@@ -2365,6 +2365,7 @@ let _tt;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
 // init called by auth system via initFlowStateApp
+initAuth();
 
 function initFlowStateApp(savedData) {
   // Merge saved data from Supabase into S
