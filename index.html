@@ -814,8 +814,7 @@ select.fi{cursor:pointer}
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
       <div class="setting-sec"><h3>Studio Name</h3><p class="setting-desc">Give your workspace a name that feels like yours.</p><div class="fl"><input class="fi" id="nameIn" placeholder="e.g. Jess Palmer Creative" /></div><button class="btn btn-p" onclick="saveName()">Save Name</button></div>
-      <div class="setting-sec"><h3>Anthropic API Key</h3><p class="setting-desc">Stored only in your browser — sent directly to Anthropic, never anywhere else. Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.</p><div class="fl api-w"><input class="fi" id="keyIn" type="password" placeholder="sk-ant-api..." /><button class="api-eye" onclick="toggleKey()">👁</button></div><button class="btn btn-p" onclick="saveKey()">Save Key</button><div class="info-b">Running locally? Open a terminal, navigate to this file's folder, and run <code>python3 -m http.server 8080</code> — then open <code>http://localhost:8080/studio.html</code>.</div></div>
-      <div class="setting-sec"><h3>Claude Model</h3><p class="setting-desc">Sonnet is the best balance of quality and speed for everyday content work.</p><div class="fl"><select class="fi" id="modelIn"><option value="claude-sonnet-4-5">claude-sonnet-4-5 (Recommended)</option><option value="claude-opus-4-5">claude-opus-4-5 (Most powerful)</option><option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (Fastest)</option></select></div><button class="btn btn-p" onclick="saveModel()">Save Model</button></div>
+      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ No setup needed.</div></div>
       <div class="setting-sec">
         <h3>Brand Profile</h3>
         <p class="setting-desc">These fields are automatically woven into every AI generation — no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and Claude will always write as <em>you</em>.</p>
@@ -1645,7 +1644,7 @@ async function generate(){
   const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels — just the ready-to-use ${S.studio.type}.`;
   const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.settings.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-allow-browser':'true'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
     const d=await res.json();
     S.studio.output=d.content?.[0]?.text||'';
@@ -2071,9 +2070,7 @@ async function cdGenerate(type) {
     newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
   };
   try {
-    var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
     });
     var d = await r.json();
@@ -2114,9 +2111,7 @@ async function cdRepurpose() {
     'Output format: ' + fmt + ' for ' + plat + '\n\n' +
     'Original post:\n' + text;
   try {
-    var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1000, system: sys, messages: [{ role: 'user', content: usr }] })
     });
     var d = await r.json();
@@ -2156,9 +2151,7 @@ async function ideaGenerate(type) {
     newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
   };
   try {
-    var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
     });
     var d = await r.json();
@@ -2188,9 +2181,7 @@ async function ideaRepurpose() {
     'Output format: ' + fmt + ' for ' + plat + '\n\n' +
     'Original post to repurpose:\n' + text;
   try {
-    var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] })
     });
     var d = await r.json();
