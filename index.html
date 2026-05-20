@@ -1171,7 +1171,7 @@ function addUserMenu(){
   el.id='userArea';el.className='user-area';el.style.position='relative';
   el.innerHTML='<button class="user-btn" onclick="toggleUMenu()"><div class="user-av">'+av+'</div><div class="user-em">'+em+'</div></button>'+
     '<div class="u-popup" id="uPop">'+
-      '<div class="u-item" onclick="closeUMenu();if(typeof navigate==='function')navigate('settings')">Settings</div>'+
+      '<div class="u-item" onclick="closeUMenu();if(typeof navigate===\'function\')navigate(\'settings\')">Settings</div>'+
       '<div class="u-sep"></div>'+
       '<div class="u-item danger" onclick="doSignOut()">Sign Out</div>'+
     '</div>';
