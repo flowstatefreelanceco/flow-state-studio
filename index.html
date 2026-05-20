@@ -6,7 +6,8 @@
 <title>Flow State Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -398,9 +399,86 @@ select.fi{cursor:pointer}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--tl)}
 </style>
+<style>
+/* AUTH */
+#authScreen{position:fixed;inset:0;background:var(--p);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+#authScreen.hidden{display:none}
+.auth-card{background:var(--w);border:1px solid var(--bl);border-radius:16px;padding:40px;width:100%;max-width:420px;box-shadow:0 8px 40px var(--sh)}
+.auth-logo{font-family:var(--fh);font-size:32px;font-weight:600;color:var(--e);margin-bottom:4px}
+.auth-tagline{font-size:11px;color:var(--t);letter-spacing:.12em;text-transform:uppercase;margin-bottom:28px}
+.auth-tabs{display:flex;gap:2px;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:3px;margin-bottom:22px}
+.auth-tab{flex:1;text-align:center;padding:8px;border-radius:100px;border:none;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:transparent;color:var(--t)}
+.auth-tab.active{background:var(--e);color:var(--p)}
+.auth-field{margin-bottom:13px}
+.auth-field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px}
+.auth-input{width:100%;background:var(--p);border:1px solid var(--b);border-radius:8px;padding:10px 14px;font-family:var(--fb);font-size:14px;color:var(--e);outline:none;transition:border-color .15s}
+.auth-input:focus{border-color:var(--teal)}
+.auth-btn{width:100%;background:var(--r);color:white;border:none;border-radius:8px;padding:12px;font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:4px}
+.auth-btn:hover{background:var(--rh)}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-err{font-size:12.5px;color:var(--r);margin-top:8px;text-align:center;min-height:18px}
+.auth-msg{font-size:12.5px;color:var(--teal);margin-top:8px;text-align:center;min-height:18px}
+.auth-hint{font-size:11px;color:var(--tl);text-align:center;margin-top:12px}
+.auth-hint span{color:var(--teal);cursor:pointer}
+/* LOADING */
+#loadingScreen{position:fixed;inset:0;background:var(--p);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9998;gap:14px}
+#loadingScreen.hidden{display:none}
+.load-logo{font-family:var(--fh);font-size:36px;font-weight:600;color:var(--e)}
+.load-dots{display:flex;gap:6px}
+.load-dot{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:ldot 1.2s infinite ease-in-out}
+.load-dot:nth-child(2){animation-delay:.2s}
+.load-dot:nth-child(3){animation-delay:.4s}
+@keyframes ldot{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-8px);opacity:1}}
+/* APP */
+#appWrap{display:none;height:100vh}
+#appWrap.show{display:block}
+/* USER MENU */
+.user-area{padding:8px 10px 14px;border-top:1px solid rgba(255,255,255,.06)}
+.user-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;border:none;background:rgba(255,255,255,.06);width:100%;transition:background .15s}
+.user-btn:hover{background:rgba(255,255,255,.12)}
+.user-av{width:26px;height:26px;border-radius:50%;background:var(--r);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.user-em{font-size:11px;color:rgba(242,235,224,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;flex:1}
+.u-popup{position:absolute;bottom:64px;left:10px;right:10px;background:var(--w);border:1px solid var(--bl);border-radius:10px;box-shadow:0 8px 30px var(--sh);display:none;z-index:200}
+.u-popup.open{display:block}
+.u-item{padding:11px 16px;font-size:13px;color:var(--e);cursor:pointer;transition:background .15s}
+.u-item:hover{background:var(--p)}
+.u-item.danger{color:var(--r)}
+.u-sep{height:1px;background:var(--bl)}
+</style>
 </head>
 <body>
-<div class="app">
+
+<div id="loadingScreen">
+  <div class="load-logo">Flow State Studio</div>
+  <div class="load-dots"><div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div></div>
+</div>
+
+<div id="authScreen" class="hidden">
+  <div class="auth-card">
+    <div class="auth-logo">Flow State Studio</div>
+    <div class="auth-tagline">Built for the way your brain works.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Create Account</button>
+    </div>
+    <div id="formLogin">
+      <div class="auth-field"><label>Email</label><input class="auth-input" type="email" id="liEmail" placeholder="you@example.com" /></div>
+      <div class="auth-field"><label>Password</label><input class="auth-input" type="password" id="liPass" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+      <button class="auth-btn" id="liBtn" onclick="doLogin()">Sign In</button>
+      <div class="auth-err" id="liErr"></div>
+      <div class="auth-hint">Forgot password? <span onclick="doReset()">Reset it</span></div>
+    </div>
+    <div id="formSignup" style="display:none">
+      <div class="auth-field"><label>Email</label><input class="auth-input" type="email" id="suEmail" placeholder="you@example.com" /></div>
+      <div class="auth-field"><label>Password</label><input class="auth-input" type="password" id="suPass" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doSignup()" /></div>
+      <button class="auth-btn" id="suBtn" onclick="doSignup()">Create Account</button>
+      <div class="auth-err" id="suErr"></div>
+      <div class="auth-msg" id="suMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="appWrap"><div class="app">
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -1028,9 +1106,119 @@ select.fi{cursor:pointer}
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast"></div></div>
 
 <script>
+const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
+const SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqO2QIw8K1tW4EgAJSVjrM00vBmHA";
+const {createClient}=supabase;
+const sb=createClient(SURL,SKEY);
+var _currentUser=null;
+
+async function initAuth(){
+  var {data:{session}}=await sb.auth.getSession();
+  if(session&&session.user){
+    _currentUser=session.user;
+    await bootApp();
+  } else {
+    document.getElementById('loadingScreen').classList.add('hidden');
+    document.getElementById('authScreen').classList.remove('hidden');
+  }
+  sb.auth.onAuthStateChange(async function(event,session){
+    if(event==='SIGNED_IN'&&session){
+      _currentUser=session.user;
+      document.getElementById('authScreen').classList.add('hidden');
+      await bootApp();
+    } else if(event==='SIGNED_OUT'){
+      _currentUser=null;
+      document.getElementById('appWrap').classList.remove('show');
+      document.getElementById('authScreen').classList.remove('hidden');
+    }
+  });
+}
+
+async function loadUserData(){
+  if(!_currentUser)return{};
+  try{
+    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
+    if(data&&data.data)return JSON.parse(data.data);
+  }catch(e){}
+  return{};
+}
+
+async function saveUserData(obj){
+  if(!_currentUser)return;
+  await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+}
+
+window._supabasePersist=function(obj){saveUserData(obj);};
+
+async function bootApp(){
+  document.getElementById('loadingScreen').classList.remove('hidden');
+  var saved=await loadUserData();
+  document.getElementById('appWrap').classList.add('show');
+  document.getElementById('loadingScreen').classList.add('hidden');
+  initFlowStateApp(saved);
+  addUserMenu();
+}
+
+function addUserMenu(){
+  var sb2=document.querySelector('.sidebar');
+  if(!sb2||document.getElementById('userArea'))return;
+  var em=_currentUser.email||'';
+  var av=em[0].toUpperCase();
+  var el=document.createElement('div');
+  el.id='userArea';el.className='user-area';el.style.position='relative';
+  el.innerHTML='<button class="user-btn" onclick="toggleUMenu()"><div class="user-av">'+av+'</div><div class="user-em">'+em+'</div></button>'+
+    '<div class="u-popup" id="uPop">'+
+      '<div class="u-item" onclick="closeUMenu();if(typeof navigate==='function')navigate('settings')">Settings</div>'+
+      '<div class="u-sep"></div>'+
+      '<div class="u-item danger" onclick="doSignOut()">Sign Out</div>'+
+    '</div>';
+  sb2.appendChild(el);
+}
+function toggleUMenu(){var p=document.getElementById('uPop');if(p)p.classList.toggle('open');}
+function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.remove('open');}
+document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&&!e.target.closest('.u-popup'))closeUMenu();});
+async function doSignOut(){closeUMenu();await sb.auth.signOut();}
+
+function switchAuthTab(t){
+  document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
+  document.getElementById('formLogin').style.display=t==='login'?'block':'none';
+  document.getElementById('formSignup').style.display=t==='signup'?'block':'none';
+}
+async function doLogin(){
+  var em=document.getElementById('liEmail').value.trim();
+  var pw=document.getElementById('liPass').value;
+  var err=document.getElementById('liErr');
+  var btn=document.getElementById('liBtn');
+  if(!em||!pw){err.textContent='Please enter your email and password';return;}
+  btn.disabled=true;btn.textContent='Signing in...';err.textContent='';
+  var {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Sign In';}
+}
+async function doSignup(){
+  var em=document.getElementById('suEmail').value.trim();
+  var pw=document.getElementById('suPass').value;
+  var err=document.getElementById('suErr');
+  var msg=document.getElementById('suMsg');
+  var btn=document.getElementById('suBtn');
+  if(!em||!pw){err.textContent='Please fill in all fields';return;}
+  if(pw.length<6){err.textContent='Password must be at least 6 characters';return;}
+  btn.disabled=true;btn.textContent='Creating account...';err.textContent='';msg.textContent='';
+  var {error}=await sb.auth.signUp({email:em,password:pw});
+  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Create Account';}
+  else{msg.textContent='Account created! Check your email to confirm, then sign in.';btn.disabled=false;btn.textContent='Create Account';switchAuthTab('login');}
+}
+async function doReset(){
+  var em=document.getElementById('liEmail').value.trim();
+  if(!em){document.getElementById('liErr').textContent='Enter your email above first';return;}
+  await sb.auth.resetPasswordForEmail(em,{redirectTo:window.location.origin});
+  document.getElementById('liErr').style.color='var(--teal)';
+  document.getElementById('liErr').textContent='Password reset email sent!';
+}
+
+
 /* ═══════════════════ DATA ═══════════════════ */
 const HOOKS_DEFAULT = [
   {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a wellness business..."},
@@ -1122,7 +1310,7 @@ const S = {
 };
 
 /* ═══════════════════ INIT ═══════════════════ */
-function init(){
+function _appInit(){
   load(); applySettings(); setupChips();
   renderDashboard(); renderCalendar(); renderKanban(); renderTaskKanban();
   renderAllLibs(); setGreeting();
@@ -1130,7 +1318,7 @@ function init(){
 }
 function load(){
   try{
-    const d=JSON.parse(localStorage.getItem('studioOS_v3')||'{}');
+    const d={}; // Data loaded from Supabase via initFlowStateApp
     S.drafts=d.drafts||[]; S.calEntries=d.calEntries||[];
     S.ideas=d.ideas||[]; S.tasks=d.tasks||[];
     S.hooks=d.hooks||HOOKS_DEFAULT.map(x=>({...x}));
@@ -2172,6 +2360,27 @@ let _tt;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
 init();
+
+function initFlowStateApp(savedData) {
+  // Merge saved data from Supabase into S
+  if (savedData && Object.keys(savedData).length > 0) {
+    if (savedData.drafts) S.drafts = savedData.drafts;
+    if (savedData.calEntries) S.calEntries = savedData.calEntries;
+    if (savedData.ideas) S.ideas = savedData.ideas;
+    if (savedData.tasks) S.tasks = savedData.tasks;
+    if (savedData.hooks) S.hooks = savedData.hooks;
+    if (savedData.ctas) S.ctas = savedData.ctas;
+    if (savedData.stories) S.stories = savedData.stories;
+    if (savedData.prompts) S.prompts = savedData.prompts;
+    if (savedData.favs) S.favs = savedData.favs;
+    if (savedData.notebooks) S.notebooks = savedData.notebooks;
+    if (savedData.notes) S.notes = savedData.notes;
+    if (savedData.settings) S.settings = {...S.settings, ...savedData.settings};
+    if (savedData.feedImages) S.feedImages = savedData.feedImages;
+  }
+  _appInit();
+}
+
 </script>
 </body>
 </html>
