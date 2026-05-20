@@ -813,7 +813,6 @@ select.fi{cursor:pointer}
   <div id="view-settings" class="view">
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
-      <div class="setting-sec"><h3>Studio Name</h3><p class="setting-desc">Give your workspace a name that feels like yours.</p><div class="fl"><input class="fi" id="nameIn" placeholder="e.g. Jess Palmer Creative" /></div><button class="btn btn-p" onclick="saveName()">Save Name</button></div>
       <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ No setup needed.</div></div>
       <div class="setting-sec">
         <h3>Brand Profile</h3>
@@ -1115,16 +1114,15 @@ const sb=createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true
 var _currentUser=null;
 
 async function initAuth(){
-  // Show login immediately, then check if already logged in
-  document.getElementById('loadingScreen').classList.add('hidden');
-  document.getElementById('authScreen').classList.remove('hidden');
-  
-  // Check for existing session in background
+  // Check for existing session first
   var {data:{session}}=await sb.auth.getSession();
   if(session&&session.user){
+    // Already logged in - go straight to app, no loading screen flash
     _currentUser=session.user;
+    document.getElementById('loadingScreen').classList.add('hidden');
     await bootApp();
   } else {
+    // Not logged in - show login screen
     document.getElementById('loadingScreen').classList.add('hidden');
     document.getElementById('authScreen').classList.remove('hidden');
   }
@@ -1398,8 +1396,6 @@ document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>
 
 /* ═══════════════════ GETTING STARTED ═══════════════════ */
 const GS_STEPS=[
-  {key:'nameSet',label:'Set your studio name',nav:'settings'},
-  {key:'keySet',label:'Add your Anthropic API key',nav:'settings'},
   {key:'bizSet',label:'Fill in your Brand Profile in Settings',nav:'settings'},
   {key:'libVisited',label:'Browse the Library (Hooks, Prompts, CTAs)',nav:'hooks'},
   {key:'calAdded',label:'Add your first calendar entry',nav:'calendar'},
