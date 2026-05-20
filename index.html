@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow State Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Brand palette — Jess Palmer / Flow State Freelance */
+  --p:#F5EFE3;          /* cream background */
+  --w:#FBF8F2;          /* warm white cards */
+  --sb:#EDE4D3;         /* sidebar cream */
+  --sb2:#E4D9C6;        /* sidebar hover */
+  --e:#2A1A0E;          /* espresso brown — primary text */
+  --em:#3D2510;         /* espresso mid */
+  --el:#5C3A20;         /* espresso light */
+  --r:#B5512A;          /* terracotta rust — primary accent */
+  --rh:#C86A3F;         /* rust hover */
+  --rp:#F5DFD0;         /* rust pale bg */
+  --teal:#3A8C8C;       /* teal/periwinkle — secondary accent */
+  --tealh:#2E7070;      /* teal hover */
+  --tealp:#D0E8E8;      /* teal pale bg */
+  --blue:#7A9EC2;       /* periwinkle blue */
+  --bluep:#D8E6F2;      /* blue pale bg */
+  --g:#C47A3A;          /* warm gold/tan */
+  --gp:#F2E4CC;         /* gold pale */
+  --t:#7A6248;          /* warm taupe — secondary text */
+  --tl:#A8906E;         /* taupe light */
+  --b:#D8CABA;          /* border warm */
+  --bl:#EDE5D5;         /* border light */
+  --sh:rgba(42,26,14,.08);--shm:rgba(42,26,14,.15);
+  --sage:#5A6E50;--sagep:#DCE8D4;
+  --fh:'Caveat',cursive;           /* handwritten — studio name/wordmark */
+  --fd:'Cormorant Garamond',Georgia,serif;  /* display — section headers */
+  --fb:'Jost',system-ui,sans-serif;         /* body — everything else */
+  --sw:238px;--rad:10px;--rsm:6px
+}
+html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);font-size:14px;line-height:1.6}
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--sb);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;border-right:1px solid var(--b)}
+.sb-logo{padding:26px 20px 20px;border-bottom:1px solid var(--b)}
+.sb-wordmark{font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.2}
+.sb-tagline{font-size:9px;color:var(--t);margin-top:4px;letter-spacing:.16em;text-transform:uppercase}
+.sb-line{width:22px;height:1.5px;background:var(--teal);border-radius:1px;margin-top:14px}
+.sb-nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;overflow-y:auto}
+.sb-nav::-webkit-scrollbar{width:0}
+.sb-section{font-size:8.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--tl);padding:10px 12px 5px;margin-top:6px}
+.nav-i{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;color:var(--t);font-size:13px;font-weight:400;margin-bottom:1px;user-select:none;letter-spacing:.01em}
+.nav-i:hover{background:var(--sb2);color:var(--e)}
+.nav-i.active{background:var(--rp);color:var(--r);border-left:2px solid var(--r);padding-left:10px;font-weight:500}
+.nav-ico{width:15px;height:15px;flex-shrink:0;opacity:.7}
+.nav-i.active .nav-ico,.nav-i:hover .nav-ico{opacity:1;color:var(--r)}
+.nav-spacer{flex:1}
+.sb-usage{padding:12px 16px;border-top:1px solid var(--b)}
+.sb-usage-lbl{font-size:9.5px;color:var(--t);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+.usage-bar-wrap{background:var(--bl);border-radius:100px;height:4px;overflow:hidden}
+.usage-bar{height:4px;background:var(--r);border-radius:100px;transition:width .3s}
+
+/* MAIN */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
+.main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
+.main-hdr h1{font-family:var(--fh);font-size:38px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
+.main-hdr .sub{font-size:12px;color:var(--t);margin-top:3px;letter-spacing:.02em}
+.hdr-acts{display:flex;gap:8px;align-items:center}
+.main-body{flex:1;overflow-y:auto;padding:24px 36px 48px}
+
+/* VIEWS */
+.view{display:none;flex-direction:column;height:100%}
+.view.active{display:flex}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px}
+.stat-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:20px 22px;box-shadow:0 1px 4px var(--sh);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal);opacity:0;transition:opacity .2s}
+.stat-card:hover::before{opacity:1}
+.stat-card .lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:9px;font-weight:500}
+.stat-card .val{font-family:var(--fh);font-size:42px;font-weight:700;color:var(--e);line-height:1}
+.stat-card .sub2{font-size:11px;color:var(--tl);margin-top:4px}
+
+/* GETTING STARTED */
+.gs-strip{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 20px;margin-bottom:22px;box-shadow:0 1px 4px var(--sh);cursor:pointer;user-select:none}
+.gs-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gs-left{display:flex;align-items:center;gap:10px}
+.gs-title{font-family:var(--fh);font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t)}
+.gs-badge{font-size:11px;color:var(--tl)}
+.gs-chevron{font-size:14px;color:var(--tl);transition:transform .2s}
+.gs-strip.open .gs-chevron{transform:rotate(180deg)}
+.gs-bar-wrap{margin-top:10px;background:var(--bl);border-radius:100px;height:3px}
+.gs-bar{height:3px;background:var(--teal);border-radius:100px;transition:width .3s}
+.gs-items{display:none;padding-top:14px;border-top:1px solid var(--bl);margin-top:14px}
+.gs-strip.open .gs-items{display:block}
+.gs-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bl);cursor:pointer}
+.gs-item:last-child{border-bottom:0;padding-bottom:0}
+.gs-cb{width:16px;height:16px;border:1.5px solid var(--b);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.gs-item.done .gs-cb{background:var(--teal);border-color:var(--teal)}
+.gs-item-lbl{font-size:13px;color:var(--e)}
+.gs-item.done .gs-item-lbl{color:var(--tl);text-decoration:line-through}
+
+/* SECTION TITLE */
+.sec-title{font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:13px;letter-spacing:.01em;display:flex;align-items:center;gap:10px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--bl)}
+
+/* DRAFT CARDS */
+.drafts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:13px}
+.dc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;cursor:pointer;transition:all .18s;box-shadow:0 1px 4px var(--sh)}
+.dc:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--shm);border-color:var(--b)}
+.dc-title{font-family:var(--fh);font-size:19px;font-weight:600;color:var(--e);line-height:1.3;margin-bottom:8px}
+.dc-preview{font-size:12.5px;color:var(--t);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
+.dc-foot{display:flex;align-items:center;justify-content:space-between}
+.dc-date{font-size:11px;color:var(--tl)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:100px;font-size:9.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.tag-instagram,.tag-Caption\/Post,.tag-Story,.tag-Carousel{background:var(--rp);color:#8C3518}
+.tag-newsletter,.tag-Email{background:var(--tealp);color:#1E5C5C}
+.tag-linkedin{background:var(--bluep);color:#2A4A70}
+.tag-blog,.tag-Blog{background:var(--gp);color:#6A4E18}
+.tag-facebook,.tag-Video{background:#D4D8EE;color:#1A2860}
+.tag-tiktok{background:#EED4E8;color:#5C1A48}
+.tag-other{background:var(--bl);color:var(--el)}
+.tag-scheduled{background:var(--sagep);color:#3A5228}
+.tag-draft{background:var(--gp);color:#6A4E18}
+.tag-published,.tag-done{background:#D0EAD0;color:#1A521A}
+.tag-idea{background:#E4D4EE;color:#3E1A5C}
+
+/* CALENDAR */
+.cal-nav{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.cal-nav h2{font-family:var(--fh);font-size:30px;font-weight:600;min-width:210px;text-align:center}
+.btn-ico{width:32px;height:32px;border:1px solid var(--b);background:var(--w);border-radius:var(--rsm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--e);transition:all .15s;font-size:17px;flex-shrink:0}
+.btn-ico:hover{background:var(--p);border-color:var(--t)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bl);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh)}
+.cal-hd{background:var(--em);color:rgba(245,239,227,.65);text-align:center;padding:9px 4px;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.14em}
+.cal-cell{background:var(--w);min-height:86px;padding:7px;cursor:pointer;transition:background .12s}
+.cal-cell:hover{background:#F0E8D8}
+.cal-cell.other{background:#F5F0E8}
+.cal-cell.other .day-n{color:var(--b)}
+.cal-cell.today{background:#FBF0E8}
+.day-n{font-size:11px;font-weight:500;color:var(--t);width:21px;height:21px;display:flex;align-items:center;justify-content:center;margin-bottom:3px}
+.cal-cell.today .day-n{background:var(--r);color:white;border-radius:50%;font-size:10.5px}
+.day-dots{display:flex;flex-direction:column;gap:2px}
+.day-row{display:flex;align-items:center;gap:3px;font-size:9.5px;color:var(--e);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-instagram{background:#B5522A}.dot-newsletter{background:#5A6E50}.dot-linkedin{background:#2A5A98}
+.dot-blog{background:#9E7A3A}.dot-facebook{background:#2A3E98}.dot-tiktok{background:#98286A}.dot-other{background:#7A6555}
+
+/* KANBAN */
+.kanban{display:grid;gap:14px;flex:1;min-height:0;overflow:hidden}
+.kanban-3{grid-template-columns:repeat(3,1fr)}
+.kanban-4{grid-template-columns:repeat(4,1fr)}
+.kc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px var(--sh)}
+.kc-head{padding:14px 16px 10px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.kc-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t)}
+.kc-count{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e)}
+.kc-body{flex:1;overflow-y:auto;padding:10px}
+.kc-body::-webkit-scrollbar{width:0}
+.kc-add{padding:6px 10px 10px;flex-shrink:0}
+.kc-card{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;position:relative}
+.kc-card:hover{box-shadow:0 3px 10px var(--sh);border-color:var(--b)}
+.kc-card .cc-title{font-size:13px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:7px}
+.kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
+.kc-card:hover .cc-del{opacity:1}
+.empty-kc{text-align:center;padding:28px 12px;color:var(--tl);font-size:12px}
+
+/* AI STUDIO */
+.studio-wrap{display:grid;grid-template-columns:330px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden}
+.sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;box-shadow:0 1px 4px var(--sh)}
+.sp-in{padding:22px}
+.fl{margin-bottom:16px}
+.fl-lbl{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:7px;display:block}
+.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:9px 11px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
+.fi:focus{border-color:var(--r);background:var(--w)}
+textarea.fi{resize:vertical;min-height:85px;line-height:1.65}
+select.fi{cursor:pointer}
+.chip-g{display:flex;flex-wrap:wrap;gap:4px}
+.chip{padding:5px 11px;border-radius:100px;border:1px solid var(--b);background:var(--p);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fb);user-select:none}
+.chip:hover{border-color:var(--r);color:var(--r)}
+.chip.sel{background:var(--r);border-color:var(--r);color:white}
+.out-panel{display:flex;flex-direction:column}
+.out-tb{padding:14px 22px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.out-tit{font-family:var(--fd);font-size:18px;font-weight:500;color:var(--e)}
+.out-bdy{flex:1;padding:22px;overflow-y:auto}
+.out-ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--t);gap:10px}
+.out-ph .sym{font-size:36px;opacity:.22}
+.out-ph h3{font-family:var(--fd);font-size:21px;font-weight:400;color:var(--t)}
+.out-ph p{font-size:12.5px;max-width:260px;line-height:1.65;color:var(--tl)}
+.out-txt{font-size:14px;line-height:1.82;color:var(--e);white-space:pre-wrap}
+.sv-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--sage);padding:3px 9px;background:var(--sagep);border-radius:100px;opacity:0;transition:opacity .3s;flex-shrink:0}
+.sv-badge.show{opacity:1}
+.ld-wrap{display:flex;align-items:center;gap:12px;color:var(--t);font-size:13px}
+.ldots{display:flex;gap:4px}
+.ld{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:lb 1.2s infinite ease-in-out}
+.ld:nth-child(2){animation-delay:.2s}.ld:nth-child(3){animation-delay:.4s}
+@keyframes lb{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-6px);opacity:1}}
+
+/* LIBRARY */
+.lib-search{position:relative;margin-bottom:14px}
+.lib-search input{width:100%;background:var(--w);border:1px solid var(--b);border-radius:var(--rad);padding:10px 14px 10px 38px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none}
+.lib-search input:focus{border-color:var(--r)}
+.lib-search .s-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tl);font-size:14px}
+.lib-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;align-items:center}
+.lib-filter-chip{padding:5px 12px;border-radius:100px;border:1px solid var(--b);background:var(--w);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fb);user-select:none}
+.lib-filter-chip:hover{border-color:var(--r);color:var(--r)}
+.lib-filter-chip.active{background:var(--e);border-color:var(--e);color:var(--p)}
+.lib-filter-chip.bm-chip{border-color:var(--teal);color:var(--teal)}
+.lib-filter-chip.bm-chip.active{background:var(--teal);border-color:var(--teal);color:white}
+.lib-count{font-size:11px;color:var(--tl);margin-bottom:14px}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.lib-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;box-shadow:0 1px 3px var(--sh);transition:box-shadow .15s}
+.lib-card:hover{box-shadow:0 4px 14px var(--shm)}
+.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+.lib-cat-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.lib-fav{background:none;border:none;cursor:pointer;color:var(--b);transition:all .18s;flex-shrink:0;line-height:1;padding:2px}
+.lib-fav:hover{color:var(--teal)}.lib-fav.faved{color:var(--teal)}.lib-fav.faved svg{fill:var(--teal)}
+.lib-title{font-family:var(--fd);font-size:16px;font-weight:500;color:var(--e);margin-bottom:6px;line-height:1.3}
+.lib-text{font-size:12.5px;color:var(--t);line-height:1.65;margin-bottom:14px}
+.lib-divider{height:1px;background:var(--bl);margin:0 -2px 12px}
+.lib-copy-btn{width:100%;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px;font-family:var(--fb);font-size:12px;color:var(--t);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.lib-copy-btn:hover{background:var(--bl);color:var(--e)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 17px;border-radius:var(--rsm);font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid transparent;white-space:nowrap;letter-spacing:.02em}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-p{background:var(--r);color:white;border-color:var(--r)}
+.btn-p:hover:not(:disabled){background:var(--rh)}
+.btn-p.full{width:100%}
+.btn-g{background:transparent;border-color:var(--b);color:var(--t)}
+.btn-g:hover{background:var(--p);color:var(--e);border-color:var(--t)}
+.btn-brass{background:var(--teal);color:white;border-color:var(--teal)}
+.btn-brass:hover{background:var(--tealh)}
+.btn-danger{background:var(--rp);color:var(--r);border-color:#E0BDAA}
+.btn-danger:hover{background:#EDD5C8}
+
+/* MODALS */
+.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-ov.open{display:flex}
+.modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,16,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
+.modal-xl{max-width:640px}
+.m-title{font-family:var(--fh);font-size:26px;font-weight:600;margin-bottom:4px;color:var(--e)}
+.m-sub{font-size:13px;color:var(--t);margin-bottom:22px;line-height:1.6}
+.m-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* WELCOME MODAL */
+.welcome-steps{display:flex;flex-direction:column;gap:0}
+.w-step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--bl)}
+.w-step:last-child{border-bottom:0}
+.w-num{width:28px;height:28px;border-radius:50%;background:var(--r);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
+.w-step-body h4{font-size:14px;font-weight:500;color:var(--e);margin-bottom:3px}
+.w-step-body p{font-size:12.5px;color:var(--t);line-height:1.6}
+
+/* SETTINGS */
+.setting-sec{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:26px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
+.setting-sec h3{font-family:var(--fh);font-size:24px;font-weight:600;margin-bottom:4px;color:var(--e)}
+.setting-desc{font-size:12.5px;color:var(--t);margin-bottom:16px;line-height:1.65}
+.setting-desc a{color:var(--r);text-decoration:none}
+.setting-desc a:hover{text-decoration:underline}
+.api-w{position:relative}
+.api-w .fi{padding-right:40px;font-family:monospace;font-size:12.5px}
+.api-eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--t);background:none;border:none;padding:0;font-size:13px;line-height:1}
+.info-b{background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:12px 15px;font-size:12px;color:var(--t);line-height:1.65;margin-top:12px}
+.info-b code{background:rgba(42,28,16,.08);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11.5px;color:var(--e)}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--e);color:var(--p);padding:10px 17px;border-radius:var(--rsm);font-size:13px;z-index:300;transform:translateY(70px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:310px;border:1px solid rgba(255,255,255,.08)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:44px 20px;color:var(--t)}
+.empty-state h3{font-family:var(--fd);font-size:22px;font-weight:400;margin-bottom:7px}
+.empty-state p{font-size:12.5px;max-width:270px;margin:0 auto;line-height:1.65;color:var(--tl)}
+
+
+/* BRAIN DUMP */
+.bd-wrap{display:grid;grid-template-columns:256px 1fr;gap:0;flex:1;min-height:0;overflow:hidden;border:1px solid var(--bl);border-radius:var(--rad);box-shadow:0 1px 4px var(--sh);background:var(--w)}
+.bd-left{border-right:1px solid var(--bl);display:flex;flex-direction:column;overflow:hidden;background:var(--sb)}
+.bd-left-hdr{padding:16px 14px 12px;border-bottom:1px solid var(--bl);flex-shrink:0}
+.bd-left-hdr h3{font-family:var(--fd);font-size:16px;font-weight:500;color:var(--e);margin-bottom:10px}
+.nb-list{flex:1;overflow-y:auto;padding:6px}
+.nb-card{padding:10px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid transparent}
+.nb-card:hover{background:var(--w);border-color:var(--bl)}
+.nb-card.active{background:var(--tealp);border-color:rgba(58,140,140,.25)}
+.nb-name{font-size:13px;font-weight:500;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nb-count{font-size:10px;color:var(--tl);flex-shrink:0}
+.nb-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px 4px;flex-shrink:0}
+.nb-card:hover .nb-del{opacity:1}
+.bd-right{display:flex;flex-direction:column;overflow:hidden}
+.bd-right-hdr{padding:14px 20px 12px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.bd-right-hdr h3{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--e)}
+.notes-list{flex:1;overflow-y:auto;padding:14px 20px}
+.note-card{background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
+.note-card:hover{box-shadow:0 3px 12px var(--sh)}
+.note-card-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.note-title-in{font-family:var(--fb);font-size:13px;font-weight:500;color:var(--e);border:none;background:transparent;outline:none;flex:1;padding:0}
+.note-title-in::placeholder{color:var(--tl)}
+.note-meta{font-size:10px;color:var(--tl);flex-shrink:0}
+.note-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;padding:2px 5px;flex-shrink:0;opacity:0;transition:opacity .15s}
+.note-card:hover .note-del{opacity:1}
+.note-body{padding:0 14px 14px;display:none}
+.note-body.open{display:block}
+.note-ta{width:100%;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;resize:none;min-height:120px;line-height:1.75;transition:border-color .15s}
+.note-ta:focus{border-color:var(--r)}
+.bd-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--t);gap:10px;padding:40px}
+.bd-empty .sym{font-size:36px;opacity:.2}
+.bd-empty h3{font-family:var(--fd);font-size:22px;font-weight:400}
+.bd-empty p{font-size:12.5px;color:var(--tl);max-width:240px;line-height:1.65}
+
+/* SECTION GUIDE */
+.guide-wrap{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:22px;box-shadow:0 1px 4px var(--sh);overflow:hidden}
+.guide-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:border-color .15s}
+.guide-hdr.open{border-bottom-color:var(--bl)}
+.guide-hdr-left{display:flex;align-items:center;gap:10px}
+.guide-hdr-title{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t)}
+.guide-chevron{font-size:13px;color:var(--tl);transition:transform .2s}
+.guide-hdr.open .guide-chevron{transform:rotate(180deg)}
+.guide-body{display:none;padding:0}
+.guide-hdr.open+.guide-body{display:block}
+.guide-section{padding:16px 20px;border-bottom:1px solid var(--bl);cursor:pointer;transition:background .15s}
+.guide-section:last-child{border-bottom:0}
+.guide-section:hover{background:var(--p)}
+.guide-section-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:0}
+.guide-section-title{font-size:13px;font-weight:500;color:var(--e);display:flex;align-items:center;gap:8px}
+.guide-section-icon{font-size:14px}
+.guide-toggle{font-size:11px;color:var(--tl);transition:transform .2s}
+.guide-section.open .guide-toggle{transform:rotate(90deg)}
+.guide-detail{display:none;margin-top:12px}
+.guide-section.open .guide-detail{display:block}
+.guide-desc{font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:10px}
+.guide-tips{list-style:none;display:flex;flex-direction:column;gap:5px}
+.guide-tips li{font-size:12px;color:var(--t);line-height:1.6;padding:7px 10px;background:var(--p);border-radius:var(--rsm);border-left:2px solid var(--r)}
+.guide-tips li strong{color:var(--e)}
+
+
+/* WHAT DO YOU WANT TO CREATE */
+.wdc-wrap{margin-bottom:24px}
+.wdc-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:12px}
+.wdc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.wdc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 12px;text-align:center;cursor:pointer;transition:all .18s;box-shadow:0 1px 3px var(--sh)}
+.wdc-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px var(--shm);border-color:var(--teal)}
+.wdc-card:active{transform:translateY(-1px)}
+.wdc-icon{font-size:22px;margin-bottom:8px;line-height:1}
+.wdc-title{font-size:13px;font-weight:500;color:var(--e);margin-bottom:3px}
+.wdc-sub{font-size:10.5px;color:var(--tl)}
+
+/* PICK UP WHERE YOU LEFT OFF */
+.pickup-wrap{margin-bottom:24px}
+.pickup-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:12px}
+.pickup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pickup-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;box-shadow:0 1px 3px var(--sh);display:flex;flex-direction:column}
+.pickup-tag{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:8px}
+.pickup-title{font-size:15px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:4px;font-family:var(--fd)}
+.pickup-sub{font-size:11px;color:var(--tl);margin-top:auto;padding-top:10px}
+
+/* SIDEBAR LIBRARY COLLAPSE */
+.nav-parent{justify-content:space-between;cursor:pointer}
+.nav-arrow{font-size:11px;color:var(--t);transition:transform .2s;margin-left:auto;flex-shrink:0}
+.nav-parent.open .nav-arrow{transform:rotate(90deg)}
+.nav-children{display:none}
+.nav-parent.open+.nav-children{display:block}
+.nav-child{padding:7px 12px 7px 30px;font-size:12.5px}
+
+/* STATS - smaller, less prominent */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.stat-card{padding:16px 18px}
+.stat-card .val{font-size:36px}
+
+/* DASHBOARD - more breathing room */
+.main-body{padding:28px 38px 48px}
+
+
+/* CARD DETAIL */
+.cd-stages{display:flex;gap:2px;margin-bottom:20px;background:var(--p);border-radius:100px;padding:3px;border:1px solid var(--bl)}
+.cd-stage{flex:1;text-align:center;padding:7px 4px;border-radius:100px;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .15s;color:var(--tl)}
+.cd-stage.active{background:var(--w);color:var(--e);box-shadow:0 1px 4px var(--sh)}
+.cd-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.cd-cols{grid-template-columns:1fr}}
+.cd-ai-panel{background:var(--p);border-radius:var(--rad);padding:16px;border:1px solid var(--bl)}
+.cd-ai-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:12px}
+.cd-ai-btn{width:100%;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px;font-family:var(--fb);font-size:12.5px;color:var(--e);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;margin-bottom:6px;text-align:left}
+.cd-ai-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--tealp)}
+.cd-out{background:var(--w);border:1px solid var(--tealp);border-radius:var(--rsm);padding:12px;font-size:12.5px;line-height:1.75;color:var(--e);white-space:pre-wrap;margin-top:10px;display:none;max-height:200px;overflow-y:auto}
+.cd-out.show{display:block}
+.cd-acts{display:none;gap:6px;margin-top:8px}
+.cd-acts.show{display:flex}
+.cd-rp-div{height:1px;background:var(--bl);margin:14px 0}
+.cd-rp-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px}
+.cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--tl)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-wordmark" id="sbName">Flow State Studio</div>
+    <div class="sb-tagline">Built for the way your brain works.</div>
+    <div class="sb-line"></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Workspace</div>
+    <div class="nav-i active" data-view="dashboard"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="6" height="6" rx="1.5"/><rect x="10" y="2" width="6" height="6" rx="1.5"/><rect x="2" y="10" width="6" height="6" rx="1.5"/><rect x="10" y="10" width="6" height="6" rx="1.5"/></svg>Dashboard</div>
+    <div class="nav-i" data-view="ideas"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg>Content Planner</div>
+    <div class="nav-i" data-view="tasks"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h9M3 13h7"/></svg>Tasks</div>
+    <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg>Calendar</div>
+    <div class="sb-section">Create</div>
+    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>AI Studio</div>
+    <div class="nav-i" data-view="drafts"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M6 7h6M6 10.5h4"/></svg>Saved Drafts</div>
+    <div class="nav-i nav-parent" onclick="toggleLibNav(this)">
+      <svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="3" rx="1"/><rect x="2" y="8" width="10" height="3" rx="1"/><rect x="2" y="13" width="7" height="2" rx="1"/></svg>
+      Library
+      <span class="nav-arrow">›</span>
+    </div>
+    <div class="nav-children">
+      <div class="nav-i nav-child" data-view="hooks">Hooks</div>
+      <div class="nav-i nav-child" data-view="prompts">Prompts</div>
+      <div class="nav-i nav-child" data-view="ctas">CTAs</div>
+      <div class="nav-i nav-child" data-view="stories">Story Ideas</div>
+    </div>
+    <div class="sb-section">Think</div>
+    <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Brain Dump</div>
+    <div class="nav-spacer"></div>
+    <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
+  </nav>
+  <div class="sb-usage">
+    <div class="sb-usage-lbl">✦ AI Studio Active</div>
+    <div class="usage-bar-wrap"><div class="usage-bar" style="width:100%"></div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div id="view-dashboard" class="view active">
+    <div class="main-hdr">
+      <div><h1>Good <span id="greeting">morning</span> ✦</h1><div class="sub" id="dashDate"></div></div>
+
+    </div>
+    <div class="main-body">
+      <div id="gsStrip" class="gs-strip" onclick="toggleGS()">
+        <div class="gs-header">
+          <div class="gs-left"><span style="font-size:16px">✦</span><span class="gs-title">Getting Started</span><span class="gs-badge" id="gsBadge"></span></div>
+          <span class="gs-chevron">▼</span>
+        </div>
+        <div class="gs-bar-wrap"><div class="gs-bar" id="gsBar"></div></div>
+        <div class="gs-items" id="gsItems"></div>
+      </div>
+      <!-- WHAT TO CREATE TODAY -->
+      <div class="wdc-wrap">
+        <div class="wdc-label">What do you want to create today?</div>
+        <div class="wdc-grid">
+          <div class="wdc-card" onclick="quickCreate('Caption / Post','instagram')">
+            <div class="wdc-icon">✍️</div>
+            <div class="wdc-title">Caption</div>
+            <div class="wdc-sub">Instagram post</div>
+          </div>
+          <div class="wdc-card" onclick="quickCreate('Email Newsletter','newsletter')">
+            <div class="wdc-icon">📧</div>
+            <div class="wdc-title">Newsletter</div>
+            <div class="wdc-sub">Email to your list</div>
+          </div>
+          <div class="wdc-card" onclick="quickCreate('Carousel Copy','instagram')">
+            <div class="wdc-icon">🎠</div>
+            <div class="wdc-title">Carousel</div>
+            <div class="wdc-sub">Slide by slide</div>
+          </div>
+          <div class="wdc-card" onclick="quickCreate('Story Script','instagram')">
+            <div class="wdc-icon">📱</div>
+            <div class="wdc-title">Story</div>
+            <div class="wdc-sub">Instagram story</div>
+          </div>
+          <div class="wdc-card" onclick="quickCreate('Bio / About','other')">
+            <div class="wdc-icon">✨</div>
+            <div class="wdc-title">Something else</div>
+            <div class="wdc-sub">Open studio</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PICK UP WHERE YOU LEFT OFF -->
+      <div id="pickUpWrap"></div>
+
+      <div class="guide-wrap">
+        <div class="guide-hdr" onclick="toggleGuide(this)">
+          <div class="guide-hdr-left"><span style="font-size:15px">📖</span><span class="guide-hdr-title">How to use each section</span></div>
+          <span class="guide-chevron">▼</span>
+        </div>
+        <div class="guide-body">
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">📋</span>Content Planner</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Your visual board for tracking every piece of content from first idea to published. Move cards through the stages as you work.</p>
+              <ul class="guide-tips">
+                <li><strong>Idea stage:</strong> dump anything here — half-formed thoughts count. Just get it out of your head.</li>
+                <li><strong>In Progress:</strong> move it here when you've started writing, designing, or recording.</li>
+                <li><strong>Ready to Post:</strong> caption written, graphic done, hashtags ready — waiting to go live.</li>
+                <li><strong>Published:</strong> move it here once it's live so you can see your output at a glance.</li>
+                <li><strong>Tip:</strong> add format (Carousel, Newsletter, Freebie, Event) so you can see content variety at a glance.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✅</span>Tasks</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">A simple three-column board for your to-do list. Separate from the Content Planner — use this for business tasks, admin, client work, anything you need to act on.</p>
+              <ul class="guide-tips">
+                <li><strong>To Do:</strong> everything you need to do. Add freely — you can prioritize later.</li>
+                <li><strong>In Progress:</strong> what you're actively working on right now. Try to keep this list short.</li>
+                <li><strong>Done:</strong> move it here when complete. Seeing things in Done feels good — let it motivate you.</li>
+                <li><strong>Tip:</strong> start each week by reviewing To Do and picking 3 things that will actually move the needle.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">📅</span>Calendar</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Your monthly publishing map. Click any day to add a content entry — you'll see colored dots on the calendar showing what's planned.</p>
+              <ul class="guide-tips">
+                <li><strong>Use it for:</strong> mapping out when specific content goes live, not for writing the content itself.</li>
+                <li><strong>Statuses:</strong> Idea → Draft → Scheduled → Published. Update as you move through your workflow.</li>
+                <li><strong>Tip:</strong> aim to have next week planned by Friday. Even placeholder entries help you stay on track.</li>
+                <li><strong>Color dots:</strong> each platform gets its own color so you can see balance at a glance — are you posting on all your platforms?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✦</span>AI Studio</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Your AI writing partner, powered by Claude. Give it a topic and it generates a full draft in your voice — no more staring at a blank page.</p>
+              <ul class="guide-tips">
+                <li><strong>Business Context matters most:</strong> the more you fill in Settings → Business Context, the more on-brand every draft will be.</li>
+                <li><strong>Give it a specific brief:</strong> instead of "write a caption about my business," try "write a caption about why wellness entrepreneurs burn out when they don't delegate — warm tone, end with a DM CTA."</li>
+                <li><strong>Save your drafts:</strong> hit Save Draft to add it to your library. You can always come back and copy or reference it later.</li>
+                <li><strong>Use Hooks first:</strong> grab a hook from the Hooks library, drop it into the brief, and ask Claude to build from it.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🔗</span>Hooks Library</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Pre-written opening lines designed to stop the scroll. Filter by type and copy directly into your content or into the AI Studio as a starting point.</p>
+              <ul class="guide-tips">
+                <li><strong>Educational hooks:</strong> best for carousels, blog posts, and reels that teach something.</li>
+                <li><strong>Engagement hooks:</strong> great for posts where you want comments, shares, or saves.</li>
+                <li><strong>Storytelling hooks:</strong> use these when you're sharing a personal experience or client story.</li>
+                <li><strong>Add your own:</strong> when you write a hook that performs well, save it here so you can reuse and riff on it.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">💬</span>Prompts, CTAs &amp; Story Ideas</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Three libraries of ready-to-copy content pieces. Prompts are for Claude, CTAs go at the end of your content, Story Ideas are for Instagram Stories.</p>
+              <ul class="guide-tips">
+                <li><strong>Prompts:</strong> copy a prompt, paste it into AI Studio or Claude directly, fill in the brackets with your specifics.</li>
+                <li><strong>CTAs:</strong> always end your content with a clear call to action — pick one that matches your goal for that post (engagement, sales, or growth).</li>
+                <li><strong>Story Ideas:</strong> use these when you open Instagram and have no idea what to post — they're designed to be quick and authentic.</li>
+                <li><strong>Favorite:</strong> hit the heart on anything you love so you can find it again fast.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🧠</span>Brain Dump</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Unlimited notebooks for anything that doesn't fit neatly anywhere else. Thoughts, ideas, client notes, inspiration, lists — no wrong way to use it.</p>
+              <ul class="guide-tips">
+                <li><strong>Suggested notebooks:</strong> Content Ideas Parking Lot, Client Notes, Weekly Reflection, Inspiration &amp; Research, Business Planning.</li>
+                <li><strong>Brain dump freely:</strong> when your brain is busy, just open a note and type. Don't edit, don't organize — just get it out. You can sort it later.</li>
+                <li><strong>Content Parking Lot:</strong> ideas that aren't ready for the Content Planner yet. Keep them here until you have bandwidth.</li>
+                <li><strong>Tip:</strong> review your Brain Dump notebooks weekly during your planning session — that's when you move things to the Planner.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="lbl">Saved Drafts</div><div class="val" id="st-drafts">0</div><div class="sub2">in your library</div></div>
+        <div class="stat-card"><div class="lbl">This Month</div><div class="val" id="st-cal">0</div><div class="sub2">calendar entries</div></div>
+        <div class="stat-card"><div class="lbl">AI Drafts Generated</div><div class="val" id="st-pub">0</div><div class="sub2">all time</div></div>
+      </div>
+      <div class="sec-title">Recent Drafts</div>
+      <div id="dashRecent"></div>
+    </div>
+  </div>
+
+  <!-- IDEA BANK -->
+  <div id="view-ideas" class="view">
+    <div class="main-hdr">
+      <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
+      <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
+    </div>
+    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
+      <div class="kanban kanban-4" id="ideaKanban"></div>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div id="view-tasks" class="view">
+    <div class="main-hdr">
+      <div><h1>Tasks</h1><div class="sub" id="taskDate"></div></div>
+      <div class="hdr-acts"><button class="btn btn-p" onclick="openTaskModal()">+ Add Task</button></div>
+    </div>
+    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
+      <div class="kanban kanban-3" id="taskKanban"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="view-calendar" class="view">
+    <div class="main-hdr">
+      <div><h1>Content Calendar</h1><div class="sub">Plan your publishing schedule</div></div>
+      <div class="hdr-acts"><button class="btn btn-p" onclick="openCalModal()">+ Add Entry</button></div>
+    </div>
+    <div class="main-body">
+      <div class="cal-nav">
+        <button class="btn-ico" onclick="changeMonth(-1)">‹</button>
+        <h2 id="calLabel"></h2>
+        <button class="btn-ico" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+
+  <!-- AI STUDIO -->
+  <div id="view-studio" class="view" style="overflow:hidden">
+    <div class="main-hdr">
+      <div><h1>AI Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
+    </div>
+    <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
+      <div class="studio-wrap">
+        <div class="sp">
+          <div class="sp-in">
+            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div></div></div>
+            <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
+            <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
+            <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
+            <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="notesIn" placeholder="CTA, hashtags, word count, specific phrases..." style="min-height:56px"></textarea></div>
+            <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
+          </div>
+        </div>
+        <div class="sp out-panel">
+          <div class="out-tb">
+            <div style="display:flex;align-items:center;gap:10px"><span class="out-tit">Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
+            <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
+          </div>
+          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>Your draft will appear here</h3><p>Generate with Claude — or skip to the Write tab to type your own.</p></div></div>
+          <!-- WRITE YOUR OWN PANEL -->
+          <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
+            <div style="display:flex;gap:10px">
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Platform</label>
+                <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
+              </div>
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Format</label>
+                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
+              </div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column">
+              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Your Draft</label>
+              <textarea id="writeTA" class="fi" style="flex:1;min-height:280px;resize:none;line-height:1.8;font-size:14px" placeholder="Write freely here... no AI required. Just you and the page.&#10;&#10;Save it to your library when ready."></textarea>
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button class="btn btn-g" onclick="writeCopy()">Copy</button>
+              <button class="btn btn-p" onclick="writeSave()">Save to Drafts</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAFTS -->
+  <div id="view-drafts" class="view">
+    <div class="main-hdr"><div><h1>Saved Drafts</h1><div class="sub">Your content library</div></div></div>
+    <div class="main-body"><div class="drafts-grid" id="draftsGrid"></div></div>
+  </div>
+
+  <!-- HOOKS -->
+  <div id="view-hooks" class="view">
+    <div class="main-hdr"><div><h1>Viral Hooks</h1><div class="sub">Scroll-stopping opening lines for your content</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('hooks')">+ Add Hook</button></div></div>
+    <div class="main-body">
+      <div class="lib-search"><span class="s-ico">⌕</span><input id="hooksSearch" placeholder="Search hooks..." oninput="renderLib('hooks')" /></div>
+      <div class="lib-filters" id="hooksFilters"></div>
+      <div class="lib-count" id="hooksCount"></div>
+      <div class="lib-grid" id="hooksGrid"></div>
+    </div>
+  </div>
+
+  <!-- PROMPTS -->
+  <div id="view-prompts" class="view">
+    <div class="main-hdr"><div><h1>Prompt Bank</h1><div class="sub">Ready-to-use AI writing prompts for your niche</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('prompts')">+ Add Prompt</button></div></div>
+    <div class="main-body">
+      <div class="lib-search"><span class="s-ico">⌕</span><input id="promptsSearch" placeholder="Search prompts..." oninput="renderLib('prompts')" /></div>
+      <div class="lib-filters" id="promptsFilters"></div>
+      <div class="lib-count" id="promptsCount"></div>
+      <div class="lib-grid" id="promptsGrid"></div>
+    </div>
+  </div>
+
+  <!-- CTAs -->
+  <div id="view-ctas" class="view">
+    <div class="main-hdr"><div><h1>CTA Ideas</h1><div class="sub">Ready-to-use calls to action, organized by goal</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('ctas')">+ Add CTA</button></div></div>
+    <div class="main-body">
+      <div class="lib-search"><span class="s-ico">⌕</span><input id="ctasSearch" placeholder="Search CTAs..." oninput="renderLib('ctas')" /></div>
+      <div class="lib-filters" id="ctasFilters"></div>
+      <div class="lib-count" id="ctasCount"></div>
+      <div class="lib-grid" id="ctasGrid"></div>
+    </div>
+  </div>
+
+  <!-- STORIES -->
+  <div id="view-stories" class="view">
+    <div class="main-hdr"><div><h1>Story Ideas</h1><div class="sub">Ready-to-use Instagram Story prompts by goal</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('stories')">+ Add Story Idea</button></div></div>
+    <div class="main-body">
+      <div class="lib-search"><span class="s-ico">⌕</span><input id="storiesSearch" placeholder="Search story ideas..." oninput="renderLib('stories')" /></div>
+      <div class="lib-filters" id="storiesFilters"></div>
+      <div class="lib-count" id="storiesCount"></div>
+      <div class="lib-grid" id="storiesGrid"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="view-settings" class="view">
+    <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
+    <div class="main-body">
+      <div class="setting-sec"><h3>Studio Name</h3><p class="setting-desc">Give your workspace a name that feels like yours.</p><div class="fl"><input class="fi" id="nameIn" placeholder="e.g. Jess Palmer Creative" /></div><button class="btn btn-p" onclick="saveName()">Save Name</button></div>
+      <div class="setting-sec"><h3>Anthropic API Key</h3><p class="setting-desc">Stored only in your browser — sent directly to Anthropic, never anywhere else. Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.</p><div class="fl api-w"><input class="fi" id="keyIn" type="password" placeholder="sk-ant-api..." /><button class="api-eye" onclick="toggleKey()">👁</button></div><button class="btn btn-p" onclick="saveKey()">Save Key</button><div class="info-b">Running locally? Open a terminal, navigate to this file's folder, and run <code>python3 -m http.server 8080</code> — then open <code>http://localhost:8080/studio.html</code>.</div></div>
+      <div class="setting-sec"><h3>Claude Model</h3><p class="setting-desc">Sonnet is the best balance of quality and speed for everyday content work.</p><div class="fl"><select class="fi" id="modelIn"><option value="claude-sonnet-4-5">claude-sonnet-4-5 (Recommended)</option><option value="claude-opus-4-5">claude-opus-4-5 (Most powerful)</option><option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (Fastest)</option></select></div><button class="btn btn-p" onclick="saveModel()">Save Model</button></div>
+      <div class="setting-sec">
+        <h3>Brand Profile</h3>
+        <p class="setting-desc">These fields are automatically woven into every AI generation — no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and Claude will always write as <em>you</em>.</p>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. VA/OBM for wellness entrepreneurs" /></div>
+          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Holistic Virtual Assistant & OBM" /></div>
+        </div>
+        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. Wellness coaches, healers, and spiritual practitioners ready to scale" /></div>
+        <div class="fl"><label class="fl-lbl">Products &amp; Offers</label><input class="fi" id="bpOffers" placeholder="e.g. VA packages, OBM retainers, 1:1 strategy intensives" /></div>
+        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational — no corporate jargon, never pushy" /></div>
+        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale — the right systems change everything" /></div>
+        <div class="fl"><label class="fl-lbl">Extra Notes for Claude <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Paste anything else Claude should always know — content pillars, things to avoid, past prompts that worked well, client language..."></textarea>
+        </div>
+        <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
+        <div class="info-b" style="margin-top:14px">
+          <strong>Tip:</strong> Your brand voice field matters most. Instead of "professional," try something specific like <em>"writes like a trusted colleague, not a coach — direct but warm, short sentences, zero buzzwords."</em>
+        </div>
+      </div>
+      <div class="setting-sec">
+        <h3>Onboarding &amp; Welcome Guide</h3>
+        <p class="setting-desc">Re-open the welcome guide that shows on first login — useful if you want to revisit the overview of each section.</p>
+        <button class="btn btn-g" onclick="resetOnboarding()">↺ Reset Welcome Guide</button>
+      </div>
+      <div class="setting-sec"><h3>Export &amp; Import</h3><p class="setting-desc">Back up all your drafts, ideas, tasks, and calendar entries. Your API key is never included in exports. Do this regularly — it's your safety net.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-brass" onclick="exportData()">⬇ Export Backup</button><button class="btn btn-g" onclick="document.getElementById('impFile').click()">⬆ Import Backup</button></div><input type="file" id="impFile" accept=".json" style="display:none" onchange="importData(event)" /></div>
+      <div class="setting-sec" style="border-color:#E0BDAA"><h3>Clear All Data</h3><p class="setting-desc">Permanently deletes everything in this browser. Export first!</p><button class="btn btn-danger" onclick="clearAll()">Clear All Data</button></div>
+    </div>
+  </div>
+
+  <!-- BRAIN DUMP -->
+  <div id="view-braindump" class="view">
+    <div class="main-hdr">
+      <div><h1>Brain Dump</h1><div class="sub">Unlimited notebooks for your thoughts, ideas &amp; notes</div></div>
+      <div class="hdr-acts"><button class="btn btn-p" onclick="newNotebook()">+ New Notebook</button></div>
+    </div>
+    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
+      <div class="bd-wrap">
+        <div class="bd-left">
+          <div class="bd-left-hdr">
+            <h3>Notebooks</h3>
+            <button class="btn btn-g" style="width:100%;font-size:12px;padding:7px;margin-top:2px" onclick="newNotebook()">+ New Notebook</button>
+          </div>
+          <div class="nb-list" id="nbList"></div>
+        </div>
+        <div class="bd-right" id="bdRight">
+          <div class="bd-empty"><div class="sym">🧠</div><h3>Select a notebook</h3><p>Choose a notebook on the left, or create your first one to start writing.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- MODALS -->
+<!-- Welcome -->
+<div class="modal-ov" id="welcomeModal">
+  <div class="modal modal-xl">
+    <div class="m-title">Welcome to your Studio ✦</div>
+    <div class="m-sub">This is your personal content workspace. Here's how it all works — read this once and you'll feel right at home.</div>
+    <div class="welcome-steps">
+      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings → add your studio name, API key, and business context. The business context is the most important part — it tells Claude who you are so every draft sounds like <em>you</em>.</p></div></div>
+      <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
+      <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events — anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
+      <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
+      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in AI Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
+      <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Export your backup regularly</h4><p>Go to Settings → Export Backup. This saves all your data to a file on your computer so you never lose anything. Do this weekly if you use this often.</p></div></div>
+    </div>
+    <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
+  </div>
+</div>
+
+<!-- Calendar Entry -->
+<div class="modal-ov" id="calModal">
+  <div class="modal">
+    <div class="m-title" id="calModalTitle">Add Calendar Entry</div>
+    <div class="m-sub">Plan content on your calendar</div>
+    <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="calTitle" placeholder="What are you posting?" /></div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="calPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="other">Other</option></select></div>
+      <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="calStatus"><option value="idea">Idea</option><option value="draft">Draft</option><option value="scheduled">Scheduled</option><option value="published">Published</option></select></div>
+    </div>
+    <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="calDate" /></div>
+    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="calNotes" style="min-height:60px" placeholder="Topic, CTA idea..."></textarea></div>
+    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('calModal')">Cancel</button><button class="btn btn-p" onclick="saveCalEntry()" style="min-width:100px">Save</button></div>
+  </div>
+</div>
+
+<!-- Idea -->
+<div class="modal-ov" id="ideaModal">
+  <div class="modal">
+    <div class="m-title">Add to Content Planner</div>
+    <div class="m-sub">Drop your content idea in — you can flesh it out later</div>
+    <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" /></div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="ideaPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option><option value="other">Other</option></select></div>
+      <div class="fl"><label class="fl-lbl">Format</label><select class="fi" id="ideaFormat">
+        <option value="Caption / Post">Post</option>
+        <option value="Carousel">Carousel</option>
+        <option value="Reel / Video">Reel / Video</option>
+        <option value="Story">Story</option>
+        <option value="Newsletter">Newsletter</option>
+        <option value="Freebie">Freebie</option>
+        <option value="Event">Event</option>
+        <option value="Blog Post">Blog Post</option>
+        <option value="Email Sequence">Email Sequence</option>
+        <option value="Podcast">Podcast</option>
+        <option value="Other">Other</option>
+      </select></div>
+    </div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="ideaDate" /></div>
+      <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="ideaTime" /></div>
+    </div>
+    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="ideaNotes" style="min-height:60px" placeholder="Hook idea, key points, CTA, deadline..."></textarea></div>
+    <div class="fl">
+      <label class="fl-lbl">Upload Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+      <div id="ideaImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+      <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 4l3-3 3 3"/><path d="M1 10v1.5A1.5 1.5 0 002.5 13h9a1.5 1.5 0 001.5-1.5V10"/></svg>
+        Add images or slides
+        <input type="file" id="ideaImgInput" multiple accept="image/*" style="display:none" onchange="handleIdeaImages(this)" />
+      </label>
+      <div style="font-size:10.5px;color:var(--tl);margin-top:5px">Images are stored in your browser — they stay with this content card.</div>
+    </div>
+
+    <!-- AI TOOLS - collapsible -->
+    <div style="border-top:1px solid var(--bl);margin-top:16px;padding-top:14px">
+      <div onclick="toggleIdeaAI()" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:0">
+        <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t)">Generate with AI</span>
+        <span id="ideaAIChev" style="font-size:12px;color:var(--tl);transition:transform .2s">&#9656;</span>
+      </div>
+      <div id="ideaAIPanel" style="display:none;margin-top:12px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <button class="cd-ai-btn" onclick="ideaGenerate('caption')">Caption</button>
+          <button class="cd-ai-btn" onclick="ideaGenerate('hooks')">5 Hooks</button>
+          <button class="cd-ai-btn" onclick="ideaGenerate('carousel')">Carousel Copy</button>
+          <button class="cd-ai-btn" onclick="ideaGenerate('newsletter')">Newsletter Intro</button>
+        </div>
+        <div style="border-top:1px solid var(--bl);padding-top:10px;margin-top:4px">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:4px">Repurpose a Post</div>
+          <div style="font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px">Copy a caption or post from anywhere — Instagram, TikTok, LinkedIn, a blog — paste it below. Claude will study the structure and rebuild it completely in your voice for your niche.</div>
+          <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+            <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t);white-space:nowrap">Original from</label>
+            <select class="fi" id="ideaRpOrigPlat" style="font-size:12px;padding:6px 10px">
+              <option value="Instagram">Instagram</option>
+              <option value="TikTok">TikTok</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="a blog or newsletter">Blog / Newsletter</option>
+              <option value="Facebook">Facebook</option>
+              <option value="Pinterest">Pinterest</option>
+              <option value="somewhere online">Other</option>
+            </select>
+          </div>
+          <textarea class="fi" id="ideaRpText" placeholder="Paste the caption, slide text, or post content here..." style="min-height:80px;margin-bottom:8px"></textarea>
+          <button class="cd-ai-btn" style="margin-bottom:0;background:var(--teal);border-color:var(--teal);color:white;font-weight:500" onclick="ideaRepurpose()">Rebuild in My Voice</button>
+        </div>
+        <div class="cd-out" id="ideaAIOut" style="margin-top:10px"></div>
+        <div class="cd-acts" id="ideaAIActs" style="margin-top:8px">
+          <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaAICopy()">Copy</button>
+          <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaAISave()">Save as Draft</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-acts" style="margin-top:16px"><button class="btn btn-g" onclick="closeModal('ideaModal')">Cancel</button><button class="btn btn-p" onclick="saveIdea()">Add to Planner</button></div>
+  </div>
+</div>
+
+<!-- Task -->
+<div class="modal-ov" id="taskModal">
+  <div class="modal">
+    <div class="m-title">Add Task</div>
+    <div class="m-sub">Add something to your to-do list</div>
+    <div class="fl"><label class="fl-lbl">Task</label><input class="fi" id="taskTitle" placeholder="e.g. Write captions for this week" /></div>
+    <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Due Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="taskDate" /></div>
+      <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="taskTime" /></div>
+    </div>
+    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="taskNotes" style="min-height:60px" placeholder="Context, links, what done looks like..."></textarea></div>
+    <div style="font-size:10.5px;color:var(--tl);margin-bottom:14px">If you set a date, this task will also appear on your calendar.</div>
+    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" onclick="saveTask()">Add Task</button></div>
+  </div>
+</div>
+
+<!-- Draft View -->
+<div class="modal-ov" id="draftModal">
+  <div class="modal modal-xl">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
+      <div class="m-title" id="draftModalTitle"></div>
+      <button class="btn btn-danger" style="padding:6px 11px;font-size:12px;flex-shrink:0;margin-top:4px" onclick="deleteDraft()">Delete</button>
+    </div>
+    <div class="m-sub" id="draftModalMeta"></div>
+    <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;max-height:360px;overflow-y:auto;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e)" id="draftModalContent"></div>
+    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('draftModal')">Close</button><button class="btn btn-p" onclick="copyDraftModal()">Copy Content</button></div>
+  </div>
+</div>
+
+<!-- CARD DETAIL MODAL -->
+<div class="modal-ov" id="cardDetailModal">
+  <div class="modal" style="max-width:720px;width:95vw">
+    <div class="cd-stages">
+      <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
+      <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
+      <div class="cd-stage" data-s="ready" onclick="cdSetStage(this)">Ready</div>
+      <div class="cd-stage" data-s="published" onclick="cdSetStage(this)">Published</div>
+    </div>
+    <div class="cd-cols">
+      <div>
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" /></div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Platform</label>
+            <select class="fi" id="cdPlat">
+              <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
+              <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
+              <option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fl"><label class="fl-lbl">Format</label>
+            <select class="fi" id="cdFormat">
+              <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
+              <option value="Reel / Video">Reel</option><option value="Story">Story</option>
+              <option value="Newsletter">Newsletter</option><option value="Freebie">Freebie</option>
+              <option value="Event">Event</option><option value="Blog Post">Blog Post</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
+        <div class="fl"><label class="fl-lbl">Notes / Brief</label>
+          <textarea class="fi" id="cdNotes" style="min-height:90px" placeholder="Hook idea, key points, angle, CTA..."></textarea>
+        </div>
+      </div>
+      <div>
+        <div class="cd-ai-panel">
+          <div class="cd-ai-lbl">AI Tools</div>
+          <button class="cd-ai-btn" onclick="cdGenerate('caption')">Generate Caption</button>
+          <button class="cd-ai-btn" onclick="cdGenerate('hooks')">Generate 5 Hooks</button>
+          <button class="cd-ai-btn" onclick="cdGenerate('carousel')">Generate Carousel Copy</button>
+          <button class="cd-ai-btn" onclick="cdGenerate('newsletter')">Generate Newsletter Intro</button>
+          <div class="cd-out" id="cdOut"></div>
+          <div class="cd-acts" id="cdActs">
+            <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy()">Copy</button>
+            <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft()">Save Draft</button>
+          </div>
+        </div>
+        <div class="cd-rp-div"></div>
+        <div class="cd-rp-lbl">Repurpose a Post</div>
+        <div class="cd-rp-note">Paste a caption or post text. Claude rewrites it in your voice for your niche.</div>
+        <textarea class="fi" id="cdRpText" placeholder="Paste post content here..." style="min-height:80px;margin-bottom:8px"></textarea>
+        <button class="btn btn-p" style="width:100%" onclick="cdRepurpose()">Repurpose for My Niche</button>
+      </div>
+    </div>
+    <div class="m-acts" style="justify-content:space-between">
+      <button class="btn btn-danger" onclick="cdDelete()">Delete</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-g" onclick="closeModal('cardDetailModal')">Close</button>
+        <button class="btn btn-p" onclick="cdSave()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Library Item -->
+<div class="modal-ov" id="addLibModal">
+  <div class="modal">
+    <div class="m-title" id="addLibTitle">Add to Library</div>
+    <div class="m-sub" id="addLibSub"></div>
+    <div class="fl" id="addLibTitleRow" style="display:none"><label class="fl-lbl">Title</label><input class="fi" id="addLibTitleIn" placeholder="Give it a name..." /></div>
+    <div class="fl"><label class="fl-lbl">Category</label><input class="fi" id="addLibCat" placeholder="e.g. Educational, Engagement..." /></div>
+    <div class="fl"><label class="fl-lbl">Content</label><textarea class="fi" id="addLibText" style="min-height:100px" placeholder="Paste or write your content here..."></textarea></div>
+    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('addLibModal')">Cancel</button><button class="btn btn-p" onclick="saveLibItem()">Add to Library</button></div>
+  </div>
+</div>
+
+<!-- CAL DAY VIEW MODAL -->
+<div class="modal-ov" id="calDayModal">
+  <div class="modal" style="max-width:500px">
+    <div class="m-title" id="calDayTitle"></div>
+    <div class="m-sub" id="calDaySubtitle"></div>
+    <div id="calDayEntries" style="margin-bottom:16px"></div>
+    <div class="m-acts">
+      <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
+      <button class="btn btn-p" onclick="calDayAddNew()">+ Add Entry</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════ DATA ═══════════════════ */
+const HOOKS_DEFAULT = [
+  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a wellness business..."},
+  {id:'h2',cat:'Educational',text:"The one system that saved me 10+ hours a week (and you can steal it)."},
+  {id:'h3',cat:'Educational',text:"3 signs you're ready to hire a VA — and don't even realize it yet."},
+  {id:'h4',cat:'Educational',text:"What [X result] actually takes. Hint: it's simpler than you think."},
+  {id:'h5',cat:'Educational',text:"If you've been doing [X] in your business, stop. Here's why."},
+  {id:'h6',cat:'Educational',text:"This is what burnout in a service business actually looks like — and most people miss it."},
+  {id:'h7',cat:'Engagement',text:"Drop a 🌿 if this is exactly what you needed to hear today."},
+  {id:'h8',cat:'Engagement',text:"Tell me in the comments: what's your biggest content block right now?"},
+  {id:'h9',cat:'Engagement',text:"Be honest — how many unfinished captions are sitting in your drafts?"},
+  {id:'h10',cat:'Engagement',text:"This or that: batch all your content at once, or create as you go?"},
+  {id:'h11',cat:'Storytelling',text:"I almost walked away from my business three months in. Here's what changed everything."},
+  {id:'h12',cat:'Storytelling',text:"When I first started as a VA, I thought I had to do everything myself. I was so wrong."},
+  {id:'h13',cat:'Storytelling',text:"Nobody warned me what running a service business in the wellness space would actually feel like."},
+  {id:'h14',cat:'Storytelling',text:"The moment I stopped doing things the 'right' way was the moment my business changed."},
+  {id:'h15',cat:'Comparison',text:"Before vs. after having a content system: what my week actually looks like now."},
+  {id:'h16',cat:'Comparison',text:"DIY everything vs. delegating: the honest truth about what each one costs you."},
+  {id:'h17',cat:'Comparison',text:"VA vs. OBM — the difference and why it matters for where your business is right now."},
+  {id:'h18',cat:'Curiosity',text:"I'm going to say something that might be controversial about content strategy..."},
+  {id:'h19',cat:'Curiosity',text:"The thing everyone gets wrong about showing up on Instagram as a service provider."},
+  {id:'h20',cat:'Curiosity',text:"Can I share something I've never posted about publicly before?"}
+];
+const CTAS_DEFAULT = [
+  {id:'c1',cat:'Engagement',text:"Save this for when you need it. ✦"},
+  {id:'c2',cat:'Engagement',text:"Drop your questions in the comments — I read every single one."},
+  {id:'c3',cat:'Engagement',text:"Double tap if this is exactly what you needed today."},
+  {id:'c4',cat:'Engagement',text:"Tell me: does this resonate? Comment below."},
+  {id:'c5',cat:'Share & Tag',text:"Tag a fellow wellness business owner who needs to see this."},
+  {id:'c6',cat:'Share & Tag',text:"Share this with someone who's been thinking about hiring support."},
+  {id:'c7',cat:'Share & Tag',text:"Send this to your VA — they deserve the appreciation. 🤍"},
+  {id:'c8',cat:'Lead Generation',text:"DM me the word READY to learn more about working together."},
+  {id:'c9',cat:'Lead Generation',text:"Grab the free guide — link in bio."},
+  {id:'c10',cat:'Lead Generation',text:"Send me a DM and let's chat about what would actually help your business right now."},
+  {id:'c11',cat:'Link & Click',text:"Full details + application link in my bio."},
+  {id:'c12',cat:'Link & Click',text:"Book your discovery call using the link in my bio."},
+  {id:'c13',cat:'Link & Click',text:"Read the full post at the link in my bio."},
+  {id:'c14',cat:'Follow & Subscribe',text:"Follow for more behind-the-scenes of a VA/OBM business serving wellness pros."},
+  {id:'c15',cat:'Follow & Subscribe',text:"Join the newsletter for weekly content tips — link in bio."},
+  {id:'c16',cat:'Direct Sales',text:"Spots are limited — DM me to get started."},
+  {id:'c17',cat:'Direct Sales',text:"Book your intensive using the link in bio."},
+  {id:'c18',cat:'Direct Sales',text:"Applications are open — link in bio. I'd love to work with you."}
+];
+const STORIES_DEFAULT = [
+  {id:'s1',cat:'Engagement',text:"Quick poll: how many hours do you actually spend on content each week?"},
+  {id:'s2',cat:'Engagement',text:"This or that: writing captions in bulk on Mondays OR writing day-of?"},
+  {id:'s3',cat:'Engagement',text:"What's your biggest struggle with showing up consistently online right now?"},
+  {id:'s4',cat:'Engagement',text:"Real talk: what would help your content feel easier this week? Vote or comment below."},
+  {id:'s5',cat:'Connect & Inspire',text:"Something most people don't know about why I started this business..."},
+  {id:'s6',cat:'Connect & Inspire',text:"Here's what my morning actually looks like on a workday (no filter, real talk)."},
+  {id:'s7',cat:'Connect & Inspire',text:"The moment I knew this work was exactly what I was meant to do..."},
+  {id:'s8',cat:'Connect & Inspire',text:"What I wish someone had told me in my first year of business."},
+  {id:'s9',cat:'Social Proof',text:"A recent client win that genuinely made my whole week. 🤍"},
+  {id:'s10',cat:'Social Proof',text:"Sharing this message from a client because it means everything..."},
+  {id:'s11',cat:'Social Proof',text:"What working together actually looks like — here's a behind-the-scenes peek."},
+  {id:'s12',cat:'Social Proof',text:"What changes for my clients once we start working together (the honest version)."},
+  {id:'s13',cat:'Storytelling',text:"Story time: the project that taught me the most about my business (and myself)."},
+  {id:'s14',cat:'Storytelling',text:"Real talk: here's what a hard week in this business actually looks like."},
+  {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my VA/OBM practice."},
+  {id:'s16',cat:'Storytelling',text:"How I went from overwhelmed freelancer to actually loving what I do — the real story."}
+];
+const PROMPTS_DEFAULT = [
+  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter for a wellness-focused VA/OBM. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
+  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions for a wellness entrepreneur about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
+  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter for a wellness entrepreneur. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
+  {id:'p4',cat:'Script Rewrite',title:'Brand Voice Rewriter',text:"Rewrite this content in a warm, grounded, clear brand voice. Remove any corporate language. Make it sound like I'm talking to a trusted colleague in the wellness space. Here is the content: [PASTE CONTENT]"},
+  {id:'p5',cat:'Script Rewrite',title:'60-Second Reel Script',text:"Turn this rough idea into a polished 60-second reel script: [PASTE IDEA]. Hook in the first 3 seconds — short and punchy. Build naturally. End with a clear CTA. Warm, confident tone throughout."},
+  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist for a VA/OBM who serves wellness and spirituality professionals. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
+  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting wellness entrepreneurs who are ready to hire support? Where are the gaps? [PASTE PLAN]"},
+  {id:'p8',cat:'Sales Copy',title:'Warm DM Script',text:"Write a DM script for reaching out to a potential client who is a wellness coach or healer. Keep it warm and non-salesy — lead with curiosity, not a pitch. Mention [YOUR OFFER] naturally in the second or third message."},
+  {id:'p9',cat:'Sales Copy',title:'Short Sales Email',text:"Write a concise sales email for [OFFER]. Tone: warm, clear, confident. Include: what it is, who it's for, what they get, and a clear CTA. Under 200 words. No fake urgency or hype."}
+];
+
+/* ═══════════════════ STATE ═══════════════════ */
+const S = {
+  view:'dashboard',
+  calMonth:new Date().getMonth(), calYear:new Date().getFullYear(),
+  drafts:[], calEntries:[], ideas:[], tasks:[],
+  hooks:[], ctas:[], stories:[], prompts:[],
+  favs:{hooks:[], ctas:[], stories:[], prompts:[]},
+  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
+  gs:{nameSet:false,keySet:false,bizSet:false,libVisited:false,calAdded:false,draftGenerated:false},
+  libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
+  studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
+  editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
+  brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:''},
+  aiCount:0,
+  notebooks:[], notes:[], activeNotebook:null
+};
+
+/* ═══════════════════ INIT ═══════════════════ */
+function init(){
+  load(); applySettings(); setupChips();
+  renderDashboard(); renderCalendar(); renderKanban(); renderTaskKanban();
+  renderAllLibs(); setGreeting();
+  if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
+}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('studioOS_v3')||'{}');
+    S.drafts=d.drafts||[]; S.calEntries=d.calEntries||[];
+    S.ideas=d.ideas||[]; S.tasks=d.tasks||[];
+    S.hooks=d.hooks||HOOKS_DEFAULT.map(x=>({...x}));
+    S.ctas=d.ctas||CTAS_DEFAULT.map(x=>({...x}));
+    S.stories=d.stories||STORIES_DEFAULT.map(x=>({...x}));
+    S.prompts=d.prompts||PROMPTS_DEFAULT.map(x=>({...x}));
+    S.favs=d.favs||{hooks:[],ctas:[],stories:[],prompts:[]};
+    S.settings={...S.settings,...(d.settings||{})};
+    S.gs={...S.gs,...(d.gs||{})};
+    S.notebooks=d.notebooks||[];
+    S.notes=d.notes||[];
+    S.brandProfile={...S.brandProfile,...(d.brandProfile||{})};
+    S.aiCount=d.aiCount||0;
+  }catch(e){}
+}
+function persist(){
+  localStorage.setItem('studioOS_v3',JSON.stringify({
+    drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
+    notebooks:S.notebooks,notes:S.notes,
+    brandProfile:S.brandProfile,aiCount:S.aiCount,
+    hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
+    favs:S.favs,settings:S.settings,gs:S.gs
+  }));
+}
+function applySettings(){
+  const n=S.settings.name||'Flow State Studio';
+  document.getElementById('sbName').textContent=n;
+  document.getElementById('nameIn').value=n;
+  document.getElementById('keyIn').value=S.settings.apiKey||'';
+  document.getElementById('modelIn').value=S.settings.model||'claude-sonnet-4-5';
+  // Brand profile
+  const bp=S.brandProfile;
+  const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
+  setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
+  setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
+}
+function setGreeting(){
+  const h=new Date().getHours();
+  document.getElementById('greeting').textContent=h<12?'morning':h<17?'afternoon':'evening';
+  const now=new Date();
+  const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const m=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('dashDate').textContent=`${d[now.getDay()]}, ${m[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  const td=document.getElementById('taskDate');
+  if(td)td.textContent=`${d[now.getDay()]}, ${m[now.getMonth()]} ${now.getDate()}`;
+}
+
+/* ═══════════════════ NAV ═══════════════════ */
+function navigate(v){
+  if(!v||!document.getElementById("view-"+v))return;
+  S.view=v;
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-i').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const ni=document.querySelector(`[data-view="${v}"]`);
+  if(ni)ni.classList.add('active');
+  if(['hooks','ctas','stories','prompts'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
+  if(v==='dashboard')renderDashboard();
+  if(v==='calendar')renderCalendar();
+  if(v==='ideas')renderKanban();
+  if(v==='tasks')renderTaskKanban();
+  if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
+  if(v==='drafts')renderDraftsGrid();
+  if(v==='braindump')renderBrainDump();
+  if(v==='settings')applySettings();
+  renderGS();
+  renderPickUp();
+  // auto-collapse GS strip when all done
+  const allDone=GS_STEPS.every(s=>S.gs[s.key]);
+  if(allDone){const strip=document.getElementById('gsStrip');if(strip)strip.style.display='none';}
+}
+document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.view)));
+
+/* ═══════════════════ GETTING STARTED ═══════════════════ */
+const GS_STEPS=[
+  {key:'nameSet',label:'Set your studio name',nav:'settings'},
+  {key:'keySet',label:'Add your Anthropic API key',nav:'settings'},
+  {key:'bizSet',label:'Fill in your Brand Profile in Settings',nav:'settings'},
+  {key:'libVisited',label:'Browse the Library (Hooks, Prompts, CTAs)',nav:'hooks'},
+  {key:'calAdded',label:'Add your first calendar entry',nav:'calendar'},
+  {key:'draftGenerated',label:'Generate your first AI draft',nav:'studio'}
+];
+function renderGS(){
+  const done=GS_STEPS.filter(s=>S.gs[s.key]).length;
+  const total=GS_STEPS.length;
+  document.getElementById('gsBadge').textContent=`${done} of ${total} complete`;
+  document.getElementById('gsBar').style.width=`${Math.round(done/total*100)}%`;
+  document.getElementById('gsItems').innerHTML=GS_STEPS.map(s=>`
+    <div class="gs-item${S.gs[s.key]?' done':''}" onclick="navigate('${s.nav}')">
+      <div class="gs-cb">${S.gs[s.key]?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+      <span class="gs-item-lbl">${s.label}</span>
+    </div>`).join('');
+}
+function toggleGS(){
+  document.getElementById('gsStrip').classList.toggle('open');
+}
+
+/* ═══════════════════ DASHBOARD ═══════════════════ */
+function quickCreate(type, plat){
+  S.studio.type=type; S.studio.plat=plat;
+  navigate('studio');
+  setTimeout(()=>{
+    const setChip=(gid,val)=>document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.toggle('sel',c.dataset.val===val));
+    setChip('typeChips',type); setChip('platChips',plat);
+  },60);
+}
+function renderPickUp(){
+  const el=document.getElementById('pickUpWrap');
+  if(!el)return;
+  const lastDraft=S.drafts[0];
+  const lastInProgress=S.ideas.find(i=>i.status==='inprogress');
+  if(!lastDraft&&!lastInProgress){el.innerHTML='';return;}
+  const dt=d=>new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  el.innerHTML=`<div class="pickup-wrap">
+    <div class="pickup-label">Pick up where you left off</div>
+    <div class="pickup-grid">
+      ${lastDraft?`<div class="pickup-card">
+        <div class="pickup-tag">Last draft</div>
+        <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
+        <div class="pickup-sub">${dt(lastDraft.createdAt)} &middot; ${cap(lastDraft.platform||'')}</div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="openDraftModal('${lastDraft.id}')">View</button>
+          <button class="btn btn-p" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(${JSON.stringify('')}||'').catch(()=>{});copyLastDraft('${lastDraft.id}')">Copy</button>
+        </div>
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">Last draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in AI Studio</div></div>'}
+      ${lastInProgress?`<div class="pickup-card">
+        <div class="pickup-tag">In progress</div>
+        <div class="pickup-title">${esc(lastInProgress.title)}</div>
+        <div class="pickup-sub">${esc(lastInProgress.format||'')}${lastInProgress.platform?' &middot; '+cap(lastInProgress.platform):''}</div>
+        <div style="margin-top:12px">
+          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="navigate('ideas')">Go to Planner →</button>
+        </div>
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">In progress</div><div class="pickup-title" style="color:var(--tl)">Nothing in progress</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+    </div>
+  </div>`;
+}
+function copyLastDraft(id){
+  const d=S.drafts.find(x=>x.id===id);
+  if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));
+}
+function renderDashboard(){
+  document.getElementById('st-drafts').textContent=S.drafts.length;
+  const now=new Date();
+  const mon=S.calEntries.filter(e=>{if(!e.date)return false;const d=new Date(e.date+'T12:00:00');return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  document.getElementById('st-cal').textContent=mon.length;
+  document.getElementById('st-pub').textContent=S.aiCount||0;
+  const el=document.getElementById('dashRecent');
+  const recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,4);
+  if(!recent.length){el.innerHTML='<div class="empty-state"><h3>Nothing here yet</h3><p>Head to AI Studio to generate a draft, write your own, or repurpose something you love.</p></div>';return;}
+  el.innerHTML=`<div class="drafts-grid">${recent.map(dcHTML).join('')}</div>`;
+  el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
+  renderGS();
+}
+
+/* ═══════════════════ KANBAN — IDEAS ═══════════════════ */
+const IDEA_COLS=[{id:'idea',label:'Ideas'},{id:'inprogress',label:'In Progress'},{id:'ready',label:'Ready to Post'},{id:'published',label:'Published'}];
+function renderKanban(){
+  const el=document.getElementById('ideaKanban');
+  el.innerHTML=IDEA_COLS.map(col=>{
+    const cards=S.ideas.filter(i=>i.status===col.id);
+    return`<div class="kc">
+      <div class="kc-head"><span class="kc-title">${col.label}</span><span class="kc-count">${cards.length}</span></div>
+      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer">
+        <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
+        <div class="cc-title">${esc(i.title)}</div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:9px">${esc(i.format||'')}</span></div>
+        ${col.id!=='published'?`<div style="margin-top:8px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
+      </div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
+      <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
+    </div>`;
+  }).join('');
+}
+function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
+function deleteIdea(id){S.ideas=S.ideas.filter(i=>i.id!==id);persist();renderKanban();}
+function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;persist();renderKanban();}}
+
+/* ═══════════════════ KANBAN — TASKS ═══════════════════ */
+const TASK_COLS=[{id:'todo',label:'To Do'},{id:'inprogress',label:'In Progress'},{id:'done',label:'Done'}];
+function renderTaskKanban(){
+  const el=document.getElementById('taskKanban');
+  el.innerHTML=TASK_COLS.map(col=>{
+    const cards=S.tasks.filter(t=>t.status===col.id);
+    return`<div class="kc">
+      <div class="kc-head"><span class="kc-title">${col.label}</span><span class="kc-count">${cards.length}</span></div>
+      <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card">
+        <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
+        <div class="cc-title">${esc(t.title)}</div>
+        ${t.date?'<div style="font-size:10.5px;color:var(--teal);margin-top:4px">Due: '+t.date+(t.time?' at '+t.time:'')+'</div>':''}
+        ${t.notes?'<div style="font-size:11px;color:var(--t);margin-top:5px;line-height:1.55;border-top:1px solid var(--bl);padding-top:5px">'+esc(t.notes)+'</div>':''}
+        ${col.id!=='done'?`<div style="margin-top:8px;display:flex;gap:5px">${nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
+      </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
+      <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
+    </div>`;
+  }).join('');
+}
+function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
+function deleteTask(id){S.tasks=S.tasks.filter(t=>t.id!==id);persist();renderTaskKanban();}
+function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;persist();renderTaskKanban();}}
+
+/* ═══════════════════ CALENDAR ═══════════════════ */
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function renderCalendar(){
+  document.getElementById('calLabel').textContent=`${MONTHS[S.calMonth]} ${S.calYear}`;
+  const first=new Date(S.calYear,S.calMonth,1).getDay();
+  const dim=new Date(S.calYear,S.calMonth+1,0).getDate();
+  const prev=new Date(S.calYear,S.calMonth,0).getDate();
+  const today=new Date();
+  let h=DAYS.map(d=>`<div class="cal-hd">${d}</div>`).join('');
+  for(let i=first-1;i>=0;i--)h+=`<div class="cal-cell other"><div class="day-n">${prev-i}</div></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${S.calYear}-${String(S.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const es=S.calEntries.filter(e=>e.date===ds);
+    const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
+    const dots=es.slice(0,3).map(e=>`<div class="day-row"><span class="dot dot-${e.platform}"></span><span style="overflow:hidden;text-overflow:ellipsis">${esc(e.title)}</span></div>`).join('');
+    const more=es.length>3?`<div class="day-row" style="color:var(--tl)">+${es.length-3} more</div>`:'';
+    h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
+  }
+  const tot=Math.ceil((first+dim)/7)*7;
+  for(let d=1;d<=tot-first-dim;d++)h+=`<div class="cal-cell other"><div class="day-n">${d}</div></div>`;
+  document.getElementById('calGrid').innerHTML=h;
+}
+function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
+
+/* ═══════════════════ LIBRARY ═══════════════════ */
+const LIB_CAT_COLORS={
+  'Educational':'background:var(--tealp);color:#1E5C5C',
+  'Engagement':'background:var(--rp);color:#8C3518',
+  'Storytelling':'background:#E4D4EE;color:#3E1A5C',
+  'Comparison':'background:var(--gp);color:#6A4E18',
+  'Curiosity':'background:var(--sagep);color:#3A5228',
+  'Share & Tag':'background:var(--rp);color:#8C3518',
+  'Lead Generation':'background:var(--sagep);color:#3A5228',
+  'Link & Click':'background:#D4D8EE;color:#1A2860',
+  'Follow & Subscribe':'background:#E4D4EE;color:#3E1A5C',
+  'Direct Sales':'background:var(--gp);color:#6A4E18',
+  'Connect & Inspire':'background:var(--rp);color:#8C3518',
+  'Social Proof':'background:var(--sagep);color:#3A5228',
+  'Caption Writing':'background:var(--rp);color:#8C3518',
+  'Script Rewrite':'background:var(--gp);color:#6A4E18',
+  'Strategy':'background:#D4D8EE;color:#1A2860',
+  'Sales Copy':'background:var(--sagep);color:#3A5228',
+  'default':'background:var(--bl);color:var(--el)'
+};
+function catStyle(cat){return LIB_CAT_COLORS[cat]||LIB_CAT_COLORS.default;}
+function renderAllLibs(){['hooks','ctas','stories','prompts'].forEach(k=>renderLib(k,true));}
+function renderLib(section,silent){
+  const data=S[section];
+  const query=(document.getElementById(section+'Search')?.value||'').toLowerCase();
+  const filter=S.libFilters[section]||'All';
+  const hasFavs=(S.favs[section]||[]).length>0;
+  const cats=['All',...(hasFavs?['Bookmarked']:[]),...[...new Set(data.map(x=>x.cat))].sort()];
+  // Filters
+  const fEl=document.getElementById(section+'Filters');
+  if(fEl)fEl.innerHTML=cats.map(c=>{const bm=c==='Bookmarked';return`<span class="lib-filter-chip${filter===c?' active':''}${bm?' bm-chip':''}" onclick="setLibFilter('${section}','${c}')">${c}</span>`;}).join('');
+  // Filter + search
+  const filtered=data.filter(x=>{
+    const matchCat=filter==='All'||(filter==='Bookmarked'&&isFav(x.id))||x.cat===filter;
+    const matchQ=!query||x.text.toLowerCase().includes(query)||(x.title||'').toLowerCase().includes(query)||(x.cat||'').toLowerCase().includes(query);
+    return matchCat&&matchQ;
+  });
+  const cnt=document.getElementById(section+'Count');
+  if(cnt)cnt.textContent=`Showing ${filtered.length} of ${data.length}`;
+  const grid=document.getElementById(section+'Grid');
+  if(!grid)return;
+  if(!filtered.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>No results</h3><p>Try a different filter or search term.</p></div>';return;}
+  const isFav=(id)=>(S.favs[section]||[]).includes(id);
+  grid.innerHTML=filtered.map(x=>`<div class="lib-card">
+    <div class="lib-card-top">
+      <span class="lib-cat-tag" style="${catStyle(x.cat)}">${esc(x.cat)}</span>
+      <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="${isFav(x.id)?'Remove bookmark':'Bookmark'}"><svg width="14" height="14" viewBox="0 0 14 14" fill="${isFav(x.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 1.5h9a1 1 0 011 1v10l-5-3-5 3v-10a1 1 0 011-1z"/></svg></button>
+    </div>
+    ${x.title?`<div class="lib-title">${esc(x.title)}</div>`:''}
+    <div class="lib-text">${esc(x.text)}</div>
+    <div class="lib-divider"></div>
+    <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1"/></svg>
+      Copy
+    </button>
+  </div>`).join('');
+}
+function setLibFilter(section,cat){S.libFilters[section]=cat;renderLib(section);}
+function toggleFav(section,id){
+  if(!S.favs[section])S.favs[section]=[];
+  const i=S.favs[section].indexOf(id);
+  if(i>-1)S.favs[section].splice(i,1); else S.favs[section].push(id);
+  persist();renderLib(section);
+}
+function copyLib(id,section){
+  const item=S[section].find(x=>x.id===id);
+  if(!item)return;
+  const text=item.title?`${item.title}\n\n${item.text}`:item.text;
+  navigator.clipboard.writeText(text).then(()=>toast('Copied ✓'));
+}
+
+/* ═══════════════════ AI STUDIO ═══════════════════ */
+function setupChips(){
+  setupCG('typeChips',v=>S.studio.type=v);
+  setupCG('platChips',v=>S.studio.plat=v);
+  setupCG('toneChips',v=>S.studio.tone=v);
+}
+function setupCG(id,cb){
+  const g=document.getElementById(id);
+  if(!g)return;
+  g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{g.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');cb(c.dataset.val);}));
+}
+async function generate(){
+  if(!S.settings.apiKey){toast('Add your API key in Settings first');navigate('settings');return;}
+  const topic=document.getElementById('topicIn').value.trim();
+  if(!topic){toast('Please enter a topic or brief');return;}
+  const notes=document.getElementById('notesIn').value.trim();
+  S.studio.topic=topic;
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true;btn.textContent='...Generating';
+  document.getElementById('cpBtn').style.display='none';
+  document.getElementById('svBtn').style.display='none';
+  document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
+  const bizCtx=buildBrandContext();
+  const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels — just the ready-to-use ${S.studio.type}.`;
+  const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.settings.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-allow-browser':'true'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})});
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
+    const d=await res.json();
+    S.studio.output=d.content?.[0]?.text||'';
+    document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div>`;
+    document.getElementById('cpBtn').style.display='inline-flex';
+    document.getElementById('svBtn').style.display='inline-flex';
+    S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;persist();renderGS();renderDashboard();
+  }catch(e){
+    document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
+    toast('Error: '+e.message);
+  }
+  btn.disabled=false;btn.textContent='✦ Generate Draft';
+}
+function copyOut(){if(S.studio.output)navigator.clipboard.writeText(S.studio.output).then(()=>toast('Copied ✓'));}
+function saveDraft(){
+  if(!S.studio.output)return;
+  S.drafts.unshift({id:Date.now().toString(),title:S.studio.topic.slice(0,65),content:S.studio.output,platform:S.studio.plat,contentType:S.studio.type,tone:S.studio.tone,createdAt:new Date().toISOString()});
+  persist();
+  const b=document.getElementById('svBadge');b.classList.add('show');setTimeout(()=>b.classList.remove('show'),2200);
+  toast('Draft saved ✓');
+}
+
+/* ═══════════════════ DRAFTS ═══════════════════ */
+function dcHTML(d){
+  const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return`<div class="dc" data-id="${d.id}"><div class="dc-title">${esc(d.title)}</div><div class="dc-preview">${esc(d.content)}</div><div class="dc-foot"><span class="dc-date">${dt}</span><span class="tag tag-${d.platform}">${cap(d.platform)}</span></div></div>`;
+}
+function renderDraftsGrid(){
+  const g=document.getElementById('draftsGrid');
+  if(!S.drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>No saved drafts yet</h3><p>Write your own, generate with Claude, or repurpose something you love — it all lives here.</p></div>';return;}
+  g.innerHTML=S.drafts.map(dcHTML).join('');
+  g.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
+}
+function openDraftModal(id){
+  const d=S.drafts.find(x=>x.id===id);if(!d)return;
+  S.viewingDraftId=id;
+  const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('draftModalTitle').textContent=d.title;
+  document.getElementById('draftModalMeta').textContent=`${cap(d.platform)} · ${d.contentType} · ${dt}`;
+  document.getElementById('draftModalContent').textContent=d.content;
+  openModal('draftModal');
+}
+function deleteDraft(){
+  if(!S.viewingDraftId||!confirm('Delete this draft permanently?'))return;
+  S.drafts=S.drafts.filter(d=>d.id!==S.viewingDraftId);
+  persist();closeModal('draftModal');renderDraftsGrid();renderDashboard();toast('Draft deleted');
+}
+function copyDraftModal(){const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));}
+
+/* ═══════════════════ MODALS ═══════════════════ */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+function openWelcome(){openModal('welcomeModal');}
+function closeWelcome(){closeModal('welcomeModal');localStorage.setItem('studioWelcomeSeen','1');}
+function openCalModal(ds){
+  S.editingCalId=null;
+  document.getElementById('calModalTitle').textContent='Add Calendar Entry';
+  document.getElementById('calTitle').value='';
+  document.getElementById('calPlat').value='instagram';
+  document.getElementById('calStatus').value='idea';
+  document.getElementById('calDate').value=ds||new Date().toISOString().split('T')[0];
+  document.getElementById('calNotes').value='';
+  openModal('calModal');
+}
+function saveCalEntry(){
+  const title=document.getElementById('calTitle').value.trim();
+  if(!title){toast('Please enter a title');return;}
+  const entry={id:S.editingCalId||Date.now().toString(),title,platform:document.getElementById('calPlat').value,status:document.getElementById('calStatus').value,date:document.getElementById('calDate').value,notes:document.getElementById('calNotes').value};
+  if(S.editingCalId)S.calEntries=S.calEntries.map(e=>e.id===S.editingCalId?entry:e); else S.calEntries.push(entry);
+  S.gs.calAdded=true;persist();closeModal('calModal');renderCalendar();renderGS();toast('Entry saved ✓');
+}
+function openIdeaModal(status){
+  S.ideaAIOut='';S._pendingIdeaImages=[];
+  var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
+  var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
+  var ap=document.getElementById('ideaAIPanel');if(ap)ap.style.display='none';
+  var ch=document.getElementById('ideaAIChev');if(ch)ch.style.transform='';
+  var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
+  var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
+  var id=document.getElementById('ideaDate');if(id)id.value='';
+  var it=document.getElementById('ideaTime');if(it)it.value='';
+  var ia=document.getElementById('ideaImgArea');if(ia)ia.innerHTML='';
+  document.getElementById('ideaTitle').value='';
+  document.getElementById('ideaPlat').value='instagram';
+  document.getElementById('ideaFormat').value='Caption / Post';
+  document.getElementById('ideaNotes').value='';
+  openModal('ideaModal');
+  document.getElementById('ideaModal')._defaultStatus=status||'idea';
+}
+function saveIdea(){
+  const title=document.getElementById('ideaTitle').value.trim();
+  if(!title){toast('Please enter an idea');return;}
+  const date=document.getElementById('ideaDate').value;
+  const time=document.getElementById('ideaTime').value;
+  const idea={
+    id:Date.now().toString(),
+    title,
+    platform:document.getElementById('ideaPlat').value,
+    format:document.getElementById('ideaFormat').value,
+    notes:document.getElementById('ideaNotes').value,
+    date,
+    time,
+    images:S._pendingIdeaImages||[],
+    status:document.getElementById('ideaModal')._defaultStatus||'idea'
+  };
+  S.ideas.push(idea);
+  // Auto-sync to calendar if date is set
+  if(date){
+    const existing=S.calEntries.find(e=>e.title===title&&e.date===date);
+    if(!existing){
+      S.calEntries.push({
+        id:'cal_'+idea.id,
+        title,
+        platform:idea.platform,
+        status:'idea',
+        date,
+        time,
+        notes:idea.notes
+      });
+    }
+  }
+  S._pendingIdeaImages=[];
+  persist();closeModal('ideaModal');renderKanban();
+  if(date)toast('Added to planner + calendar ✓');
+  else toast('Idea added ✓');
+}
+function openTaskModal(status){
+  document.getElementById('taskTitle').value='';
+  document.getElementById('taskStatus').value=status||'todo';
+  var td=document.getElementById('taskDate');if(td)td.value='';
+  var tt=document.getElementById('taskTime');if(tt)tt.value='';
+  var tn=document.getElementById('taskNotes');if(tn)tn.value='';
+  openModal('taskModal');
+}
+function saveTask(){
+  const title=document.getElementById('taskTitle').value.trim();
+  if(!title){toast('Please enter a task');return;}
+  const date=document.getElementById('taskDate').value;
+  const time=document.getElementById('taskTime').value;
+  const notes=document.getElementById('taskNotes').value;
+  const task={id:Date.now().toString(),title,status:document.getElementById('taskStatus').value,date,time,notes};
+  S.tasks.push(task);
+  if(date){
+    const existing=S.calEntries.find(e=>e.title===title&&e.date===date);
+    if(!existing){
+      S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status:'scheduled',date,time,notes});
+    }
+  }
+  persist();closeModal('taskModal');renderTaskKanban();toast('Task added ✓');
+}
+function openAddLibModal(section){
+  S.addLibSection=section;
+  const labels={hooks:'Hook',ctas:'CTA',stories:'Story Idea',prompts:'Prompt'};
+  document.getElementById('addLibTitle').textContent=`Add ${labels[section]||'Item'}`;
+  document.getElementById('addLibSub').textContent=`Add your own to the ${labels[section]||'library'}`;
+  const hasTitleRow=section==='prompts';
+  document.getElementById('addLibTitleRow').style.display=hasTitleRow?'block':'none';
+  document.getElementById('addLibTitleIn').value='';
+  document.getElementById('addLibCat').value='';
+  document.getElementById('addLibText').value='';
+  openModal('addLibModal');
+}
+function saveLibItem(){
+  const cat=document.getElementById('addLibCat').value.trim();
+  const text=document.getElementById('addLibText').value.trim();
+  if(!cat||!text){toast('Please fill in category and content');return;}
+  const item={id:'u'+Date.now(),cat,text};
+  if(S.addLibSection==='prompts')item.title=document.getElementById('addLibTitleIn').value.trim();
+  S[S.addLibSection].push(item);
+  persist();closeModal('addLibModal');renderLib(S.addLibSection);toast('Added to library ✓');
+}
+
+/* ═══════════════════ SETTINGS ═══════════════════ */
+function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Flow State Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
+function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
+function saveBrandProfile(){
+  const g=id=>document.getElementById(id)?.value.trim()||'';
+  S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra')};
+  const hasContent=Object.values(S.brandProfile).some(v=>v.length>0);
+  S.gs.bizSet=hasContent;
+  persist();renderGS();toast('Brand profile saved ✓');
+}
+function buildBrandContext(){
+  const bp=S.brandProfile;
+  const lines=[];
+  if(bp.role||bp.niche) lines.push(`Role: ${[bp.role,bp.niche].filter(Boolean).join(' — ')}`);
+  if(bp.client)  lines.push(`Ideal client: ${bp.client}`);
+  if(bp.offers)  lines.push(`Offers: ${bp.offers}`);
+  if(bp.voice)   lines.push(`Brand voice: ${bp.voice}`);
+  if(bp.pov)     lines.push(`Unique POV: ${bp.pov}`);
+  if(bp.extra)   lines.push(`\nAdditional context:\n${bp.extra}`);
+  return lines.length ? '\n\nBrand Profile:\n'+lines.join('\n') : '';
+}
+function resetOnboarding(){
+  localStorage.removeItem('studioWelcomeSeen');
+  openWelcome();
+  toast('Welcome guide reset ✓');
+}
+function saveModel(){S.settings.model=document.getElementById('modelIn').value;persist();toast('Model saved ✓');}
+function toggleKey(){const i=document.getElementById('keyIn');i.type=i.type==='password'?'text':'password';}
+function clearAll(){if(!confirm('Delete everything? Export a backup first!'))return;localStorage.clear();location.reload();}
+function exportData(){
+  const payload={version:3,exportedAt:new Date().toISOString(),drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,favs:S.favs,settings:{...S.settings,apiKey:''}};
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));
+  a.download=`studio-backup-${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  toast('Backup downloaded ✓');
+}
+function importData(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(!confirm(`Import data? This will merge with your existing content.`))return;
+      const merge=(key)=>{const ids=new Set(S[key].map(x=>x.id));(d[key]||[]).forEach(x=>{if(!ids.has(x.id))S[key].push(x);});};
+      ['drafts','calEntries','ideas','tasks','hooks','ctas','stories','prompts'].forEach(merge);
+      if(d.settings)S.settings={...S.settings,...d.settings,apiKey:S.settings.apiKey};
+      persist();renderDashboard();renderCalendar();renderAllLibs();applySettings();
+      toast('Imported successfully ✓');
+    }catch(err){toast('Could not read backup: '+err.message);}
+    e.target.value='';
+  };r.readAsText(f);
+}
+
+
+/* ═══════════════════ BRAIN DUMP ═══════════════════ */
+function renderBrainDump(){
+  renderNbList();
+  if(S.activeNotebook){
+    const nb=S.notebooks.find(x=>x.id===S.activeNotebook);
+    if(nb) renderNotes(S.activeNotebook);
+    else { S.activeNotebook=null; document.getElementById('bdRight').innerHTML='<div class="bd-empty"><div class="sym">🧠</div><h3>Select a notebook</h3><p>Choose a notebook on the left, or create your first one to start writing.</p></div>'; }
+  }
+}
+function renderNbList(){
+  const el=document.getElementById('nbList');
+  if(!el)return;
+  if(!S.notebooks.length){
+    el.innerHTML='<div style="padding:20px 12px;text-align:center;font-size:12px;color:var(--tl);line-height:1.7">No notebooks yet.<br>Hit "+ New Notebook" to start!</div>';
+    return;
+  }
+  el.innerHTML=S.notebooks.map(nb=>{
+    const count=S.notes.filter(n=>n.notebookId===nb.id).length;
+    return`<div class="nb-card${S.activeNotebook===nb.id?' active':''}" onclick="selectNotebook('${nb.id}')">
+      <div style="min-width:0;flex:1">
+        <div class="nb-name">${esc(nb.name)}</div>
+        <div class="nb-count">${count} note${count!==1?'s':''}</div>
+      </div>
+      <button class="nb-del" onclick="event.stopPropagation();deleteNotebook('${nb.id}')" title="Delete">✕</button>
+    </div>`;
+  }).join('');
+}
+function selectNotebook(id){
+  S.activeNotebook=id;
+  renderNbList();
+  renderNotes(id);
+}
+function renderNotes(nbId){
+  const nb=S.notebooks.find(x=>x.id===nbId);
+  if(!nb)return;
+  const notes=S.notes.filter(n=>n.notebookId===nbId).sort((a,b)=>new Date(b.updatedAt||b.createdAt)-new Date(a.updatedAt||a.createdAt));
+  const right=document.getElementById('bdRight');
+  right.innerHTML=`
+    <div class="bd-right-hdr">
+      <h3>${esc(nb.name)}</h3>
+      <button class="btn btn-p" style="padding:7px 14px;font-size:12px" onclick="newNote('${nbId}')">+ New Note</button>
+    </div>
+    <div class="notes-list" id="notesList">
+      ${!notes.length
+        ?'<div class="bd-empty"><div class="sym">✦</div><h3>No notes yet</h3><p>Hit "+ New Note" to start. No format required — just write freely.</p></div>'
+        :notes.map(n=>noteCardHTML(n)).join('')}
+    </div>`;
+  // wire up auto-resize for all textareas
+  right.querySelectorAll('.note-ta').forEach(ta=>{
+    ta.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.max(120,this.scrollHeight)+'px';});
+  });
+}
+function noteCardHTML(n){
+  const dt=new Date(n.updatedAt||n.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  return`<div class="note-card" id="nc-${n.id}">
+    <div class="note-card-hdr" onclick="toggleNote('${n.id}')">
+      <input class="note-title-in" value="${esc(n.title||'')}" placeholder="Untitled note..." onclick="event.stopPropagation()"
+        onchange="updateNoteTitle('${n.id}',this.value)" />
+      <span class="note-meta">${dt}</span>
+      <button class="note-del" onclick="event.stopPropagation();deleteNote('${n.id}')" title="Delete note">✕</button>
+    </div>
+    <div class="note-body" id="nb-${n.id}">
+      <textarea class="note-ta" placeholder="Start writing... no rules here. Brain dump freely."
+        oninput="updateNoteContent('${n.id}',this.value);this.style.height='auto';this.style.height=Math.max(120,this.scrollHeight)+'px'">${esc(n.content||'')}</textarea>
+    </div>
+  </div>`;
+}
+function toggleNote(id){
+  const body=document.getElementById('nb-'+id);
+  if(!body)return;
+  body.classList.toggle('open');
+  if(body.classList.contains('open')){
+    const ta=body.querySelector('textarea');
+    if(ta){ta.style.height='auto';ta.style.height=Math.max(120,ta.scrollHeight)+'px';setTimeout(()=>ta.focus(),50);}
+  }
+}
+function newNotebook(){
+  const name=prompt('Name your notebook:','');
+  if(!name||!name.trim())return;
+  const nb={id:'nb'+Date.now(),name:name.trim(),createdAt:new Date().toISOString()};
+  S.notebooks.push(nb);
+  persist();
+  if(document.getElementById('nbList')) renderNbList();
+  selectNotebook(nb.id);
+  toast('Notebook created ✓');
+}
+function deleteNotebook(id){
+  const nb=S.notebooks.find(x=>x.id===id);
+  if(!confirm(`Delete "${nb?.name}" and all its notes?`))return;
+  S.notebooks=S.notebooks.filter(x=>x.id!==id);
+  S.notes=S.notes.filter(x=>x.notebookId!==id);
+  if(S.activeNotebook===id){
+    S.activeNotebook=null;
+    const right=document.getElementById('bdRight');
+    if(right)right.innerHTML='<div class="bd-empty"><div class="sym">🧠</div><h3>Select a notebook</h3><p>Choose a notebook on the left, or create a new one to start writing.</p></div>';
+  }
+  persist();renderNbList();toast('Notebook deleted');
+}
+function newNote(nbId){
+  const note={id:'n'+Date.now(),notebookId:nbId,title:'',content:'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  S.notes.unshift(note);
+  persist();renderNotes(nbId);
+  // auto-open and focus
+  setTimeout(()=>{
+    const body=document.getElementById('nb-'+note.id);
+    if(body){body.classList.add('open');const ta=body.querySelector('textarea');if(ta)ta.focus();}
+  },60);
+}
+function updateNoteTitle(id,val){
+  const n=S.notes.find(x=>x.id===id);
+  if(n){n.title=val;n.updatedAt=new Date().toISOString();persist();}
+}
+function updateNoteContent(id,val){
+  const n=S.notes.find(x=>x.id===id);
+  if(n){n.content=val;n.updatedAt=new Date().toISOString();persist();}
+}
+function deleteNote(id){
+  const n=S.notes.find(x=>x.id===id);
+  if(!confirm('Delete this note?'))return;
+  const nbId=n?.notebookId;
+  S.notes=S.notes.filter(x=>x.id!==id);
+  persist();if(nbId)renderNotes(nbId);toast('Note deleted');
+}
+
+/* ═══════════════════ SECTION GUIDE ═══════════════════ */
+function toggleLibNav(el){el.classList.toggle('open');}
+function toggleGuide(hdr){
+  hdr.classList.toggle('open');
+}
+function toggleGuideSec(sec){
+  // close all others
+  document.querySelectorAll('.guide-section').forEach(s=>{ if(s!==sec)s.classList.remove('open'); });
+  sec.classList.toggle('open');
+}
+
+
+/* CARD DETAIL */
+function cdOpen(id) {
+  var x = S.ideas.find(function(a) { return a.id === id; });
+  if (!x) return;
+  S.cdId = id;
+  S.cdOut = '';
+  document.getElementById('cdTitle').value = x.title || '';
+  document.getElementById('cdPlat').value = x.platform || 'instagram';
+  document.getElementById('cdFormat').value = x.format || 'Caption / Post';
+  document.getElementById('cdDate').value = x.date || '';
+  document.getElementById('cdNotes').value = x.notes || '';
+  document.querySelectorAll('.cd-stage').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.s === x.status);
+  });
+  var o = document.getElementById('cdOut');
+  if (o) { o.textContent = ''; o.classList.remove('show'); }
+  var a = document.getElementById('cdActs');
+  if (a) a.classList.remove('show');
+  document.getElementById('cdRpText').value = '';
+  openModal('cardDetailModal');
+}
+function cdSetStage(el) {
+  document.querySelectorAll('.cd-stage').forEach(function(s) { s.classList.remove('active'); });
+  el.classList.add('active');
+}
+function cdSave() {
+  var x = S.ideas.find(function(a) { return a.id === S.cdId; });
+  if (!x) return;
+  x.title = document.getElementById('cdTitle').value.trim();
+  x.platform = document.getElementById('cdPlat').value;
+  x.format = document.getElementById('cdFormat').value;
+  x.date = document.getElementById('cdDate').value;
+  x.notes = document.getElementById('cdNotes').value;
+  var ac = document.querySelector('.cd-stage.active');
+  if (ac) x.status = ac.dataset.s;
+  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Saved');
+}
+function cdDelete() {
+  if (!confirm('Delete this card?')) return;
+  S.ideas = S.ideas.filter(function(a) { return a.id !== S.cdId; });
+  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Deleted');
+}
+async function cdGenerate(type) {
+  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
+  var title = document.getElementById('cdTitle').value.trim();
+  var notes = document.getElementById('cdNotes').value.trim();
+  var plat = document.getElementById('cdPlat').value;
+  if (!title && !notes) { toast('Add a title or brief first'); return; }
+  var brief = title + (notes ? '. Notes: ' + notes : '');
+  var o = document.getElementById('cdOut');
+  var a = document.getElementById('cdActs');
+  o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var prompts = {
+    caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
+    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
+    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
+    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
+  };
+  try {
+    var r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
+    });
+    var d = await r.json();
+    S.cdOut = (d.content && d.content[0] && d.content[0].text) || '';
+    o.textContent = S.cdOut; a.classList.add('show');
+    S.aiCount = (S.aiCount || 0) + 1; persist();
+  } catch(e) { o.textContent = 'Error: ' + e.message; }
+}
+function cdCopy() {
+  if (S.cdOut) navigator.clipboard.writeText(S.cdOut).then(function() { toast('Copied'); });
+}
+function cdSaveDraft() {
+  if (!S.cdOut) return;
+  var t = document.getElementById('cdTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: S.cdOut,
+    platform: document.getElementById('cdPlat').value,
+    contentType: document.getElementById('cdFormat').value,
+    tone: 'Brand Voice', createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+async function cdRepurpose() {
+  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
+  var text = document.getElementById('cdRpText').value.trim();
+  if (!text) { toast('Paste some content first'); return; }
+  var plat = document.getElementById('cdPlat').value;
+  var fmt = document.getElementById('cdFormat').value;
+  var o = document.getElementById('cdOut');
+  var a = document.getElementById('cdActs');
+  o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
+  var usr = 'I found a post I want to repurpose. Study what makes it work — the structure, the hook, the angle, the emotional pull — then rebuild it completely for my niche and voice.' +
+    '\n\nYour job is NOT to reword it. Your job is to:\n' +
+    '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
+    '2. Take that same winning framework\n' +
+    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
+    '4. Make it feel 100% original\n\n' +
+    'Output format: ' + fmt + ' for ' + plat + '\n\n' +
+    'Original post:\n' + text;
+  try {
+    var r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1000, system: sys, messages: [{ role: 'user', content: usr }] })
+    });
+    var d = await r.json();
+    S.cdOut = (d.content && d.content[0] && d.content[0].text) || '';
+    o.textContent = S.cdOut; a.classList.add('show');
+    S.aiCount = (S.aiCount || 0) + 1; persist();
+  } catch(e) { o.textContent = 'Error: ' + e.message; }
+}
+
+
+/* IDEA MODAL AI TOOLS */
+function toggleIdeaAI() {
+  var panel = document.getElementById('ideaAIPanel');
+  var chev = document.getElementById('ideaAIChev');
+  if (!panel) return;
+  var open = panel.style.display === 'block';
+  panel.style.display = open ? 'none' : 'block';
+  if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
+}
+async function ideaGenerate(type) {
+  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
+  var title = document.getElementById('ideaTitle').value.trim();
+  var notes = document.getElementById('ideaNotes').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  var fmt = document.getElementById('ideaFormat').value;
+  if (!title && !notes) { toast('Add a title or idea first'); return; }
+  var brief = title + (notes ? '. Notes: ' + notes : '');
+  var o = document.getElementById('ideaAIOut');
+  var a = document.getElementById('ideaAIActs');
+  o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var prompts = {
+    caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
+    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
+    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
+    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
+  };
+  try {
+    var r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
+    });
+    var d = await r.json();
+    S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
+    o.textContent = S.ideaAIOut; a.classList.add('show');
+    S.aiCount = (S.aiCount || 0) + 1; persist();
+  } catch(e) { o.textContent = 'Error: ' + e.message; }
+}
+async function ideaRepurpose() {
+  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
+  var text = document.getElementById('ideaRpText').value.trim();
+  if (!text) { toast('Paste the post content first'); return; }
+  var plat = document.getElementById('ideaPlat').value;
+  var fmt = document.getElementById('ideaFormat').value;
+  var origPlat = document.getElementById('ideaRpOrigPlat').value;
+  var o = document.getElementById('ideaAIOut');
+  var a = document.getElementById('ideaAIActs');
+  o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
+  var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work — the structure, the hook, the angle, the emotional pull — then rebuild it completely for my niche and voice.' +
+    '\n\nYour job is NOT to reword it. Your job is to:\n' +
+    '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
+    '2. Take that same winning framework\n' +
+    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
+    '4. Make it feel 100% original — someone who saw both posts should not recognize the connection\n\n' +
+    'Output format: ' + fmt + ' for ' + plat + '\n\n' +
+    'Original post to repurpose:\n' + text;
+  try {
+    var r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': S.settings.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser': 'true' },
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] })
+    });
+    var d = await r.json();
+    S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
+    o.textContent = S.ideaAIOut; a.classList.add('show');
+    S.aiCount = (S.aiCount || 0) + 1; persist();
+  } catch(e) { o.textContent = 'Error: ' + e.message; }
+}
+function ideaAICopy() {
+  if (S.ideaAIOut) navigator.clipboard.writeText(S.ideaAIOut).then(function() { toast('Copied'); });
+}
+function ideaAISave() {
+  if (!S.ideaAIOut) return;
+  var t = document.getElementById('ideaTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: S.ideaAIOut,
+    platform: document.getElementById('ideaPlat').value,
+    contentType: document.getElementById('ideaFormat').value,
+    tone: 'Brand Voice', createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+
+
+/* STUDIO TABS */
+function switchTab(tab) {
+  var genPanel = document.getElementById('outBdy');
+  var writePanel = document.getElementById('writePanel');
+  var cpBtn = document.getElementById('cpBtn');
+  var svBtn = document.getElementById('svBtn');
+  var tabGen = document.getElementById('tabGenerate');
+  var tabWr = document.getElementById('tabWrite');
+  if (tab === 'write') {
+    if (genPanel) genPanel.style.display = 'none';
+    if (writePanel) writePanel.style.display = 'flex';
+    if (cpBtn) cpBtn.style.display = 'none';
+    if (svBtn) svBtn.style.display = 'none';
+    if (tabGen) { tabGen.style.background = 'transparent'; tabGen.style.color = 'var(--t)'; }
+    if (tabWr) { tabWr.style.background = 'var(--e)'; tabWr.style.color = 'var(--p)'; }
+  } else {
+    if (genPanel) genPanel.style.display = '';
+    if (writePanel) writePanel.style.display = 'none';
+    if (tabGen) { tabGen.style.background = 'var(--e)'; tabGen.style.color = 'var(--p)'; }
+    if (tabWr) { tabWr.style.background = 'transparent'; tabWr.style.color = 'var(--t)'; }
+  }
+}
+function writeCopy() {
+  var ta = document.getElementById('writeTA');
+  if (ta && ta.value.trim()) navigator.clipboard.writeText(ta.value.trim()).then(function() { toast('Copied'); });
+}
+function writeSave() {
+  var ta = document.getElementById('writeTA');
+  if (!ta || !ta.value.trim()) { toast('Nothing to save yet'); return; }
+  var plat = document.getElementById('writePlat').value;
+  var fmt = document.getElementById('writeFormat').value;
+  var text = ta.value.trim();
+  var title = text.split('\n')[0].slice(0, 65) || 'My draft';
+  S.drafts.unshift({
+    id: Date.now().toString(),
+    title: title,
+    content: text,
+    platform: plat,
+    contentType: fmt,
+    tone: 'Own writing',
+    createdAt: new Date().toISOString()
+  });
+  persist();
+  var badge = document.getElementById('svBadge');
+  if (badge) { badge.classList.add('show'); setTimeout(function() { badge.classList.remove('show'); }, 2200); }
+  toast('Draft saved to library');
+}
+
+
+/* IMAGE UPLOAD FOR IDEA MODAL */
+function handleIdeaImages(input) {
+  if (!input.files || !input.files.length) return;
+  if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
+  var area = document.getElementById('ideaImgArea');
+  Array.from(input.files).forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      S._pendingIdeaImages.push({ name: file.name, data: e.target.result });
+      if (area) {
+        var img = document.createElement('div');
+        img.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl)';
+        img.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover" />';
+        area.appendChild(img);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+
+/* CALENDAR DAY VIEW */
+var _calDayDate = '';
+function calDayClick(ds) {
+  var entries = S.calEntries.filter(function(e) { return e.date === ds; });
+  if (entries.length === 0) { openCalModal(ds); return; }
+  _calDayDate = ds;
+  var parts = ds.split('-');
+  var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var monNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calDayTitle').textContent = dayNames[d.getDay()] + ', ' + monNames[d.getMonth()] + ' ' + d.getDate();
+  document.getElementById('calDaySubtitle').textContent = entries.length + (entries.length !== 1 ? ' entries' : ' entry') + ' planned';
+  var container = document.getElementById('calDayEntries');
+  container.innerHTML = '';
+  entries.forEach(function(e) {
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px';
+    var titleEl = document.createElement('div');
+    titleEl.style.cssText = 'font-size:13.5px;font-weight:500;color:var(--e);margin-bottom:6px';
+    titleEl.textContent = e.title || '';
+    card.appendChild(titleEl);
+    var tagsEl = document.createElement('div');
+    tagsEl.style.cssText = 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px';
+    tagsEl.innerHTML = '<span class="tag tag-' + (e.platform||'other') + '">' + cap(e.platform||'other') + '</span>' +
+      '<span class="tag tag-' + (e.status||'idea') + '">' + cap(e.status||'idea') + '</span>' +
+      (e.time ? '<span style="font-size:10.5px;color:var(--tl)">' + esc(e.time) + '</span>' : '');
+    card.appendChild(tagsEl);
+    if (e.notes) {
+      var notesEl = document.createElement('div');
+      notesEl.style.cssText = 'font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:8px';
+      notesEl.textContent = e.notes;
+      card.appendChild(notesEl);
+    }
+    var btns = document.createElement('div');
+    btns.style.cssText = 'display:flex;gap:6px';
+    var editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-g';
+    editBtn.style.cssText = 'font-size:11px;padding:5px 10px';
+    editBtn.textContent = 'Edit';
+    editBtn.addEventListener('click', (function(id){ return function(){ calEditEntry(id); }; })(e.id));
+    var delBtn = document.createElement('button');
+    delBtn.className = 'btn btn-danger';
+    delBtn.style.cssText = 'font-size:11px;padding:5px 10px';
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', (function(id){ return function(){ calDeleteEntry(id); }; })(e.id));
+    btns.appendChild(editBtn);
+    btns.appendChild(delBtn);
+    card.appendChild(btns);
+    container.appendChild(card);
+  });
+  openModal('calDayModal');
+}
+function calDayAddNew() {
+  closeModal('calDayModal');
+  openCalModal(_calDayDate);
+}
+function calDeleteEntry(id) {
+  S.calEntries = S.calEntries.filter(function(e) { return e.id !== id; });
+  persist(); closeModal('calDayModal'); renderCalendar(); toast('Entry deleted');
+}
+function calEditEntry(id) {
+  var e = S.calEntries.find(function(x) { return x.id === id; });
+  if (!e) return;
+  closeModal('calDayModal');
+  S.editingCalId = id;
+  document.getElementById('calModalTitle').textContent = 'Edit Entry';
+  document.getElementById('calTitle').value = e.title || '';
+  document.getElementById('calPlat').value = e.platform || 'instagram';
+  document.getElementById('calStatus').value = e.status || 'idea';
+  document.getElementById('calDate').value = e.date || '';
+  document.getElementById('calNotes').value = e.notes || '';
+  openModal('calModal');
+}
+
+/* ═══════════════════ UTILS ═══════════════════ */
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
+let _tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
+
+init();
+</script>
+</body>
+</html>
