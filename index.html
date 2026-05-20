@@ -1014,8 +1014,8 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- CARD DETAIL MODAL -->
-<div class="modal-ov" id="cardDetailModal">
-  <div class="modal" style="max-width:900px;width:96vw;max-height:92vh;overflow-y:auto">
+<div class="modal-ov" id="cardDetailModal" style="align-items:flex-start;padding:20px">
+  <div class="modal" style="max-width:1100px;width:98vw;max-height:calc(100vh - 40px);overflow-y:auto;margin:0 auto">
     <div class="cd-stages">
       <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
       <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
@@ -1337,13 +1337,17 @@ function load(){
   }catch(e){}
 }
 function persist(){
-  localStorage.setItem('studioOS_v3',JSON.stringify({
+  var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,aiCount:S.aiCount,
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
-  }));
+  };
+  // Save to Supabase (cross-device)
+  if(window._supabasePersist)window._supabasePersist(dataToSave);
+  // Also save to localStorage as backup
+  try{localStorage.setItem('fss_backup',JSON.stringify(dataToSave));}catch(e){}
 }
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
@@ -1602,6 +1606,7 @@ function renderLib(section,silent){
 }
 function setLibFilter(section,cat){S.libFilters[section]=cat;renderLib(section);}
 function toggleFav(section,id){
+  if(!S.favs)S.favs={};
   if(!S.favs[section])S.favs[section]=[];
   const i=S.favs[section].indexOf(id);
   if(i>-1)S.favs[section].splice(i,1); else S.favs[section].push(id);
@@ -2365,7 +2370,7 @@ function initFlowStateApp(savedData) {
     if (savedData.ctas) S.ctas = savedData.ctas;
     if (savedData.stories) S.stories = savedData.stories;
     if (savedData.prompts) S.prompts = savedData.prompts;
-    if (savedData.favs && typeof savedData.favs === 'object') S.favs = savedData.favs;
+    if (savedData.favs && typeof savedData.favs === 'object') { S.favs = {}; Object.keys(savedData.favs).forEach(function(k){ S.favs[k] = savedData.favs[k]; }); }
     if (savedData.notebooks) S.notebooks = savedData.notebooks;
     if (savedData.notes) S.notes = savedData.notes;
     if (savedData.settings) S.settings = Object.assign({}, S.settings, savedData.settings);
