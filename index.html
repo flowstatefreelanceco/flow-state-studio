@@ -1110,12 +1110,17 @@ select.fi{cursor:pointer}
 
 <script>
 const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
-const SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqO2QIw8K1tW4EgAJSVjrM00vBmHA";
+const SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA";
 const {createClient}=supabase;
 const sb=createClient(SURL,SKEY);
 var _currentUser=null;
 
 async function initAuth(){
+  // Show login immediately, then check if already logged in
+  document.getElementById('loadingScreen').classList.add('hidden');
+  document.getElementById('authScreen').classList.remove('hidden');
+  
+  // Check for existing session in background
   var {data:{session}}=await sb.auth.getSession();
   if(session&&session.user){
     _currentUser=session.user;
