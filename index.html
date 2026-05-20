@@ -1349,12 +1349,12 @@ function persist(){
 }
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
-  document.getElementById('sbName').textContent=n;
-  document.getElementById('nameIn').value=n;
-  document.getElementById('keyIn').value=S.settings.apiKey||'';
-  document.getElementById('modelIn').value=S.settings.model||'claude-sonnet-4-5';
+  const sbNameEl=document.getElementById('sbName');if(sbNameEl)sbNameEl.textContent=n;
+  const nameInEl=document.getElementById('nameIn');if(nameInEl)nameInEl.value=n;
+  const keyEl=document.getElementById('keyIn');if(keyEl)keyEl.value=S.settings.apiKey||'';
+  const modelEl=document.getElementById('modelIn');if(modelEl)modelEl.value=S.settings.model||'claude-sonnet-4-5';
   // Brand profile
-  const bp=S.brandProfile;
+  const bp=S.brandProfile||{};
   const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
   setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
   setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
