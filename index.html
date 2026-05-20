@@ -876,12 +876,12 @@ select.fi{cursor:pointer}
     <div class="m-title">Welcome to your Studio ✦</div>
     <div class="m-sub">This is your personal content workspace. Here's how it all works — read this once and you'll feel right at home.</div>
     <div class="welcome-steps">
-      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings → add your studio name, API key, and business context. The business context is the most important part — it tells Claude who you are so every draft sounds like <em>you</em>.</p></div></div>
+      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings and add your studio name and Brand Profile. The Brand Profile is the most important part — it tells Claude who you are, who you serve, and what you offer so every draft sounds like <em>you</em>.</p></div></div>
       <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
       <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events — anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
       <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
       <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in AI Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
-      <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Export your backup regularly</h4><p>Go to Settings → Export Backup. This saves all your data to a file on your computer so you never lose anything. Do this weekly if you use this often.</p></div></div>
+      <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Your data is saved automatically</h4><p>Everything you create saves to your account instantly and syncs across all your devices. Pick up on your phone exactly where you left off on your laptop.</p></div></div>
     </div>
     <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
   </div>
@@ -1111,7 +1111,7 @@ select.fi{cursor:pointer}
 const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
 const SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA";
 const {createClient}=supabase;
-const sb=createClient(SURL,SKEY);
+const sb=createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'fss_auth_token'}});
 var _currentUser=null;
 
 async function initAuth(){
