@@ -433,8 +433,9 @@ select.fi{cursor:pointer}
 .ai2-tone-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .ai2-tone-chip{padding:5px 11px;border-radius:100px;border:1px solid var(--bl);font-size:11px;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t);user-select:none}
 .ai2-tone-chip.sel{background:var(--e);border-color:var(--e);color:var(--p)}
-.ai2-smart-brief{background:linear-gradient(135deg,var(--tealp),var(--bluep,#e8eef8));border:1px solid var(--teal);border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--e);line-height:1.65;margin-top:10px;display:none}
+.ai2-smart-brief{background:linear-gradient(135deg,#f0ece3,#e8ede8);border:1px solid var(--teal);border-left:3px solid var(--teal);border-radius:var(--rsm);padding:16px 18px;font-size:13px;color:var(--e);line-height:1.8;margin-top:10px;display:none;white-space:pre-wrap}
 .ai2-smart-brief.show{display:block}
+.ai2-smart-brief strong{color:var(--teal)}
 .ai2-series-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
 .ai2-series-list.show{display:flex}
 .ai2-series-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px;font-size:12px;color:var(--e);line-height:1.5;cursor:pointer;transition:all .15s}
@@ -1122,12 +1123,12 @@ select.fi{cursor:pointer}
       <div class="cd2-right">
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
-            <div class="ai2-section-title">&#10022; Smart Brief</div>
+            <div class="ai2-section-title">&#10022; Creative Director</div>
             <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-smartBrief-body">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Claude reads your card and gives you a creative direction.</div>
-            <button class="ai2-btn full accent" onclick="cdSmartBrief()">Get Creative Direction</button>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid — before you write a single word.</div>
+            <button class="ai2-btn full accent" onclick="cdSmartBrief()">Brief Me, Creative Director ✦</button>
             <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
             <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
           </div>
@@ -1275,55 +1276,46 @@ const {createClient}=supabase;
 const sb=createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'fss_auth_token'}});
 var _currentUser=null;
 
+var _appBooted = false;
+
 async function initAuth(){
-  // Check for existing session first
   var {data:{session}}=await sb.auth.getSession();
   if(session&&session.user){
-    // Already logged in - go straight to app, no loading screen flash
     _currentUser=session.user;
     document.getElementById('loadingScreen').classList.add('hidden');
-    await bootApp();
+    if(!_appBooted) await bootApp();
   } else {
-    // Not logged in - show login screen
     document.getElementById('loadingScreen').classList.add('hidden');
     document.getElementById('authScreen').classList.remove('hidden');
   }
   sb.auth.onAuthStateChange(async function(event,session){
-    if(event==='SIGNED_IN'&&session){
+    if(event==='SIGNED_IN'&&session&&!_appBooted){
       _currentUser=session.user;
       document.getElementById('authScreen').classList.add('hidden');
       await bootApp();
     } else if(event==='SIGNED_OUT'){
       _currentUser=null;
+      _appBooted=false;
       document.getElementById('appWrap').classList.remove('show');
       document.getElementById('authScreen').classList.remove('hidden');
     }
   });
 }
 
-async function loadUserData(){
-  if(!_currentUser)return{};
-  try{
-    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
-    if(data&&data.data)return JSON.parse(data.data);
-  }catch(e){}
-  return{};
-}
-
-async function saveUserData(obj){
-  if(!_currentUser)return;
-  await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
-}
-
-window._supabasePersist=function(obj){saveUserData(obj);};
 
 async function bootApp(){
+  _appBooted=true;
   document.getElementById('loadingScreen').classList.remove('hidden');
   var saved=await loadUserData();
   document.getElementById('appWrap').classList.add('show');
   document.getElementById('loadingScreen').classList.add('hidden');
   initFlowStateApp(saved);
   addUserMenu();
+  // Re-render calendar after data loads so entries show
+  setTimeout(function(){
+    if(typeof renderCalendar==='function')renderCalendar();
+    if(typeof renderKanban==='function')renderKanban();
+  }, 200);
 }
 
 function addUserMenu(){
@@ -1697,7 +1689,10 @@ function renderCalendar(){
   for(let i=first-1;i>=0;i--)h+=`<div class="cal-cell other"><div class="day-n">${prev-i}</div></div>`;
   for(let d=1;d<=dim;d++){
     const ds=`${S.calYear}-${String(S.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const es=S.calEntries.filter(e=>e.date===ds);
+    // Merge calEntries + content planner ideas with dates
+    const ideaEntries=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}));
+    const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEntries.find(ie=>ie.title===e.title));
+    const es=[...ideaEntries,...calOnly];
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
     const dots=es.slice(0,3).map(e=>`<div class="day-row"><span class="dot dot-${e.platform}"></span><span style="overflow:hidden;text-overflow:ellipsis">${esc(e.title)}</span></div>`).join('');
     const more=es.length>3?`<div class="day-row" style="color:var(--tl)">+${es.length-3} more</div>`:'';
@@ -2192,7 +2187,7 @@ function cdOpen(id) {
     el.classList.toggle('active', el.dataset.s === x.status);
   });
   // Reset all AI sections
-  ['smartBrief','generate','hooks','variations','series','repurpose'].forEach(function(sec) {
+  ['generate','hooks','variations','series','repurpose'].forEach(function(sec) {
     var body = document.getElementById('ai2-'+sec+'-body');
     if (body) body.classList.remove('open');
     var chev = document.getElementById('ai2-'+sec+'-chev');
@@ -2213,6 +2208,9 @@ function cdOpen(id) {
   var sbOut = document.getElementById('cd-smartBrief-out');
   if (sbOut) { sbOut.textContent = ''; sbOut.classList.remove('show'); }
   document.getElementById('cdRpText').value = '';
+  // Open Smart Brief and Generate sections by default
+  var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
+  var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
   openModal('cardDetailModal');
 }
 
@@ -2268,16 +2266,26 @@ function cdGetBrief() {
 }
 
 async function cdSmartBrief() {
-  
   var b = cdGetBrief();
   if (!b.title && !b.notes) { toast('Add a title or notes first'); return; }
   var load = document.getElementById('cd-load-smartBrief');
   var out = document.getElementById('cd-smartBrief-out');
   load.classList.add('show'); out.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a senior content strategist for wellness businesses.' + brand + ' Be concise and specific. Max 3 sentences.';
-  var usr = 'Give me a creative direction for this content: ' + b.brief + '. ' + b.context + '. What angle would work best, why, and one specific suggestion to make it stand out?';
-  var result = await cdCallAI(sys, usr, 400);
+  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
+    ' You think like a creative director — you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
+    'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
+  var usr = 'I need your creative direction on this piece of content.\n\n' +
+    'Brief: ' + b.brief + '\n' +
+    'Platform: ' + b.plat + '\n' +
+    'Format: ' + b.fmt + '\n\n' +
+    'Give me:\n' +
+    '1. THE ANGLE — the specific perspective or framing that will make this land with my audience (1-2 sentences)\n' +
+    '2. THE HOOK — one specific opening line or hook I should lead with\n' +
+    '3. THE EMOTION — what feeling should this create in my reader and why that matters for my niche\n' +
+    '4. THE WATCH OUT — one thing to avoid with this topic that would make it feel generic or off-brand\n\n' +
+    'Be direct and specific. No fluff. Talk to me like a creative director briefing a copywriter.';
+  var result = await cdCallAI(sys, usr, 600);
   load.classList.remove('show');
   if (result) { out.textContent = result; out.classList.add('show'); }
 }
@@ -2616,7 +2624,9 @@ function handleIdeaImages(input) {
 /* CALENDAR DAY VIEW */
 var _calDayDate = '';
 function calDayClick(ds) {
-  var entries = S.calEntries.filter(function(e) { return e.date === ds; });
+  var ideaEnts = S.ideas.filter(function(i){ return i.date===ds; }).map(function(i){ return {id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}; });
+  var calOnly = S.calEntries.filter(function(e){ return e.date===ds && !ideaEnts.find(function(ie){ return ie.title===e.title; }); });
+  var entries = ideaEnts.concat(calOnly);
   if (entries.length === 0) { openCalModal(ds); return; }
   _calDayDate = ds;
   var parts = ds.split('-');
