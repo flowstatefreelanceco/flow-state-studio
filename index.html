@@ -241,7 +241,8 @@ select.fi{cursor:pointer}
 /* MODALS */
 .modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal-ov.open{display:flex}
-.modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,16,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
+.modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,14,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
+.modal-lg{max-width:1100px!important;width:98vw!important;max-height:96vh!important;padding:28px!important}
 .modal-xl{max-width:640px}
 .m-title{font-family:var(--fh);font-size:26px;font-weight:600;margin-bottom:4px;color:var(--e)}
 .m-sub{font-size:13px;color:var(--t);margin-bottom:22px;line-height:1.6}
@@ -1014,8 +1015,8 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- CARD DETAIL MODAL -->
-<div class="modal-ov" id="cardDetailModal" style="align-items:flex-start;padding:20px">
-  <div class="modal" style="max-width:1100px;width:98vw;max-height:calc(100vh - 40px);overflow-y:auto;margin:0 auto">
+<div class="modal-ov" id="cardDetailModal">
+  <div class="modal modal-lg">
     <div class="cd-stages">
       <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
       <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
@@ -1573,14 +1574,16 @@ function renderLib(section,silent){
   const data=S[section];
   const query=(document.getElementById(section+'Search')?.value||'').toLowerCase();
   const filter=S.libFilters[section]||'All';
-  const hasFavs=(S.favs[section]||[]).length>0;
+  const hasFavs=S.favs&&S.favs[section]&&S.favs[section].length>0;
   const cats=['All',...(hasFavs?['Bookmarked']:[]),...[...new Set(data.map(x=>x.cat))].sort()];
   // Filters
   const fEl=document.getElementById(section+'Filters');
   if(fEl)fEl.innerHTML=cats.map(c=>{const bm=c==='Bookmarked';return`<span class="lib-filter-chip${filter===c?' active':''}${bm?' bm-chip':''}" onclick="setLibFilter('${section}','${c}')">${c}</span>`;}).join('');
   // Filter + search
   const filtered=data.filter(x=>{
-    const matchCat=filter==='All'||(filter==='Bookmarked'&&isFav(x.id))||x.cat===filter;
+    var favList=S.favs&&S.favs[section]?S.favs[section]:[];
+    var isBookmarked=favList.indexOf(x.id)>-1;
+    const matchCat=filter==='All'||(filter==='Bookmarked'&&isBookmarked)||x.cat===filter;
     const matchQ=!query||x.text.toLowerCase().includes(query)||(x.title||'').toLowerCase().includes(query)||(x.cat||'').toLowerCase().includes(query);
     return matchCat&&matchQ;
   });
