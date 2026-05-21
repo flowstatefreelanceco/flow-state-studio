@@ -242,11 +242,11 @@ select.fi{cursor:pointer}
 .modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal-ov.open{display:flex}
 .modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,14,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
-.modal-lg{max-width:1100px!important;width:98vw!important;max-height:96vh!important;padding:28px!important}
-#cardDetailModal{align-items:flex-start!important;padding:16px!important}
-#cardDetailModal .modal{max-width:100%!important;width:calc(100vw - 32px)!important;max-height:calc(100vh - 32px)!important;margin:0!important}
-#cardDetailModal .cd-cols{grid-template-columns:1fr 1fr!important}
-#cardDetailModal .cd-ai-panel{position:sticky;top:0}
+
+/* CARD MODAL PANEL - standalone, ignores .modal */
+.cd-modal-panel{background:var(--w);border-radius:14px;padding:28px;width:calc(100vw - 40px);max-width:1200px;max-height:calc(100vh - 40px);overflow-y:auto;border:1px solid var(--bl);box-shadow:0 24px 64px rgba(42,26,14,.25);position:relative}
+
+
 .modal-xl{max-width:640px}
 .m-title{font-family:var(--fh);font-size:26px;font-weight:600;margin-bottom:4px;color:var(--e)}
 .m-sub{font-size:13px;color:var(--t);margin-bottom:22px;line-height:1.6}
@@ -1020,7 +1020,7 @@ select.fi{cursor:pointer}
 
 <!-- CARD DETAIL MODAL -->
 <div class="modal-ov" id="cardDetailModal">
-  <div class="modal modal-lg">
+  <div class="cd-modal-panel">
     <div class="cd-stages">
       <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
       <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
