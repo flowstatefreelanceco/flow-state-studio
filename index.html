@@ -399,49 +399,81 @@ select.fi{cursor:pointer}
 .cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
 
 /* CARD DETAIL REBUILT */
-.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 120px);min-height:500px}
-.cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
-.cd2-right{padding:20px 24px;overflow-y:auto;background:var(--p);display:flex;flex-direction:column;gap:12px}
-.ai2-section{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow:hidden;flex-shrink:0}
-.ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
+.cd2-wrap{display:grid;grid-template-columns:380px 1fr;gap:0;height:calc(100vh - 64px);min-height:500px}
+.cd2-left{padding:24px 28px;border-right:1px solid var(--bl);overflow-y:auto;display:flex;flex-direction:column;gap:16px;background:var(--w)}
+.cd2-right{padding:24px 28px;overflow-y:auto;background:var(--p);display:flex;flex-direction:column;gap:14px}
+
+/* AI SECTION CARDS */
+.ai2-section{background:var(--w);border:1px solid var(--bl);border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 1px 4px rgba(42,26,14,.06)}
+.ai2-section-hdr{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
 .ai2-section-hdr:hover{background:var(--p)}
-.ai2-section-body.open .ai2-section-hdr{border-bottom-color:var(--bl)}
-.ai2-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);display:flex;align-items:center;gap:7px}
-.ai2-section-body{padding:14px 16px;display:none}
+.ai2-section-title{font-family:var(--fh);font-size:17px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:10px}
+.ai2-section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ai2-sec-cd .ai2-section-icon{background:linear-gradient(135deg,var(--teal),#2a7a7a)}
+.ai2-sec-gen .ai2-section-icon{background:linear-gradient(135deg,var(--r),#c86a3f)}
+.ai2-sec-hooks .ai2-section-icon{background:linear-gradient(135deg,#7a9ec2,#5a7ea2)}
+.ai2-sec-var .ai2-section-icon{background:linear-gradient(135deg,#9a7ec8,#7a5ea8)}
+.ai2-sec-series .ai2-section-icon{background:linear-gradient(135deg,#c8a07a,#a87a4a)}
+.ai2-sec-rp .ai2-section-icon{background:linear-gradient(135deg,#7ac8a0,#4aa870)}
+.ai2-chev{width:28px;height:28px;border-radius:50%;background:var(--p);border:1px solid var(--bl);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t);flex-shrink:0;transition:all .2s}
+.ai2-section-body.open .ai2-chev{transform:rotate(45deg)}
+.ai2-section-body{display:none}
 .ai2-section-body.open{display:block}
-.ai2-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
-.ai2-btn{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:12px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
-.ai2-btn:hover{border-color:var(--teal);background:var(--tealp);color:var(--teal)}
+.ai2-body-inner{padding:0 20px 18px}
+
+/* GENERATE BUTTONS */
+.ai2-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ai2-btn{background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:12px 14px;font-family:var(--fb);font-size:13px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
+.ai2-btn:hover{border-color:var(--teal);background:var(--tealp);color:var(--teal);transform:translateY(-1px);box-shadow:0 3px 10px rgba(58,140,140,.15)}
 .ai2-btn.full{grid-column:1/-1}
-.ai2-btn.accent{background:var(--teal);color:white;border-color:var(--teal);font-weight:500}
-.ai2-btn.accent:hover{background:var(--tealh);border-color:var(--tealh)}
-.ai2-btn-label{font-weight:600;display:block;margin-bottom:2px}
-.ai2-btn-sub{font-size:10px;color:var(--tl);display:block}
-.ai2-btn:hover .ai2-btn-sub{color:inherit;opacity:.8}
-.ai2-input{width:100%;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px 12px;font-family:var(--fb);font-size:12.5px;color:var(--e);outline:none;margin-bottom:8px;resize:vertical;transition:border-color .15s}
-.ai2-input:focus{border-color:var(--teal)}
-.ai2-out{background:var(--w);border:1px solid var(--tealp);border-radius:var(--rsm);padding:14px;font-size:13px;line-height:1.82;color:var(--e);white-space:pre-wrap;display:none;max-height:320px;overflow-y:auto;margin-top:10px}
-.ai2-out.show{display:block}
-.ai2-out-acts{display:none;gap:6px;margin-top:8px;flex-wrap:wrap}
-.ai2-out-acts.show{display:flex}
-.ai2-hook-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
-.ai2-hook-list.show{display:flex}
-.ai2-hook-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-size:12.5px;color:var(--e);display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer;transition:all .15s}
-.ai2-hook-item:hover{border-color:var(--teal);background:var(--tealp)}
-.ai2-hook-text{flex:1;line-height:1.55}
-.ai2-hook-use{font-size:10px;color:var(--tl);flex-shrink:0;margin-top:2px;white-space:nowrap}
-.ai2-tone-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.ai2-tone-chip{padding:5px 11px;border-radius:100px;border:1px solid var(--bl);font-size:11px;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t);user-select:none}
+.ai2-btn.accent{background:var(--teal);color:white;border-color:var(--teal);font-weight:600;font-size:13.5px;padding:13px 16px}
+.ai2-btn.accent:hover{background:var(--tealh);border-color:var(--tealh);transform:translateY(-1px);box-shadow:0 4px 14px rgba(58,140,140,.3)}
+.ai2-btn.accent-r{background:var(--r);color:white;border-color:var(--r);font-weight:600;font-size:13.5px;padding:13px 16px}
+.ai2-btn.accent-r:hover{background:var(--rh);transform:translateY(-1px);box-shadow:0 4px 14px rgba(181,81,42,.3)}
+.ai2-btn-label{font-weight:600;display:block;margin-bottom:3px;font-size:13px}
+.ai2-btn-sub{font-size:11px;color:var(--tl);display:block}
+.ai2-btn:hover .ai2-btn-sub{color:var(--teal);opacity:.9}
+
+/* TONE CHIPS */
+.ai2-tone-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.ai2-tone-chip{padding:6px 14px;border-radius:100px;border:1.5px solid var(--bl);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t)}
 .ai2-tone-chip.sel{background:var(--e);border-color:var(--e);color:var(--p)}
-.ai2-smart-brief{background:linear-gradient(135deg,#f0ece3,#e8ede8);border:1px solid var(--teal);border-left:3px solid var(--teal);border-radius:var(--rsm);padding:16px 18px;font-size:13px;color:var(--e);line-height:1.8;margin-top:10px;display:none;white-space:pre-wrap}
+.ai2-tone-chip:hover{border-color:var(--b);color:var(--e)}
+
+/* OUTPUT */
+.ai2-input{width:100%;background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:10px 14px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;margin-bottom:10px;resize:vertical;transition:border-color .15s}
+.ai2-input:focus{border-color:var(--teal)}
+.ai2-out{background:linear-gradient(135deg,#fdfaf6,#f8f4ee);border:1.5px solid var(--teal);border-radius:10px;padding:16px 18px;font-size:13.5px;line-height:1.85;color:var(--e);white-space:pre-wrap;display:none;max-height:340px;overflow-y:auto;margin-top:12px}
+.ai2-out.show{display:block}
+.ai2-out-acts{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ai2-out-acts.show{display:flex}
+
+/* SMART BRIEF OUTPUT */
+.ai2-smart-brief{background:linear-gradient(135deg,#f0f7f7,#e8f0e8);border:1.5px solid var(--teal);border-left:4px solid var(--teal);border-radius:10px;padding:18px 20px;font-size:14px;color:var(--e);line-height:1.85;margin-top:12px;display:none;white-space:pre-wrap}
 .ai2-smart-brief.show{display:block}
-.ai2-smart-brief strong{color:var(--teal)}
-.ai2-series-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
+
+/* HOOKS */
+.ai2-hook-list{display:none;flex-direction:column;gap:8px;margin-top:12px}
+.ai2-hook-list.show{display:flex}
+.ai2-hook-item{background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--e);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;cursor:pointer;transition:all .15s;line-height:1.55}
+.ai2-hook-item:hover{border-color:var(--teal);background:var(--tealp);transform:translateY(-1px)}
+.ai2-hook-text{flex:1}
+.ai2-hook-use{font-size:11px;color:var(--teal);flex-shrink:0;margin-top:2px;white-space:nowrap;font-weight:600}
+
+/* SERIES */
+.ai2-series-list{display:none;flex-direction:column;gap:8px;margin-top:12px}
 .ai2-series-list.show{display:flex}
-.ai2-series-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px;font-size:12px;color:var(--e);line-height:1.5;cursor:pointer;transition:all .15s}
-.ai2-series-item:hover{border-color:var(--r);background:var(--rp)}
-.ai2-loading{font-size:12px;color:var(--tl);padding:8px 0;display:none;font-style:italic}
+.ai2-series-item{background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--e);line-height:1.5;cursor:pointer;transition:all .15s}
+.ai2-series-item:hover{border-color:var(--r);background:var(--rp);transform:translateY(-1px)}
+
+/* LOADING */
+.ai2-loading{font-size:13px;color:var(--teal);padding:10px 0;display:none;font-style:italic;font-family:var(--fh);font-size:16px}
 .ai2-loading.show{display:block}
+
+/* DIVIDER */
+.ai2-div{height:1px;background:var(--bl);margin:16px 0}
+.ai2-sub-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:10px}
+.ai2-desc{font-size:12.5px;color:var(--tl);line-height:1.65;margin-bottom:12px}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px}
@@ -966,6 +998,15 @@ select.fi{cursor:pointer}
       <div class="cd2-left">
         <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" style="font-size:15px;font-family:var(--fh)" /></div>
         <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Starting Stage</label>
+            <select class="fi" id="ideaStatus">
+              <option value="idea">Idea</option>
+              <option value="inprogress">In Progress</option>
+              <option value="ready">Ready</option>
+            </select>
+          </div>
+        </div>
+        <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="ideaPlat">
               <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
@@ -1007,7 +1048,13 @@ select.fi{cursor:pointer}
             <span id="ideaAIChev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ideaAIPanel">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Pick a tone then generate — or repurpose something you love.</div>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:12px">Your creative director in your back pocket — get the angle, hook, emotion, and what to avoid before you write a word.</div>
+            <button class="ai2-btn full accent" style="margin-bottom:14px" onclick="ideaSmartBrief()">Brief Me, Creative Director ✦</button>
+            <div class="ai2-loading" id="idea-load-smartBrief">Thinking...</div>
+            <div class="ai2-smart-brief" id="idea-smartBrief-out"></div>
+            <div style="height:1px;background:var(--bl);margin:14px 0"></div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:10px">Generate Content</div>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Pick a tone then generate.</div>
             <div class="ai2-tone-row">
               <div class="ai2-tone-chip sel" data-t="warm" onclick="ideaSelTone(this)">Warm</div>
               <div class="ai2-tone-chip" data-t="direct" onclick="ideaSelTone(this)">Direct</div>
@@ -1021,12 +1068,45 @@ select.fi{cursor:pointer}
               <button class="ai2-btn" onclick="ideaGenerate('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
               <button class="ai2-btn" onclick="ideaGenerate('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
             </div>
+            <div class="ai2-loading" id="idea-load-generate">Writing...</div>
             <div class="ai2-out" id="ideaAIOut"></div>
             <div class="ai2-out-acts" id="ideaAIActs">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaAICopy()">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaAISave()">Save Draft</button>
             </div>
-            <div class="cd-rp-div" style="height:1px;background:var(--bl);margin:14px 0"></div>
+            <div class="ai2-div"></div>
+            <div class="ai2-sub-label">Hook Builder</div>
+            <div class="ai2-desc">Generate 5 hooks, pick your favorite, build the full post from it.</div>
+            <button class="ai2-btn full" onclick="ideaGenHooks()">Generate 5 Hooks</button>
+            <div class="ai2-loading" id="idea-load-hooks">Generating hooks...</div>
+            <div class="ai2-hook-list" id="idea-hook-list"></div>
+            <div id="idea-hook-build-area" style="display:none;margin-top:10px">
+              <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
+              <div id="idea-selected-hook" style="font-size:13px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:10px;background:var(--tealp);border-radius:10px"></div>
+              <button class="ai2-btn full accent" onclick="ideaBuildFromHook()">Build Full Post from This Hook</button>
+            </div>
+            <div class="ai2-out" id="idea-out-hooks"></div>
+            <div class="ai2-out-acts" id="idea-acts-hooks">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaCopy2('hooks')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaSaveDraft2('hooks')">Save Draft</button>
+            </div>
+            <div class="ai2-div"></div>
+            <div class="ai2-sub-label">Caption Variations</div>
+            <div class="ai2-desc">Same idea, 3 different angles. Pick what feels right today.</div>
+            <button class="ai2-btn full accent-r" onclick="ideaGenVariations()">Generate 3 Variations</button>
+            <div class="ai2-loading" id="idea-load-variations">Writing variations...</div>
+            <div class="ai2-out" id="idea-out-variations"></div>
+            <div class="ai2-out-acts" id="idea-acts-variations">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaCopy2('variations')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaSaveDraft2('variations')">Save Draft</button>
+            </div>
+            <div class="ai2-div"></div>
+            <div class="ai2-sub-label">Content Series</div>
+            <div class="ai2-desc">One idea becomes 5 posts. Click any to add to your planner.</div>
+            <button class="ai2-btn full accent" onclick="ideaGenSeries()">Generate Content Series</button>
+            <div class="ai2-loading" id="idea-load-series">Spinning out ideas...</div>
+            <div class="ai2-series-list" id="idea-series-list"></div>
+            <div class="ai2-div"></div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:8px">Repurpose a Post</div>
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post — Claude rebuilds it in your voice for your niche.</div>
             <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
@@ -1121,24 +1201,24 @@ select.fi{cursor:pointer}
         </div>
       </div>
       <div class="cd2-right">
-        <div class="ai2-section">
+        <div class="ai2-section ai2-sec-cd">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
-            <div class="ai2-section-title">&#10022; Creative Director</div>
-            <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
+            <div class="ai2-section-title"><div class="ai2-section-icon">✦</div>Creative Director</div>
+            <div class="ai2-chev" id="ai2-smartBrief-chev">+</div>
           </div>
-          <div class="ai2-section-body" id="ai2-smartBrief-body">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid — before you write a single word.</div>
+          <div class="ai2-section-body" id="ai2-smartBrief-body"><div class="ai2-body-inner">
+            <div class="ai2-desc">Your creative director in your back pocket. Get the angle, hook, emotion, and what to avoid — before you write a word.</div>
             <button class="ai2-btn full accent" onclick="cdSmartBrief()">Brief Me, Creative Director ✦</button>
             <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
             <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
           </div>
         </div>
-        <div class="ai2-section">
+        <div class="ai2-section ai2-sec-gen">
           <div class="ai2-section-hdr" onclick="toggleAI2('generate')">
-            <div class="ai2-section-title">&#9997; Generate Content</div>
-            <span id="ai2-generate-chev" style="color:var(--tl);font-size:16px">+</span>
+            <div class="ai2-section-title"><div class="ai2-section-icon">✍</div>Generate Content</div>
+            <div class="ai2-chev" id="ai2-generate-chev">+</div>
           </div>
-          <div class="ai2-section-body" id="ai2-generate-body">
+          <div class="ai2-section-body" id="ai2-generate-body"><div class="ai2-body-inner">
             <div class="ai2-tone-row" id="cdToneRow">
               <div class="ai2-tone-chip sel" data-t="warm" onclick="cdSelTone(this)">Warm</div>
               <div class="ai2-tone-chip" data-t="direct" onclick="cdSelTone(this)">Direct</div>
@@ -1162,12 +1242,12 @@ select.fi{cursor:pointer}
             </div>
           </div>
         </div>
-        <div class="ai2-section">
+        <div class="ai2-section ai2-sec-hooks">
           <div class="ai2-section-hdr" onclick="toggleAI2('hooks')">
-            <div class="ai2-section-title">Hook Builder</div>
-            <span id="ai2-hooks-chev" style="color:var(--tl);font-size:16px">+</span>
+            <div class="ai2-section-title"><div class="ai2-section-icon">🎣</div>Hook Builder</div>
+            <div class="ai2-chev" id="ai2-hooks-chev">+</div>
           </div>
-          <div class="ai2-section-body" id="ai2-hooks-body">
+          <div class="ai2-section-body" id="ai2-hooks-body"><div class="ai2-body-inner">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
             <button class="ai2-btn full" onclick="cdGen2('hooks')">Generate 5 Hooks</button>
             <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
@@ -1184,12 +1264,12 @@ select.fi{cursor:pointer}
             </div>
           </div>
         </div>
-        <div class="ai2-section">
+        <div class="ai2-section ai2-sec-var">
           <div class="ai2-section-hdr" onclick="toggleAI2('variations')">
-            <div class="ai2-section-title">Caption Variations</div>
-            <span id="ai2-variations-chev" style="color:var(--tl);font-size:16px">+</span>
+            <div class="ai2-section-title"><div class="ai2-section-icon">🔀</div>Caption Variations</div>
+            <div class="ai2-chev" id="ai2-variations-chev">+</div>
           </div>
-          <div class="ai2-section-body" id="ai2-variations-body">
+          <div class="ai2-section-body" id="ai2-variations-body"><div class="ai2-body-inner">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
             <button class="ai2-btn full accent" onclick="cdGen2('variations')">Generate 3 Variations</button>
             <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
@@ -1200,24 +1280,24 @@ select.fi{cursor:pointer}
             </div>
           </div>
         </div>
-        <div class="ai2-section">
+        <div class="ai2-section ai2-sec-series">
           <div class="ai2-section-hdr" onclick="toggleAI2('series')">
-            <div class="ai2-section-title">Content Series</div>
-            <span id="ai2-series-chev" style="color:var(--tl);font-size:16px">+</span>
+            <div class="ai2-section-title"><div class="ai2-section-icon">🗂</div>Content Series</div>
+            <div class="ai2-chev" id="ai2-series-chev">+</div>
           </div>
-          <div class="ai2-section-body" id="ai2-series-body">
+          <div class="ai2-section-body" id="ai2-series-body"><div class="ai2-body-inner">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
             <button class="ai2-btn full accent" onclick="cdGen2('series')">Generate Content Series</button>
             <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
             <div class="ai2-series-list" id="cd-series-list"></div>
           </div>
         </div>
-        <div class="ai2-section">
+        <div class="ai2-section ai2-sec-rp">
           <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')">
-            <div class="ai2-section-title">Repurpose a Post</div>
-            <span id="ai2-repurpose-chev" style="color:var(--tl);font-size:16px">+</span>
+            <div class="ai2-section-title"><div class="ai2-section-icon">↻</div>Repurpose</div>
+            <div class="ai2-chev" id="ai2-repurpose-chev">+</div>
           </div>
-          <div class="ai2-section-body" id="ai2-repurpose-body">
+          <div class="ai2-section-body" id="ai2-repurpose-body"><div class="ai2-body-inner">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. Claude studies why it works then rebuilds it in your voice.</div>
             <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
               <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
@@ -1898,6 +1978,8 @@ function openIdeaModal(status){
   var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
   var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.remove('open');
   var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='+';
+  var sbOut=document.getElementById('idea-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var sbLoad=document.getElementById('idea-load-smartBrief');if(sbLoad)sbLoad.classList.remove('show');
   var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
   var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
   var id=document.getElementById('ideaDate');if(id)id.value='';
@@ -1924,7 +2006,7 @@ function saveIdea(){
     date,
     time,
     images:S._pendingIdeaImages||[],
-    status:document.getElementById('ideaModal')._defaultStatus||'idea'
+    status:document.getElementById('ideaStatus')?document.getElementById('ideaStatus').value:'idea'
   };
   S.ideas.push(idea);
   // Auto-sync to calendar if date is set
@@ -2261,7 +2343,22 @@ function cdSave() {
   x.notes = document.getElementById('cdNotes').value;
   var ac = document.querySelector('.cd-stage.active');
   if (ac) x.status = ac.dataset.s;
-  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Saved');
+  // Sync to calendar if date is set
+  if (x.date) {
+    var calIdx = S.calEntries.findIndex(function(e) { return e.id === 'cal_'+S.cdId; });
+    if (calIdx > -1) {
+      S.calEntries[calIdx].title = x.title;
+      S.calEntries[calIdx].platform = x.platform;
+      S.calEntries[calIdx].date = x.date;
+      S.calEntries[calIdx].notes = x.notes;
+    } else {
+      S.calEntries.push({ id:'cal_'+S.cdId, title:x.title, platform:x.platform, status:x.status, date:x.date, notes:x.notes });
+    }
+  } else {
+    // Remove from calendar if date cleared
+    S.calEntries = S.calEntries.filter(function(e) { return e.id !== 'cal_'+S.cdId; });
+  }
+  persist(); closeModal('cardDetailModal'); renderKanban(); renderCalendar(); toast('Saved');
 }
 
 function cdDelete() {
@@ -2551,6 +2648,34 @@ function ideaSelTone(el) {
   el.classList.add('sel');
 }
 
+async function ideaSmartBrief() {
+  var title = document.getElementById('ideaTitle').value.trim();
+  var notes = document.getElementById('ideaNotes').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  var fmt = document.getElementById('ideaFormat').value;
+  if (!title && !notes) { toast('Add a title or notes first'); return; }
+  var brief = title + (notes ? '. Notes: ' + notes : '');
+  var load = document.getElementById('idea-load-smartBrief');
+  var out = document.getElementById('idea-smartBrief-out');
+  if (load) load.classList.add('show');
+  if (out) out.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
+    ' You think like a creative director — you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
+    'You are direct, specific, and practical. You never give generic advice.';
+  var usr = 'I need your creative direction on this piece of content.\n\n' +
+    'Brief: ' + brief + '\nPlatform: ' + plat + '\nFormat: ' + fmt + '\n\n' +
+    'Give me:\n' +
+    '1. THE ANGLE — the specific perspective that will make this land with my audience\n' +
+    '2. THE HOOK — one specific opening line I should lead with\n' +
+    '3. THE EMOTION — what feeling this should create and why it matters for my niche\n' +
+    '4. THE WATCH OUT — one thing to avoid that would make it feel generic or off-brand\n\n' +
+    'Be direct and specific. Talk to me like a creative director briefing a copywriter.';
+  var result = await cdCallAI(sys, usr, 600);
+  if (load) load.classList.remove('show');
+  if (result && out) { out.textContent = result; out.classList.add('show'); }
+}
+
 function ideaAICopy() {
   if (S.ideaAIOut) navigator.clipboard.writeText(S.ideaAIOut).then(function() { toast('Copied'); });
 }
@@ -2710,6 +2835,166 @@ function calEditEntry(id) {
   document.getElementById('calDate').value = e.date || '';
   document.getElementById('calNotes').value = e.notes || '';
   openModal('calModal');
+}
+
+
+/* IDEA MODAL EXTRA AI */
+var _ideaHookSel = '';
+var _ideaOutputs = {};
+
+async function ideaGenHooks() {
+  var title = document.getElementById('ideaTitle').value.trim();
+  var notes = document.getElementById('ideaNotes').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  if (!title && !notes) { toast('Add a title first'); return; }
+  var brief = title + (notes ? '. ' + notes : '');
+  var load = document.getElementById('idea-load-hooks');
+  if (load) load.classList.add('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional content writer.' + brand + ' Output ONLY the hooks. No preamble.';
+  var usr = 'Generate 5 scroll-stopping opening hooks for: ' + brief + '. Platform: ' + plat + '. Different styles: question, bold statement, statistic, story opener, controversy. Number them 1-5. Just the hook line.';
+  var result = await cdCallAI(sys, usr, 400);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _ideaOutputs['hooks'] = result;
+    ideaRenderHooks(result);
+  }
+}
+
+function ideaRenderHooks(text) {
+  var lines = text.split('
+').filter(function(l) { return l.trim(); });
+  var list = document.getElementById('idea-hook-list');
+  if (!list) return;
+  list.innerHTML = '';
+  lines.forEach(function(line) {
+    var clean = line.replace(/^[0-9]+[.)\s]+/, '').trim();
+    if (!clean) return;
+    var item = document.createElement('div');
+    item.className = 'ai2-hook-item';
+    item.innerHTML = '<span class="ai2-hook-text">' + esc(clean) + '</span><span class="ai2-hook-use">Use this ›</span>';
+    item.addEventListener('click', function() { ideaSelectHook(clean); });
+    list.appendChild(item);
+  });
+  list.classList.add('show');
+}
+
+function ideaSelectHook(hook) {
+  _ideaHookSel = hook;
+  var sel = document.getElementById('idea-selected-hook');
+  if (sel) sel.textContent = hook;
+  var area = document.getElementById('idea-hook-build-area');
+  if (area) area.style.display = 'block';
+}
+
+async function ideaBuildFromHook() {
+  if (!_ideaHookSel) return;
+  var title = document.getElementById('ideaTitle').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  var brand = buildBrandContext();
+  var sys = 'You are a professional content writer.' + brand + ' Output ONLY the finished content.';
+  var usr = 'Write a full ' + plat + ' caption starting with this hook: "' + _ideaHookSel + '". Topic: ' + title + '. Keep the hook exactly as written. Add value, end with CTA.';
+  var out = document.getElementById('idea-out-hooks');
+  var acts = document.getElementById('idea-acts-hooks');
+  if (out) { out.textContent = 'Building...'; out.classList.add('show'); }
+  if (acts) acts.classList.remove('show');
+  var result = await cdCallAI(sys, usr, 700);
+  if (result) {
+    _ideaOutputs['hooks'] = result;
+    if (out) out.textContent = result;
+    if (acts) acts.classList.add('show');
+  }
+}
+
+async function ideaGenVariations() {
+  var title = document.getElementById('ideaTitle').value.trim();
+  var notes = document.getElementById('ideaNotes').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  if (!title && !notes) { toast('Add a title first'); return; }
+  var brief = title + (notes ? '. ' + notes : '');
+  var load = document.getElementById('idea-load-variations');
+  var out = document.getElementById('idea-out-variations');
+  var acts = document.getElementById('idea-acts-variations');
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional content writer.' + brand + ' Output ONLY the 3 variations.';
+  var usr = 'Write 3 caption variations for: ' + brief + '. For ' + plat + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each clearly.';
+  var result = await cdCallAI(sys, usr, 900);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _ideaOutputs['variations'] = result;
+    if (out) { out.textContent = result; out.classList.add('show'); }
+    if (acts) acts.classList.add('show');
+  }
+}
+
+async function ideaGenSeries() {
+  var title = document.getElementById('ideaTitle').value.trim();
+  var notes = document.getElementById('ideaNotes').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  if (!title && !notes) { toast('Add a title first'); return; }
+  var brief = title + (notes ? '. ' + notes : '');
+  var load = document.getElementById('idea-load-series');
+  if (load) load.classList.add('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional content strategist.' + brand + ' Output ONLY the series list.';
+  var usr = 'Generate a 5-part content series from: ' + brief + '. For ' + plat + '. Each post stands alone but connects to a bigger theme. For each: title + one sentence description. Number them 1-5.';
+  var result = await cdCallAI(sys, usr, 600);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _ideaOutputs['series'] = result;
+    ideaRenderSeries(result);
+  }
+}
+
+function ideaRenderSeries(text) {
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
+  var list = document.getElementById('idea-series-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var items = [];
+  var cur = '';
+  lines.forEach(function(line) {
+    if (/^[0-9]+[.)]/.test(line.trim())) {
+      if (cur) items.push(cur);
+      cur = line.replace(/^[0-9]+[.)\s]+/, '').trim();
+    } else if (cur) { cur += ' ' + line.trim(); }
+  });
+  if (cur) items.push(cur);
+  if (!items.length) items = lines.slice(0, 5);
+  items.forEach(function(item) {
+    if (!item.trim()) return;
+    var el = document.createElement('div');
+    el.className = 'ai2-series-item';
+    el.textContent = item;
+    el.title = 'Click to add to planner';
+    var plat = document.getElementById('ideaPlat').value;
+    var fmt = document.getElementById('ideaFormat').value;
+    el.addEventListener('click', function() {
+      S.ideas.push({ id: Date.now().toString(), title: item.slice(0, 80), platform: plat, format: fmt, notes: '', status: 'idea' });
+      persist(); renderKanban(); toast('Added to planner');
+    });
+    list.appendChild(el);
+  });
+  list.classList.add('show');
+}
+
+function ideaCopy2(type) {
+  var txt = _ideaOutputs[type] || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied'); });
+}
+
+function ideaSaveDraft2(type) {
+  var txt = _ideaOutputs[type] || '';
+  if (!txt) return;
+  var t = document.getElementById('ideaTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: txt,
+    platform: document.getElementById('ideaPlat').value,
+    contentType: document.getElementById('ideaFormat').value,
+    tone: type, createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
 }
 
 /* ═══════════════════ UTILS ═══════════════════ */
