@@ -2862,8 +2862,7 @@ async function ideaGenHooks() {
 }
 
 function ideaRenderHooks(text) {
-  var lines = text.split('
-').filter(function(l) { return l.trim(); });
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
   var list = document.getElementById('idea-hook-list');
   if (!list) return;
   list.innerHTML = '';
