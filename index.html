@@ -441,7 +441,7 @@ select.fi{cursor:pointer}
 .ai2-tone-chip:hover{border-color:var(--b);color:var(--e)}
 
 /* OUTPUT */
-.ai2-input{width:100%;background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:10px 14px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;margin-bottom:10px;resize:vertical;transition:border-color .15s}
+.ai2-input{width:100%;background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:10px 14px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;margin-bottom:10px;position:relative;z-index:10;pointer-events:all;resize:vertical;transition:border-color .15s}
 .ai2-input:focus{border-color:var(--teal)}
 .ai2-out{background:linear-gradient(135deg,#fdfaf6,#f8f4ee);border:1.5px solid var(--teal);border-radius:10px;padding:18px 20px;font-size:14.5px;line-height:1.85;color:var(--e);white-space:pre-wrap;display:none;max-height:340px;overflow-y:auto;margin-top:12px}
 .ai2-out.show{display:block}
@@ -2519,17 +2519,22 @@ async function ideaGenerate(type) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 1000, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.fulldraft }] })
     });
+    if (!r.ok) { throw new Error('Server error: ' + r.status); }
     var d = await r.json();
+    if (d.error) { throw new Error(d.error.message || JSON.stringify(d.error)); }
     S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
     if (load) load.classList.remove('show');
+    out.style.display = 'block';
     out.textContent = S.ideaAIOut;
     out.classList.add('show');
-    if (acts) acts.classList.add('show');
+    if (acts) { acts.style.display = 'flex'; acts.classList.add('show'); }
     S.aiCount = (S.aiCount || 0) + 1; persist();
   } catch(e) {
     if (load) load.classList.remove('show');
+    out.style.display = 'block';
     out.textContent = 'Error: ' + e.message;
     out.classList.add('show');
+    toast('Error: ' + e.message);
   }
 }
 
