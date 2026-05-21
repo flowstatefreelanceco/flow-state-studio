@@ -1063,10 +1063,12 @@ select.fi{cursor:pointer}
               <div class="ai2-tone-chip" data-t="playful" onclick="ideaSelTone(this)">Playful</div>
             </div>
             <div class="ai2-btn-grid">
-              <button class="ai2-btn" onclick="ideaGenerate('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('hooks')"><span class="ai2-btn-label">5 Hooks</span><span class="ai2-btn-sub">Pick your favorite</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('fulldraft')"><span class="ai2-btn-label">Full Draft</span><span class="ai2-btn-sub">Complete piece, start to finish</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA — ready to film</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('emailseq')"><span class="ai2-btn-label">Email Sequence</span><span class="ai2-btn-sub">3-part nurture from this idea</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('listicle')"><span class="ai2-btn-label">Listicle Post</span><span class="ai2-btn-sub">Numbered tips or lessons</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('talking')"><span class="ai2-btn-label">Talking Points</span><span class="ai2-btn-sub">5 key points to speak to</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('ctaonly')"><span class="ai2-btn-label">5 CTAs</span><span class="ai2-btn-sub">Strong calls to action</span></button>
             </div>
             <div class="ai2-loading" id="idea-load-generate">Writing...</div>
             <div class="ai2-out" id="ideaAIOut"></div>
@@ -2493,7 +2495,6 @@ async function ideaGenerate(type) {
   if (load) load.classList.add('show');
   out.classList.remove('show'); out.textContent = '';
   if (acts) acts.classList.remove('show');
-  // Get selected tone
   var toneEl = document.querySelector('#ideaModal .ai2-tone-chip.sel');
   var tone = toneEl ? toneEl.dataset.t : 'warm';
   var toneMap = { warm:'warm and human', direct:'direct and punchy', story:'story-led', educational:'educational and value-packed', playful:'playful and witty' };
@@ -2501,16 +2502,22 @@ async function ideaGenerate(type) {
   var brand = buildBrandContext();
   var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
   var prompts = {
-    caption: 'Write a ' + plat + ' caption for: ' + brief + '. Tone: ' + toneDesc + '. Strong hook, value in the middle, natural CTA.',
-    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Platform: ' + plat + '. Numbered list, one punchy line each.',
-    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-6: one point each. Last: CTA. Label each slide.',
+    fulldraft: 'Write a complete publish-ready ' + fmt + ' for ' + plat + ' about: ' + brief + '. Tone: ' + toneDesc + '. Write the full piece start to finish — hook, body, CTA. Nothing generic.',
+    reel: 'Write a Reel script for: ' + brief + '. Format:\nHOOK (first 3 seconds)\nBODY (main value, punchy)\nCTA (last 5 seconds). Tone: ' + toneDesc + '.',
+    emailseq: 'Write a 3-email nurture sequence about: ' + brief + '. Each email: Subject line, Preview text, Body (3-4 paragraphs), CTA. Email 1: problem. Email 2: solution. Email 3: invitation. Tone: ' + toneDesc + '.',
+    listicle: 'Write a listicle post for ' + plat + ' about: ' + brief + '. Strong hook, 5-7 numbered points (1-2 sentences each), CTA. Tone: ' + toneDesc + '.',
+    talking: 'Give me 5 talking points to speak about: ' + brief + '. Each: a clear standalone insight plus a suggested opening line.',
+    ctaonly: 'Write 5 different calls to action for content about: ' + brief + '. Platform: ' + plat + '. Mix: direct ask, question, soft invite, urgency, value-led. 1-2 sentences each.',
+    caption: 'Write a ' + plat + ' caption for: ' + brief + '. Tone: ' + toneDesc + '. Strong hook, value, natural CTA.',
+    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy line each.',
+    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-6: one point each. Last: CTA.',
     newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
   };
   try {
     var r = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.caption }] })
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 1000, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.fulldraft }] })
     });
     var d = await r.json();
     S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
