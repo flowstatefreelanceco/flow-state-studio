@@ -398,6 +398,50 @@ select.fi{cursor:pointer}
 .cd-rp-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px}
 .cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
 
+/* CARD DETAIL REBUILT */
+.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 120px);min-height:500px}
+.cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.cd2-right{padding:20px 24px;overflow-y:auto;background:var(--p);display:flex;flex-direction:column;gap:12px}
+.ai2-section{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow:hidden;flex-shrink:0}
+.ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
+.ai2-section-hdr:hover{background:var(--p)}
+.ai2-section-body.open .ai2-section-hdr{border-bottom-color:var(--bl)}
+.ai2-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);display:flex;align-items:center;gap:7px}
+.ai2-section-body{padding:14px 16px;display:none}
+.ai2-section-body.open{display:block}
+.ai2-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.ai2-btn{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:12px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
+.ai2-btn:hover{border-color:var(--teal);background:var(--tealp);color:var(--teal)}
+.ai2-btn.full{grid-column:1/-1}
+.ai2-btn.accent{background:var(--teal);color:white;border-color:var(--teal);font-weight:500}
+.ai2-btn.accent:hover{background:var(--tealh);border-color:var(--tealh)}
+.ai2-btn-label{font-weight:600;display:block;margin-bottom:2px}
+.ai2-btn-sub{font-size:10px;color:var(--tl);display:block}
+.ai2-btn:hover .ai2-btn-sub{color:inherit;opacity:.8}
+.ai2-input{width:100%;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px 12px;font-family:var(--fb);font-size:12.5px;color:var(--e);outline:none;margin-bottom:8px;resize:vertical;transition:border-color .15s}
+.ai2-input:focus{border-color:var(--teal)}
+.ai2-out{background:var(--w);border:1px solid var(--tealp);border-radius:var(--rsm);padding:14px;font-size:13px;line-height:1.82;color:var(--e);white-space:pre-wrap;display:none;max-height:320px;overflow-y:auto;margin-top:10px}
+.ai2-out.show{display:block}
+.ai2-out-acts{display:none;gap:6px;margin-top:8px;flex-wrap:wrap}
+.ai2-out-acts.show{display:flex}
+.ai2-hook-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
+.ai2-hook-list.show{display:flex}
+.ai2-hook-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-size:12.5px;color:var(--e);display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer;transition:all .15s}
+.ai2-hook-item:hover{border-color:var(--teal);background:var(--tealp)}
+.ai2-hook-text{flex:1;line-height:1.55}
+.ai2-hook-use{font-size:10px;color:var(--tl);flex-shrink:0;margin-top:2px;white-space:nowrap}
+.ai2-tone-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.ai2-tone-chip{padding:5px 11px;border-radius:100px;border:1px solid var(--bl);font-size:11px;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t);user-select:none}
+.ai2-tone-chip.sel{background:var(--e);border-color:var(--e);color:var(--p)}
+.ai2-smart-brief{background:linear-gradient(135deg,var(--tealp),var(--bluep,#e8eef8));border:1px solid var(--teal);border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--e);line-height:1.65;margin-top:10px;display:none}
+.ai2-smart-brief.show{display:block}
+.ai2-series-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
+.ai2-series-list.show{display:flex}
+.ai2-series-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px;font-size:12px;color:var(--e);line-height:1.5;cursor:pointer;transition:all .15s}
+.ai2-series-item:hover{border-color:var(--r);background:var(--rp)}
+.ai2-loading{font-size:12px;color:var(--tl);padding:8px 0;display:none;font-style:italic}
+.ai2-loading.show{display:block}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -2018,11 +2062,14 @@ function toggleGuideSec(sec){
 
 
 /* CARD DETAIL */
+var _cdSelTone = 'warm';
+var _cdHookSel = '';
+var _cdOutputs = {};
+
 function cdOpen(id) {
   var x = S.ideas.find(function(a) { return a.id === id; });
   if (!x) return;
-  S.cdId = id;
-  S.cdOut = '';
+  S.cdId = id; S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
   document.getElementById('cdTitle').value = x.title || '';
   document.getElementById('cdPlat').value = x.platform || 'instagram';
   document.getElementById('cdFormat').value = x.format || 'Caption / Post';
@@ -2031,17 +2078,53 @@ function cdOpen(id) {
   document.querySelectorAll('.cd-stage').forEach(function(el) {
     el.classList.toggle('active', el.dataset.s === x.status);
   });
-  var o = document.getElementById('cdOut');
-  if (o) { o.textContent = ''; o.classList.remove('show'); }
-  var a = document.getElementById('cdActs');
-  if (a) a.classList.remove('show');
+  // Reset all AI sections
+  ['smartBrief','generate','hooks','variations','series','repurpose'].forEach(function(sec) {
+    var body = document.getElementById('ai2-'+sec+'-body');
+    if (body) body.classList.remove('open');
+    var chev = document.getElementById('ai2-'+sec+'-chev');
+    if (chev) chev.textContent = '›';
+    var out = document.getElementById('cd-out-'+sec);
+    if (out) { out.textContent = ''; out.classList.remove('show'); }
+    var acts = document.getElementById('cd-acts-'+sec);
+    if (acts) acts.classList.remove('show');
+    var load = document.getElementById('cd-load-'+sec);
+    if (load) load.classList.remove('show');
+  });
+  var hookList = document.getElementById('cd-hook-list');
+  if (hookList) { hookList.innerHTML = ''; hookList.classList.remove('show'); }
+  var buildArea = document.getElementById('cd-hook-build-area');
+  if (buildArea) buildArea.style.display = 'none';
+  var seriesList = document.getElementById('cd-series-list');
+  if (seriesList) { seriesList.innerHTML = ''; seriesList.classList.remove('show'); }
+  var sbOut = document.getElementById('cd-smartBrief-out');
+  if (sbOut) { sbOut.textContent = ''; sbOut.classList.remove('show'); }
   document.getElementById('cdRpText').value = '';
   openModal('cardDetailModal');
 }
+
+function toggleAI2(sec) {
+  var body = document.getElementById('ai2-'+sec+'-body');
+  var chev = document.getElementById('ai2-'+sec+'-chev');
+  if (!body) return;
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chev) chev.textContent = isOpen ? '›' : '‹';
+}
+
 function cdSetStage(el) {
   document.querySelectorAll('.cd-stage').forEach(function(s) { s.classList.remove('active'); });
   el.classList.add('active');
 }
+
+function cdSelTone(el) {
+  document.querySelectorAll('.ai2-tone-chip').forEach(function(c) { c.classList.remove('sel'); });
+  el.classList.add('sel');
+  _cdSelTone = el.dataset.t;
+}
+
+function cdUpdatePlatDot() {}
+
 function cdSave() {
   var x = S.ideas.find(function(a) { return a.id === S.cdId; });
   if (!x) return;
@@ -2054,81 +2137,215 @@ function cdSave() {
   if (ac) x.status = ac.dataset.s;
   persist(); closeModal('cardDetailModal'); renderKanban(); toast('Saved');
 }
+
 function cdDelete() {
   if (!confirm('Delete this card?')) return;
   S.ideas = S.ideas.filter(function(a) { return a.id !== S.cdId; });
   persist(); closeModal('cardDetailModal'); renderKanban(); toast('Deleted');
 }
-async function cdGenerate(type) {
-  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
+
+function cdGetBrief() {
   var title = document.getElementById('cdTitle').value.trim();
   var notes = document.getElementById('cdNotes').value.trim();
-  var plat = document.getElementById('cdPlat').value;
-  if (!title && !notes) { toast('Add a title or brief first'); return; }
-  var brief = title + (notes ? '. Notes: ' + notes : '');
-  var o = document.getElementById('cdOut');
-  var a = document.getElementById('cdActs');
-  o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
-  var brand = buildBrandContext();
-  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
-  var prompts = {
-    caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
-    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
-    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
-    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
-  };
-  try {
-    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
-    });
-    var d = await r.json();
-    S.cdOut = (d.content && d.content[0] && d.content[0].text) || '';
-    o.textContent = S.cdOut; a.classList.add('show');
-    S.aiCount = (S.aiCount || 0) + 1; persist();
-  } catch(e) { o.textContent = 'Error: ' + e.message; }
-}
-function cdCopy() {
-  if (S.cdOut) navigator.clipboard.writeText(S.cdOut).then(function() { toast('Copied'); });
-}
-function cdSaveDraft() {
-  if (!S.cdOut) return;
-  var t = document.getElementById('cdTitle').value.trim() || 'Untitled';
-  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: S.cdOut,
-    platform: document.getElementById('cdPlat').value,
-    contentType: document.getElementById('cdFormat').value,
-    tone: 'Brand Voice', createdAt: new Date().toISOString() });
-  persist(); toast('Draft saved');
-}
-async function cdRepurpose() {
-  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
-  var text = document.getElementById('cdRpText').value.trim();
-  if (!text) { toast('Paste some content first'); return; }
-  var plat = document.getElementById('cdPlat').value;
   var fmt = document.getElementById('cdFormat').value;
-  var o = document.getElementById('cdOut');
-  var a = document.getElementById('cdActs');
-  o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
-  var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
-  var usr = 'I found a post I want to repurpose. Study what makes it work — the structure, the hook, the angle, the emotional pull — then rebuild it completely for my niche and voice.' +
-    '\n\nYour job is NOT to reword it. Your job is to:\n' +
-    '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
-    '2. Take that same winning framework\n' +
-    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
-    '4. Make it feel 100% original\n\n' +
-    'Output format: ' + fmt + ' for ' + plat + '\n\n' +
-    'Original post:\n' + text;
-  try {
-    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1000, system: sys, messages: [{ role: 'user', content: usr }] })
-    });
-    var d = await r.json();
-    S.cdOut = (d.content && d.content[0] && d.content[0].text) || '';
-    o.textContent = S.cdOut; a.classList.add('show');
-    S.aiCount = (S.aiCount || 0) + 1; persist();
-  } catch(e) { o.textContent = 'Error: ' + e.message; }
+  var plat = document.getElementById('cdPlat').value;
+  return { title: title, notes: notes, fmt: fmt, plat: plat,
+    brief: title + (notes ? '. Notes: ' + notes : ''),
+    context: 'Format: ' + fmt + ' for ' + plat };
 }
 
+async function cdSmartBrief() {
+  if (!window.ANTHROPIC_READY && !S.settings.apiKey) { toast('AI is powering up — try again in a moment'); return; }
+  var b = cdGetBrief();
+  if (!b.title && !b.notes) { toast('Add a title or notes first'); return; }
+  var load = document.getElementById('cd-load-smartBrief');
+  var out = document.getElementById('cd-smartBrief-out');
+  load.classList.add('show'); out.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a senior content strategist for wellness businesses.' + brand + ' Be concise and specific. Max 3 sentences.';
+  var usr = 'Give me a creative direction for this content: ' + b.brief + '. ' + b.context + '. What angle would work best, why, and one specific suggestion to make it stand out?';
+  var result = await cdCallAI(sys, usr, 400);
+  load.classList.remove('show');
+  if (result) { out.textContent = result; out.classList.add('show'); }
+}
+
+async function cdGen2(type) {
+  if (!S.settings || !S.settings.apiKey) {
+    // Try serverless
+  }
+  var b = cdGetBrief();
+  if (!b.title && !b.notes) { toast('Add a title or brief first'); return; }
+  var load = document.getElementById('cd-load-'+type);
+  var out = document.getElementById('cd-out-'+type);
+  var acts = document.getElementById('cd-acts-'+type);
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var tone = _cdSelTone || 'warm';
+  var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
+  var toneDesc = toneMap[tone] || 'warm and authentic';
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
+  var prompts = {
+    caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
+    story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
+    carousel: 'Write carousel slide copy for: ' + b.brief + '. Slide 1: scroll-stopping hook. Slides 2-6: one clear point each (short, punchy). Last slide: strong CTA. Label each slide.',
+    reel: 'Write a Reel/TikTok script for: ' + b.brief + '. Format: HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Make it conversational and energetic.',
+    newsletter: 'Write an engaging newsletter opening for: ' + b.brief + '. Tone: ' + toneDesc + '. Max 4 sentences. Should make the reader want to keep reading.',
+    email: 'Write a marketing email for: ' + b.brief + '. Include: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
+    variations: 'Write 3 different caption variations for: ' + b.brief + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each clearly. All for ' + b.plat + '.',
+    hooks: 'Generate 5 scroll-stopping opening hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Each hook should be different in style (question, bold statement, statistic, story opener, controversy). Number them 1-5. Just the hook line, nothing else.',
+    series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Each post should stand alone but connect to a bigger theme. For each: one sentence title + one sentence description. Number them 1-5.'
+  };
+  var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : 900);
+  if (load) load.classList.remove('show');
+  if (result && type === 'hooks') {
+    _cdOutputs[type] = result;
+    cdRenderHooks(result);
+  } else if (result && type === 'series') {
+    _cdOutputs[type] = result;
+    cdRenderSeries(result);
+  } else if (result) {
+    _cdOutputs[type] = result;
+    if (out) { out.textContent = result; out.classList.add('show'); }
+    if (acts) acts.classList.add('show');
+  }
+  S.aiCount = (S.aiCount || 0) + 1; persist();
+}
+
+function cdRenderHooks(text) {
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
+  var hookList = document.getElementById('cd-hook-list');
+  if (!hookList) return;
+  hookList.innerHTML = '';
+  lines.forEach(function(line) {
+    var clean = line.replace(/^[0-9]+[.)\s]+/, '').trim();
+    if (!clean) return;
+    var item = document.createElement('div');
+    item.className = 'ai2-hook-item';
+    item.innerHTML = '<span class="ai2-hook-text">' + esc(clean) + '</span><span class="ai2-hook-use">Use this ›</span>';
+    item.addEventListener('click', function() { cdSelectHook(clean); });
+    hookList.appendChild(item);
+  });
+  hookList.classList.add('show');
+}
+
+function cdSelectHook(hook) {
+  _cdHookSel = hook;
+  var sel = document.getElementById('cd-selected-hook');
+  if (sel) sel.textContent = hook;
+  var area = document.getElementById('cd-hook-build-area');
+  if (area) area.style.display = 'block';
+}
+
+async function cdBuildFromHook() {
+  if (!_cdHookSel) return;
+  var b = cdGetBrief();
+  var brand = buildBrandContext();
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var usr = 'Write a full ' + b.plat + ' caption starting with this hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Keep the hook exactly as written. Add value in the middle, end with a natural CTA.';
+  var out = document.getElementById('cd-out-hooks');
+  var acts = document.getElementById('cd-acts-hooks');
+  if (out) { out.textContent = 'Building...'; out.classList.add('show'); }
+  if (acts) acts.classList.remove('show');
+  var result = await cdCallAI(sys, usr, 700);
+  if (result) {
+    _cdOutputs['hooks'] = result;
+    if (out) out.textContent = result;
+    if (acts) acts.classList.add('show');
+  }
+}
+
+function cdRenderSeries(text) {
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
+  var list = document.getElementById('cd-series-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var items = [];
+  var cur = '';
+  lines.forEach(function(line) {
+    if (/^[0-9]+[.)]/.test(line.trim())) {
+      if (cur) items.push(cur);
+      cur = line.replace(/^[0-9]+[.)\s]+/, '').trim();
+    } else if (cur) {
+      cur += ' ' + line.trim();
+    }
+  });
+  if (cur) items.push(cur);
+  if (!items.length) items = lines.slice(0, 5);
+  items.forEach(function(item) {
+    if (!item.trim()) return;
+    var el = document.createElement('div');
+    el.className = 'ai2-series-item';
+    el.textContent = item;
+    el.title = 'Click to add to planner';
+    el.addEventListener('click', function() {
+      var b = cdGetBrief();
+      S.ideas.push({ id: Date.now().toString(), title: item.slice(0, 80), platform: b.plat, format: b.fmt, notes: '', status: 'idea' });
+      persist(); renderKanban(); toast('Added to planner');
+    });
+    list.appendChild(el);
+  });
+  list.classList.add('show');
+}
+
+async function cdRepurpose2() {
+  var text = document.getElementById('cdRpText').value.trim();
+  if (!text) { toast('Paste some content first'); return; }
+  var b = cdGetBrief();
+  var plat = document.getElementById('cdRpPlat').value;
+  var load = document.getElementById('cd-load-repurpose');
+  var out = document.getElementById('cd-out-repurpose');
+  var acts = document.getElementById('cd-acts-repurpose');
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist and copywriter for wellness businesses.' + brand + ' Output ONLY the repurposed content. No preamble.';
+  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work — the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
+  var result = await cdCallAI(sys, usr, 1000);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _cdOutputs['repurpose'] = result;
+    if (out) { out.textContent = result; out.classList.add('show'); }
+    if (acts) acts.classList.add('show');
+  }
+}
+
+async function cdCallAI(sys, usr, maxTok) {
+  try {
+    var r = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] })
+    });
+    var d = await r.json();
+    return (d.content && d.content[0] && d.content[0].text) || '';
+  } catch(e) {
+    toast('Error: ' + e.message);
+    return '';
+  }
+}
+
+function cdCopy2(type) {
+  var txt = _cdOutputs[type] || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied'); });
+}
+
+function cdSaveDraft2(type) {
+  var txt = _cdOutputs[type] || '';
+  if (!txt) return;
+  var t = document.getElementById('cdTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: txt,
+    platform: document.getElementById('cdPlat').value,
+    contentType: document.getElementById('cdFormat').value,
+    tone: type, createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+
+// Keep old cdCopy and cdSaveDraft as aliases
+function cdCopy() { cdCopy2('generate'); }
+function cdSaveDraft() { cdSaveDraft2('generate'); }
 
 /* IDEA MODAL AI TOOLS */
 function toggleIdeaAI() {
