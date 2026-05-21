@@ -1303,8 +1303,23 @@ async function initAuth(){
 }
 
 
+async function loadUserData(){
+  if(!_currentUser)return{};
+  try{
+    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
+    if(data&&data.data)return JSON.parse(data.data);
+  }catch(e){}
+  return{};
+}
+
+async function saveUserData(obj){
+  if(!_currentUser)return;
+  await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+}
+
 async function bootApp(){
   _appBooted=true;
+  window._supabasePersist=function(obj){saveUserData(obj);};
   document.getElementById('loadingScreen').classList.remove('hidden');
   var saved=await loadUserData();
   document.getElementById('appWrap').classList.add('show');
