@@ -162,7 +162,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc-body::-webkit-scrollbar{width:0}
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
 .kc-card{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;position:relative}
-.kc-card:hover{box-shadow:0 3px 10px var(--sh);border-color:var(--b)}
+.kc-card:hover{box-shadow:0 4px 14px var(--shm);border-color:var(--teal);transform:translateY(-1px)}
 .kc-card .cc-title{font-size:13px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:7px}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
@@ -239,12 +239,12 @@ select.fi{cursor:pointer}
 .btn-danger:hover{background:#EDD5C8}
 
 /* MODALS */
-.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
 .modal-ov.open{display:flex}
 .modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,14,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
 
 /* CARD MODAL PANEL - standalone, ignores .modal */
-.cd-modal-panel{background:var(--w);border-radius:14px;padding:28px;width:calc(100vw - 40px);max-width:1200px;max-height:calc(100vh - 40px);overflow-y:auto;border:1px solid var(--bl);box-shadow:0 24px 64px rgba(42,26,14,.25);position:relative}
+.cd-modal-panel{background:var(--w);border-radius:14px;padding:28px;width:95vw;max-height:92vh;overflow-y:auto;border:1px solid var(--bl);box-shadow:0 24px 64px rgba(42,26,14,.25);position:relative}
 
 
 .modal-xl{max-width:640px}
@@ -908,8 +908,8 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- Idea -->
-<div class="modal-ov" id="ideaModal">
-  <div class="modal">
+<div class="modal-ov" id="ideaModal" style="padding:12px">
+  <div class="cd-modal-panel" style="width:calc(100vw - 24px);max-height:calc(100vh - 24px);min-height:80vh">
     <div class="m-title">Add to Content Planner</div>
     <div class="m-sub">Drop your content idea in — you can flesh it out later</div>
     <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" /></div>
@@ -1019,8 +1019,8 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- CARD DETAIL MODAL -->
-<div class="modal-ov" id="cardDetailModal">
-  <div class="cd-modal-panel">
+<div class="modal-ov" id="cardDetailModal" style="padding:12px">
+  <div class="cd-modal-panel" style="width:calc(100vw - 24px);max-height:calc(100vh - 24px);min-height:80vh">
     <div class="cd-stages">
       <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
       <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
