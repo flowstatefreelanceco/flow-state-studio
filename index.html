@@ -1063,17 +1063,24 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- CARD DETAIL MODAL -->
-<div class="modal-ov" id="cardDetailModal" style="padding:12px">
-  <div class="cd-modal-panel" style="width:calc(100vw - 24px);max-height:calc(100vh - 24px);min-height:80vh">
-    <div class="cd-stages">
-      <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
-      <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
-      <div class="cd-stage" data-s="ready" onclick="cdSetStage(this)">Ready</div>
-      <div class="cd-stage" data-s="published" onclick="cdSetStage(this)">Published</div>
+<div class="modal-ov" id="cardDetailModal" style="padding:0;align-items:stretch">
+  <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:100vh;max-height:100vh;border-radius:0;padding:0;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
+      <div class="cd-stages" style="margin-bottom:0">
+        <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
+        <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
+        <div class="cd-stage" data-s="ready" onclick="cdSetStage(this)">Ready</div>
+        <div class="cd-stage" data-s="published" onclick="cdSetStage(this)">Published</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-danger" style="font-size:12px;padding:6px 12px" onclick="cdDelete()">Delete</button>
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('cardDetailModal')">Close</button>
+        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSave()">Save</button>
+      </div>
     </div>
-    <div class="cd-cols">
-      <div>
-        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" /></div>
+    <div class="cd2-wrap">
+      <div class="cd2-left">
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:15px;font-family:var(--fh)" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -1095,34 +1102,126 @@ select.fi{cursor:pointer}
         </div>
         <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
         <div class="fl"><label class="fl-lbl">Notes / Brief</label>
-          <textarea class="fi" id="cdNotes" style="min-height:90px" placeholder="Hook idea, key points, angle, CTA..."></textarea>
+          <textarea class="fi" id="cdNotes" style="min-height:160px" placeholder="Hook idea, key points, angle, CTA..."></textarea>
         </div>
       </div>
-      <div>
-        <div class="cd-ai-panel">
-          <div class="cd-ai-lbl">AI Tools</div>
-          <button class="cd-ai-btn" onclick="cdGenerate('caption')">Generate Caption</button>
-          <button class="cd-ai-btn" onclick="cdGenerate('hooks')">Generate 5 Hooks</button>
-          <button class="cd-ai-btn" onclick="cdGenerate('carousel')">Generate Carousel Copy</button>
-          <button class="cd-ai-btn" onclick="cdGenerate('newsletter')">Generate Newsletter Intro</button>
-          <div class="cd-out" id="cdOut"></div>
-          <div class="cd-acts" id="cdActs">
-            <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy()">Copy</button>
-            <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft()">Save Draft</button>
+      <div class="cd2-right">
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
+            <div class="ai2-section-title">&#10022; Smart Brief</div>
+            <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-smartBrief-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Claude reads your card and gives you a creative direction.</div>
+            <button class="ai2-btn full accent" onclick="cdSmartBrief()">Get Creative Direction</button>
+            <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
+            <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
           </div>
         </div>
-        <div class="cd-rp-div"></div>
-        <div class="cd-rp-lbl">Repurpose a Post</div>
-        <div class="cd-rp-note">Paste a caption or post text. Claude rewrites it in your voice for your niche.</div>
-        <textarea class="fi" id="cdRpText" placeholder="Paste post content here..." style="min-height:80px;margin-bottom:8px"></textarea>
-        <button class="btn btn-p" style="width:100%" onclick="cdRepurpose()">Repurpose for My Niche</button>
-      </div>
-    </div>
-    <div class="m-acts" style="justify-content:space-between">
-      <button class="btn btn-danger" onclick="cdDelete()">Delete</button>
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-g" onclick="closeModal('cardDetailModal')">Close</button>
-        <button class="btn btn-p" onclick="cdSave()">Save Changes</button>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('generate')">
+            <div class="ai2-section-title">&#9997; Generate Content</div>
+            <span id="ai2-generate-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-generate-body">
+            <div class="ai2-tone-row" id="cdToneRow">
+              <div class="ai2-tone-chip sel" data-t="warm" onclick="cdSelTone(this)">Warm</div>
+              <div class="ai2-tone-chip" data-t="direct" onclick="cdSelTone(this)">Direct</div>
+              <div class="ai2-tone-chip" data-t="story" onclick="cdSelTone(this)">Story-led</div>
+              <div class="ai2-tone-chip" data-t="educational" onclick="cdSelTone(this)">Educational</div>
+              <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
+            </div>
+            <div class="ai2-btn-grid">
+              <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
+              <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
+              <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
+              <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
+              <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
+              <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
+            </div>
+            <div class="ai2-loading" id="cd-load-generate">Writing...</div>
+            <div class="ai2-out" id="cd-out-generate"></div>
+            <div class="ai2-out-acts" id="cd-acts-generate">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('generate')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('generate')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('hooks')">
+            <div class="ai2-section-title">Hook Builder</div>
+            <span id="ai2-hooks-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-hooks-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
+            <button class="ai2-btn full" onclick="cdGen2('hooks')">Generate 5 Hooks</button>
+            <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
+            <div class="ai2-hook-list" id="cd-hook-list"></div>
+            <div id="cd-hook-build-area" style="display:none;margin-top:10px">
+              <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
+              <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
+              <button class="ai2-btn full accent" onclick="cdBuildFromHook()">Build Full Post from This Hook</button>
+            </div>
+            <div class="ai2-out" id="cd-out-hooks"></div>
+            <div class="ai2-out-acts" id="cd-acts-hooks">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('variations')">
+            <div class="ai2-section-title">Caption Variations</div>
+            <span id="ai2-variations-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-variations-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
+            <button class="ai2-btn full accent" onclick="cdGen2('variations')">Generate 3 Variations</button>
+            <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
+            <div class="ai2-out" id="cd-out-variations"></div>
+            <div class="ai2-out-acts" id="cd-acts-variations">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('variations')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('variations')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('series')">
+            <div class="ai2-section-title">Content Series</div>
+            <span id="ai2-series-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-series-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
+            <button class="ai2-btn full accent" onclick="cdGen2('series')">Generate Content Series</button>
+            <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
+            <div class="ai2-series-list" id="cd-series-list"></div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')">
+            <div class="ai2-section-title">Repurpose a Post</div>
+            <span id="ai2-repurpose-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-repurpose-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. Claude studies why it works then rebuilds it in your voice.</div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
+              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
+                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                <option value="LinkedIn">LinkedIn</option><option value="a blog">Blog</option>
+                <option value="a newsletter">Newsletter</option><option value="somewhere">Other</option>
+              </select>
+            </div>
+            <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post text here..." style="min-height:80px"></textarea>
+            <button class="ai2-btn full accent" onclick="cdRepurpose2()">Rebuild in My Voice</button>
+            <div class="ai2-loading" id="cd-load-repurpose">Studying and rebuilding...</div>
+            <div class="ai2-out" id="cd-out-repurpose"></div>
+            <div class="ai2-out-acts" id="cd-acts-repurpose">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
