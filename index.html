@@ -405,9 +405,9 @@ select.fi{cursor:pointer}
 
 /* AI SECTION CARDS */
 .ai2-section{background:var(--w);border:1px solid var(--bl);border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 1px 4px rgba(42,26,14,.06)}
-.ai2-section-hdr{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
+.ai2-section-hdr{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
 .ai2-section-hdr:hover{background:var(--p)}
-.ai2-section-title{font-family:var(--fh);font-size:17px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:10px}
+.ai2-section-title{font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:10px}
 .ai2-section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .ai2-sec-cd .ai2-section-icon{background:linear-gradient(135deg,var(--teal),#2a7a7a)}
 .ai2-sec-gen .ai2-section-icon{background:linear-gradient(135deg,var(--r),#c86a3f)}
@@ -417,39 +417,39 @@ select.fi{cursor:pointer}
 .ai2-sec-rp .ai2-section-icon{background:linear-gradient(135deg,#7ac8a0,#4aa870)}
 .ai2-chev{width:28px;height:28px;border-radius:50%;background:var(--p);border:1px solid var(--bl);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t);flex-shrink:0;transition:all .2s}
 .ai2-section-body.open .ai2-chev{transform:rotate(45deg)}
-.ai2-section-body{display:none}
+.ai2-section-body{display:none;padding:0 24px 22px}
 .ai2-section-body.open{display:block}
 .ai2-body-inner{padding:0 20px 18px}
 
 /* GENERATE BUTTONS */
 .ai2-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.ai2-btn{background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:12px 14px;font-family:var(--fb);font-size:13px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
+.ai2-btn{background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:14px 16px;font-family:var(--fb);font-size:14px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
 .ai2-btn:hover{border-color:var(--teal);background:var(--tealp);color:var(--teal);transform:translateY(-1px);box-shadow:0 3px 10px rgba(58,140,140,.15)}
 .ai2-btn.full{grid-column:1/-1}
-.ai2-btn.accent{background:var(--teal);color:white;border-color:var(--teal);font-weight:600;font-size:13.5px;padding:13px 16px}
+.ai2-btn.accent{background:var(--teal);color:white;border-color:var(--teal);font-weight:600;font-size:14.5px;padding:15px 18px}
 .ai2-btn.accent:hover{background:var(--tealh);border-color:var(--tealh);transform:translateY(-1px);box-shadow:0 4px 14px rgba(58,140,140,.3)}
-.ai2-btn.accent-r{background:var(--r);color:white;border-color:var(--r);font-weight:600;font-size:13.5px;padding:13px 16px}
+.ai2-btn.accent-r{background:var(--r);color:white;border-color:var(--r);font-weight:600;font-size:14.5px;padding:15px 18px}
 .ai2-btn.accent-r:hover{background:var(--rh);transform:translateY(-1px);box-shadow:0 4px 14px rgba(181,81,42,.3)}
-.ai2-btn-label{font-weight:600;display:block;margin-bottom:3px;font-size:13px}
-.ai2-btn-sub{font-size:11px;color:var(--tl);display:block}
+.ai2-btn-label{font-weight:600;display:block;margin-bottom:4px;font-size:14px}
+.ai2-btn-sub{font-size:12px;color:var(--tl);display:block}
 .ai2-btn:hover .ai2-btn-sub{color:var(--teal);opacity:.9}
 
 /* TONE CHIPS */
 .ai2-tone-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
-.ai2-tone-chip{padding:6px 14px;border-radius:100px;border:1.5px solid var(--bl);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t)}
+.ai2-tone-chip{padding:8px 16px;border-radius:100px;border:1.5px solid var(--bl);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t)}
 .ai2-tone-chip.sel{background:var(--e);border-color:var(--e);color:var(--p)}
 .ai2-tone-chip:hover{border-color:var(--b);color:var(--e)}
 
 /* OUTPUT */
 .ai2-input{width:100%;background:var(--p);border:1.5px solid var(--bl);border-radius:10px;padding:10px 14px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;margin-bottom:10px;resize:vertical;transition:border-color .15s}
 .ai2-input:focus{border-color:var(--teal)}
-.ai2-out{background:linear-gradient(135deg,#fdfaf6,#f8f4ee);border:1.5px solid var(--teal);border-radius:10px;padding:16px 18px;font-size:13.5px;line-height:1.85;color:var(--e);white-space:pre-wrap;display:none;max-height:340px;overflow-y:auto;margin-top:12px}
+.ai2-out{background:linear-gradient(135deg,#fdfaf6,#f8f4ee);border:1.5px solid var(--teal);border-radius:10px;padding:18px 20px;font-size:14.5px;line-height:1.85;color:var(--e);white-space:pre-wrap;display:none;max-height:340px;overflow-y:auto;margin-top:12px}
 .ai2-out.show{display:block}
 .ai2-out-acts{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}
 .ai2-out-acts.show{display:flex}
 
 /* SMART BRIEF OUTPUT */
-.ai2-smart-brief{background:linear-gradient(135deg,#f0f7f7,#e8f0e8);border:1.5px solid var(--teal);border-left:4px solid var(--teal);border-radius:10px;padding:18px 20px;font-size:14px;color:var(--e);line-height:1.85;margin-top:12px;display:none;white-space:pre-wrap}
+.ai2-smart-brief{background:linear-gradient(135deg,#f0f7f7,#e8f0e8);border:1.5px solid var(--teal);border-left:4px solid var(--teal);border-radius:10px;padding:20px 22px;font-size:15px;color:var(--e);line-height:1.85;margin-top:12px;display:none;white-space:pre-wrap}
 .ai2-smart-brief.show{display:block}
 
 /* HOOKS */
@@ -472,8 +472,8 @@ select.fi{cursor:pointer}
 
 /* DIVIDER */
 .ai2-div{height:1px;background:var(--bl);margin:16px 0}
-.ai2-sub-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:10px}
-.ai2-desc{font-size:12.5px;color:var(--tl);line-height:1.65;margin-bottom:12px}
+.ai2-sub-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:12px}
+.ai2-desc{font-size:13.5px;color:var(--tl);line-height:1.65;margin-bottom:14px}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px}
@@ -1219,6 +1219,7 @@ select.fi{cursor:pointer}
             <div class="ai2-chev" id="ai2-generate-chev">+</div>
           </div>
           <div class="ai2-section-body" id="ai2-generate-body"><div class="ai2-body-inner">
+            <div class="ai2-desc">Unique to this card — reads your brief and writes the full piece. Different from AI Studio. Pick a tone first.</div>
             <div class="ai2-tone-row" id="cdToneRow">
               <div class="ai2-tone-chip sel" data-t="warm" onclick="cdSelTone(this)">Warm</div>
               <div class="ai2-tone-chip" data-t="direct" onclick="cdSelTone(this)">Direct</div>
@@ -1227,12 +1228,12 @@ select.fi{cursor:pointer}
               <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
             </div>
             <div class="ai2-btn-grid">
-              <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
-              <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
-              <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
-              <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
-              <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
-              <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
+              <button class="ai2-btn" onclick="cdGen2('fulldraft')"><span class="ai2-btn-label">Full Draft</span><span class="ai2-btn-sub">Complete piece, start to finish</span></button>
+              <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA — ready to film</span></button>
+              <button class="ai2-btn" onclick="cdGen2('emailseq')"><span class="ai2-btn-label">Email Sequence</span><span class="ai2-btn-sub">3-part nurture from this idea</span></button>
+              <button class="ai2-btn" onclick="cdGen2('listicle')"><span class="ai2-btn-label">Listicle Post</span><span class="ai2-btn-sub">Numbered tips or lessons</span></button>
+              <button class="ai2-btn" onclick="cdGen2('talking')"><span class="ai2-btn-label">Talking Points</span><span class="ai2-btn-sub">5 key points to speak to</span></button>
+              <button class="ai2-btn" onclick="cdGen2('ctaonly')"><span class="ai2-btn-label">5 CTAs</span><span class="ai2-btn-sub">Strong calls to action</span></button>
             </div>
             <div class="ai2-loading" id="cd-load-generate">Writing...</div>
             <div class="ai2-out" id="cd-out-generate"></div>
@@ -1240,114 +1241,7 @@ select.fi{cursor:pointer}
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('generate')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('generate')">Save Draft</button>
             </div>
-          </div>
-        </div>
-        <div class="ai2-section ai2-sec-hooks">
-          <div class="ai2-section-hdr" onclick="toggleAI2('hooks')">
-            <div class="ai2-section-title"><div class="ai2-section-icon">🎣</div>Hook Builder</div>
-            <div class="ai2-chev" id="ai2-hooks-chev">+</div>
-          </div>
-          <div class="ai2-section-body" id="ai2-hooks-body"><div class="ai2-body-inner">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
-            <button class="ai2-btn full" onclick="cdGen2('hooks')">Generate 5 Hooks</button>
-            <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
-            <div class="ai2-hook-list" id="cd-hook-list"></div>
-            <div id="cd-hook-build-area" style="display:none;margin-top:10px">
-              <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
-              <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
-              <button class="ai2-btn full accent" onclick="cdBuildFromHook()">Build Full Post from This Hook</button>
-            </div>
-            <div class="ai2-out" id="cd-out-hooks"></div>
-            <div class="ai2-out-acts" id="cd-acts-hooks">
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
-              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
-            </div>
-          </div>
-        </div>
-        <div class="ai2-section ai2-sec-var">
-          <div class="ai2-section-hdr" onclick="toggleAI2('variations')">
-            <div class="ai2-section-title"><div class="ai2-section-icon">🔀</div>Caption Variations</div>
-            <div class="ai2-chev" id="ai2-variations-chev">+</div>
-          </div>
-          <div class="ai2-section-body" id="ai2-variations-body"><div class="ai2-body-inner">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
-            <button class="ai2-btn full accent" onclick="cdGen2('variations')">Generate 3 Variations</button>
-            <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
-            <div class="ai2-out" id="cd-out-variations"></div>
-            <div class="ai2-out-acts" id="cd-acts-variations">
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('variations')">Copy</button>
-              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('variations')">Save Draft</button>
-            </div>
-          </div>
-        </div>
-        <div class="ai2-section ai2-sec-series">
-          <div class="ai2-section-hdr" onclick="toggleAI2('series')">
-            <div class="ai2-section-title"><div class="ai2-section-icon">🗂</div>Content Series</div>
-            <div class="ai2-chev" id="ai2-series-chev">+</div>
-          </div>
-          <div class="ai2-section-body" id="ai2-series-body"><div class="ai2-body-inner">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
-            <button class="ai2-btn full accent" onclick="cdGen2('series')">Generate Content Series</button>
-            <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
-            <div class="ai2-series-list" id="cd-series-list"></div>
-          </div>
-        </div>
-        <div class="ai2-section ai2-sec-rp">
-          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')">
-            <div class="ai2-section-title"><div class="ai2-section-icon">↻</div>Repurpose</div>
-            <div class="ai2-chev" id="ai2-repurpose-chev">+</div>
-          </div>
-          <div class="ai2-section-body" id="ai2-repurpose-body"><div class="ai2-body-inner">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. Claude studies why it works then rebuilds it in your voice.</div>
-            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
-              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
-              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
-                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
-                <option value="LinkedIn">LinkedIn</option><option value="a blog">Blog</option>
-                <option value="a newsletter">Newsletter</option><option value="somewhere">Other</option>
-              </select>
-            </div>
-            <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post text here..." style="min-height:80px"></textarea>
-            <button class="ai2-btn full accent" onclick="cdRepurpose2()">Rebuild in My Voice</button>
-            <div class="ai2-loading" id="cd-load-repurpose">Studying and rebuilding...</div>
-            <div class="ai2-out" id="cd-out-repurpose"></div>
-            <div class="ai2-out-acts" id="cd-acts-repurpose">
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
-              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Add Library Item -->
-<div class="modal-ov" id="addLibModal">
-  <div class="modal">
-    <div class="m-title" id="addLibTitle">Add to Library</div>
-    <div class="m-sub" id="addLibSub"></div>
-    <div class="fl" id="addLibTitleRow" style="display:none"><label class="fl-lbl">Title</label><input class="fi" id="addLibTitleIn" placeholder="Give it a name..." /></div>
-    <div class="fl"><label class="fl-lbl">Category</label><input class="fi" id="addLibCat" placeholder="e.g. Educational, Engagement..." /></div>
-    <div class="fl"><label class="fl-lbl">Content</label><textarea class="fi" id="addLibText" style="min-height:100px" placeholder="Paste or write your content here..."></textarea></div>
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('addLibModal')">Cancel</button><button class="btn btn-p" onclick="saveLibItem()">Add to Library</button></div>
-  </div>
-</div>
-
-<!-- CAL DAY VIEW MODAL -->
-<div class="modal-ov" id="calDayModal">
-  <div class="modal" style="max-width:500px">
-    <div class="m-title" id="calDayTitle"></div>
-    <div class="m-sub" id="calDaySubtitle"></div>
-    <div id="calDayEntries" style="margin-bottom:16px"></div>
-    <div class="m-acts">
-      <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
-      <button class="btn btn-p" onclick="calDayAddNew()">+ Add Entry</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div></div>
+          </div></div>
 
 <script>
 const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
@@ -1976,8 +1870,8 @@ function openIdeaModal(status){
   S.ideaAIOut='';S._pendingIdeaImages=[];
   var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
   var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
-  var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.remove('open');
-  var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='+';
+  var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.add('open');
+  var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='-';
   var sbOut=document.getElementById('idea-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
   var sbLoad=document.getElementById('idea-load-smartBrief');if(sbLoad)sbLoad.classList.remove('show');
   var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
@@ -2417,16 +2311,16 @@ async function cdGen2(type) {
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
   var prompts = {
-    caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
-    story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
-    carousel: 'Write carousel slide copy for: ' + b.brief + '. Slide 1: scroll-stopping hook. Slides 2-6: one clear point each (short, punchy). Last slide: strong CTA. Label each slide.',
-    reel: 'Write a Reel/TikTok script for: ' + b.brief + '. Format: HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Make it conversational and energetic.',
-    newsletter: 'Write an engaging newsletter opening for: ' + b.brief + '. Tone: ' + toneDesc + '. Max 4 sentences. Should make the reader want to keep reading.',
-    email: 'Write a marketing email for: ' + b.brief + '. Include: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
-    variations: 'Write 3 different caption variations for: ' + b.brief + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each clearly. All for ' + b.plat + '.',
-    hooks: 'Generate 5 scroll-stopping opening hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Each hook should be different in style (question, bold statement, statistic, story opener, controversy). Number them 1-5. Just the hook line, nothing else.',
-    series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Each post should stand alone but connect to a bigger theme. For each: one sentence title + one sentence description. Number them 1-5.'
-  };
+    fulldraft: 'Write a complete publish-ready ' + b.fmt + ' for ' + b.plat + ' about: ' + b.brief + '. Tone: ' + toneDesc + '. Write the full piece start to finish — hook, body, CTA. Nothing generic, nothing missing.',
+    reel: 'Write a Reel script for: ' + b.brief + '. Format:\nHOOK (first 3 seconds — stops the scroll)\nBODY (main value, punchy, conversational)\nCTA (last 5 seconds). Tone: ' + toneDesc + '.',
+    emailseq: 'Write a 3-email nurture sequence about: ' + b.brief + '. Each email: Subject line, Preview text, Opening, Body (3-4 short paragraphs), CTA. Email 1: problem. Email 2: solution. Email 3: invitation to act. Tone: ' + toneDesc + '.',
+    listicle: 'Write a listicle post for ' + b.plat + ' about: ' + b.brief + '. Strong hook, then 5-7 numbered points (1-2 sentences each). End with CTA. Tone: ' + toneDesc + '.',
+    talking: 'Give me 5 talking points to speak about: ' + b.brief + '. Platform: ' + b.plat + '. Each: a clear standalone insight I could speak to for 30-60 seconds, plus a suggested opening line.',
+    ctaonly: 'Write 5 different calls to action for content about: ' + b.brief + '. Platform: ' + b.plat + '. Mix: direct ask, question, soft invite, urgency, value-led. Each 1-2 sentences. Natural not salesy.',
+    variations: 'Write 3 caption variations for: ' + b.brief + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each. For ' + b.plat + '.',
+    hooks: 'Generate 5 scroll-stopping hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Different styles: question, bold statement, statistic, story opener, controversy. Number 1-5. Hook line only.',
+    series: 'Generate a 5-part content series from: ' + b.brief + '. Each post stands alone but connects to bigger theme. For each: one sentence title + one sentence description. Number 1-5.'
+  };;
   var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : 900);
   if (load) load.classList.remove('show');
   if (result && type === 'hooks') {
@@ -2592,27 +2486,47 @@ async function ideaGenerate(type) {
   var fmt = document.getElementById('ideaFormat').value;
   if (!title && !notes) { toast('Add a title or idea first'); return; }
   var brief = title + (notes ? '. Notes: ' + notes : '');
-  var o = document.getElementById('ideaAIOut');
-  var a = document.getElementById('ideaAIActs');
-  o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
+  var out = document.getElementById('ideaAIOut');
+  var acts = document.getElementById('ideaAIActs');
+  var load = document.getElementById('idea-load-generate');
+  if (!out) { toast('Output area not found'); return; }
+  if (load) load.classList.add('show');
+  out.classList.remove('show'); out.textContent = '';
+  if (acts) acts.classList.remove('show');
+  // Get selected tone
+  var toneEl = document.querySelector('#ideaModal .ai2-tone-chip.sel');
+  var tone = toneEl ? toneEl.dataset.t : 'warm';
+  var toneMap = { warm:'warm and human', direct:'direct and punchy', story:'story-led', educational:'educational and value-packed', playful:'playful and witty' };
+  var toneDesc = toneMap[tone] || 'warm and human';
   var brand = buildBrandContext();
-  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
   var prompts = {
-    caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
-    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
-    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
+    caption: 'Write a ' + plat + ' caption for: ' + brief + '. Tone: ' + toneDesc + '. Strong hook, value in the middle, natural CTA.',
+    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Platform: ' + plat + '. Numbered list, one punchy line each.',
+    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-6: one point each. Last: CTA. Label each slide.',
     newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
   };
   try {
-    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
+    var r = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.caption }] })
     });
     var d = await r.json();
     S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
-    o.textContent = S.ideaAIOut; a.classList.add('show');
+    if (load) load.classList.remove('show');
+    out.textContent = S.ideaAIOut;
+    out.classList.add('show');
+    if (acts) acts.classList.add('show');
     S.aiCount = (S.aiCount || 0) + 1; persist();
-  } catch(e) { o.textContent = 'Error: ' + e.message; }
+  } catch(e) {
+    if (load) load.classList.remove('show');
+    out.textContent = 'Error: ' + e.message;
+    out.classList.add('show');
+  }
 }
+
+
 async function ideaRepurpose() {
   var text = document.getElementById('ideaRpText').value.trim();
   if (!text) { toast('Paste the post content first'); return; }
@@ -2621,7 +2535,10 @@ async function ideaRepurpose() {
   var origPlat = document.getElementById('ideaRpOrigPlat').value;
   var o = document.getElementById('ideaAIOut');
   var a = document.getElementById('ideaAIActs');
-  o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
+  var rpLoad = document.getElementById('idea-load-repurpose');
+  if (rpLoad) rpLoad.classList.add('show');
+  if (o) { o.classList.remove('show'); o.textContent = ''; }
+  if (a) a.classList.remove('show');
   var brand = buildBrandContext();
   var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
   var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work — the structure, the hook, the angle, the emotional pull — then rebuild it completely for my niche and voice.' +
@@ -2674,6 +2591,7 @@ async function ideaSmartBrief() {
   var result = await cdCallAI(sys, usr, 600);
   if (load) load.classList.remove('show');
   if (result && out) { out.textContent = result; out.classList.add('show'); }
+  else if (!result) { toast('No response — check your connection'); }
 }
 
 function ideaAICopy() {
