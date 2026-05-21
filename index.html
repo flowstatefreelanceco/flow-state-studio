@@ -1781,7 +1781,7 @@ function setupCG(id,cb){
   g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{g.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');cb(c.dataset.val);}));
 }
 async function generate(){
-  if(!S.settings.apiKey){toast('Add your API key in Settings first');navigate('settings');return;}
+  if(false){toast('Add your API key in Settings first');navigate('settings');return;}
   const topic=document.getElementById('topicIn').value.trim();
   if(!topic){toast('Please enter a topic or brief');return;}
   const notes=document.getElementById('notesIn').value.trim();
@@ -2254,7 +2254,7 @@ function cdGetBrief() {
 }
 
 async function cdSmartBrief() {
-  if (!window.ANTHROPIC_READY && !S.settings.apiKey) { toast('AI is powering up — try again in a moment'); return; }
+  
   var b = cdGetBrief();
   if (!b.title && !b.notes) { toast('Add a title or notes first'); return; }
   var load = document.getElementById('cd-load-smartBrief');
@@ -2269,9 +2269,6 @@ async function cdSmartBrief() {
 }
 
 async function cdGen2(type) {
-  if (!S.settings || !S.settings.apiKey) {
-    // Try serverless
-  }
   var b = cdGetBrief();
   if (!b.title && !b.notes) { toast('Add a title or brief first'); return; }
   var load = document.getElementById('cd-load-'+type);
@@ -2456,7 +2453,6 @@ function toggleIdeaAI() {
   if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
 }
 async function ideaGenerate(type) {
-  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
   var title = document.getElementById('ideaTitle').value.trim();
   var notes = document.getElementById('ideaNotes').value.trim();
   var plat = document.getElementById('ideaPlat').value;
@@ -2485,7 +2481,6 @@ async function ideaGenerate(type) {
   } catch(e) { o.textContent = 'Error: ' + e.message; }
 }
 async function ideaRepurpose() {
-  if (!S.settings.apiKey) { toast('Add your API key in Settings first'); return; }
   var text = document.getElementById('ideaRpText').value.trim();
   if (!text) { toast('Paste the post content first'); return; }
   var plat = document.getElementById('ideaPlat').value;
