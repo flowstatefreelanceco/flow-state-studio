@@ -2168,9 +2168,9 @@ var _cdHookSel = '';
 var _cdOutputs = {};
 
 function cdOpen(id) {
+  S.cdId = id;
   var x = S.ideas.find(function(a) { return a.id === id; });
-  if (!x) return;
-  S.cdId = id; S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
+  if (!x) { toast('Card not found'); return; } S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
   document.getElementById('cdTitle').value = x.title || '';
   document.getElementById('cdPlat').value = x.platform || 'instagram';
   document.getElementById('cdFormat').value = x.format || 'Caption / Post';
