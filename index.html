@@ -1093,7 +1093,7 @@ select.fi{cursor:pointer}
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
       <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)">Add to Content Planner</div>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('ideaModal')">Cancel</button>
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('ideaModal')">Close</button>
         <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveIdea()" id="ideaSaveBtn">Add to Planner</button>
       </div>
     </div>
@@ -1224,6 +1224,21 @@ select.fi{cursor:pointer}
             </div>
             <textarea class="ai2-input" id="ideaRpText" placeholder="Paste the caption or post content here..." style="min-height:80px"></textarea>
             <button class="ai2-btn full accent" onclick="ideaRepurpose()">Rebuild in My Voice</button>
+            <div class="ai2-loading" id="idea-load-repurpose">Rebuilding...</div>
+            <div class="ai2-out" id="idea-out-repurpose"></div>
+            <div class="ai2-out-acts" id="idea-acts-repurpose">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaAICopy2('repurpose')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaAISave2('repurpose')">Save Draft</button>
+              <button class="btn btn-p" style="font-size:11.5px;padding:6px 12px" onclick="ideaMoveToWrite('repurpose')">Move to Write Area</button>
+            </div>
+            <div class="ai2-div"></div>
+            <div style="font-size:18px;font-family:var(--fh);font-weight:600;color:var(--e);margin-bottom:8px">Write Your Own ✦</div>
+            <div class="ai2-desc">No AI required. Just you and the page. Generate something above and hit Move to Write Area — or just write from scratch.</div>
+            <textarea class="ai2-input" id="ideaWriteArea" style="min-height:220px;font-size:14px;line-height:1.85" placeholder="Write your caption, script or copy here..."></textarea>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaCopyWrite()">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaSaveWrite()">Save Draft</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2128,6 +2143,7 @@ function openIdeaModal(status){
   var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.add('open');
   var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='-';
   var sbOut=document.getElementById('idea-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var wa=document.getElementById('ideaWriteArea');if(wa)wa.value='';
   var sbLoad=document.getElementById('idea-load-smartBrief');if(sbLoad)sbLoad.classList.remove('show');
   var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
   var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
@@ -2463,6 +2479,7 @@ function cdOpen(id) {
   var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.add('open');
   var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='-';
   var sbOut=document.getElementById('idea-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var wa=document.getElementById('ideaWriteArea');if(wa)wa.value='';
   var sbLoad=document.getElementById('idea-load-smartBrief');if(sbLoad)sbLoad.classList.remove('show');
   var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
   var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
@@ -2742,15 +2759,34 @@ async function cdRepurpose2() {
   }
 }
 
+function stripMarkdown(txt) {
+  if (!txt) return '';
+  return txt
+    .replace(/#{1,6}\s+/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/^[-*+]\s+/gm, '')
+    .replace(/^\d+\.\s+/gm, function(m) { return m; })
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/
+{3,}/g, '
+
+')
+    .trim();
+}
+
 async function cdCallAI(sys, usr, maxTok) {
+  var fullSys = sys + ' Do NOT use markdown formatting. No asterisks, no hashtags, no bullet dashes. Use plain text with natural line breaks only.';
   try {
     var r = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] })
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: fullSys, messages: [{ role: 'user', content: usr }] })
     });
     var d = await r.json();
-    return (d.content && d.content[0] && d.content[0].text) || '';
+    var text = (d.content && d.content[0] && d.content[0].text) || '';
+    return stripMarkdown(text);
   } catch(e) {
     toast('Error: ' + e.message);
     return '';
@@ -2908,6 +2944,42 @@ async function ideaSmartBrief() {
   if (load) load.classList.remove('show');
   if (result && out) { out.textContent = result; out.classList.add('show'); }
   else if (!result) { toast('No response — check your connection'); }
+}
+
+
+function ideaMoveToWrite(type) {
+  var txt = _ideaOutputs[type] || S.ideaAIOut || '';
+  if (!txt) { toast('Generate something first'); return; }
+  var wa = document.getElementById('ideaWriteArea');
+  if (wa) { wa.value = txt; wa.focus(); toast('Moved — now make it yours'); }
+}
+function ideaCopyWrite() {
+  var wa = document.getElementById('ideaWriteArea');
+  if (wa && wa.value.trim()) navigator.clipboard.writeText(wa.value.trim()).then(function(){ toast('Copied'); });
+  else toast('Nothing written yet');
+}
+function ideaSaveWrite() {
+  var wa = document.getElementById('ideaWriteArea');
+  if (!wa || !wa.value.trim()) { toast('Nothing to save'); return; }
+  var t = document.getElementById('ideaTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0,65), content: wa.value.trim(),
+    platform: document.getElementById('ideaPlat').value,
+    contentType: 'Own Writing', tone: 'Personal',
+    createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+function ideaAICopy2(type) {
+  var txt = _ideaOutputs[type] || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function(){ toast('Copied'); });
+}
+function ideaAISave2(type) {
+  var txt = _ideaOutputs[type] || '';
+  if (!txt) { toast('Nothing to save'); return; }
+  var t = document.getElementById('ideaTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0,65), content: txt,
+    platform: document.getElementById('ideaPlat').value,
+    contentType: type, tone: 'Brand Voice', createdAt: new Date().toISOString() });
+  persist(); toast('Saved to drafts');
 }
 
 function ideaAICopy() {
