@@ -1281,9 +1281,28 @@ async function initAuth(){
 
 async function loadUserData(){
   if(!_currentUser)return{};
+  // Try Supabase first
   try{
     var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
-    if(data&&data.data)return JSON.parse(data.data);
+    if(data&&data.data){
+      var sbData=JSON.parse(data.data);
+      // Also check localStorage - merge ideas/drafts to avoid data loss
+      try{
+        var local=JSON.parse(localStorage.getItem('fss_data')||'{}');
+        if(local.ideas&&sbData.ideas&&local.ideas.length>sbData.ideas.length){
+          sbData.ideas=local.ideas;
+        }
+        if(local.drafts&&sbData.drafts&&local.drafts.length>sbData.drafts.length){
+          sbData.drafts=local.drafts;
+        }
+      }catch(e){}
+      return sbData;
+    }
+  }catch(e){}
+  // Fallback to localStorage
+  try{
+    var localData=JSON.parse(localStorage.getItem('fss_data')||'{}');
+    if(Object.keys(localData).length>0)return localData;
   }catch(e){}
   return{};
 }
@@ -1489,10 +1508,10 @@ function persist(){
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
-  // Save to Supabase (cross-device)
+  // Save to localStorage FIRST (instant, never fails)
+  try{localStorage.setItem('fss_data',JSON.stringify(dataToSave));}catch(e){}
+  // Then fire Supabase async (cross-device sync)
   if(window._supabasePersist)window._supabasePersist(dataToSave);
-  // Also save to localStorage as backup
-  try{localStorage.setItem('fss_backup',JSON.stringify(dataToSave));}catch(e){}
 }
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
