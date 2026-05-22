@@ -1283,7 +1283,7 @@ async function loadUserData(){
   if(!_currentUser)return{};
   // Try Supabase first
   try{
-    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
+    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
     if(data&&data.data){
       var sbData=JSON.parse(data.data);
       // Also check localStorage - merge ideas/drafts to avoid data loss
@@ -1897,6 +1897,9 @@ function saveCalEntry(){
   S.gs.calAdded=true;persist();closeModal('calModal');renderCalendar();renderGS();toast('Entry saved ✓');
 }
 function openIdeaModal(status){
+  S._editingIdea=false; S.cdId=null;
+  // Reset header
+  var hdr=document.querySelector('#ideaModal .cd-modal-panel > div:first-child div:first-child');if(hdr)hdr.textContent='Add to Content Planner';
   S.ideaAIOut='';S._pendingIdeaImages=[];
   var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
   var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
@@ -1921,6 +1924,29 @@ function saveIdea(){
   if(!title){toast('Please enter an idea');return;}
   const date=document.getElementById('ideaDate').value;
   const time=document.getElementById('ideaTime').value;
+  const status=document.getElementById('ideaStatus')?document.getElementById('ideaStatus').value:'idea';
+  if(S._editingIdea&&S.cdId){
+    // UPDATE existing card
+    var x=S.ideas.find(function(a){return a.id===S.cdId;});
+    if(x){
+      x.title=title;
+      x.platform=document.getElementById('ideaPlat').value;
+      x.format=document.getElementById('ideaFormat').value;
+      x.notes=document.getElementById('ideaNotes').value;
+      x.date=date; x.time=time; x.status=status;
+      x.images=S._pendingIdeaImages||[];
+    }
+    S._editingIdea=false; S.cdId=null;
+    // Sync calendar
+    if(x&&x.date){
+      var calIdx=S.calEntries.findIndex(function(e){return e.id==='cal_'+x.id;});
+      if(calIdx>-1){S.calEntries[calIdx].title=x.title;S.calEntries[calIdx].date=x.date;}
+      else{S.calEntries.push({id:'cal_'+x.id,title:x.title,platform:x.platform,status:x.status,date:x.date,notes:x.notes});}
+    }
+    persist();closeModal('ideaModal');renderKanban();renderCalendar();toast('Saved ✓');
+    return;
+  }
+  // ADD new card
   const idea={
     id:Date.now().toString(),
     title,
@@ -1930,7 +1956,7 @@ function saveIdea(){
     date,
     time,
     images:S._pendingIdeaImages||[],
-    status:document.getElementById('ideaStatus')?document.getElementById('ideaStatus').value:'idea'
+    status:status
   };
   S.ideas.push(idea);
   // Auto-sync to calendar if date is set
@@ -2198,7 +2224,33 @@ var _cdOutputs = {};
 function cdOpen(id) {
   S.cdId = id;
   var x = S.ideas.find(function(a) { return a.id === id; });
-  if (!x) { toast('Card not found'); return; } S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
+  if (!x) { toast('Card not found'); return; }
+  // Use ideaModal for editing too - same experience for add and edit
+  S._editingIdea = true;
+  document.getElementById('ideaTitle').value = x.title || '';
+  document.getElementById('ideaPlat').value = x.platform || 'instagram';
+  document.getElementById('ideaFormat').value = x.format || 'Caption / Post';
+  document.getElementById('ideaDate').value = x.date || '';
+  document.getElementById('ideaTime').value = x.time || '';
+  document.getElementById('ideaNotes').value = x.notes || '';
+  if(document.getElementById('ideaStatus')) document.getElementById('ideaStatus').value = x.status || 'idea';
+  // Reset AI panel
+  S.ideaAIOut=''; S._pendingIdeaImages=x.images||[]; _ideaHookSel=''; _ideaOutputs={};
+  var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
+  var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
+  var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.add('open');
+  var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='-';
+  var sbOut=document.getElementById('idea-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var sbLoad=document.getElementById('idea-load-smartBrief');if(sbLoad)sbLoad.classList.remove('show');
+  var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
+  var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
+  var ia=document.getElementById('ideaImgArea');if(ia)ia.innerHTML='';
+  // Update header to show Edit mode
+  var title=document.querySelector('#ideaModal .cd-modal-panel > div:first-child div:first-child');
+  if(title)title.textContent='Edit Content Card';
+  openModal('ideaModal');
+  return; // skip the rest of old cdOpen
+  var dummy=null; S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
   document.getElementById('cdTitle').value = x.title || '';
   document.getElementById('cdPlat').value = x.platform || 'instagram';
   document.getElementById('cdFormat').value = x.format || 'Caption / Post';
@@ -2734,6 +2786,7 @@ function calDayClick(ds) {
   var titleEl=document.getElementById('calDayTitle');if(titleEl)titleEl.textContent=dayNames[d.getDay()]+', '+monNames[d.getMonth()]+' '+d.getDate();
   var subEl=document.getElementById('calDaySubtitle');if(subEl)subEl.textContent=entries.length+(entries.length!==1?' entries':' entry')+' planned';
   var container = document.getElementById('calDayEntries');
+  if(!container){console.warn('calDayEntries not found');return;}
   container.innerHTML = '';
   entries.forEach(function(e) {
     var card = document.createElement('div');
@@ -2986,6 +3039,20 @@ function initFlowStateApp(savedData) {
 }
 
 </script>
+
+<!-- CAL DAY VIEW MODAL -->
+<div class="modal-ov" id="calDayModal">
+  <div class="modal" style="max-width:520px">
+    <div class="m-title" id="calDayTitle"></div>
+    <div class="m-sub" id="calDaySubtitle" style="margin-bottom:16px"></div>
+    <div id="calDayEntries"></div>
+    <div class="m-acts">
+      <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
+      <button class="btn btn-p" onclick="calDayAddNew()">+ Add Entry</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 </body>
 </html>
