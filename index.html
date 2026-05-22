@@ -1309,7 +1309,16 @@ async function loadUserData(){
 
 async function saveUserData(obj){
   if(!_currentUser)return;
-  await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+  try{
+    var payload={user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()};
+    var result=await sb.from('user_data').upsert(payload,{onConflict:'user_id'});
+    if(result.error){
+      // Table might not exist - try to save to localStorage only
+      console.warn('Supabase save failed:',result.error.message);
+    }
+  }catch(e){
+    console.warn('Save error:',e.message);
+  }
 }
 
 async function bootApp(){
@@ -2219,7 +2228,7 @@ function cdOpen(id) {
   if (seriesList) { seriesList.innerHTML = ''; seriesList.classList.remove('show'); }
   var sbOut = document.getElementById('cd-smartBrief-out');
   if (sbOut) { sbOut.textContent = ''; sbOut.classList.remove('show'); }
-  document.getElementById('cdRpText').value = '';
+  var rpEl=document.getElementById('cdRpText');if(rpEl)rpEl.value='';
   // Open Smart Brief and Generate sections by default
   var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
   var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
@@ -2722,8 +2731,8 @@ function calDayClick(ds) {
   var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
   var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var monNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calDayTitle').textContent = dayNames[d.getDay()] + ', ' + monNames[d.getMonth()] + ' ' + d.getDate();
-  document.getElementById('calDaySubtitle').textContent = entries.length + (entries.length !== 1 ? ' entries' : ' entry') + ' planned';
+  var titleEl=document.getElementById('calDayTitle');if(titleEl)titleEl.textContent=dayNames[d.getDay()]+', '+monNames[d.getMonth()]+' '+d.getDate();
+  var subEl=document.getElementById('calDaySubtitle');if(subEl)subEl.textContent=entries.length+(entries.length!==1?' entries':' entry')+' planned';
   var container = document.getElementById('calDayEntries');
   container.innerHTML = '';
   entries.forEach(function(e) {
