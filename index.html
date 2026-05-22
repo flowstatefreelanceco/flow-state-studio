@@ -969,18 +969,121 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- Calendar Entry -->
-<div class="modal-ov" id="calModal">
-  <div class="modal">
-    <div class="m-title" id="calModalTitle">Add Calendar Entry</div>
-    <div class="m-sub">Plan content on your calendar</div>
-    <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="calTitle" placeholder="What are you posting?" /></div>
-    <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="calPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="other">Other</option></select></div>
-      <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="calStatus"><option value="idea">Idea</option><option value="draft">Draft</option><option value="scheduled">Scheduled</option><option value="published">Published</option></select></div>
+<div class="modal-ov" id="calModal" style="padding:0;align-items:stretch">
+  <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:100vh;max-height:100vh;border-radius:0;padding:0;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
+      <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)" id="calModalTitle">Add Calendar Entry</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('calModal')">Cancel</button>
+        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveCalEntry()">Save Entry</button>
+      </div>
     </div>
-    <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="calDate" /></div>
-    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="calNotes" style="min-height:60px" placeholder="Topic, CTA idea..."></textarea></div>
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('calModal')">Cancel</button><button class="btn btn-p" onclick="saveCalEntry()" style="min-width:100px">Save</button></div>
+    <div class="cd2-wrap">
+      <div class="cd2-left">
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="calTitle" placeholder="What are you posting?" style="font-size:15px;font-family:var(--fh)" /></div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Platform</label>
+            <select class="fi" id="calPlat">
+              <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
+              <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
+              <option value="facebook">Facebook</option><option value="tiktok">TikTok</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fl"><label class="fl-lbl">Status</label>
+            <select class="fi" id="calStatus">
+              <option value="idea">Idea</option><option value="draft">Draft</option>
+              <option value="scheduled">Scheduled</option><option value="published">Published</option>
+            </select>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="calDate" /></div>
+          <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="calTime" /></div>
+        </div>
+        <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="calNotes" style="min-height:120px" placeholder="Topic, hook idea, CTA..."></textarea>
+        </div>
+        <div class="fl">
+          <label class="fl-lbl">Write Your Draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="calDraft" style="min-height:160px;line-height:1.8;font-size:14px" placeholder="Write your caption, script, or copy here... no AI required. Just you and the page."></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="calCopyDraft()">Copy Draft</button>
+            <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="calSaveDraft()">Save to Drafts</button>
+          </div>
+        </div>
+      </div>
+      <div class="cd2-right">
+        <div class="ai2-section ai2-sec-cd">
+          <div class="ai2-section-hdr" onclick="toggleCalAI('smartBrief')">
+            <div class="ai2-section-title"><div class="ai2-section-icon">✦</div>Creative Director</div>
+            <div class="ai2-chev" id="cal-ai-smartBrief-chev">+</div>
+          </div>
+          <div class="ai2-section-body" id="cal-ai-smartBrief-body">
+            <div class="ai2-desc">Get the angle, hook, emotion and what to avoid before you write a word.</div>
+            <button class="ai2-btn full accent" onclick="calSmartBrief()">Brief Me, Creative Director ✦</button>
+            <div class="ai2-loading" id="cal-load-smartBrief">Thinking...</div>
+            <div class="ai2-smart-brief" id="cal-smartBrief-out"></div>
+          </div>
+        </div>
+        <div class="ai2-section ai2-sec-gen">
+          <div class="ai2-section-hdr" onclick="toggleCalAI('generate')">
+            <div class="ai2-section-title"><div class="ai2-section-icon">✍</div>Generate Content</div>
+            <div class="ai2-chev" id="cal-ai-generate-chev">+</div>
+          </div>
+          <div class="ai2-section-body" id="cal-ai-generate-body">
+            <div class="ai2-tone-row" id="calToneRow">
+              <div class="ai2-tone-chip sel" data-t="warm" onclick="calSelTone(this)">Warm</div>
+              <div class="ai2-tone-chip" data-t="direct" onclick="calSelTone(this)">Direct</div>
+              <div class="ai2-tone-chip" data-t="story" onclick="calSelTone(this)">Story-led</div>
+              <div class="ai2-tone-chip" data-t="educational" onclick="calSelTone(this)">Educational</div>
+              <div class="ai2-tone-chip" data-t="playful" onclick="calSelTone(this)">Playful</div>
+            </div>
+            <div class="ai2-btn-grid">
+              <button class="ai2-btn" onclick="calGenerate('fulldraft')"><span class="ai2-btn-label">Full Draft</span><span class="ai2-btn-sub">Complete piece</span></button>
+              <button class="ai2-btn" onclick="calGenerate('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
+              <button class="ai2-btn" onclick="calGenerate('emailseq')"><span class="ai2-btn-label">Email Sequence</span><span class="ai2-btn-sub">3-part nurture</span></button>
+              <button class="ai2-btn" onclick="calGenerate('listicle')"><span class="ai2-btn-label">Listicle</span><span class="ai2-btn-sub">Numbered tips</span></button>
+              <button class="ai2-btn" onclick="calGenerate('talking')"><span class="ai2-btn-label">Talking Points</span><span class="ai2-btn-sub">5 key points</span></button>
+              <button class="ai2-btn" onclick="calGenerate('ctaonly')"><span class="ai2-btn-label">5 CTAs</span><span class="ai2-btn-sub">Calls to action</span></button>
+            </div>
+            <div class="ai2-loading" id="cal-load-generate">Writing...</div>
+            <div class="ai2-out" id="cal-out-generate"></div>
+            <div class="ai2-out-acts" id="cal-acts-generate">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="calCopyAI()">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="calSaveAIDraft()">Save Draft</button>
+              <button class="btn btn-p" style="font-size:11.5px;padding:6px 12px" onclick="calMoveToWriteArea()">Move to Write Area</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section ai2-sec-rp">
+          <div class="ai2-section-hdr" onclick="toggleCalAI('repurpose')">
+            <div class="ai2-section-title"><div class="ai2-section-icon">↻</div>Repurpose</div>
+            <div class="ai2-chev" id="cal-ai-repurpose-chev">+</div>
+          </div>
+          <div class="ai2-section-body" id="cal-ai-repurpose-body">
+            <div class="ai2-desc">Paste any post — Claude rebuilds it in your voice.</div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
+              <select class="fi" id="calRpPlat" style="font-size:12px;padding:6px 10px">
+                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                <option value="LinkedIn">LinkedIn</option><option value="a blog">Blog</option>
+                <option value="a newsletter">Newsletter</option><option value="somewhere">Other</option>
+              </select>
+            </div>
+            <textarea class="ai2-input" id="calRpText" placeholder="Paste the post content here..." style="min-height:80px"></textarea>
+            <button class="ai2-btn full accent" onclick="calRepurpose()">Rebuild in My Voice</button>
+            <div class="ai2-loading" id="cal-load-repurpose">Rebuilding...</div>
+            <div class="ai2-out" id="cal-out-repurpose"></div>
+            <div class="ai2-out-acts" id="cal-acts-repurpose">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="calCopyAI('repurpose')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="calSaveAIDraft('repurpose')">Save Draft</button>
+              <button class="btn btn-p" style="font-size:11.5px;padding:6px 12px" onclick="calMoveToWriteArea('repurpose')">Move to Write Area</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -991,7 +1094,7 @@ select.fi{cursor:pointer}
       <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)">Add to Content Planner</div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('ideaModal')">Cancel</button>
-        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveIdea()">Add to Planner</button>
+        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveIdea()" id="ideaSaveBtn">Add to Planner</button>
       </div>
     </div>
     <div class="cd2-wrap">
@@ -1889,6 +1992,124 @@ function openCalModal(ds){
   document.getElementById('calNotes').value='';
   openModal('calModal');
 }
+
+/* CALENDAR MODAL AI */
+var _calAIOut = {};
+function toggleCalAI(sec) {
+  var body = document.getElementById('cal-ai-'+sec+'-body');
+  var chev = document.getElementById('cal-ai-'+sec+'-chev');
+  if (!body) return;
+  body.classList.toggle('open');
+  if (chev) chev.textContent = body.classList.contains('open') ? '-' : '+';
+}
+function calSelTone(el) {
+  el.closest('.ai2-tone-row').querySelectorAll('.ai2-tone-chip').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+}
+function calGetBrief() {
+  return {
+    title: document.getElementById('calTitle').value.trim(),
+    notes: document.getElementById('calNotes').value.trim(),
+    plat: document.getElementById('calPlat').value
+  };
+}
+async function calSmartBrief() {
+  var b = calGetBrief();
+  if (!b.title && !b.notes) { toast('Add a title first'); return; }
+  var load = document.getElementById('cal-load-smartBrief');
+  var out = document.getElementById('cal-smartBrief-out');
+  if (load) load.classList.add('show');
+  if (out) out.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a world-class creative director for wellness businesses.' + brand + ' Be direct and specific.';
+  var usr = 'Creative direction for: ' + (b.title || b.notes) + ' on ' + b.plat + '. Give me: 1. THE ANGLE 2. THE HOOK 3. THE EMOTION 4. THE WATCH OUT';
+  var result = await cdCallAI(sys, usr, 500);
+  if (load) load.classList.remove('show');
+  if (result && out) { out.textContent = result; out.classList.add('show'); }
+}
+async function calGenerate(type) {
+  var b = calGetBrief();
+  if (!b.title && !b.notes) { toast('Add a title first'); return; }
+  var brief = b.title + (b.notes ? '. ' + b.notes : '');
+  var toneEl = document.querySelector('#calToneRow .ai2-tone-chip.sel');
+  var tone = toneEl ? toneEl.dataset.t : 'warm';
+  var toneMap = {warm:'warm and human',direct:'direct and punchy',story:'story-led',educational:'educational',playful:'playful'};
+  var toneDesc = toneMap[tone] || 'warm';
+  var load = document.getElementById('cal-load-generate');
+  var out = document.getElementById('cal-out-generate');
+  var acts = document.getElementById('cal-acts-generate');
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content.';
+  var prompts = {
+    fulldraft: 'Write a complete ' + b.plat + ' post about: ' + brief + '. Tone: ' + toneDesc + '. Full piece, start to finish.',
+    reel: 'Reel script for: ' + brief + '. HOOK / BODY / CTA format. Tone: ' + toneDesc + '.',
+    emailseq: '3-email sequence about: ' + brief + '. Subject, preview, body, CTA for each. Tone: ' + toneDesc + '.',
+    listicle: 'Listicle for ' + b.plat + ' about: ' + brief + '. Hook + 5-7 numbered points + CTA.',
+    talking: '5 talking points for: ' + brief + '. Each with a suggested opening line.',
+    ctaonly: '5 calls to action for: ' + brief + '. Mix of styles.'
+  };
+  var result = await cdCallAI(sys, prompts[type] || prompts.fulldraft, 900);
+  _calAIOut[type] = result || '';
+  if (load) load.classList.remove('show');
+  if (result && out) { out.style.display = 'block'; out.textContent = result; out.classList.add('show'); }
+  if (acts) acts.classList.add('show');
+}
+async function calRepurpose() {
+  var text = document.getElementById('calRpText').value.trim();
+  if (!text) { toast('Paste some content first'); return; }
+  var b = calGetBrief();
+  var plat = document.getElementById('calRpPlat').value;
+  var load = document.getElementById('cal-load-repurpose');
+  var out = document.getElementById('cal-out-repurpose');
+  var acts = document.getElementById('cal-acts-repurpose');
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional copywriter.' + brand + ' Output ONLY the repurposed content.';
+  var usr = 'Repurpose this ' + plat + ' post in my brand voice. Same idea, completely rewritten.\n\n' + text;
+  var result = await cdCallAI(sys, usr, 900);
+  _calAIOut['repurpose'] = result || '';
+  if (load) load.classList.remove('show');
+  if (result && out) { out.style.display = 'block'; out.textContent = result; out.classList.add('show'); }
+  if (acts) acts.classList.add('show');
+}
+function calCopyAI(type) {
+  var txt = _calAIOut[type || 'generate'] || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function(){ toast('Copied'); });
+}
+function calCopyDraft() {
+  var ta = document.getElementById('calDraft');
+  if (ta && ta.value.trim()) navigator.clipboard.writeText(ta.value.trim()).then(function(){ toast('Copied'); });
+}
+function calSaveDraft() {
+  var ta = document.getElementById('calDraft');
+  if (!ta || !ta.value.trim()) { toast('Nothing to save'); return; }
+  var t = document.getElementById('calTitle').value.trim() || 'Calendar draft';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0,65), content: ta.value.trim(),
+    platform: document.getElementById('calPlat').value, contentType: 'Draft', tone: 'Own writing',
+    createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+function calSaveAIDraft(type) {
+  var txt = _calAIOut[type || 'generate'] || '';
+  if (!txt) return;
+  var t = document.getElementById('calTitle').value.trim() || 'Calendar draft';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0,65), content: txt,
+    platform: document.getElementById('calPlat').value, contentType: 'AI Draft', tone: 'Brand Voice',
+    createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+function calMoveToWriteArea(type) {
+  var txt = _calAIOut[type || 'generate'] || '';
+  if (!txt) return;
+  var ta = document.getElementById('calDraft');
+  if (ta) { ta.value = txt; ta.focus(); toast('Moved to write area — edit it and make it yours'); }
+}
+
 function saveCalEntry(){
   const title=document.getElementById('calTitle').value.trim();
   if(!title){toast('Please enter a title');return;}
@@ -1900,6 +2121,7 @@ function openIdeaModal(status){
   S._editingIdea=false; S.cdId=null;
   // Reset header
   var hdr=document.querySelector('#ideaModal .cd-modal-panel > div:first-child div:first-child');if(hdr)hdr.textContent='Add to Content Planner';
+  var sb=document.getElementById('ideaSaveBtn');if(sb)sb.textContent='Add to Planner';
   S.ideaAIOut='';S._pendingIdeaImages=[];
   var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
   var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
@@ -2246,8 +2468,10 @@ function cdOpen(id) {
   var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
   var ia=document.getElementById('ideaImgArea');if(ia)ia.innerHTML='';
   // Update header to show Edit mode
-  var title=document.querySelector('#ideaModal .cd-modal-panel > div:first-child div:first-child');
-  if(title)title.textContent='Edit Content Card';
+  var titleEl=document.querySelector('#ideaModal .cd-modal-panel > div:first-child div:first-child');
+  if(titleEl)titleEl.textContent='Edit Content Card';
+  var saveBtn=document.getElementById('ideaSaveBtn');
+  if(saveBtn)saveBtn.textContent='Save Changes';
   openModal('ideaModal');
   return; // skip the rest of old cdOpen
   var dummy=null; S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
