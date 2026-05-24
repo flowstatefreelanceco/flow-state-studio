@@ -1399,30 +1399,44 @@ async function initAuth(){
 
 async function loadUserData(){
   if(!_currentUser)return{};
-  // Try Supabase first
+  
+  // STEP 1: Load from localStorage immediately (always available)
+  var localData={};
   try{
-    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
-    if(data&&data.data){
+    var raw=localStorage.getItem('fss_data_'+_currentUser.id)||localStorage.getItem('fss_data')||'{}';
+    localData=JSON.parse(raw);
+  }catch(e){}
+  
+  // STEP 2: Try Supabase in background and merge if it has MORE data
+  try{
+    var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
+    if(!error&&data&&data.data){
       var sbData=JSON.parse(data.data);
-      // Also check localStorage - merge ideas/drafts to avoid data loss
-      try{
-        var local=JSON.parse(localStorage.getItem('fss_data')||'{}');
-        if(local.ideas&&sbData.ideas&&local.ideas.length>sbData.ideas.length){
-          sbData.ideas=local.ideas;
-        }
-        if(local.drafts&&sbData.drafts&&local.drafts.length>sbData.drafts.length){
-          sbData.drafts=local.drafts;
-        }
-      }catch(e){}
-      return sbData;
+      // Merge: keep whichever source has more of each array
+      var merged={};
+      var keys=['drafts','ideas','calEntries','tasks','hooks','ctas','stories','prompts'];
+      keys.forEach(function(k){
+        var local=localData[k]||[];
+        var sb_arr=sbData[k]||[];
+        merged[k]=local.length>=sb_arr.length?local:sb_arr;
+      });
+      // Non-array fields: prefer localStorage (most recent edits)
+      merged.brandProfile=localData.brandProfile||sbData.brandProfile||{};
+      merged.settings=Object.assign({},sbData.settings||{},localData.settings||{});
+      merged.favs=localData.favs||sbData.favs||{};
+      merged.notebooks=localData.notebooks||sbData.notebooks||[];
+      merged.notes=localData.notes||sbData.notes||{};
+      merged.gs=localData.gs||sbData.gs||{};
+      merged.aiCount=(localData.aiCount||0)>=(sbData.aiCount||0)?localData.aiCount:sbData.aiCount;
+      // Save merged back to localStorage
+      try{localStorage.setItem('fss_data_'+_currentUser.id,JSON.stringify(merged));}catch(e){}
+      return merged;
     }
-  }catch(e){}
-  // Fallback to localStorage
-  try{
-    var localData=JSON.parse(localStorage.getItem('fss_data')||'{}');
-    if(Object.keys(localData).length>0)return localData;
-  }catch(e){}
-  return{};
+  }catch(e){
+    console.warn('Supabase load failed, using localStorage:',e.message);
+  }
+  
+  return localData;
 }
 
 async function saveUserData(obj){
@@ -1431,11 +1445,15 @@ async function saveUserData(obj){
     var payload={user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()};
     var result=await sb.from('user_data').upsert(payload,{onConflict:'user_id'});
     if(result.error){
-      // Table might not exist - try to save to localStorage only
-      console.warn('Supabase save failed:',result.error.message);
+      console.warn('Supabase save failed (data is safe in localStorage):',result.error.message);
+      // Show one-time warning if Supabase table missing
+      if(result.error.code==='42P01'&&!window._sbTableWarned){
+        window._sbTableWarned=true;
+        console.warn('Run this SQL in Supabase: CREATE TABLE IF NOT EXISTS user_data (user_id uuid primary key references auth.users(id) on delete cascade, data text, updated_at timestamptz default now()); ALTER TABLE user_data ENABLE ROW LEVEL SECURITY; CREATE POLICY \'user_own\' ON user_data FOR ALL USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);');
+      }
     }
   }catch(e){
-    console.warn('Save error:',e.message);
+    console.warn('Supabase error (data safe in localStorage):',e.message);
   }
 }
 
@@ -1635,8 +1653,12 @@ function persist(){
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
-  // Save to localStorage FIRST (instant, never fails)
-  try{localStorage.setItem('fss_data',JSON.stringify(dataToSave));}catch(e){}
+  // Save to localStorage FIRST and ALWAYS - user-specific key
+  var lsKey='fss_data'+(_currentUser?'_'+_currentUser.id:'');
+  try{
+    localStorage.setItem(lsKey,JSON.stringify(dataToSave));
+    localStorage.setItem('fss_data',JSON.stringify(dataToSave)); // fallback key
+  }catch(e){}
   // Then fire Supabase async (cross-device sync)
   if(window._supabasePersist)window._supabasePersist(dataToSave);
 }
