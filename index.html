@@ -2762,17 +2762,12 @@ async function cdRepurpose2() {
 function stripMarkdown(txt) {
   if (!txt) return '';
   return txt
-    .replace(/#{1,6}\s+/g, '')
+    .replace(/#{1,6} /g, '')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/^[-*+]\s+/gm, '')
-    .replace(/^\d+\.\s+/gm, function(m) { return m; })
+    .replace(/^[-*+] /gm, '')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/
-{3,}/g, '
-
-')
     .trim();
 }
 
