@@ -1878,23 +1878,33 @@ function renderCalendar(){
   for(let i=first-1;i>=0;i--)h+=`<div class="cal-cell other"><div class="day-n">${prev-i}</div></div>`;
   for(let d=1;d<=dim;d++){
     const ds=`${S.calYear}-${String(S.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    // Merge calEntries + content planner ideas with dates
-    const ideaEntries=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}));
-    const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEntries.find(ie=>ie.title===e.title));
-    const es=[...ideaEntries,...calOnly];
+    // Merge ideas + calEntries + tasks for this day
+    const ideaEnts=(S.ideas||[]).filter(i=>i.date===ds).map(i=>({
+      id:'idea_'+i.id,title:i.title,platform:i.platform||'other',
+      format:i.format||'',status:i.status,date:i.date,_fromIdea:true
+    }));
+    const taskEnts=(S.tasks||[]).filter(t=>t.date===ds).map(t=>({
+      id:'task_'+t.id,title:t.title,platform:'other',
+      format:'Task',status:t.status,date:t.date,_fromTask:true
+    }));
+    const calEnts=(S.calEntries||[]).filter(e=>e.date===ds&&!ideaEnts.find(i=>i.title===e.title));
+    const es=[...ideaEnts,...taskEnts,...calEnts];
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
-    const dots=es.slice(0,3).map(e=>{
-      var fmt=e.format?e.format.replace('Caption / Post','Post').replace('Reel / Video','Reel').replace(' / ','/'):'';
-      var label=fmt?`<span style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-right:4px">${esc(fmt)}</span>`:'';
-      return `<div class="day-row">${label}<span style="overflow:hidden;text-overflow:ellipsis;font-size:11px">${esc(e.title)}</span></div>`;
+    const dots=es.slice(0,4).map(e=>{
+      const fmt=(e.format||'').replace('Caption / Post','Post').replace('Reel / Video','Reel');
+      const fmtLabel=fmt?`<span style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--teal);margin-right:3px">${esc(fmt)}</span>`:'';
+      const taskLabel=e._fromTask?`<span style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--r);margin-right:3px">Task</span>`:'';
+      return `<div class="day-row" style="font-size:10.5px;line-height:1.4;margin-bottom:2px">${taskLabel}${fmtLabel}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.title)}</span></div>`;
     }).join('');
-    const more=es.length>3?`<div class="day-row" style="color:var(--tl)">+${es.length-3} more</div>`:'';
-    h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
+    const more=es.length>4?`<div class="day-row" style="color:var(--tl);font-size:10px">+${es.length-4} more</div>`:'';
+    const hasItems=es.length>0?'has-items':'';
+    h+=`<div class="cal-cell${isTod?' today':''} ${hasItems}" onclick="calDayClick('${ds}')" style="cursor:pointer"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
   }
-  const tot=Math.ceil((first+dim)/7)*7;
-  for(let d=1;d<=tot-first-dim;d++)h+=`<div class="cal-cell other"><div class="day-n">${d}</div></div>`;
+  const tot=Math.ceil((first+dim)/7);
+  for(let i=0;i<tot*7-(first+dim);i++)h+=`<div class="cal-cell other"><div class="day-n">${i+1}</div></div>`;
   document.getElementById('calGrid').innerHTML=h;
 }
+
 function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
 
 /* ═══════════════════ LIBRARY ═══════════════════ */
@@ -3187,10 +3197,11 @@ function handleIdeaImages(input) {
 /* CALENDAR DAY VIEW */
 var _calDayDate = '';
 function calDayClick(ds) {
-  var ideaEnts = S.ideas.filter(function(i){ return i.date===ds; }).map(function(i){ return {id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}; });
-  var calOnly = S.calEntries.filter(function(e){ return e.date===ds && !ideaEnts.find(function(ie){ return ie.title===e.title; }); });
-  var entries = ideaEnts.concat(calOnly);
-  if (entries.length === 0) { openCalModal(ds); return; }
+  var ideaEnts=(S.ideas||[]).filter(function(i){return i.date===ds;}).map(function(i){return{id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true,format:i.format||''};});
+  var taskEnts=(S.tasks||[]).filter(function(t){return t.date===ds;}).map(function(t){return{id:'task_'+t.id,title:t.title,platform:'other',status:t.status,date:t.date,_fromTask:true};});
+  var calOnly=(S.calEntries||[]).filter(function(e){return e.date===ds&&!ideaEnts.find(function(ie){return ie.title===e.title;});});
+  var entries=ideaEnts.concat(taskEnts).concat(calOnly);
+  if(entries.length===0){openCalModal(ds);return;}
   _calDayDate = ds;
   var parts = ds.split('-');
   var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
@@ -3424,7 +3435,7 @@ function ideaSaveDraft2(type) {
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
 let _tt;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
+function toast(msg){const el=document.getElementById('toast');if(!el){console.log('TOAST:',msg);return;}el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
 // init called by auth system via initFlowStateApp
 initAuth();
@@ -3453,21 +3464,5 @@ function initFlowStateApp(savedData) {
 
 </script>
 
-<!-- CAL DAY VIEW MODAL -->
-<div class="modal-ov" id="calDayModal">
-  <div class="modal" style="max-width:540px;width:95vw">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <div class="m-title" id="calDayTitle"></div>
-      <button class="btn btn-p" style="font-size:11px;padding:5px 10px" onclick="calDayAddNew()">+ Add</button>
-    </div>
-    <div class="m-sub" id="calDaySubtitle" style="margin-bottom:16px"></div>
-    <div id="calDayEntries"></div>
-    <div class="m-acts">
-      <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 </body>
 </html>
