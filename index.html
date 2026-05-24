@@ -642,10 +642,10 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Reel / Story</div>
             <div class="wdc-sub">Script & plan it</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Bio / About','other')">
+          <div class="wdc-card" onclick="quickCreateCard('Other','other')">
             <div class="wdc-icon">✨</div>
             <div class="wdc-title">Something else</div>
-            <div class="wdc-sub">Open studio</div>
+            <div class="wdc-sub">Plan anything</div>
           </div>
         </div>
       </div>
@@ -1766,6 +1766,12 @@ function quickCreate(type, plat){
     setChip('typeChips',type); setChip('platChips',plat);
   },60);
 }
+
+function copyLastDraft(id){
+  var d=S.drafts.find(function(x){return x.id===id;});
+  if(d&&d.content)navigator.clipboard.writeText(d.content).then(function(){toast('Copied to clipboard');});
+}
+
 function renderPickUp(){
   const el=document.getElementById('pickUpWrap');
   if(!el)return;
@@ -1782,7 +1788,7 @@ function renderPickUp(){
         <div class="pickup-sub">${dt(lastDraft.createdAt)} &middot; ${cap(lastDraft.platform||'')}</div>
         <div style="margin-top:12px;display:flex;gap:8px">
           <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="openDraftModal('${lastDraft.id}')">View</button>
-          <button class="btn btn-p" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(${JSON.stringify('')}||'').catch(()=>{});copyLastDraft('${lastDraft.id}')">Copy</button>
+          <button class="btn btn-p" style="font-size:12px;padding:6px 12px" onclick="copyLastDraft('${lastDraft.id}')">Copy</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">Last draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in AI Studio</div></div>'}
       ${lastInProgress?`<div class="pickup-card">
@@ -2040,7 +2046,7 @@ function saveDraftEdit(){
   if(!d)return;
   var contentEl=document.getElementById('draftModalContent');
   if(contentEl)d.content=contentEl.value||contentEl.textContent;
-  persist();toast('Draft saved ✓');
+  persist();toast('Draft updated ✓');
 }
 
 function deleteDraft(){
@@ -2195,7 +2201,7 @@ function calSaveDraft() {
   S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0,65), content: ta.value.trim(),
     platform: document.getElementById('calPlat').value, contentType: 'Draft', tone: 'Own writing',
     createdAt: new Date().toISOString() });
-  persist(); toast('Draft saved');
+  persist(); toast('Draft saved ✓ — find it in Writing Studio');
 }
 function calSaveAIDraft(type) {
   var txt = _calAIOut[type || 'generate'] || '';
@@ -2235,12 +2241,12 @@ function saveCalEntry(){
     var idx=S.calEntries.findIndex(function(e){return e.id===S._editingCalEntry.id;});
     if(idx>-1){S.calEntries[idx].title=title;S.calEntries[idx].platform=platform;S.calEntries[idx].status=status;S.calEntries[idx].date=date;S.calEntries[idx].time=time;S.calEntries[idx].notes=notes;S.calEntries[idx].draft=draft;}
     S._editingCalEntry=null;
-    persist();closeModal('calModal');renderCalendar();toast('Saved ✓');return;
+    persist();closeModal('calModal');renderCalendar();toast('Calendar entry saved ✓');return;
   }
   // New entry
   var entry={id:Date.now().toString(),title:title,platform:platform,status:status,date:date,time:time,notes:notes,draft:draft};
   S.calEntries.push(entry);
-  persist();closeModal('calModal');renderCalendar();toast('Saved ✓');
+  persist();closeModal('calModal');renderCalendar();toast('Calendar entry saved ✓');
 }
 function openIdeaModal(status){
   S._editingIdea=false; S.cdId=null;
@@ -2291,7 +2297,7 @@ function saveIdea(){
       if(calIdx>-1){S.calEntries[calIdx].title=x.title;S.calEntries[calIdx].date=x.date;}
       else{S.calEntries.push({id:'cal_'+x.id,title:x.title,platform:x.platform,status:x.status,date:x.date,notes:x.notes});}
     }
-    persist();closeModal('ideaModal');renderKanban();renderCalendar();toast('Saved ✓');
+    persist();closeModal('ideaModal');renderKanban();renderCalendar();toast('Saved to Content Planner ✓');
     return;
   }
   // ADD new card
@@ -2540,9 +2546,15 @@ function updateNoteTitle(id,val){
   const n=S.notes.find(x=>x.id===id);
   if(n){n.title=val;n.updatedAt=new Date().toISOString();persist();}
 }
+var _noteSaveTimer=null;
 function updateNoteContent(id,val){
   const n=S.notes.find(x=>x.id===id);
-  if(n){n.content=val;n.updatedAt=new Date().toISOString();persist();}
+  if(n){
+    n.content=val;n.updatedAt=new Date().toISOString();
+    persist();
+    clearTimeout(_noteSaveTimer);
+    _noteSaveTimer=setTimeout(function(){toast('Note saved ✓');},1200);
+  }
 }
 function deleteNote(id){
   const n=S.notes.find(x=>x.id===id);
@@ -3084,7 +3096,7 @@ function ideaAISave2(type) {
   S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0,65), content: txt,
     platform: document.getElementById('ideaPlat').value,
     contentType: type, tone: 'Brand Voice', createdAt: new Date().toISOString() });
-  persist(); toast('Saved to drafts');
+  persist(); toast('Saved to Writing Studio drafts ✓');
 }
 
 function ideaAICopy() {
