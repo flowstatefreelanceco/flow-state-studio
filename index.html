@@ -576,7 +576,7 @@ select.fi{cursor:pointer}
     <div class="nav-i" data-view="tasks"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h9M3 13h7"/></svg>Tasks</div>
     <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg>Calendar</div>
     <div class="sb-section">Create</div>
-    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>AI Studio</div>
+    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>Writing Studio</div>
     <div class="nav-i" data-view="drafts"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M6 7h6M6 10.5h4"/></svg>Saved Drafts</div>
     <div class="nav-i nav-parent" onclick="toggleLibNav(this)">
       <svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="3" rx="1"/><rect x="2" y="8" width="10" height="3" rx="1"/><rect x="2" y="13" width="7" height="2" rx="1"/></svg>
@@ -632,15 +632,15 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Newsletter</div>
             <div class="wdc-sub">Email to your list</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Carousel Copy','instagram')">
+          <div class="wdc-card" onclick="quickCreateCard('Carousel','instagram')">
             <div class="wdc-icon">🎠</div>
             <div class="wdc-title">Carousel</div>
             <div class="wdc-sub">Slide by slide</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Story Script','instagram')">
+          <div class="wdc-card" onclick="quickCreateCard('Reel / Video','instagram')">
             <div class="wdc-icon">📱</div>
-            <div class="wdc-title">Story</div>
-            <div class="wdc-sub">Instagram story</div>
+            <div class="wdc-title">Reel / Story</div>
+            <div class="wdc-sub">Script & plan it</div>
           </div>
           <div class="wdc-card" onclick="quickCreate('Bio / About','other')">
             <div class="wdc-icon">✨</div>
@@ -697,7 +697,7 @@ select.fi{cursor:pointer}
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✦</span>AI Studio</span><span class="guide-toggle">›</span></div>
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✦</span>Writing Studio</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
               <p class="guide-desc">Your AI writing partner, powered by Claude. Give it a topic and it generates a full draft in your voice — no more staring at a blank page.</p>
               <ul class="guide-tips">
@@ -711,7 +711,7 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🔗</span>Hooks Library</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Pre-written opening lines designed to stop the scroll. Filter by type and copy directly into your content or into the AI Studio as a starting point.</p>
+              <p class="guide-desc">Pre-written opening lines designed to stop the scroll. Filter by type and copy directly into your content or into the Writing Studio as a starting point.</p>
               <ul class="guide-tips">
                 <li><strong>Educational hooks:</strong> best for carousels, blog posts, and reels that teach something.</li>
                 <li><strong>Engagement hooks:</strong> great for posts where you want comments, shares, or saves.</li>
@@ -725,7 +725,7 @@ select.fi{cursor:pointer}
             <div class="guide-detail">
               <p class="guide-desc">Three libraries of ready-to-copy content pieces. Prompts are for Claude, CTAs go at the end of your content, Story Ideas are for Instagram Stories.</p>
               <ul class="guide-tips">
-                <li><strong>Prompts:</strong> copy a prompt, paste it into AI Studio or Claude directly, fill in the brackets with your specifics.</li>
+                <li><strong>Prompts:</strong> copy a prompt, paste it into Writing Studio or Claude directly, fill in the brackets with your specifics.</li>
                 <li><strong>CTAs:</strong> always end your content with a clear call to action — pick one that matches your goal for that post (engagement, sales, or growth).</li>
                 <li><strong>Story Ideas:</strong> use these when you open Instagram and have no idea what to post — they're designed to be quick and authentic.</li>
                 <li><strong>Favorite:</strong> hit the heart on anything you love so you can find it again fast.</li>
@@ -797,7 +797,7 @@ select.fi{cursor:pointer}
   <!-- AI STUDIO -->
   <div id="view-studio" class="view" style="overflow:hidden">
     <div class="main-hdr">
-      <div><h1>AI Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
+      <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
     </div>
     <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
@@ -961,7 +961,7 @@ select.fi{cursor:pointer}
       <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
       <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events — anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
       <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
-      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in AI Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
+      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in Writing Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
       <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Your data is saved automatically</h4><p>Everything you create saves to your account instantly and syncs across all your devices. Pick up on your phone exactly where you left off on your laptop.</p></div></div>
     </div>
     <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
@@ -1272,8 +1272,12 @@ select.fi{cursor:pointer}
       <button class="btn btn-danger" style="padding:6px 11px;font-size:12px;flex-shrink:0;margin-top:4px" onclick="deleteDraft()">Delete</button>
     </div>
     <div class="m-sub" id="draftModalMeta"></div>
-    <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;max-height:360px;overflow-y:auto;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e);background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm);padding:14px;outline:none;resize:vertical;width:100%" id="draftModalContent"></textarea>
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('draftModal')">Close</button><button class="btn btn-p" onclick="copyDraftModal()">Copy Content</button></div>
+    <textarea class="fi" id="draftModalContent" style="min-height:300px;font-size:14px;line-height:1.8;width:100%;resize:vertical;margin-bottom:4px"></textarea>
+    <div class="m-acts">
+      <button class="btn btn-g" onclick="closeModal('draftModal')">Close</button>
+      <button class="btn btn-g" onclick="copyDraftModal()">Copy</button>
+      <button class="btn btn-p" onclick="saveDraftEdit()">Save Changes</button>
+    </div>
   </div>
 </div>
 
@@ -1399,43 +1403,41 @@ async function initAuth(){
 
 async function loadUserData(){
   if(!_currentUser)return{};
-  
-  // STEP 1: Load from localStorage immediately (always available)
+
+  // ALWAYS load localStorage first - this is instant and reliable
   var localData={};
   try{
-    var raw=localStorage.getItem('fss_data_'+_currentUser.id)||localStorage.getItem('fss_data')||'{}';
+    var raw=localStorage.getItem('fss_v1')||'{}';
     localData=JSON.parse(raw);
   }catch(e){}
-  
-  // STEP 2: Try Supabase in background and merge if it has MORE data
+
+  // Then try Supabase and merge best of both
   try{
     var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
     if(!error&&data&&data.data){
       var sbData=JSON.parse(data.data);
-      // Merge: keep whichever source has more of each array
-      var merged={};
       var keys=['drafts','ideas','calEntries','tasks','hooks','ctas','stories','prompts'];
+      var merged=Object.assign({},sbData);
       keys.forEach(function(k){
-        var local=localData[k]||[];
-        var sb_arr=sbData[k]||[];
-        merged[k]=local.length>=sb_arr.length?local:sb_arr;
+        var loc=localData[k]||[];
+        var sb_k=sbData[k]||[];
+        // Keep whichever has more items
+        merged[k]=loc.length>sb_k.length?loc:sb_k;
       });
-      // Non-array fields: prefer localStorage (most recent edits)
       merged.brandProfile=localData.brandProfile||sbData.brandProfile||{};
       merged.settings=Object.assign({},sbData.settings||{},localData.settings||{});
       merged.favs=localData.favs||sbData.favs||{};
       merged.notebooks=localData.notebooks||sbData.notebooks||[];
       merged.notes=localData.notes||sbData.notes||{};
       merged.gs=localData.gs||sbData.gs||{};
-      merged.aiCount=(localData.aiCount||0)>=(sbData.aiCount||0)?localData.aiCount:sbData.aiCount;
-      // Save merged back to localStorage
-      try{localStorage.setItem('fss_data_'+_currentUser.id,JSON.stringify(merged));}catch(e){}
+      // Write merged back so next load is consistent
+      try{localStorage.setItem('fss_v1',JSON.stringify(merged));}catch(e){}
       return merged;
     }
   }catch(e){
-    console.warn('Supabase load failed, using localStorage:',e.message);
+    console.warn('Supabase unavailable, using localStorage:',e.message);
   }
-  
+
   return localData;
 }
 
@@ -1653,13 +1655,9 @@ function persist(){
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
-  // Save to localStorage FIRST and ALWAYS - user-specific key
-  var lsKey='fss_data'+(_currentUser?'_'+_currentUser.id:'');
-  try{
-    localStorage.setItem(lsKey,JSON.stringify(dataToSave));
-    localStorage.setItem('fss_data',JSON.stringify(dataToSave)); // fallback key
-  }catch(e){}
-  // Then fire Supabase async (cross-device sync)
+  // ALWAYS save to localStorage first - use fixed key
+  try{localStorage.setItem('fss_v1',JSON.stringify(dataToSave));}catch(e){}
+  // Then Supabase async
   if(window._supabasePersist)window._supabasePersist(dataToSave);
 }
 function applySettings(){
@@ -1734,6 +1732,32 @@ function toggleGS(){
 }
 
 /* ═══════════════════ DASHBOARD ═══════════════════ */
+
+function quickCreateCard(format, platform) {
+  S._editingIdea = false; S.cdId = null;
+  // Pre-fill format and platform
+  var fmtEl = document.getElementById('ideaFormat');
+  var platEl = document.getElementById('ideaPlat');
+  if (fmtEl) fmtEl.value = format;
+  if (platEl) platEl.value = platform || 'instagram';
+  var titleEl = document.getElementById('ideaTitle');
+  if (titleEl) titleEl.value = '';
+  var notesEl = document.getElementById('ideaNotes');
+  if (notesEl) notesEl.value = '';
+  var statusEl = document.getElementById('ideaStatus');
+  if (statusEl) statusEl.value = 'idea';
+  // Reset AI panel
+  var ap = document.getElementById('ideaAIPanel');
+  if (ap) ap.classList.add('open');
+  var ch = document.getElementById('ideaAIChev');
+  if (ch) ch.textContent = '-';
+  var hdr = document.querySelector('#ideaModal .cd-modal-panel > div:first-child div:first-child');
+  if (hdr) hdr.textContent = 'Add to Content Planner';
+  var sb = document.getElementById('ideaSaveBtn');
+  if (sb) sb.textContent = 'Add to Planner';
+  openModal('ideaModal');
+}
+
 function quickCreate(type, plat){
   S.studio.type=type; S.studio.plat=plat;
   navigate('studio');
@@ -3419,13 +3443,15 @@ function initFlowStateApp(savedData) {
 
 <!-- CAL DAY VIEW MODAL -->
 <div class="modal-ov" id="calDayModal">
-  <div class="modal" style="max-width:520px">
-    <div class="m-title" id="calDayTitle"></div>
+  <div class="modal" style="max-width:540px;width:95vw">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="m-title" id="calDayTitle"></div>
+      <button class="btn btn-p" style="font-size:11px;padding:5px 10px" onclick="calDayAddNew()">+ Add</button>
+    </div>
     <div class="m-sub" id="calDaySubtitle" style="margin-bottom:16px"></div>
     <div id="calDayEntries"></div>
     <div class="m-acts">
       <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
-      <button class="btn btn-p" onclick="calDayAddNew()">+ Add Entry</button>
     </div>
   </div>
 </div>
