@@ -1272,7 +1272,7 @@ select.fi{cursor:pointer}
       <button class="btn btn-danger" style="padding:6px 11px;font-size:12px;flex-shrink:0;margin-top:4px" onclick="deleteDraft()">Delete</button>
     </div>
     <div class="m-sub" id="draftModalMeta"></div>
-    <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;max-height:360px;overflow-y:auto;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e)" id="draftModalContent"></div>
+    <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;max-height:360px;overflow-y:auto;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e);background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm);padding:14px;outline:none;resize:vertical;width:100%" id="draftModalContent"></textarea>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('draftModal')">Close</button><button class="btn btn-p" onclick="copyDraftModal()">Copy Content</button></div>
   </div>
 </div>
@@ -1831,7 +1831,11 @@ function renderCalendar(){
     const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEntries.find(ie=>ie.title===e.title));
     const es=[...ideaEntries,...calOnly];
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
-    const dots=es.slice(0,3).map(e=>`<div class="day-row"><span class="dot dot-${e.platform}"></span><span style="overflow:hidden;text-overflow:ellipsis">${esc(e.title)}</span></div>`).join('');
+    const dots=es.slice(0,3).map(e=>{
+      var fmt=e.format?e.format.replace('Caption / Post','Post').replace('Reel / Video','Reel').replace(' / ','/'):'';
+      var label=fmt?`<span style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-right:4px">${esc(fmt)}</span>`:'';
+      return `<div class="day-row">${label}<span style="overflow:hidden;text-overflow:ellipsis;font-size:11px">${esc(e.title)}</span></div>`;
+    }).join('');
     const more=es.length>3?`<div class="day-row" style="color:var(--tl)">+${es.length-3} more</div>`:'';
     h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
   }
@@ -1984,6 +1988,15 @@ function openDraftModal(id){
   document.getElementById('draftModalContent').textContent=d.content;
   openModal('draftModal');
 }
+
+function saveDraftEdit(){
+  var d=S.drafts.find(function(x){return x.id===S.viewingDraftId;});
+  if(!d)return;
+  var contentEl=document.getElementById('draftModalContent');
+  if(contentEl)d.content=contentEl.value||contentEl.textContent;
+  persist();toast('Draft saved ✓');
+}
+
 function deleteDraft(){
   if(!S.viewingDraftId||!confirm('Delete this draft permanently?'))return;
   S.drafts=S.drafts.filter(d=>d.id!==S.viewingDraftId);
@@ -1997,7 +2010,36 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
 function openWelcome(){openModal('welcomeModal');}
 function closeWelcome(){closeModal('welcomeModal');localStorage.setItem('studioWelcomeSeen','1');}
-function openCalModal(ds){
+function openCalModal(ds, existingEntry) {
+  S._editingCalEntry = existingEntry || null;
+  var titleEl = document.getElementById('calModalTitle');
+  if (titleEl) titleEl.textContent = existingEntry ? 'Edit Calendar Entry' : 'Add Calendar Entry';
+  var saveBtn = document.querySelector('#calModal .btn-p');
+  if (saveBtn) saveBtn.textContent = existingEntry ? 'Save Changes' : 'Save Entry';
+  if (existingEntry) {
+    var t=document.getElementById('calTitle');if(t)t.value=existingEntry.title||'';
+    var p=document.getElementById('calPlat');if(p)p.value=existingEntry.platform||'instagram';
+    var st=document.getElementById('calStatus');if(st)st.value=existingEntry.status||'idea';
+    var dn=document.getElementById('calDate');if(dn)dn.value=existingEntry.date||ds||'';
+    var tm=document.getElementById('calTime');if(tm)tm.value=existingEntry.time||'';
+    var no=document.getElementById('calNotes');if(no)no.value=existingEntry.notes||'';
+    var dr=document.getElementById('calDraft');if(dr)dr.value=existingEntry.draft||'';
+  } else {
+    var t=document.getElementById('calTitle');if(t)t.value='';
+    var dn=document.getElementById('calDate');if(dn)dn.value=ds||'';
+    var no=document.getElementById('calNotes');if(no)no.value='';
+    var dr=document.getElementById('calDraft');if(dr)dr.value='';
+  }
+  // Reset AI
+  _calAIOut={};
+  ['smartBrief','generate','repurpose'].forEach(function(sec){
+    var body=document.getElementById('cal-ai-'+sec+'-body');if(body)body.classList.remove('open');
+    var out=document.getElementById('cal-out-'+sec);if(out){out.textContent='';out.classList.remove('show');}
+  });
+  var sb=document.getElementById('cal-smartBrief-out');if(sb){sb.textContent='';sb.classList.remove('show');}
+  openModal('calModal');
+}
+function _openCalModalOld(ds){
   S.editingCalId=null;
   document.getElementById('calModalTitle').textContent='Add Calendar Entry';
   document.getElementById('calTitle').value='';
@@ -2126,11 +2168,33 @@ function calMoveToWriteArea(type) {
 }
 
 function saveCalEntry(){
-  const title=document.getElementById('calTitle').value.trim();
-  if(!title){toast('Please enter a title');return;}
-  const entry={id:S.editingCalId||Date.now().toString(),title,platform:document.getElementById('calPlat').value,status:document.getElementById('calStatus').value,date:document.getElementById('calDate').value,notes:document.getElementById('calNotes').value};
-  if(S.editingCalId)S.calEntries=S.calEntries.map(e=>e.id===S.editingCalId?entry:e); else S.calEntries.push(entry);
-  S.gs.calAdded=true;persist();closeModal('calModal');renderCalendar();renderGS();toast('Entry saved ✓');
+  var title=document.getElementById('calTitle').value.trim();
+  if(!title){toast('Add a title');return;}
+  var date=document.getElementById('calDate').value;
+  var time=document.getElementById('calTime')?document.getElementById('calTime').value:'';
+  var platform=document.getElementById('calPlat').value;
+  var status=document.getElementById('calStatus').value;
+  var notes=document.getElementById('calNotes').value;
+  var draft=document.getElementById('calDraft')?document.getElementById('calDraft').value:'';
+  if(S._editingCalEntry&&S._editingCalEntry._fromIdea){
+    // Update the idea in S.ideas
+    var realId=S._editingCalEntry.id.replace('idea_','');
+    var idea=S.ideas.find(function(i){return i.id===realId;});
+    if(idea){idea.title=title;idea.platform=platform;idea.status=status;idea.date=date;idea.time=time;idea.notes=notes;}
+    S._editingCalEntry=null;
+    persist();closeModal('calModal');renderKanban();renderCalendar();toast('Saved ✓');return;
+  }
+  if(S._editingCalEntry){
+    // Update existing cal entry
+    var idx=S.calEntries.findIndex(function(e){return e.id===S._editingCalEntry.id;});
+    if(idx>-1){S.calEntries[idx].title=title;S.calEntries[idx].platform=platform;S.calEntries[idx].status=status;S.calEntries[idx].date=date;S.calEntries[idx].time=time;S.calEntries[idx].notes=notes;S.calEntries[idx].draft=draft;}
+    S._editingCalEntry=null;
+    persist();closeModal('calModal');renderCalendar();toast('Saved ✓');return;
+  }
+  // New entry
+  var entry={id:Date.now().toString(),title:title,platform:platform,status:status,date:date,time:time,notes:notes,draft:draft};
+  S.calEntries.push(entry);
+  persist();closeModal('calModal');renderCalendar();toast('Saved ✓');
 }
 function openIdeaModal(status){
   S._editingIdea=false; S.cdId=null;
