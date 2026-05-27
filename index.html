@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Studio — Content OS</title>
+<title>Flow State Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -65,7 +66,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
-.main-hdr h1{font-family:var(--fd);font-size:34px;font-weight:500;color:var(--e);letter-spacing:-.01em;line-height:1.1}
+.main-hdr h1{font-family:var(--fh);font-size:38px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
 .main-hdr .sub{font-size:12px;color:var(--t);margin-top:3px;letter-spacing:.02em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;padding:24px 36px 48px}
@@ -80,14 +81,14 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal);opacity:0;transition:opacity .2s}
 .stat-card:hover::before{opacity:1}
 .stat-card .lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:9px;font-weight:500}
-.stat-card .val{font-family:var(--fd);font-size:42px;font-weight:500;color:var(--e);line-height:1}
+.stat-card .val{font-family:var(--fh);font-size:42px;font-weight:700;color:var(--e);line-height:1}
 .stat-card .sub2{font-size:11px;color:var(--tl);margin-top:4px}
 
 /* GETTING STARTED */
 .gs-strip{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 20px;margin-bottom:22px;box-shadow:0 1px 4px var(--sh);cursor:pointer;user-select:none}
 .gs-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .gs-left{display:flex;align-items:center;gap:10px}
-.gs-title{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t)}
+.gs-title{font-family:var(--fh);font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t)}
 .gs-badge{font-size:11px;color:var(--tl)}
 .gs-chevron{font-size:14px;color:var(--tl);transition:transform .2s}
 .gs-strip.open .gs-chevron{transform:rotate(180deg)}
@@ -103,14 +104,14 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .gs-item.done .gs-item-lbl{color:var(--tl);text-decoration:line-through}
 
 /* SECTION TITLE */
-.sec-title{font-family:var(--fd);font-size:19px;font-weight:500;color:var(--e);margin-bottom:13px;letter-spacing:.01em;display:flex;align-items:center;gap:10px}
+.sec-title{font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:13px;letter-spacing:.01em;display:flex;align-items:center;gap:10px}
 .sec-title::after{content:'';flex:1;height:1px;background:var(--bl)}
 
 /* DRAFT CARDS */
 .drafts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:13px}
 .dc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;cursor:pointer;transition:all .18s;box-shadow:0 1px 4px var(--sh)}
 .dc:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--shm);border-color:var(--b)}
-.dc-title{font-family:var(--fd);font-size:17px;font-weight:500;color:var(--e);line-height:1.3;margin-bottom:8px}
+.dc-title{font-family:var(--fh);font-size:19px;font-weight:600;color:var(--e);line-height:1.3;margin-bottom:8px}
 .dc-preview{font-size:12.5px;color:var(--t);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
 .dc-foot{display:flex;align-items:center;justify-content:space-between}
 .dc-date{font-size:11px;color:var(--tl)}
@@ -131,7 +132,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 
 /* CALENDAR */
 .cal-nav{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.cal-nav h2{font-family:var(--fd);font-size:26px;font-weight:500;min-width:210px;text-align:center}
+.cal-nav h2{font-family:var(--fh);font-size:30px;font-weight:600;min-width:210px;text-align:center}
 .btn-ico{width:32px;height:32px;border:1px solid var(--b);background:var(--w);border-radius:var(--rsm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--e);transition:all .15s;font-size:17px;flex-shrink:0}
 .btn-ico:hover{background:var(--p);border-color:var(--t)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bl);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh)}
@@ -156,12 +157,12 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px var(--sh)}
 .kc-head{padding:14px 16px 10px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .kc-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t)}
-.kc-count{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--e)}
+.kc-count{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e)}
 .kc-body{flex:1;overflow-y:auto;padding:10px}
 .kc-body::-webkit-scrollbar{width:0}
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
 .kc-card{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;position:relative}
-.kc-card:hover{box-shadow:0 3px 10px var(--sh);border-color:var(--b)}
+.kc-card:hover{box-shadow:0 4px 14px var(--shm);border-color:var(--teal);transform:translateY(-1px)}
 .kc-card .cc-title{font-size:13px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:7px}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
@@ -208,14 +209,16 @@ select.fi{cursor:pointer}
 .lib-filter-chip{padding:5px 12px;border-radius:100px;border:1px solid var(--b);background:var(--w);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fb);user-select:none}
 .lib-filter-chip:hover{border-color:var(--r);color:var(--r)}
 .lib-filter-chip.active{background:var(--e);border-color:var(--e);color:var(--p)}
+.lib-filter-chip.bm-chip{border-color:var(--teal);color:var(--teal)}
+.lib-filter-chip.bm-chip.active{background:var(--teal);border-color:var(--teal);color:white}
 .lib-count{font-size:11px;color:var(--tl);margin-bottom:14px}
 .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
 .lib-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;box-shadow:0 1px 3px var(--sh);transition:box-shadow .15s}
 .lib-card:hover{box-shadow:0 4px 14px var(--shm)}
 .lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
 .lib-cat-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-.lib-fav{background:none;border:none;cursor:pointer;color:var(--tl);font-size:16px;transition:color .15s;flex-shrink:0;line-height:1}
-.lib-fav:hover,.lib-fav.faved{color:var(--r)}
+.lib-fav{background:none;border:none;cursor:pointer;color:var(--b);transition:all .18s;flex-shrink:0;line-height:1;padding:2px}
+.lib-fav:hover{color:var(--teal)}.lib-fav.faved{color:var(--teal)}.lib-fav.faved svg{fill:var(--teal)}
 .lib-title{font-family:var(--fd);font-size:16px;font-weight:500;color:var(--e);margin-bottom:6px;line-height:1.3}
 .lib-text{font-size:12.5px;color:var(--t);line-height:1.65;margin-bottom:14px}
 .lib-divider{height:1px;background:var(--bl);margin:0 -2px 12px}
@@ -236,11 +239,16 @@ select.fi{cursor:pointer}
 .btn-danger:hover{background:#EDD5C8}
 
 /* MODALS */
-.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
 .modal-ov.open{display:flex}
-.modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,16,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
+.modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,14,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
+
+/* CARD MODAL PANEL - standalone, ignores .modal */
+.cd-modal-panel{background:var(--w);border-radius:14px;padding:28px;width:95vw;max-height:92vh;overflow-y:auto;border:1px solid var(--bl);box-shadow:0 24px 64px rgba(42,26,14,.25);position:relative}
+
+
 .modal-xl{max-width:640px}
-.m-title{font-family:var(--fd);font-size:23px;font-weight:500;margin-bottom:4px;color:var(--e)}
+.m-title{font-family:var(--fh);font-size:26px;font-weight:600;margin-bottom:4px;color:var(--e)}
 .m-sub{font-size:13px;color:var(--t);margin-bottom:22px;line-height:1.6}
 .m-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -255,7 +263,7 @@ select.fi{cursor:pointer}
 
 /* SETTINGS */
 .setting-sec{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:26px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
-.setting-sec h3{font-family:var(--fd);font-size:20px;font-weight:500;margin-bottom:4px;color:var(--e)}
+.setting-sec h3{font-family:var(--fh);font-size:24px;font-weight:600;margin-bottom:4px;color:var(--e)}
 .setting-desc{font-size:12.5px;color:var(--t);margin-bottom:16px;line-height:1.65}
 .setting-desc a{color:var(--r);text-decoration:none}
 .setting-desc a:hover{text-decoration:underline}
@@ -371,21 +379,162 @@ select.fi{cursor:pointer}
 /* DASHBOARD - more breathing room */
 .main-body{padding:28px 38px 48px}
 
+
+/* CARD DETAIL */
+.cd-stages{display:flex;gap:2px;margin-bottom:20px;background:var(--p);border-radius:100px;padding:3px;border:1px solid var(--bl)}
+.cd-stage{flex:1;text-align:center;padding:7px 4px;border-radius:100px;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .15s;color:var(--tl)}
+.cd-stage.active{background:var(--w);color:var(--e);box-shadow:0 1px 4px var(--sh)}
+.cd-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:780px){.cd-cols{grid-template-columns:1fr}}
+.cd-ai-panel{background:var(--p);border-radius:var(--rad);padding:16px;border:1px solid var(--bl)}
+.cd-ai-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:12px}
+.cd-ai-btn{width:100%;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px;font-family:var(--fb);font-size:12.5px;color:var(--e);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;margin-bottom:6px;text-align:left}
+.cd-ai-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--tealp)}
+.cd-out{background:var(--w);border:1px solid var(--tealp);border-radius:var(--rsm);padding:12px;font-size:12.5px;line-height:1.75;color:var(--e);white-space:pre-wrap;margin-top:10px;display:none;max-height:200px;overflow-y:auto}
+.cd-out.show{display:block}
+.cd-acts{display:none;gap:6px;margin-top:8px}
+.cd-acts.show{display:flex}
+.cd-rp-div{height:1px;background:var(--bl);margin:14px 0}
+.cd-rp-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px}
+.cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
+
+/* CARD DETAIL REBUILT */
+.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 120px);min-height:500px}
+.cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.cd2-right{padding:20px 24px;overflow-y:auto;background:var(--p);display:flex;flex-direction:column;gap:12px}
+.ai2-section{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow:hidden;flex-shrink:0}
+.ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
+.ai2-section-hdr:hover{background:var(--p)}
+.ai2-section-body.open .ai2-section-hdr{border-bottom-color:var(--bl)}
+.ai2-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);display:flex;align-items:center;gap:7px}
+.ai2-section-body{padding:14px 16px;display:none}
+.ai2-section-body.open{display:block}
+.ai2-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.ai2-btn{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:12px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
+.ai2-btn:hover{border-color:var(--teal);background:var(--tealp);color:var(--teal)}
+.ai2-btn.full{grid-column:1/-1}
+.ai2-btn.accent{background:var(--teal);color:white;border-color:var(--teal);font-weight:500}
+.ai2-btn.accent:hover{background:var(--tealh);border-color:var(--tealh)}
+.ai2-btn-label{font-weight:600;display:block;margin-bottom:2px}
+.ai2-btn-sub{font-size:10px;color:var(--tl);display:block}
+.ai2-btn:hover .ai2-btn-sub{color:inherit;opacity:.8}
+.ai2-input{width:100%;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px 12px;font-family:var(--fb);font-size:12.5px;color:var(--e);outline:none;margin-bottom:8px;resize:vertical;transition:border-color .15s}
+.ai2-input:focus{border-color:var(--teal)}
+.ai2-out{background:var(--w);border:1px solid var(--tealp);border-radius:var(--rsm);padding:14px;font-size:13px;line-height:1.82;color:var(--e);white-space:pre-wrap;display:none;max-height:320px;overflow-y:auto;margin-top:10px}
+.ai2-out.show{display:block}
+.ai2-out-acts{display:none;gap:6px;margin-top:8px;flex-wrap:wrap}
+.ai2-out-acts.show{display:flex}
+.ai2-hook-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
+.ai2-hook-list.show{display:flex}
+.ai2-hook-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-size:12.5px;color:var(--e);display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer;transition:all .15s}
+.ai2-hook-item:hover{border-color:var(--teal);background:var(--tealp)}
+.ai2-hook-text{flex:1;line-height:1.55}
+.ai2-hook-use{font-size:10px;color:var(--tl);flex-shrink:0;margin-top:2px;white-space:nowrap}
+.ai2-tone-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.ai2-tone-chip{padding:5px 11px;border-radius:100px;border:1px solid var(--bl);font-size:11px;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t);user-select:none}
+.ai2-tone-chip.sel{background:var(--e);border-color:var(--e);color:var(--p)}
+.ai2-smart-brief{background:linear-gradient(135deg,#f0ece3,#e8ede8);border:1px solid var(--teal);border-left:3px solid var(--teal);border-radius:var(--rsm);padding:16px 18px;font-size:13px;color:var(--e);line-height:1.8;margin-top:10px;display:none;white-space:pre-wrap}
+.ai2-smart-brief.show{display:block}
+.ai2-smart-brief strong{color:var(--teal)}
+.ai2-series-list{display:none;flex-direction:column;gap:6px;margin-top:8px}
+.ai2-series-list.show{display:flex}
+.ai2-series-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px;font-size:12px;color:var(--e);line-height:1.5;cursor:pointer;transition:all .15s}
+.ai2-series-item:hover{border-color:var(--r);background:var(--rp)}
+.ai2-loading{font-size:12px;color:var(--tl);padding:8px 0;display:none;font-style:italic}
+.ai2-loading.show{display:block}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--tl)}
 </style>
+<style>
+/* AUTH */
+#authScreen{position:fixed;inset:0;background:var(--p);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+#authScreen.hidden{display:none}
+.auth-card{background:var(--w);border:1px solid var(--bl);border-radius:16px;padding:40px;width:100%;max-width:420px;box-shadow:0 8px 40px var(--sh)}
+.auth-logo{font-family:var(--fh);font-size:32px;font-weight:600;color:var(--e);margin-bottom:4px}
+.auth-tagline{font-size:11px;color:var(--t);letter-spacing:.12em;text-transform:uppercase;margin-bottom:28px}
+.auth-tabs{display:flex;gap:2px;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:3px;margin-bottom:22px}
+.auth-tab{flex:1;text-align:center;padding:8px;border-radius:100px;border:none;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:transparent;color:var(--t)}
+.auth-tab.active{background:var(--e);color:var(--p)}
+.auth-field{margin-bottom:13px}
+.auth-field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px}
+.auth-input{width:100%;background:var(--p);border:1px solid var(--b);border-radius:8px;padding:10px 14px;font-family:var(--fb);font-size:14px;color:var(--e);outline:none;transition:border-color .15s}
+.auth-input:focus{border-color:var(--teal)}
+.auth-btn{width:100%;background:var(--r);color:white;border:none;border-radius:8px;padding:12px;font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:4px}
+.auth-btn:hover{background:var(--rh)}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-err{font-size:12.5px;color:var(--r);margin-top:8px;text-align:center;min-height:18px}
+.auth-msg{font-size:12.5px;color:var(--teal);margin-top:8px;text-align:center;min-height:18px}
+.auth-hint{font-size:11px;color:var(--tl);text-align:center;margin-top:12px}
+.auth-hint span{color:var(--teal);cursor:pointer}
+/* LOADING */
+#loadingScreen{position:fixed;inset:0;background:var(--p);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9998;gap:14px}
+#loadingScreen.hidden{display:none}
+.load-logo{font-family:var(--fh);font-size:36px;font-weight:600;color:var(--e)}
+.load-dots{display:flex;gap:6px}
+.load-dot{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:ldot 1.2s infinite ease-in-out}
+.load-dot:nth-child(2){animation-delay:.2s}
+.load-dot:nth-child(3){animation-delay:.4s}
+@keyframes ldot{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-8px);opacity:1}}
+/* APP */
+#appWrap{display:none;height:100vh}
+#appWrap.show{display:block}
+/* USER MENU */
+.user-area{padding:8px 10px 14px;border-top:1px solid rgba(255,255,255,.06)}
+.user-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;border:none;background:rgba(255,255,255,.06);width:100%;transition:background .15s}
+.user-btn:hover{background:rgba(255,255,255,.12)}
+.user-av{width:26px;height:26px;border-radius:50%;background:var(--r);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.user-em{font-size:11px;color:rgba(242,235,224,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;flex:1}
+.u-popup{position:absolute;bottom:64px;left:10px;right:10px;background:var(--w);border:1px solid var(--bl);border-radius:10px;box-shadow:0 8px 30px var(--sh);display:none;z-index:200}
+.u-popup.open{display:block}
+.u-item{padding:11px 16px;font-size:13px;color:var(--e);cursor:pointer;transition:background .15s}
+.u-item:hover{background:var(--p)}
+.u-item.danger{color:var(--r)}
+.u-sep{height:1px;background:var(--bl)}
+</style>
 </head>
 <body>
-<div class="app">
+
+<div id="loadingScreen">
+  <div class="load-logo">Flow State Studio</div>
+  <div class="load-dots"><div class="load-dot"></div><div class="load-dot"></div><div class="load-dot"></div></div>
+</div>
+
+<div id="authScreen" class="hidden">
+  <div class="auth-card">
+    <div class="auth-logo">Flow State Studio</div>
+    <div class="auth-tagline">Built for the way your brain works.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Create Account</button>
+    </div>
+    <div id="formLogin">
+      <div class="auth-field"><label>Email</label><input class="auth-input" type="email" id="liEmail" placeholder="you@example.com" /></div>
+      <div class="auth-field"><label>Password</label><input class="auth-input" type="password" id="liPass" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+      <button class="auth-btn" id="liBtn" onclick="doLogin()">Sign In</button>
+      <div class="auth-err" id="liErr"></div>
+      <div class="auth-hint">Forgot password? <span onclick="doReset()">Reset it</span></div>
+    </div>
+    <div id="formSignup" style="display:none">
+      <div class="auth-field"><label>Email</label><input class="auth-input" type="email" id="suEmail" placeholder="you@example.com" /></div>
+      <div class="auth-field"><label>Password</label><input class="auth-input" type="password" id="suPass" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doSignup()" /></div>
+      <button class="auth-btn" id="suBtn" onclick="doSignup()">Create Account</button>
+      <div class="auth-err" id="suErr"></div>
+      <div class="auth-msg" id="suMsg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="appWrap"><div class="app">
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <div class="sb-wordmark" id="sbName">Your Studio</div>
-    <div class="sb-tagline">Content OS</div>
+    <div class="sb-wordmark" id="sbName">Flow State Studio</div>
+    <div class="sb-tagline">Built for the way your brain works.</div>
     <div class="sb-line"></div>
   </div>
   <nav class="sb-nav">
@@ -616,7 +765,7 @@ select.fi{cursor:pointer}
   <!-- AI STUDIO -->
   <div id="view-studio" class="view" style="overflow:hidden">
     <div class="main-hdr">
-      <div><h1>AI Writing Studio</h1><div class="sub">Powered by Claude</div></div>
+      <div><h1>AI Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
     </div>
     <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
@@ -635,7 +784,26 @@ select.fi{cursor:pointer}
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit">Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
           </div>
-          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>Your draft will appear here</h3><p>Fill out the panel and click Generate Draft to create content with Claude.</p></div></div>
+          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>Your draft will appear here</h3><p>Generate with Claude — or skip to the Write tab to type your own.</p></div></div>
+          <!-- WRITE YOUR OWN PANEL -->
+          <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
+            <div style="display:flex;gap:10px">
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Platform</label>
+                <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
+              </div>
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Format</label>
+                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
+              </div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column">
+              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Your Draft</label>
+              <textarea id="writeTA" class="fi" style="flex:1;min-height:280px;resize:none;line-height:1.8;font-size:14px" placeholder="Write freely here... no AI required. Just you and the page.&#10;&#10;Save it to your library when ready."></textarea>
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button class="btn btn-g" onclick="writeCopy()">Copy</button>
+              <button class="btn btn-p" onclick="writeSave()">Save to Drafts</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -695,9 +863,7 @@ select.fi{cursor:pointer}
   <div id="view-settings" class="view">
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
-      <div class="setting-sec"><h3>Studio Name</h3><p class="setting-desc">Give your workspace a name that feels like yours.</p><div class="fl"><input class="fi" id="nameIn" placeholder="e.g. Jess Palmer Creative" /></div><button class="btn btn-p" onclick="saveName()">Save Name</button></div>
-      <div class="setting-sec"><h3>Anthropic API Key</h3><p class="setting-desc">Stored only in your browser — sent directly to Anthropic, never anywhere else. Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.</p><div class="fl api-w"><input class="fi" id="keyIn" type="password" placeholder="sk-ant-api..." /><button class="api-eye" onclick="toggleKey()">👁</button></div><button class="btn btn-p" onclick="saveKey()">Save Key</button><div class="info-b">Running locally? Open a terminal, navigate to this file's folder, and run <code>python3 -m http.server 8080</code> — then open <code>http://localhost:8080/studio.html</code>.</div></div>
-      <div class="setting-sec"><h3>Claude Model</h3><p class="setting-desc">Sonnet is the best balance of quality and speed for everyday content work.</p><div class="fl"><select class="fi" id="modelIn"><option value="claude-sonnet-4-5">claude-sonnet-4-5 (Recommended)</option><option value="claude-opus-4-5">claude-opus-4-5 (Most powerful)</option><option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (Fastest)</option></select></div><button class="btn btn-p" onclick="saveModel()">Save Model</button></div>
+      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ No setup needed.</div></div>
       <div class="setting-sec">
         <h3>Brand Profile</h3>
         <p class="setting-desc">These fields are automatically woven into every AI generation — no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and Claude will always write as <em>you</em>.</p>
@@ -759,12 +925,12 @@ select.fi{cursor:pointer}
     <div class="m-title">Welcome to your Studio ✦</div>
     <div class="m-sub">This is your personal content workspace. Here's how it all works — read this once and you'll feel right at home.</div>
     <div class="welcome-steps">
-      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings → add your studio name, API key, and business context. The business context is the most important part — it tells Claude who you are so every draft sounds like <em>you</em>.</p></div></div>
+      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings and add your studio name and Brand Profile. The Brand Profile is the most important part — it tells Claude who you are, who you serve, and what you offer so every draft sounds like <em>you</em>.</p></div></div>
       <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
       <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events — anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
       <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
       <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in AI Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
-      <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Export your backup regularly</h4><p>Go to Settings → Export Backup. This saves all your data to a file on your computer so you never lose anything. Do this weekly if you use this often.</p></div></div>
+      <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Your data is saved automatically</h4><p>Everything you create saves to your account instantly and syncs across all your devices. Pick up on your phone exactly where you left off on your laptop.</p></div></div>
     </div>
     <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
   </div>
@@ -787,31 +953,99 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- Idea -->
-<div class="modal-ov" id="ideaModal">
-  <div class="modal">
-    <div class="m-title">Add to Content Planner</div>
-    <div class="m-sub">Drop your content idea in — you can flesh it out later</div>
-    <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" /></div>
-    <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="ideaPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option><option value="other">Other</option></select></div>
-      <div class="fl"><label class="fl-lbl">Format</label><select class="fi" id="ideaFormat">
-        <option value="Caption / Post">Post</option>
-        <option value="Carousel">Carousel</option>
-        <option value="Reel / Video">Reel / Video</option>
-        <option value="Story">Story</option>
-        <option value="Newsletter">Newsletter</option>
-        <option value="Freebie">Freebie</option>
-        <option value="Event">Event</option>
-        <option value="Blog Post">Blog Post</option>
-        <option value="Email Sequence">Email Sequence</option>
-        <option value="Podcast">Podcast</option>
-        <option value="Other">Other</option>
-      </select></div>
+<div class="modal-ov" id="ideaModal" style="padding:0;align-items:stretch">
+  <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:100vh;max-height:100vh;border-radius:0;padding:0;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
+      <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)">Add to Content Planner</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('ideaModal')">Cancel</button>
+        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveIdea()">Add to Planner</button>
+      </div>
     </div>
-    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="ideaNotes" style="min-height:60px" placeholder="Hook idea, key points, CTA, deadline..."></textarea></div>
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('ideaModal')">Cancel</button><button class="btn btn-p" onclick="saveIdea()">Add to Planner</button></div>
+    <div class="cd2-wrap">
+      <div class="cd2-left">
+        <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" style="font-size:15px;font-family:var(--fh)" /></div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Platform</label>
+            <select class="fi" id="ideaPlat">
+              <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
+              <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
+              <option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fl"><label class="fl-lbl">Format</label>
+            <select class="fi" id="ideaFormat">
+              <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
+              <option value="Reel / Video">Reel</option><option value="Story">Story</option>
+              <option value="Newsletter">Newsletter</option><option value="Freebie">Freebie</option>
+              <option value="Event">Event</option><option value="Blog Post">Blog Post</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" /></div>
+          <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="ideaTime" /></div>
+        </div>
+        <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="ideaNotes" style="min-height:120px" placeholder="Hook idea, key points, CTA, deadline..."></textarea>
+        </div>
+        <div class="fl">
+          <label class="fl-lbl">Upload Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <div id="ideaImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+          <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
+            Add images or slides
+            <input type="file" id="ideaImgInput" multiple accept="image/*" style="display:none" onchange="handleIdeaImages(this)" />
+          </label>
+        </div>
+      </div>
+      <div class="cd2-right">
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleIdeaAI()">
+            <div class="ai2-section-title">&#10022; Generate with AI</div>
+            <span id="ideaAIChev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ideaAIPanel">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Pick a tone then generate — or repurpose something you love.</div>
+            <div class="ai2-tone-row">
+              <div class="ai2-tone-chip sel" data-t="warm" onclick="ideaSelTone(this)">Warm</div>
+              <div class="ai2-tone-chip" data-t="direct" onclick="ideaSelTone(this)">Direct</div>
+              <div class="ai2-tone-chip" data-t="story" onclick="ideaSelTone(this)">Story-led</div>
+              <div class="ai2-tone-chip" data-t="educational" onclick="ideaSelTone(this)">Educational</div>
+              <div class="ai2-tone-chip" data-t="playful" onclick="ideaSelTone(this)">Playful</div>
+            </div>
+            <div class="ai2-btn-grid">
+              <button class="ai2-btn" onclick="ideaGenerate('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('hooks')"><span class="ai2-btn-label">5 Hooks</span><span class="ai2-btn-sub">Pick your favorite</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
+            </div>
+            <div class="ai2-out" id="ideaAIOut"></div>
+            <div class="ai2-out-acts" id="ideaAIActs">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaAICopy()">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaAISave()">Save Draft</button>
+            </div>
+            <div class="cd-rp-div" style="height:1px;background:var(--bl);margin:14px 0"></div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:8px">Repurpose a Post</div>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post — Claude rebuilds it in your voice for your niche.</div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
+              <select class="fi" id="ideaRpOrigPlat" style="font-size:12px;padding:6px 10px">
+                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                <option value="LinkedIn">LinkedIn</option><option value="a blog or newsletter">Blog / Newsletter</option>
+                <option value="Facebook">Facebook</option><option value="somewhere online">Other</option>
+              </select>
+            </div>
+            <textarea class="ai2-input" id="ideaRpText" placeholder="Paste the caption or post content here..." style="min-height:80px"></textarea>
+            <button class="ai2-btn full accent" onclick="ideaRepurpose()">Rebuild in My Voice</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <!-- Task -->
 <div class="modal-ov" id="taskModal">
@@ -820,6 +1054,12 @@ select.fi{cursor:pointer}
     <div class="m-sub">Add something to your to-do list</div>
     <div class="fl"><label class="fl-lbl">Task</label><input class="fi" id="taskTitle" placeholder="e.g. Write captions for this week" /></div>
     <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Due Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="taskDate" /></div>
+      <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="taskTime" /></div>
+    </div>
+    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="taskNotes" style="min-height:60px" placeholder="Context, links, what done looks like..."></textarea></div>
+    <div style="font-size:10.5px;color:var(--tl);margin-bottom:14px">If you set a date, this task will also appear on your calendar.</div>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" onclick="saveTask()">Add Task</button></div>
   </div>
 </div>
@@ -837,6 +1077,171 @@ select.fi{cursor:pointer}
   </div>
 </div>
 
+<!-- CARD DETAIL MODAL -->
+<div class="modal-ov" id="cardDetailModal" style="padding:0;align-items:stretch">
+  <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:100vh;max-height:100vh;border-radius:0;padding:0;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
+      <div class="cd-stages" style="margin-bottom:0">
+        <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
+        <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
+        <div class="cd-stage" data-s="ready" onclick="cdSetStage(this)">Ready</div>
+        <div class="cd-stage" data-s="published" onclick="cdSetStage(this)">Published</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-danger" style="font-size:12px;padding:6px 12px" onclick="cdDelete()">Delete</button>
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('cardDetailModal')">Close</button>
+        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSave()">Save</button>
+      </div>
+    </div>
+    <div class="cd2-wrap">
+      <div class="cd2-left">
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:15px;font-family:var(--fh)" /></div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Platform</label>
+            <select class="fi" id="cdPlat">
+              <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
+              <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
+              <option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fl"><label class="fl-lbl">Format</label>
+            <select class="fi" id="cdFormat">
+              <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
+              <option value="Reel / Video">Reel</option><option value="Story">Story</option>
+              <option value="Newsletter">Newsletter</option><option value="Freebie">Freebie</option>
+              <option value="Event">Event</option><option value="Blog Post">Blog Post</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
+        <div class="fl"><label class="fl-lbl">Notes / Brief</label>
+          <textarea class="fi" id="cdNotes" style="min-height:160px" placeholder="Hook idea, key points, angle, CTA..."></textarea>
+        </div>
+      </div>
+      <div class="cd2-right">
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
+            <div class="ai2-section-title">&#10022; Creative Director</div>
+            <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-smartBrief-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid — before you write a single word.</div>
+            <button class="ai2-btn full accent" onclick="cdSmartBrief()">Brief Me, Creative Director ✦</button>
+            <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
+            <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('generate')">
+            <div class="ai2-section-title">&#9997; Generate Content</div>
+            <span id="ai2-generate-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-generate-body">
+            <div class="ai2-tone-row" id="cdToneRow">
+              <div class="ai2-tone-chip sel" data-t="warm" onclick="cdSelTone(this)">Warm</div>
+              <div class="ai2-tone-chip" data-t="direct" onclick="cdSelTone(this)">Direct</div>
+              <div class="ai2-tone-chip" data-t="story" onclick="cdSelTone(this)">Story-led</div>
+              <div class="ai2-tone-chip" data-t="educational" onclick="cdSelTone(this)">Educational</div>
+              <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
+            </div>
+            <div class="ai2-btn-grid">
+              <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
+              <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
+              <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
+              <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
+              <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
+              <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
+            </div>
+            <div class="ai2-loading" id="cd-load-generate">Writing...</div>
+            <div class="ai2-out" id="cd-out-generate"></div>
+            <div class="ai2-out-acts" id="cd-acts-generate">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('generate')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('generate')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('hooks')">
+            <div class="ai2-section-title">Hook Builder</div>
+            <span id="ai2-hooks-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-hooks-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
+            <button class="ai2-btn full" onclick="cdGen2('hooks')">Generate 5 Hooks</button>
+            <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
+            <div class="ai2-hook-list" id="cd-hook-list"></div>
+            <div id="cd-hook-build-area" style="display:none;margin-top:10px">
+              <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
+              <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
+              <button class="ai2-btn full accent" onclick="cdBuildFromHook()">Build Full Post from This Hook</button>
+            </div>
+            <div class="ai2-out" id="cd-out-hooks"></div>
+            <div class="ai2-out-acts" id="cd-acts-hooks">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('variations')">
+            <div class="ai2-section-title">Caption Variations</div>
+            <span id="ai2-variations-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-variations-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
+            <button class="ai2-btn full accent" onclick="cdGen2('variations')">Generate 3 Variations</button>
+            <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
+            <div class="ai2-out" id="cd-out-variations"></div>
+            <div class="ai2-out-acts" id="cd-acts-variations">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('variations')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('variations')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('series')">
+            <div class="ai2-section-title">Content Series</div>
+            <span id="ai2-series-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-series-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
+            <button class="ai2-btn full accent" onclick="cdGen2('series')">Generate Content Series</button>
+            <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
+            <div class="ai2-series-list" id="cd-series-list"></div>
+          </div>
+        </div>
+        <div class="ai2-section">
+          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')">
+            <div class="ai2-section-title">Repurpose a Post</div>
+            <span id="ai2-repurpose-chev" style="color:var(--tl);font-size:16px">+</span>
+          </div>
+          <div class="ai2-section-body" id="ai2-repurpose-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. Claude studies why it works then rebuilds it in your voice.</div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
+              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
+                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                <option value="LinkedIn">LinkedIn</option><option value="a blog">Blog</option>
+                <option value="a newsletter">Newsletter</option><option value="somewhere">Other</option>
+              </select>
+            </div>
+            <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post text here..." style="min-height:80px"></textarea>
+            <button class="ai2-btn full accent" onclick="cdRepurpose2()">Rebuild in My Voice</button>
+            <div class="ai2-loading" id="cd-load-repurpose">Studying and rebuilding...</div>
+            <div class="ai2-out" id="cd-out-repurpose"></div>
+            <div class="ai2-out-acts" id="cd-acts-repurpose">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Add Library Item -->
 <div class="modal-ov" id="addLibModal">
   <div class="modal">
@@ -849,9 +1254,144 @@ select.fi{cursor:pointer}
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- CAL DAY VIEW MODAL -->
+<div class="modal-ov" id="calDayModal">
+  <div class="modal" style="max-width:500px">
+    <div class="m-title" id="calDayTitle"></div>
+    <div class="m-sub" id="calDaySubtitle"></div>
+    <div id="calDayEntries" style="margin-bottom:16px"></div>
+    <div class="m-acts">
+      <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
+      <button class="btn btn-p" onclick="calDayAddNew()">+ Add Entry</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div></div>
 
 <script>
+const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
+const SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA";
+const {createClient}=supabase;
+const sb=createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'fss_auth_token'}});
+var _currentUser=null;
+
+var _appBooted = false;
+
+async function initAuth(){
+  var {data:{session}}=await sb.auth.getSession();
+  if(session&&session.user){
+    _currentUser=session.user;
+    document.getElementById('loadingScreen').classList.add('hidden');
+    if(!_appBooted) await bootApp();
+  } else {
+    document.getElementById('loadingScreen').classList.add('hidden');
+    document.getElementById('authScreen').classList.remove('hidden');
+  }
+  sb.auth.onAuthStateChange(async function(event,session){
+    if(event==='SIGNED_IN'&&session&&!_appBooted){
+      _currentUser=session.user;
+      document.getElementById('authScreen').classList.add('hidden');
+      await bootApp();
+    } else if(event==='SIGNED_OUT'){
+      _currentUser=null;
+      _appBooted=false;
+      document.getElementById('appWrap').classList.remove('show');
+      document.getElementById('authScreen').classList.remove('hidden');
+    }
+  });
+}
+
+
+async function loadUserData(){
+  if(!_currentUser)return{};
+  try{
+    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
+    if(data&&data.data)return JSON.parse(data.data);
+  }catch(e){}
+  return{};
+}
+
+async function saveUserData(obj){
+  if(!_currentUser)return;
+  // Always save to localStorage as backup
+  try{localStorage.setItem('fss_v1',JSON.stringify(obj));}catch(e){}
+  try{ await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+}
+
+async function bootApp(){
+  _appBooted=true;
+  window._supabasePersist=function(obj){saveUserData(obj);};
+  document.getElementById('loadingScreen').classList.remove('hidden');
+  var saved=await loadUserData();
+  document.getElementById('appWrap').classList.add('show');
+  document.getElementById('loadingScreen').classList.add('hidden');
+  initFlowStateApp(saved);
+  addUserMenu();
+  // Re-render calendar after data loads so entries show
+  setTimeout(function(){
+    if(typeof renderCalendar==='function')renderCalendar();
+    if(typeof renderKanban==='function')renderKanban();
+  }, 200);
+}
+
+function addUserMenu(){
+  var sb2=document.querySelector('.sidebar');
+  if(!sb2||document.getElementById('userArea'))return;
+  var em=_currentUser.email||'';
+  var av=em[0].toUpperCase();
+  var el=document.createElement('div');
+  el.id='userArea';el.className='user-area';el.style.position='relative';
+  el.innerHTML='<button class="user-btn" onclick="toggleUMenu()"><div class="user-av">'+av+'</div><div class="user-em">'+em+'</div></button>'+
+    '<div class="u-popup" id="uPop">'+
+      '<div class="u-item" onclick="closeUMenu();if(typeof navigate===\'function\')navigate(\'settings\')">Settings</div>'+
+      '<div class="u-sep"></div>'+
+      '<div class="u-item danger" onclick="doSignOut()">Sign Out</div>'+
+    '</div>';
+  sb2.appendChild(el);
+}
+function toggleUMenu(){var p=document.getElementById('uPop');if(p)p.classList.toggle('open');}
+function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.remove('open');}
+document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&&!e.target.closest('.u-popup'))closeUMenu();});
+async function doSignOut(){closeUMenu();await sb.auth.signOut();}
+
+function switchAuthTab(t){
+  document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
+  document.getElementById('formLogin').style.display=t==='login'?'block':'none';
+  document.getElementById('formSignup').style.display=t==='signup'?'block':'none';
+}
+async function doLogin(){
+  var em=document.getElementById('liEmail').value.trim();
+  var pw=document.getElementById('liPass').value;
+  var err=document.getElementById('liErr');
+  var btn=document.getElementById('liBtn');
+  if(!em||!pw){err.textContent='Please enter your email and password';return;}
+  btn.disabled=true;btn.textContent='Signing in...';err.textContent='';
+  var {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Sign In';}
+}
+async function doSignup(){
+  var em=document.getElementById('suEmail').value.trim();
+  var pw=document.getElementById('suPass').value;
+  var err=document.getElementById('suErr');
+  var msg=document.getElementById('suMsg');
+  var btn=document.getElementById('suBtn');
+  if(!em||!pw){err.textContent='Please fill in all fields';return;}
+  if(pw.length<6){err.textContent='Password must be at least 6 characters';return;}
+  btn.disabled=true;btn.textContent='Creating account...';err.textContent='';msg.textContent='';
+  var {error}=await sb.auth.signUp({email:em,password:pw});
+  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Create Account';}
+  else{msg.textContent='Account created! Check your email to confirm, then sign in.';btn.disabled=false;btn.textContent='Create Account';switchAuthTab('login');}
+}
+async function doReset(){
+  var em=document.getElementById('liEmail').value.trim();
+  if(!em){document.getElementById('liErr').textContent='Enter your email above first';return;}
+  await sb.auth.resetPasswordForEmail(em,{redirectTo:window.location.origin});
+  document.getElementById('liErr').style.color='var(--teal)';
+  document.getElementById('liErr').textContent='Password reset email sent!';
+}
+
+
 /* ═══════════════════ DATA ═══════════════════ */
 const HOOKS_DEFAULT = [
   {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a wellness business..."},
@@ -932,18 +1472,18 @@ const S = {
   drafts:[], calEntries:[], ideas:[], tasks:[],
   hooks:[], ctas:[], stories:[], prompts:[],
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
-  settings:{name:'',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
+  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
   gs:{nameSet:false,keySet:false,bizSet:false,libVisited:false,calAdded:false,draftGenerated:false},
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
-  editingCalId:null, viewingDraftId:null, addLibSection:null,
+  editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
   brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:''},
   aiCount:0,
   notebooks:[], notes:[], activeNotebook:null
 };
 
 /* ═══════════════════ INIT ═══════════════════ */
-function init(){
+function _appInit(){
   load(); applySettings(); setupChips();
   renderDashboard(); renderCalendar(); renderKanban(); renderTaskKanban();
   renderAllLibs(); setGreeting();
@@ -951,7 +1491,7 @@ function init(){
 }
 function load(){
   try{
-    const d=JSON.parse(localStorage.getItem('studioOS_v3')||'{}');
+    const d={}; // Data loaded from Supabase via initFlowStateApp
     S.drafts=d.drafts||[]; S.calEntries=d.calEntries||[];
     S.ideas=d.ideas||[]; S.tasks=d.tasks||[];
     S.hooks=d.hooks||HOOKS_DEFAULT.map(x=>({...x}));
@@ -968,22 +1508,26 @@ function load(){
   }catch(e){}
 }
 function persist(){
-  localStorage.setItem('studioOS_v3',JSON.stringify({
+  var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,aiCount:S.aiCount,
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
-  }));
+  };
+  // Save to Supabase (cross-device)
+  if(window._supabasePersist)window._supabasePersist(dataToSave);
+  // Also save to localStorage as backup
+  try{localStorage.setItem('fss_backup',JSON.stringify(dataToSave));}catch(e){}
 }
 function applySettings(){
-  const n=S.settings.name||'Your Studio';
-  document.getElementById('sbName').textContent=n;
-  document.getElementById('nameIn').value=n;
-  document.getElementById('keyIn').value=S.settings.apiKey||'';
-  document.getElementById('modelIn').value=S.settings.model||'claude-sonnet-4-5';
+  const n=S.settings.name||'Flow State Studio';
+  const sbNameEl=document.getElementById('sbName');if(sbNameEl)sbNameEl.textContent=n;
+  const nameInEl=document.getElementById('nameIn');if(nameInEl)nameInEl.value=n;
+  const keyEl=document.getElementById('keyIn');if(keyEl)keyEl.value=S.settings.apiKey||'';
+  const modelEl=document.getElementById('modelIn');if(modelEl)modelEl.value=S.settings.model||'claude-sonnet-4-5';
   // Brand profile
-  const bp=S.brandProfile;
+  const bp=S.brandProfile||{};
   const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
   setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
   setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
@@ -1001,6 +1545,7 @@ function setGreeting(){
 
 /* ═══════════════════ NAV ═══════════════════ */
 function navigate(v){
+  if(!v||!document.getElementById("view-"+v))return;
   S.view=v;
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-i').forEach(el=>el.classList.remove('active'));
@@ -1026,8 +1571,6 @@ document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>
 
 /* ═══════════════════ GETTING STARTED ═══════════════════ */
 const GS_STEPS=[
-  {key:'nameSet',label:'Set your studio name',nav:'settings'},
-  {key:'keySet',label:'Add your Anthropic API key',nav:'settings'},
   {key:'bizSet',label:'Fill in your Brand Profile in Settings',nav:'settings'},
   {key:'libVisited',label:'Browse the Library (Hooks, Prompts, CTAs)',nav:'hooks'},
   {key:'calAdded',label:'Add your first calendar entry',nav:'calendar'},
@@ -1099,7 +1642,7 @@ function renderDashboard(){
   document.getElementById('st-pub').textContent=S.aiCount||0;
   const el=document.getElementById('dashRecent');
   const recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,4);
-  if(!recent.length){el.innerHTML='<div class="empty-state"><h3>Nothing here yet</h3><p>Head to AI Studio to generate your first draft, or browse the Library for inspiration.</p></div>';return;}
+  if(!recent.length){el.innerHTML='<div class="empty-state"><h3>Nothing here yet</h3><p>Head to AI Studio to generate a draft, write your own, or repurpose something you love.</p></div>';return;}
   el.innerHTML=`<div class="drafts-grid">${recent.map(dcHTML).join('')}</div>`;
   el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
   renderGS();
@@ -1113,7 +1656,7 @@ function renderKanban(){
     const cards=S.ideas.filter(i=>i.status===col.id);
     return`<div class="kc">
       <div class="kc-head"><span class="kc-title">${col.label}</span><span class="kc-count">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card">
+      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
         <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:9px">${esc(i.format||'')}</span></div>
@@ -1138,6 +1681,8 @@ function renderTaskKanban(){
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
         <div class="cc-title">${esc(t.title)}</div>
+        ${t.date?'<div style="font-size:10.5px;color:var(--teal);margin-top:4px">Due: '+t.date+(t.time?' at '+t.time:'')+'</div>':''}
+        ${t.notes?'<div style="font-size:11px;color:var(--t);margin-top:5px;line-height:1.55;border-top:1px solid var(--bl);padding-top:5px">'+esc(t.notes)+'</div>':''}
         ${col.id!=='done'?`<div style="margin-top:8px;display:flex;gap:5px">${nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
@@ -1161,7 +1706,10 @@ function renderCalendar(){
   for(let i=first-1;i>=0;i--)h+=`<div class="cal-cell other"><div class="day-n">${prev-i}</div></div>`;
   for(let d=1;d<=dim;d++){
     const ds=`${S.calYear}-${String(S.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const es=S.calEntries.filter(e=>e.date===ds);
+    // Merge calEntries + content planner ideas with dates
+    const ideaEntries=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}));
+    const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEntries.find(ie=>ie.title===e.title));
+    const es=[...ideaEntries,...calOnly];
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
     const dots=es.slice(0,3).map(e=>`<div class="day-row"><span class="dot dot-${e.platform}"></span><span style="overflow:hidden;text-overflow:ellipsis">${esc(e.title)}</span></div>`).join('');
     const more=es.length>3?`<div class="day-row" style="color:var(--tl)">+${es.length-3} more</div>`:'';
@@ -1199,13 +1747,16 @@ function renderLib(section,silent){
   const data=S[section];
   const query=(document.getElementById(section+'Search')?.value||'').toLowerCase();
   const filter=S.libFilters[section]||'All';
-  const cats=['All',...[...new Set(data.map(x=>x.cat))].sort()];
+  const hasFavs=S.favs&&S.favs[section]&&S.favs[section].length>0;
+  const cats=['All',...(hasFavs?['Bookmarked']:[]),...[...new Set(data.map(x=>x.cat))].sort()];
   // Filters
   const fEl=document.getElementById(section+'Filters');
-  if(fEl)fEl.innerHTML=cats.map(c=>`<span class="lib-filter-chip${filter===c?' active':''}" onclick="setLibFilter('${section}','${c}')">${c}</span>`).join('');
+  if(fEl)fEl.innerHTML=cats.map(c=>{const bm=c==='Bookmarked';return`<span class="lib-filter-chip${filter===c?' active':''}${bm?' bm-chip':''}" onclick="setLibFilter('${section}','${c}')">${c}</span>`;}).join('');
   // Filter + search
   const filtered=data.filter(x=>{
-    const matchCat=filter==='All'||x.cat===filter;
+    var favList=S.favs&&S.favs[section]?S.favs[section]:[];
+    var isBookmarked=favList.indexOf(x.id)>-1;
+    const matchCat=filter==='All'||(filter==='Bookmarked'&&isBookmarked)||x.cat===filter;
     const matchQ=!query||x.text.toLowerCase().includes(query)||(x.title||'').toLowerCase().includes(query)||(x.cat||'').toLowerCase().includes(query);
     return matchCat&&matchQ;
   });
@@ -1218,7 +1769,7 @@ function renderLib(section,silent){
   grid.innerHTML=filtered.map(x=>`<div class="lib-card">
     <div class="lib-card-top">
       <span class="lib-cat-tag" style="${catStyle(x.cat)}">${esc(x.cat)}</span>
-      <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="Favorite">♡</button>
+      <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="${isFav(x.id)?'Remove bookmark':'Bookmark'}"><svg width="14" height="14" viewBox="0 0 14 14" fill="${isFav(x.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 1.5h9a1 1 0 011 1v10l-5-3-5 3v-10a1 1 0 011-1z"/></svg></button>
     </div>
     ${x.title?`<div class="lib-title">${esc(x.title)}</div>`:''}
     <div class="lib-text">${esc(x.text)}</div>
@@ -1231,6 +1782,7 @@ function renderLib(section,silent){
 }
 function setLibFilter(section,cat){S.libFilters[section]=cat;renderLib(section);}
 function toggleFav(section,id){
+  if(!S.favs)S.favs={};
   if(!S.favs[section])S.favs[section]=[];
   const i=S.favs[section].indexOf(id);
   if(i>-1)S.favs[section].splice(i,1); else S.favs[section].push(id);
@@ -1255,7 +1807,7 @@ function setupCG(id,cb){
   g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{g.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');cb(c.dataset.val);}));
 }
 async function generate(){
-  if(!S.settings.apiKey){toast('Add your API key in Settings first');navigate('settings');return;}
+  if(false){toast('Add your API key in Settings first');navigate('settings');return;}
   const topic=document.getElementById('topicIn').value.trim();
   if(!topic){toast('Please enter a topic or brief');return;}
   const notes=document.getElementById('notesIn').value.trim();
@@ -1269,7 +1821,7 @@ async function generate(){
   const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels — just the ready-to-use ${S.studio.type}.`;
   const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.settings.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-allow-browser':'true'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
     const d=await res.json();
     S.studio.output=d.content?.[0]?.text||'';
@@ -1299,7 +1851,7 @@ function dcHTML(d){
 }
 function renderDraftsGrid(){
   const g=document.getElementById('draftsGrid');
-  if(!S.drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>No saved drafts yet</h3><p>Generate content in the AI Studio and save it here.</p></div>';return;}
+  if(!S.drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>No saved drafts yet</h3><p>Write your own, generate with Claude, or repurpose something you love — it all lives here.</p></div>';return;}
   g.innerHTML=S.drafts.map(dcHTML).join('');
   g.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
 }
@@ -1343,6 +1895,16 @@ function saveCalEntry(){
   S.gs.calAdded=true;persist();closeModal('calModal');renderCalendar();renderGS();toast('Entry saved ✓');
 }
 function openIdeaModal(status){
+  S.ideaAIOut='';S._pendingIdeaImages=[];
+  var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
+  var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
+  var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.remove('open');
+  var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='+';
+  var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
+  var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
+  var id=document.getElementById('ideaDate');if(id)id.value='';
+  var it=document.getElementById('ideaTime');if(it)it.value='';
+  var ia=document.getElementById('ideaImgArea');if(ia)ia.innerHTML='';
   document.getElementById('ideaTitle').value='';
   document.getElementById('ideaPlat').value='instagram';
   document.getElementById('ideaFormat').value='Caption / Post';
@@ -1353,26 +1915,59 @@ function openIdeaModal(status){
 function saveIdea(){
   const title=document.getElementById('ideaTitle').value.trim();
   if(!title){toast('Please enter an idea');return;}
-  S.ideas.push({id:Date.now().toString(),title,platform:document.getElementById('ideaPlat').value,format:document.getElementById('ideaFormat').value,notes:document.getElementById('ideaNotes').value,status:document.getElementById('ideaModal')._defaultStatus||'idea'});
-  persist();closeModal('ideaModal');renderKanban();toast('Idea added ✓');
+  const date=document.getElementById('ideaDate').value;
+  const time=document.getElementById('ideaTime').value;
+  const idea={
+    id:Date.now().toString(),
+    title,
+    platform:document.getElementById('ideaPlat').value,
+    format:document.getElementById('ideaFormat').value,
+    notes:document.getElementById('ideaNotes').value,
+    date,
+    time,
+    images:S._pendingIdeaImages||[],
+    status:document.getElementById('ideaModal')._defaultStatus||'idea'
+  };
+  S.ideas.push(idea);
+  // Auto-sync to calendar if date is set
+  if(date){
+    const existing=S.calEntries.find(e=>e.title===title&&e.date===date);
+    if(!existing){
+      S.calEntries.push({
+        id:'cal_'+idea.id,
+        title,
+        platform:idea.platform,
+        status:'idea',
+        date,
+        time,
+        notes:idea.notes
+      });
+    }
+  }
+  S._pendingIdeaImages=[];
+  persist();closeModal('ideaModal');renderKanban();
+  if(date)toast('Added to planner + calendar ✓');
+  else toast('Idea added ✓');
 }
 function openTaskEditModal(id){
-  var t=S.tasks.find(x=>x.id===id);if(!t)return;
+  const t=S.tasks.find(x=>x.id===id);if(!t)return;
   S._editingTaskId=id;
   document.getElementById('taskTitle').value=t.title||'';
   document.getElementById('taskStatus').value=t.status||'todo';
-  var td=document.getElementById('taskDate');if(td)td.value=t.date||'';
-  var tt=document.getElementById('taskTime');if(tt)tt.value=t.time||'';
-  var tn=document.getElementById('taskNotes');if(tn)tn.value=t.notes||'';
-  var btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Save Changes';
-  document.getElementById('taskModalTitle').textContent='Edit Task';
+  const td=document.getElementById('taskDate');if(td)td.value=t.date||'';
+  const tt=document.getElementById('taskTime');if(tt)tt.value=t.time||'';
+  const tn=document.getElementById('taskNotes');if(tn)tn.value=t.notes||'';
+  const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Save Changes';
+  const mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Edit Task';
   openModal('taskModal');
 }
 function openTaskModal(status){
   S._editingTaskId=null;
-  document.getElementById('taskModalTitle').textContent='Add Task';
   document.getElementById('taskTitle').value='';
   document.getElementById('taskStatus').value=status||'todo';
+  var td=document.getElementById('taskDate');if(td)td.value='';
+  var tt=document.getElementById('taskTime');if(tt)tt.value='';
+  var tn=document.getElementById('taskNotes');if(tn)tn.value='';
   openModal('taskModal');
 }
 function saveTask(){
@@ -1383,18 +1978,17 @@ function saveTask(){
   const notes=document.getElementById('taskNotes')?document.getElementById('taskNotes').value:'';
   const status=document.getElementById('taskStatus').value;
   if(S._editingTaskId){
-    var t=S.tasks.find(x=>x.id===S._editingTaskId);
+    const t=S.tasks.find(x=>x.id===S._editingTaskId);
     if(t){t.title=title;t.date=date;t.time=time;t.notes=notes;t.status=status;}
     S._editingTaskId=null;
+    const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Add Task';
     persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task saved ✓');return;
   }
-  // new task
   const task={id:Date.now().toString(),title,status,date,time,notes};
   S.tasks.push(task);
   if(date){const existing=S.calEntries.find(e=>e.title===title&&e.date===date);if(!existing){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status:'scheduled',date,time,notes});}}
   persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task added ✓');
 }
-// _REPLACED_SAVE_TASK_
 function openAddLibModal(section){
   S.addLibSection=section;
   const labels={hooks:'Hook',ctas:'CTA',stories:'Story Idea',prompts:'Prompt'};
@@ -1418,7 +2012,7 @@ function saveLibItem(){
 }
 
 /* ═══════════════════ SETTINGS ═══════════════════ */
-function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Your Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
+function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Flow State Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
 function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
@@ -1543,8 +2137,8 @@ function noteCardHTML(n){
   </div>`;
 }
 function saveNoteExplicit(id){
-  var n=S.notes.find(x=>x.id===id);if(!n)return;
-  var ta=document.querySelector('#nb-'+id+' .note-ta');
+  const n=S.notes.find(x=>x.id===id);if(!n)return;
+  const ta=document.querySelector('#nb-'+id+' .note-ta');
   if(ta){n.content=ta.value;n.updatedAt=new Date().toISOString();}
   persist();toast('Note saved ✓');
 }
@@ -1616,102 +2210,566 @@ function toggleGuideSec(sec){
   sec.classList.toggle('open');
 }
 
+
+/* CARD DETAIL */
+var _cdSelTone = 'warm';
+var _cdHookSel = '';
+var _cdOutputs = {};
+
+function cdOpen(id) {
+  var x = S.ideas.find(function(a) { return a.id === id; });
+  if (!x) return;
+  S.cdId = id; S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
+  document.getElementById('cdTitle').value = x.title || '';
+  document.getElementById('cdPlat').value = x.platform || 'instagram';
+  document.getElementById('cdFormat').value = x.format || 'Caption / Post';
+  document.getElementById('cdDate').value = x.date || '';
+  document.getElementById('cdNotes').value = x.notes || '';
+  document.querySelectorAll('.cd-stage').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.s === x.status);
+  });
+  // Reset all AI sections
+  ['generate','hooks','variations','series','repurpose'].forEach(function(sec) {
+    var body = document.getElementById('ai2-'+sec+'-body');
+    if (body) body.classList.remove('open');
+    var chev = document.getElementById('ai2-'+sec+'-chev');
+    if (chev) chev.textContent = '›';
+    var out = document.getElementById('cd-out-'+sec);
+    if (out) { out.textContent = ''; out.classList.remove('show'); }
+    var acts = document.getElementById('cd-acts-'+sec);
+    if (acts) acts.classList.remove('show');
+    var load = document.getElementById('cd-load-'+sec);
+    if (load) load.classList.remove('show');
+  });
+  var hookList = document.getElementById('cd-hook-list');
+  if (hookList) { hookList.innerHTML = ''; hookList.classList.remove('show'); }
+  var buildArea = document.getElementById('cd-hook-build-area');
+  if (buildArea) buildArea.style.display = 'none';
+  var seriesList = document.getElementById('cd-series-list');
+  if (seriesList) { seriesList.innerHTML = ''; seriesList.classList.remove('show'); }
+  var sbOut = document.getElementById('cd-smartBrief-out');
+  if (sbOut) { sbOut.textContent = ''; sbOut.classList.remove('show'); }
+  document.getElementById('cdRpText').value = '';
+  // Open Smart Brief and Generate sections by default
+  var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
+  var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
+  openModal('cardDetailModal');
+}
+
+function toggleAI2(sec) {
+  var body = document.getElementById('ai2-'+sec+'-body');
+  var chev = document.getElementById('ai2-'+sec+'-chev');
+  if (!body) return;
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chev) chev.textContent = isOpen ? '›' : '‹';
+}
+
+function cdSetStage(el) {
+  document.querySelectorAll('.cd-stage').forEach(function(s) { s.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+function cdSelTone(el) {
+  document.querySelectorAll('.ai2-tone-chip').forEach(function(c) { c.classList.remove('sel'); });
+  el.classList.add('sel');
+  _cdSelTone = el.dataset.t;
+}
+
+function cdUpdatePlatDot() {}
+
+function cdSave() {
+  var x = S.ideas.find(function(a) { return a.id === S.cdId; });
+  if (!x) return;
+  x.title = document.getElementById('cdTitle').value.trim();
+  x.platform = document.getElementById('cdPlat').value;
+  x.format = document.getElementById('cdFormat').value;
+  x.date = document.getElementById('cdDate').value;
+  x.notes = document.getElementById('cdNotes').value;
+  var ac = document.querySelector('.cd-stage.active');
+  if (ac) x.status = ac.dataset.s;
+  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Saved');
+}
+
+function cdDelete() {
+  if (!confirm('Delete this card?')) return;
+  S.ideas = S.ideas.filter(function(a) { return a.id !== S.cdId; });
+  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Deleted');
+}
+
+function cdGetBrief() {
+  var title = document.getElementById('cdTitle').value.trim();
+  var notes = document.getElementById('cdNotes').value.trim();
+  var fmt = document.getElementById('cdFormat').value;
+  var plat = document.getElementById('cdPlat').value;
+  return { title: title, notes: notes, fmt: fmt, plat: plat,
+    brief: title + (notes ? '. Notes: ' + notes : ''),
+    context: 'Format: ' + fmt + ' for ' + plat };
+}
+
+async function cdSmartBrief() {
+  var b = cdGetBrief();
+  if (!b.title && !b.notes) { toast('Add a title or notes first'); return; }
+  var load = document.getElementById('cd-load-smartBrief');
+  var out = document.getElementById('cd-smartBrief-out');
+  load.classList.add('show'); out.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
+    ' You think like a creative director — you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
+    'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
+  var usr = 'I need your creative direction on this piece of content.\n\n' +
+    'Brief: ' + b.brief + '\n' +
+    'Platform: ' + b.plat + '\n' +
+    'Format: ' + b.fmt + '\n\n' +
+    'Give me:\n' +
+    '1. THE ANGLE — the specific perspective or framing that will make this land with my audience (1-2 sentences)\n' +
+    '2. THE HOOK — one specific opening line or hook I should lead with\n' +
+    '3. THE EMOTION — what feeling should this create in my reader and why that matters for my niche\n' +
+    '4. THE WATCH OUT — one thing to avoid with this topic that would make it feel generic or off-brand\n\n' +
+    'Be direct and specific. No fluff. Talk to me like a creative director briefing a copywriter.';
+  var result = await cdCallAI(sys, usr, 600);
+  load.classList.remove('show');
+  if (result) { out.textContent = result; out.classList.add('show'); }
+}
+
+async function cdGen2(type) {
+  var b = cdGetBrief();
+  if (!b.title && !b.notes) { toast('Add a title or brief first'); return; }
+  var load = document.getElementById('cd-load-'+type);
+  var out = document.getElementById('cd-out-'+type);
+  var acts = document.getElementById('cd-acts-'+type);
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var tone = _cdSelTone || 'warm';
+  var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
+  var toneDesc = toneMap[tone] || 'warm and authentic';
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
+  var prompts = {
+    caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
+    story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
+    carousel: 'Write carousel slide copy for: ' + b.brief + '. Slide 1: scroll-stopping hook. Slides 2-6: one clear point each (short, punchy). Last slide: strong CTA. Label each slide.',
+    reel: 'Write a Reel/TikTok script for: ' + b.brief + '. Format: HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Make it conversational and energetic.',
+    newsletter: 'Write an engaging newsletter opening for: ' + b.brief + '. Tone: ' + toneDesc + '. Max 4 sentences. Should make the reader want to keep reading.',
+    email: 'Write a marketing email for: ' + b.brief + '. Include: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
+    variations: 'Write 3 different caption variations for: ' + b.brief + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each clearly. All for ' + b.plat + '.',
+    hooks: 'Generate 5 scroll-stopping opening hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Each hook should be different in style (question, bold statement, statistic, story opener, controversy). Number them 1-5. Just the hook line, nothing else.',
+    series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Each post should stand alone but connect to a bigger theme. For each: one sentence title + one sentence description. Number them 1-5.'
+  };
+  var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : 900);
+  if (load) load.classList.remove('show');
+  if (result && type === 'hooks') {
+    _cdOutputs[type] = result;
+    cdRenderHooks(result);
+  } else if (result && type === 'series') {
+    _cdOutputs[type] = result;
+    cdRenderSeries(result);
+  } else if (result) {
+    _cdOutputs[type] = result;
+    if (out) { out.textContent = result; out.classList.add('show'); }
+    if (acts) acts.classList.add('show');
+  }
+  S.aiCount = (S.aiCount || 0) + 1; persist();
+}
+
+function cdRenderHooks(text) {
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
+  var hookList = document.getElementById('cd-hook-list');
+  if (!hookList) return;
+  hookList.innerHTML = '';
+  lines.forEach(function(line) {
+    var clean = line.replace(/^[0-9]+[.)\s]+/, '').trim();
+    if (!clean) return;
+    var item = document.createElement('div');
+    item.className = 'ai2-hook-item';
+    item.innerHTML = '<span class="ai2-hook-text">' + esc(clean) + '</span><span class="ai2-hook-use">Use this ›</span>';
+    item.addEventListener('click', function() { cdSelectHook(clean); });
+    hookList.appendChild(item);
+  });
+  hookList.classList.add('show');
+}
+
+function cdSelectHook(hook) {
+  _cdHookSel = hook;
+  var sel = document.getElementById('cd-selected-hook');
+  if (sel) sel.textContent = hook;
+  var area = document.getElementById('cd-hook-build-area');
+  if (area) area.style.display = 'block';
+}
+
+async function cdBuildFromHook() {
+  if (!_cdHookSel) return;
+  var b = cdGetBrief();
+  var brand = buildBrandContext();
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var usr = 'Write a full ' + b.plat + ' caption starting with this hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Keep the hook exactly as written. Add value in the middle, end with a natural CTA.';
+  var out = document.getElementById('cd-out-hooks');
+  var acts = document.getElementById('cd-acts-hooks');
+  if (out) { out.textContent = 'Building...'; out.classList.add('show'); }
+  if (acts) acts.classList.remove('show');
+  var result = await cdCallAI(sys, usr, 700);
+  if (result) {
+    _cdOutputs['hooks'] = result;
+    if (out) out.textContent = result;
+    if (acts) acts.classList.add('show');
+  }
+}
+
+function cdRenderSeries(text) {
+  var lines = text.split('\n').filter(function(l) { return l.trim(); });
+  var list = document.getElementById('cd-series-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var items = [];
+  var cur = '';
+  lines.forEach(function(line) {
+    if (/^[0-9]+[.)]/.test(line.trim())) {
+      if (cur) items.push(cur);
+      cur = line.replace(/^[0-9]+[.)\s]+/, '').trim();
+    } else if (cur) {
+      cur += ' ' + line.trim();
+    }
+  });
+  if (cur) items.push(cur);
+  if (!items.length) items = lines.slice(0, 5);
+  items.forEach(function(item) {
+    if (!item.trim()) return;
+    var el = document.createElement('div');
+    el.className = 'ai2-series-item';
+    el.textContent = item;
+    el.title = 'Click to add to planner';
+    el.addEventListener('click', function() {
+      var b = cdGetBrief();
+      S.ideas.push({ id: Date.now().toString(), title: item.slice(0, 80), platform: b.plat, format: b.fmt, notes: '', status: 'idea' });
+      persist(); renderKanban(); toast('Added to planner');
+    });
+    list.appendChild(el);
+  });
+  list.classList.add('show');
+}
+
+async function cdRepurpose2() {
+  var text = document.getElementById('cdRpText').value.trim();
+  if (!text) { toast('Paste some content first'); return; }
+  var b = cdGetBrief();
+  var plat = document.getElementById('cdRpPlat').value;
+  var load = document.getElementById('cd-load-repurpose');
+  var out = document.getElementById('cd-out-repurpose');
+  var acts = document.getElementById('cd-acts-repurpose');
+  if (load) load.classList.add('show');
+  if (out) { out.textContent = ''; out.classList.remove('show'); }
+  if (acts) acts.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist and copywriter for wellness businesses.' + brand + ' Output ONLY the repurposed content. No preamble.';
+  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work — the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
+  var result = await cdCallAI(sys, usr, 1000);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _cdOutputs['repurpose'] = result;
+    if (out) { out.textContent = result; out.classList.add('show'); }
+    if (acts) acts.classList.add('show');
+  }
+}
+
+async function cdCallAI(sys, usr, maxTok) {
+  try {
+    var r = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] })
+    });
+    var d = await r.json();
+    return (d.content && d.content[0] && d.content[0].text) || '';
+  } catch(e) {
+    toast('Error: ' + e.message);
+    return '';
+  }
+}
+
+function cdCopy2(type) {
+  var txt = _cdOutputs[type] || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied'); });
+}
+
+function cdSaveDraft2(type) {
+  var txt = _cdOutputs[type] || '';
+  if (!txt) return;
+  var t = document.getElementById('cdTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: txt,
+    platform: document.getElementById('cdPlat').value,
+    contentType: document.getElementById('cdFormat').value,
+    tone: type, createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+
+// Keep old cdCopy and cdSaveDraft as aliases
+function cdCopy() { cdCopy2('generate'); }
+function cdSaveDraft() { cdSaveDraft2('generate'); }
+
+/* IDEA MODAL AI TOOLS */
+function toggleIdeaAI() {
+  var panel = document.getElementById('ideaAIPanel');
+  var chev = document.getElementById('ideaAIChev');
+  if (!panel) return;
+  panel.classList.toggle('open');
+  if (chev) chev.textContent = panel.classList.contains('open') ? '-' : '+';
+}
+async function ideaGenerate(type) {
+  var title = document.getElementById('ideaTitle').value.trim();
+  var notes = document.getElementById('ideaNotes').value.trim();
+  var plat = document.getElementById('ideaPlat').value;
+  var fmt = document.getElementById('ideaFormat').value;
+  if (!title && !notes) { toast('Add a title or idea first'); return; }
+  var brief = title + (notes ? '. Notes: ' + notes : '');
+  var o = document.getElementById('ideaAIOut');
+  var a = document.getElementById('ideaAIActs');
+  o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var prompts = {
+    caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
+    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
+    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
+    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
+  };
+  try {
+    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
+    });
+    var d = await r.json();
+    S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
+    o.textContent = S.ideaAIOut; a.classList.add('show');
+    S.aiCount = (S.aiCount || 0) + 1; persist();
+  } catch(e) { o.textContent = 'Error: ' + e.message; }
+}
+async function ideaRepurpose() {
+  var text = document.getElementById('ideaRpText').value.trim();
+  if (!text) { toast('Paste the post content first'); return; }
+  var plat = document.getElementById('ideaPlat').value;
+  var fmt = document.getElementById('ideaFormat').value;
+  var origPlat = document.getElementById('ideaRpOrigPlat').value;
+  var o = document.getElementById('ideaAIOut');
+  var a = document.getElementById('ideaAIActs');
+  o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
+  var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work — the structure, the hook, the angle, the emotional pull — then rebuild it completely for my niche and voice.' +
+    '\n\nYour job is NOT to reword it. Your job is to:\n' +
+    '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
+    '2. Take that same winning framework\n' +
+    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
+    '4. Make it feel 100% original — someone who saw both posts should not recognize the connection\n\n' +
+    'Output format: ' + fmt + ' for ' + plat + '\n\n' +
+    'Original post to repurpose:\n' + text;
+  try {
+    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] })
+    });
+    var d = await r.json();
+    S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
+    o.textContent = S.ideaAIOut; a.classList.add('show');
+    S.aiCount = (S.aiCount || 0) + 1; persist();
+  } catch(e) { o.textContent = 'Error: ' + e.message; }
+}
+
+function ideaSelTone(el) {
+  el.closest('.ai2-tone-row').querySelectorAll('.ai2-tone-chip').forEach(function(c) { c.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+
+function ideaAICopy() {
+  if (S.ideaAIOut) navigator.clipboard.writeText(S.ideaAIOut).then(function() { toast('Copied'); });
+}
+function ideaAISave() {
+  if (!S.ideaAIOut) return;
+  var t = document.getElementById('ideaTitle').value.trim() || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: S.ideaAIOut,
+    platform: document.getElementById('ideaPlat').value,
+    contentType: document.getElementById('ideaFormat').value,
+    tone: 'Brand Voice', createdAt: new Date().toISOString() });
+  persist(); toast('Draft saved');
+}
+
+
+/* STUDIO TABS */
+function switchTab(tab) {
+  var genPanel = document.getElementById('outBdy');
+  var writePanel = document.getElementById('writePanel');
+  var cpBtn = document.getElementById('cpBtn');
+  var svBtn = document.getElementById('svBtn');
+  var tabGen = document.getElementById('tabGenerate');
+  var tabWr = document.getElementById('tabWrite');
+  if (tab === 'write') {
+    if (genPanel) genPanel.style.display = 'none';
+    if (writePanel) writePanel.style.display = 'flex';
+    if (cpBtn) cpBtn.style.display = 'none';
+    if (svBtn) svBtn.style.display = 'none';
+    if (tabGen) { tabGen.style.background = 'transparent'; tabGen.style.color = 'var(--t)'; }
+    if (tabWr) { tabWr.style.background = 'var(--e)'; tabWr.style.color = 'var(--p)'; }
+  } else {
+    if (genPanel) genPanel.style.display = '';
+    if (writePanel) writePanel.style.display = 'none';
+    if (tabGen) { tabGen.style.background = 'var(--e)'; tabGen.style.color = 'var(--p)'; }
+    if (tabWr) { tabWr.style.background = 'transparent'; tabWr.style.color = 'var(--t)'; }
+  }
+}
+function writeCopy() {
+  var ta = document.getElementById('writeTA');
+  if (ta && ta.value.trim()) navigator.clipboard.writeText(ta.value.trim()).then(function() { toast('Copied'); });
+}
+function writeSave() {
+  var ta = document.getElementById('writeTA');
+  if (!ta || !ta.value.trim()) { toast('Nothing to save yet'); return; }
+  var plat = document.getElementById('writePlat').value;
+  var fmt = document.getElementById('writeFormat').value;
+  var text = ta.value.trim();
+  var title = text.split('\n')[0].slice(0, 65) || 'My draft';
+  S.drafts.unshift({
+    id: Date.now().toString(),
+    title: title,
+    content: text,
+    platform: plat,
+    contentType: fmt,
+    tone: 'Own writing',
+    createdAt: new Date().toISOString()
+  });
+  persist();
+  var badge = document.getElementById('svBadge');
+  if (badge) { badge.classList.add('show'); setTimeout(function() { badge.classList.remove('show'); }, 2200); }
+  toast('Draft saved to library');
+}
+
+
+/* IMAGE UPLOAD FOR IDEA MODAL */
+function handleIdeaImages(input) {
+  if (!input.files || !input.files.length) return;
+  if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
+  var area = document.getElementById('ideaImgArea');
+  Array.from(input.files).forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      S._pendingIdeaImages.push({ name: file.name, data: e.target.result });
+      if (area) {
+        var img = document.createElement('div');
+        img.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl)';
+        img.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover" />';
+        area.appendChild(img);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+
+/* CALENDAR DAY VIEW */
+var _calDayDate = '';
+function calDayClick(ds) {
+  var ideaEnts = S.ideas.filter(function(i){ return i.date===ds; }).map(function(i){ return {id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}; });
+  var calOnly = S.calEntries.filter(function(e){ return e.date===ds && !ideaEnts.find(function(ie){ return ie.title===e.title; }); });
+  var entries = ideaEnts.concat(calOnly);
+  if (entries.length === 0) { openCalModal(ds); return; }
+  _calDayDate = ds;
+  var parts = ds.split('-');
+  var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var monNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calDayTitle').textContent = dayNames[d.getDay()] + ', ' + monNames[d.getMonth()] + ' ' + d.getDate();
+  document.getElementById('calDaySubtitle').textContent = entries.length + (entries.length !== 1 ? ' entries' : ' entry') + ' planned';
+  var container = document.getElementById('calDayEntries');
+  container.innerHTML = '';
+  entries.forEach(function(e) {
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px';
+    var titleEl = document.createElement('div');
+    titleEl.style.cssText = 'font-size:13.5px;font-weight:500;color:var(--e);margin-bottom:6px';
+    titleEl.textContent = e.title || '';
+    card.appendChild(titleEl);
+    var tagsEl = document.createElement('div');
+    tagsEl.style.cssText = 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px';
+    tagsEl.innerHTML = '<span class="tag tag-' + (e.platform||'other') + '">' + cap(e.platform||'other') + '</span>' +
+      '<span class="tag tag-' + (e.status||'idea') + '">' + cap(e.status||'idea') + '</span>' +
+      (e.time ? '<span style="font-size:10.5px;color:var(--tl)">' + esc(e.time) + '</span>' : '');
+    card.appendChild(tagsEl);
+    if (e.notes) {
+      var notesEl = document.createElement('div');
+      notesEl.style.cssText = 'font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:8px';
+      notesEl.textContent = e.notes;
+      card.appendChild(notesEl);
+    }
+    var btns = document.createElement('div');
+    btns.style.cssText = 'display:flex;gap:6px';
+    var editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-g';
+    editBtn.style.cssText = 'font-size:11px;padding:5px 10px';
+    editBtn.textContent = 'Edit';
+    editBtn.addEventListener('click', (function(id){ return function(){ calEditEntry(id); }; })(e.id));
+    var delBtn = document.createElement('button');
+    delBtn.className = 'btn btn-danger';
+    delBtn.style.cssText = 'font-size:11px;padding:5px 10px';
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', (function(id){ return function(){ calDeleteEntry(id); }; })(e.id));
+    btns.appendChild(editBtn);
+    btns.appendChild(delBtn);
+    card.appendChild(btns);
+    container.appendChild(card);
+  });
+  openModal('calDayModal');
+}
+function calDayAddNew() {
+  closeModal('calDayModal');
+  openCalModal(_calDayDate);
+}
+function calDeleteEntry(id) {
+  S.calEntries = S.calEntries.filter(function(e) { return e.id !== id; });
+  persist(); closeModal('calDayModal'); renderCalendar(); toast('Entry deleted');
+}
+function calEditEntry(id) {
+  var e = S.calEntries.find(function(x) { return x.id === id; });
+  if (!e) return;
+  closeModal('calDayModal');
+  S.editingCalId = id;
+  document.getElementById('calModalTitle').textContent = 'Edit Entry';
+  document.getElementById('calTitle').value = e.title || '';
+  document.getElementById('calPlat').value = e.platform || 'instagram';
+  document.getElementById('calStatus').value = e.status || 'idea';
+  document.getElementById('calDate').value = e.date || '';
+  document.getElementById('calNotes').value = e.notes || '';
+  openModal('calModal');
+}
+
 /* ═══════════════════ UTILS ═══════════════════ */
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
 let _tt;
-function toast(msg){const el=document.getElementById('toast');if(!el){console.log('TOAST:',msg);return;}el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
+function toast(msg){const el=document.getElementById('toast');if(!el){console.log('Toast:',msg);return;}el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
-init();
+// init called by auth system via initFlowStateApp
+initAuth();
 
-/* ═══════════════════ CALENDAR DAY VIEW ═══════════════════ */
-var _calDayDate='';
-function calDayClick(ds){
-  _calDayDate=ds;
-  var entries=S.calEntries.filter(function(e){return e.date===ds;});
-  if(entries.length===0){openCalModal(ds);return;}
-  var parts=ds.split('-');
-  var d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
-  var dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var monNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var titleEl=document.getElementById('calDayTitle');
-  if(titleEl)titleEl.textContent=dayNames[d.getDay()]+', '+monNames[d.getMonth()]+' '+d.getDate();
-  var subEl=document.getElementById('calDaySubtitle');
-  if(subEl)subEl.textContent=entries.length+(entries.length!==1?' entries':' entry')+' planned';
-  var container=document.getElementById('calDayEntries');
-  if(!container)return;
-  container.innerHTML='';
-  entries.forEach(function(e){
-    var card=document.createElement('div');
-    card.style.cssText='background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px';
-    var titleDiv=document.createElement('div');
-    titleDiv.style.cssText='font-size:13.5px;font-weight:500;color:var(--e);margin-bottom:6px';
-    titleDiv.textContent=e.title||'';card.appendChild(titleDiv);
-    var tagsDiv=document.createElement('div');
-    tagsDiv.style.cssText='display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px';
-    tagsDiv.innerHTML='<span class="tag tag-'+(e.platform||'other')+'">'+cap(e.platform||'other')+'</span>'+
-      '<span class="tag tag-'+(e.status||'idea')+'">'+cap(e.status||'idea')+'</span>';
-    card.appendChild(tagsDiv);
-    if(e.notes){var notesDiv=document.createElement('div');notesDiv.style.cssText='font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:8px';notesDiv.textContent=e.notes;card.appendChild(notesDiv);}
-    var btns=document.createElement('div');btns.style.cssText='display:flex;gap:6px';
-    var editBtn=document.createElement('button');editBtn.className='btn btn-g';editBtn.style.cssText='font-size:11px;padding:5px 10px';editBtn.textContent='Edit';
-    (function(id){editBtn.addEventListener('click',function(){calEditEntry(id);});})(e.id);
-    var delBtn=document.createElement('button');delBtn.className='btn btn-danger';delBtn.style.cssText='font-size:11px;padding:5px 10px';delBtn.textContent='Delete';
-    (function(id){delBtn.addEventListener('click',function(){calDeleteEntry(id);});})(e.id);
-    btns.appendChild(editBtn);btns.appendChild(delBtn);card.appendChild(btns);container.appendChild(card);
-  });
-  openModal('calDayModal');
-}
-function calDayAddNew(){closeModal('calDayModal');openCalModal(_calDayDate);}
-function calDeleteEntry(id){
-  S.calEntries=S.calEntries.filter(function(e){return e.id!==id;});
-  persist();closeModal('calDayModal');renderCalendar();toast('Entry deleted');
-}
-function calEditEntry(id){
-  var entry=S.calEntries.find(function(x){return x.id===id;});
-  if(!entry)return;
-  closeModal('calDayModal');
-  S.editingCalId=id;
-  document.getElementById('calModalTitle').textContent='Edit Calendar Entry';
-  document.getElementById('calTitle').value=entry.title||'';
-  document.getElementById('calPlat').value=entry.platform||'instagram';
-  document.getElementById('calStatus').value=entry.status||'idea';
-  document.getElementById('calDate').value=entry.date||'';
-  document.getElementById('calNotes').value=entry.notes||'';
-  openModal('calModal');
+function initFlowStateApp(savedData) {
+  // Merge saved data from Supabase into S
+  if (savedData && Object.keys(savedData).length > 0) {
+    if (savedData.drafts) S.drafts = savedData.drafts;
+    if (savedData.calEntries) S.calEntries = savedData.calEntries;
+    if (savedData.ideas) S.ideas = savedData.ideas;
+    if (savedData.tasks) S.tasks = savedData.tasks;
+    if (savedData.hooks) S.hooks = savedData.hooks;
+    if (savedData.ctas) S.ctas = savedData.ctas;
+    if (savedData.stories) S.stories = savedData.stories;
+    if (savedData.prompts) S.prompts = savedData.prompts;
+    if (savedData.favs && typeof savedData.favs === 'object') { S.favs = {}; Object.keys(savedData.favs).forEach(function(k){ S.favs[k] = savedData.favs[k]; }); }
+    if (savedData.notebooks) S.notebooks = savedData.notebooks;
+    if (savedData.notes) S.notes = savedData.notes;
+    if (savedData.settings) S.settings = Object.assign({}, S.settings, savedData.settings);
+    if (savedData.feedImages) S.feedImages = savedData.feedImages;
+    if (savedData.gs) S.gs = savedData.gs;
+    if (savedData.aiCount) S.aiCount = savedData.aiCount;
+  }
+  _appInit();
 }
 
 </script>
-
-<!-- ═══ FIX 1: TOAST ═══ -->
-<div class="toast" id="toast"></div>
-
-<!-- ═══ FIX 2: CALENDAR DAY MODAL ═══ -->
-<div class="modal-ov" id="calDayModal">
-  <div class="modal" style="max-width:540px;width:95vw">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <div class="m-title" id="calDayTitle"></div>
-      <button class="btn btn-p" style="font-size:11px;padding:5px 10px" onclick="calDayAddNew()">+ Add Entry</button>
-    </div>
-    <div class="m-sub" id="calDaySubtitle" style="margin-bottom:12px"></div>
-    <div id="calDayEntries" style="max-height:55vh;overflow-y:auto"></div>
-    <div class="m-acts" style="margin-top:12px">
-      <button class="btn btn-g" onclick="closeModal('calDayModal')">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ FIX 3: ADD LIB MODAL ═══ -->
-<div class="modal-ov" id="addLibModal">
-  <div class="modal">
-    <div class="m-title" id="addLibTitle">Add Item</div>
-    <div class="m-sub" id="addLibSub">Add your own to the library</div>
-    <div id="addLibTitleRow" style="display:none" class="fl"><label class="fl-lbl">Title</label><input class="fi" id="addLibTitleIn" placeholder="e.g. Warm Instagram Caption" /></div>
-    <div class="fl"><label class="fl-lbl">Category</label><input class="fi" id="addLibCat" placeholder="e.g. Educational, Engagement..." /></div>
-    <div class="fl"><label class="fl-lbl">Content</label><textarea class="fi" id="addLibText" style="min-height:100px" placeholder="Paste or write your content here..."></textarea></div>
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('addLibModal')">Cancel</button><button class="btn btn-p" onclick="saveLibItem()">Add to Library</button></div>
-  </div>
-</div>
-
 </body>
 </html>
