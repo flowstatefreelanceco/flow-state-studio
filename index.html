@@ -1304,19 +1304,38 @@ async function initAuth(){
 
 
 async function loadUserData(){
-  if(!_currentUser)return{};
+  // Always try localStorage first as instant fallback
+  var localData={};
+  try{var raw=localStorage.getItem('fss_v1');if(raw)localData=JSON.parse(raw);}catch(e){}
+  if(!_currentUser)return localData;
   try{
-    var {data}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).single();
-    if(data&&data.data)return JSON.parse(data.data);
-  }catch(e){}
-  return{};
+    var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
+    if(!error&&data&&data.data){
+      var sbData=JSON.parse(data.data);
+      // Supabase wins if it has more data, localStorage wins for settings/brand
+      var merged=Object.assign({},localData,sbData);
+      // For arrays, take whichever has more entries
+      ['drafts','ideas','calEntries','tasks','hooks','ctas','stories','prompts','notebooks','notes'].forEach(function(k){
+        var loc=localData[k]||[];var sb_=sbData[k]||[];
+        merged[k]=loc.length>sb_.length?loc:sb_;
+      });
+      merged.brandProfile=sbData.brandProfile||localData.brandProfile||{};
+      merged.settings=Object.assign({},localData.settings||{},sbData.settings||{});
+      merged.favs=sbData.favs||localData.favs||{};
+      merged.gs=Object.assign({},localData.gs||{},sbData.gs||{});
+      try{localStorage.setItem('fss_v1',JSON.stringify(merged));}catch(e){}
+      return merged;
+    }
+  }catch(e){console.warn('Supabase load failed, using localStorage:',e.message);}
+  return localData;
 }
 
 async function saveUserData(obj){
   if(!_currentUser)return;
-  // Always save to localStorage as backup
   try{localStorage.setItem('fss_v1',JSON.stringify(obj));}catch(e){}
-  try{ await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+  try{
+    await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+  }catch(e){console.warn('Supabase save failed:',e.message);}
 }
 
 async function bootApp(){
@@ -1518,7 +1537,7 @@ function persist(){
   // Save to Supabase (cross-device)
   if(window._supabasePersist)window._supabasePersist(dataToSave);
   // Also save to localStorage as backup
-  try{localStorage.setItem('fss_backup',JSON.stringify(dataToSave));}catch(e){}
+  try{localStorage.setItem('fss_v1',JSON.stringify(dataToSave));}catch(e){}
 }
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
@@ -1869,6 +1888,12 @@ function deleteDraft(){
   S.drafts=S.drafts.filter(d=>d.id!==S.viewingDraftId);
   persist();closeModal('draftModal');renderDraftsGrid();renderDashboard();toast('Draft deleted');
 }
+function saveDraftEdit(){
+  const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(!d)return;
+  const el=document.getElementById('draftModalContent');
+  if(el)d.content=el.value;
+  persist();toast('Draft saved ✓');
+}
 function copyDraftModal(){const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));}
 
 /* ═══════════════════ MODALS ═══════════════════ */
@@ -1890,11 +1915,30 @@ function openCalModal(ds){
 function saveCalEntry(){
   const title=document.getElementById('calTitle').value.trim();
   if(!title){toast('Please enter a title');return;}
-  const entry={id:S.editingCalId||Date.now().toString(),title,platform:document.getElementById('calPlat').value,status:document.getElementById('calStatus').value,date:document.getElementById('calDate').value,notes:document.getElementById('calNotes').value};
-  if(S.editingCalId)S.calEntries=S.calEntries.map(e=>e.id===S.editingCalId?entry:e); else S.calEntries.push(entry);
-  S.gs.calAdded=true;persist();closeModal('calModal');renderCalendar();renderGS();toast('Entry saved ✓');
+  const timeEl=document.getElementById('calTime');
+  const draftEl=document.getElementById('calDraft');
+  const entry={
+    id:S.editingCalId||Date.now().toString(),
+    title,
+    platform:document.getElementById('calPlat').value,
+    status:document.getElementById('calStatus').value,
+    date:document.getElementById('calDate').value,
+    time:timeEl?timeEl.value:'',
+    notes:document.getElementById('calNotes').value,
+    draft:draftEl?draftEl.value:''
+  };
+  if(S.editingCalId){
+    S.calEntries=S.calEntries.map(e=>e.id===S.editingCalId?entry:e);
+  } else {
+    S.calEntries.push(entry);
+  }
+  S.editingCalId=null;
+  S.gs.calAdded=true;
+  persist();closeModal('calModal');renderCalendar();renderGS();
+  toast('Entry saved ✓');
 }
 function openIdeaModal(status){
+  S._editingIdea=false;S.cdId=null;
   S.ideaAIOut='';S._pendingIdeaImages=[];
   var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
   var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
@@ -1915,37 +1959,24 @@ function openIdeaModal(status){
 function saveIdea(){
   const title=document.getElementById('ideaTitle').value.trim();
   if(!title){toast('Please enter an idea');return;}
-  const date=document.getElementById('ideaDate').value;
-  const time=document.getElementById('ideaTime').value;
+  const date=document.getElementById('ideaDate')?document.getElementById('ideaDate').value:'';
+  const time=document.getElementById('ideaTime')?document.getElementById('ideaTime').value:'';
+  const platform=document.getElementById('ideaPlat').value;
+  const format=document.getElementById('ideaFormat').value;
+  const notes=document.getElementById('ideaNotes').value;
+  const statusEl=document.getElementById('ideaStatus');
+  const status=statusEl?statusEl.value:(document.getElementById('ideaModal')._defaultStatus||'idea');
   const idea={
-    id:Date.now().toString(),
-    title,
-    platform:document.getElementById('ideaPlat').value,
-    format:document.getElementById('ideaFormat').value,
-    notes:document.getElementById('ideaNotes').value,
-    date,
-    time,
-    images:S._pendingIdeaImages||[],
-    status:document.getElementById('ideaModal')._defaultStatus||'idea'
+    id:Date.now().toString(),title,platform,format,notes,date,time,
+    images:S._pendingIdeaImages||[],status
   };
   S.ideas.push(idea);
-  // Auto-sync to calendar if date is set
   if(date){
     const existing=S.calEntries.find(e=>e.title===title&&e.date===date);
-    if(!existing){
-      S.calEntries.push({
-        id:'cal_'+idea.id,
-        title,
-        platform:idea.platform,
-        status:'idea',
-        date,
-        time,
-        notes:idea.notes
-      });
-    }
+    if(!existing){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   }
   S._pendingIdeaImages=[];
-  persist();closeModal('ideaModal');renderKanban();
+  persist();closeModal('ideaModal');renderKanban();renderCalendar();
   if(date)toast('Added to planner + calendar ✓');
   else toast('Idea added ✓');
 }
@@ -2288,7 +2319,13 @@ function cdSave() {
   x.notes = document.getElementById('cdNotes').value;
   var ac = document.querySelector('.cd-stage.active');
   if (ac) x.status = ac.dataset.s;
-  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Saved');
+  // Sync calendar if date set
+  if(x.date){
+    var calIdx=S.calEntries.findIndex(function(e){return e.id==='cal_'+x.id||e.title===x.title;});
+    if(calIdx>-1){S.calEntries[calIdx].title=x.title;S.calEntries[calIdx].date=x.date;S.calEntries[calIdx].platform=x.platform;}
+    else{S.calEntries.push({id:'cal_'+x.id,title:x.title,platform:x.platform,status:x.status,date:x.date,notes:x.notes});}
+  }
+  persist(); closeModal('cardDetailModal'); renderKanban(); renderCalendar(); toast('Saved ✓');
 }
 
 function cdDelete() {
@@ -2766,6 +2803,7 @@ function initFlowStateApp(savedData) {
     if (savedData.feedImages) S.feedImages = savedData.feedImages;
     if (savedData.gs) S.gs = savedData.gs;
     if (savedData.aiCount) S.aiCount = savedData.aiCount;
+    if (savedData.brandProfile) S.brandProfile = Object.assign({}, S.brandProfile, savedData.brandProfile);
   }
   _appInit();
 }
