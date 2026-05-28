@@ -738,7 +738,7 @@ select.fi{cursor:pointer}
   <!-- TASKS -->
   <div id="view-tasks" class="view">
     <div class="main-hdr">
-      <div><h1>Tasks</h1><div class="sub" id="taskDate"></div></div>
+      <div><h1>Tasks</h1><div class="sub" id="taskSubDate"></div></div>
       <div class="hdr-acts"><button class="btn btn-p" onclick="openTaskModal()">+ Add Task</button></div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
@@ -1131,7 +1131,7 @@ select.fi{cursor:pointer}
           </div>
           <div class="ai2-section-body" id="ai2-smartBrief-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid — before you write a single word.</div>
-            <button class="ai2-btn full accent" onclick="cdSmartBrief()">Brief Me, Creative Director ✦</button>
+            <button class="ai2-btn full accent" onclick="cdSmartBrief()" style="background:linear-gradient(135deg,var(--e),#3d2510);color:var(--p);border:none;font-weight:600;font-size:14.5px;padding:14px">✦ Brief Me, Creative Director</button>
             <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
             <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
           </div>
@@ -1172,13 +1172,13 @@ select.fi{cursor:pointer}
           </div>
           <div class="ai2-section-body" id="ai2-hooks-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
-            <button class="ai2-btn full" onclick="cdGen2('hooks')">Generate 5 Hooks</button>
+            <button class="ai2-btn full" onclick="cdGen2('hooks')" style="background:linear-gradient(135deg,var(--r),#c86a3f);color:white;border:none;font-weight:600;font-size:14px;padding:13px">✦ Generate 5 Hooks</button>
             <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
             <div class="ai2-hook-list" id="cd-hook-list"></div>
             <div id="cd-hook-build-area" style="display:none;margin-top:10px">
               <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
               <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
-              <button class="ai2-btn full accent" onclick="cdBuildFromHook()">Build Full Post from This Hook</button>
+              <button class="ai2-btn full accent" onclick="cdBuildFromHook()" style="background:linear-gradient(135deg,var(--teal),#2e7070);color:white;border:none;font-weight:600;font-size:14px;padding:13px">✦ Build Full Post from This Hook</button>
             </div>
             <div class="ai2-out" id="cd-out-hooks"></div>
             <div class="ai2-out-acts" id="cd-acts-hooks">
@@ -1194,7 +1194,7 @@ select.fi{cursor:pointer}
           </div>
           <div class="ai2-section-body" id="ai2-variations-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
-            <button class="ai2-btn full accent" onclick="cdGen2('variations')">Generate 3 Variations</button>
+            <button class="ai2-btn full accent" onclick="cdGen2('variations')" style="background:linear-gradient(135deg,var(--teal),#2e7070);color:white;border:none;font-weight:600">⇕ Generate 3 Variations</button>
             <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
             <div class="ai2-out" id="cd-out-variations"></div>
             <div class="ai2-out-acts" id="cd-acts-variations">
@@ -1210,7 +1210,7 @@ select.fi{cursor:pointer}
           </div>
           <div class="ai2-section-body" id="ai2-series-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
-            <button class="ai2-btn full accent" onclick="cdGen2('series')">Generate Content Series</button>
+            <button class="ai2-btn full accent" onclick="cdGen2('series')" style="background:linear-gradient(135deg,#C47A3A,#a86020);color:white;border:none;font-weight:600">☆ Generate Content Series</button>
             <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
             <div class="ai2-series-list" id="cd-series-list"></div>
           </div>
@@ -1231,7 +1231,7 @@ select.fi{cursor:pointer}
               </select>
             </div>
             <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post text here..." style="min-height:80px"></textarea>
-            <button class="ai2-btn full accent" onclick="cdRepurpose2()">Rebuild in My Voice</button>
+            <button class="ai2-btn full accent" onclick="cdRepurpose2()" style="background:linear-gradient(135deg,var(--r),#c86a3f);color:white;border:none;font-weight:600">↻ Rebuild in My Voice</button>
             <div class="ai2-loading" id="cd-load-repurpose">Studying and rebuilding...</div>
             <div class="ai2-out" id="cd-out-repurpose"></div>
             <div class="ai2-out-acts" id="cd-acts-repurpose">
@@ -1559,7 +1559,7 @@ function setGreeting(){
   const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const m=['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('dashDate').textContent=`${d[now.getDay()]}, ${m[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-  const td=document.getElementById('taskDate');
+  const td=document.getElementById('taskSubDate');
   if(td)td.textContent=`${d[now.getDay()]}, ${m[now.getMonth()]} ${now.getDate()}`;
 }
 
@@ -2364,12 +2364,8 @@ function cdDelete() {
 }
 
 function cdGetBrief(){
-  return {
-    title: (document.getElementById('ideaTitle')||document.getElementById('cdTitle')||{value:''}).value.trim(),
-    notes: (document.getElementById('ideaNotes')||document.getElementById('cdNotes')||{value:''}).value.trim(),
-    plat:  (document.getElementById('ideaPlat') ||document.getElementById('cdPlat') ||{value:'instagram'}).value,
-    format:(document.getElementById('ideaFormat')||document.getElementById('cdFormat')||{value:'Caption / Post'}).value
-  };
+  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+  return{title:g('cdTitle'),notes:g('cdNotes'),plat:g('cdPlat')||'instagram',format:g('cdFormat')||'Caption / Post'};
 }
 
 async function cdSmartBrief() {
