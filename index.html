@@ -1312,17 +1312,32 @@ async function loadUserData(){
     var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
     if(!error&&data&&data.data){
       var sbData=JSON.parse(data.data);
-      // Supabase wins if it has more data, localStorage wins for settings/brand
-      var merged=Object.assign({},localData,sbData);
-      // For arrays, take whichever has more entries
-      ['drafts','ideas','calEntries','tasks','hooks','ctas','stories','prompts','notebooks','notes'].forEach(function(k){
-        var loc=localData[k]||[];var sb_=sbData[k]||[];
-        merged[k]=loc.length>sb_.length?loc:sb_;
+      // Smart merge: union arrays by ID, prefer most recently created item
+      function mergeArrays(loc,sb_){
+        var map={};
+        // Add supabase items first
+        (sb_||[]).forEach(function(x){if(x&&x.id)map[x.id]=x;});
+        // localStorage items overwrite — they are more recent user actions
+        (loc||[]).forEach(function(x){if(x&&x.id)map[x.id]=x;});
+        return Object.values(map);
+      }
+      var merged={};
+      ['drafts','ideas','calEntries','tasks','notebooks','notes'].forEach(function(k){
+        merged[k]=mergeArrays(localData[k],sbData[k]);
       });
-      merged.brandProfile=sbData.brandProfile||localData.brandProfile||{};
-      merged.settings=Object.assign({},localData.settings||{},sbData.settings||{});
-      merged.favs=sbData.favs||localData.favs||{};
-      merged.gs=Object.assign({},localData.gs||{},sbData.gs||{});
+      // For library — take whichever has more (user may have added items)
+      ['hooks','ctas','stories','prompts'].forEach(function(k){
+        var loc=localData[k]||[];var sb_=sbData[k]||[];
+        merged[k]=loc.length>=sb_.length?loc:sb_;
+      });
+      // Settings — localStorage wins (most recent user edits)
+      merged.brandProfile=localData.brandProfile&&Object.keys(localData.brandProfile).some(function(k){return localData.brandProfile[k];})
+        ?localData.brandProfile:(sbData.brandProfile||{});
+      merged.settings=Object.assign({},sbData.settings||{},localData.settings||{});
+      merged.favs=Object.assign({},sbData.favs||{},localData.favs||{});
+      merged.gs=Object.assign({},sbData.gs||{},localData.gs||{});
+      merged.aiCount=Math.max(localData.aiCount||0,sbData.aiCount||0);
+      // Save merged back so next load is fast
       try{localStorage.setItem('fss_v1',JSON.stringify(merged));}catch(e){}
       return merged;
     }
