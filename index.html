@@ -1523,24 +1523,7 @@ function _appInit(){
   renderAllLibs(); setGreeting();
   if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
 }
-function load(){
-  try{
-    const d={}; // Data loaded from Supabase via initFlowStateApp
-    S.drafts=d.drafts||[]; S.calEntries=d.calEntries||[];
-    S.ideas=d.ideas||[]; S.tasks=d.tasks||[];
-    S.hooks=d.hooks||HOOKS_DEFAULT.map(x=>({...x}));
-    S.ctas=d.ctas||CTAS_DEFAULT.map(x=>({...x}));
-    S.stories=d.stories||STORIES_DEFAULT.map(x=>({...x}));
-    S.prompts=d.prompts||PROMPTS_DEFAULT.map(x=>({...x}));
-    S.favs=d.favs||{hooks:[],ctas:[],stories:[],prompts:[]};
-    S.settings={...S.settings,...(d.settings||{})};
-    S.gs={...S.gs,...(d.gs||{})};
-    S.notebooks=d.notebooks||[];
-    S.notes=d.notes||[];
-    S.brandProfile={...S.brandProfile,...(d.brandProfile||{})};
-    S.aiCount=d.aiCount||0;
-  }catch(e){}
-}
+function load(){ /* data loaded via initFlowStateApp */ }
 function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
@@ -1740,14 +1723,17 @@ function renderCalendar(){
   for(let i=first-1;i>=0;i--)h+=`<div class="cal-cell other"><div class="day-n">${prev-i}</div></div>`;
   for(let d=1;d<=dim;d++){
     const ds=`${S.calYear}-${String(S.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    // Merge calEntries + content planner ideas with dates
-    const ideaEntries=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}));
-    const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEntries.find(ie=>ie.title===e.title));
-    const es=[...ideaEntries,...calOnly];
+    const ideaEnts=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,_fromIdea:true}));
+    const taskEnts=S.tasks.filter(t=>t.date===ds).map(t=>({id:'task_'+t.id,title:t.title,platform:'other',status:t.status,_fromTask:true}));
+    const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEnts.find(ie=>ie.title===e.title)&&!taskEnts.find(te=>te.title===e.title));
+    const es=[...ideaEnts,...taskEnts,...calOnly];
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
-    const dots=es.slice(0,3).map(e=>`<div class="day-row"><span class="dot dot-${e.platform}"></span><span style="overflow:hidden;text-overflow:ellipsis">${esc(e.title)}</span></div>`).join('');
-    const more=es.length>3?`<div class="day-row" style="color:var(--tl)">+${es.length-3} more</div>`:'';
-    h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
+    const dots=es.slice(0,3).map(e=>{
+      const icon=e._fromTask?'☑ ':'';
+      return `<div class="day-row">${icon}<span style="overflow:hidden;text-overflow:ellipsis;font-size:10.5px">${esc(e.title)}</span></div>`;
+    }).join('');
+    const more=es.length>3?`<div class="day-row" style="color:var(--tl);font-size:10px">+${es.length-3} more</div>`:'';
+    h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')" style="cursor:pointer"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
   }
   const tot=Math.ceil((first+dim)/7)*7;
   for(let d=1;d<=tot-first-dim;d++)h+=`<div class="cal-cell other"><div class="day-n">${d}</div></div>`;
@@ -1972,6 +1958,9 @@ function openIdeaModal(status){
   document.getElementById('ideaModal')._defaultStatus=status||'idea';
 }
 function saveIdea(){
+  // If editing an existing card, delegate to cdSave
+  if(S._editingIdea && S.cdId){ cdSave(); return; }
+  // New idea
   const title=document.getElementById('ideaTitle').value.trim();
   if(!title){toast('Please enter an idea');return;}
   const date=document.getElementById('ideaDate')?document.getElementById('ideaDate').value:'';
@@ -1980,11 +1969,8 @@ function saveIdea(){
   const format=document.getElementById('ideaFormat').value;
   const notes=document.getElementById('ideaNotes').value;
   const statusEl=document.getElementById('ideaStatus');
-  const status=statusEl?statusEl.value:(document.getElementById('ideaModal')._defaultStatus||'idea');
-  const idea={
-    id:Date.now().toString(),title,platform,format,notes,date,time,
-    images:S._pendingIdeaImages||[],status
-  };
+  const status=statusEl?statusEl.value:'idea';
+  const idea={id:Date.now().toString(),title,platform,format,notes,date,time,images:S._pendingIdeaImages||[],status};
   S.ideas.push(idea);
   if(date){
     const existing=S.calEntries.find(e=>e.title===title&&e.date===date);
@@ -1992,8 +1978,7 @@ function saveIdea(){
   }
   S._pendingIdeaImages=[];
   persist();closeModal('ideaModal');renderKanban();renderCalendar();
-  if(date)toast('Added to planner + calendar ✓');
-  else toast('Idea added ✓');
+  toast(date?'Added to planner + calendar ✓':'Idea added ✓');
 }
 function openTaskEditModal(id){
   const t=S.tasks.find(x=>x.id===id);if(!t)return;
@@ -2023,16 +2008,30 @@ function saveTask(){
   const time=document.getElementById('taskTime')?document.getElementById('taskTime').value:'';
   const notes=document.getElementById('taskNotes')?document.getElementById('taskNotes').value:'';
   const status=document.getElementById('taskStatus').value;
+  const btn=document.getElementById('taskSaveBtn');
+
   if(S._editingTaskId){
     const t=S.tasks.find(x=>x.id===S._editingTaskId);
-    if(t){t.title=title;t.date=date;t.time=time;t.notes=notes;t.status=status;}
+    if(t){
+      t.title=title;t.date=date;t.time=time;t.notes=notes;t.status=status;
+      // Update or remove calendar entry
+      const calId='cal_task_'+t.id;
+      if(date){
+        const idx=S.calEntries.findIndex(e=>e.id===calId);
+        if(idx>-1){S.calEntries[idx].title=title;S.calEntries[idx].date=date;S.calEntries[idx].time=time;S.calEntries[idx].status=status;}
+        else{S.calEntries.push({id:calId,title,platform:'other',status,date,time,notes});}
+      } else {
+        S.calEntries=S.calEntries.filter(e=>e.id!==calId);
+      }
+    }
     S._editingTaskId=null;
-    const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Add Task';
+    if(btn)btn.textContent='Add Task';
     persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task saved ✓');return;
   }
+  // New task
   const task={id:Date.now().toString(),title,status,date,time,notes};
   S.tasks.push(task);
-  if(date){const existing=S.calEntries.find(e=>e.title===title&&e.date===date);if(!existing){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status:'scheduled',date,time,notes});}}
+  if(date){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status,date,time,notes});}
   persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task added ✓');
 }
 function openAddLibModal(section){
@@ -2265,41 +2264,60 @@ var _cdOutputs = {};
 function cdOpen(id) {
   var x = S.ideas.find(function(a) { return a.id === id; });
   if (!x) return;
-  S.cdId = id; S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
-  document.getElementById('cdTitle').value = x.title || '';
-  document.getElementById('cdPlat').value = x.platform || 'instagram';
-  document.getElementById('cdFormat').value = x.format || 'Caption / Post';
-  document.getElementById('cdDate').value = x.date || '';
-  document.getElementById('cdNotes').value = x.notes || '';
-  document.querySelectorAll('.cd-stage').forEach(function(el) {
-    el.classList.toggle('active', el.dataset.s === x.status);
-  });
-  // Reset all AI sections
-  ['generate','hooks','variations','series','repurpose'].forEach(function(sec) {
-    var body = document.getElementById('ai2-'+sec+'-body');
-    if (body) body.classList.remove('open');
-    var chev = document.getElementById('ai2-'+sec+'-chev');
-    if (chev) chev.textContent = '›';
-    var out = document.getElementById('cd-out-'+sec);
-    if (out) { out.textContent = ''; out.classList.remove('show'); }
-    var acts = document.getElementById('cd-acts-'+sec);
-    if (acts) acts.classList.remove('show');
-    var load = document.getElementById('cd-load-'+sec);
-    if (load) load.classList.remove('show');
-  });
-  var hookList = document.getElementById('cd-hook-list');
-  if (hookList) { hookList.innerHTML = ''; hookList.classList.remove('show'); }
-  var buildArea = document.getElementById('cd-hook-build-area');
-  if (buildArea) buildArea.style.display = 'none';
-  var seriesList = document.getElementById('cd-series-list');
-  if (seriesList) { seriesList.innerHTML = ''; seriesList.classList.remove('show'); }
-  var sbOut = document.getElementById('cd-smartBrief-out');
+
+  // Populate the full-screen ideaModal fields
+  S.cdId = id;
+  S._editingIdea = true;
+  S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
+  S._pendingIdeaImages = x.images || [];
+
+  document.getElementById('ideaTitle').value = x.title || '';
+  document.getElementById('ideaPlat').value = x.platform || 'instagram';
+  document.getElementById('ideaFormat').value = x.format || 'Caption / Post';
+  document.getElementById('ideaDate').value = x.date || '';
+  document.getElementById('ideaTime').value = x.time || '';
+  document.getElementById('ideaNotes').value = x.notes || '';
+
+  var statusEl = document.getElementById('ideaStatus');
+  if (statusEl) statusEl.value = x.status || 'idea';
+
+  // Update modal title + save button for edit mode
+  var mt = document.getElementById('ideaModalTitle');
+  if (mt) mt.textContent = 'Edit Content Card';
+  var sb = document.getElementById('ideaSaveBtn');
+  if (sb) sb.textContent = 'Save Changes';
+
+  // Reset all AI output areas
+  var aiOut = document.getElementById('ideaAIOut');
+  if (aiOut) { aiOut.textContent = ''; aiOut.classList.remove('show'); }
+  var aiActs = document.getElementById('ideaAIActs');
+  if (aiActs) aiActs.classList.remove('show');
+  var sbOut = document.getElementById('idea-smartBrief-out');
   if (sbOut) { sbOut.textContent = ''; sbOut.classList.remove('show'); }
-  document.getElementById('cdRpText').value = '';
-  // Open Smart Brief and Generate sections by default
-  var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
-  var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
-  openModal('cardDetailModal');
+  var rpText = document.getElementById('ideaRpText');
+  if (rpText) rpText.value = '';
+  var writeArea = document.getElementById('ideaWriteArea');
+  if (writeArea) writeArea.value = '';
+
+  // Clear image preview area
+  var imgArea = document.getElementById('ideaImgArea');
+  if (imgArea) {
+    imgArea.innerHTML = '';
+    (x.images||[]).forEach(function(img){
+      var d = document.createElement('div');
+      d.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl)';
+      d.innerHTML = '<img src="'+img.data+'" style="width:100%;height:100%;object-fit:cover" />';
+      imgArea.appendChild(d);
+    });
+  }
+
+  // Open AI panel by default
+  var aiPanel = document.getElementById('ideaAIPanel');
+  if (aiPanel) aiPanel.classList.add('open');
+  var aiChev = document.getElementById('ideaAIChev');
+  if (aiChev) aiChev.textContent = '-';
+
+  openModal('ideaModal');
 }
 
 function toggleAI2(sec) {
@@ -2324,23 +2342,37 @@ function cdSelTone(el) {
 
 function cdUpdatePlatDot() {}
 
-function cdSave() {
-  var x = S.ideas.find(function(a) { return a.id === S.cdId; });
-  if (!x) return;
-  x.title = document.getElementById('cdTitle').value.trim();
-  x.platform = document.getElementById('cdPlat').value;
-  x.format = document.getElementById('cdFormat').value;
-  x.date = document.getElementById('cdDate').value;
-  x.notes = document.getElementById('cdNotes').value;
-  var ac = document.querySelector('.cd-stage.active');
-  if (ac) x.status = ac.dataset.s;
-  // Sync calendar if date set
+function cdSave(){
+  var x=S.ideas.find(function(a){return a.id===S.cdId;});
+  if(!x)return;
+  var getVal=function(newId,oldId){
+    var el=document.getElementById(newId)||document.getElementById(oldId);
+    return el?el.value:'';
+  };
+  x.title=getVal('ideaTitle','cdTitle').trim()||x.title;
+  x.platform=getVal('ideaPlat','cdPlat')||x.platform;
+  x.format=getVal('ideaFormat','cdFormat')||x.format;
+  x.date=getVal('ideaDate','cdDate');
+  x.time=getVal('ideaTime','cdTime');
+  x.notes=getVal('ideaNotes','cdNotes');
+  x.images=S._pendingIdeaImages||x.images||[];
+  // Status from stage buttons or select
+  var stageEl=document.querySelector('.cd-stage.active');
+  var statusEl=document.getElementById('ideaStatus');
+  if(stageEl&&stageEl.dataset.s)x.status=stageEl.dataset.s;
+  else if(statusEl)x.status=statusEl.value||x.status;
+  // Sync calendar: update if exists, add if new date, remove if date cleared
+  var calId='cal_'+x.id;
   if(x.date){
-    var calIdx=S.calEntries.findIndex(function(e){return e.id==='cal_'+x.id||e.title===x.title;});
-    if(calIdx>-1){S.calEntries[calIdx].title=x.title;S.calEntries[calIdx].date=x.date;S.calEntries[calIdx].platform=x.platform;}
-    else{S.calEntries.push({id:'cal_'+x.id,title:x.title,platform:x.platform,status:x.status,date:x.date,notes:x.notes});}
+    var idx=S.calEntries.findIndex(function(e){return e.id===calId;});
+    if(idx>-1){S.calEntries[idx].title=x.title;S.calEntries[idx].date=x.date;S.calEntries[idx].time=x.time;S.calEntries[idx].platform=x.platform;S.calEntries[idx].status=x.status;S.calEntries[idx].notes=x.notes;}
+    else{S.calEntries.push({id:calId,title:x.title,platform:x.platform,status:x.status,date:x.date,time:x.time,notes:x.notes});}
+  } else {
+    S.calEntries=S.calEntries.filter(function(e){return e.id!==calId;});
   }
-  persist(); closeModal('cardDetailModal'); renderKanban(); renderCalendar(); toast('Saved ✓');
+  S._editingIdea=false;S.cdId=null;
+  persist();closeModal('ideaModal');closeModal('cardDetailModal');
+  renderKanban();renderCalendar();toast('Card saved ✓');
 }
 
 function cdDelete() {
@@ -2349,14 +2381,13 @@ function cdDelete() {
   persist(); closeModal('cardDetailModal'); renderKanban(); toast('Deleted');
 }
 
-function cdGetBrief() {
-  var title = document.getElementById('cdTitle').value.trim();
-  var notes = document.getElementById('cdNotes').value.trim();
-  var fmt = document.getElementById('cdFormat').value;
-  var plat = document.getElementById('cdPlat').value;
-  return { title: title, notes: notes, fmt: fmt, plat: plat,
-    brief: title + (notes ? '. Notes: ' + notes : ''),
-    context: 'Format: ' + fmt + ' for ' + plat };
+function cdGetBrief(){
+  return {
+    title: (document.getElementById('ideaTitle')||document.getElementById('cdTitle')||{value:''}).value.trim(),
+    notes: (document.getElementById('ideaNotes')||document.getElementById('cdNotes')||{value:''}).value.trim(),
+    plat:  (document.getElementById('ideaPlat') ||document.getElementById('cdPlat') ||{value:'instagram'}).value,
+    format:(document.getElementById('ideaFormat')||document.getElementById('cdFormat')||{value:'Caption / Post'}).value
+  };
 }
 
 async function cdSmartBrief() {
@@ -2544,15 +2575,14 @@ function cdCopy2(type) {
   if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied'); });
 }
 
-function cdSaveDraft2(type) {
-  var txt = _cdOutputs[type] || '';
-  if (!txt) return;
-  var t = document.getElementById('cdTitle').value.trim() || 'Untitled';
-  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: txt,
-    platform: document.getElementById('cdPlat').value,
-    contentType: document.getElementById('cdFormat').value,
-    tone: type, createdAt: new Date().toISOString() });
-  persist(); toast('Draft saved');
+function cdSaveDraft2(type){
+  var txt=_cdOutputs[type]||'';if(!txt)return;
+  var titleEl=document.getElementById('ideaTitle')||document.getElementById('cdTitle');
+  var platEl=document.getElementById('ideaPlat')||document.getElementById('cdPlat');
+  var t=titleEl?titleEl.value.trim():'Untitled';
+  var p=platEl?platEl.value:'instagram';
+  S.drafts.unshift({id:Date.now().toString(),title:t.slice(0,65),content:txt,platform:p,contentType:type,tone:'Brand Voice',createdAt:new Date().toISOString()});
+  persist();toast('Draft saved ✓');
 }
 
 // Keep old cdCopy and cdSaveDraft as aliases
@@ -2717,54 +2747,56 @@ function handleIdeaImages(input) {
 
 /* CALENDAR DAY VIEW */
 var _calDayDate = '';
-function calDayClick(ds) {
-  var ideaEnts = S.ideas.filter(function(i){ return i.date===ds; }).map(function(i){ return {id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,date:i.date,time:i.time||'',notes:i.notes||'',_fromIdea:true}; });
-  var calOnly = S.calEntries.filter(function(e){ return e.date===ds && !ideaEnts.find(function(ie){ return ie.title===e.title; }); });
-  var entries = ideaEnts.concat(calOnly);
-  if (entries.length === 0) { openCalModal(ds); return; }
-  _calDayDate = ds;
-  var parts = ds.split('-');
-  var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var monNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calDayTitle').textContent = dayNames[d.getDay()] + ', ' + monNames[d.getMonth()] + ' ' + d.getDate();
-  document.getElementById('calDaySubtitle').textContent = entries.length + (entries.length !== 1 ? ' entries' : ' entry') + ' planned';
-  var container = document.getElementById('calDayEntries');
-  container.innerHTML = '';
-  entries.forEach(function(e) {
-    var card = document.createElement('div');
-    card.style.cssText = 'background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px';
-    var titleEl = document.createElement('div');
-    titleEl.style.cssText = 'font-size:13.5px;font-weight:500;color:var(--e);margin-bottom:6px';
-    titleEl.textContent = e.title || '';
-    card.appendChild(titleEl);
-    var tagsEl = document.createElement('div');
-    tagsEl.style.cssText = 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px';
-    tagsEl.innerHTML = '<span class="tag tag-' + (e.platform||'other') + '">' + cap(e.platform||'other') + '</span>' +
-      '<span class="tag tag-' + (e.status||'idea') + '">' + cap(e.status||'idea') + '</span>' +
-      (e.time ? '<span style="font-size:10.5px;color:var(--tl)">' + esc(e.time) + '</span>' : '');
-    card.appendChild(tagsEl);
-    if (e.notes) {
-      var notesEl = document.createElement('div');
-      notesEl.style.cssText = 'font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:8px';
-      notesEl.textContent = e.notes;
-      card.appendChild(notesEl);
+function calDayClick(ds){
+  var ideaEnts=S.ideas.filter(function(i){return i.date===ds;}).map(function(i){
+    return{id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,time:i.time||'',notes:i.notes||'',_fromIdea:true};
+  });
+  var taskEnts=S.tasks.filter(function(t){return t.date===ds;}).map(function(t){
+    return{id:'task_'+t.id,title:t.title,platform:'other',status:t.status,time:t.time||'',notes:t.notes||'',_fromTask:true};
+  });
+  var calOnly=S.calEntries.filter(function(e){
+    return e.date===ds&&!ideaEnts.find(function(ie){return ie.title===e.title;})&&!taskEnts.find(function(te){return te.title===e.title;});
+  });
+  var entries=ideaEnts.concat(taskEnts).concat(calOnly);
+  if(entries.length===0){openCalModal(ds);return;}
+  _calDayDate=ds;
+  var parts=ds.split('-');
+  var dObj=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+  var dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var monNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calDayTitle').textContent=dayNames[dObj.getDay()]+', '+monNames[dObj.getMonth()]+' '+dObj.getDate();
+  document.getElementById('calDaySubtitle').textContent=entries.length+(entries.length!==1?' entries':' entry')+' planned';
+  var container=document.getElementById('calDayEntries');
+  container.innerHTML='';
+  entries.forEach(function(e){
+    var card=document.createElement('div');
+    card.style.cssText='background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:box-shadow .15s';
+    card.onmouseenter=function(){card.style.boxShadow='0 3px 10px rgba(42,26,14,.12)';};
+    card.onmouseleave=function(){card.style.boxShadow='';};
+    // Type label
+    var typeLabel=e._fromTask?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:4px;display:block">Task</span>':
+      e._fromIdea?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:4px;display:block">Content Card</span>':
+      '<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:4px;display:block">Calendar Entry</span>';
+    var titleDiv=document.createElement('div');
+    titleDiv.innerHTML=typeLabel+'<div style="font-size:13.5px;font-weight:500;color:var(--e)">'+(e.title||'')+'</div>';
+    card.appendChild(titleDiv);
+    if(e.time||e.platform){
+      var meta=document.createElement('div');
+      meta.style.cssText='font-size:11px;color:var(--tl);margin-top:4px;margin-bottom:8px';
+      meta.textContent=(e.time||'')+(e.time&&e.platform?' · ':'')+(!e._fromTask?cap(e.platform||''):'');
+      card.appendChild(meta);
     }
-    var btns = document.createElement('div');
-    btns.style.cssText = 'display:flex;gap:6px';
-    var editBtn = document.createElement('button');
-    editBtn.className = 'btn btn-g';
-    editBtn.style.cssText = 'font-size:11px;padding:5px 10px';
-    editBtn.textContent = 'Edit';
-    editBtn.addEventListener('click', (function(id){ return function(){ calEditEntry(id); }; })(e.id));
-    var delBtn = document.createElement('button');
-    delBtn.className = 'btn btn-danger';
-    delBtn.style.cssText = 'font-size:11px;padding:5px 10px';
-    delBtn.textContent = 'Delete';
-    delBtn.addEventListener('click', (function(id){ return function(){ calDeleteEntry(id); }; })(e.id));
-    btns.appendChild(editBtn);
-    btns.appendChild(delBtn);
-    card.appendChild(btns);
+    var btns=document.createElement('div');
+    btns.style.cssText='display:flex;gap:6px';
+    var editBtn=document.createElement('button');
+    editBtn.className='btn btn-g';editBtn.style.cssText='font-size:11px;padding:5px 12px';
+    editBtn.textContent='Open & Edit';
+    (function(entry){editBtn.addEventListener('click',function(){calEntryOpen(entry.id,entry._fromIdea,entry._fromTask);});})(e);
+    var delBtn=document.createElement('button');
+    delBtn.className='btn btn-danger';delBtn.style.cssText='font-size:11px;padding:5px 10px';
+    delBtn.textContent='Delete';
+    (function(entry){delBtn.addEventListener('click',function(){calEntryDelete(entry.id,entry._fromIdea,entry._fromTask);});})(e);
+    btns.appendChild(editBtn);btns.appendChild(delBtn);card.appendChild(btns);
     container.appendChild(card);
   });
   openModal('calDayModal');
@@ -2777,6 +2809,41 @@ function calDeleteEntry(id) {
   S.calEntries = S.calEntries.filter(function(e) { return e.id !== id; });
   persist(); closeModal('calDayModal'); renderCalendar(); toast('Entry deleted');
 }
+
+function calEntryOpen(id,fromIdea,fromTask){
+  closeModal('calDayModal');
+  if(fromTask){
+    var realId=id.replace('task_','');
+    openTaskEditModal(realId);
+    return;
+  }
+  if(fromIdea){
+    var realId=id.replace('idea_','');
+    cdOpen(realId);
+    return;
+  }
+  // Regular cal entry
+  calEditEntry(id);
+}
+
+function calEntryDelete(id,fromIdea,fromTask){
+  if(fromTask){
+    var realId=id.replace('task_','');
+    if(!confirm('Delete this task?'))return;
+    S.tasks=S.tasks.filter(function(t){return t.id!==realId;});
+    persist();closeModal('calDayModal');renderCalendar();renderTaskKanban();toast('Task deleted');return;
+  }
+  if(fromIdea){
+    var realId=id.replace('idea_','');
+    if(!confirm('Delete this content card? This also removes it from the planner.'))return;
+    S.ideas=S.ideas.filter(function(i){return i.id!==realId;});
+    persist();closeModal('calDayModal');renderCalendar();renderKanban();toast('Content card deleted');return;
+  }
+  if(!confirm('Delete this entry?'))return;
+  S.calEntries=S.calEntries.filter(function(e){return e.id!==id;});
+  persist();closeModal('calDayModal');renderCalendar();toast('Entry deleted');
+}
+
 function calEditEntry(id) {
   var e = S.calEntries.find(function(x) { return x.id === id; });
   if (!e) return;
