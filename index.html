@@ -1050,7 +1050,7 @@ select.fi{cursor:pointer}
 <!-- Task -->
 <div class="modal-ov" id="taskModal">
   <div class="modal">
-    <div class="m-title">Add Task</div>
+    <div class="m-title" id="taskModalTitle">Add Task</div>
     <div class="m-sub">Add something to your to-do list</div>
     <div class="fl"><label class="fl-lbl">Task</label><input class="fi" id="taskTitle" placeholder="e.g. Write captions for this week" /></div>
     <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
@@ -1060,7 +1060,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="taskNotes" style="min-height:60px" placeholder="Context, links, what done looks like..."></textarea></div>
     <div style="font-size:10.5px;color:var(--tl);margin-bottom:14px">If you set a date, this task will also appear on your calendar.</div>
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" onclick="saveTask()">Add Task</button></div>
+    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button></div>
   </div>
 </div>
 
@@ -1124,6 +1124,22 @@ select.fi{cursor:pointer}
         </div>
       </div>
       <div class="cd2-right">
+        <!-- WRITE YOUR OWN — always visible at top -->
+        <div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow:hidden;flex-shrink:0;margin-bottom:0">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--e);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
+            <div style="font-size:10px;color:var(--tl)">AI tools will use this as context</div>
+          </div>
+          <div style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Write your own draft, hook, or notes here first — the AI tools below will build on it.</div>
+            <textarea id="cdOwnContent" class="ai2-input" placeholder="Start writing here... your hook, your angle, your rough draft. The AI tools below will read this and build on what you've written." style="min-height:110px;margin-bottom:8px"></textarea>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
+              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
+              <div id="cdOwnSaved" style="font-size:10.5px;color:var(--teal);opacity:0;transition:opacity .3s">Saved ✓</div>
+            </div>
+          </div>
+        </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
             <div class="ai2-section-title">&#10022; Creative Director</div>
@@ -1732,8 +1748,9 @@ function renderCalendar(){
     const es=[...ideaEnts,...taskEnts,...calOnly];
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
     const dots=es.slice(0,3).map(e=>{
-      const icon=e._fromTask?'☑ ':'';
-      return `<div class="day-row">${icon}<span style="overflow:hidden;text-overflow:ellipsis;font-size:10.5px">${esc(e.title)}</span></div>`;
+      const dotColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--b)';
+      const textColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--e)';
+      return `<div class="day-row"><span style="width:5px;height:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:3px"></span><span style="overflow:hidden;text-overflow:ellipsis;font-size:10.5px;color:${textColor}">${esc(e.title)}</span></div>`;
     }).join('');
     const more=es.length>3?`<div class="day-row" style="color:var(--tl);font-size:10px">+${es.length-3} more</div>`:'';
     h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')" style="cursor:pointer"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
@@ -1942,7 +1959,7 @@ function saveCalEntry(){
   toast('Entry saved ✓');
 }
 function openIdeaModal(status){
-  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';S._pendingIdeaImages=[];
+  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';S._pendingIdeaImages=[];
   // Clear all fields
   document.getElementById('cdTitle').value='';
   document.getElementById('cdPlat').value='instagram';
@@ -2002,6 +2019,8 @@ function openTaskModal(status){
   var td=document.getElementById('taskDate');if(td)td.value='';
   var tt=document.getElementById('taskTime');if(tt)tt.value='';
   var tn=document.getElementById('taskNotes');if(tn)tn.value='';
+  var btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Add Task';
+  var mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Add Task';
   openModal('taskModal');
 }
 function saveTask(){
@@ -2365,7 +2384,25 @@ function cdDelete() {
 
 function cdGetBrief(){
   var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';}
-  return{title:g('cdTitle'),notes:g('cdNotes'),plat:g('cdPlat')||'instagram',format:g('cdFormat')||'Caption / Post'};
+  var own=g('cdOwnContent');
+  var notes=g('cdNotes');
+  var combined=own&&notes?notes+'\n\n---\nMy own draft / notes:\n'+own:own||notes;
+  var fullBrief=(g('cdTitle')+(combined?'\n'+combined:''));
+  return{title:g('cdTitle'),notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
+}
+
+function cdCopyOwn(){
+  var el=document.getElementById('cdOwnContent');
+  if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
+}
+function cdSaveOwnDraft(){
+  var el=document.getElementById('cdOwnContent');
+  if(!el||!el.value.trim()){toast('Nothing to save yet');return;}
+  var b=cdGetBrief();
+  var draft={id:Date.now().toString(),title:b.title||'Untitled draft',content:el.value.trim(),platform:b.plat,format:b.format,createdAt:new Date().toISOString()};
+  S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
+  var saved=document.getElementById('cdOwnSaved');if(saved){saved.style.opacity='1';setTimeout(()=>saved.style.opacity='0',2000);}
+  toast('Draft saved ✓');
 }
 
 async function cdSmartBrief() {
@@ -2395,7 +2432,7 @@ async function cdSmartBrief() {
 
 async function cdGen2(type) {
   var b = cdGetBrief();
-  if (!b.title && !b.notes) { toast('Add a title or brief first'); return; }
+  if (!b.title && !b.notes && !b.ownContent) { toast('Add a title, brief, or write something first'); return; }
   var load = document.getElementById('cd-load-'+type);
   var out = document.getElementById('cd-out-'+type);
   var acts = document.getElementById('cd-acts-'+type);
@@ -2748,13 +2785,14 @@ function calDayClick(ds){
   container.innerHTML='';
   entries.forEach(function(e){
     var card=document.createElement('div');
-    card.style.cssText='background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:box-shadow .15s';
+    var borderColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--b)';
+    card.style.cssText='background:var(--p);border:1px solid var(--bl);border-left:3px solid '+borderColor+';border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:box-shadow .15s';
     card.onmouseenter=function(){card.style.boxShadow='0 3px 10px rgba(42,26,14,.12)';};
     card.onmouseleave=function(){card.style.boxShadow='';};
     // Type label
-    var typeLabel=e._fromTask?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:4px;display:block">Task</span>':
-      e._fromIdea?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:4px;display:block">Content Card</span>':
-      '<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:4px;display:block">Calendar Entry</span>';
+    var typeLabel=e._fromTask?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:4px;display:block">☑ Task</span>':
+      e._fromIdea?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:4px;display:block">✦ Content Card</span>':
+      '<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:4px;display:block">📅 Calendar Entry</span>';
     var titleDiv=document.createElement('div');
     titleDiv.innerHTML=typeLabel+'<div style="font-size:13.5px;font-weight:500;color:var(--e)">'+(e.title||'')+'</div>';
     card.appendChild(titleDiv);
