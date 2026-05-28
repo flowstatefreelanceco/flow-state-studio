@@ -1090,7 +1090,7 @@ select.fi{cursor:pointer}
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn btn-danger" style="font-size:12px;padding:6px 12px" onclick="cdDelete()">Delete</button>
         <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('cardDetailModal')">Close</button>
-        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSave()">Save</button>
+        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd()">Save</button>
       </div>
     </div>
     <div class="cd2-wrap">
@@ -1115,7 +1115,10 @@ select.fi{cursor:pointer}
             </select>
           </div>
         </div>
-        <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
+          <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><input class="fi" type="time" id="cdTime" /></div>
+        </div>
         <div class="fl"><label class="fl-lbl">Notes / Brief</label>
           <textarea class="fi" id="cdNotes" style="min-height:160px" placeholder="Hook idea, key points, angle, CTA..."></textarea>
         </div>
@@ -1939,45 +1942,45 @@ function saveCalEntry(){
   toast('Entry saved ✓');
 }
 function openIdeaModal(status){
-  S._editingIdea=false;S.cdId=null;
-  S.ideaAIOut='';S._pendingIdeaImages=[];
-  var op=document.getElementById('ideaAIOut');if(op){op.textContent='';op.classList.remove('show');}
-  var oa=document.getElementById('ideaAIActs');if(oa)oa.classList.remove('show');
-  var ap=document.getElementById('ideaAIPanel');if(ap)ap.classList.remove('open');
-  var ch=document.getElementById('ideaAIChev');if(ch)ch.textContent='+';
-  var rt=document.getElementById('ideaRpText');if(rt)rt.value='';
-  var ro=document.getElementById('ideaRpOrigPlat');if(ro)ro.value='Instagram';
-  var id=document.getElementById('ideaDate');if(id)id.value='';
-  var it=document.getElementById('ideaTime');if(it)it.value='';
-  var ia=document.getElementById('ideaImgArea');if(ia)ia.innerHTML='';
-  document.getElementById('ideaTitle').value='';
-  document.getElementById('ideaPlat').value='instagram';
-  document.getElementById('ideaFormat').value='Caption / Post';
-  document.getElementById('ideaNotes').value='';
-  openModal('ideaModal');
-  document.getElementById('ideaModal')._defaultStatus=status||'idea';
+  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';S._pendingIdeaImages=[];
+  // Clear all fields
+  document.getElementById('cdTitle').value='';
+  document.getElementById('cdPlat').value='instagram';
+  document.getElementById('cdFormat').value='Caption / Post';
+  document.getElementById('cdDate').value='';
+  var ct=document.getElementById('cdTime');if(ct)ct.value='';
+  document.getElementById('cdNotes').value='';
+  // Set stage
+  var defStatus=status||'idea';
+  document.querySelectorAll('.cd-stage').forEach(function(el){el.classList.toggle('active',el.dataset.s===defStatus);});
+  // Reset AI sections
+  ['smartBrief','generate','hooks','variations','series','repurpose'].forEach(function(sec){
+    var body=document.getElementById('ai2-'+sec+'-body');if(body)body.classList.remove('open');
+    var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='+';
+    var out=document.getElementById('cd-out-'+sec);if(out){out.textContent='';out.classList.remove('show');}
+    var acts=document.getElementById('cd-acts-'+sec);if(acts)acts.classList.remove('show');
+  });
+  var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
+  // Open SmartBrief by default
+  var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
+  openModal('cardDetailModal');
 }
 function saveIdea(){
-  // If editing an existing card, delegate to cdSave
-  if(S._editingIdea && S.cdId){ cdSave(); return; }
-  // New idea
-  const title=document.getElementById('ideaTitle').value.trim();
+  var title=document.getElementById('cdTitle').value.trim();
   if(!title){toast('Please enter an idea');return;}
-  const date=document.getElementById('ideaDate')?document.getElementById('ideaDate').value:'';
-  const time=document.getElementById('ideaTime')?document.getElementById('ideaTime').value:'';
-  const platform=document.getElementById('ideaPlat').value;
-  const format=document.getElementById('ideaFormat').value;
-  const notes=document.getElementById('ideaNotes').value;
-  const statusEl=document.getElementById('ideaStatus');
-  const status=statusEl?statusEl.value:'idea';
-  const idea={id:Date.now().toString(),title,platform,format,notes,date,time,images:S._pendingIdeaImages||[],status};
+  var date=document.getElementById('cdDate').value;
+  var ct=document.getElementById('cdTime');var time=ct?ct.value:'';
+  var platform=document.getElementById('cdPlat').value;
+  var format=document.getElementById('cdFormat').value;
+  var notes=document.getElementById('cdNotes').value;
+  var stageEl=document.querySelector('.cd-stage.active');
+  var status=stageEl?stageEl.dataset.s:'idea';
+  var idea={id:Date.now().toString(),title,platform,format,notes,date,time,images:S._pendingIdeaImages||[],status};
   S.ideas.push(idea);
-  if(date){
-    const existing=S.calEntries.find(e=>e.title===title&&e.date===date);
-    if(!existing){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
-  }
+  if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
-  persist();closeModal('ideaModal');renderKanban();renderCalendar();
+  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();
   toast(date?'Added to planner + calendar ✓':'Idea added ✓');
 }
 function openTaskEditModal(id){
@@ -2261,63 +2264,44 @@ var _cdSelTone = 'warm';
 var _cdHookSel = '';
 var _cdOutputs = {};
 
-function cdOpen(id) {
-  var x = S.ideas.find(function(a) { return a.id === id; });
-  if (!x) return;
+function cdOpen(id){
+  var x=S.ideas.find(function(a){return a.id===id;});
+  if(!x)return;
+  S.cdId=id;S.cdOut='';_cdOutputs={};_cdHookSel='';
+  S._pendingIdeaImages=x.images||[];
 
-  // Populate the full-screen ideaModal fields
-  S.cdId = id;
-  S._editingIdea = true;
-  S.cdOut = ''; _cdOutputs = {}; _cdHookSel = '';
-  S._pendingIdeaImages = x.images || [];
+  // Populate all fields
+  document.getElementById('cdTitle').value=x.title||'';
+  document.getElementById('cdPlat').value=x.platform||'instagram';
+  document.getElementById('cdFormat').value=x.format||'Caption / Post';
+  document.getElementById('cdDate').value=x.date||'';
+  var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
+  document.getElementById('cdNotes').value=x.notes||'';
 
-  document.getElementById('ideaTitle').value = x.title || '';
-  document.getElementById('ideaPlat').value = x.platform || 'instagram';
-  document.getElementById('ideaFormat').value = x.format || 'Caption / Post';
-  document.getElementById('ideaDate').value = x.date || '';
-  document.getElementById('ideaTime').value = x.time || '';
-  document.getElementById('ideaNotes').value = x.notes || '';
+  // Set stage buttons
+  document.querySelectorAll('.cd-stage').forEach(function(el){
+    el.classList.toggle('active',el.dataset.s===x.status);
+  });
 
-  var statusEl = document.getElementById('ideaStatus');
-  if (statusEl) statusEl.value = x.status || 'idea';
+  // Reset all AI sections
+  ['smartBrief','generate','hooks','variations','series','repurpose'].forEach(function(sec){
+    var body=document.getElementById('ai2-'+sec+'-body');if(body)body.classList.remove('open');
+    var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='+';
+    var out=document.getElementById('cd-out-'+sec);if(out){out.textContent='';out.classList.remove('show');}
+    var acts=document.getElementById('cd-acts-'+sec);if(acts)acts.classList.remove('show');
+    var load=document.getElementById('cd-load-'+sec);if(load)load.classList.remove('show');
+  });
+  var hookList=document.getElementById('cd-hook-list');if(hookList){hookList.innerHTML='';hookList.classList.remove('show');}
+  var buildArea=document.getElementById('cd-hook-build-area');if(buildArea)buildArea.style.display='none';
+  var seriesList=document.getElementById('cd-series-list');if(seriesList){seriesList.innerHTML='';seriesList.classList.remove('show');}
+  var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
 
-  // Update modal title + save button for edit mode
-  var mt = document.getElementById('ideaModalTitle');
-  if (mt) mt.textContent = 'Edit Content Card';
-  var sb = document.getElementById('ideaSaveBtn');
-  if (sb) sb.textContent = 'Save Changes';
+  // Open Smart Brief and Generate by default
+  var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
+  var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
 
-  // Reset all AI output areas
-  var aiOut = document.getElementById('ideaAIOut');
-  if (aiOut) { aiOut.textContent = ''; aiOut.classList.remove('show'); }
-  var aiActs = document.getElementById('ideaAIActs');
-  if (aiActs) aiActs.classList.remove('show');
-  var sbOut = document.getElementById('idea-smartBrief-out');
-  if (sbOut) { sbOut.textContent = ''; sbOut.classList.remove('show'); }
-  var rpText = document.getElementById('ideaRpText');
-  if (rpText) rpText.value = '';
-  var writeArea = document.getElementById('ideaWriteArea');
-  if (writeArea) writeArea.value = '';
-
-  // Clear image preview area
-  var imgArea = document.getElementById('ideaImgArea');
-  if (imgArea) {
-    imgArea.innerHTML = '';
-    (x.images||[]).forEach(function(img){
-      var d = document.createElement('div');
-      d.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl)';
-      d.innerHTML = '<img src="'+img.data+'" style="width:100%;height:100%;object-fit:cover" />';
-      imgArea.appendChild(d);
-    });
-  }
-
-  // Open AI panel by default
-  var aiPanel = document.getElementById('ideaAIPanel');
-  if (aiPanel) aiPanel.classList.add('open');
-  var aiChev = document.getElementById('ideaAIChev');
-  if (aiChev) aiChev.textContent = '-';
-
-  openModal('ideaModal');
+  openModal('cardDetailModal');
 }
 
 function toggleAI2(sec) {
@@ -2342,26 +2326,24 @@ function cdSelTone(el) {
 
 function cdUpdatePlatDot() {}
 
+
+function cdSaveOrAdd(){
+  if(S.cdId){ cdSave(); } else { saveIdea(); }
+}
 function cdSave(){
   var x=S.ideas.find(function(a){return a.id===S.cdId;});
   if(!x)return;
-  var getVal=function(newId,oldId){
-    var el=document.getElementById(newId)||document.getElementById(oldId);
-    return el?el.value:'';
-  };
-  x.title=getVal('ideaTitle','cdTitle').trim()||x.title;
-  x.platform=getVal('ideaPlat','cdPlat')||x.platform;
-  x.format=getVal('ideaFormat','cdFormat')||x.format;
-  x.date=getVal('ideaDate','cdDate');
-  x.time=getVal('ideaTime','cdTime');
-  x.notes=getVal('ideaNotes','cdNotes');
+  x.title=document.getElementById('cdTitle').value.trim()||x.title;
+  x.platform=document.getElementById('cdPlat').value||x.platform;
+  x.format=document.getElementById('cdFormat').value||x.format;
+  x.date=document.getElementById('cdDate').value;
+  var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
+  x.notes=document.getElementById('cdNotes').value;
   x.images=S._pendingIdeaImages||x.images||[];
-  // Status from stage buttons or select
+  // Status from stage buttons
   var stageEl=document.querySelector('.cd-stage.active');
-  var statusEl=document.getElementById('ideaStatus');
   if(stageEl&&stageEl.dataset.s)x.status=stageEl.dataset.s;
-  else if(statusEl)x.status=statusEl.value||x.status;
-  // Sync calendar: update if exists, add if new date, remove if date cleared
+  // Sync calendar
   var calId='cal_'+x.id;
   if(x.date){
     var idx=S.calEntries.findIndex(function(e){return e.id===calId;});
@@ -2370,8 +2352,8 @@ function cdSave(){
   } else {
     S.calEntries=S.calEntries.filter(function(e){return e.id!==calId;});
   }
-  S._editingIdea=false;S.cdId=null;
-  persist();closeModal('ideaModal');closeModal('cardDetailModal');
+  S.cdId=null;
+  persist();closeModal('cardDetailModal');
   renderKanban();renderCalendar();toast('Card saved ✓');
 }
 
