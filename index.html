@@ -201,29 +201,58 @@ select.fi{cursor:pointer}
 @keyframes lb{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-6px);opacity:1}}
 
 /* LIBRARY */
-.lib-search{position:relative;margin-bottom:14px}
-.lib-search input{width:100%;background:var(--w);border:1px solid var(--b);border-radius:var(--rad);padding:10px 14px 10px 38px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none}
+.lib-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.lib-search{position:relative;flex:1}
+.lib-search input{width:100%;background:var(--w);border:1.5px solid var(--b);border-radius:var(--rad);padding:10px 14px 10px 38px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;transition:border-color .15s}
 .lib-search input:focus{border-color:var(--r)}
 .lib-search .s-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tl);font-size:14px}
+.lib-view-toggle{display:flex;border:1.5px solid var(--b);border-radius:var(--rsm);overflow:hidden;flex-shrink:0}
+.lib-view-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--w);border:none;cursor:pointer;color:var(--tl);transition:all .15s;font-size:14px}
+.lib-view-btn:hover{background:var(--p);color:var(--e)}
+.lib-view-btn.active{background:var(--e);color:var(--p)}
 .lib-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;align-items:center}
-.lib-filter-chip{padding:5px 12px;border-radius:100px;border:1px solid var(--b);background:var(--w);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fb);user-select:none}
+.lib-filter-chip{padding:6px 14px;border-radius:100px;border:1.5px solid var(--b);background:var(--w);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fh);font-weight:500;user-select:none;letter-spacing:.01em}
 .lib-filter-chip:hover{border-color:var(--r);color:var(--r)}
 .lib-filter-chip.active{background:var(--e);border-color:var(--e);color:var(--p)}
 .lib-filter-chip.bm-chip{border-color:var(--teal);color:var(--teal)}
 .lib-filter-chip.bm-chip.active{background:var(--teal);border-color:var(--teal);color:white}
 .lib-count{font-size:11px;color:var(--tl);margin-bottom:14px}
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
-.lib-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;box-shadow:0 1px 3px var(--sh);transition:box-shadow .15s}
-.lib-card:hover{box-shadow:0 4px 14px var(--shm)}
-.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
-.lib-cat-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+
+/* GRID VIEW */
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.lib-card{background:var(--w);border-radius:12px;overflow:hidden;transition:transform .18s,box-shadow .18s;position:relative;
+  box-shadow:0 2px 0 var(--b),0 1px 4px var(--sh);
+  /* hand-drawn feel: slightly irregular border via outline trick */
+  outline:1.5px solid transparent}
+.lib-card:hover{transform:translateY(-2px);box-shadow:0 4px 0 var(--b),0 6px 20px var(--shm)}
+.lib-card-strip{height:6px;width:100%;flex-shrink:0}
+.lib-card-inner{padding:14px 16px 0;border-left:4px solid transparent}
+.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.lib-cat-label{font-family:var(--fh);font-size:13px;font-weight:600;letter-spacing:.02em;line-height:1.2}
 .lib-fav{background:none;border:none;cursor:pointer;color:var(--b);transition:all .18s;flex-shrink:0;line-height:1;padding:2px}
 .lib-fav:hover{color:var(--teal)}.lib-fav.faved{color:var(--teal)}.lib-fav.faved svg{fill:var(--teal)}
-.lib-title{font-family:var(--fd);font-size:16px;font-weight:500;color:var(--e);margin-bottom:6px;line-height:1.3}
-.lib-text{font-size:12.5px;color:var(--t);line-height:1.65;margin-bottom:14px}
-.lib-divider{height:1px;background:var(--bl);margin:0 -2px 12px}
-.lib-copy-btn{width:100%;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px;font-family:var(--fb);font-size:12px;color:var(--t);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.lib-text{font-size:13px;color:var(--e);line-height:1.7;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.lib-title-label{font-size:10.5px;font-weight:600;color:var(--t);margin-bottom:4px;letter-spacing:.02em}
+.lib-card-foot{padding:0 16px 12px;display:flex;gap:6px}
+.lib-copy-btn{flex:1;background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm);padding:8px;font-family:var(--fb);font-size:12px;color:var(--t);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
 .lib-copy-btn:hover{background:var(--bl);color:var(--e)}
+
+/* LIST VIEW */
+.lib-list{display:flex;flex-direction:column;gap:8px}
+.lib-list-item{background:var(--w);border-radius:10px;overflow:hidden;display:flex;align-items:stretch;
+  box-shadow:0 1px 0 var(--b),0 1px 3px var(--sh);transition:box-shadow .15s}
+.lib-list-item:hover{box-shadow:0 2px 0 var(--b),0 3px 10px var(--shm)}
+.lib-list-stripe{width:5px;flex-shrink:0}
+.lib-list-body{flex:1;padding:12px 14px;min-width:0}
+.lib-list-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.lib-list-cat{font-family:var(--fh);font-size:12px;font-weight:600}
+.lib-list-title{font-size:11px;font-weight:600;color:var(--t);margin-left:auto;white-space:nowrap}
+.lib-list-text{font-size:13px;color:var(--e);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lib-list-actions{display:flex;flex-direction:column;justify-content:center;padding:8px 10px;gap:6px;border-left:1px solid var(--bl);flex-shrink:0}
+.lib-list-btn{background:none;border:none;cursor:pointer;color:var(--tl);padding:4px;transition:color .15s;font-size:13px;display:flex;align-items:center;justify-content:center}
+.lib-list-btn:hover{color:var(--r)}
+.lib-list-fav{background:none;border:none;cursor:pointer;color:var(--b);padding:4px;transition:color .15s;display:flex;align-items:center;justify-content:center}
+.lib-list-fav:hover{color:var(--teal)}.lib-list-fav.faved{color:var(--teal)}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 17px;border-radius:var(--rsm);font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid transparent;white-space:nowrap;letter-spacing:.02em}
@@ -828,10 +857,20 @@ select.fi{cursor:pointer}
   <div id="view-hooks" class="view">
     <div class="main-hdr"><div><h1>Viral Hooks</h1><div class="sub">Scroll-stopping opening lines for your content</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('hooks')">+ Add Hook</button></div></div>
     <div class="main-body">
-      <div class="lib-search"><span class="s-ico">⌕</span><input id="hooksSearch" placeholder="Search hooks..." oninput="renderLib('hooks')" /></div>
+      <div class="lib-toolbar">
+        <div class="lib-search"><span class="s-ico">⌕</span><input id="hooksSearch" placeholder="Search hooks..." oninput="renderLib('hooks')" /></div>
+        <div class="lib-view-toggle">
+          <button class="lib-view-btn active" id="hooksViewGrid" onclick="setLibView('hooks','grid')" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+          </button>
+          <button class="lib-view-btn" id="hooksViewList" onclick="setLibView('hooks','list')" title="List view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="1" y1="3" x2="13" y2="3"/><line x1="1" y1="7" x2="13" y2="7"/><line x1="1" y1="11" x2="13" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
       <div class="lib-filters" id="hooksFilters"></div>
       <div class="lib-count" id="hooksCount"></div>
-      <div class="lib-grid" id="hooksGrid"></div>
+      <div id="hooksGrid"></div>
     </div>
   </div>
 
@@ -839,10 +878,20 @@ select.fi{cursor:pointer}
   <div id="view-prompts" class="view">
     <div class="main-hdr"><div><h1>Prompt Bank</h1><div class="sub">Ready-to-use AI writing prompts for your niche</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('prompts')">+ Add Prompt</button></div></div>
     <div class="main-body">
-      <div class="lib-search"><span class="s-ico">⌕</span><input id="promptsSearch" placeholder="Search prompts..." oninput="renderLib('prompts')" /></div>
+      <div class="lib-toolbar">
+        <div class="lib-search"><span class="s-ico">⌕</span><input id="promptsSearch" placeholder="Search prompts..." oninput="renderLib('prompts')" /></div>
+        <div class="lib-view-toggle">
+          <button class="lib-view-btn active" id="promptsViewGrid" onclick="setLibView('prompts','grid')" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+          </button>
+          <button class="lib-view-btn" id="promptsViewList" onclick="setLibView('prompts','list')" title="List view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="1" y1="3" x2="13" y2="3"/><line x1="1" y1="7" x2="13" y2="7"/><line x1="1" y1="11" x2="13" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
       <div class="lib-filters" id="promptsFilters"></div>
       <div class="lib-count" id="promptsCount"></div>
-      <div class="lib-grid" id="promptsGrid"></div>
+      <div id="promptsGrid"></div>
     </div>
   </div>
 
@@ -850,10 +899,20 @@ select.fi{cursor:pointer}
   <div id="view-ctas" class="view">
     <div class="main-hdr"><div><h1>CTA Ideas</h1><div class="sub">Ready-to-use calls to action, organized by goal</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('ctas')">+ Add CTA</button></div></div>
     <div class="main-body">
-      <div class="lib-search"><span class="s-ico">⌕</span><input id="ctasSearch" placeholder="Search CTAs..." oninput="renderLib('ctas')" /></div>
+      <div class="lib-toolbar">
+        <div class="lib-search"><span class="s-ico">⌕</span><input id="ctasSearch" placeholder="Search CTAs..." oninput="renderLib('ctas')" /></div>
+        <div class="lib-view-toggle">
+          <button class="lib-view-btn active" id="ctasViewGrid" onclick="setLibView('ctas','grid')" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+          </button>
+          <button class="lib-view-btn" id="ctasViewList" onclick="setLibView('ctas','list')" title="List view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="1" y1="3" x2="13" y2="3"/><line x1="1" y1="7" x2="13" y2="7"/><line x1="1" y1="11" x2="13" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
       <div class="lib-filters" id="ctasFilters"></div>
       <div class="lib-count" id="ctasCount"></div>
-      <div class="lib-grid" id="ctasGrid"></div>
+      <div id="ctasGrid"></div>
     </div>
   </div>
 
@@ -861,10 +920,20 @@ select.fi{cursor:pointer}
   <div id="view-stories" class="view">
     <div class="main-hdr"><div><h1>Story Ideas</h1><div class="sub">Ready-to-use Instagram Story prompts by goal</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('stories')">+ Add Story Idea</button></div></div>
     <div class="main-body">
-      <div class="lib-search"><span class="s-ico">⌕</span><input id="storiesSearch" placeholder="Search story ideas..." oninput="renderLib('stories')" /></div>
+      <div class="lib-toolbar">
+        <div class="lib-search"><span class="s-ico">⌕</span><input id="storiesSearch" placeholder="Search story ideas..." oninput="renderLib('stories')" /></div>
+        <div class="lib-view-toggle">
+          <button class="lib-view-btn active" id="storiesViewGrid" onclick="setLibView('stories','grid')" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+          </button>
+          <button class="lib-view-btn" id="storiesViewList" onclick="setLibView('stories','list')" title="List view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="1" y1="3" x2="13" y2="3"/><line x1="1" y1="7" x2="13" y2="7"/><line x1="1" y1="11" x2="13" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
       <div class="lib-filters" id="storiesFilters"></div>
       <div class="lib-count" id="storiesCount"></div>
-      <div class="lib-grid" id="storiesGrid"></div>
+      <div id="storiesGrid"></div>
     </div>
   </div>
 
@@ -1774,36 +1843,47 @@ function renderCalendar(){
 function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
 
 /* ═══════════════════ LIBRARY ═══════════════════ */
-const LIB_CAT_COLORS={
-  'Educational':'background:var(--tealp);color:#1E5C5C',
-  'Engagement':'background:var(--rp);color:#8C3518',
-  'Storytelling':'background:#E4D4EE;color:#3E1A5C',
-  'Comparison':'background:var(--gp);color:#6A4E18',
-  'Curiosity':'background:var(--sagep);color:#3A5228',
-  'Share & Tag':'background:var(--rp);color:#8C3518',
-  'Lead Generation':'background:var(--sagep);color:#3A5228',
-  'Link & Click':'background:#D4D8EE;color:#1A2860',
-  'Follow & Subscribe':'background:#E4D4EE;color:#3E1A5C',
-  'Direct Sales':'background:var(--gp);color:#6A4E18',
-  'Connect & Inspire':'background:var(--rp);color:#8C3518',
-  'Social Proof':'background:var(--sagep);color:#3A5228',
-  'Caption Writing':'background:var(--rp);color:#8C3518',
-  'Script Rewrite':'background:var(--gp);color:#6A4E18',
-  'Strategy':'background:#D4D8EE;color:#1A2860',
-  'Sales Copy':'background:var(--sagep);color:#3A5228',
-  'default':'background:var(--bl);color:var(--el)'
+// cat → { strip: hex, border: hex, text: hex, bg: hex }
+const LIB_CAT_MAP={
+  'Educational':    {strip:'#3A8C8C',border:'#3A8C8C',text:'#1E5C5C',bg:'#D0E8E8'},
+  'Engagement':     {strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
+  'Storytelling':   {strip:'#8A5AAB',border:'#8A5AAB',text:'#3E1A5C',bg:'#EAD8F5'},
+  'Comparison':     {strip:'#C47A3A',border:'#C47A3A',text:'#6A4E18',bg:'#F2E4CC'},
+  'Curiosity':      {strip:'#5A6E50',border:'#5A6E50',text:'#3A5228',bg:'#DCE8D4'},
+  'Share & Tag':    {strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
+  'Lead Generation':{strip:'#5A6E50',border:'#5A6E50',text:'#3A5228',bg:'#DCE8D4'},
+  'Link & Click':   {strip:'#7A9EC2',border:'#7A9EC2',text:'#1A2860',bg:'#D8E6F2'},
+  'Follow & Subscribe':{strip:'#8A5AAB',border:'#8A5AAB',text:'#3E1A5C',bg:'#EAD8F5'},
+  'Direct Sales':   {strip:'#C47A3A',border:'#C47A3A',text:'#6A4E18',bg:'#F2E4CC'},
+  'Connect & Inspire':{strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
+  'Social Proof':   {strip:'#5A6E50',border:'#5A6E50',text:'#3A5228',bg:'#DCE8D4'},
+  'Caption Writing':{strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
+  'Script Rewrite': {strip:'#C47A3A',border:'#C47A3A',text:'#6A4E18',bg:'#F2E4CC'},
+  'Strategy':       {strip:'#7A9EC2',border:'#7A9EC2',text:'#1A2860',bg:'#D8E6F2'},
+  'Sales Copy':     {strip:'#5A6E50',border:'#5A6E50',text:'#3A5228',bg:'#DCE8D4'},
+  'Generated':      {strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
+  'default':        {strip:'#D8CABA',border:'#D8CABA',text:'#7A6248',bg:'#EDE5D5'}
 };
-function catStyle(cat){return LIB_CAT_COLORS[cat]||LIB_CAT_COLORS.default;}
+function catInfo(cat){return LIB_CAT_MAP[cat]||LIB_CAT_MAP.default;}
+function catStyle(cat){const c=catInfo(cat);return \`background:\${c.bg};color:\${c.text}\`;}
+const _libView={hooks:'grid',ctas:'grid',stories:'grid',prompts:'grid'};
 function renderAllLibs(){['hooks','ctas','stories','prompts'].forEach(k=>renderLib(k,true));}
+function setLibView(section,view){_libView[section]=view;renderLib(section);}
 function renderLib(section,silent){
   const data=S[section];
   const query=(document.getElementById(section+'Search')?.value||'').toLowerCase();
   const filter=S.libFilters[section]||'All';
+  const view=_libView[section]||'grid';
   const hasFavs=S.favs&&S.favs[section]&&S.favs[section].length>0;
   const cats=['All',...(hasFavs?['Bookmarked']:[]),...[...new Set(data.map(x=>x.cat))].sort()];
   // Filters
   const fEl=document.getElementById(section+'Filters');
   if(fEl)fEl.innerHTML=cats.map(c=>{const bm=c==='Bookmarked';return`<span class="lib-filter-chip${filter===c?' active':''}${bm?' bm-chip':''}" onclick="setLibFilter('${section}','${c}')">${c}</span>`;}).join('');
+  // Update toggle button states
+  const gBtn=document.getElementById(section+'ViewGrid');
+  const lBtn=document.getElementById(section+'ViewList');
+  if(gBtn)gBtn.classList.toggle('active',view==='grid');
+  if(lBtn)lBtn.classList.toggle('active',view==='list');
   // Filter + search
   const filtered=data.filter(x=>{
     var favList=S.favs&&S.favs[section]?S.favs[section]:[];
@@ -1813,24 +1893,57 @@ function renderLib(section,silent){
     return matchCat&&matchQ;
   });
   const cnt=document.getElementById(section+'Count');
-  if(cnt)cnt.textContent=`Showing ${filtered.length} of ${data.length}`;
+  if(cnt)cnt.textContent=`${filtered.length} of ${data.length}`;
   const grid=document.getElementById(section+'Grid');
   if(!grid)return;
-  if(!filtered.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>No results</h3><p>Try a different filter or search term.</p></div>';return;}
+  if(!filtered.length){
+    grid.className='';
+    grid.innerHTML='<div class="empty-state"><h3>No results</h3><p>Try a different filter or search term.</p></div>';
+    return;
+  }
   const isFav=(id)=>(S.favs[section]||[]).includes(id);
-  grid.innerHTML=filtered.map(x=>`<div class="lib-card">
-    <div class="lib-card-top">
-      <span class="lib-cat-tag" style="${catStyle(x.cat)}">${esc(x.cat)}</span>
-      <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="${isFav(x.id)?'Remove bookmark':'Bookmark'}"><svg width="14" height="14" viewBox="0 0 14 14" fill="${isFav(x.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 1.5h9a1 1 0 011 1v10l-5-3-5 3v-10a1 1 0 011-1z"/></svg></button>
-    </div>
-    ${x.title?`<div style="font-size:11px;font-weight:600;color:var(--e);margin-bottom:5px;letter-spacing:.01em">${esc(x.title)}</div>`:''}
-    <div class="lib-text" style="display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">${esc(x.text)}</div>
-    <div class="lib-divider"></div>
-    <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')">
-      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1"/></svg>
-      Copy
-    </button>
-  </div>`).join('');
+  const favSvg=(id)=>`<svg width="14" height="14" viewBox="0 0 14 14" fill="${isFav(id)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 1.5h9a1 1 0 011 1v10l-5-3-5 3v-10a1 1 0 011-1z"/></svg>`;
+  const copySvg=`<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1"/></svg>`;
+
+  if(view==='grid'){
+    grid.className='lib-grid';
+    grid.innerHTML=filtered.map(x=>{
+      const c=catInfo(x.cat);
+      return `<div class="lib-card" style="border-left:4px solid ${c.border}">
+        <div class="lib-card-strip" style="background:${c.strip}"></div>
+        <div class="lib-card-inner">
+          <div class="lib-card-top">
+            <span class="lib-cat-label" style="color:${c.text}">${esc(x.cat)}</span>
+            <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="Bookmark" style="color:${isFav(x.id)?'var(--teal)':'var(--b)'}">${favSvg(x.id)}</button>
+          </div>
+          ${x.title?`<div class="lib-title-label">${esc(x.title)}</div>`:''}
+          <div class="lib-text">${esc(x.text)}</div>
+        </div>
+        <div class="lib-card-foot">
+          <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')">${copySvg} Copy</button>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    grid.className='lib-list';
+    grid.innerHTML=filtered.map(x=>{
+      const c=catInfo(x.cat);
+      return `<div class="lib-list-item">
+        <div class="lib-list-stripe" style="background:${c.strip}"></div>
+        <div class="lib-list-body">
+          <div class="lib-list-top">
+            <span class="lib-list-cat" style="color:${c.text}">${esc(x.cat)}</span>
+            ${x.title?`<span class="lib-list-title">${esc(x.title)}</span>`:''}
+          </div>
+          <div class="lib-list-text">${esc(x.text)}</div>
+        </div>
+        <div class="lib-list-actions">
+          <button class="lib-list-btn" onclick="copyLib('${x.id}','${section}')" title="Copy">${copySvg}</button>
+          <button class="lib-list-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="Bookmark" style="color:${isFav(x.id)?'var(--teal)':'var(--b)'}">${favSvg(x.id)}</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 function setLibFilter(section,cat){S.libFilters[section]=cat;renderLib(section);}
 function toggleFav(section,id){
