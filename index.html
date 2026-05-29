@@ -299,9 +299,9 @@ select.fi{cursor:pointer}
 .bd-right{display:flex;flex-direction:column;overflow:hidden}
 .bd-right-hdr{padding:14px 20px 12px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
 .bd-right-hdr h3{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--e)}
-.notes-list{flex:1;overflow-y:auto;padding:14px 20px}
-.note-card{background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
-.note-card:hover{box-shadow:0 3px 12px var(--sh)}
+.notes-list{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:0}
+.note-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s;box-shadow:0 1px 3px var(--sh)}
+.note-card:hover{box-shadow:0 4px 14px var(--shm)}
 .note-card-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .note-title-in{font-family:var(--fb);font-size:13px;font-weight:500;color:var(--e);border:none;background:transparent;outline:none;flex:1;padding:0}
 .note-title-in::placeholder{color:var(--tl)}
@@ -1211,6 +1211,7 @@ select.fi{cursor:pointer}
             <div class="ai2-out-acts" id="cd-acts-hooks">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px;border-color:var(--teal);color:var(--teal)" onclick="cdSaveHookToLib()">+ Hook Library</button>
             </div>
           </div>
         </div>
@@ -2002,9 +2003,11 @@ function saveIdea(){
   var platform=document.getElementById('cdPlat').value;
   var format=document.getElementById('cdFormat').value;
   var notes=document.getElementById('cdNotes').value;
+  var ownEl=document.getElementById('cdOwnContent');
+  var ownContent=ownEl?ownEl.value:'';
   var stageEl=document.querySelector('.cd-stage.active');
   var status=stageEl?stageEl.dataset.s:'idea';
-  var idea={id:Date.now().toString(),title,platform,format,notes,date,time,images:S._pendingIdeaImages||[],status};
+  var idea={id:Date.now().toString(),title,platform,format,notes,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||''};
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
@@ -2198,14 +2201,16 @@ function renderNotes(nbId){
 }
 function noteCardHTML(n){
   const dt=new Date(n.updatedAt||n.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const isOpen=_openNotes.has(n.id);
   return`<div class="note-card" id="nc-${n.id}">
-    <div class="note-card-hdr" onclick="toggleNote('${n.id}')">
+    <div class="note-card-hdr" onclick="toggleNote('${n.id}')" style="cursor:pointer">
       <input class="note-title-in" value="${esc(n.title||'')}" placeholder="Untitled note..." onclick="event.stopPropagation()"
         onchange="updateNoteTitle('${n.id}',this.value)" />
       <span class="note-meta">${dt}</span>
+      <span style="font-size:11px;color:var(--tl);flex-shrink:0;margin-left:2px">${isOpen?'▲':'▼'}</span>
       <button class="note-del" onclick="event.stopPropagation();deleteNote('${n.id}')" title="Delete note">✕</button>
     </div>
-    <div class="note-body" id="nb-${n.id}">
+    <div class="note-body${isOpen?' open':''}" id="nb-${n.id}">
       <textarea class="note-ta" placeholder="Start writing... no rules here. Brain dump freely."
         oninput="updateNoteContent('${n.id}',this.value);this.style.height='auto';this.style.height=Math.max(120,this.scrollHeight)+'px'">${esc(n.content||'')}</textarea>
       <div style="display:flex;justify-content:flex-end;padding:8px 0 2px">
@@ -2223,10 +2228,13 @@ function saveNoteExplicit(id){
 function toggleNote(id){
   const body=document.getElementById('nb-'+id);
   if(!body)return;
-  body.classList.toggle('open');
-  if(body.classList.contains('open')){
+  const isOpen=body.classList.toggle('open');
+  if(isOpen){
+    _openNotes.add(id);
     const ta=body.querySelector('textarea');
     if(ta){ta.style.height='auto';ta.style.height=Math.max(120,ta.scrollHeight)+'px';setTimeout(()=>ta.focus(),50);}
+  } else {
+    _openNotes.delete(id);
   }
 }
 function newNotebook(){
@@ -2254,11 +2262,11 @@ function deleteNotebook(id){
 function newNote(nbId){
   const note={id:'n'+Date.now(),notebookId:nbId,title:'',content:'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
   S.notes.unshift(note);
+  _openNotes.add(note.id);
   persist();renderNotes(nbId);
-  // auto-open and focus
   setTimeout(()=>{
-    const body=document.getElementById('nb-'+note.id);
-    if(body){body.classList.add('open');const ta=body.querySelector('textarea');if(ta)ta.focus();}
+    const ta=document.querySelector('#nb-'+note.id+' .note-ta');
+    if(ta){ta.style.height='auto';ta.style.height=Math.max(120,ta.scrollHeight)+'px';ta.focus();}
   },60);
 }
 function updateNoteTitle(id,val){
@@ -2293,6 +2301,7 @@ function toggleGuideSec(sec){
 var _cdSelTone = 'warm';
 var _cdHookSel = '';
 var _cdOutputs = {};
+var _openNotes = new Set();
 
 function cdOpen(id){
   var x=S.ideas.find(function(a){return a.id===id;});
@@ -2430,6 +2439,19 @@ function cdGetBrief(){
   return{title:g('cdTitle'),notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
 }
 
+function cdSaveHookToLib(){
+  // Save the built-from-hook output (or all hooks raw) to hooks library
+  var txt=_cdOutputs['hooks']||'';
+  if(!txt){toast('No hook output to save');return;}
+  var b=cdGetBrief();
+  var item={id:'u'+Date.now(),cat:'Generated',text:txt.slice(0,300)};
+  S.hooks.unshift(item);persist();toast('Saved to Hooks Library ✓');
+}
+function cdSaveSingleHook(hookText){
+  if(!hookText){return;}
+  var item={id:'u'+Date.now(),cat:'Generated',text:hookText};
+  S.hooks.unshift(item);persist();toast('Hook saved to library ✓');
+}
 function studioOwnCopy(){
   var el=document.getElementById('studioOwnTA');
   if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
@@ -2538,7 +2560,7 @@ function cdRenderHooks(text) {
     if (!clean) return;
     var item = document.createElement('div');
     item.className = 'ai2-hook-item';
-    item.innerHTML = '<span class="ai2-hook-text">' + esc(clean) + '</span><span class="ai2-hook-use">Use this ›</span>';
+    item.innerHTML = '<span class="ai2-hook-text">' + esc(clean) + '</span><div style="display:flex;gap:6px;flex-shrink:0;align-items:center"><button onclick="event.stopPropagation();cdSaveSingleHook(\'' + clean.replace(/'/g,"\\'") + '\')" style="font-size:9px;padding:3px 7px;border:1px solid var(--bl);border-radius:100px;background:var(--p);color:var(--tl);cursor:pointer;white-space:nowrap" title="Save to Hooks Library">+ Lib</button><span class="ai2-hook-use">Use this ›</span></div>';
     item.addEventListener('click', function() { cdSelectHook(clean); });
     hookList.appendChild(item);
   });
