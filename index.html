@@ -66,7 +66,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
-.main-hdr h1{font-family:var(--fh);font-size:38px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
+.main-hdr h1{font-family:var(--fh);font-size:44px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
 .main-hdr .sub{font-size:12px;color:var(--t);margin-top:3px;letter-spacing:.02em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;padding:24px 36px 48px}
@@ -156,8 +156,8 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kanban-4{grid-template-columns:repeat(4,1fr)}
 .kc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px var(--sh)}
 .kc-head{padding:14px 16px 10px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.kc-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t)}
-.kc-count{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e)}
+.kc-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t)}
+.kc-count{font-family:var(--fh);font-size:28px;font-weight:600;color:var(--e)}
 .kc-body{flex:1;overflow-y:auto;padding:10px}
 .kc-body::-webkit-scrollbar{width:0}
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
@@ -174,8 +174,8 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;box-shadow:0 1px 4px var(--sh)}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
-.fl-lbl{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:7px;display:block}
-.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:9px 11px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
+.fl-lbl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:7px;display:block}
+.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:14px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
 .fi:focus{border-color:var(--r);background:var(--w)}
 textarea.fi{resize:vertical;min-height:85px;line-height:1.65}
 select.fi{cursor:pointer}
@@ -447,8 +447,8 @@ select.fi{cursor:pointer}
 .ai2-btn-label{font-weight:600;display:block;margin-bottom:2px}
 .ai2-btn-sub{font-size:10px;color:var(--tl);display:block}
 .ai2-btn:hover .ai2-btn-sub{color:inherit;opacity:.8}
-.ai2-input{width:100%;background:var(--bluep);border:1px solid rgba(122,158,194,.3);border-radius:var(--rsm);padding:8px 12px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;margin-bottom:8px;resize:vertical;transition:border-color .15s}
-.ai2-input:focus{border-color:var(--blue);background:white}
+.ai2-input{width:100%;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px 12px;font-family:var(--fb);font-size:13.5px;color:var(--e);outline:none;margin-bottom:8px;resize:vertical;transition:border-color .15s}
+.ai2-input:focus{border-color:var(--teal);background:var(--w)}
 .ai2-out{background:var(--w);border:1px solid var(--tealp);border-radius:var(--rsm);padding:14px;font-size:13px;line-height:1.82;color:var(--e);white-space:pre-wrap;display:none;max-height:320px;overflow-y:auto;margin-top:10px}
 .ai2-out.show{display:block}
 .ai2-out-acts{display:none;gap:6px;margin-top:8px;flex-wrap:wrap}
@@ -461,7 +461,7 @@ select.fi{cursor:pointer}
 .ai2-hook-use{font-size:10px;color:var(--tl);flex-shrink:0;margin-top:2px;white-space:nowrap}
 .ai2-tone-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .ai2-tone-chip{padding:5px 11px;border-radius:100px;border:1px solid var(--bl);font-size:11px;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t);user-select:none}
-.ai2-tone-chip.sel{background:var(--e);border-color:var(--e);color:var(--p)}
+.ai2-tone-chip.sel{background:var(--r) !important;border-color:var(--r) !important;color:white !important}
 .ai2-smart-brief{background:linear-gradient(135deg,#f0ece3,#e8ede8);border:1px solid var(--teal);border-left:3px solid var(--teal);border-radius:var(--rsm);padding:16px 18px;font-size:13px;color:var(--e);line-height:1.8;margin-top:10px;display:none;white-space:pre-wrap}
 .ai2-smart-brief.show{display:block}
 .ai2-smart-brief strong{color:var(--teal)}
@@ -1067,8 +1067,11 @@ select.fi{cursor:pointer}
           <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" /></div>
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="ideaTime" /></div>
         </div>
-        <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="ideaNotes" style="min-height:120px" placeholder="Hook idea, key points, CTA, deadline..."></textarea>
+        <div class="fl"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="ideaHook" style="min-height:54px;font-size:14px" placeholder="Opening hook or subject line..."></textarea>
+        </div>
+        <div class="fl"><label class="fl-lbl">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="ideaNotes" style="min-height:90px;font-size:14px" placeholder="Key points, angle, CTA, deadline...">
         </div>
         <div class="fl">
           <label class="fl-lbl">Upload Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
@@ -1174,7 +1177,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:15px;font-family:var(--fh)" /></div>
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:17px;font-family:var(--fh)" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -1199,20 +1202,23 @@ select.fi{cursor:pointer}
           <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><input class="fi" type="time" id="cdTime" /></div>
         </div>
-        <div class="fl"><label class="fl-lbl">Notes / Brief</label>
-          <textarea class="fi" id="cdNotes" style="min-height:160px" placeholder="Hook idea, key points, angle, CTA..."></textarea>
+        <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
+          <textarea class="fi" id="cdHook" style="min-height:64px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line — the thing that makes them stop scrolling..."></textarea>
+        </div>
+        <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
+          <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
         </div>
       </div>
       <div class="cd2-right">
         <!-- WRITE YOUR OWN — always visible at top -->
         <div style="background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;margin-bottom:0;box-shadow:0 2px 8px rgba(122,158,194,.15)">
           <div style="padding:12px 16px;border-bottom:1px solid rgba(122,158,194,.2);background:rgba(122,158,194,.08);display:flex;align-items:center;justify-content:space-between">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--e);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
+            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
             <div style="font-size:10px;color:var(--tl)">AI tools will use this as context</div>
           </div>
           <div style="padding:14px 16px">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Write your own draft, hook, or notes here first — the AI tools below will build on it.</div>
-            <textarea id="cdOwnContent" class="ai2-input" placeholder="Start writing here... your hook, your angle, your rough draft. The AI tools below will read this and build on what you've written." style="min-height:110px;margin-bottom:8px"></textarea>
+            <textarea id="cdOwnContent" class="fi" style="min-height:110px;margin-bottom:8px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Start writing here... your hook, your angle, your rough draft. The AI tools below will read this and build on what you've written."></textarea>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
               <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
@@ -1731,9 +1737,8 @@ function renderPickUp(){
         <div class="pickup-tag">Last draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
         <div class="pickup-sub">${dt(lastDraft.createdAt)} &middot; ${cap(lastDraft.platform||'')}</div>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="openDraftModal('${lastDraft.id}')">View</button>
-          <button class="btn btn-p" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(${JSON.stringify('')}||'').catch(()=>{});copyLastDraft('${lastDraft.id}')">Copy</button>
+        <div style="margin-top:12px">
+          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="openDraftModal('${lastDraft.id}')">Open to edit / copy →</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">Last draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
       ${lastInProgress?`<div class="pickup-card">
@@ -1798,7 +1803,7 @@ function renderTaskKanban(){
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
         <div class="cc-title">${esc(t.title)}</div>
-        ${t.date?'<div style="font-size:10.5px;color:var(--teal);margin-top:4px">Due: '+t.date+(t.time?' at '+t.time:'')+'</div>':''}
+        ${t.date?'<div style="font-size:12px;color:var(--teal);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
         ${t.notes?'<div style="font-size:11px;color:var(--t);margin-top:5px;line-height:1.55;border-top:1px solid var(--bl);padding-top:5px">'+esc(t.notes)+'</div>':''}
         ${col.id!=='done'?`<div style="margin-top:8px;display:flex;gap:5px">${nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
@@ -2092,6 +2097,7 @@ function openIdeaModal(status){
   document.getElementById('cdDate').value='';
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
+  var hkElNew=document.getElementById('cdHook');if(hkElNew)hkElNew.value='';
   // Set stage
   var defStatus=status||'idea';
   document.querySelectorAll('.cd-stage').forEach(function(el){el.classList.toggle('active',el.dataset.s===defStatus);});
@@ -2116,11 +2122,12 @@ function saveIdea(){
   var platform=document.getElementById('cdPlat').value;
   var format=document.getElementById('cdFormat').value;
   var notes=document.getElementById('cdNotes').value;
+  var hookEl2=document.getElementById('cdHook');var hookVal=hookEl2?hookEl2.value:'';
   var ownEl=document.getElementById('cdOwnContent');
   var ownContent=ownEl?ownEl.value:'';
   var stageEl=document.querySelector('.cd-stage.active');
   var status=stageEl?stageEl.dataset.s:'idea';
-  var idea={id:Date.now().toString(),title,platform,format,notes,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||''};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||''};
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
@@ -2429,6 +2436,7 @@ function cdOpen(id){
   document.getElementById('cdDate').value=x.date||'';
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
+  var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
 
   // Set stage buttons
   document.querySelectorAll('.cd-stage').forEach(function(el){
@@ -2514,6 +2522,7 @@ function cdSave(){
   x.date=document.getElementById('cdDate').value;
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
+  var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
   x.images=S._pendingIdeaImages||x.images||[];
   // Persist AI outputs and own content so they survive close/reopen
   var ownEl=document.getElementById('cdOwnContent');
@@ -2546,10 +2555,12 @@ function cdDelete() {
 function cdGetBrief(){
   var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';}
   var own=g('cdOwnContent');
+  var hook=g('cdHook');
   var notes=g('cdNotes');
-  var combined=own&&notes?notes+'\n\n---\nMy own draft / notes:\n'+own:own||notes;
+  var notesBlock=[hook?'Hook/Subject: '+hook:'',notes].filter(Boolean).join('\n');
+  var combined=own&&notesBlock?notesBlock+'\n\n---\nMy own draft:\n'+own:own||notesBlock;
   var fullBrief=(g('cdTitle')+(combined?'\n'+combined:''));
-  return{title:g('cdTitle'),notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
+  return{title:g('cdTitle'),hook:hook,notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
 }
 
 function cdSaveHookToLib(){
@@ -3067,6 +3078,7 @@ function calEditEntry(id) {
 }
 
 /* ═══════════════════ UTILS ═══════════════════ */
+function fmtDate(ds){if(!ds)return '';try{var p=ds.split('-');var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}catch(e){return ds;}}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
 let _tt;
