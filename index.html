@@ -1823,8 +1823,8 @@ function renderLib(section,silent){
       <span class="lib-cat-tag" style="${catStyle(x.cat)}">${esc(x.cat)}</span>
       <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="${isFav(x.id)?'Remove bookmark':'Bookmark'}"><svg width="14" height="14" viewBox="0 0 14 14" fill="${isFav(x.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 1.5h9a1 1 0 011 1v10l-5-3-5 3v-10a1 1 0 011-1z"/></svg></button>
     </div>
-    ${x.title?`<div class="lib-title">${esc(x.title)}</div>`:''}
-    <div class="lib-text">${esc(x.text)}</div>
+    ${x.title?`<div style="font-size:11px;font-weight:600;color:var(--e);margin-bottom:5px;letter-spacing:.01em">${esc(x.title)}</div>`:''}
+    <div class="lib-text" style="display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">${esc(x.text)}</div>
     <div class="lib-divider"></div>
     <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')">
       <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1"/></svg>
