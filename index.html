@@ -1865,7 +1865,7 @@ const LIB_CAT_MAP={
   'default':        {strip:'#D8CABA',border:'#D8CABA',text:'#7A6248',bg:'#EDE5D5'}
 };
 function catInfo(cat){return LIB_CAT_MAP[cat]||LIB_CAT_MAP.default;}
-function catStyle(cat){const c=catInfo(cat);return \`background:\${c.bg};color:\${c.text}\`;}
+function catStyle(cat){const c=catInfo(cat);return 'background:'+c.bg+';color:'+c.text;}
 const _libView={hooks:'grid',ctas:'grid',stories:'grid',prompts:'grid'};
 function renderAllLibs(){['hooks','ctas','stories','prompts'].forEach(k=>renderLib(k,true));}
 function setLibView(section,view){_libView[section]=view;renderLib(section);}
