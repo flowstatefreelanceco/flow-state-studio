@@ -66,8 +66,8 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
-.main-hdr h1{font-family:var(--fh);font-size:44px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
-.main-hdr .sub{font-size:12px;color:var(--t);margin-top:3px;letter-spacing:.02em}
+.main-hdr h1{font-family:var(--fh);font-size:36px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
+.main-hdr .sub{font-size:14px;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;padding:24px 36px 48px}
 
@@ -137,7 +137,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .btn-ico:hover{background:var(--p);border-color:var(--t)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bl);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh)}
 .cal-hd{background:var(--em);color:rgba(245,239,227,.65);text-align:center;padding:9px 4px;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.14em}
-.cal-cell{background:var(--w);min-height:86px;padding:7px;cursor:pointer;transition:background .12s}
+.cal-cell{background:var(--w);min-height:96px;padding:8px;cursor:pointer;transition:background .12s}
 .cal-cell:hover{background:#F0E8D8}
 .cal-cell.other{background:#F5F0E8}
 .cal-cell.other .day-n{color:var(--b)}
@@ -607,15 +607,18 @@ select.fi{cursor:pointer}
 
     </div>
     <div class="main-body">
-      <div id="gsStrip" class="gs-strip" onclick="toggleGS()">
-        <div class="gs-header">
+      <div id="gsStrip" class="gs-strip">
+        <div class="gs-header" onclick="toggleGS()" style="cursor:pointer">
           <div class="gs-left"><span style="font-size:16px">✦</span><span class="gs-title">Getting Started</span><span class="gs-badge" id="gsBadge"></span></div>
-          <span class="gs-chevron">▼</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button onclick="event.stopPropagation();dismissGS()" style="font-size:10px;color:var(--tl);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:4px;white-space:nowrap" title="Hide forever (reset in Settings)">✕ Dismiss</button>
+            <span class="gs-chevron">▼</span>
+          </div>
         </div>
         <div class="gs-bar-wrap"><div class="gs-bar" id="gsBar"></div></div>
         <div class="gs-items" id="gsItems"></div>
       </div>
-      <!-- WHAT TO CREATE TODAY -->
+      <!-- HOW TO USE EACH SECTION — moved above pick-up -->
       <div class="wdc-wrap">
         <div class="wdc-label">What do you want to create today?</div>
         <div class="wdc-grid">
@@ -639,6 +642,11 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Story</div>
             <div class="wdc-sub">Instagram story</div>
           </div>
+          <div class="wdc-card" onclick="quickCreate('Blog Post','blog')">
+            <div class="wdc-icon">✍️</div>
+            <div class="wdc-title">Blog / Article</div>
+            <div class="wdc-sub">Long-form post</div>
+          </div>
           <div class="wdc-card" onclick="quickCreate('Bio / About','other')">
             <div class="wdc-icon">✨</div>
             <div class="wdc-title">Something else</div>
@@ -650,7 +658,7 @@ select.fi{cursor:pointer}
       <!-- PICK UP WHERE YOU LEFT OFF -->
       <div id="pickUpWrap"></div>
 
-      <div class="guide-wrap">
+      <div class="guide-wrap" id="guideWrap">
         <div class="guide-hdr" onclick="toggleGuide(this)">
           <div class="guide-hdr-left"><span style="font-size:15px">📖</span><span class="guide-hdr-title">How to use each section</span></div>
           <span class="guide-chevron">▼</span>
@@ -800,7 +808,7 @@ select.fi{cursor:pointer}
       <div class="studio-wrap">
         <div class="sp">
           <div class="sp-in">
-            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div></div></div>
+            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post / Article">Blog/Article</div></div></div>
             <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
@@ -850,7 +858,30 @@ select.fi{cursor:pointer}
   <!-- DRAFTS -->
   <div id="view-drafts" class="view">
     <div class="main-hdr"><div><h1>Saved Drafts</h1><div class="sub">Your content library</div></div></div>
-    <div class="main-body"><div class="drafts-grid" id="draftsGrid"></div></div>
+    <div class="main-body">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+        <div style="position:relative;flex:1;min-width:180px">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tl);font-size:14px">⌕</span>
+          <input id="draftsSearch" style="width:100%;background:var(--w);border:1.5px solid var(--b);border-radius:var(--rad);padding:9px 14px 9px 36px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none" placeholder="Search drafts..." oninput="renderDraftsGrid()" />
+        </div>
+        <select id="draftsSortBy" class="fi" style="width:auto;min-width:160px" onchange="renderDraftsGrid()">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="platform">By platform</option>
+        </select>
+        <select id="draftsFilterPlat" class="fi" style="width:auto;min-width:140px" onchange="renderDraftsGrid()">
+          <option value="">All platforms</option>
+          <option value="instagram">Instagram</option>
+          <option value="newsletter">Newsletter</option>
+          <option value="email">Email</option>
+          <option value="substack">Substack</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="blog">Blog</option>
+          <option value="tiktok">TikTok</option>
+        </select>
+      </div>
+      <div class="drafts-grid" id="draftsGrid"></div>
+    </div>
   </div>
 
   <!-- HOOKS -->
@@ -870,6 +901,10 @@ select.fi{cursor:pointer}
       </div>
       <div class="lib-filters" id="hooksFilters"></div>
       <div class="lib-count" id="hooksCount"></div>
+      <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
+        <span style="font-size:16px;flex-shrink:0">✦</span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+      </div>
       <div id="hooksGrid"></div>
     </div>
   </div>
@@ -891,6 +926,10 @@ select.fi{cursor:pointer}
       </div>
       <div class="lib-filters" id="promptsFilters"></div>
       <div class="lib-count" id="promptsCount"></div>
+      <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
+        <span style="font-size:16px;flex-shrink:0">✦</span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+      </div>
       <div id="promptsGrid"></div>
     </div>
   </div>
@@ -912,6 +951,10 @@ select.fi{cursor:pointer}
       </div>
       <div class="lib-filters" id="ctasFilters"></div>
       <div class="lib-count" id="ctasCount"></div>
+      <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
+        <span style="font-size:16px;flex-shrink:0">✦</span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+      </div>
       <div id="ctasGrid"></div>
     </div>
   </div>
@@ -933,6 +976,10 @@ select.fi{cursor:pointer}
       </div>
       <div class="lib-filters" id="storiesFilters"></div>
       <div class="lib-count" id="storiesCount"></div>
+      <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
+        <span style="font-size:16px;flex-shrink:0">✦</span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+      </div>
       <div id="storiesGrid"></div>
     </div>
   </div>
@@ -1155,6 +1202,11 @@ select.fi{cursor:pointer}
     </div>
     <div class="m-sub" id="draftModalMeta"></div>
     <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;max-height:360px;overflow-y:auto;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e)" id="draftModalContent"></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bl);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t)">Save to Notebook:</span>
+      <select id="draftNbSelect" class="fi" style="width:auto;min-width:160px;font-size:12px;padding:6px 10px"></select>
+      <button class="btn btn-brass" style="font-size:12px;padding:6px 14px" onclick="saveDraftToNotebook()">Save →</button>
+    </div>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('draftModal')">Close</button><button class="btn btn-p" onclick="copyDraftModal()">Copy Content</button></div>
   </div>
 </div>
@@ -1207,6 +1259,15 @@ select.fi{cursor:pointer}
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
           <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
+        </div>
+        <!-- TASK BREAKDOWN -->
+        <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
+            <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
+          </div>
+          <div id="cdTaskList" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps added here sync to your Task board and Calendar.</div>
         </div>
       </div>
       <div class="cd2-right">
@@ -1286,7 +1347,7 @@ select.fi{cursor:pointer}
             <div class="ai2-out-acts" id="cd-acts-hooks">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px;border-color:var(--teal);color:var(--teal)" onclick="cdSaveHookToLib()">+ Hook Library</button>
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px;border-color:var(--teal);color:var(--teal)" onclick="cdSaveHookToLib()">Save Selected Hook →</button>
             </div>
           </div>
         </div>
@@ -1688,7 +1749,8 @@ function navigate(v){
   renderPickUp();
   // auto-collapse GS strip when all done
   const allDone=GS_STEPS.every(s=>S.gs[s.key]);
-  if(allDone){const strip=document.getElementById('gsStrip');if(strip)strip.style.display='none';}
+  const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
+  if(allDone||dismissed){const strip=document.getElementById('gsStrip');if(strip)strip.style.display='none';}
 }
 document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.view)));
 
@@ -1713,6 +1775,14 @@ function renderGS(){
 function toggleGS(){
   document.getElementById('gsStrip').classList.toggle('open');
 }
+function dismissGS(){
+  localStorage.setItem('gsDismissed','1');
+  S.gs.dismissed=true;
+  const strip=document.getElementById('gsStrip');
+  if(strip)strip.style.display='none';
+  persist();
+  toast('Getting Started hidden — reset it in Settings anytime');
+}
 
 /* ═══════════════════ DASHBOARD ═══════════════════ */
 function quickCreate(type, plat){
@@ -1727,28 +1797,29 @@ function renderPickUp(){
   const el=document.getElementById('pickUpWrap');
   if(!el)return;
   const lastDraft=S.drafts[0];
-  const lastInProgress=S.ideas.find(i=>i.status==='inprogress');
-  if(!lastDraft&&!lastInProgress){el.innerHTML='';return;}
-  const dt=d=>new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const lastIdea=S.ideas.find(i=>i.status==='inprogress')||S.ideas[0];
+  if(!lastDraft&&!lastIdea){el.innerHTML='';return;}
+  const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   el.innerHTML=`<div class="pickup-wrap">
     <div class="pickup-label">Pick up where you left off</div>
     <div class="pickup-grid">
-      ${lastDraft?`<div class="pickup-card">
-        <div class="pickup-tag">Last draft</div>
+      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid var(--teal)">
+        <div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
-        <div class="pickup-sub">${dt(lastDraft.createdAt)} &middot; ${cap(lastDraft.platform||'')}</div>
-        <div style="margin-top:12px">
-          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="openDraftModal('${lastDraft.id}')">Open to edit / copy →</button>
+        <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
+        <div style="margin-top:12px;display:flex;gap:6px">
+          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="openDraftModal('${lastDraft.id}')">Open →</button>
+          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">Last draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
-      ${lastInProgress?`<div class="pickup-card">
-        <div class="pickup-tag">In progress</div>
-        <div class="pickup-title">${esc(lastInProgress.title)}</div>
-        <div class="pickup-sub">${esc(lastInProgress.format||'')}${lastInProgress.platform?' &middot; '+cap(lastInProgress.platform):''}</div>
-        <div style="margin-top:12px">
-          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="navigate('ideas')">Go to Planner →</button>
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--teal)"><div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
+      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid var(--r)">
+        <div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div>
+        <div class="pickup-title">${esc(lastIdea.title)}</div>
+        <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
+        <div style="margin-top:12px;display:flex;gap:6px">
+          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdOpen('${lastIdea.id}')">Open →</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">In progress</div><div class="pickup-title" style="color:var(--tl)">Nothing in progress</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--r)"><div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
     </div>
   </div>`;
 }
@@ -1802,8 +1873,8 @@ function renderTaskKanban(){
       <div class="kc-head"><span class="kc-title">${col.label}</span><span class="kc-count">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
-        <div class="cc-title">${esc(t.title)}</div>
-        ${t.date?'<div style="font-size:12px;color:var(--teal);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
+        <div class="cc-title" style="font-size:15px;font-weight:600;line-height:1.3">${esc(t.title)}</div>
+        ${t.date?'<div style="font-size:13px;color:var(--teal);margin-top:6px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
         ${t.notes?'<div style="font-size:11px;color:var(--t);margin-top:5px;line-height:1.55;border-top:1px solid var(--bl);padding-top:5px">'+esc(t.notes)+'</div>':''}
         ${col.id!=='done'?`<div style="margin-top:8px;display:flex;gap:5px">${nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
@@ -1836,7 +1907,7 @@ function renderCalendar(){
     const dots=es.slice(0,3).map(e=>{
       const dotColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--b)';
       const textColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--e)';
-      return `<div class="day-row"><span style="width:5px;height:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:3px"></span><span style="overflow:hidden;text-overflow:ellipsis;font-size:10.5px;color:${textColor}">${esc(e.title)}</span></div>`;
+      return `<div class="day-row"><span style="width:5px;height:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:3px"></span><span style="overflow:hidden;text-overflow:ellipsis;font-size:12px;color:${textColor};font-weight:500">${esc(e.title)}</span></div>`;
     }).join('');
     const more=es.length>3?`<div class="day-row" style="color:var(--tl);font-size:10px">+${es.length-3} more</div>`:'';
     h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')" style="cursor:pointer"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
@@ -2021,8 +2092,18 @@ function dcHTML(d){
 }
 function renderDraftsGrid(){
   const g=document.getElementById('draftsGrid');
-  if(!S.drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>No saved drafts yet</h3><p>Write your own, generate with Claude, or repurpose something you love — it all lives here.</p></div>';return;}
-  g.innerHTML=S.drafts.map(dcHTML).join('');
+  if(!g)return;
+  const q=(document.getElementById('draftsSearch')?.value||'').toLowerCase();
+  const sortBy=document.getElementById('draftsSortBy')?.value||'newest';
+  const platFilter=document.getElementById('draftsFilterPlat')?.value||'';
+  let drafts=[...S.drafts];
+  if(q)drafts=drafts.filter(d=>(d.title||'').toLowerCase().includes(q)||(d.content||'').toLowerCase().includes(q));
+  if(platFilter)drafts=drafts.filter(d=>d.platform===platFilter);
+  if(sortBy==='oldest')drafts.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  else if(sortBy==='platform')drafts.sort((a,b)=>(a.platform||'').localeCompare(b.platform||''));
+  else drafts.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  if(!drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>'+(S.drafts.length?'No matches':'No saved drafts yet')+'</h3><p>'+(S.drafts.length?'Try a different search or filter.':'Write your own, generate with Claude, or repurpose something you love.')+'</p></div>';return;}
+  g.innerHTML=drafts.map(dcHTML).join('');
   g.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
 }
 function openDraftModal(id){
@@ -2030,9 +2111,33 @@ function openDraftModal(id){
   S.viewingDraftId=id;
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
   document.getElementById('draftModalTitle').textContent=d.title;
-  document.getElementById('draftModalMeta').textContent=`${cap(d.platform)} · ${d.contentType} · ${dt}`;
+  document.getElementById('draftModalMeta').textContent=`${cap(d.platform||'')}${d.contentType?' · '+d.contentType:''} · ${dt}`;
   document.getElementById('draftModalContent').value=d.content;
+  // Populate notebook select
+  const nbSel=document.getElementById('draftNbSelect');
+  if(nbSel){
+    nbSel.innerHTML='<option value="">+ Create new notebook</option>'+
+      (S.notebooks||[]).map(nb=>`<option value="${nb.id}">${esc(nb.name)}</option>`).join('');
+  }
   openModal('draftModal');
+}
+function saveDraftToNotebook(){
+  const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(!d)return;
+  const sel=document.getElementById('draftNbSelect');
+  const nbId=sel?sel.value:'';
+  let targetNbId=nbId;
+  if(!nbId){
+    // Create new notebook named after the draft
+    const nb={id:'nb'+Date.now(),name:d.title||'Draft Notebook',createdAt:new Date().toISOString()};
+    if(!S.notebooks)S.notebooks=[];
+    S.notebooks.push(nb);
+    targetNbId=nb.id;
+  }
+  if(!S.notes)S.notes=[];
+  const note={id:'n'+Date.now(),notebookId:targetNbId,title:d.title||'',content:d.content||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  S.notes.unshift(note);
+  persist();
+  toast('Saved to notebook ✓');
 }
 function deleteDraft(){
   if(!S.viewingDraftId||!confirm('Delete this draft permanently?'))return;
@@ -2089,7 +2194,7 @@ function saveCalEntry(){
   toast('Entry saved ✓');
 }
 function openIdeaModal(status){
-  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';S._pendingIdeaImages=[];
+  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';S._pendingIdeaImages=[];cdRenderTasks();
   // Clear all fields
   document.getElementById('cdTitle').value='';
   document.getElementById('cdPlat').value='instagram';
@@ -2127,7 +2232,8 @@ function saveIdea(){
   var ownContent=ownEl?ownEl.value:'';
   var stageEl=document.querySelector('.cd-stage.active');
   var status=stageEl?stageEl.dataset.s:'idea';
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||''};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
@@ -2235,6 +2341,11 @@ function buildBrandContext(){
 }
 function resetOnboarding(){
   localStorage.removeItem('studioWelcomeSeen');
+  localStorage.removeItem('gsDismissed');
+  S.gs.dismissed=false;
+  const strip=document.getElementById('gsStrip');
+  if(strip)strip.style.display='';
+  persist();
   openWelcome();
   toast('Welcome guide reset ✓');
 }
@@ -2437,6 +2548,7 @@ function cdOpen(id){
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
+  _cdTasks=x.cdTasks?JSON.parse(JSON.stringify(x.cdTasks)):[];cdRenderTasks();
 
   // Set stage buttons
   document.querySelectorAll('.cd-stage').forEach(function(el){
@@ -2463,23 +2575,61 @@ function cdOpen(id){
   // Restore any previously generated AI outputs
   if(x.aiOutputs&&Object.keys(x.aiOutputs).length){
     _cdOutputs=Object.assign({},x.aiOutputs);
-    ['generate','hooks','variations','repurpose'].forEach(function(sec){
+
+    // Smart Brief
+    if(_cdOutputs['smartBrief']){
+      var sbO=document.getElementById('cd-smartBrief-out');
+      if(sbO){sbO.textContent=_cdOutputs['smartBrief'];sbO.classList.add('show');}
+      var sb2=document.getElementById('ai2-smartBrief-body');
+      if(sb2){sb2.classList.add('open');var sc2=document.getElementById('ai2-smartBrief-chev');if(sc2)sc2.textContent='-';}
+    }
+
+    // Simple text output sections
+    ['generate','variations','repurpose'].forEach(function(sec){
       if(_cdOutputs[sec]){
-        var body=document.getElementById('ai2-'+sec+'-body');if(body){body.classList.add('open');var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';}
-        if(sec==='hooks'){
-          cdRenderHooks(_cdOutputs[sec]);
-        } else {
-          var out=document.getElementById('cd-out-'+sec);if(out){out.textContent=_cdOutputs[sec];out.classList.add('show');}
-          var acts=document.getElementById('cd-acts-'+sec);if(acts)acts.classList.add('show');
-        }
+        var body=document.getElementById('ai2-'+sec+'-body');
+        if(body){body.classList.add('open');var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';}
+        var out=document.getElementById('cd-out-'+sec);
+        if(out){out.textContent=_cdOutputs[sec];out.classList.add('show');}
+        var acts=document.getElementById('cd-acts-'+sec);
+        if(acts)acts.classList.add('show');
       }
     });
-    if(x.aiHookSel){_cdHookSel=x.aiHookSel;var sel=document.getElementById('cd-selected-hook');if(sel)sel.textContent=x.aiHookSel;if(buildArea)buildArea.style.display='block';}
-    if(_cdOutputs['smartBrief']){var sbO=document.getElementById('cd-smartBrief-out');if(sbO){sbO.textContent=_cdOutputs['smartBrief'];sbO.classList.add('show');var sb2=document.getElementById('ai2-smartBrief-body');if(sb2){sb2.classList.add('open');var sc2=document.getElementById('ai2-smartBrief-chev');if(sc2)sc2.textContent='-';}}}
-  }
 
-  // Default open: SmartBrief and Generate (only if nothing restored)
-  if(!x.aiOutputs||!Object.keys(x.aiOutputs).length){
+    // Hook section — restore hook list AND built post
+    if(_cdOutputs['hookList']||_cdOutputs['hookBuilt']){
+      var hookBody=document.getElementById('ai2-hooks-body');
+      if(hookBody){hookBody.classList.add('open');var hChev=document.getElementById('ai2-hooks-chev');if(hChev)hChev.textContent='-';}
+      // Restore hook list
+      if(_cdOutputs['hookList']){
+        cdRenderHooks(_cdOutputs['hookList']);
+      }
+      // Restore selected hook
+      if(x.aiHookSel){
+        _cdHookSel=x.aiHookSel;
+        var selEl=document.getElementById('cd-selected-hook');
+        if(selEl)selEl.textContent=x.aiHookSel;
+        var bArea=document.getElementById('cd-hook-build-area');
+        if(bArea)bArea.style.display='block';
+      }
+      // Restore built post (from "Build Full Post from This Hook")
+      if(_cdOutputs['hookBuilt']){
+        var hookOut=document.getElementById('cd-out-hooks');
+        if(hookOut){hookOut.textContent=_cdOutputs['hookBuilt'];hookOut.classList.add('show');}
+        var hookActs=document.getElementById('cd-acts-hooks');
+        if(hookActs)hookActs.classList.add('show');
+      }
+    }
+
+    // Series — re-render the clickable list
+    if(_cdOutputs['series']){
+      var serBody=document.getElementById('ai2-series-body');
+      if(serBody){serBody.classList.add('open');var serChev=document.getElementById('ai2-series-chev');if(serChev)serChev.textContent='-';}
+      cdRenderSeries(_cdOutputs['series']);
+    }
+
+  } else {
+    // Default open: SmartBrief and Generate when nothing saved yet
     var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
     var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
   }
@@ -2529,6 +2679,10 @@ function cdSave(){
   x.ownContent=ownEl?ownEl.value:'';
   x.aiOutputs=Object.assign({},_cdOutputs);
   x.aiHookSel=_cdHookSel||'';
+  x.cdTasks=JSON.parse(JSON.stringify(_cdTasks));
+  cdSyncTasks(x.title,x.id);
+  renderTaskKanban();
+  renderCalendar();
   // Status from stage buttons
   var stageEl=document.querySelector('.cd-stage.active');
   if(stageEl&&stageEl.dataset.s)x.status=stageEl.dataset.s;
@@ -2552,6 +2706,43 @@ function cdDelete() {
   persist(); closeModal('cardDetailModal'); renderKanban(); toast('Deleted');
 }
 
+var _cdTasks=[];
+function cdAddTask(){
+  var task={id:'ct'+Date.now(),title:'',date:'',done:false};
+  _cdTasks.push(task);
+  cdRenderTasks();
+}
+function cdRemoveTask(id){
+  _cdTasks=_cdTasks.filter(t=>t.id!==id);
+  cdRenderTasks();
+}
+function cdRenderTasks(){
+  var el=document.getElementById('cdTaskList');if(!el)return;
+  if(!_cdTasks.length){el.innerHTML='<div style="font-size:12px;color:var(--tl);font-style:italic">No steps yet — click + Add Step</div>';return;}
+  el.innerHTML=_cdTasks.map(t=>`<div style="display:flex;gap:6px;align-items:center">
+    <input type="text" value="${esc(t.title)}" placeholder="e.g. Write the hook..." 
+      oninput="var tk=_cdTasks.find(x=>x.id==='${t.id}');if(tk)tk.title=this.value"
+      style="flex:1;padding:6px 9px;border:1px solid var(--b);border-radius:var(--rsm);font-family:var(--fb);font-size:12.5px;background:var(--w);color:var(--e);outline:none" />
+    <input type="date" value="${t.date}"
+      oninput="var tk=_cdTasks.find(x=>x.id==='${t.id}');if(tk)tk.date=this.value"
+      style="width:120px;padding:6px 8px;border:1px solid var(--b);border-radius:var(--rsm);font-family:var(--fb);font-size:12px;background:var(--w);color:var(--e);outline:none" />
+    <button onclick="cdRemoveTask('${t.id}')" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:14px;padding:2px 4px">✕</button>
+  </div>`).join('');
+}
+function cdSyncTasks(ideaTitle,ideaId){
+  _cdTasks.forEach(function(ct){
+    if(!ct.title.trim())return;
+    var existing=S.tasks.find(t=>t._ideaTask===ct.id);
+    if(existing){
+      existing.title=ct.title;existing.date=ct.date;
+      if(ct.date){var calId='cal_task_'+existing.id;var idx=S.calEntries.findIndex(e=>e.id===calId);if(idx>-1){S.calEntries[idx].title=ct.title;S.calEntries[idx].date=ct.date;}else{S.calEntries.push({id:calId,title:ct.title,platform:'other',status:'todo',date:ct.date,time:'',notes:'For: '+ideaTitle});}}
+    } else {
+      var newTask={id:Date.now().toString()+'_'+ct.id,title:ct.title,status:'todo',date:ct.date,time:'',notes:'Step for: '+ideaTitle,_ideaTask:ct.id,_ideaId:ideaId};
+      S.tasks.push(newTask);
+      if(ct.date){S.calEntries.push({id:'cal_task_'+newTask.id,title:ct.title,platform:'other',status:'todo',date:ct.date,time:'',notes:'For: '+ideaTitle});}
+    }
+  });
+}
 function cdGetBrief(){
   var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';}
   var own=g('cdOwnContent');
@@ -2564,12 +2755,11 @@ function cdGetBrief(){
 }
 
 function cdSaveHookToLib(){
-  // Save the built-from-hook output (or all hooks raw) to hooks library
-  var txt=_cdOutputs['hooks']||'';
-  if(!txt){toast('No hook output to save');return;}
-  var b=cdGetBrief();
-  var item={id:'u'+Date.now(),cat:'Generated',text:txt.slice(0,300)};
-  S.hooks.unshift(item);persist();toast('Saved to Hooks Library ✓');
+  // Save the currently SELECTED hook to the library
+  var txt=_cdHookSel||'';
+  if(!txt){toast('Select a hook first — click "Use this ›" on any hook');return;}
+  var item={id:'u'+Date.now(),cat:'Generated',text:txt};
+  S.hooks.unshift(item);persist();toast('Hook saved to library ✓');
 }
 function cdSaveSingleHook(hookText){
   if(!hookText){return;}
@@ -2630,7 +2820,7 @@ async function cdSmartBrief() {
     'Be direct and specific. No fluff. Talk to me like a creative director briefing a copywriter.';
   var result = await cdCallAI(sys, usr, 600);
   load.classList.remove('show');
-  if (result) { _cdOutputs['smartBrief']=result; out.textContent = result; out.classList.add('show'); }
+  if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); }
 }
 
 async function cdGen2(type) {
@@ -2661,10 +2851,11 @@ async function cdGen2(type) {
   var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : 900);
   if (load) load.classList.remove('show');
   if (result && type === 'hooks') {
-    _cdOutputs[type] = result;
+    _cdOutputs['hookList'] = result;
+    delete _cdOutputs['hookBuilt']; // clear any old built post
     cdRenderHooks(result);
   } else if (result && type === 'series') {
-    _cdOutputs[type] = result;
+    _cdOutputs['series'] = result;
     cdRenderSeries(result);
   } else if (result) {
     _cdOutputs[type] = result;
@@ -2711,7 +2902,7 @@ async function cdBuildFromHook() {
   if (acts) acts.classList.remove('show');
   var result = await cdCallAI(sys, usr, 700);
   if (result) {
-    _cdOutputs['hooks'] = result;
+    _cdOutputs['hookBuilt'] = result;
     if (out) out.textContent = result;
     if (acts) acts.classList.add('show');
   }
@@ -2794,7 +2985,7 @@ function cdCopy2(type) {
 }
 
 function cdSaveDraft2(type){
-  var txt=_cdOutputs[type]||'';if(!txt)return;
+  var txt=(type==='hooks'?(_cdOutputs['hookBuilt']||_cdOutputs['hookList']||''):_cdOutputs[type])||'';if(!txt)return;
   var titleEl=document.getElementById('ideaTitle')||document.getElementById('cdTitle');
   var platEl=document.getElementById('ideaPlat')||document.getElementById('cdPlat');
   var t=titleEl?titleEl.value.trim():'Untitled';
