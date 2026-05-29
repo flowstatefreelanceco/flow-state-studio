@@ -544,7 +544,7 @@ select.fi{cursor:pointer}
     <div class="nav-i" data-view="tasks"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h9M3 13h7"/></svg>Tasks</div>
     <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg>Calendar</div>
     <div class="sb-section">Create</div>
-    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>AI Studio</div>
+    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>Writing Studio</div>
     <div class="nav-i" data-view="drafts"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M6 7h6M6 10.5h4"/></svg>Saved Drafts</div>
     <div class="nav-i nav-parent" onclick="toggleLibNav(this)">
       <svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="3" rx="1"/><rect x="2" y="8" width="10" height="3" rx="1"/><rect x="2" y="13" width="7" height="2" rx="1"/></svg>
@@ -563,7 +563,7 @@ select.fi{cursor:pointer}
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
   <div class="sb-usage">
-    <div class="sb-usage-lbl">✦ AI Studio Active</div>
+    <div class="sb-usage-lbl">✦ Writing Studio Active</div>
     <div class="usage-bar-wrap"><div class="usage-bar" style="width:100%"></div></div>
   </div>
 </aside>
@@ -679,7 +679,7 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🔗</span>Hooks Library</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Pre-written opening lines designed to stop the scroll. Filter by type and copy directly into your content or into the AI Studio as a starting point.</p>
+              <p class="guide-desc">Pre-written opening lines designed to stop the scroll. Filter by type and copy directly into your content or into the Writing Studio as a starting point.</p>
               <ul class="guide-tips">
                 <li><strong>Educational hooks:</strong> best for carousels, blog posts, and reels that teach something.</li>
                 <li><strong>Engagement hooks:</strong> great for posts where you want comments, shares, or saves.</li>
@@ -765,14 +765,14 @@ select.fi{cursor:pointer}
   <!-- AI STUDIO -->
   <div id="view-studio" class="view" style="overflow:hidden">
     <div class="main-hdr">
-      <div><h1>AI Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
+      <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
     </div>
     <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
         <div class="sp">
           <div class="sp-in">
             <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div></div></div>
-            <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
+            <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="notesIn" placeholder="CTA, hashtags, word count, specific phrases..." style="min-height:56px"></textarea></div>
@@ -780,16 +780,25 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="sp out-panel">
-          <div class="out-tb">
-            <div style="display:flex;align-items:center;gap:10px"><span class="out-tit">Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
+          <div style="padding:14px 20px 0;flex-shrink:0">
+            <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:6px">✍️ Write Your Own</div>
+            <textarea id="studioOwnTA" class="fi" placeholder="Start writing here — your own draft, hook, or rough ideas. Use the generate tools on the left to get AI inspiration, or skip them entirely and just write." style="min-height:90px;font-size:13px;line-height:1.75;margin-bottom:8px;resize:vertical"></textarea>
+            <div style="display:flex;gap:6px;margin-bottom:12px">
+              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="studioOwnCopy()">Copy</button>
+              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="studioOwnSave()">Save to Drafts</button>
+            </div>
+            <div style="height:1px;background:var(--bl);margin:0 -20px 0"></div>
+          </div>
+          <div class="out-tb" style="border-top:none">
+            <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
           </div>
-          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>Your draft will appear here</h3><p>Generate with Claude — or skip to the Write tab to type your own.</p></div></div>
+          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate — or write your own above.</p></div></div>
           <!-- WRITE YOUR OWN PANEL -->
           <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
             <div style="display:flex;gap:10px">
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Platform</label>
-                <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
+                <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="email">Email</option><option value="substack">Substack</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
               </div>
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Format</label>
                 <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
@@ -929,7 +938,7 @@ select.fi{cursor:pointer}
       <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
       <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events — anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
       <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
-      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in AI Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
+      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in the Writing Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
       <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Your data is saved automatically</h4><p>Everything you create saves to your account instantly and syncs across all your devices. Pick up on your phone exactly where you left off on your laptop.</p></div></div>
     </div>
     <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
@@ -943,7 +952,7 @@ select.fi{cursor:pointer}
     <div class="m-sub">Plan content on your calendar</div>
     <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="calTitle" placeholder="What are you posting?" /></div>
     <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="calPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="other">Other</option></select></div>
+      <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="calPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="email">Email</option><option value="substack">Substack</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="other">Other</option></select></div>
       <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="calStatus"><option value="idea">Idea</option><option value="draft">Draft</option><option value="scheduled">Scheduled</option><option value="published">Published</option></select></div>
     </div>
     <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="calDate" /></div>
@@ -969,6 +978,7 @@ select.fi{cursor:pointer}
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="ideaPlat">
               <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
+              <option value="email">Email</option><option value="substack">Substack</option>
               <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
               <option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
               <option value="other">Other</option>
@@ -1100,6 +1110,7 @@ select.fi{cursor:pointer}
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
               <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
+              <option value="email">Email</option><option value="substack">Substack</option>
               <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
               <option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
               <option value="other">Other</option>
@@ -1142,19 +1153,19 @@ select.fi{cursor:pointer}
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
-            <div class="ai2-section-title">&#10022; Creative Director</div>
+            <div class="ai2-section-title">✦ Creative Director</div>
             <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-smartBrief-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid — before you write a single word.</div>
-            <button class="ai2-btn full accent" onclick="cdSmartBrief()" style="background:linear-gradient(135deg,var(--e),#3d2510);color:var(--p);border:none;font-weight:600;font-size:14.5px;padding:14px">✦ Brief Me, Creative Director</button>
+            <button class="ai2-btn full accent" onclick="cdSmartBrief()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Brief Me, Creative Director</button>
             <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
             <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
           </div>
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('generate')">
-            <div class="ai2-section-title">&#9997; Generate Content</div>
+            <div class="ai2-section-title">✍️ Generate Content</div>
             <span id="ai2-generate-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-generate-body">
@@ -1183,18 +1194,18 @@ select.fi{cursor:pointer}
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('hooks')">
-            <div class="ai2-section-title">Hook Builder</div>
+            <div class="ai2-section-title">🪝 Hook Builder</div>
             <span id="ai2-hooks-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-hooks-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
-            <button class="ai2-btn full" onclick="cdGen2('hooks')" style="background:linear-gradient(135deg,var(--r),#c86a3f);color:white;border:none;font-weight:600;font-size:14px;padding:13px">✦ Generate 5 Hooks</button>
+            <button class="ai2-btn full" onclick="cdGen2('hooks')" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Generate 5 Hooks</button>
             <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
             <div class="ai2-hook-list" id="cd-hook-list"></div>
             <div id="cd-hook-build-area" style="display:none;margin-top:10px">
               <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
               <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
-              <button class="ai2-btn full accent" onclick="cdBuildFromHook()" style="background:linear-gradient(135deg,var(--teal),#2e7070);color:white;border:none;font-weight:600;font-size:14px;padding:13px">✦ Build Full Post from This Hook</button>
+              <button class="ai2-btn full accent" onclick="cdBuildFromHook()" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Build Full Post from This Hook</button>
             </div>
             <div class="ai2-out" id="cd-out-hooks"></div>
             <div class="ai2-out-acts" id="cd-acts-hooks">
@@ -1205,12 +1216,12 @@ select.fi{cursor:pointer}
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('variations')">
-            <div class="ai2-section-title">Caption Variations</div>
+            <div class="ai2-section-title">⇕ Caption Variations</div>
             <span id="ai2-variations-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-variations-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
-            <button class="ai2-btn full accent" onclick="cdGen2('variations')" style="background:linear-gradient(135deg,var(--teal),#2e7070);color:white;border:none;font-weight:600">⇕ Generate 3 Variations</button>
+            <button class="ai2-btn full accent" onclick="cdGen2('variations')" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:13px;padding:12px">⇕ Generate 3 Variations</button>
             <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
             <div class="ai2-out" id="cd-out-variations"></div>
             <div class="ai2-out-acts" id="cd-acts-variations">
@@ -1221,19 +1232,19 @@ select.fi{cursor:pointer}
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('series')">
-            <div class="ai2-section-title">Content Series</div>
+            <div class="ai2-section-title">☆ Content Series</div>
             <span id="ai2-series-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-series-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
-            <button class="ai2-btn full accent" onclick="cdGen2('series')" style="background:linear-gradient(135deg,#C47A3A,#a86020);color:white;border:none;font-weight:600">☆ Generate Content Series</button>
+            <button class="ai2-btn full accent" onclick="cdGen2('series')" style="background:var(--g);color:white;border:none;font-weight:600;font-size:13px;padding:12px">☆ Generate Content Series</button>
             <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
             <div class="ai2-series-list" id="cd-series-list"></div>
           </div>
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')">
-            <div class="ai2-section-title">Repurpose a Post</div>
+            <div class="ai2-section-title">↻ Repurpose a Post</div>
             <span id="ai2-repurpose-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
@@ -1247,7 +1258,7 @@ select.fi{cursor:pointer}
               </select>
             </div>
             <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post text here..." style="min-height:80px"></textarea>
-            <button class="ai2-btn full accent" onclick="cdRepurpose2()" style="background:linear-gradient(135deg,var(--r),#c86a3f);color:white;border:none;font-weight:600">↻ Rebuild in My Voice</button>
+            <button class="ai2-btn full accent" onclick="cdRepurpose2()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">↻ Rebuild in My Voice</button>
             <div class="ai2-loading" id="cd-load-repurpose">Studying and rebuilding...</div>
             <div class="ai2-out" id="cd-out-repurpose"></div>
             <div class="ai2-out-acts" id="cd-acts-repurpose">
@@ -1654,7 +1665,7 @@ function renderPickUp(){
           <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="openDraftModal('${lastDraft.id}')">View</button>
           <button class="btn btn-p" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(${JSON.stringify('')}||'').catch(()=>{});copyLastDraft('${lastDraft.id}')">Copy</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">Last draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in AI Studio</div></div>'}
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none"><div class="pickup-tag">Last draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
       ${lastInProgress?`<div class="pickup-card">
         <div class="pickup-tag">In progress</div>
         <div class="pickup-title">${esc(lastInProgress.title)}</div>
@@ -1678,7 +1689,7 @@ function renderDashboard(){
   document.getElementById('st-pub').textContent=S.aiCount||0;
   const el=document.getElementById('dashRecent');
   const recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,4);
-  if(!recent.length){el.innerHTML='<div class="empty-state"><h3>Nothing here yet</h3><p>Head to AI Studio to generate a draft, write your own, or repurpose something you love.</p></div>';return;}
+  if(!recent.length){el.innerHTML='<div class="empty-state"><h3>Nothing here yet</h3><p>Head to the Writing Studio to generate a draft, write your own, or repurpose something you love.</p></div>';return;}
   el.innerHTML=`<div class="drafts-grid">${recent.map(dcHTML).join('')}</div>`;
   el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
   renderGS();
@@ -2316,9 +2327,32 @@ function cdOpen(id){
   var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
 
-  // Open Smart Brief and Generate by default
-  var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
-  var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
+  // Restore own content
+  var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
+
+  // Restore any previously generated AI outputs
+  if(x.aiOutputs&&Object.keys(x.aiOutputs).length){
+    _cdOutputs=Object.assign({},x.aiOutputs);
+    ['generate','hooks','variations','repurpose'].forEach(function(sec){
+      if(_cdOutputs[sec]){
+        var body=document.getElementById('ai2-'+sec+'-body');if(body){body.classList.add('open');var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';}
+        if(sec==='hooks'){
+          cdRenderHooks(_cdOutputs[sec]);
+        } else {
+          var out=document.getElementById('cd-out-'+sec);if(out){out.textContent=_cdOutputs[sec];out.classList.add('show');}
+          var acts=document.getElementById('cd-acts-'+sec);if(acts)acts.classList.add('show');
+        }
+      }
+    });
+    if(x.aiHookSel){_cdHookSel=x.aiHookSel;var sel=document.getElementById('cd-selected-hook');if(sel)sel.textContent=x.aiHookSel;if(buildArea)buildArea.style.display='block';}
+    if(_cdOutputs['smartBrief']){var sbO=document.getElementById('cd-smartBrief-out');if(sbO){sbO.textContent=_cdOutputs['smartBrief'];sbO.classList.add('show');var sb2=document.getElementById('ai2-smartBrief-body');if(sb2){sb2.classList.add('open');var sc2=document.getElementById('ai2-smartBrief-chev');if(sc2)sc2.textContent='-';}}}
+  }
+
+  // Default open: SmartBrief and Generate (only if nothing restored)
+  if(!x.aiOutputs||!Object.keys(x.aiOutputs).length){
+    var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
+    var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
+  }
 
   openModal('cardDetailModal');
 }
@@ -2359,6 +2393,11 @@ function cdSave(){
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
   x.images=S._pendingIdeaImages||x.images||[];
+  // Persist AI outputs and own content so they survive close/reopen
+  var ownEl=document.getElementById('cdOwnContent');
+  x.ownContent=ownEl?ownEl.value:'';
+  x.aiOutputs=Object.assign({},_cdOutputs);
+  x.aiHookSel=_cdHookSel||'';
   // Status from stage buttons
   var stageEl=document.querySelector('.cd-stage.active');
   if(stageEl&&stageEl.dataset.s)x.status=stageEl.dataset.s;
@@ -2391,6 +2430,24 @@ function cdGetBrief(){
   return{title:g('cdTitle'),notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
 }
 
+function studioOwnCopy(){
+  var el=document.getElementById('studioOwnTA');
+  if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
+  else toast('Nothing to copy yet');
+}
+function studioOwnSave(){
+  var el=document.getElementById('studioOwnTA');
+  if(!el||!el.value.trim()){toast('Write something first');return;}
+  var plat=document.getElementById('platChips');
+  var selPlat='other';
+  if(plat){var selChip=plat.querySelector('.chip.sel');if(selChip)selPlat=selChip.dataset.val;}
+  var typeEl=document.getElementById('typeChips');
+  var selType='Draft';
+  if(typeEl){var selT=typeEl.querySelector('.chip.sel');if(selT)selType=selT.dataset.val;}
+  var draft={id:Date.now().toString(),title:selType+' — own draft',content:el.value.trim(),platform:selPlat,format:selType,createdAt:new Date().toISOString()};
+  S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
+  toast('Saved to drafts ✓');
+}
 function cdCopyOwn(){
   var el=document.getElementById('cdOwnContent');
   if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
@@ -2427,7 +2484,7 @@ async function cdSmartBrief() {
     'Be direct and specific. No fluff. Talk to me like a creative director briefing a copywriter.';
   var result = await cdCallAI(sys, usr, 600);
   load.classList.remove('show');
-  if (result) { out.textContent = result; out.classList.add('show'); }
+  if (result) { _cdOutputs['smartBrief']=result; out.textContent = result; out.classList.add('show'); }
 }
 
 async function cdGen2(type) {
