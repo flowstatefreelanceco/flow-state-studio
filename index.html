@@ -314,14 +314,14 @@ select.fi{cursor:pointer}
 
 /* BRAIN DUMP */
 .bd-wrap{display:grid;grid-template-columns:256px 1fr;gap:0;flex:1;min-height:0;overflow:hidden;border:1px solid var(--bl);border-radius:var(--rad);box-shadow:0 1px 4px var(--sh);background:var(--w)}
-.bd-left{border-right:1px solid var(--bl);display:flex;flex-direction:column;overflow:hidden;background:var(--sb)}
-.bd-left-hdr{padding:16px 14px 12px;border-bottom:1px solid var(--bl);flex-shrink:0}
-.bd-left-hdr h3{font-family:var(--fd);font-size:16px;font-weight:500;color:var(--e);margin-bottom:10px}
+.bd-left{border-right:1px solid rgba(122,158,194,.25);display:flex;flex-direction:column;overflow:hidden;background:var(--bluep)}
+.bd-left-hdr{padding:16px 14px 12px;border-bottom:1px solid rgba(122,158,194,.2);flex-shrink:0;background:rgba(122,158,194,.08)}
+.bd-left-hdr h3{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e);margin-bottom:10px}
 .nb-list{flex:1;overflow-y:auto;padding:6px}
 .nb-card{padding:10px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid transparent}
-.nb-card:hover{background:var(--w);border-color:var(--bl)}
-.nb-card.active{background:var(--tealp);border-color:rgba(58,140,140,.25)}
-.nb-name{font-size:13px;font-weight:500;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nb-card:hover{background:rgba(255,255,255,.7);border-color:rgba(122,158,194,.3)}
+.nb-card.active{background:white;border-color:rgba(122,158,194,.4);box-shadow:0 1px 4px rgba(122,158,194,.2)}
+.nb-name{font-size:15px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fh)}
 .nb-count{font-size:10px;color:var(--tl);flex-shrink:0}
 .nb-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px 4px;flex-shrink:0}
 .nb-card:hover .nb-del{opacity:1}
@@ -332,14 +332,14 @@ select.fi{cursor:pointer}
 .note-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s;box-shadow:0 1px 3px var(--sh)}
 .note-card:hover{box-shadow:0 4px 14px var(--shm)}
 .note-card-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.note-title-in{font-family:var(--fb);font-size:13px;font-weight:500;color:var(--e);border:none;background:transparent;outline:none;flex:1;padding:0}
+.note-title-in{font-family:var(--fh);font-size:17px;font-weight:600;color:var(--e);border:none;background:transparent;outline:none;flex:1;padding:0}
 .note-title-in::placeholder{color:var(--tl)}
 .note-meta{font-size:10px;color:var(--tl);flex-shrink:0}
 .note-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;padding:2px 5px;flex-shrink:0;opacity:0;transition:opacity .15s}
 .note-card:hover .note-del{opacity:1}
 .note-body{padding:0 14px 14px;display:none}
 .note-body.open{display:block}
-.note-ta{width:100%;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none;resize:none;min-height:120px;line-height:1.75;transition:border-color .15s}
+.note-ta{width:100%;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px 14px;font-family:var(--fb);font-size:15px;color:var(--e);outline:none;resize:none;min-height:120px;line-height:1.85;transition:border-color .15s}
 .note-ta:focus{border-color:var(--r)}
 .bd-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--t);gap:10px;padding:40px}
 .bd-empty .sym{font-size:36px;opacity:.2}
@@ -859,20 +859,22 @@ select.fi{cursor:pointer}
 
   <!-- DRAFTS -->
   <div id="view-drafts" class="view">
-    <div class="main-hdr"><div><h1>Saved Drafts</h1><div class="sub">Your content library</div></div></div>
+    <div class="main-hdr">
+      <div><h1>Saved Drafts</h1><div class="sub">Your content library</div></div>
+    </div>
     <div class="main-body">
-      <div id="recentDraftsWrap" style="margin-bottom:24px"></div>
-      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
-        <div style="position:relative;flex:1;min-width:180px">
-          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tl);font-size:14px">⌕</span>
-          <input id="draftsSearch" style="width:100%;background:var(--w);border:1.5px solid var(--b);border-radius:var(--rad);padding:9px 14px 9px 36px;font-family:var(--fb);font-size:13px;color:var(--e);outline:none" placeholder="Search drafts..." oninput="renderDraftsGrid()" />
+      <!-- SEARCH + FILTERS — same toolbar style as library -->
+      <div class="lib-toolbar" style="margin-bottom:16px">
+        <div class="lib-search">
+          <span class="s-ico">⌕</span>
+          <input id="draftsSearch" placeholder="Search drafts..." oninput="renderDraftsGrid()" />
         </div>
-        <select id="draftsSortBy" class="fi" style="width:auto;min-width:160px" onchange="renderDraftsGrid()">
+        <select id="draftsSortBy" class="fi" style="width:auto;min-width:150px;font-size:13px" onchange="renderDraftsGrid()">
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
           <option value="platform">By platform</option>
         </select>
-        <select id="draftsFilterPlat" class="fi" style="width:auto;min-width:140px" onchange="renderDraftsGrid()">
+        <select id="draftsFilterPlat" class="fi" style="width:auto;min-width:130px;font-size:13px" onchange="renderDraftsGrid()">
           <option value="">All platforms</option>
           <option value="instagram">Instagram</option>
           <option value="newsletter">Newsletter</option>
@@ -883,6 +885,9 @@ select.fi{cursor:pointer}
           <option value="tiktok">TikTok</option>
         </select>
       </div>
+      <!-- RECENT DRAFTS — smaller cards with teal border -->
+      <div id="recentDraftsWrap" style="margin-bottom:28px"></div>
+      <!-- ALL DRAFTS -->
       <div class="drafts-grid" id="draftsGrid"></div>
     </div>
   </div>
@@ -1032,7 +1037,7 @@ select.fi{cursor:pointer}
         <div class="bd-left">
           <div class="bd-left-hdr">
             <h3>Notebooks</h3>
-            <button class="btn btn-g" style="width:100%;font-size:12px;padding:7px;margin-top:2px" onclick="newNotebook()">+ New Notebook</button>
+            <button class="btn btn-g" style="width:100%;font-size:12px;padding:7px;margin-top:2px;border-color:rgba(122,158,194,.4);color:var(--blue)" onclick="newNotebook()">+ New Notebook</button>
           </div>
           <div class="nb-list" id="nbList"></div>
         </div>
@@ -1735,7 +1740,7 @@ const S = {
 /* ═══════════════════ INIT ═══════════════════ */
 function _appInit(){
   load(); applySettings(); setupChips();
-  renderDashboard(); renderCalendar(); renderKanban(); renderTaskKanban();
+  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban();
   renderAllLibs(); setGreeting();
   if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
 }
@@ -1879,6 +1884,7 @@ function copyLastDraft(id){
 }
 function renderDashboard(){
   renderGS();
+  renderPickUp();
 }
 
 /* ═══════════════════ KANBAN — IDEAS ═══════════════════ */
@@ -2137,8 +2143,18 @@ function renderRecentDrafts(){
   var el=document.getElementById('recentDraftsWrap');if(!el)return;
   var recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,3);
   if(!recent.length){el.innerHTML='';return;}
-  el.innerHTML='<div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:10px;display:flex;align-items:center;gap:8px">Recently saved <span style="font-size:12px;font-family:var(--fb);color:var(--tl);font-weight:400;margin-left:4px">— pick up where you left off</span></div>'+
-    '<div class="drafts-grid" id="recentDraftsGrid">'+recent.map(dcHTML).join('')+'</div>';
+  var cards=recent.map(d=>{
+    const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const platColors={'instagram':'var(--r)','newsletter':'var(--teal)','email':'var(--teal)','substack':'var(--teal)','linkedin':'var(--blue)','blog':'var(--g)','tiktok':'#98286A'};
+    const borderColor=platColors[d.platform]||'var(--b)';
+    return '<div class="dc" data-id="'+d.id+'" style="border-top:3px solid '+borderColor+';padding:12px 16px;min-height:auto">'+
+      '<div class="dc-title" style="font-size:15px;margin-bottom:4px">'+esc(d.title||'Untitled')+'</div>'+
+      '<div class="dc-preview" style="font-size:12px;-webkit-line-clamp:2;margin-bottom:8px">'+esc(d.content||'')+'</div>'+
+      '<div class="dc-foot"><span class="dc-date">'+dt+'</span><span class="tag tag-'+d.platform+'">'+cap(d.platform||'')+'</span></div>'+
+    '</div>';
+  }).join('');
+  el.innerHTML='<div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:12px;display:flex;align-items:center;gap:10px">Recently saved<span style="font-size:12px;font-family:var(--fb);color:var(--tl);font-weight:400;letter-spacing:.02em">— pick up where you left off</span></div>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px">'+cards+'</div>';
   el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
 }
 function renderDraftsGrid(){
@@ -2590,6 +2606,11 @@ function cdOpen(id){
   var x=S.ideas.find(function(a){return a.id===id;});
   if(!x)return;
   S.cdId=id;S.cdOut='';_cdOutputs={};_cdHookSel='';
+  // Migrate legacy 'hooks' key to 'hookList'
+  if(x.aiOutputs&&x.aiOutputs['hooks']&&!x.aiOutputs['hookList']){
+    x.aiOutputs['hookList']=x.aiOutputs['hooks'];
+    delete x.aiOutputs['hooks'];
+  }
   S._pendingIdeaImages=x.images||[];
 
   // Populate all fields
