@@ -61,7 +61,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .sb-usage{padding:12px 16px;border-top:1px solid var(--b)}
 .sb-usage-lbl{font-size:9.5px;color:var(--t);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
 .usage-bar-wrap{background:var(--bl);border-radius:100px;height:4px;overflow:hidden}
-.usage-bar{height:4px;background:var(--r);border-radius:100px;transition:width .3s}
+.usage-bar{height:4px;background:var(--teal);border-radius:100px;transition:width .3s,background .3s}
 
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
@@ -591,9 +591,10 @@ select.fi{cursor:pointer}
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
-  <div class="sb-usage">
-    <div class="sb-usage-lbl">✦ Writing Studio Active</div>
-    <div class="usage-bar-wrap"><div class="usage-bar" style="width:100%"></div></div>
+  <div class="sb-usage" id="creditBar">
+    <div class="sb-usage-lbl" id="creditLabel">✦ Studio in Session</div>
+    <div class="usage-bar-wrap"><div class="usage-bar" id="creditBarFill" style="width:100%"></div></div>
+    <div id="creditSub" style="font-size:9px;color:var(--tl);margin-top:4px;letter-spacing:.04em"></div>
   </div>
 </aside>
 
@@ -704,12 +705,12 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✦</span>AI Studio</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Your AI writing partner, powered by Claude. Give it a topic and it generates a full draft in your voice — no more staring at a blank page.</p>
+              <p class="guide-desc">Your AI writing partner, powered by the Studio. Give it a topic and it generates a full draft in your voice — no more staring at a blank page.</p>
               <ul class="guide-tips">
                 <li><strong>Business Context matters most:</strong> the more you fill in Settings → Business Context, the more on-brand every draft will be.</li>
                 <li><strong>Give it a specific brief:</strong> instead of "write a caption about my business," try "write a caption about why wellness entrepreneurs burn out when they don't delegate — warm tone, end with a DM CTA."</li>
                 <li><strong>Save your drafts:</strong> hit Save Draft to add it to your library. You can always come back and copy or reference it later.</li>
-                <li><strong>Use Hooks first:</strong> grab a hook from the Hooks library, drop it into the brief, and ask Claude to build from it.</li>
+                <li><strong>Use Hooks first:</strong> grab a hook from the Hooks library, drop it into the brief, and use the Studio to build from it.</li>
               </ul>
             </div>
           </div>
@@ -728,9 +729,9 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">💬</span>Prompts, CTAs &amp; Story Ideas</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Three libraries of ready-to-copy content pieces. Prompts are for Claude, CTAs go at the end of your content, Story Ideas are for Instagram Stories.</p>
+              <p class="guide-desc">Three libraries of ready-to-copy content pieces. Prompts are for the Studio, CTAs go at the end of your content, Story Ideas are for Instagram Stories.</p>
               <ul class="guide-tips">
-                <li><strong>Prompts:</strong> copy a prompt, paste it into AI Studio or Claude directly, fill in the brackets with your specifics.</li>
+                <li><strong>Prompts:</strong> copy a prompt and paste it into the Writing Studio, fill in the brackets with your specifics.</li>
                 <li><strong>CTAs:</strong> always end your content with a clear call to action — pick one that matches your goal for that post (engagement, sales, or growth).</li>
                 <li><strong>Story Ideas:</strong> use these when you open Instagram and have no idea what to post — they're designed to be quick and authentic.</li>
                 <li><strong>Favorite:</strong> hit the heart on anything you love so you can find it again fast.</li>
@@ -751,13 +752,14 @@ select.fi{cursor:pointer}
           </div>
         </div>
       </div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="lbl">Saved Drafts</div><div class="val" id="st-drafts">0</div><div class="sub2">in your library</div></div>
-        <div class="stat-card"><div class="lbl">This Month</div><div class="val" id="st-cal">0</div><div class="sub2">calendar entries</div></div>
-        <div class="stat-card"><div class="lbl">AI Drafts Generated</div><div class="val" id="st-pub">0</div><div class="sub2">all time</div></div>
+      <!-- PANIC BUTTON -->
+      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div>
+          <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
+          <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction — angle, hook, emotion, what to avoid — before you write a single word.</div>
+        </div>
+        <button onclick="openPanicModal()" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
       </div>
-      <div class="sec-title">Recent Drafts</div>
-      <div id="dashRecent"></div>
     </div>
   </div>
 
@@ -802,13 +804,13 @@ select.fi{cursor:pointer}
   <!-- AI STUDIO -->
   <div id="view-studio" class="view" style="overflow:hidden">
     <div class="main-hdr">
-      <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with Claude — both save to your library</div></div>
+      <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with the Studio — both save to your library</div></div>
     </div>
     <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
         <div class="sp">
           <div class="sp-in">
-            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post / Article">Blog/Article</div></div></div>
+            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post / Article">Blog / Article</div></div></div>
             <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
@@ -859,6 +861,7 @@ select.fi{cursor:pointer}
   <div id="view-drafts" class="view">
     <div class="main-hdr"><div><h1>Saved Drafts</h1><div class="sub">Your content library</div></div></div>
     <div class="main-body">
+      <div id="recentDraftsWrap" style="margin-bottom:24px"></div>
       <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
         <div style="position:relative;flex:1;min-width:180px">
           <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tl);font-size:14px">⌕</span>
@@ -903,7 +906,7 @@ select.fi{cursor:pointer}
       <div class="lib-count" id="hooksCount"></div>
       <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
         <span style="font-size:16px;flex-shrink:0">✦</span>
-        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — the Studio will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
       </div>
       <div id="hooksGrid"></div>
     </div>
@@ -928,7 +931,7 @@ select.fi{cursor:pointer}
       <div class="lib-count" id="promptsCount"></div>
       <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
         <span style="font-size:16px;flex-shrink:0">✦</span>
-        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — the Studio will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
       </div>
       <div id="promptsGrid"></div>
     </div>
@@ -953,7 +956,7 @@ select.fi{cursor:pointer}
       <div class="lib-count" id="ctasCount"></div>
       <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
         <span style="font-size:16px;flex-shrink:0">✦</span>
-        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — the Studio will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
       </div>
       <div id="ctasGrid"></div>
     </div>
@@ -978,7 +981,7 @@ select.fi{cursor:pointer}
       <div class="lib-count" id="storiesCount"></div>
       <div style="background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--el)">
         <span style="font-size:16px;flex-shrink:0">✦</span>
-        <span>These work best when your <strong>Brand Profile</strong> is filled in — Claude will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
+        <span>These work best when your <strong>Brand Profile</strong> is filled in — the Studio will automatically write in your niche and voice. <span style="color:var(--r);cursor:pointer;text-decoration:underline" onclick="navigate('settings')">Set it up in Settings →</span></span>
       </div>
       <div id="storiesGrid"></div>
     </div>
@@ -988,10 +991,10 @@ select.fi{cursor:pointer}
   <div id="view-settings" class="view">
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
-      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ No setup needed.</div></div>
+      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ ✦ No setup needed.</div></div>
       <div class="setting-sec">
         <h3>Brand Profile</h3>
-        <p class="setting-desc">These fields are automatically woven into every AI generation — no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and Claude will always write as <em>you</em>.</p>
+        <p class="setting-desc">These fields are automatically woven into every AI generation — no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. VA/OBM for wellness entrepreneurs" /></div>
           <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Holistic Virtual Assistant & OBM" /></div>
@@ -1000,8 +1003,8 @@ select.fi{cursor:pointer}
         <div class="fl"><label class="fl-lbl">Products &amp; Offers</label><input class="fi" id="bpOffers" placeholder="e.g. VA packages, OBM retainers, 1:1 strategy intensives" /></div>
         <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational — no corporate jargon, never pushy" /></div>
         <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale — the right systems change everything" /></div>
-        <div class="fl"><label class="fl-lbl">Extra Notes for Claude <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Paste anything else Claude should always know — content pillars, things to avoid, past prompts that worked well, client language..."></textarea>
+        <div class="fl"><label class="fl-lbl">Extra Notes for the Studio <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Paste anything else the Studio should always know — content pillars, things to avoid, past prompts that worked well, client language..."></textarea>
         </div>
         <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
         <div class="info-b" style="margin-top:14px">
@@ -1050,11 +1053,11 @@ select.fi{cursor:pointer}
     <div class="m-title">Welcome to your Studio ✦</div>
     <div class="m-sub">This is your personal content workspace. Here's how it all works — read this once and you'll feel right at home.</div>
     <div class="welcome-steps">
-      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings and add your studio name and Brand Profile. The Brand Profile is the most important part — it tells Claude who you are, who you serve, and what you offer so every draft sounds like <em>you</em>.</p></div></div>
+      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings and add your studio name and Brand Profile. The Brand Profile is the most important part — it tells the Studio who you are, who you serve, and what you offer so every draft sounds like <em>you</em>.</p></div></div>
       <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
       <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events — anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
       <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
-      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in the Writing Studio</h4><p>Pick your content type, platform, and tone — give Claude a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
+      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in the Writing Studio</h4><p>Pick your content type, platform, and tone — give the Studio a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
       <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Your data is saved automatically</h4><p>Everything you create saves to your account instantly and syncs across all your devices. Pick up on your phone exactly where you left off on your laptop.</p></div></div>
     </div>
     <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
@@ -1157,7 +1160,7 @@ select.fi{cursor:pointer}
             </div>
             <div class="cd-rp-div" style="height:1px;background:var(--bl);margin:14px 0"></div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:8px">Repurpose a Post</div>
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post — Claude rebuilds it in your voice for your niche.</div>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post — the Studio rebuilds it in your voice for your niche.</div>
             <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
               <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
               <select class="fi" id="ideaRpOrigPlat" style="font-size:12px;padding:6px 10px">
@@ -1385,7 +1388,7 @@ select.fi{cursor:pointer}
             <span id="ai2-repurpose-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. Claude studies why it works then rebuilds it in your voice.</div>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. the Studio studies what works and rebuilds it in your voice.</div>
             <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
               <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
               <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
@@ -1434,7 +1437,43 @@ select.fi{cursor:pointer}
   </div>
 </div>
 
-<div class="toast" id="toast"></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- PANIC / CREATIVE DIRECTOR MODAL -->
+<div class="modal-ov" id="panicModal">
+  <div class="modal modal-xl">
+    <div class="m-title">✦ Creative Director Mode</div>
+    <div class="m-sub">Tell me what you're trying to create and I'll give you the angle, hook, emotion, and what to avoid — before you write a word.</div>
+    <div class="fl"><label class="fl-lbl">What are you working on?</label>
+      <textarea class="fi" id="panicTopic" style="min-height:80px;font-size:14px" placeholder="e.g. A carousel about why ADHD brains struggle with consistency — for my VA/OBM audience..."></textarea>
+    </div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Platform</label>
+        <select class="fi" id="panicPlat">
+          <option value="Instagram">Instagram</option><option value="Newsletter">Newsletter</option>
+          <option value="Email">Email</option><option value="LinkedIn">LinkedIn</option>
+          <option value="TikTok">TikTok</option><option value="Blog">Blog</option><option value="Substack">Substack</option>
+        </select>
+      </div>
+      <div class="fl"><label class="fl-lbl">Format</label>
+        <select class="fi" id="panicFormat">
+          <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
+          <option value="Reel Script">Reel</option><option value="Newsletter">Newsletter</option>
+          <option value="Blog Post">Blog Post</option><option value="Story">Story</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-p full" id="panicBtn" onclick="runPanic()" style="font-size:14px;padding:12px">✦ Brief Me Now</button>
+    <div id="panicLoading" style="display:none;text-align:center;padding:16px 0;color:var(--t);font-size:13px">Thinking like a creative director...</div>
+    <div id="panicOut" style="display:none;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;margin-top:14px;font-size:14px;line-height:1.85;white-space:pre-wrap;color:var(--e)"></div>
+    <div id="panicActs" style="display:none;margin-top:10px;display:none;gap:8px">
+      <button class="btn btn-g" onclick="navigator.clipboard.writeText(document.getElementById('panicOut').textContent).then(()=>toast('Copied ✓'))">Copy</button>
+      <button class="btn btn-brass" onclick="panicToCard()">→ Open as Content Card</button>
+    </div>
+    <div class="m-acts" style="margin-top:14px"><button class="btn btn-g" onclick="closeModal('panicModal')">Close</button></div>
+  </div>
+</div>
+</div>
 
 <script>
 const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
@@ -1525,11 +1564,17 @@ async function bootApp(){
   window._supabasePersist=function(obj){saveUserData(obj);};
   document.getElementById('loadingScreen').classList.remove('hidden');
   var saved=await loadUserData();
+  // Load plan from Supabase profiles table
+  try{
+    var {data:profile}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
+    if(profile&&profile.plan) S.plan=profile.plan;
+  }catch(e){ /* profiles table may not exist yet — defaults to beta */ }
   document.getElementById('appWrap').classList.add('show');
   document.getElementById('loadingScreen').classList.add('hidden');
   initFlowStateApp(saved);
   addUserMenu();
-  // Re-render calendar after data loads so entries show
+  checkCreditReset();
+  renderCreditBar();
   setTimeout(function(){
     if(typeof renderCalendar==='function')renderCalendar();
     if(typeof renderKanban==='function')renderKanban();
@@ -1674,6 +1719,10 @@ const S = {
   hooks:[], ctas:[], stories:[], prompts:[],
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
   settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
+  plan:'beta', // 'owner'|'unlimited'|'beta'|'starter' — loaded from Supabase
+  monthlyCredits:50, // limit for beta plan
+  creditsUsed:0, // this month
+  creditMonth:'', // YYYY-MM of current credit window
   gs:{nameSet:false,keySet:false,bizSet:false,libVisited:false,calAdded:false,draftGenerated:false},
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
@@ -1696,6 +1745,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,aiCount:S.aiCount,
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
@@ -1828,16 +1878,6 @@ function copyLastDraft(id){
   if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));
 }
 function renderDashboard(){
-  document.getElementById('st-drafts').textContent=S.drafts.length;
-  const now=new Date();
-  const mon=S.calEntries.filter(e=>{if(!e.date)return false;const d=new Date(e.date+'T12:00:00');return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
-  document.getElementById('st-cal').textContent=mon.length;
-  document.getElementById('st-pub').textContent=S.aiCount||0;
-  const el=document.getElementById('dashRecent');
-  const recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,4);
-  if(!recent.length){el.innerHTML='<div class="empty-state"><h3>Nothing here yet</h3><p>Head to the Writing Studio to generate a draft, write your own, or repurpose something you love.</p></div>';return;}
-  el.innerHTML=`<div class="drafts-grid">${recent.map(dcHTML).join('')}</div>`;
-  el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
   renderGS();
 }
 
@@ -1871,12 +1911,15 @@ function renderTaskKanban(){
     const cards=S.tasks.filter(t=>t.status===col.id);
     return`<div class="kc">
       <div class="kc-head"><span class="kc-title">${col.label}</span><span class="kc-count">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
+      <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer;padding:14px 16px;min-height:100px">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
-        <div class="cc-title" style="font-size:15px;font-weight:600;line-height:1.3">${esc(t.title)}</div>
-        ${t.date?'<div style="font-size:13px;color:var(--teal);margin-top:6px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
-        ${t.notes?'<div style="font-size:11px;color:var(--t);margin-top:5px;line-height:1.55;border-top:1px solid var(--bl);padding-top:5px">'+esc(t.notes)+'</div>':''}
-        ${col.id!=='done'?`<div style="margin-top:8px;display:flex;gap:5px">${nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
+        <div class="cc-title" style="font-size:15px;font-weight:600;line-height:1.35;margin-bottom:8px;padding-right:18px">${esc(t.title)}</div>
+        ${t.date?'<div style="font-size:13px;color:var(--teal);margin-top:4px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
+        ${t.notes?'<div style="font-size:12.5px;color:var(--t);margin-top:7px;line-height:1.6;border-top:1px solid var(--bl);padding-top:7px">'+esc(t.notes)+'</div>':''}
+        <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap;align-items:center">
+          ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
+          ${t._ideaId?`<button class="btn btn-g" style="padding:4px 10px;font-size:10px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">→ View Content Card</button>`:''}
+        </div>
       </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
     </div>`;
@@ -2069,7 +2112,7 @@ async function generate(){
     document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div>`;
     document.getElementById('cpBtn').style.display='inline-flex';
     document.getElementById('svBtn').style.display='inline-flex';
-    S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;persist();renderGS();renderDashboard();
+    S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
     toast('Error: '+e.message);
@@ -2090,9 +2133,18 @@ function dcHTML(d){
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   return`<div class="dc" data-id="${d.id}"><div class="dc-title">${esc(d.title)}</div><div class="dc-preview">${esc(d.content)}</div><div class="dc-foot"><span class="dc-date">${dt}</span><span class="tag tag-${d.platform}">${cap(d.platform)}</span></div></div>`;
 }
+function renderRecentDrafts(){
+  var el=document.getElementById('recentDraftsWrap');if(!el)return;
+  var recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,3);
+  if(!recent.length){el.innerHTML='';return;}
+  el.innerHTML='<div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:10px;display:flex;align-items:center;gap:8px">Recently saved <span style="font-size:12px;font-family:var(--fb);color:var(--tl);font-weight:400;margin-left:4px">— pick up where you left off</span></div>'+
+    '<div class="drafts-grid" id="recentDraftsGrid">'+recent.map(dcHTML).join('')+'</div>';
+  el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
+}
 function renderDraftsGrid(){
   const g=document.getElementById('draftsGrid');
   if(!g)return;
+  renderRecentDrafts();
   const q=(document.getElementById('draftsSearch')?.value||'').toLowerCase();
   const sortBy=document.getElementById('draftsSortBy')?.value||'newest';
   const platFilter=document.getElementById('draftsFilterPlat')?.value||'';
@@ -2102,7 +2154,7 @@ function renderDraftsGrid(){
   if(sortBy==='oldest')drafts.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
   else if(sortBy==='platform')drafts.sort((a,b)=>(a.platform||'').localeCompare(b.platform||''));
   else drafts.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-  if(!drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>'+(S.drafts.length?'No matches':'No saved drafts yet')+'</h3><p>'+(S.drafts.length?'Try a different search or filter.':'Write your own, generate with Claude, or repurpose something you love.')+'</p></div>';return;}
+  if(!drafts.length){g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><h3>'+(S.drafts.length?'No matches':'No saved drafts yet')+'</h3><p>'+(S.drafts.length?'Try a different search or filter.':'Write your own, generate with the Studio, or repurpose something you love.')+'</p></div>';return;}
   g.innerHTML=drafts.map(dcHTML).join('');
   g.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
 }
@@ -2766,6 +2818,46 @@ function cdSaveSingleHook(hookText){
   var item={id:'u'+Date.now(),cat:'Generated',text:hookText};
   S.hooks.unshift(item);persist();toast('Hook saved to library ✓');
 }
+function openPanicModal(){
+  document.getElementById('panicTopic').value='';
+  document.getElementById('panicOut').style.display='none';
+  document.getElementById('panicOut').textContent='';
+  document.getElementById('panicLoading').style.display='none';
+  var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
+  openModal('panicModal');
+  setTimeout(()=>document.getElementById('panicTopic').focus(),100);
+}
+async function runPanic(){
+  var topic=document.getElementById('panicTopic').value.trim();
+  if(!topic){toast('Add a topic first');return;}
+  var plat=document.getElementById('panicPlat').value;
+  var fmt=document.getElementById('panicFormat').value;
+  var brand=buildBrandContext();
+  document.getElementById('panicLoading').style.display='block';
+  document.getElementById('panicOut').style.display='none';
+  var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
+  document.getElementById('panicBtn').disabled=true;
+  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Talk like a creative director briefing a copywriter.';
+  var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nGive me:\n1. THE ANGLE — specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK — one specific opening line to lead with\n3. THE EMOTION — what feeling to create and why it matters for my niche\n4. THE WATCH OUT — one thing to avoid that would make it feel generic or off-brand\n\nBe direct. No fluff.';
+  var result=await cdCallAI(sys,usr,600);
+  document.getElementById('panicLoading').style.display='none';
+  document.getElementById('panicBtn').disabled=false;
+  if(result){
+    var out=document.getElementById('panicOut');
+    out.textContent=result;out.style.display='block';
+    if(actsEl)actsEl.style.display='flex';
+  }
+}
+function panicToCard(){
+  var topic=document.getElementById('panicTopic').value.trim();
+  var out=document.getElementById('panicOut').textContent;
+  closeModal('panicModal');
+  openIdeaModal('idea');
+  setTimeout(()=>{
+    var t=document.getElementById('cdTitle');if(t)t.value=topic;
+    var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
+  },100);
+}
 function studioOwnCopy(){
   var el=document.getElementById('studioOwnTA');
   if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
@@ -2964,7 +3056,69 @@ async function cdRepurpose2() {
   }
 }
 
+/* ═══════════════════ CREDITS ═══════════════════ */
+function isUnlimited(){
+  return S.plan==='owner'||S.plan==='unlimited';
+}
+function creditLimit(){
+  if(S.plan==='owner'||S.plan==='unlimited') return Infinity;
+  if(S.plan==='starter') return 125;
+  return 50; // beta default
+}
+function checkCreditReset(){
+  var now=new Date();
+  var ym=now.getFullYear()+'-'+(now.getMonth()+1);
+  if(S.creditMonth!==ym){
+    S.creditMonth=ym;
+    S.creditsUsed=0;
+    persist();
+  }
+}
+function canUseAI(){
+  if(isUnlimited()) return true;
+  return (S.creditsUsed||0)<creditLimit();
+}
+function consumeCredit(){
+  if(isUnlimited()) return;
+  S.creditsUsed=(S.creditsUsed||0)+1;
+  persist();
+  renderCreditBar();
+}
+function renderCreditBar(){
+  var lbl=document.getElementById('creditLabel');
+  var fill=document.getElementById('creditBarFill');
+  var sub=document.getElementById('creditSub');
+  if(!lbl||!fill)return;
+  if(isUnlimited()){
+    lbl.textContent='✦ Studio in Session';
+    fill.style.width='100%';
+    fill.style.background='var(--teal)';
+    if(sub)sub.textContent='Unlimited access';
+    return;
+  }
+  var limit=creditLimit();
+  var used=S.creditsUsed||0;
+  var remaining=Math.max(0,limit-used);
+  var pct=Math.round((remaining/limit)*100);
+  lbl.textContent='✦ Studio in Session';
+  fill.style.width=pct+'%';
+  fill.style.background=pct>40?'var(--teal)':pct>15?'var(--g)':'var(--r)';
+  if(sub)sub.textContent=remaining+' of '+limit+' credits remaining';
+}
+function showCreditBlocked(){
+  var limit=creditLimit();
+  toast('All '+limit+' credits used this month. Resets on the 1st ✦');
+  // Show a gentle modal
+  var msg='All '+limit+' credits used this month. They reset on the 1st.';
+  if(confirm(msg+'\n\nWant to learn about unlimited access?')){
+    navigate('settings');
+  }
+}
+
 async function cdCallAI(sys, usr, maxTok) {
+  // Credit check
+  checkCreditReset();
+  if(!canUseAI()){showCreditBlocked();return '';}
   try {
     var r = await fetch('/api/generate', {
       method: 'POST',
@@ -2972,7 +3126,9 @@ async function cdCallAI(sys, usr, maxTok) {
       body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] })
     });
     var d = await r.json();
-    return (d.content && d.content[0] && d.content[0].text) || '';
+    var result = (d.content && d.content[0] && d.content[0].text) || '';
+    if(result) consumeCredit(); // only consume if we got a real response
+    return result;
   } catch(e) {
     toast('Error: ' + e.message);
     return '';
