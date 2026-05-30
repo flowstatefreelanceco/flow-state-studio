@@ -302,6 +302,39 @@ select.fi{cursor:pointer}
 .info-b{background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:12px 15px;font-size:12px;color:var(--t);line-height:1.65;margin-top:12px}
 .info-b code{background:rgba(42,28,16,.08);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11.5px;color:var(--e)}
 
+/* LOCKED / PRICING SCREEN */
+#lockedScreen{position:fixed;inset:0;background:var(--p);z-index:9990;overflow-y:auto;display:none}
+#lockedScreen.show{display:block}
+.pricing-wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+.pricing-hero{text-align:center;margin-bottom:56px}
+.pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
+.pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
+.pricing-nd{display:inline-flex;align-items:center;gap:6px;background:var(--rp);border:1px solid #E0BDAA;border-radius:100px;padding:6px 16px;font-size:12px;font-weight:600;color:var(--r);letter-spacing:.04em;text-transform:uppercase;margin-top:8px}
+.pricing-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:48px}
+.pf-card{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:18px 20px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 1px 4px var(--sh)}
+.pf-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.pf-title{font-size:14px;font-weight:600;color:var(--e);margin-bottom:3px}
+.pf-desc{font-size:12.5px;color:var(--t);line-height:1.6}
+.pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.pc{background:var(--w);border:2px solid var(--bl);border-radius:14px;padding:28px;position:relative;transition:border-color .2s}
+.pc.featured{border-color:var(--r);background:var(--rp)}
+.pc-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:100px;white-space:nowrap}
+.pc-name{font-family:var(--fh);font-size:28px;font-weight:700;color:var(--e);margin-bottom:4px}
+.pc-price{font-size:36px;font-weight:700;color:var(--r);line-height:1;margin-bottom:4px}
+.pc-price span{font-size:15px;font-weight:400;color:var(--t)}
+.pc-credits{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:16px;padding:5px 12px;background:var(--tealp);border-radius:100px;display:inline-block}
+.pc-features{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:8px}
+.pc-features li{font-size:13.5px;color:var(--e);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.pc-features li::before{content:"✦";color:var(--r);flex-shrink:0;font-size:11px;margin-top:3px}
+.pc-btn{width:100%;padding:14px;font-size:15px;font-weight:600;border-radius:var(--rsm);border:none;cursor:pointer;font-family:var(--fb);transition:all .15s}
+.pc-btn-primary{background:var(--r);color:white}
+.pc-btn-primary:hover{background:var(--rh)}
+.pc-btn-secondary{background:transparent;color:var(--r);border:2px solid var(--r)}
+.pc-btn-secondary:hover{background:var(--rp)}
+.pricing-footer{text-align:center;font-size:12.5px;color:var(--tl);line-height:1.8}
+.pricing-footer a{color:var(--r);cursor:pointer;text-decoration:underline}
+.pricing-divider{height:1px;background:var(--bl);margin:40px 0;position:relative}
+.pricing-divider::after{content:"Everything you get";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--p);padding:0 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--tl)}
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--e);color:var(--p);padding:10px 17px;border-radius:var(--rsm);font-size:13px;z-index:300;transform:translateY(70px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:310px;border:1px solid rgba(255,255,255,.08)}
 .toast.show{transform:translateY(0);opacity:1}
@@ -996,7 +1029,39 @@ select.fi{cursor:pointer}
   <div id="view-settings" class="view">
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
-      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ ✦ No setup needed.</div></div>
+      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ No setup needed.</div></div>
+
+      <!-- MEMBERSHIP / UPGRADE -->
+      <div class="setting-sec" id="membershipSection">
+        <h3>Membership</h3>
+        <p class="setting-desc">Your current plan and usage this month.</p>
+        <div id="currentPlanDisplay" style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:3px">Current Plan</div>
+            <div id="planName" style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)">Beta</div>
+            <div id="planCredits" style="font-size:12px;color:var(--tl);margin-top:2px"></div>
+          </div>
+          <div id="planBadge" style="padding:6px 14px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--tealp);color:var(--teal)">Active</div>
+        </div>
+        <div id="upgradeOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="border:2px solid var(--bl);border-radius:var(--rad);padding:20px;background:var(--w);transition:border-color .15s" onmouseover="this.style.borderColor='var(--r)'" onmouseout="this.style.borderColor='var(--bl)'">
+            <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:4px">Starter</div>
+            <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$9.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">125 AI credits per month — perfect for consistent creators posting a few times a week.</div>
+            <button class="btn btn-p" style="width:100%" onclick="startUpgrade('starter')">Upgrade to Starter</button>
+          </div>
+          <div style="border:2px solid var(--r);border-radius:var(--rad);padding:20px;background:var(--rp);position:relative">
+            <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px">Most Popular</div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited</div>
+            <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$19.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">Unlimited AI credits — for creators who are all in and want zero limits.</div>
+            <button class="btn btn-p" style="width:100%" onclick="startUpgrade('unlimited')">Upgrade to Unlimited</button>
+          </div>
+        </div>
+        <div id="alreadyUnlimited" style="display:none;text-align:center;padding:14px;background:var(--tealp);border-radius:var(--rsm);color:var(--teal);font-size:13px;font-weight:500">
+          ✦ You have unlimited access — thank you for being part of Flow State Studio!
+        </div>
+      </div>
       <div class="setting-sec">
         <h3>Brand Profile</h3>
         <p class="setting-desc">These fields are automatically woven into every AI generation — no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
@@ -1020,6 +1085,15 @@ select.fi{cursor:pointer}
         <h3>Onboarding &amp; Welcome Guide</h3>
         <p class="setting-desc">Re-open the welcome guide that shows on first login — useful if you want to revisit the overview of each section.</p>
         <button class="btn btn-g" onclick="resetOnboarding()">↺ Reset Welcome Guide</button>
+      </div>
+      <div class="setting-sec">
+        <h3>Beta Invite Code</h3>
+        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically — no SQL needed.</p>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO</div>
+          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO').then(()=>toast('Code copied ✓'))">Copy</button>
+        </div>
+        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in — no action needed from you.</div>
       </div>
       <div class="setting-sec"><h3>Export &amp; Import</h3><p class="setting-desc">Back up all your drafts, ideas, tasks, and calendar entries. Your API key is never included in exports. Do this regularly — it's your safety net.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-brass" onclick="exportData()">⬇ Export Backup</button><button class="btn btn-g" onclick="document.getElementById('impFile').click()">⬆ Import Backup</button></div><input type="file" id="impFile" accept=".json" style="display:none" onchange="importData(event)" /></div>
       <div class="setting-sec" style="border-color:#E0BDAA"><h3>Clear All Data</h3><p class="setting-desc">Permanently deletes everything in this browser. Export first!</p><button class="btn btn-danger" onclick="clearAll()">Clear All Data</button></div>
@@ -1444,6 +1518,102 @@ select.fi{cursor:pointer}
 
 <div class="toast" id="toast"></div>
 
+<!-- LOCKED / PRICING SCREEN -->
+<div id="lockedScreen">
+  <div class="pricing-wrap">
+    <div class="pricing-hero">
+      <div class="pricing-wordmark">Flow State Studio ✦</div>
+      <div class="pricing-tagline">The content workspace built for the way your brain actually works — not the way productivity gurus think it should.</div>
+      <div class="pricing-nd">🧠 Designed for ADHD &amp; neurodivergent creators</div>
+    </div>
+
+    <!-- FEATURE GRID -->
+    <div class="pricing-features">
+      <div class="pf-card">
+        <div class="pf-icon">✦</div>
+        <div><div class="pf-title">Creative Director Mode</div><div class="pf-desc">Stuck staring at a blank page? Hit one button and get your angle, hook, emotion, and what to avoid — before you write a single word. Built for ND brains that need a starting point, not a blank canvas.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🪝</div>
+        <div><div class="pf-title">Hook Builder</div><div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, and build a full post from it. No more losing the thread between your idea and your caption.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🗂</div>
+        <div><div class="pf-title">Content Planner</div><div class="pf-desc">A visual board that moves with you — from half-baked idea to published. See everything at once without losing track. Perfect for brains that think in big pictures, not lists.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">✍️</div>
+        <div><div class="pf-title">Writing Studio</div><div class="pf-desc">Generate captions, carousels, newsletters, reels, emails and more — all in your brand voice. Write your own or use AI as your starting point. Both live in the same place.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">☑</div>
+        <div><div class="pf-title">Task Breakdown</div><div class="pf-desc">Break any content idea into steps that sync to your task board and calendar. Because ND brains need the big idea AND the tiny next action — in the same place.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">📅</div>
+        <div><div class="pf-title">Calendar + Tasks</div><div class="pf-desc">Your content and tasks on one calendar, color-coded so you always know what's what. No more switching between five apps to figure out what day it is and what you're supposed to be doing.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🧠</div>
+        <div><div class="pf-title">Brain Dump Notebooks</div><div class="pf-desc">Unlimited notebooks for your thoughts, ideas, and half-finished drafts. No format required. Just write — and save your drafts straight to a notebook when you're done.</div></div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🔗</div>
+        <div><div class="pf-title">Hook, CTA &amp; Prompt Library</div><div class="pf-desc">Hundreds of pre-written hooks, CTAs, and writing prompts built for wellness and service businesses. Filter by vibe, bookmark your favourites, save your own.</div></div>
+      </div>
+    </div>
+
+    <div class="pricing-divider"></div>
+
+    <!-- PRICING CARDS -->
+    <div class="pricing-cards">
+      <div class="pc">
+        <div class="pc-name">Starter</div>
+        <div class="pc-price">$9.50<span>/month</span></div>
+        <div class="pc-credits">125 AI credits / month</div>
+        <ul class="pc-features">
+          <li>All tools — Content Planner, Writing Studio, Hook Builder, Creative Director</li>
+          <li>Task board + calendar sync</li>
+          <li>Brain Dump notebooks</li>
+          <li>Full hook, CTA &amp; prompt library</li>
+          <li>Save unlimited drafts</li>
+          <li>125 AI generations per month</li>
+        </ul>
+        <button class="pc-btn pc-btn-secondary" onclick="lockedUpgrade('starter')">Get Started — $9.50/mo</button>
+      </div>
+      <div class="pc featured">
+        <div class="pc-badge">Most Popular</div>
+        <div class="pc-name">Unlimited</div>
+        <div class="pc-price">$19.50<span>/month</span></div>
+        <div class="pc-credits">Unlimited AI credits</div>
+        <ul class="pc-features">
+          <li>Everything in Starter</li>
+          <li>Unlimited AI generations — generate as much as you need, whenever you need it</li>
+          <li>Perfect for batch content days, launches, and high-output weeks</li>
+          <li>Zero limits, zero anxiety about running out mid-flow</li>
+        </ul>
+        <button class="pc-btn pc-btn-primary" onclick="lockedUpgrade('unlimited')">Go Unlimited — $19.50/mo</button>
+      </div>
+    </div>
+
+    <!-- INVITE CODE -->
+    <div style="text-align:center;margin-bottom:32px;padding:24px;background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);max-width:420px;margin-left:auto;margin-right:auto">
+      <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:6px">Got an invite code?</div>
+      <div style="font-size:13px;color:var(--t);margin-bottom:14px">Beta testers enter your code below for free access.</div>
+      <div style="display:flex;gap:8px">
+        <input id="inviteCodeInput" class="fi" placeholder="Enter invite code..." style="flex:1;text-transform:uppercase;letter-spacing:.08em;font-size:14px" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')redeemInviteCode()" />
+        <button class="btn btn-p" onclick="redeemInviteCode()" style="white-space:nowrap">Redeem →</button>
+      </div>
+      <div id="inviteCodeMsg" style="font-size:12px;margin-top:8px;min-height:16px"></div>
+    </div>
+
+    <div class="pricing-footer">
+      Cancel anytime · Secured by Stripe · Your data is always yours<br>
+      Already have an account? <a onclick="lockedSignIn()">Sign in here</a>
+    </div>
+  </div>
+</div>
+
 <!-- PANIC / CREATIVE DIRECTOR MODAL -->
 <div class="modal-ov" id="panicModal">
   <div class="modal modal-xl">
@@ -1501,6 +1671,12 @@ async function initAuth(){
   }
   sb.auth.onAuthStateChange(async function(event,session){
     if(event==='SIGNED_IN'&&session&&!_appBooted){
+      // Check for pending invite code from before signup
+      var pendingCode=sessionStorage.getItem('pendingInviteCode');
+      if(pendingCode===INVITE_CODE){
+        try{await sb.from('profiles').upsert({id:session.user.id,plan:'beta'});}catch(e){}
+        sessionStorage.removeItem('pendingInviteCode');
+      }
       _currentUser=session.user;
       document.getElementById('authScreen').classList.add('hidden');
       await bootApp();
@@ -1574,8 +1750,13 @@ async function bootApp(){
     var {data:profile}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
     if(profile&&profile.plan) S.plan=profile.plan;
   }catch(e){ /* profiles table may not exist yet — defaults to beta */ }
-  document.getElementById('appWrap').classList.add('show');
   document.getElementById('loadingScreen').classList.add('hidden');
+  // Check if user is locked
+  if(S.plan==='locked'){
+    document.getElementById('lockedScreen').classList.add('show');
+    return;
+  }
+  document.getElementById('appWrap').classList.add('show');
   initFlowStateApp(saved);
   addUserMenu();
   checkCreditReset();
@@ -1799,7 +1980,14 @@ function navigate(v){
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='drafts')renderDraftsGrid();
   if(v==='braindump')renderBrainDump();
-  if(v==='settings')applySettings();
+  if(v==='settings'){applySettings();renderMembershipSection();
+    // Refresh plan from Supabase in case it changed (e.g. after Stripe payment)
+    if(_currentUser){
+      sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle().then(function(res){
+        if(res.data&&res.data.plan){S.plan=res.data.plan;renderMembershipSection();renderCreditBar();}
+      });
+    }
+  }
   renderGS();
   renderPickUp();
   // auto-collapse GS strip when all done
@@ -2387,6 +2575,66 @@ function saveLibItem(){
 }
 
 /* ═══════════════════ SETTINGS ═══════════════════ */
+/* ═══════════════════ UPGRADE / MEMBERSHIP ═══════════════════ */
+function renderMembershipSection(){
+  var planNameEl=document.getElementById('planName');
+  var planCreditsEl=document.getElementById('planCredits');
+  var upgradeOpts=document.getElementById('upgradeOptions');
+  var alreadyUnlimited=document.getElementById('alreadyUnlimited');
+  var planBadge=document.getElementById('planBadge');
+  if(!planNameEl)return;
+  var plan=S.plan||'beta';
+  var used=S.creditsUsed||0;
+  var limit=creditLimit();
+  var planLabels={owner:'Owner',unlimited:'Unlimited',starter:'Starter',beta:'Beta'};
+  planNameEl.textContent=planLabels[plan]||'Beta';
+  if(isUnlimited()){
+    planCreditsEl.textContent='Unlimited AI credits';
+    if(upgradeOpts)upgradeOpts.style.display='none';
+    if(alreadyUnlimited)alreadyUnlimited.style.display='block';
+    if(planBadge){planBadge.textContent='Unlimited';planBadge.style.background='var(--rp)';planBadge.style.color='var(--r)';}
+  } else {
+    planCreditsEl.textContent=used+' of '+limit+' credits used this month';
+    if(upgradeOpts)upgradeOpts.style.display='grid';
+    if(alreadyUnlimited)alreadyUnlimited.style.display='none';
+    // Hide upgrade button for current plan
+    if(plan==='starter'){
+      starterBtns=document.querySelectorAll('.btn-p');var starterBtn=null;starterBtns.forEach(function(b){if(b.textContent.includes('Starter'))starterBtn=b;});
+      if(starterBtn){starterBtn.textContent='Current Plan';starterBtn.disabled=true;starterBtn.style.opacity='.5';}
+    }
+  }
+}
+
+async function startUpgrade(plan){
+  if(!_currentUser){toast('Please sign in first');return;}
+  var btn=event.target;
+  btn.textContent='Opening checkout...';
+  btn.disabled=true;
+  try{
+    var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/create-checkout',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
+      body:JSON.stringify({plan,userId:_currentUser.id,userEmail:_currentUser.email})
+    });
+    var data=await res.json();
+    if(data.url){
+      window.open(data.url,'_blank');
+      toast('Stripe checkout opened in new tab ✦');
+    } else {
+      toast('Error: '+(data.error||'Could not open checkout'));
+    }
+  }catch(e){
+    toast('Error: '+e.message);
+  }
+  btn.textContent=plan==='starter'?'Upgrade to Starter':'Upgrade to Unlimited';
+  btn.disabled=false;
+}
+
+async function getAnonKey(){
+  // Return the Supabase anon key for Edge Function calls
+  return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA';
+}
+
 function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Flow State Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
 function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
 function saveBrandProfile(){
@@ -2839,6 +3087,92 @@ function cdSaveSingleHook(hookText){
   var item={id:'u'+Date.now(),cat:'Generated',text:hookText};
   S.hooks.unshift(item);persist();toast('Hook saved to library ✓');
 }
+/* ═══════════════════ LOCKED SCREEN ═══════════════════ */
+function showLockedScreen(){
+  document.getElementById('lockedScreen').classList.add('show');
+  document.getElementById('appWrap').classList.remove('show');
+}
+function hideLockedScreen(){
+  document.getElementById('lockedScreen').classList.remove('show');
+  document.getElementById('appWrap').classList.add('show');
+}
+async function lockedUpgrade(plan){
+  if(!_currentUser){
+    // Not signed in — send to auth screen
+    document.getElementById('lockedScreen').classList.remove('show');
+    document.getElementById('authScreen').classList.remove('hidden');
+    // Store intended plan for after login
+    sessionStorage.setItem('intendedPlan',plan);
+    return;
+  }
+  var btn=event.target;
+  var orig=btn.textContent;
+  btn.textContent='Opening checkout...';btn.disabled=true;
+  try{
+    var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/create-checkout',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
+      body:JSON.stringify({plan,userId:_currentUser.id,userEmail:_currentUser.email})
+    });
+    var data=await res.json();
+    if(data.url){window.open(data.url,'_blank');toast('Stripe checkout opened ✦');}
+    else toast('Error: '+(data.error||'Could not open checkout'));
+  }catch(e){toast('Error: '+e.message);}
+  btn.textContent=orig;btn.disabled=false;
+}
+const INVITE_CODE = 'FLOWBETASTUDIO';
+
+async function redeemInviteCode(){
+  var input = document.getElementById('inviteCodeInput');
+  var msg = document.getElementById('inviteCodeMsg');
+  var code = (input.value||'').trim().toUpperCase();
+  if(!code){msg.textContent='Enter your invite code';msg.style.color='var(--r)';return;}
+  if(code !== INVITE_CODE){
+    msg.textContent='That code doesn\'t look right — check with Jess!';
+    msg.style.color='var(--r)';
+    return;
+  }
+  if(!_currentUser){
+    // Not signed in yet — save code and send to signup
+    sessionStorage.setItem('pendingInviteCode', code);
+    msg.textContent='Code accepted! Create your account to continue...';
+    msg.style.color='var(--teal)';
+    setTimeout(function(){
+      document.getElementById('lockedScreen').classList.remove('show');
+      document.getElementById('authScreen').classList.remove('hidden');
+      // Switch to signup tab
+      var suTab=document.querySelector('.auth-tab:not(.active)');
+      if(suTab)suTab.click();
+    }, 1200);
+    return;
+  }
+  // Signed in — update plan directly in Supabase
+  msg.textContent='Activating your beta access...';
+  msg.style.color='var(--teal)';
+  try{
+    var {error}=await sb.from('profiles').upsert({id:_currentUser.id,plan:'beta'});
+    if(error)throw error;
+    S.plan='beta';
+    msg.textContent='✦ Beta access activated! Welcome to Flow State Studio.';
+    setTimeout(function(){
+      document.getElementById('lockedScreen').classList.remove('show');
+      document.getElementById('appWrap').classList.add('show');
+      initFlowStateApp({});
+      addUserMenu();
+      checkCreditReset();
+      renderCreditBar();
+    }, 1500);
+  }catch(e){
+    msg.textContent='Something went wrong — try again or contact Jess.';
+    msg.style.color='var(--r)';
+  }
+}
+
+function lockedSignIn(){
+  document.getElementById('lockedScreen').classList.remove('show');
+  document.getElementById('authScreen').classList.remove('hidden');
+}
+
 function openPanicModal(){
   document.getElementById('panicTopic').value='';
   document.getElementById('panicOut').style.display='none';
