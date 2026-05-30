@@ -163,7 +163,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
 .kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;margin-bottom:14px;cursor:pointer;transition:all .18s;position:relative;box-shadow:0 2px 6px var(--sh);overflow:hidden}
 .kc-card:hover{box-shadow:0 8px 24px var(--shm);border-color:var(--teal);transform:translateY(-2px)}
-.kc-card .cc-title{font-size:14px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:7px}
+.kc-card .cc-title{font-size:15px;font-weight:600;color:var(--e);line-height:1.4;margin-bottom:8px;padding-right:18px;font-family:var(--fh)}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
 .kc-card:hover .cc-del{opacity:1}
@@ -186,7 +186,7 @@ select.fi{cursor:pointer}
 .out-panel{display:flex;flex-direction:column}
 .out-tb{padding:14px 22px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
 .out-tit{font-family:var(--fd);font-size:18px;font-weight:500;color:var(--e)}
-.out-bdy{flex:1;padding:22px;overflow-y:auto}
+.out-bdy{flex:1;padding:22px;overflow-y:auto;min-height:280px}
 .out-ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--t);gap:10px}
 .out-ph .sym{font-size:36px;opacity:.22}
 .out-ph h3{font-family:var(--fd);font-size:21px;font-weight:400;color:var(--t)}
@@ -854,7 +854,7 @@ select.fi{cursor:pointer}
         <div class="sp out-panel">
           <div style="padding:14px 20px 0;flex-shrink:0">
             <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:6px">✍️ Write Your Own</div>
-            <textarea id="studioOwnTA" class="fi" placeholder="Start writing here — your own draft, hook, or rough ideas. Use the generate tools on the left to get AI inspiration, or skip them entirely and just write." style="min-height:90px;font-size:13px;line-height:1.75;margin-bottom:8px;resize:vertical"></textarea>
+            <textarea id="studioOwnTA" class="fi" placeholder="Start writing here — your own draft, hook, or rough ideas. Use the generate tools on the left to get AI inspiration, or skip them entirely and just write." style="min-height:280px;font-size:14px;line-height:1.85;margin-bottom:8px;resize:vertical;flex:1"></textarea>
             <div style="display:flex;gap:6px;margin-bottom:12px">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="studioOwnCopy()">Copy</button>
               <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="studioOwnSave()">Save to Drafts</button>
@@ -927,7 +927,7 @@ select.fi{cursor:pointer}
 
   <!-- HOOKS -->
   <div id="view-hooks" class="view">
-    <div class="main-hdr"><div><h1>Viral Hooks</h1><div class="sub">Scroll-stopping opening lines for your content</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('hooks')">+ Add Hook</button></div></div>
+    <div class="main-hdr"><div><h1>Hooks</h1><div class="sub">Scroll-stopping opening lines for your content</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('hooks')">+ Add Hook</button></div></div>
     <div class="main-body">
       <div class="lib-toolbar">
         <div class="lib-search"><span class="s-ico">⌕</span><input id="hooksSearch" placeholder="Search hooks..." oninput="renderLib('hooks')" /></div>
@@ -1260,7 +1260,7 @@ select.fi{cursor:pointer}
 
 <!-- Task -->
 <div class="modal-ov" id="taskModal">
-  <div class="modal modal-xl" style="max-width:680px">
+  <div class="modal modal-task">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
       <div class="m-title" id="taskModalTitle" style="margin:0">Add Task</div>
       <button id="taskStarBtn" onclick="toggleTaskStar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--bl);transition:color .15s;padding:4px" title="Mark as priority">☆</button>
@@ -2159,11 +2159,11 @@ function renderKanban(){
     const cards=S.ideas.filter(i=>i.status===col.id);
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer">
+      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer;padding:14px 16px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:9px">${esc(i.format||'')}</span></div>
-        ${col.id!=='published'?`<div style="margin-top:8px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span></div>
+        ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
@@ -2188,14 +2188,14 @@ function renderTaskKanban(){
           <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
             <div style="font-family:var(--fh);font-size:19px;font-weight:600;line-height:1.3;color:var(--e);flex:1">${esc(t.title)}</div>
-            <span style="font-size:20px;color:${t.starred?'var(--g)':'rgba(0,0,0,.2)'};flex-shrink:0;margin-top:1px">${t.starred?'★':'☆'}</span>
+            ${t.starred?'<span style="font-size:16px;color:var(--g);flex-shrink:0">★</span>':''}
           </div>
           ${t.date?'<div style="font-size:12px;color:var(--r);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
         </div>
         <!-- Tags section — white -->
-        ${(t.taskType||t.energy||t.timeEst)?'<div style="padding:8px 16px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--bl);background:var(--w)">'+(t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':'')+(t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Med':'🌿 Low')+'</span>':'')+(t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':'')+'</div>':''}
+        ${(t.taskType||t.energy||t.timeEst)?'<div style="padding:8px 16px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid rgba(0,0,0,.06);background:#FAFAF8">'+(t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':'')+(t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Med':'🌿 Low')+'</span>':'')+(t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':'')+'</div>':''}
         <!-- Steps + notes — teal tint -->
-        ${(t.substeps&&t.substeps.length||t.notes)?'<div style="padding:10px 16px;background:var(--tealp);border-bottom:1px solid rgba(58,140,140,.15)">'+(t.substeps&&t.substeps.length?'<div style="font-size:12px;color:var(--teal);font-weight:500;margin-bottom:4px">☑ '+t.substeps.filter(function(s){return s.done;}).length+' of '+t.substeps.length+' steps done</div>':'')+(t.notes?'<div style="font-size:12.5px;color:var(--el);line-height:1.6">'+esc(t.notes.slice(0,90))+(t.notes.length>90?'…':'')+'</div>':'')+'</div>':''}
+        ${(t.substeps&&t.substeps.length||t.notes)?'<div style="padding:10px 16px;background:#EBF4F4;border-bottom:1px solid rgba(58,140,140,.12)">'+(t.substeps&&t.substeps.length?'<div style="font-size:12px;color:var(--teal);font-weight:500;margin-bottom:4px">☑ '+t.substeps.filter(function(s){return s.done;}).length+' of '+t.substeps.length+' steps done</div>':'')+(t.notes?'<div style="font-size:12.5px;color:var(--el);line-height:1.6">'+esc(t.notes.slice(0,90))+(t.notes.length>90?'…':'')+'</div>':'')+'</div>':''}
         <!-- Actions footer -->
         <div style="padding:8px 12px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;background:var(--w)">
           ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
@@ -2420,7 +2420,16 @@ function saveDraft(){
 /* ═══════════════════ DRAFTS ═══════════════════ */
 function dcHTML(d){
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  return`<div class="dc" data-id="${d.id}"><div class="dc-title">${esc(d.title)}</div><div class="dc-preview">${esc(d.content)}</div><div class="dc-foot"><span class="dc-date">${dt}</span><span class="tag tag-${d.platform}">${cap(d.platform)}</span></div></div>`;
+  const platColors={'instagram':'#B5512A','newsletter':'#3A8C8C','email':'#3A8C8C','substack':'#3A8C8C','linkedin':'#7A9EC2','blog':'#C47A3A','tiktok':'#98286A','facebook':'#2A3E98','other':'#9A7A5A'};
+  const bc=platColors[d.platform]||'#9A7A5A';
+  return`<div class="dc" data-id="${d.id}" style="border-top:4px solid ${bc};border-left:3px solid ${bc};overflow:hidden">
+    <div style="padding:14px 16px 0">
+      <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${bc};margin-bottom:6px">${cap(d.platform||'draft')}</div>
+      <div class="dc-title" style="color:${bc}">${esc(d.title||'Untitled draft')}</div>
+      <div class="dc-preview">${esc(d.content)}</div>
+    </div>
+    <div class="dc-foot" style="padding:0 16px 14px"><span class="dc-date">${dt}</span></div>
+  </div>`;
 }
 function renderRecentDrafts(){
   var el=document.getElementById('recentDraftsWrap');if(!el)return;
