@@ -2435,18 +2435,8 @@ function renderRecentDrafts(){
   var el=document.getElementById('recentDraftsWrap');if(!el)return;
   var recent=[...S.drafts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,3);
   if(!recent.length){el.innerHTML='';return;}
-  var cards=recent.map(d=>{
-    const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    const platColors={'instagram':'var(--r)','newsletter':'var(--teal)','email':'var(--teal)','substack':'var(--teal)','linkedin':'var(--blue)','blog':'var(--g)','tiktok':'#98286A'};
-    const borderColor=platColors[d.platform]||'var(--b)';
-    return '<div class="dc" data-id="'+d.id+'" style="border-top:3px solid '+borderColor+';padding:12px 16px;min-height:auto">'+
-      '<div class="dc-title" style="font-size:14px;font-family:var(--fb);font-weight:600;margin-bottom:4px">'+esc(d.title||'Untitled')+'</div>'+
-      '<div class="dc-preview" style="font-size:12px;-webkit-line-clamp:2;margin-bottom:8px">'+esc(d.content||'')+'</div>'+
-      '<div class="dc-foot"><span class="dc-date">'+dt+'</span><span class="tag tag-'+d.platform+'">'+cap(d.platform||'')+'</span></div>'+
-    '</div>';
-  }).join('');
-  el.innerHTML='<div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:12px;display:flex;align-items:center;gap:10px">Recently saved<span style="font-size:12px;font-family:var(--fb);color:var(--tl);font-weight:400;letter-spacing:.02em">— pick up where you left off</span></div>'+
-    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px">'+cards+'</div>';
+  el.innerHTML='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:12px">Recently saved</div>'+
+    '<div class="drafts-grid">'+recent.map(dcHTML).join('')+'</div>';
   el.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>openDraftModal(c.dataset.id)));
 }
 function renderDraftsGrid(){
