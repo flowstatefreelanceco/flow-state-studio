@@ -161,8 +161,8 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc-body{flex:1;overflow-y:auto;padding:10px}
 .kc-body::-webkit-scrollbar{width:0}
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
-.kc-card{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;position:relative}
-.kc-card:hover{box-shadow:0 4px 14px var(--shm);border-color:var(--teal);transform:translateY(-1px)}
+.kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 3px var(--sh)}
+.kc-card:hover{box-shadow:0 6px 20px var(--shm);border-color:var(--teal);transform:translateY(-2px)}
 .kc-card .cc-title{font-size:14px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:7px}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
@@ -349,12 +349,12 @@ select.fi{cursor:pointer}
 .bd-wrap{display:grid;grid-template-columns:256px 1fr;gap:0;flex:1;min-height:0;overflow:hidden;border:1px solid var(--bl);border-radius:var(--rad);box-shadow:0 1px 4px var(--sh);background:var(--w)}
 .bd-left{border-right:1px solid rgba(122,158,194,.25);display:flex;flex-direction:column;overflow:hidden;background:var(--bluep)}
 .bd-left-hdr{padding:16px 14px 12px;border-bottom:1px solid rgba(122,158,194,.2);flex-shrink:0;background:rgba(122,158,194,.08)}
-.bd-left-hdr h3{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e);margin-bottom:10px}
+.bd-left-hdr h3{font-family:var(--fb);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:10px}
 .nb-list{flex:1;overflow-y:auto;padding:6px}
 .nb-card{padding:10px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid transparent}
 .nb-card:hover{background:rgba(255,255,255,.7);border-color:rgba(122,158,194,.3)}
 .nb-card.active{background:white;border-color:rgba(122,158,194,.4);box-shadow:0 1px 4px rgba(122,158,194,.2)}
-.nb-name{font-size:15px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fh)}
+.nb-name{font-size:14px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fb);letter-spacing:.01em}
 .nb-count{font-size:10px;color:var(--tl);flex-shrink:0}
 .nb-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px 4px;flex-shrink:0}
 .nb-card:hover .nb-del{opacity:1}
@@ -365,7 +365,7 @@ select.fi{cursor:pointer}
 .note-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s;box-shadow:0 1px 3px var(--sh)}
 .note-card:hover{box-shadow:0 4px 14px var(--shm)}
 .note-card-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.note-title-in{font-family:var(--fh);font-size:17px;font-weight:600;color:var(--e);border:none;background:transparent;outline:none;flex:1;padding:0}
+.note-title-in{font-family:var(--fb);font-size:15px;font-weight:600;color:var(--e);border:none;background:transparent;outline:none;flex:1;padding:0}
 .note-title-in::placeholder{color:var(--tl)}
 .note-meta{font-size:10px;color:var(--tl);flex-shrink:0}
 .note-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;padding:2px 5px;flex-shrink:0;opacity:0;transition:opacity .15s}
@@ -893,7 +893,7 @@ select.fi{cursor:pointer}
   <!-- DRAFTS -->
   <div id="view-drafts" class="view">
     <div class="main-hdr">
-      <div><h1>Saved Drafts</h1><div class="sub">Your content library</div></div>
+      <div><h1 style="font-family:var(--fb);font-size:28px;font-weight:700;letter-spacing:.02em;text-transform:uppercase">Saved Drafts</h1><div class="sub">Your content library</div></div>
     </div>
     <div class="main-body">
       <!-- SEARCH + FILTERS — same toolbar style as library -->
@@ -1086,7 +1086,7 @@ select.fi{cursor:pointer}
         <p class="setting-desc">Re-open the welcome guide that shows on first login — useful if you want to revisit the overview of each section.</p>
         <button class="btn btn-g" onclick="resetOnboarding()">↺ Reset Welcome Guide</button>
       </div>
-      <div class="setting-sec">
+      <div class="setting-sec" id="inviteCodeSection" style="display:none">
         <h3>Beta Invite Code</h3>
         <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically — no SQL needed.</p>
         <div style="display:flex;align-items:center;gap:10px">
@@ -1423,7 +1423,10 @@ select.fi{cursor:pointer}
             <div id="cd-hook-build-area" style="display:none;margin-top:10px">
               <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
               <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
-              <button class="ai2-btn full accent" onclick="cdBuildFromHook()" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Build Full Post from This Hook</button>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0">
+                <button class="ai2-btn full accent" onclick="cdBuildFromHook()" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:12px;padding:11px">✦ Build Full Post</button>
+                <button class="ai2-btn full" onclick="cdBuildCaptionFromHook()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:12px;padding:11px">✍️ Caption Only</button>
+              </div>
             </div>
             <div class="ai2-out" id="cd-out-hooks"></div>
             <div class="ai2-out-acts" id="cd-acts-hooks">
@@ -2588,6 +2591,8 @@ function renderMembershipSection(){
   var limit=creditLimit();
   var planLabels={owner:'Owner',unlimited:'Unlimited',starter:'Starter',beta:'Beta'};
   planNameEl.textContent=planLabels[plan]||'Beta';
+  var invSec=document.getElementById('inviteCodeSection');
+  if(invSec)invSec.style.display=S.plan==='owner'?'block':'none';
   if(isUnlimited()){
     planCreditsEl.textContent='Unlimited AI credits';
     if(upgradeOpts)upgradeOpts.style.display='none';
@@ -3335,6 +3340,26 @@ function cdSelectHook(hook) {
   if (sel) sel.textContent = hook;
   var area = document.getElementById('cd-hook-build-area');
   if (area) area.style.display = 'block';
+}
+
+async function cdBuildCaptionFromHook() {
+  if (!_cdHookSel) return;
+  var b = cdGetBrief();
+  var brand = buildBrandContext();
+  var tone = _cdSelTone || 'warm';
+  var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished caption. No preamble.';
+  var usr = 'Write a ' + b.plat + ' caption starting with this exact hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Tone: ' + (toneMap[tone]||'warm')+'. Keep hook exactly as written. 2-4 short paragraphs, end with a natural CTA. No hashtags.';
+  var out = document.getElementById('cd-out-hooks');
+  var acts = document.getElementById('cd-acts-hooks');
+  if (out) { out.textContent = 'Writing caption...'; out.classList.add('show'); }
+  if (acts) acts.classList.remove('show');
+  var result = await cdCallAI(sys, usr, 500);
+  if (result) {
+    _cdOutputs['hookBuilt'] = result;
+    if (out) out.textContent = result;
+    if (acts) acts.classList.add('show');
+  }
 }
 
 async function cdBuildFromHook() {
