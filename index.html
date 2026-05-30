@@ -161,7 +161,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc-body{flex:1;overflow-y:auto;padding:12px}
 .kc-body::-webkit-scrollbar{width:0}
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
-.kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;margin-bottom:12px;cursor:pointer;transition:all .18s;position:relative;box-shadow:0 2px 6px var(--sh)}
+.kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;margin-bottom:14px;cursor:pointer;transition:all .18s;position:relative;box-shadow:0 2px 6px var(--sh);overflow:hidden}
 .kc-card:hover{box-shadow:0 8px 24px var(--shm);border-color:var(--teal);transform:translateY(-2px)}
 .kc-card .cc-title{font-size:14px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:7px}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
@@ -349,18 +349,18 @@ select.fi{cursor:pointer}
 .bd-wrap{display:grid;grid-template-columns:256px 1fr;gap:0;flex:1;min-height:0;overflow:hidden;border:1px solid var(--bl);border-radius:var(--rad);box-shadow:0 1px 4px var(--sh);background:var(--w)}
 .bd-left{border-right:1px solid rgba(122,158,194,.25);display:flex;flex-direction:column;overflow:hidden;background:var(--bluep)}
 .bd-left-hdr{padding:16px 14px 12px;border-bottom:1px solid rgba(122,158,194,.2);flex-shrink:0;background:rgba(122,158,194,.08)}
-.bd-left-hdr h3{font-family:var(--fb);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:10px}
+.bd-left-hdr h3{font-family:var(--fb);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--tl);margin-bottom:10px}
 .nb-list{flex:1;overflow-y:auto;padding:6px}
 .nb-card{padding:10px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid transparent}
 .nb-card:hover{background:rgba(255,255,255,.7);border-color:rgba(122,158,194,.3)}
 .nb-card.active{background:white;border-color:rgba(122,158,194,.4);box-shadow:0 1px 4px rgba(122,158,194,.2)}
-.nb-name{font-size:16px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fb);letter-spacing:.01em}
+.nb-name{font-size:14px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--fb);letter-spacing:.01em}
 .nb-count{font-size:10px;color:var(--tl);flex-shrink:0}
 .nb-del{font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px 4px;flex-shrink:0}
 .nb-card:hover .nb-del{opacity:1}
 .bd-right{display:flex;flex-direction:column;overflow:hidden}
 .bd-right-hdr{padding:14px 20px 12px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
-.bd-right-hdr h3{font-family:var(--fh);font-size:28px;font-weight:600;color:var(--e)}
+.bd-right-hdr h3{font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)}
 .notes-list{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:0}
 .note-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s;box-shadow:0 1px 3px var(--sh)}
 .note-card:hover{box-shadow:0 4px 14px var(--shm)}
@@ -596,7 +596,7 @@ select.fi{cursor:pointer}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-wordmark" id="sbName">Flow State Studio</div>
-    <div class="sb-tagline" style="font-size:11px">Built for the way your brain works.</div>
+    <div class="sb-tagline">Built for the way your brain works.</div>
     <div class="sb-line"></div>
   </div>
   <nav class="sb-nav">
@@ -620,7 +620,7 @@ select.fi{cursor:pointer}
       <div class="nav-i nav-child" data-view="stories">Story Ideas</div>
     </div>
     <div class="sb-section">Think</div>
-    <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Brain Dump</div>
+    <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Notebooks</div>
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
@@ -780,7 +780,7 @@ select.fi{cursor:pointer}
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🧠</span>Brain Dump</span><span class="guide-toggle">›</span></div>
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🧠</span>Notebooks</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
               <p class="guide-desc">Unlimited notebooks for anything that doesn't fit neatly anywhere else. Thoughts, ideas, client notes, inspiration, lists — no wrong way to use it.</p>
               <ul class="guide-tips">
@@ -1103,8 +1103,8 @@ select.fi{cursor:pointer}
   <!-- BRAIN DUMP -->
   <div id="view-braindump" class="view">
     <div class="main-hdr">
-      <div><h1>Brain Dump</h1><div class="sub">Unlimited notebooks for your thoughts, ideas &amp; notes</div></div>
-      <div class="hdr-acts"><button class="btn btn-p" onclick="newNotebook()">+ New Notebook</button></div>
+      <div><h1>Notebooks</h1><div class="sub">Unlimited notebooks for your thoughts, ideas &amp; notes</div></div>
+      <div class="hdr-acts"><button class="btn btn-g" onclick="openBrainDump()">🧠 Brain Dump Session</button><button class="btn btn-p" onclick="newNotebook()">+ New Notebook</button></div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
       <div class="bd-wrap">
@@ -1322,6 +1322,30 @@ select.fi{cursor:pointer}
 
     <div style="font-size:11px;color:var(--tl);margin-bottom:14px">📅 If you set a date, this task will also appear on your calendar.</div>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button></div>
+  </div>
+</div>
+
+<!-- BRAIN DUMP SESSION MODAL -->
+<div class="modal-ov" id="brainDumpModal" style="align-items:stretch;padding:0">
+  <div class="modal" style="max-width:100%;width:100%;height:100%;border-radius:0;margin:0;display:flex;flex-direction:column;background:var(--p)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--bl);flex-shrink:0">
+      <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e)">🧠 Brain Dump</div>
+      <div style="font-size:13px;color:var(--tl)">Just write. No rules. No format.</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-g" onclick="brainDumpSaveDraft()">Save to Drafts</button>
+        <button class="btn btn-brass" onclick="brainDumpSaveNotebook()">Save to Notebook</button>
+        <button class="btn btn-g" onclick="closeModal('brainDumpModal')">Close</button>
+      </div>
+    </div>
+    <div style="flex:1;padding:32px 48px;overflow-y:auto">
+      <input id="brainDumpTitle" class="fi" placeholder="Give it a title (optional)..." style="font-size:22px;font-family:var(--fh);font-weight:600;border:none;background:transparent;outline:none;margin-bottom:16px;padding:0;width:100%;color:var(--e)" />
+      <textarea id="brainDumpTA" style="width:100%;min-height:calc(100vh - 280px);background:transparent;border:none;outline:none;font-family:var(--fb);font-size:17px;line-height:2;color:var(--e);resize:none;caret-color:var(--r)" placeholder="Start anywhere. Write whatever is in your head. This is for you, not for anyone else. Let it out."></textarea>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid var(--bl);font-size:11px;color:var(--tl);display:flex;align-items:center;gap:16px;flex-shrink:0">
+      <span id="brainDumpWordCount">0 words</span>
+      <span>•</span>
+      <span>Nothing is saved automatically — use the buttons above when ready.</span>
+    </div>
   </div>
 </div>
 
@@ -1607,7 +1631,7 @@ select.fi{cursor:pointer}
       </div>
       <div class="pf-card">
         <div class="pf-icon">🧠</div>
-        <div><div class="pf-title">Brain Dump Notebooks</div><div class="pf-desc">Unlimited notebooks for your thoughts, ideas, and half-finished drafts. No format required. Just write — and save your drafts straight to a notebook when you're done.</div></div>
+        <div><div class="pf-title">Notebooks &amp; Brain Dump</div><div class="pf-desc">Unlimited notebooks for your thoughts, ideas, and half-finished drafts. No format required. Just write — and save your drafts straight to a notebook when you're done.</div></div>
       </div>
       <div class="pf-card">
         <div class="pf-icon">🔗</div>
@@ -1626,7 +1650,7 @@ select.fi{cursor:pointer}
         <ul class="pc-features">
           <li>All tools — Content Planner, Writing Studio, Hook Builder, Creative Director</li>
           <li>Task board + calendar sync</li>
-          <li>Brain Dump notebooks</li>
+          <li>Notebooks + Brain Dump sessions</li>
           <li>Full hook, CTA &amp; prompt library</li>
           <li>Save unlimited drafts</li>
           <li>125 AI generations per month</li>
@@ -2159,21 +2183,23 @@ function renderTaskKanban(){
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
-          <div style="font-family:var(--fh);font-size:18px;font-weight:600;line-height:1.3;color:var(--e);flex:1;padding-right:10px">${esc(t.title)}</div>
-          <span style="font-size:18px;color:${t.starred?'var(--g)':'var(--bl)'};flex-shrink:0">${t.starred?'★':'☆'}</span>
+        <!-- Title section — rust top strip -->
+        <div style="background:var(--rp);border-bottom:2px solid #E0BDAA;padding:14px 16px 12px;position:relative">
+          <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+            <div style="font-family:var(--fh);font-size:19px;font-weight:600;line-height:1.3;color:var(--e);flex:1">${esc(t.title)}</div>
+            <span style="font-size:20px;color:${t.starred?'var(--g)':'rgba(0,0,0,.2)'};flex-shrink:0;margin-top:1px">${t.starred?'★':'☆'}</span>
+          </div>
+          ${t.date?'<div style="font-size:12px;color:var(--r);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
         </div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
-          ${t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':''}
-          ${t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Medium':'🌿 Low')+'</span>':''}
-          ${t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':''}
-        </div>
-        ${t.date?'<div style="font-size:13px;color:var(--teal);margin-bottom:6px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
-        ${t.substeps&&t.substeps.length?'<div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">'+t.substeps.filter(function(s){return s.done}).length+' / '+t.substeps.length+' steps done</div>':''}
-        ${t.notes?'<div style="font-size:12.5px;color:var(--t);line-height:1.6;border-top:1px solid var(--bl);padding-top:8px;margin-top:4px">'+esc(t.notes.slice(0,100))+(t.notes.length>100?'...':'')+'</div>':''}
-        <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--bl);padding-top:8px">
+        <!-- Tags section — white -->
+        ${(t.taskType||t.energy||t.timeEst)?'<div style="padding:8px 16px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--bl);background:var(--w)">'+(t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':'')+(t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Med':'🌿 Low')+'</span>':'')+(t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':'')+'</div>':''}
+        <!-- Steps + notes — teal tint -->
+        ${(t.substeps&&t.substeps.length||t.notes)?'<div style="padding:10px 16px;background:var(--tealp);border-bottom:1px solid rgba(58,140,140,.15)">'+(t.substeps&&t.substeps.length?'<div style="font-size:12px;color:var(--teal);font-weight:500;margin-bottom:4px">☑ '+t.substeps.filter(function(s){return s.done;}).length+' of '+t.substeps.length+' steps done</div>':'')+(t.notes?'<div style="font-size:12.5px;color:var(--el);line-height:1.6">'+esc(t.notes.slice(0,90))+(t.notes.length>90?'…':'')+'</div>':'')+'</div>':''}
+        <!-- Actions footer -->
+        <div style="padding:8px 12px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;background:var(--w)">
           ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
-          ${t._ideaId?`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">↗ Card</button>`:''}
+          ${t._ideaId?`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">↗ Card</button>`:'<div style="flex:1"></div>'}
         </div>
       </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
@@ -2294,7 +2320,8 @@ function renderLib(section,silent){
           <div class="lib-text">${esc(x.text)}</div>
         </div>
         <div class="lib-card-foot">
-          <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')">${copySvg} Copy</button>
+          <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')" style="flex:1">${copySvg} Copy</button>
+          <button onclick="deleteLib('${x.id}','${section}')" title="Remove" style="background:none;border:1.5px solid var(--bl);border-radius:var(--rsm);padding:8px 10px;cursor:pointer;color:var(--tl);font-size:12px;transition:all .15s;flex-shrink:0" onmouseover="this.style.borderColor='var(--r)';this.style.color='var(--r)'" onmouseout="this.style.borderColor='var(--bl)';this.style.color='var(--tl)'">✕</button>
         </div>
       </div>`;
     }).join('');
@@ -2314,10 +2341,17 @@ function renderLib(section,silent){
         <div class="lib-list-actions">
           <button class="lib-list-btn" onclick="copyLib('${x.id}','${section}')" title="Copy">${copySvg}</button>
           <button class="lib-list-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="Bookmark" style="color:${isFav(x.id)?'var(--teal)':'var(--b)'}">${favSvg(x.id)}</button>
+          <button class="lib-list-btn" onclick="deleteLib('${x.id}','${section}')" title="Remove" style="color:var(--tl)" onmouseover="this.style.color='var(--r)'" onmouseout="this.style.color='var(--tl)'">✕</button>
         </div>
       </div>`;
     }).join('');
   }
+}
+function deleteLib(id,section){
+  if(!confirm('Remove this from your library?'))return;
+  S[section]=S[section].filter(function(x){return x.id!==id;});
+  if(S.favs&&S.favs[section])S.favs[section]=S.favs[section].filter(function(x){return x!==id;});
+  persist();renderLib(section);toast('Removed ✓');
 }
 function setLibFilter(section,cat){S.libFilters[section]=cat;renderLib(section);}
 function toggleFav(section,id){
@@ -3327,6 +3361,52 @@ function panicToCard(){
     var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
   },100);
 }
+/* ═══════════════ BRAIN DUMP SESSION ═══════════════ */
+function openBrainDump(){
+  document.getElementById('brainDumpTitle').value='';
+  document.getElementById('brainDumpTA').value='';
+  document.getElementById('brainDumpWordCount').textContent='0 words';
+  openModal('brainDumpModal');
+  setTimeout(function(){document.getElementById('brainDumpTA').focus();},100);
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var ta=document.getElementById('brainDumpTA');
+  if(ta)ta.addEventListener('input',function(){
+    var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
+    var el=document.getElementById('brainDumpWordCount');
+    if(el)el.textContent=words+' word'+(words!==1?'s':'');
+  });
+});
+function brainDumpSaveDraft(){
+  var content=document.getElementById('brainDumpTA').value.trim();
+  var title=document.getElementById('brainDumpTitle').value.trim()||'Brain Dump — '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  if(!content){toast('Nothing to save yet');return;}
+  S.drafts.unshift({id:Date.now().toString(),title:title,content:content,platform:'other',format:'Brain Dump',createdAt:new Date().toISOString()});
+  persist();renderDraftsGrid();renderRecentDrafts();
+  toast('Saved to Drafts ✓');
+  closeModal('brainDumpModal');
+}
+function brainDumpSaveNotebook(){
+  var content2=document.getElementById('brainDumpTA').value.trim();
+  var title=document.getElementById('brainDumpTitle').value.trim()||'Brain Dump — '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  if(!content2){toast('Nothing to save yet');return;}
+  if(!S.notebooks)S.notebooks=[];
+  var targetNb;
+  if(!S.notebooks.length){
+    targetNb={id:'nb'+Date.now(),name:'Brain Dumps',createdAt:new Date().toISOString()};
+    S.notebooks.push(targetNb);
+  } else {
+    // Use the currently active notebook or first one
+    targetNb=S.notebooks.find(function(nb){return nb.id===S.activeNotebook;})||S.notebooks[0];
+  }
+  if(!S.notes)S.notes=[];
+  var note={id:'n'+Date.now(),notebookId:targetNb.id,title:title,content:content2,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  S.notes.unshift(note);
+  persist();
+  toast('Saved to '+targetNb.name+' ✓');
+  closeModal('brainDumpModal');
+}
+
 function studioOwnCopy(){
   var el=document.getElementById('studioOwnTA');
   if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
