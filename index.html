@@ -1538,24 +1538,70 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')">
-            <div class="ai2-section-title">↻ Repurpose a Post</div>
-            <span id="ai2-repurpose-chev" style="color:var(--tl);font-size:16px">+</span>
+          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8)">
+            <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Repurpose</div>
+            <span id="ai2-repurpose-chev" style="color:var(--r);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. the Studio studies what works and rebuilds it in your voice.</div>
-            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
-              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
-              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
-                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
-                <option value="LinkedIn">LinkedIn</option><option value="a blog">Blog</option>
-                <option value="a newsletter">Newsletter</option><option value="somewhere">Other</option>
-              </select>
+            <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:14px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
+              The Creative Director studies what made a piece of content work. Then it strips it back and rebuilds it completely in your voice, niche, offers, and brand. Nothing gets copied. Everything gets transformed.
             </div>
-            <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post text here..." style="min-height:80px"></textarea>
-            <button class="ai2-btn full accent" onclick="cdRepurpose2()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">↻ Rebuild in My Voice</button>
-            <div class="ai2-loading" id="cd-load-repurpose">Studying and rebuilding...</div>
-            <div class="ai2-out" id="cd-out-repurpose"></div>
+
+            <!-- Step 1: Source -->
+            <div style="margin-bottom:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:8px">Step 1: Give it the content</div>
+              <div style="display:flex;gap:6px;margin-bottom:8px">
+                <button id="rpTabUrl" onclick="cdRpTab('url')" style="flex:1;padding:7px;font-size:11.5px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:var(--r);color:white;cursor:pointer">Paste URL</button>
+                <button id="rpTabText" onclick="cdRpTab('text')" style="flex:1;padding:7px;font-size:11.5px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--b);background:var(--w);color:var(--t);cursor:pointer">Paste Text</button>
+              </div>
+              <div id="rpUrlArea" style="display:block">
+                <input class="ai2-input" id="cdRpUrl" placeholder="https://www.instagram.com/p/..." style="margin-bottom:6px;font-size:13px" />
+                <div style="font-size:10.5px;color:var(--tl)">Note: paste the caption text below if the URL does not load automatically.</div>
+              </div>
+              <div id="rpTextArea" style="display:none">
+                <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px;margin-bottom:8px">
+                  <option value="Instagram">From Instagram</option><option value="TikTok">From TikTok</option>
+                  <option value="LinkedIn">From LinkedIn</option><option value="a blog">From a blog</option>
+                  <option value="a newsletter">From a newsletter</option><option value="somewhere">From somewhere</option>
+                </select>
+                <textarea class="ai2-input" id="cdRpText" placeholder="Paste the caption, post, or article text here..." style="min-height:100px"></textarea>
+              </div>
+            </div>
+
+            <!-- Step 2: Output target -->
+            <div style="margin-bottom:14px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:8px">Step 2: What do you want to create?</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+                <select class="fi" id="cdRpOutPlat" style="font-size:12px;padding:6px 10px">
+                  <option value="Instagram">Instagram</option><option value="LinkedIn">LinkedIn</option>
+                  <option value="TikTok">TikTok</option><option value="Newsletter">Newsletter</option>
+                  <option value="Email">Email</option><option value="Substack">Substack</option>
+                  <option value="Blog">Blog Post</option>
+                </select>
+                <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
+                  <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
+                  <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
+                  <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
+                  <option value="Blog Post">Blog Post</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Step 3: Analyze + Rebuild -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+              <button onclick="cdAnalyzeOnly()" style="padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Analyze First</button>
+              <button onclick="cdRepurpose2()" style="padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Analyze + Rebuild</button>
+            </div>
+
+            <!-- Analysis output -->
+            <div id="cd-analysis-wrap" style="display:none;margin-bottom:12px">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:6px">Creative Director Analysis</div>
+              <div id="cd-analysis-out" style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:12px 14px;font-size:13px;color:var(--el);line-height:1.75;white-space:pre-wrap"></div>
+              <button onclick="cdRebuildAfterAnalysis()" style="width:100%;margin-top:8px;padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Now Rebuild in My Voice</button>
+            </div>
+
+            <div class="ai2-loading" id="cd-load-repurpose">Creative Director is analyzing...</div>
+            <div id="cd-out-repurpose" class="ai2-out"></div>
             <div class="ai2-out-acts" id="cd-acts-repurpose">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
