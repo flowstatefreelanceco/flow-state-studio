@@ -46,7 +46,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 /* SIDEBAR */
 .sidebar{width:var(--sw);min-width:var(--sw);background:var(--sb);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;border-right:1px solid var(--b)}
 .sb-logo{padding:26px 20px 20px;border-bottom:1px solid var(--b)}
-.sb-wordmark{font-family:var(--fh);font-size:32px;font-weight:700;color:var(--e);letter-spacing:.01em;line-height:1.2}
+.sb-wordmark{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);letter-spacing:.01em;line-height:1.2}
 .sb-tagline{font-size:9px;color:var(--t);margin-top:4px;letter-spacing:.16em;text-transform:uppercase}
 .sb-line{width:22px;height:1.5px;background:var(--teal);border-radius:1px;margin-top:14px}
 .sb-nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;overflow-y:auto}
@@ -66,7 +66,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
-.main-hdr h1{font-family:var(--fh);font-size:32px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
+.main-hdr h1{font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
 .main-hdr .sub{font-size:14px;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;padding:24px 36px 48px}
@@ -1260,18 +1260,67 @@ select.fi{cursor:pointer}
 
 <!-- Task -->
 <div class="modal-ov" id="taskModal">
-  <div class="modal">
-    <div class="m-title" id="taskModalTitle">Add Task</div>
-    <div class="m-sub">Add something to your to-do list</div>
-    <div class="fl"><label class="fl-lbl">Task</label><input class="fi" id="taskTitle" placeholder="e.g. Write captions for this week" /></div>
-    <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
-    <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Due Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="taskDate" /></div>
-      <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="taskTime" /></div>
+  <div class="modal modal-xl" style="max-width:680px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="m-title" id="taskModalTitle" style="margin:0">Add Task</div>
+      <button id="taskStarBtn" onclick="toggleTaskStar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--bl);transition:color .15s;padding:4px" title="Mark as priority">☆</button>
     </div>
-    <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="taskNotes" style="min-height:60px" placeholder="Context, links, what done looks like..."></textarea></div>
+    <div class="m-sub" style="margin-bottom:18px">Add something to your to-do list</div>
     <div id="taskCardLink" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.2);border-radius:var(--rsm);padding:10px 14px;margin-bottom:14px;cursor:pointer;font-size:13px;color:var(--teal);font-weight:500">↗ View linked Content Card</div>
-    <div style="font-size:10.5px;color:var(--tl);margin-bottom:14px">If you set a date, this task will also appear on your calendar.</div>
+
+    <div class="fl"><label class="fl-lbl" style="font-size:13px">Task</label><input class="fi" id="taskTitle" style="font-size:16px;font-family:var(--fh);font-weight:600;padding:12px" placeholder="e.g. Write captions for this week" /></div>
+
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
+      <div class="fl"><label class="fl-lbl">Type</label>
+        <select class="fi" id="taskType">
+          <option value="">No type</option>
+          <option value="writing">✍️ Writing</option>
+          <option value="admin">📋 Admin</option>
+          <option value="creative">🎨 Creative</option>
+          <option value="research">🔍 Research</option>
+          <option value="calls">📞 Calls / Meetings</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Due Date</label><input class="fi" type="date" id="taskDate" /></div>
+      <div class="fl"><label class="fl-lbl">Time</label><input class="fi" type="time" id="taskTime" /></div>
+    </div>
+
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">Energy needed</label>
+        <select class="fi" id="taskEnergy">
+          <option value="">Any energy</option>
+          <option value="high">🔥 High focus</option>
+          <option value="medium">⚡ Medium focus</option>
+          <option value="low">🌿 Low energy</option>
+        </select>
+      </div>
+      <div class="fl"><label class="fl-lbl">Time estimate</label>
+        <select class="fi" id="taskTime2">
+          <option value="">Unknown</option>
+          <option value="15min">15 minutes</option>
+          <option value="30min">30 minutes</option>
+          <option value="1hr">1 hour</option>
+          <option value="2hr">2 hours</option>
+          <option value="halfday">Half day</option>
+          <option value="fullday">Full day</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fl"><label class="fl-lbl">Sub-steps <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">— break it into tiny actions</span></label>
+      <div id="taskSubsteps" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
+      <button onclick="addTaskSubstep()" style="font-size:11px;padding:5px 12px;background:none;border:1.5px dashed var(--b);border-radius:var(--rsm);color:var(--tl);cursor:pointer;text-align:left;font-family:var(--fb)">+ Add a step</button>
+    </div>
+
+    <div class="fl"><label class="fl-lbl">Brain dump <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">— messy thinking welcome</span></label>
+      <textarea class="fi" id="taskNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Context, links, random thoughts, blockers, anything..."></textarea>
+    </div>
+
+    <div style="font-size:11px;color:var(--tl);margin-bottom:14px">📅 If you set a date, this task will also appear on your calendar.</div>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button></div>
   </div>
 </div>
@@ -1312,7 +1361,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:17px;font-family:var(--fh)" /></div>
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px;font-family:var(--fh);font-weight:600;padding:12px" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -1422,15 +1471,17 @@ select.fi{cursor:pointer}
             <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
             <div class="ai2-hook-list" id="cd-hook-list"></div>
             <div id="cd-hook-build-area" style="display:none;margin-top:10px">
-              <div style="font-size:10px;color:var(--tl);margin-bottom:6px">Selected hook:</div>
-              <div id="cd-selected-hook" style="font-size:12.5px;color:var(--teal);font-style:italic;margin-bottom:10px;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
+              <div style="font-size:10px;color:var(--tl);margin-bottom:5px">Selected hook:</div>
+              <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px">
+                <div id="cd-selected-hook" style="flex:1;font-size:12.5px;color:var(--teal);font-style:italic;padding:8px;background:var(--tealp);border-radius:var(--rsm)"></div>
+                <button class="btn btn-g" style="font-size:11px;padding:5px 10px;border-color:var(--teal);color:var(--teal);white-space:nowrap;flex-shrink:0" onclick="cdSaveHookToLib()">+ Save Hook</button>
+              </div>
               <button class="ai2-btn full accent" onclick="cdBuildFromHook()" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Build Full Post from This Hook</button>
             </div>
             <div class="ai2-out" id="cd-out-hooks"></div>
             <div class="ai2-out-acts" id="cd-acts-hooks">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px;border-color:var(--teal);color:var(--teal)" onclick="cdSaveHookToLib()">Save Selected Hook →</button>
             </div>
           </div>
         </div>
@@ -2108,12 +2159,21 @@ function renderTaskKanban(){
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
-        <div style="font-family:var(--fh);font-size:18px;font-weight:600;line-height:1.3;margin-bottom:6px;padding-right:22px;color:var(--e)">${esc(t.title)}</div>
-        ${t.date?'<div style="font-size:13px;color:var(--teal);margin-top:5px;font-weight:500;display:flex;align-items:center;gap:5px"><span>📅</span> '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
-        ${t.notes?'<div style="font-size:13px;color:var(--t);margin-top:9px;line-height:1.65;border-top:1px solid var(--bl);padding-top:9px">'+esc(t.notes)+'</div>':''}
-        <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--bl);padding-top:10px">
-          ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:5px 10px;font-size:11px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
-          ${t._ideaId?`<button class="btn btn-g" style="padding:5px 10px;font-size:11px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">↗ Content Card</button>`:''}
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+          <div style="font-family:var(--fh);font-size:18px;font-weight:600;line-height:1.3;color:var(--e);flex:1;padding-right:10px">${esc(t.title)}</div>
+          <span style="font-size:18px;color:${t.starred?'var(--g)':'var(--bl)'};flex-shrink:0">${t.starred?'★':'☆'}</span>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+          ${t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':''}
+          ${t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Medium':'🌿 Low')+'</span>':''}
+          ${t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':''}
+        </div>
+        ${t.date?'<div style="font-size:13px;color:var(--teal);margin-bottom:6px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
+        ${t.substeps&&t.substeps.length?'<div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">'+t.substeps.filter(function(s){return s.done}).length+' / '+t.substeps.length+' steps done</div>':''}
+        ${t.notes?'<div style="font-size:12.5px;color:var(--t);line-height:1.6;border-top:1px solid var(--bl);padding-top:8px;margin-top:4px">'+esc(t.notes.slice(0,100))+(t.notes.length>100?'...':'')+'</div>':''}
+        <div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--bl);padding-top:8px">
+          ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
+          ${t._ideaId?`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">↗ Card</button>`:''}
         </div>
       </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
@@ -2500,32 +2560,72 @@ function saveIdea(){
 function openTaskEditModal(id){
   const t=S.tasks.find(x=>x.id===id);if(!t)return;
   S._editingTaskId=id;
+  _taskSubsteps=t.substeps?JSON.parse(JSON.stringify(t.substeps)):[];
+  _taskStarred=t.starred||false;
   document.getElementById('taskTitle').value=t.title||'';
   document.getElementById('taskStatus').value=t.status||'todo';
   const td=document.getElementById('taskDate');if(td)td.value=t.date||'';
   const tt=document.getElementById('taskTime');if(tt)tt.value=t.time||'';
   const tn=document.getElementById('taskNotes');if(tn)tn.value=t.notes||'';
+  const te=document.getElementById('taskEnergy');if(te)te.value=t.energy||'';
+  const tt2=document.getElementById('taskTime2');if(tt2)tt2.value=t.timeEst||'';
+  const ty=document.getElementById('taskType');if(ty)ty.value=t.taskType||'';
+  const sb=document.getElementById('taskStarBtn');if(sb){sb.textContent=_taskStarred?'★':'☆';sb.style.color=_taskStarred?'var(--g)':'var(--bl)';}
+  renderTaskSubsteps();
   const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Save Changes';
   const mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Edit Task';
-  // Show/hide content card link
   const cardLink=document.getElementById('taskCardLink');
   if(cardLink){
-    if(t._ideaId){
-      cardLink.style.display='block';
-      cardLink.onclick=function(){closeModal('taskModal');cdOpen(t._ideaId);};
-    } else {
-      cardLink.style.display='none';
-    }
+    if(t._ideaId){cardLink.style.display='block';cardLink.onclick=function(){closeModal('taskModal');cdOpen(t._ideaId);};}
+    else{cardLink.style.display='none';}
   }
   openModal('taskModal');
 }
+var _taskSubsteps = [];
+var _taskStarred = false;
+
+function toggleTaskStar(){
+  _taskStarred = !_taskStarred;
+  var btn = document.getElementById('taskStarBtn');
+  if(btn){ btn.textContent = _taskStarred ? '★' : '☆'; btn.style.color = _taskStarred ? 'var(--g)' : 'var(--bl)'; }
+}
+
+function addTaskSubstep(text){
+  var step = {id:'s'+Date.now(), text:text||'', done:false};
+  _taskSubsteps.push(step);
+  renderTaskSubsteps();
+}
+
+function renderTaskSubsteps(){
+  var el = document.getElementById('taskSubsteps'); if(!el) return;
+  var rows = _taskSubsteps.map(function(s,i){
+    return '<div style="display:flex;align-items:center;gap:8px">'
+      +'<input type="checkbox" '+(s.done?'checked':'')
+      +' onchange="_taskSubsteps['+i+'].done=this.checked" style="width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:var(--teal)" />'
+      +'<input type="text" value="'+s.text.replace(/"/g,'&quot;')+'" placeholder="e.g. Open doc..." '
+      +'oninput="_taskSubsteps['+i+'].text=this.value" '
+      +'style="flex:1;padding:7px 10px;border:1px solid var(--b);border-radius:var(--rsm);font-family:var(--fb);font-size:13px;background:var(--w);color:var(--e);outline:none" />'
+      +'<button onclick="_taskSubsteps.splice('+i+',1);renderTaskSubsteps()" '
+      +'style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:14px;padding:2px 4px">✕</button>'
+      +'</div>';
+  });
+  el.innerHTML = rows.join('');
+}
+
 function openTaskModal(status){
   S._editingTaskId=null;
+  _taskSubsteps=[];_taskStarred=false;
   document.getElementById('taskTitle').value='';
   document.getElementById('taskStatus').value=status||'todo';
   var td=document.getElementById('taskDate');if(td)td.value='';
   var tt=document.getElementById('taskTime');if(tt)tt.value='';
   var tn=document.getElementById('taskNotes');if(tn)tn.value='';
+  var te=document.getElementById('taskEnergy');if(te)te.value='';
+  var tt2=document.getElementById('taskTime2');if(tt2)tt2.value='';
+  var ty=document.getElementById('taskType');if(ty)ty.value='';
+  var sb=document.getElementById('taskStarBtn');if(sb){sb.textContent='☆';sb.style.color='var(--bl)';}
+  var cl=document.getElementById('taskCardLink');if(cl)cl.style.display='none';
+  renderTaskSubsteps();
   var btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Add Task';
   var mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Add Task';
   openModal('taskModal');
