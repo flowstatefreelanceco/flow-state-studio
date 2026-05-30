@@ -674,25 +674,25 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Newsletter</div>
             <div class="wdc-sub">Email to your list</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Carousel Copy','instagram')">
+          <div class="wdc-card" onclick="quickCreateCard('Carousel','Carousel Copy','instagram')">
             <div class="wdc-icon">🎠</div>
             <div class="wdc-title">Carousel</div>
-            <div class="wdc-sub">Slide by slide</div>
+            <div class="wdc-sub">Plan it out</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Story Script','instagram')">
+          <div class="wdc-card" onclick="quickCreateCard('Story','Story Script','instagram')">
             <div class="wdc-icon">📱</div>
             <div class="wdc-title">Story</div>
-            <div class="wdc-sub">Instagram story</div>
+            <div class="wdc-sub">Plan it out</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Blog Post','blog')">
+          <div class="wdc-card" onclick="quickCreateCard('Blog / Article','Blog Post','blog')">
             <div class="wdc-icon">✍️</div>
             <div class="wdc-title">Blog / Article</div>
-            <div class="wdc-sub">Long-form post</div>
+            <div class="wdc-sub">Plan it out</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Bio / About','other')">
+          <div class="wdc-card" onclick="openIdeaModal('idea')">
             <div class="wdc-icon">✨</div>
             <div class="wdc-title">Something else</div>
-            <div class="wdc-sub">Open studio</div>
+            <div class="wdc-sub">Open content card</div>
           </div>
         </div>
       </div>
@@ -2104,6 +2104,18 @@ function dismissGS(){
 }
 
 /* ═══════════════════ DASHBOARD ═══════════════════ */
+function quickCreateCard(title, format, plat){
+  // Open a content card pre-filled with format and platform
+  openIdeaModal('idea');
+  setTimeout(function(){
+    var fmt=document.getElementById('cdFormat');
+    if(fmt){fmt.value=format;}
+    var platEl=document.getElementById('cdPlat');
+    if(platEl){platEl.value=plat;}
+    var titleEl=document.getElementById('cdTitle');
+    if(titleEl){titleEl.focus();}
+  },100);
+}
 function quickCreate(type, plat){
   S.studio.type=type; S.studio.plat=plat;
   navigate('studio');
@@ -3326,8 +3338,27 @@ function openPanicModal(){
   document.getElementById('panicOut').textContent='';
   document.getElementById('panicLoading').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
+  // Randomize platform and format every time — takes pressure off choosing
+  var plats=['Instagram','Newsletter','Email','LinkedIn','TikTok','Blog','Substack'];
+  var fmts=['Caption','Carousel','Reel','Newsletter','Blog Post','Story'];
+  var platPairs={
+    'Instagram':['Caption','Carousel','Reel','Story'],
+    'Newsletter':['Newsletter'],
+    'Email':['Newsletter'],
+    'LinkedIn':['Caption','Blog Post'],
+    'TikTok':['Reel','Caption'],
+    'Blog':['Blog Post'],
+    'Substack':['Newsletter','Blog Post']
+  };
+  var randPlat=plats[Math.floor(Math.random()*plats.length)];
+  var fmtOptions=platPairs[randPlat]||fmts;
+  var randFmt=fmtOptions[Math.floor(Math.random()*fmtOptions.length)];
+  var platEl=document.getElementById('panicPlat');
+  var fmtEl=document.getElementById('panicFormat');
+  if(platEl)platEl.value=randPlat;
+  if(fmtEl)fmtEl.value=randFmt;
   openModal('panicModal');
-  setTimeout(()=>document.getElementById('panicTopic').focus(),100);
+  setTimeout(function(){document.getElementById('panicTopic').focus();},100);
 }
 async function runPanic(){
   var topic=document.getElementById('panicTopic').value.trim();
