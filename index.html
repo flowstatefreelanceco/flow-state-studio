@@ -152,9 +152,9 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 
 /* KANBAN */
 .kanban{display:grid;gap:14px;flex:1;min-height:0;overflow:hidden}
-.kanban-3{grid-template-columns:repeat(3,1fr)}
+.kanban-3{grid-template-columns:repeat(3,1fr);gap:16px}
 .kanban-4{grid-template-columns:repeat(4,1fr)}
-.kc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px var(--sh)}
+.kc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px var(--sh);min-width:0}
 .kc-head{padding:14px 16px 10px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .kc-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t)}
 .kc-count{font-family:var(--fh);font-size:28px;font-weight:600;color:var(--e)}
@@ -652,7 +652,15 @@ select.fi{cursor:pointer}
         <div class="gs-bar-wrap"><div class="gs-bar" id="gsBar"></div></div>
         <div class="gs-items" id="gsItems"></div>
       </div>
-      <!-- HOW TO USE EACH SECTION — moved above pick-up -->
+      <!-- PANIC BUTTON -->
+      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div>
+          <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
+          <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction — angle, hook, emotion, what to avoid — before you write a single word.</div>
+        </div>
+        <button onclick="openPanicModal()" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
+      </div>
+      <!-- WHAT TO CREATE TODAY -->
       <div class="wdc-wrap">
         <div class="wdc-label">What do you want to create today?</div>
         <div class="wdc-grid">
@@ -784,14 +792,6 @@ select.fi{cursor:pointer}
             </div>
           </div>
         </div>
-      </div>
-      <!-- PANIC BUTTON -->
-      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
-        <div>
-          <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
-          <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction — angle, hook, emotion, what to avoid — before you write a single word.</div>
-        </div>
-        <button onclick="openPanicModal()" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
       </div>
     </div>
   </div>
@@ -1270,6 +1270,7 @@ select.fi{cursor:pointer}
       <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="taskTime" /></div>
     </div>
     <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="taskNotes" style="min-height:60px" placeholder="Context, links, what done looks like..."></textarea></div>
+    <div id="taskCardLink" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.2);border-radius:var(--rsm);padding:10px 14px;margin-bottom:14px;cursor:pointer;font-size:13px;color:var(--teal);font-weight:500">↗ View linked Content Card</div>
     <div style="font-size:10.5px;color:var(--tl);margin-bottom:14px">If you set a date, this task will also appear on your calendar.</div>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button></div>
   </div>
@@ -2506,6 +2507,16 @@ function openTaskEditModal(id){
   const tn=document.getElementById('taskNotes');if(tn)tn.value=t.notes||'';
   const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Save Changes';
   const mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Edit Task';
+  // Show/hide content card link
+  const cardLink=document.getElementById('taskCardLink');
+  if(cardLink){
+    if(t._ideaId){
+      cardLink.style.display='block';
+      cardLink.onclick=function(){closeModal('taskModal');cdOpen(t._ideaId);};
+    } else {
+      cardLink.style.display='none';
+    }
+  }
   openModal('taskModal');
 }
 function openTaskModal(status){
