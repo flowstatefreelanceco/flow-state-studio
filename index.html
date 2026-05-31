@@ -2969,17 +2969,22 @@ function openTaskModal(status){
 function saveTask(){
   const title=document.getElementById('taskTitle').value.trim();
   if(!title){toast('Please enter a task');return;}
-  const date=document.getElementById('taskDate')?document.getElementById('taskDate').value:'';
-  const time=document.getElementById('taskTime')?document.getElementById('taskTime').value:'';
-  const notes=document.getElementById('taskNotes')?document.getElementById('taskNotes').value:'';
-  const status=document.getElementById('taskStatus').value;
+  const g=id=>{const el=document.getElementById(id);return el?el.value:'';};
+  const date=g('taskDate');
+  const time=g('taskTime');
+  const notes=g('taskNotes');
+  const status=g('taskStatus')||'todo';
+  const taskType=g('taskType');
+  const energy=g('taskEnergy');
+  const timeEst=g('taskTime2');
+  const starred=document.getElementById('taskStarBtn')?.textContent==='★';
   const btn=document.getElementById('taskSaveBtn');
 
   if(S._editingTaskId){
     const t=S.tasks.find(x=>x.id===S._editingTaskId);
     if(t){
       t.title=title;t.date=date;t.time=time;t.notes=notes;t.status=status;
-      // Update or remove calendar entry
+      t.taskType=taskType;t.energy=energy;t.timeEst=timeEst;t.starred=starred;
       const calId='cal_task_'+t.id;
       if(date){
         const idx=S.calEntries.findIndex(e=>e.id===calId);
@@ -2994,7 +2999,7 @@ function saveTask(){
     persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task saved ✓');return;
   }
   // New task
-  const task={id:Date.now().toString(),title,status,date,time,notes};
+  const task={id:Date.now().toString(),title,status,date,time,notes,taskType,energy,timeEst,starred};
   S.tasks.push(task);
   if(date){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status,date,time,notes});}
   persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task added ✓');
@@ -4265,15 +4270,17 @@ function calDayClick(ds){
     return{id:'idea_'+i.id,title:i.title,platform:i.platform,format:i.format||'',status:i.status,time:i.time||'',notes:i.notes||'',_fromIdea:true};
   });
   var taskEnts=S.tasks.filter(function(t){return t.date===ds;}).map(function(t){
-    return{id:'task_'+t.id,title:t.title,platform:'other',status:t.status,time:t.time||'',notes:t.notes||'',taskType:t.taskType||'',energy:t.energy||'',timeEst:t.timeEst||'',_fromTask:true};
+    return{id:'task_'+t.id,_tid:t.id,title:t.title,platform:'other',status:t.status,time:t.time||'',notes:t.notes||'',taskType:t.taskType||'',energy:t.energy||'',timeEst:t.timeEst||'',starred:t.starred||false,_fromTask:true};
   });
   var calOnly=S.calEntries.filter(function(e){
     return e.date===ds&&!ideaEnts.find(function(ie){return ie.title===e.title;})&&!taskEnts.find(function(te){return te.title===e.title;});
   }).map(function(e){
-    // Try to enrich with task data if this is a task-linked cal entry
-    if(e._fromTask||e.id.indexOf('cal_task_')===0){
-      var linkedTask=S.tasks.find(function(t){return 'cal_task_'+t.id===e.id||t.title===e.title;});
-      if(linkedTask) return Object.assign({},e,{taskType:linkedTask.taskType||'',energy:linkedTask.energy||'',timeEst:linkedTask.timeEst||'',_fromTask:true});
+    // Enrich any cal entry that could be task-linked
+    var linkedTask=S.tasks.find(function(t){
+      return 'cal_task_'+t.id===e.id||t.id===e._tid||t.title===e.title;
+    });
+    if(linkedTask){
+      return Object.assign({},e,{taskType:linkedTask.taskType||'',energy:linkedTask.energy||'',timeEst:linkedTask.timeEst||'',starred:linkedTask.starred||false,_fromTask:true});
     }
     return e;
   });
