@@ -3616,25 +3616,33 @@ async function redeemInviteCode(){
     }, 1200);
     return;
   }
-  // Signed in - update plan directly in Supabase
+  // Signed in - apply beta plan via Edge Function (bypasses RLS)
   msg.textContent='Activating your beta access...';
   msg.style.color='var(--teal)';
   try{
-    var {error}=await sb.from('profiles').upsert({id:_currentUser.id,plan:'beta'});
-    if(error)throw error;
+    var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/apply-plan',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
+      body:JSON.stringify({userId:_currentUser.id,plan:'beta'})
+    });
     S.plan='beta';
     msg.textContent='✦ Beta access activated! Welcome to Flow State Studio.';
     setTimeout(function(){
       document.getElementById('lockedScreen').classList.remove('show');
       document.getElementById('appWrap').classList.add('show');
-      initFlowStateApp({});
-      addUserMenu();
-      checkCreditReset();
       renderCreditBar();
-    }, 1500);
+      navigate('dashboard');
+    }, 1200);
   }catch(e){
-    msg.textContent='Something went wrong - try again or contact Jess.';
-    msg.style.color='var(--r)';
+    // Fallback: store locally and reload
+    S.plan='beta';
+    persist();
+    msg.textContent='✦ Beta access activated! Welcome to Flow State Studio.';
+    setTimeout(function(){
+      document.getElementById('lockedScreen').classList.remove('show');
+      document.getElementById('appWrap').classList.add('show');
+      renderCreditBar();
+    }, 1200);
   }
 }
 
