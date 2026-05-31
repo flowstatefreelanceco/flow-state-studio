@@ -305,7 +305,7 @@ select.fi{cursor:pointer}
 /* LOCKED / PRICING SCREEN */
 #lockedScreen{position:fixed;inset:0;background:var(--p);z-index:9990;overflow-y:auto;display:none}
 #lockedScreen.show{display:block}
-.pricing-wrap{max-width:900px;margin:0 auto;padding:32px 16px 80px}
+.pricing-wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
 .pricing-hero{text-align:center;margin-bottom:56px}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
 .pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
@@ -339,67 +339,6 @@ select.fi{cursor:pointer}
 #cd-repurpose-sidebyside{display:none}
 #cd-repurpose-sidebyside.show{display:flex}
 @media(max-width:900px){#cd-repurpose-sidebyside.show{flex-direction:column}}
-/* ═══════════════ MOBILE ═══════════════ */
-.mob-topbar{display:none;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--w);border-bottom:1px solid var(--bl);position:sticky;top:0;z-index:200;flex-shrink:0}
-.mob-wordmark{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e)}
-.mob-hamburger{background:none;border:none;cursor:pointer;padding:6px;color:var(--e);font-size:22px;line-height:1}
-.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:290;opacity:0;transition:opacity .25s}
-.mob-overlay.show{opacity:1}
-.sidebar-mobile-open .sidebar{transform:translateX(0)!important}
-
-@media(max-width:768px){
-  .mob-topbar{display:flex}
-  .sidebar{
-    position:fixed!important;top:0;left:0;height:100vh;z-index:300;
-    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
-    width:260px!important;box-shadow:4px 0 24px rgba(0,0,0,.18)
-  }
-  .mob-overlay{display:block}
-  .app-wrap-mobile{flex-direction:column}
-  .main{flex-direction:column;min-height:0}
-  .main-hdr{padding:16px;flex-direction:column;align-items:flex-start;gap:10px}
-  .main-hdr .hdr-acts{flex-wrap:wrap;gap:6px}
-  .main-body{padding:14px 16px}
-  /* Content planner kanban - stack columns */
-  .kanban-3,.kanban-4{grid-template-columns:1fr!important}
-  /* Task kanban - stack */
-  .kc{min-width:0}
-  /* Content card modal - full screen */
-  .modal-full .cd2-wrap{flex-direction:column}
-  .modal-full .cd2-left{width:100%!important;border-right:none;border-bottom:1px solid var(--bl);max-height:50vh;overflow-y:auto}
-  .modal-full .cd2-right{width:100%!important}
-  /* Modals full width */
-  .modal,.modal-xl,.modal-task{width:95vw!important;max-width:95vw!important;margin:10px auto}
-  /* Writing studio - stack panels */
-  .sp-wrap{flex-direction:column!important}
-  .sp{min-width:0!important;width:100%!important}
-  /* Notebooks - stack */
-  .bd-wrap{flex-direction:column}
-  .bd-left{width:100%!important;max-height:200px;border-right:none;border-bottom:1px solid var(--bl)}
-  /* Library grid - 1 col on small, 2 on medium */
-  .lib-grid{grid-template-columns:1fr!important}
-  /* Calendar - smaller cells */
-  .cal-cell{min-height:60px!important;padding:4px!important;font-size:10px}
-  .cal-day-num{font-size:11px!important}
-  /* Pricing page */
-  .pricing-cards,.pricing-features{grid-template-columns:1fr!important}
-  /* Dashboard WDC */
-  .wdc-wrap{grid-template-columns:repeat(2,1fr)!important}
-  /* Stats */
-  .stats-row{grid-template-columns:1fr 1fr!important}
-  /* Pickup grid */
-  .pickup-grid{grid-template-columns:1fr!important}
-  /* Two col forms */
-  .two-col{grid-template-columns:1fr!important}
-  /* Hide credits sub on mobile */
-  #creditSub{display:none}
-}
-
-@media(max-width:480px){
-  .wdc-wrap{grid-template-columns:1fr 1fr!important}
-  .lib-grid{grid-template-columns:1fr!important}
-  .pricing-cards{grid-template-columns:1fr!important}
-}
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--e);color:var(--p);padding:10px 17px;border-radius:var(--rsm);font-size:13px;z-index:300;transform:translateY(70px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:310px;border:1px solid rgba(255,255,255,.08)}
 .toast.show{transform:translateY(0);opacity:1}
@@ -463,7 +402,7 @@ select.fi{cursor:pointer}
 .guide-toggle{font-size:11px;color:var(--tl);transition:transform .2s}
 .guide-section.open .guide-toggle{transform:rotate(90deg)}
 .guide-detail{display:none;margin-top:12px}
-.guide-section.open .guide-detail{display:block!important}
+.guide-section.open .guide-detail{display:block}
 .guide-desc{font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:10px}
 .guide-tips{list-style:none;display:flex;flex-direction:column;gap:5px}
 .guide-tips li{font-size:12px;color:var(--t);line-height:1.6;padding:7px 10px;background:var(--p);border-radius:var(--rsm);border-left:2px solid var(--r)}
@@ -608,7 +547,7 @@ select.fi{cursor:pointer}
 @keyframes ldot{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-8px);opacity:1}}
 /* APP */
 #appWrap{display:none;height:100vh}
-#appWrap.show{display:flex;flex-direction:column}
+#appWrap.show{display:block}
 /* USER MENU */
 .user-area{padding:8px 10px 14px;border-top:1px solid rgba(255,255,255,.06)}
 .user-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;border:none;background:rgba(255,255,255,.06);width:100%;transition:background .15s}
@@ -660,29 +599,21 @@ select.fi{cursor:pointer}
 <div id="appWrap"><div class="app">
 
 <!-- SIDEBAR -->
-<!-- MOBILE TOPBAR -->
-<div class="mob-topbar" id="mobTopbar">
-  <div class="mob-wordmark">Flow State Studio ✦</div>
-  <button class="mob-hamburger" onclick="toggleMobNav()" aria-label="Menu">☰</button>
-</div>
-<!-- SIDEBAR OVERLAY -->
-<div class="mob-overlay" id="mobOverlay" onclick="closeMobNav()"></div>
-
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-wordmark" id="sbName">Flow State Studio</div>
-    <div class="sb-tagline nav-label">Built for the way your brain works.</div>
+    <div class="sb-tagline">Built for the way your brain works.</div>
     <div class="sb-line"></div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Workspace</div>
-    <div class="nav-i active" data-view="dashboard"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="6" height="6" rx="1.5"/><rect x="10" y="2" width="6" height="6" rx="1.5"/><rect x="2" y="10" width="6" height="6" rx="1.5"/><rect x="10" y="10" width="6" height="6" rx="1.5"/></svg><span class="nav-label">Dashboard</span></div>
-    <div class="nav-i" data-view="ideas"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg><span class="nav-label">Content Planner</span></div>
-    <div class="nav-i" data-view="tasks"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h9M3 13h7"/></svg><span class="nav-label">Tasks</span></div>
-    <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg><span class="nav-label">Calendar</span></div>
+    <div class="nav-i active" data-view="dashboard"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="6" height="6" rx="1.5"/><rect x="10" y="2" width="6" height="6" rx="1.5"/><rect x="2" y="10" width="6" height="6" rx="1.5"/><rect x="10" y="10" width="6" height="6" rx="1.5"/></svg>Dashboard</div>
+    <div class="nav-i" data-view="ideas"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg>Content Planner</div>
+    <div class="nav-i" data-view="tasks"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h9M3 13h7"/></svg>Tasks</div>
+    <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg>Calendar</div>
     <div class="sb-section">Create</div>
-    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg><span class="nav-label">Writing Studio</span></div>
-    <div class="nav-i" data-view="drafts"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M6 7h6M6 10.5h4"/></svg><span class="nav-label">Saved Drafts</span></div>
+    <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>Writing Studio</div>
+    <div class="nav-i" data-view="drafts"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M6 7h6M6 10.5h4"/></svg>Saved Drafts</div>
     <div class="nav-i nav-parent" onclick="toggleLibNav(this)">
       <svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="3" rx="1"/><rect x="2" y="8" width="10" height="3" rx="1"/><rect x="2" y="13" width="7" height="2" rx="1"/></svg>
       Library
@@ -695,9 +626,9 @@ select.fi{cursor:pointer}
       <div class="nav-i nav-child" data-view="stories">Story Ideas</div>
     </div>
     <div class="sb-section">Think</div>
-    <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg><span class="nav-label">Notebooks</span></div>
+    <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Notebooks</div>
     <div class="nav-spacer"></div>
-    <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg><span class="nav-label">Settings</span></div>
+    <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
   <div style="padding:8px 14px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:1.6">
     © 2026 Flow State Studio. All rights reserved.<br>
@@ -824,67 +755,50 @@ select.fi{cursor:pointer}
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">⚙️</span>Brand Profiles (Start Here)</span><span class="guide-toggle">›</span></div>
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✦</span>AI Studio</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Your profiles are the foundation of everything. The more you fill them in, the more every AI tool writes as you, for your audience, about your actual offers.</p>
+              <p class="guide-desc">Your AI writing partner, powered by the Studio. Give it a topic and it generates a full draft in your voice - no more staring at a blank page.</p>
               <ul class="guide-tips">
-                <li><strong>Brand Profile:</strong> fill this in first. Niche, voice, ideal client, offers, POV. This is always active as your foundation.</li>
-                <li><strong>Offer Profile:</strong> switch to this when you are in launch mode or actively selling something specific. The AI will naturally weave your offer into every piece.</li>
-                <li><strong>Long-form Profile:</strong> switch to this when writing a book chapter, newsletter series, or blog post. Gives the AI full context on your project so it stays consistent.</li>
-                <li><strong>How to switch:</strong> go to Settings and click the profile tab you want active. The rest of the app updates instantly.</li>
-                <li><strong>All three save independently</strong> so you never lose your work switching between them.</li>
+                <li><strong>Business Context matters most:</strong> the more you fill in Settings → Business Context, the more on-brand every draft will be.</li>
+                <li><strong>Give it a specific brief:</strong> instead of "write a caption about my business," try "write a caption about why wellness entrepreneurs burn out when they don't delegate - warm tone, end with a DM CTA."</li>
+                <li><strong>Save your drafts:</strong> hit Save Draft to add it to your library. You can always come back and copy or reference it later.</li>
+                <li><strong>Use Hooks first:</strong> grab a hook from the Hooks library, drop it into the brief, and use the Studio to build from it.</li>
               </ul>
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🗂</span>Content Card and Creative Director</span><span class="guide-toggle">›</span></div>
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🔗</span>Hooks Library</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Every idea in your Content Planner has a content card. This is where you plan, write, and generate each piece of content using the Creative Director tools.</p>
+              <p class="guide-desc">Pre-written opening lines designed to stop the scroll. Filter by type and copy directly into your content or into the Writing Studio as a starting point.</p>
               <ul class="guide-tips">
-                <li><strong>Write Your Own first:</strong> jot your own angle or rough draft before touching any AI tools. The AI will read it and build on what you wrote.</li>
-                <li><strong>Creative Director: Strategy Session:</strong> stuck on how to approach a topic? Hit this first. It gives you the angle, hook, emotion, and what to avoid before you write a word.</li>
-                <li><strong>Hook Builder:</strong> generate 5 hooks, pick your favourite, build the full post from it. Great for when you know the topic but not the opening.</li>
-                <li><strong>Creative Director: Content Autopsy:</strong> paste any post that stopped your scroll. It breaks down exactly why it worked, then rebuilds it completely in your voice.</li>
-                <li><strong>Break Into Tasks:</strong> add the steps needed to finish and publish this piece. They sync to your Task board and Calendar automatically.</li>
+                <li><strong>Educational hooks:</strong> best for carousels, blog posts, and reels that teach something.</li>
+                <li><strong>Engagement hooks:</strong> great for posts where you want comments, shares, or saves.</li>
+                <li><strong>Storytelling hooks:</strong> use these when you're sharing a personal experience or client story.</li>
+                <li><strong>Add your own:</strong> when you write a hook that performs well, save it here so you can reuse and riff on it.</li>
               </ul>
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✍️</span>Writing Studio</span><span class="guide-toggle">›</span></div>
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">💬</span>Prompts, CTAs &amp; Story Ideas</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">A dedicated space for generating full drafts. Best for when you want to write something fresh without it being tied to a specific content card.</p>
+              <p class="guide-desc">Three libraries of ready-to-copy content pieces. Prompts are for the Studio, CTAs go at the end of your content, Story Ideas are for Instagram Stories.</p>
               <ul class="guide-tips">
-                <li><strong>Write Your Own:</strong> use the left panel to write freely without using AI at all. It is your workspace, not a prompt field.</li>
-                <li><strong>Give a specific brief:</strong> instead of "write a caption," try "write a warm Instagram caption about why ND entrepreneurs struggle with consistency, ending with a question CTA."</li>
-                <li><strong>Save your drafts:</strong> every good draft goes into Saved Drafts automatically. Export as CSV to bring into a scheduler.</li>
-                <li><strong>Active profile matters:</strong> switch your profile in Settings before generating. Offer Profile during a launch, Long-form for a blog post.</li>
+                <li><strong>Prompts:</strong> copy a prompt and paste it into the Writing Studio, fill in the brackets with your specifics.</li>
+                <li><strong>CTAs:</strong> always end your content with a clear call to action - pick one that matches your goal for that post (engagement, sales, or growth).</li>
+                <li><strong>Story Ideas:</strong> use these when you open Instagram and have no idea what to post - they're designed to be quick and authentic.</li>
+                <li><strong>Favorite:</strong> hit the heart on anything you love so you can find it again fast.</li>
               </ul>
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🔗</span>Hooks, CTAs, Stories and Prompts</span><span class="guide-toggle">›</span></div>
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🧠</span>Notebooks</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Four libraries of ready-to-use content building blocks. Filter, search, bookmark favorites, and delete anything that doesn't fit your niche.</div>
+              <p class="guide-desc">Unlimited notebooks for anything that doesn't fit neatly anywhere else. Thoughts, ideas, client notes, inspiration, lists - no wrong way to use it.</p>
               <ul class="guide-tips">
-                <li><strong>Hooks:</strong> scroll-stopping opening lines. Copy one, drop it into a content card or the Writing Studio as your starting point.</li>
-                <li><strong>CTAs:</strong> closing lines that prompt action. Always end your content with one. Match the CTA to your goal for that post.</li>
-                <li><strong>Story Ideas:</strong> quick Instagram Story prompts for when you open the app with nothing planned.</li>
-                <li><strong>Prompt Bank:</strong> AI writing prompts. Copy one, paste it into the Writing Studio, swap the brackets for your specifics.</li>
-                <li><strong>Add your own:</strong> when something works, save it. Your best hooks and CTAs should live here so you can reuse and riff on them.</li>
-                <li><strong>Fill in your Brand Profile</strong> in Settings and the prompts auto-fill with your niche and voice when you copy them.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">📓</span>Notebooks and Brain Dump</span><span class="guide-toggle">›</span></div>
-            <div class="guide-detail">
-              <p class="guide-desc">Your messy thinking space. No format required, no rules, no judgment. Notebooks keep everything organized, Brain Dump sessions give you a blank page to just write.</p>
-              <ul class="guide-tips">
-                <li><strong>Suggested notebooks:</strong> Content Ideas Parking Lot, Client Notes, Weekly Reflection, Research and Inspiration, Business Planning.</li>
-                <li><strong>Brain Dump Session:</strong> hit the button when your brain is full and you just need to get it out. Write anything. Save to Drafts or a Notebook when done.</li>
-                <li><strong>Content Parking Lot:</strong> ideas not ready for the Planner yet. Park them here, review weekly, move the good ones over.</li>
-                <li><strong>Save drafts to notebooks:</strong> open any saved draft and use the Save to Notebook option at the bottom to move it into a long-form project notebook.</li>
-                <li><strong>Tip:</strong> review your notebooks every Monday. That is where next week is hiding.</li>
+                <li><strong>Suggested notebooks:</strong> Content Ideas Parking Lot, Client Notes, Weekly Reflection, Inspiration &amp; Research, Business Planning.</li>
+                <li><strong>Brain dump freely:</strong> when your brain is busy, just open a note and type. Don't edit, don't organize - just get it out. You can sort it later.</li>
+                <li><strong>Content Parking Lot:</strong> ideas that aren't ready for the Content Planner yet. Keep them here until you have bandwidth.</li>
+                <li><strong>Tip:</strong> review your Brain Dump notebooks weekly during your planning session - that's when you move things to the Planner.</li>
               </ul>
             </div>
           </div>
@@ -1546,8 +1460,8 @@ select.fi{cursor:pointer}
       <div class="cd2-right">
         <!-- WRITE YOUR OWN - always visible at top -->
         <div style="background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;margin-bottom:0;box-shadow:0 2px 8px rgba(122,158,194,.15)">
-          <div style="padding:12px 16px;border-bottom:2px solid var(--b);background:linear-gradient(135deg,var(--gp),#EDE0C4);display:flex;align-items:center;justify-content:space-between">
-            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
+          <div style="padding:12px 16px;border-bottom:2px solid rgba(122,158,194,.25);background:linear-gradient(135deg,var(--bluep),#D8EAF8);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
             <div style="font-size:10px;color:var(--tl)">AI tools will use this as context</div>
           </div>
           <div style="padding:14px 16px">
@@ -2350,9 +2264,6 @@ const S = {
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
   editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
   brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:''},
-  offerProfile:{name:'',price:'',whoFor:'',transformation:'',objections:'',keyMsg:'',callToAction:''},
-  longformProfile:{title:'',premise:'',targetReader:'',coreArgument:'',tone:'',themes:'',extra:''},
-  activeProfile:'brand',
   aiCount:0,
   notebooks:[], notes:[], activeNotebook:null
 };
@@ -2370,7 +2281,7 @@ function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
-    brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
+    brandProfile:S.brandProfile,aiCount:S.aiCount,
     creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
@@ -2406,7 +2317,6 @@ function setGreeting(){
 /* ═══════════════════ NAV ═══════════════════ */
 function navigate(v){
   if(!v||!document.getElementById("view-"+v))return;
-  if(window.innerWidth<=768)closeMobNav();
   S.view=v;
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-i').forEach(el=>el.classList.remove('active'));
@@ -2431,8 +2341,12 @@ function navigate(v){
   }
   renderGS();
   renderPickUp();
+  // auto-collapse GS strip when all done
+  const allDone=GS_STEPS.every(s=>S.gs[s.key]);
+  const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
+  if(allDone||dismissed){const strip=document.getElementById('gsStrip');if(strip)strip.style.display='none';}
 }
-// nav listeners added in DOMContentLoaded below
+document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.view)));
 
 /* ═══════════════════ GETTING STARTED ═══════════════════ */
 const GS_STEPS=[
@@ -2452,34 +2366,6 @@ function renderGS(){
       <span class="gs-item-lbl">${s.label}</span>
     </div>`).join('');
 }
-/* ═══════════════ MOBILE NAV ═══════════════ */
-/* toggleSidebar removed */
-
-function toggleMobNav(){
-  var sidebar=document.querySelector('.sidebar');
-  var overlay=document.getElementById('mobOverlay');
-  var closeBtn=document.getElementById('mobNavClose');
-  var isOpen=sidebar.style.transform==='translateX(0px)'||sidebar.style.transform==='translateX(0)';
-  if(isOpen){
-    sidebar.style.transform='translateX(-100%)';
-    overlay.classList.remove('show');
-    if(closeBtn)closeBtn.style.display='none';
-  } else {
-    sidebar.style.transform='translateX(0)';
-    overlay.classList.add('show');
-    if(closeBtn)closeBtn.style.display='block';
-  }
-}
-function closeMobNav(){
-  var sidebar=document.querySelector('.sidebar');
-  var overlay=document.getElementById('mobOverlay');
-  var closeBtn=document.getElementById('mobNavClose');
-  sidebar.style.transform='translateX(-100%)';
-  overlay.classList.remove('show');
-  if(closeBtn)closeBtn.style.display='none';
-}
-// Mobile nav close is handled inline via navigate()
-
 function toggleGS(){
   document.getElementById('gsStrip').classList.toggle('open');
 }
@@ -2608,7 +2494,7 @@ function renderTaskKanban(){
   }).join('');
 }
 function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
-function deleteTask(id){S.tasks=S.tasks.filter(t=>t.id!==id);S.calEntries=S.calEntries.filter(e=>e.id!=='cal_task_'+id&&e._taskId!==id);persist();renderTaskKanban();renderCalendar();}
+function deleteTask(id){S.tasks=S.tasks.filter(t=>t.id!==id);persist();renderTaskKanban();}
 function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;persist();renderTaskKanban();}}
 
 /* ═══════════════════ CALENDAR ═══════════════════ */
@@ -3189,57 +3075,6 @@ async function getAnonKey(){
 
 function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Flow State Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
 function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
-function switchProfileTab(tab){
-  ['brand','offer','longform'].forEach(function(t){
-    var panel=document.getElementById('profPanel-'+t);
-    var btn=document.getElementById('profTab-'+t);
-    if(panel) panel.style.display=t===tab?'block':'none';
-    if(btn){
-      btn.style.background=t===tab?'var(--r)':'var(--w)';
-      btn.style.color=t===tab?'white':'var(--t)';
-      btn.style.borderColor=t===tab?'var(--r)':'var(--b)';
-    }
-  });
-  S.activeProfile=tab;
-  persist();
-}
-
-function saveOfferProfile(){
-  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
-  S.offerProfile={name:g('opName'),price:g('opPrice'),whoFor:g('opWhoFor'),transformation:g('opTransformation'),objections:g('opObjections'),keyMsg:g('opKeyMsg'),callToAction:g('opCTA')};
-  persist();
-  S.gs.biz=true;persist();renderGS();
-  toast('Offer profile saved!');
-}
-
-function saveLongformProfile(){
-  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
-  S.longformProfile={title:g('lfTitle'),format:document.getElementById('lfFormat')?.value||'',premise:g('lfPremise'),targetReader:g('lfTargetReader'),coreArgument:g('lfCoreArg'),tone:g('lfTone'),themes:g('lfThemes')};
-  persist();
-  toast('Project profile saved!');
-}
-
-function applyProfileSettings(){
-  var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
-  // Brand
-  var bp=S.brandProfile||{};
-  var setVal=function(id,v){var el=document.getElementById(id);if(el)el.value=v||'';};
-  setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
-  setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
-  // Offer
-  var op=S.offerProfile||{};
-  setVal('opName',op.name);setVal('opPrice',op.price);setVal('opWhoFor',op.whoFor);
-  setVal('opTransformation',op.transformation);setVal('opObjections',op.objections);
-  setVal('opKeyMsg',op.keyMsg);setVal('opCTA',op.callToAction);
-  // Longform
-  var lf=S.longformProfile||{};
-  setVal('lfTitle',lf.title);setVal('lfPremise',lf.premise);setVal('lfTargetReader',lf.targetReader);
-  setVal('lfCoreArg',lf.coreArgument);setVal('lfTone',lf.tone);setVal('lfThemes',lf.themes);
-  var lfFmt=document.getElementById('lfFormat');if(lfFmt&&lf.format)lfFmt.value=lf.format;
-  // Restore active tab
-  if(S.activeProfile) switchProfileTab(S.activeProfile);
-}
-
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
   S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra')};
@@ -3886,11 +3721,6 @@ function openBrainDump(){
 }
 document.addEventListener('DOMContentLoaded',function(){
   checkPaymentSuccess();
-  // Wire up ALL nav item click listeners now that DOM exists
-  document.querySelectorAll('.nav-i[data-view]').forEach(function(el){
-    el.addEventListener('click', function(){ navigate(el.dataset.view); });
-  });
-
   var ta=document.getElementById('brainDumpTA');
   if(ta)ta.addEventListener('input',function(){
     var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
