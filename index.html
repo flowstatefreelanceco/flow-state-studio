@@ -470,7 +470,7 @@ select.fi{cursor:pointer}
 .cd2-right{padding:20px 24px;overflow-y:auto;background:var(--bluep);display:flex;flex-direction:column;gap:12px}
 .ai2-section{background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(122,158,194,.12)}
 .ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
-.ai2-section-hdr:hover{background:rgba(122,158,194,.08)}
+.ai2-section-hdr:hover{filter:brightness(.97)}
 .ai2-section-body.open .ai2-section-hdr{border-bottom-color:var(--bl)}
 .ai2-section-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:flex;align-items:center;gap:7px}
 .ai2-section-body{padding:14px 16px;display:none}
@@ -1433,7 +1433,7 @@ select.fi{cursor:pointer}
       <div class="cd2-right">
         <!-- WRITE YOUR OWN - always visible at top -->
         <div style="background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;margin-bottom:0;box-shadow:0 2px 8px rgba(122,158,194,.15)">
-          <div style="padding:12px 16px;border-bottom:1px solid rgba(122,158,194,.2);background:rgba(122,158,194,.08);display:flex;align-items:center;justify-content:space-between">
+          <div style="padding:12px 16px;border-bottom:2px solid rgba(122,158,194,.25);background:linear-gradient(135deg,var(--bluep),#D8EAF8);display:flex;align-items:center;justify-content:space-between">
             <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
             <div style="font-size:10px;color:var(--tl)">AI tools will use this as context</div>
           </div>
@@ -1448,8 +1448,8 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')">
-            <div class="ai2-section-title">✦ Creative Director</div>
+          <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA">
+            <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Strategy Session</div>
             <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-smartBrief-body">
@@ -1460,8 +1460,8 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('generate')">
-            <div class="ai2-section-title">✍️ Generate Content</div>
+          <div class="ai2-section-hdr" onclick="toggleAI2('generate')" style="background:linear-gradient(135deg,var(--tealp),#C8E8E8);border-bottom:2px solid rgba(58,140,140,.3)">
+            <div class="ai2-section-title" style="color:var(--teal)">✍️ Generate Content</div>
             <span id="ai2-generate-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-generate-body">
@@ -1489,8 +1489,8 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('hooks')">
-            <div class="ai2-section-title">🪝 Hook Builder</div>
+          <div class="ai2-section-hdr" onclick="toggleAI2('hooks')" style="background:linear-gradient(135deg,var(--gp),#EDE0C4);border-bottom:2px solid #D4A843">
+            <div class="ai2-section-title" style="color:var(--g)">🪝 Hook Builder</div>
             <span id="ai2-hooks-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-hooks-body">
@@ -1514,8 +1514,8 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('variations')">
-            <div class="ai2-section-title">⇕ Caption Variations</div>
+          <div class="ai2-section-hdr" onclick="toggleAI2('variations')" style="background:linear-gradient(135deg,var(--bluep),#D4E4F4);border-bottom:2px solid rgba(122,158,194,.4)">
+            <div class="ai2-section-title" style="color:var(--blue)">⇕ Caption Variations</div>
             <span id="ai2-variations-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-variations-body">
@@ -1530,8 +1530,8 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('series')">
-            <div class="ai2-section-title">☆ Content Series</div>
+          <div class="ai2-section-hdr" onclick="toggleAI2('series')" style="background:linear-gradient(135deg,var(--sagep),#D4E8D0);border-bottom:2px solid rgba(90,110,80,.3)">
+            <div class="ai2-section-title" style="color:#3A5228">☆ Content Series</div>
             <span id="ai2-series-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-series-body">
@@ -1542,9 +1542,9 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8)">
+          <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')" style="background:linear-gradient(135deg,#E8C4B4,#D4A090);border-bottom:2px solid #C4826A">
             <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Content Autopsy</div>
-            <span id="ai2-repurpose-chev" style="color:var(--r);font-size:16px">+</span>
+            <span id="ai2-repurpose-chev" style="color:#8C3518;font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
             <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:14px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
