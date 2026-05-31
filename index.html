@@ -1905,6 +1905,59 @@ var _currentUser=null;
 
 var _appBooted = false;
 
+// Check for payment success URL parameter
+function checkPaymentSuccess(){
+  var params = new URLSearchParams(window.location.search);
+  var payment = params.get('payment');
+  var plan = params.get('plan');
+  if(payment === 'success' && plan){
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+    // Store the plan
+    sessionStorage.setItem('paidPlan', plan);
+    // Show success screen
+    showPaymentSuccess(plan);
+  }
+}
+
+function showPaymentSuccess(plan){
+  var planName = plan === 'unlimited' ? 'Unlimited Founders Membership' : 'Starter Founders Membership';
+  var el = document.createElement('div');
+  el.id = 'paymentSuccess';
+  el.style.cssText = 'position:fixed;inset:0;background:var(--p);z-index:9995;display:flex;align-items:center;justify-content:center;padding:24px';
+  var btn = document.createElement('button');
+  btn.textContent = 'Create My Account';
+  btn.style.cssText = 'width:100%;padding:14px;background:var(--r);color:white;border:none;border-radius:var(--rsm);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;display:block';
+  btn.onclick = function(){ proceedToSignup(plan); };
+  var inner = document.createElement('div');
+  inner.style.cssText = 'max-width:480px;text-align:center;background:var(--w);border-radius:var(--rad);padding:40px;box-shadow:0 8px 40px rgba(0,0,0,.12)';
+  inner.innerHTML = '<div style="font-size:48px;margin-bottom:16px">🎉</div>'
+    + '<div style="font-family:var(--fh);font-size:28px;font-weight:600;color:var(--e);margin-bottom:8px">Welcome to Flow State Studio!</div>'
+    + '<div style="font-size:14px;color:var(--t);line-height:1.7;margin-bottom:24px">Your <strong>'+planName+'</strong> is confirmed. Now create your account and you will be straight in with full access.</div>';
+  inner.appendChild(btn);
+  var hint = document.createElement('div');
+  hint.style.cssText = 'font-size:12px;color:var(--tl)';
+  hint.innerHTML = 'Already have an account? <span onclick="proceedToLogin()" style="color:var(--r);cursor:pointer;text-decoration:underline">Sign in instead</span>';
+  inner.appendChild(hint);
+  el.appendChild(inner);
+  document.body.appendChild(el);
+}
+
+function proceedToSignup(plan){
+  sessionStorage.setItem('paidPlan', plan);
+  var el = document.getElementById('paymentSuccess');
+  if(el) el.remove();
+  document.getElementById('authScreen').classList.remove('hidden');
+  switchAuthTab('signup');
+}
+
+function proceedToLogin(){
+  var el = document.getElementById('paymentSuccess');
+  if(el) el.remove();
+  document.getElementById('authScreen').classList.remove('hidden');
+  switchAuthTab('login');
+}
+
 async function initAuth(){
   var {data:{session}}=await sb.auth.getSession();
   if(session&&session.user){
@@ -2067,34 +2120,27 @@ async function doSignup(){
     err.textContent=error.message;
     btn.disabled=false;btn.textContent='Create Account';
   } else {
-    // Check if they came from a plan selection
-    var intendedPlan=sessionStorage.getItem('intendedPlan');
-    if(intendedPlan&&data.user){
-      msg.textContent='Account created! Opening checkout...';
-      btn.textContent='Create Account';btn.disabled=false;
-      // Small delay then open Stripe
-      setTimeout(async function(){
-        try{
-          var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/create-checkout',{
-            method:'POST',
-            headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
-            body:JSON.stringify({plan:intendedPlan,userId:data.user.id,userEmail:em})
-          });
-          var d=await res.json();
-          if(d.url){
-            sessionStorage.removeItem('intendedPlan');
-            window.open(d.url,'_blank');
-            msg.textContent='Checkout opened! Complete your payment, then check your email to confirm your account.';
-          }
-        }catch(e){
-          msg.textContent='Account created! Check your email to confirm, then sign in.';
-        }
-      },800);
+    btn.disabled=false;btn.textContent='Create Account';
+    // Check if they already paid (pending_plans table or sessionStorage)
+    var paidPlan=sessionStorage.getItem('paidPlan')||sessionStorage.getItem('intendedPlan');
+    if(paidPlan&&data.user){
+      // Try to find pending plan by email
+      try{
+        var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',em.toLowerCase()).maybeSingle();
+        var planToApply=pending?.plan||paidPlan;
+        await sb.from('profiles').upsert({id:data.user.id,plan:planToApply});
+        await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
+        sessionStorage.removeItem('paidPlan');
+        sessionStorage.removeItem('intendedPlan');
+        msg.style.color='var(--teal)';
+        msg.textContent='Account created with '+planToApply+' access! Check your email to confirm, then sign in.';
+      }catch(e){
+        msg.textContent='Account created! Check your email to confirm, then sign in.';
+      }
     } else {
       msg.textContent='Account created! Check your email to confirm, then sign in.';
-      btn.disabled=false;btn.textContent='Create Account';
-      switchAuthTab('login');
     }
+    switchAuthTab('login');
   }
 }
 async function doReset(){
@@ -2208,6 +2254,7 @@ function _appInit(){
   renderAllLibs(); setGreeting();
   if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
 }
+
 function load(){ /* data loaded via initFlowStateApp */ }
 function persist(){
   var dataToSave={
@@ -3646,6 +3693,7 @@ function openBrainDump(){
   setTimeout(function(){document.getElementById('brainDumpTA').focus();},100);
 }
 document.addEventListener('DOMContentLoaded',function(){
+  checkPaymentSuccess();
   var ta=document.getElementById('brainDumpTA');
   if(ta)ta.addEventListener('input',function(){
     var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
