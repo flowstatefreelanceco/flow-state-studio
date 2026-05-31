@@ -1970,13 +1970,34 @@ async function initAuth(){
   }
   sb.auth.onAuthStateChange(async function(event,session){
     if(event==='SIGNED_IN'&&session&&!_appBooted){
-      // Check for pending invite code from before signup
+      _currentUser=session.user;
+
+      // 1. Check for invite code — set plan to beta
       var pendingCode=sessionStorage.getItem('pendingInviteCode');
       if(pendingCode===INVITE_CODE){
-        try{await sb.from('profiles').upsert({id:session.user.id,plan:'beta'});}catch(e){}
+        try{
+          await sb.from('profiles').upsert({id:session.user.id,plan:'beta'});
+          S.plan='beta';
+        }catch(e){}
         sessionStorage.removeItem('pendingInviteCode');
       }
-      _currentUser=session.user;
+
+      // 2. Check for pending paid plan by email
+      var paidPlan=sessionStorage.getItem('paidPlan');
+      if(paidPlan){
+        try{
+          // Check pending_plans table first
+          var {data:pending}=await sb.from('pending_plans')
+            .select('plan').eq('email',session.user.email.toLowerCase()).maybeSingle();
+          var planToApply=pending?.plan||paidPlan;
+          await sb.from('profiles').upsert({id:session.user.id,plan:planToApply});
+          await sb.from('pending_plans').delete().eq('email',session.user.email.toLowerCase());
+          S.plan=planToApply;
+        }catch(e){}
+        sessionStorage.removeItem('paidPlan');
+        sessionStorage.removeItem('intendedPlan');
+      }
+
       document.getElementById('authScreen').classList.add('hidden');
       await bootApp();
     } else if(event==='SIGNED_OUT'){
