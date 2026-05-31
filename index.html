@@ -670,10 +670,7 @@ select.fi{cursor:pointer}
 
 <aside class="sidebar">
   <div class="sb-logo">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
-      <div class="sb-wordmark" id="sbName">Flow State Studio</div>
-      <button class="sb-collapse-btn" onclick="toggleSidebar()" id="sidebarCollapseBtn" title="Collapse sidebar">‹</button>
-    </div>
+    <div class="sb-wordmark" id="sbName">Flow State Studio</div>
     <div class="sb-tagline nav-label">Built for the way your brain works.</div>
     <div class="sb-line"></div>
   </div>
@@ -2456,14 +2453,7 @@ function renderGS(){
     </div>`).join('');
 }
 /* ═══════════════ MOBILE NAV ═══════════════ */
-function toggleSidebar(){
-  var sidebar = document.querySelector('.sidebar');
-  if(!sidebar) return;
-  var btn = document.getElementById('sidebarCollapseBtn');
-  var isCollapsed = sidebar.classList.toggle('collapsed');
-  if(btn) btn.textContent = isCollapsed ? '›' : '‹';
-  localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
-}
+/* toggleSidebar removed */
 
 function toggleMobNav(){
   var sidebar=document.querySelector('.sidebar');
@@ -3900,13 +3890,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.nav-i[data-view]').forEach(function(el){
     el.addEventListener('click', function(){ navigate(el.dataset.view); });
   });
-  // Restore sidebar collapsed state
-  if(localStorage.getItem('sidebarCollapsed')==='1'){
-    var sb2=document.querySelector('.sidebar');
-    var btn2=document.getElementById('sidebarCollapseBtn');
-    if(sb2) sb2.classList.add('collapsed');
-    if(btn2) btn2.textContent='›';
-  }
+
   var ta=document.getElementById('brainDumpTA');
   if(ta)ta.addEventListener('input',function(){
     var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
