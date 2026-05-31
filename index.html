@@ -1075,22 +1075,20 @@ select.fi{cursor:pointer}
       </div>
       <div class="setting-sec">
         <h3>Brand Profile</h3>
-        <p class="setting-desc">These fields are automatically woven into every AI generation - no copy-pasting needed. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
+        <p class="setting-desc">These fields are automatically woven into every AI generation. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. VA/OBM for wellness entrepreneurs" /></div>
-          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Holistic Virtual Assistant & OBM" /></div>
+          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Holistic Virtual Assistant and OBM" /></div>
         </div>
         <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. Wellness coaches, healers, and spiritual practitioners ready to scale" /></div>
-        <div class="fl"><label class="fl-lbl">Products &amp; Offers</label><input class="fi" id="bpOffers" placeholder="e.g. VA packages, OBM retainers, 1:1 strategy intensives" /></div>
-        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational - no corporate jargon, never pushy" /></div>
-        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale - the right systems change everything" /></div>
-        <div class="fl"><label class="fl-lbl">Extra Notes for the Studio <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Paste anything else the Studio should always know - content pillars, things to avoid, past prompts that worked well, client language..."></textarea>
+        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. VA packages, OBM retainers, 1:1 strategy intensives" /></div>
+        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
+        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
+        <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
         </div>
         <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
-        <div class="info-b" style="margin-top:14px">
-          <strong>Tip:</strong> Your brand voice field matters most. Instead of "professional," try something specific like <em>"writes like a trusted colleague, not a coach - direct but warm, short sentences, zero buzzwords."</em>
-        </div>
+        <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> Brand Voice matters most. Be specific: "writes like a trusted colleague, direct but warm, short sentences, zero buzzwords."</div>
       </div>
       <div class="setting-sec">
         <h3>Onboarding &amp; Welcome Guide</h3>
@@ -2264,6 +2262,9 @@ const S = {
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
   editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
   brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:''},
+  offerProfile:{name:'',price:'',whoFor:'',transformation:'',objections:'',keyMsg:'',callToAction:''},
+  longformProfile:{title:'',format:'book',premise:'',targetReader:'',coreArgument:'',tone:'',themes:''},
+  activeProfile:'brand',
   aiCount:0,
   notebooks:[], notes:[], activeNotebook:null
 };
@@ -2281,7 +2282,7 @@ function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
-    brandProfile:S.brandProfile,aiCount:S.aiCount,
+    brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
     creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
@@ -2356,6 +2357,11 @@ const GS_STEPS=[
   {key:'draftGenerated',label:'Generate your first AI draft',nav:'studio'}
 ];
 function renderGS(){
+  const strip=document.getElementById('gsStrip');
+  const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
+  const allDone=GS_STEPS.every(s=>S.gs[s.key]);
+  if(dismissed||allDone){if(strip)strip.style.display='none';return;}
+  if(strip)strip.style.display='';
   const done=GS_STEPS.filter(s=>S.gs[s.key]).length;
   const total=GS_STEPS.length;
   document.getElementById('gsBadge').textContent=`${done} of ${total} complete`;
@@ -2494,7 +2500,14 @@ function renderTaskKanban(){
   }).join('');
 }
 function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
-function deleteTask(id){S.tasks=S.tasks.filter(t=>t.id!==id);persist();renderTaskKanban();}
+function deleteTask(id){
+  S.tasks=S.tasks.filter(t=>t.id!==id);
+  // Remove all calendar entries linked to this task
+  S.calEntries=S.calEntries.filter(function(e){
+    return e.id!=='cal_task_'+id && e._taskId!==id && e.id!=='cal_'+id;
+  });
+  persist();renderTaskKanban();renderCalendar();
+}
 function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;persist();renderTaskKanban();}}
 
 /* ═══════════════════ CALENDAR ═══════════════════ */
@@ -4388,6 +4401,9 @@ function initFlowStateApp(savedData) {
     if (savedData.gs) S.gs = savedData.gs;
     if (savedData.aiCount) S.aiCount = savedData.aiCount;
     if (savedData.brandProfile) S.brandProfile = Object.assign({}, S.brandProfile, savedData.brandProfile);
+  if (savedData.offerProfile) S.offerProfile = Object.assign({}, S.offerProfile, savedData.offerProfile);
+  if (savedData.longformProfile) S.longformProfile = Object.assign({}, S.longformProfile, savedData.longformProfile);
+  if (savedData.activeProfile) S.activeProfile = savedData.activeProfile;
   }
   _appInit();
 }
