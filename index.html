@@ -1056,17 +1056,17 @@ select.fi{cursor:pointer}
         </div>
         <div id="upgradeOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="border:2px solid var(--bl);border-radius:var(--rad);padding:20px;background:var(--w);transition:border-color .15s" onmouseover="this.style.borderColor='var(--r)'" onmouseout="this.style.borderColor='var(--bl)'">
-            <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:4px">Starter</div>
+            <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$9.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
-            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">125 AI credits per month - perfect for consistent creators posting a few times a week.</div>
-            <button class="btn btn-p" style="width:100%" onclick="startUpgrade('starter')">Upgrade to Starter</button>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">125 AI credits/month. Locked in at founding price forever.</div>
+            <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member</button>
           </div>
           <div style="border:2px solid var(--r);border-radius:var(--rad);padding:20px;background:var(--rp);position:relative">
             <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px">Most Popular</div>
-            <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited</div>
+            <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$19.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
-            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">Unlimited AI credits - for creators who are all in and want zero limits.</div>
-            <button class="btn btn-p" style="width:100%" onclick="startUpgrade('unlimited')">Upgrade to Unlimited</button>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">Unlimited AI credits. Zero limits. Locked in at founding price forever.</div>
+            <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member</button>
           </div>
         </div>
         <div id="alreadyUnlimited" style="display:none;text-align:center;padding:14px;background:var(--tealp);border-radius:var(--rsm);color:var(--teal);font-size:13px;font-weight:500">
@@ -1106,8 +1106,28 @@ select.fi{cursor:pointer}
         </div>
         <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
       </div>
-      <div class="setting-sec"><h3>Export &amp; Import</h3><p class="setting-desc">Back up all your drafts, ideas, tasks, and calendar entries. Your API key is never included in exports. Do this regularly - it's your safety net.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-brass" onclick="exportData()">⬇ Export Backup</button><button class="btn btn-g" onclick="document.getElementById('impFile').click()">⬆ Import Backup</button></div><input type="file" id="impFile" accept=".json" style="display:none" onchange="importData(event)" /></div>
-      <div class="setting-sec" style="border-color:#E0BDAA"><h3>Clear All Data</h3><p class="setting-desc">Permanently deletes everything in this browser. Export first!</p><button class="btn btn-danger" onclick="clearAll()">Clear All Data</button></div>
+      <div class="setting-sec">
+        <h3>Export &amp; Import</h3>
+        <p class="setting-desc">Download a backup of all your drafts, notes, ideas, tasks, and calendar entries as a JSON file. You can re-import it at any time to restore your content. Use this regularly as your safety net.</p>
+        <div class="info-b" style="margin-bottom:12px">
+          <strong>Export</strong> saves everything to your device as a .json file.<br>
+          <strong>Import</strong> merges a backup file back into your account — it adds to your existing content, it does not replace it.
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-brass" onclick="exportData()">⬇ Export Full Backup (JSON)</button>
+          <button class="btn btn-g" onclick="exportCSV()">⬇ Export Drafts as CSV</button>
+          <button class="btn btn-g" onclick="document.getElementById('impFile').click()">⬆ Import Backup</button>
+        </div>
+        <input type="file" id="impFile" accept=".json" style="display:none" onchange="importData(event)" />
+        <div style="font-size:11px;color:var(--tl);margin-top:8px;line-height:1.6">
+          JSON backup = full restore of everything. CSV = your drafts as a spreadsheet you can open in Excel or Google Sheets.
+        </div>
+      </div>
+      <div class="setting-sec" id="clearDataSection" style="border-color:#E0BDAA;display:none">
+        <h3>Clear All Data</h3>
+        <p class="setting-desc">Permanently deletes everything in this browser. Export first!</p>
+        <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
+      </div>
     </div>
   </div>
 
@@ -2936,6 +2956,8 @@ function renderMembershipSection(){
   planNameEl.textContent=planLabels[plan]||'Beta';
   var invSec=document.getElementById('inviteCodeSection');
   if(invSec)invSec.style.display=S.plan==='owner'?'block':'none';
+  var clearSec=document.getElementById('clearDataSection');
+  if(clearSec)clearSec.style.display=S.plan==='owner'?'block':'none';
   if(isUnlimited()){
     planCreditsEl.textContent='Unlimited AI credits';
     if(upgradeOpts)upgradeOpts.style.display='none';
@@ -3016,6 +3038,26 @@ function resetOnboarding(){
 function saveModel(){S.settings.model=document.getElementById('modelIn').value;persist();toast('Model saved ✓');}
 function toggleKey(){const i=document.getElementById('keyIn');i.type=i.type==='password'?'text':'password';}
 function clearAll(){if(!confirm('Delete everything? Export a backup first!'))return;localStorage.clear();location.reload();}
+function exportCSV(){
+  if(!S.drafts||!S.drafts.length){toast('No drafts to export yet');return;}
+  var headers=['Title','Platform','Format','Date Saved','Content'];
+  var lines=[headers.join(',')];
+  S.drafts.forEach(function(d){
+    var date=d.createdAt?new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+    var esc=function(s){return '"'+(s||'').replace(/"/g,'""')+'"';};
+    lines.push([esc(d.title||'Untitled'),esc(d.platform||''),esc(d.format||''),esc(date),esc(d.content||'')].join(','));
+  });
+  var csv=lines.join(String.fromCharCode(13,10));
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='FlowStateStudio_Drafts_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Drafts exported as CSV');
+}
+
 function exportData(){
   const payload={version:3,exportedAt:new Date().toISOString(),drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,favs:S.favs,settings:{...S.settings,apiKey:''}};
   const a=document.createElement('a');
