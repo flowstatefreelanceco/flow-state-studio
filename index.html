@@ -1741,6 +1741,7 @@ select.fi{cursor:pointer}
 
     <div class="pricing-footer">
       Cancel anytime · Secured by Stripe · Your data is always yours<br>
+      After payment, come back here and create your account to get started.<br>
       Already have an account? <a onclick="lockedSignIn()">Sign in here</a>
     </div>
   </div>
@@ -2838,7 +2839,7 @@ function renderMembershipSection(){
   var plan=S.plan||'beta';
   var used=S.creditsUsed||0;
   var limit=creditLimit();
-  var planLabels={owner:'Owner',unlimited:'Unlimited',starter:'Starter',beta:'Beta'};
+  var planLabels={owner:'Owner',unlimited:'Unlimited Founders',starter:'Starter Founders',beta:'Beta'};
   planNameEl.textContent=planLabels[plan]||'Beta';
   var invSec=document.getElementById('inviteCodeSection');
   if(invSec)invSec.style.display=S.plan==='owner'?'block':'none';
