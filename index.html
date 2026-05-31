@@ -4262,10 +4262,10 @@ function handleIdeaImages(input) {
 var _calDayDate = '';
 function calDayClick(ds){
   var ideaEnts=S.ideas.filter(function(i){return i.date===ds;}).map(function(i){
-    return{id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,time:i.time||'',notes:i.notes||'',_fromIdea:true};
+    return{id:'idea_'+i.id,title:i.title,platform:i.platform,format:i.format||'',status:i.status,time:i.time||'',notes:i.notes||'',_fromIdea:true};
   });
   var taskEnts=S.tasks.filter(function(t){return t.date===ds;}).map(function(t){
-    return{id:'task_'+t.id,title:t.title,platform:'other',status:t.status,time:t.time||'',notes:t.notes||'',_fromTask:true};
+    return{id:'task_'+t.id,title:t.title,platform:'other',status:t.status,time:t.time||'',notes:t.notes||'',taskType:t.taskType||'',energy:t.energy||'',timeEst:t.timeEst||'',_fromTask:true};
   });
   var calOnly=S.calEntries.filter(function(e){
     return e.date===ds&&!ideaEnts.find(function(ie){return ie.title===e.title;})&&!taskEnts.find(function(te){return te.title===e.title;});
@@ -4292,14 +4292,31 @@ function calDayClick(ds){
       e._fromIdea?'<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:4px;display:block">✦ Content Card</span>':
       '<span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:4px;display:block">📅 Calendar Entry</span>';
     var titleDiv=document.createElement('div');
-    titleDiv.innerHTML=typeLabel+'<div style="font-size:13.5px;font-weight:500;color:var(--e)">'+(e.title||'')+'</div>';
+    titleDiv.innerHTML=typeLabel+'<div style="font-size:14px;font-weight:600;color:var(--e);line-height:1.3">'+(e.title||'')+'</div>';
     card.appendChild(titleDiv);
-    if(e.time||e.platform){
-      var meta=document.createElement('div');
-      meta.style.cssText='font-size:11px;color:var(--tl);margin-top:4px;margin-bottom:8px';
-      meta.textContent=(e.time||'')+(e.time&&e.platform?' · ':'')+(!e._fromTask?cap(e.platform||''):'');
-      card.appendChild(meta);
+    // Rich preview tags
+    var tags=document.createElement('div');
+    tags.style.cssText='display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;margin-bottom:8px;align-items:center';
+    if(e.time){
+      var timeTag=document.createElement('span');
+      timeTag.style.cssText='font-size:10px;color:var(--tl)';
+      timeTag.textContent='⏰ '+e.time;
+      tags.appendChild(timeTag);
     }
+    if(e._fromIdea){
+      if(e.platform){var pt=document.createElement('span');pt.style.cssText='font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--tealp);color:var(--teal);padding:2px 8px;border-radius:100px';pt.textContent=cap(e.platform);tags.appendChild(pt);}
+      if(e.format){var ft=document.createElement('span');ft.style.cssText='font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);color:var(--t);padding:2px 8px;border-radius:100px';ft.textContent=e.format;tags.appendChild(ft);}
+    }
+    if(e._fromTask){
+      var typeIcons={writing:'✍️',admin:'📋',creative:'🎨',research:'🔍',calls:'📞'};
+      var energyColors={high:'var(--r)',medium:'var(--g)',low:'var(--teal)'};
+      var energyBgs={high:'var(--rp)',medium:'var(--gp)',low:'var(--tealp)'};
+      var energyLabels={high:'🔥 High focus',medium:'⚡ Medium',low:'🌿 Low energy'};
+      if(e.taskType){var tt=document.createElement('span');tt.style.cssText='font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);color:var(--t);padding:2px 8px;border-radius:100px';tt.textContent=(typeIcons[e.taskType]||'')+' '+e.taskType;tags.appendChild(tt);}
+      if(e.energy){var et=document.createElement('span');et.style.cssText='font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;background:'+(energyBgs[e.energy]||'var(--p)')+';color:'+(energyColors[e.energy]||'var(--t)');et.textContent=energyLabels[e.energy]||e.energy;tags.appendChild(et);}
+      if(e.timeEst){var te=document.createElement('span');te.style.cssText='font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px';te.textContent='⏱ '+e.timeEst;tags.appendChild(te);}
+    }
+    if(tags.children.length>0) card.appendChild(tags);
     var btns=document.createElement('div');
     btns.style.cssText='display:flex;gap:6px';
     var editBtn=document.createElement('button');
