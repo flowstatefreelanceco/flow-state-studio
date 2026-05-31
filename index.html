@@ -355,7 +355,7 @@ select.fi{cursor:pointer}
     width:260px!important;box-shadow:4px 0 24px rgba(0,0,0,.18)
   }
   .mob-overlay{display:block}
-  .app-wrap{flex-direction:column}
+  .app-wrap-mobile{flex-direction:column}
   .main{flex-direction:column;min-height:0}
   .main-hdr{padding:16px;flex-direction:column;align-items:flex-start;gap:10px}
   .main-hdr .hdr-acts{flex-wrap:wrap;gap:6px}
@@ -608,7 +608,7 @@ select.fi{cursor:pointer}
 @keyframes ldot{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-8px);opacity:1}}
 /* APP */
 #appWrap{display:none;height:100vh}
-#appWrap.show{display:block}
+#appWrap.show{display:flex;flex-direction:column}
 /* USER MENU */
 .user-area{padding:8px 10px 14px;border-top:1px solid rgba(255,255,255,.06)}
 .user-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;border:none;background:rgba(255,255,255,.06);width:100%;transition:background .15s}
@@ -2434,12 +2434,6 @@ function navigate(v){
   }
   renderGS();
   renderPickUp();
-  // auto-collapse GS strip when all done
-  const allDone=GS_STEPS.every(s=>S.gs[s.key]);
-  const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
-  const strip=document.getElementById('gsStrip');
-  if(allDone||dismissed){if(strip)strip.style.display='none'; return;}
-  if(strip)strip.style.display='';
 }
 // nav listeners added in DOMContentLoaded below
 
