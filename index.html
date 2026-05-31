@@ -618,6 +618,7 @@ select.fi{cursor:pointer}
     <div class="sb-section">Workspace</div>
     <div class="nav-i active" data-view="dashboard"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="6" height="6" rx="1.5"/><rect x="10" y="2" width="6" height="6" rx="1.5"/><rect x="2" y="10" width="6" height="6" rx="1.5"/><rect x="10" y="10" width="6" height="6" rx="1.5"/></svg>Dashboard</div>
     <div class="nav-i" data-view="ideas"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="4" height="12" rx="1"/><rect x="7" y="3" width="4" height="9" rx="1"/><rect x="12" y="3" width="4" height="6" rx="1"/></svg>Content Planner</div>
+    <div class="nav-i" data-view="feedpreview"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx=".8"/><rect x="9" y="2" width="7" height="5" rx=".8"/><rect x="2" y="9" width="7" height="7" rx=".8"/><rect x="11" y="9" width="5" height="7" rx=".8"/></svg>Feed Preview</div>
     <div class="nav-i" data-view="tasks"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h9M3 13h7"/></svg>Tasks</div>
     <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg>Calendar</div>
     <div class="sb-section">Create</div>
@@ -636,7 +637,6 @@ select.fi{cursor:pointer}
     </div>
     <div class="sb-section">Think</div>
     <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Notebooks</div>
-    <div class="nav-i" data-view="feedpreview"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx=".8"/><rect x="9" y="2" width="7" height="5" rx=".8"/><rect x="2" y="9" width="7" height="7" rx=".8"/><rect x="11" y="9" width="5" height="7" rx=".8"/></svg>Feed Preview</div>
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
@@ -1474,6 +1474,15 @@ select.fi{cursor:pointer}
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
           <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
+        </div>
+        <!-- IMAGE UPLOAD -->
+        <div class="fl">
+          <label class="fl-lbl">Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional, shows in Feed Preview)</span></label>
+          <div id="cdImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+          <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
+            📸 Add images or slides
+            <input type="file" id="cdImgInput" multiple accept="image/*" style="display:none" onchange="handleCdImages(this)" />
+          </label>
         </div>
         <!-- TASK BREAKDOWN -->
         <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
@@ -3447,6 +3456,8 @@ function cdOpen(id){
     delete x.aiOutputs['hooks'];
   }
   S._pendingIdeaImages=x.images||[];
+  // Render any existing images in the upload area
+  setTimeout(function(){ cdRefreshImageArea(); }, 80);
 
   // Populate all fields
   document.getElementById('cdTitle').value=x.title||'';
@@ -4371,6 +4382,46 @@ function handleIdeaImages(input) {
     reader.readAsDataURL(file);
   });
   input.value = '';
+}
+
+/* IMAGE UPLOAD FOR CARD DETAIL MODAL */
+function handleCdImages(input) {
+  if (!input.files || !input.files.length) return;
+  if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
+  var area = document.getElementById('cdImgArea');
+  Array.from(input.files).forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      S._pendingIdeaImages.push({ name: file.name, data: e.target.result });
+      cdRenderImageThumb(area, e.target.result, S._pendingIdeaImages.length - 1);
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function cdRenderImageThumb(area, src, idx) {
+  if (!area) return;
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl);flex-shrink:0';
+  wrap.innerHTML = '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover" />' +
+    '<button onclick="cdRemoveImage(' + idx + ')" title="Remove" style="position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(42,26,14,.65);border:none;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>';
+  area.appendChild(wrap);
+}
+
+function cdRemoveImage(idx) {
+  if (!S._pendingIdeaImages) return;
+  S._pendingIdeaImages.splice(idx, 1);
+  cdRefreshImageArea();
+}
+
+function cdRefreshImageArea() {
+  var area = document.getElementById('cdImgArea');
+  if (!area) return;
+  area.innerHTML = '';
+  (S._pendingIdeaImages || []).forEach(function(img, i) {
+    cdRenderImageThumb(area, img.data, i);
+  });
 }
 
 
