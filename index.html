@@ -670,8 +670,11 @@ select.fi{cursor:pointer}
 
 <aside class="sidebar">
   <div class="sb-logo">
-    <div class="sb-wordmark" id="sbName">Flow State Studio</div>
-    <div class="sb-tagline">Built for the way your brain works.</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+      <div class="sb-wordmark" id="sbName">Flow State Studio</div>
+      <button class="sb-collapse-btn" onclick="toggleSidebar()" id="sidebarCollapseBtn" title="Collapse sidebar">‹</button>
+    </div>
+    <div class="sb-tagline nav-label">Built for the way your brain works.</div>
     <div class="sb-line"></div>
   </div>
   <nav class="sb-nav">
@@ -2413,7 +2416,9 @@ function navigate(v){
   // auto-collapse GS strip when all done
   const allDone=GS_STEPS.every(s=>S.gs[s.key]);
   const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
-  if(allDone||dismissed){const strip=document.getElementById('gsStrip');if(strip)strip.style.display='none';}
+  const strip=document.getElementById('gsStrip');
+  if(allDone||dismissed){if(strip)strip.style.display='none'; return;}
+  if(strip)strip.style.display='';
 }
 document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.view)));
 
