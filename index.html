@@ -2762,7 +2762,7 @@ function openDraftModal(id){
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
   document.getElementById('draftModalTitle').textContent=d.title;
   document.getElementById('draftModalMeta').textContent=`${cap(d.platform||'')}${d.contentType?' · '+d.contentType:''} · ${dt}`;
-  document.getElementById('draftModalContent').value=d.content;
+  document.getElementById('draftModalContent').textContent=d.content||'';
   // Populate notebook select
   const nbSel=document.getElementById('draftNbSelect');
   if(nbSel){
@@ -4269,6 +4269,13 @@ function calDayClick(ds){
   });
   var calOnly=S.calEntries.filter(function(e){
     return e.date===ds&&!ideaEnts.find(function(ie){return ie.title===e.title;})&&!taskEnts.find(function(te){return te.title===e.title;});
+  }).map(function(e){
+    // Try to enrich with task data if this is a task-linked cal entry
+    if(e._fromTask||e.id.indexOf('cal_task_')===0){
+      var linkedTask=S.tasks.find(function(t){return 'cal_task_'+t.id===e.id||t.title===e.title;});
+      if(linkedTask) return Object.assign({},e,{taskType:linkedTask.taskType||'',energy:linkedTask.energy||'',timeEst:linkedTask.timeEst||'',_fromTask:true});
+    }
+    return e;
   });
   var entries=ideaEnts.concat(taskEnts).concat(calOnly);
   if(entries.length===0){openCalModal(ds);return;}
