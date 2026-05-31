@@ -630,6 +630,11 @@ select.fi{cursor:pointer}
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
+  <div style="padding:8px 14px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:1.6">
+    © 2026 Flow State Studio. All rights reserved.<br>
+    <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
+    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span>
+  </div>
   <div class="sb-usage" id="creditBar">
     <div class="sb-usage-lbl" id="creditLabel">✦ Studio in Session</div>
     <div class="usage-bar-wrap"><div class="usage-bar" id="creditBarFill" style="width:100%"></div></div>
@@ -1700,7 +1705,7 @@ select.fi{cursor:pointer}
     <!-- PRICING CARDS -->
     <div class="pricing-cards">
       <div class="pc">
-        <div class="pc-name">Starter</div>
+        <div class="pc-name">Starter Founders Membership</div>
         <div class="pc-price">$9.50<span>/month</span></div>
         <div class="pc-credits">125 AI credits / month</div>
         <ul class="pc-features">
@@ -1710,12 +1715,13 @@ select.fi{cursor:pointer}
           <li>Full hook, CTA &amp; prompt library</li>
           <li>Save unlimited drafts</li>
           <li>125 AI generations per month</li>
+          <li>Locked in at founding price forever</li>
         </ul>
-        <button class="pc-btn pc-btn-secondary" onclick="lockedUpgrade('starter')">Get Started - $9.50/mo</button>
+        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member - $9.50/mo</button>
       </div>
       <div class="pc featured">
         <div class="pc-badge">Most Popular</div>
-        <div class="pc-name">Unlimited</div>
+        <div class="pc-name">Unlimited Founders Membership</div>
         <div class="pc-price">$19.50<span>/month</span></div>
         <div class="pc-credits">Unlimited AI credits</div>
         <ul class="pc-features">
@@ -1723,8 +1729,9 @@ select.fi{cursor:pointer}
           <li>Unlimited AI generations - generate as much as you need, whenever you need it</li>
           <li>Perfect for batch content days, launches, and high-output weeks</li>
           <li>Zero limits, zero anxiety about running out mid-flow</li>
+          <li>Locked in at founding price forever</li>
         </ul>
-        <button class="pc-btn pc-btn-primary" onclick="lockedUpgrade('unlimited')">Go Unlimited - $19.50/mo</button>
+        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member - $19.50/mo</button>
       </div>
     </div>
 
@@ -1744,6 +1751,92 @@ select.fi{cursor:pointer}
       After payment, come back here and create your account to get started.<br>
       Already have an account? <a onclick="lockedSignIn()">Sign in here</a>
     </div>
+  </div>
+</div>
+
+<!-- TERMS OF SERVICE MODAL -->
+<div class="modal-ov" id="tosModal">
+  <div class="modal modal-xl" style="max-height:85vh;overflow-y:auto">
+    <div class="m-title">Terms of Service</div>
+    <div class="m-sub">Last updated: June 2026</div>
+    <div style="font-size:13.5px;line-height:1.9;color:var(--e)">
+      <p><strong>1. Acceptance of Terms</strong><br>
+      By accessing or using Flow State Studio ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Platform.</p>
+
+      <p><strong>2. Ownership and Intellectual Property</strong><br>
+      Flow State Studio, including its design, code, content, brand, library materials, AI prompts, and all associated intellectual property, is owned exclusively by Flow State Studio and its creator. You may not copy, reproduce, distribute, reverse engineer, modify, or create derivative works from any part of the Platform without express written permission.</p>
+
+      <p><strong>3. Your Content</strong><br>
+      Content you create using the Platform (drafts, notes, plans) belongs to you. We do not claim ownership of your generated content. You grant us a limited license to store and display your content solely to provide the service.</p>
+
+      <p><strong>4. Permitted Use</strong><br>
+      The Platform is for your personal business use only. You may not resell, sublicense, or share your account. Each membership is for one user.</p>
+
+      <p><strong>5. AI-Generated Content</strong><br>
+      The Platform uses AI to assist content creation. You are responsible for reviewing, editing, and taking ownership of any AI-generated content before publishing. We make no guarantees about the accuracy or suitability of AI outputs.</p>
+
+      <p><strong>6. Payments and Cancellation</strong><br>
+      Subscriptions are billed monthly. You may cancel at any time and retain access until the end of your billing period. We do not offer refunds for partial months. Founding Member pricing is locked for as long as your subscription remains active.</p>
+
+      <p><strong>7. Prohibited Conduct</strong><br>
+      You agree not to use the Platform to generate harmful, illegal, or misleading content, attempt to reverse engineer or copy the Platform, share your login credentials, or circumvent any access controls.</p>
+
+      <p><strong>8. Termination</strong><br>
+      We reserve the right to suspend or terminate accounts that violate these terms, with or without notice.</p>
+
+      <p><strong>9. Disclaimer of Warranties</strong><br>
+      The Platform is provided "as is." We make no warranties that the service will be uninterrupted, error-free, or meet your specific requirements.</p>
+
+      <p><strong>10. Limitation of Liability</strong><br>
+      To the fullest extent permitted by law, Flow State Studio shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Platform.</p>
+
+      <p><strong>11. Changes to Terms</strong><br>
+      We may update these terms at any time. Continued use of the Platform after changes constitutes acceptance of the new terms.</p>
+
+      <p><strong>12. Contact</strong><br>
+      For questions about these terms, contact us through the Platform.</p>
+    </div>
+    <div class="m-acts"><button class="btn btn-p" onclick="closeModal('tosModal')">Got it</button></div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY MODAL -->
+<div class="modal-ov" id="privacyModal">
+  <div class="modal modal-xl" style="max-height:85vh;overflow-y:auto">
+    <div class="m-title">Privacy Policy</div>
+    <div class="m-sub">Last updated: June 2026</div>
+    <div style="font-size:13.5px;line-height:1.9;color:var(--e)">
+      <p><strong>1. What We Collect</strong><br>
+      We collect your email address and password (encrypted) when you create an account. We store content you create on the Platform (drafts, notes, plans, tasks) to provide the service. We do not collect payment information directly — payments are handled securely by Stripe.</p>
+
+      <p><strong>2. How We Use Your Data</strong><br>
+      Your data is used solely to provide and improve the Platform. We use your email to send account-related communications. We do not sell your data to third parties. We do not use your content to train AI models.</p>
+
+      <p><strong>3. AI Processing</strong><br>
+      When you use AI features, your prompts and content briefs are sent to Anthropic's API to generate responses. This is subject to Anthropic's privacy policy. We do not store your AI prompts beyond what is needed to display your results.</p>
+
+      <p><strong>4. Data Storage</strong><br>
+      Your data is stored securely using Supabase, which is hosted on AWS infrastructure. Your content is encrypted at rest and in transit.</p>
+
+      <p><strong>5. Cookies</strong><br>
+      We use minimal cookies required for authentication and session management only. We do not use tracking or advertising cookies.</p>
+
+      <p><strong>6. Third-Party Services</strong><br>
+      We use Supabase (database and auth), Stripe (payments), and Anthropic (AI). Each has their own privacy policy governing how they handle data.</p>
+
+      <p><strong>7. Your Rights</strong><br>
+      You can request deletion of your account and all associated data at any time by contacting us through the Platform. You can export your drafts and notes before deleting.</p>
+
+      <p><strong>8. Children</strong><br>
+      The Platform is not intended for users under 16. We do not knowingly collect data from children.</p>
+
+      <p><strong>9. Changes</strong><br>
+      We may update this policy. We will notify you of significant changes via email or in-app notice.</p>
+
+      <p><strong>10. Contact</strong><br>
+      For privacy questions or data deletion requests, contact us through the Platform.</p>
+    </div>
+    <div class="m-acts"><button class="btn btn-p" onclick="closeModal('privacyModal')">Got it</button></div>
   </div>
 </div>
 
