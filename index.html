@@ -3586,14 +3586,12 @@ async function redeemInviteCode(){
   if(!_currentUser){
     // Not signed in yet - save code and send to signup
     sessionStorage.setItem('pendingInviteCode', code);
-    msg.textContent='Code accepted! Create your account to continue...';
+    msg.innerHTML='Code accepted! <span style="text-decoration:underline;cursor:pointer" onclick="document.getElementById(\"lockedScreen\").classList.remove(\"show\");document.getElementById(\"authScreen\").classList.remove(\"hidden\");switchAuthTab(\"signup\")">Create your account to continue →</span>';
     msg.style.color='var(--teal)';
     setTimeout(function(){
       document.getElementById('lockedScreen').classList.remove('show');
       document.getElementById('authScreen').classList.remove('hidden');
-      // Switch to signup tab
-      var suTab=document.querySelector('.auth-tab:not(.active)');
-      if(suTab)suTab.click();
+      switchAuthTab('signup');
     }, 1200);
     return;
   }
