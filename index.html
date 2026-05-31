@@ -305,7 +305,7 @@ select.fi{cursor:pointer}
 /* LOCKED / PRICING SCREEN */
 #lockedScreen{position:fixed;inset:0;background:var(--p);z-index:9990;overflow-y:auto;display:none}
 #lockedScreen.show{display:block}
-.pricing-wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+.pricing-wrap{max-width:900px;margin:0 auto;padding:32px 16px 80px}
 .pricing-hero{text-align:center;margin-bottom:56px}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
 .pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
@@ -339,6 +339,67 @@ select.fi{cursor:pointer}
 #cd-repurpose-sidebyside{display:none}
 #cd-repurpose-sidebyside.show{display:flex}
 @media(max-width:900px){#cd-repurpose-sidebyside.show{flex-direction:column}}
+/* ═══════════════ MOBILE ═══════════════ */
+.mob-topbar{display:none;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--w);border-bottom:1px solid var(--bl);position:sticky;top:0;z-index:200;flex-shrink:0}
+.mob-wordmark{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e)}
+.mob-hamburger{background:none;border:none;cursor:pointer;padding:6px;color:var(--e);font-size:22px;line-height:1}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:290;opacity:0;transition:opacity .25s}
+.mob-overlay.show{opacity:1}
+.sidebar-mobile-open .sidebar{transform:translateX(0)!important}
+
+@media(max-width:768px){
+  .mob-topbar{display:flex}
+  .sidebar{
+    position:fixed!important;top:0;left:0;height:100vh;z-index:300;
+    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    width:260px!important;box-shadow:4px 0 24px rgba(0,0,0,.18)
+  }
+  .mob-overlay{display:block}
+  .app-wrap{flex-direction:column}
+  .main{flex-direction:column;min-height:0}
+  .main-hdr{padding:16px;flex-direction:column;align-items:flex-start;gap:10px}
+  .main-hdr .hdr-acts{flex-wrap:wrap;gap:6px}
+  .main-body{padding:14px 16px}
+  /* Content planner kanban - stack columns */
+  .kanban-3,.kanban-4{grid-template-columns:1fr!important}
+  /* Task kanban - stack */
+  .kc{min-width:0}
+  /* Content card modal - full screen */
+  .modal-full .cd2-wrap{flex-direction:column}
+  .modal-full .cd2-left{width:100%!important;border-right:none;border-bottom:1px solid var(--bl);max-height:50vh;overflow-y:auto}
+  .modal-full .cd2-right{width:100%!important}
+  /* Modals full width */
+  .modal,.modal-xl,.modal-task{width:95vw!important;max-width:95vw!important;margin:10px auto}
+  /* Writing studio - stack panels */
+  .sp-wrap{flex-direction:column!important}
+  .sp{min-width:0!important;width:100%!important}
+  /* Notebooks - stack */
+  .bd-wrap{flex-direction:column}
+  .bd-left{width:100%!important;max-height:200px;border-right:none;border-bottom:1px solid var(--bl)}
+  /* Library grid - 1 col on small, 2 on medium */
+  .lib-grid{grid-template-columns:1fr!important}
+  /* Calendar - smaller cells */
+  .cal-cell{min-height:60px!important;padding:4px!important;font-size:10px}
+  .cal-day-num{font-size:11px!important}
+  /* Pricing page */
+  .pricing-cards,.pricing-features{grid-template-columns:1fr!important}
+  /* Dashboard WDC */
+  .wdc-wrap{grid-template-columns:repeat(2,1fr)!important}
+  /* Stats */
+  .stats-row{grid-template-columns:1fr 1fr!important}
+  /* Pickup grid */
+  .pickup-grid{grid-template-columns:1fr!important}
+  /* Two col forms */
+  .two-col{grid-template-columns:1fr!important}
+  /* Hide credits sub on mobile */
+  #creditSub{display:none}
+}
+
+@media(max-width:480px){
+  .wdc-wrap{grid-template-columns:1fr 1fr!important}
+  .lib-grid{grid-template-columns:1fr!important}
+  .pricing-cards{grid-template-columns:1fr!important}
+}
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--e);color:var(--p);padding:10px 17px;border-radius:var(--rsm);font-size:13px;z-index:300;transform:translateY(70px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:310px;border:1px solid rgba(255,255,255,.08)}
 .toast.show{transform:translateY(0);opacity:1}
@@ -599,6 +660,14 @@ select.fi{cursor:pointer}
 <div id="appWrap"><div class="app">
 
 <!-- SIDEBAR -->
+<!-- MOBILE TOPBAR -->
+<div class="mob-topbar" id="mobTopbar">
+  <div class="mob-wordmark">Flow State Studio ✦</div>
+  <button class="mob-hamburger" onclick="toggleMobNav()" aria-label="Menu">☰</button>
+</div>
+<!-- SIDEBAR OVERLAY -->
+<div class="mob-overlay" id="mobOverlay" onclick="closeMobNav()"></div>
+
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-wordmark" id="sbName">Flow State Studio</div>
@@ -2366,6 +2435,39 @@ function renderGS(){
       <span class="gs-item-lbl">${s.label}</span>
     </div>`).join('');
 }
+/* ═══════════════ MOBILE NAV ═══════════════ */
+function toggleMobNav(){
+  var sidebar=document.querySelector('.sidebar');
+  var overlay=document.getElementById('mobOverlay');
+  var closeBtn=document.getElementById('mobNavClose');
+  var isOpen=sidebar.style.transform==='translateX(0px)'||sidebar.style.transform==='translateX(0)';
+  if(isOpen){
+    sidebar.style.transform='translateX(-100%)';
+    overlay.classList.remove('show');
+    if(closeBtn)closeBtn.style.display='none';
+  } else {
+    sidebar.style.transform='translateX(0)';
+    overlay.classList.add('show');
+    if(closeBtn)closeBtn.style.display='block';
+  }
+}
+function closeMobNav(){
+  var sidebar=document.querySelector('.sidebar');
+  var overlay=document.getElementById('mobOverlay');
+  var closeBtn=document.getElementById('mobNavClose');
+  sidebar.style.transform='translateX(-100%)';
+  overlay.classList.remove('show');
+  if(closeBtn)closeBtn.style.display='none';
+}
+// Close sidebar when a nav item is clicked on mobile
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.innerWidth<=768){
+    document.querySelectorAll('.nav-i').forEach(function(el){
+      el.addEventListener('click',function(){closeMobNav();});
+    });
+  }
+});
+
 function toggleGS(){
   document.getElementById('gsStrip').classList.toggle('open');
 }
