@@ -4388,24 +4388,33 @@ function handleIdeaImages(input) {
 function handleCdImages(input) {
   if (!input.files || !input.files.length) return;
   if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
-  var area = document.getElementById('cdImgArea');
   Array.from(input.files).forEach(function(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      S._pendingIdeaImages.push({ name: file.name, data: e.target.result });
-      cdRenderImageThumb(area, e.target.result, S._pendingIdeaImages.length - 1);
+      var imgObj = { name: file.name, data: e.target.result };
+      S._pendingIdeaImages.push(imgObj);
+      var area = document.getElementById('cdImgArea');
+      cdRenderImageThumb(area, imgObj, S._pendingIdeaImages.length - 1);
     };
     reader.readAsDataURL(file);
   });
   input.value = '';
 }
 
-function cdRenderImageThumb(area, src, idx) {
+function cdRenderImageThumb(area, img, idx) {
   if (!area) return;
   var wrap = document.createElement('div');
   wrap.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl);flex-shrink:0';
-  wrap.innerHTML = '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover" />' +
-    '<button onclick="cdRemoveImage(' + idx + ')" title="Remove" style="position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(42,26,14,.65);border:none;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">✕</button>';
+  var im = document.createElement('img');
+  im.src = img.data;
+  im.style.cssText = 'width:100%;height:100%;object-fit:cover';
+  var btn = document.createElement('button');
+  btn.title = 'Remove';
+  btn.style.cssText = 'position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(42,26,14,.65);border:none;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1';
+  btn.textContent = 'x';
+  (function(i){ btn.addEventListener('click', function(){ cdRemoveImage(i); }); })(idx);
+  wrap.appendChild(im);
+  wrap.appendChild(btn);
   area.appendChild(wrap);
 }
 
@@ -4420,7 +4429,7 @@ function cdRefreshImageArea() {
   if (!area) return;
   area.innerHTML = '';
   (S._pendingIdeaImages || []).forEach(function(img, i) {
-    cdRenderImageThumb(area, img.data, i);
+    cdRenderImageThumb(area, img, i);
   });
 }
 
