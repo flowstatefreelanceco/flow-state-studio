@@ -335,6 +335,10 @@ select.fi{cursor:pointer}
 .pricing-footer a{color:var(--r);cursor:pointer;text-decoration:underline}
 .pricing-divider{height:1px;background:var(--bl);margin:40px 0;position:relative}
 .pricing-divider::after{content:"Everything you get";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--p);padding:0 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--tl)}
+/* REPURPOSE SIDE BY SIDE */
+#cd-repurpose-sidebyside{display:none}
+#cd-repurpose-sidebyside.show{display:flex}
+@media(max-width:900px){#cd-repurpose-sidebyside.show{flex-direction:column}}
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--e);color:var(--p);padding:10px 17px;border-radius:var(--rsm);font-size:13px;z-index:300;transform:translateY(70px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:310px;border:1px solid rgba(255,255,255,.08)}
 .toast.show{transform:translateY(0);opacity:1}
@@ -1539,70 +1543,74 @@ select.fi{cursor:pointer}
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8)">
-            <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Repurpose</div>
+            <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Content Autopsy</div>
             <span id="ai2-repurpose-chev" style="color:var(--r);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
             <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:14px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
-              The Creative Director studies what made a piece of content work. Then it strips it back and rebuilds it completely in your voice, niche, offers, and brand. Nothing gets copied. Everything gets transformed.
+              Paste any post that stopped your scroll. The Creative Director will dissect exactly why it worked, then rebuild it completely as your own content. Hook type, emotional trigger, audience psychology, virality reason — all of it. Then: a finished piece in your voice.
             </div>
 
-            <!-- Step 1: Source -->
-            <div style="margin-bottom:14px">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:8px">Step 1: Give it the content</div>
-              <div style="display:flex;gap:6px;margin-bottom:8px">
-                <button id="rpTabUrl" onclick="cdRpTab('url')" style="flex:1;padding:7px;font-size:11.5px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:var(--r);color:white;cursor:pointer">Paste URL</button>
-                <button id="rpTabText" onclick="cdRpTab('text')" style="flex:1;padding:7px;font-size:11.5px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--b);background:var(--w);color:var(--t);cursor:pointer">Paste Text</button>
-              </div>
-              <div id="rpUrlArea" style="display:block">
-                <input class="ai2-input" id="cdRpUrl" placeholder="https://www.instagram.com/p/..." style="margin-bottom:6px;font-size:13px" />
-                <div style="font-size:10.5px;color:var(--tl)">Note: paste the caption text below if the URL does not load automatically.</div>
-              </div>
-              <div id="rpTextArea" style="display:none">
-                <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px;margin-bottom:8px">
-                  <option value="Instagram">From Instagram</option><option value="TikTok">From TikTok</option>
-                  <option value="LinkedIn">From LinkedIn</option><option value="a blog">From a blog</option>
-                  <option value="a newsletter">From a newsletter</option><option value="somewhere">From somewhere</option>
-                </select>
-                <textarea class="ai2-input" id="cdRpText" placeholder="Paste the caption, post, or article text here..." style="min-height:100px"></textarea>
-              </div>
+            <!-- Input -->
+            <div style="margin-bottom:12px">
+              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px;margin-bottom:8px">
+                <option value="Instagram">From Instagram</option><option value="TikTok">From TikTok</option>
+                <option value="LinkedIn">From LinkedIn</option><option value="a blog">From a blog</option>
+                <option value="a newsletter">From a newsletter</option><option value="somewhere">From somewhere</option>
+              </select>
+              <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post, caption, or article here. For carousels, paste each slide on a new line..." style="min-height:110px"></textarea>
             </div>
 
-            <!-- Step 2: Output target -->
-            <div style="margin-bottom:14px">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:8px">Step 2: What do you want to create?</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
-                <select class="fi" id="cdRpOutPlat" style="font-size:12px;padding:6px 10px">
-                  <option value="Instagram">Instagram</option><option value="LinkedIn">LinkedIn</option>
-                  <option value="TikTok">TikTok</option><option value="Newsletter">Newsletter</option>
-                  <option value="Email">Email</option><option value="Substack">Substack</option>
-                  <option value="Blog">Blog Post</option>
-                </select>
-                <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
-                  <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
-                  <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
-                  <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
-                  <option value="Blog Post">Blog Post</option>
-                </select>
-              </div>
+            <!-- Output target -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+              <select class="fi" id="cdRpOutPlat" style="font-size:12px;padding:6px 10px">
+                <option value="Instagram">Instagram</option><option value="LinkedIn">LinkedIn</option>
+                <option value="TikTok">TikTok</option><option value="Newsletter">Newsletter</option>
+                <option value="Email">Email</option><option value="Substack">Substack</option>
+                <option value="Blog">Blog Post</option>
+              </select>
+              <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
+                <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
+                <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
+                <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
+                <option value="Blog Post">Blog Post</option>
+              </select>
             </div>
 
-            <!-- Step 3: Analyze + Rebuild -->
+            <!-- Action buttons -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-              <button onclick="cdAnalyzeOnly()" style="padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Analyze First</button>
-              <button onclick="cdRepurpose2()" style="padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Analyze + Rebuild</button>
+              <button onclick="cdAutopsy()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Run Content Autopsy</button>
+              <button onclick="cdRepurpose2()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Autopsy + Rebuild</button>
             </div>
 
-            <!-- Analysis output -->
-            <div id="cd-analysis-wrap" style="display:none;margin-bottom:12px">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:6px">Creative Director Analysis</div>
-              <div id="cd-analysis-out" style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:12px 14px;font-size:13px;color:var(--el);line-height:1.75;white-space:pre-wrap"></div>
-              <button onclick="cdRebuildAfterAnalysis()" style="width:100%;margin-top:8px;padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Now Rebuild in My Voice</button>
+            <div class="ai2-loading" id="cd-load-repurpose">Running Content Autopsy...</div>
+
+            <!-- Side by side: analysis + rebuild -->
+            <div id="cd-repurpose-sidebyside" style="display:none;gap:12px;margin-bottom:10px">
+              <!-- Left: Autopsy -->
+              <div style="flex:1;min-width:0">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+                  Content Autopsy
+                  <button onclick="cdSaveToSwipeFile()" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--r);border-radius:100px;color:var(--r);cursor:pointer;font-family:var(--fb)">+ Swipe File</button>
+                </div>
+                <div id="cd-analysis-out" style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto"></div>
+              </div>
+              <!-- Right: Rebuilt -->
+              <div style="flex:1;min-width:0">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+                  Rebuilt in Your Voice
+                  <div style="display:flex;gap:4px">
+                    <button onclick="cdCopy2('repurpose')" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--teal);border-radius:100px;color:var(--teal);cursor:pointer;font-family:var(--fb)">Copy</button>
+                    <button onclick="cdSaveDraft2('repurpose')" style="font-size:10px;padding:3px 8px;background:var(--teal);border:1px solid var(--teal);border-radius:100px;color:white;cursor:pointer;font-family:var(--fb)">Save Draft</button>
+                  </div>
+                </div>
+                <div id="cd-out-repurpose" class="ai2-out" style="background:var(--tealp);border:1px solid rgba(58,140,140,.2);border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto;min-height:80px"></div>
+                <button id="cd-rebuild-btn" onclick="cdRebuildAfterAnalysis()" style="display:none;width:100%;margin-top:8px;padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--teal);color:white;cursor:pointer">✦ Now Rebuild in My Voice</button>
+              </div>
             </div>
 
-            <div class="ai2-loading" id="cd-load-repurpose">Creative Director is analyzing...</div>
-            <div id="cd-out-repurpose" class="ai2-out"></div>
-            <div class="ai2-out-acts" id="cd-acts-repurpose">
+            <!-- Old single output (hidden, keep for compat) -->
+            <div class="ai2-out-acts" id="cd-acts-repurpose" style="display:none">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
             </div>
@@ -2027,7 +2035,8 @@ const S = {
   hooks:[], ctas:[], stories:[], prompts:[],
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
   settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
-  plan:'beta', // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
+  plan:'beta',
+  swipeFile:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
   creditsUsed:0, // this month
   creditMonth:'', // YYYY-MM of current credit window
@@ -2053,7 +2062,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
@@ -2623,6 +2632,9 @@ function openIdeaModal(status){
   });
   var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
+  var sbs=document.getElementById('cd-repurpose-sidebyside');if(sbs)sbs.classList.remove('show');
+  var rebuildBtn=document.getElementById('cd-rebuild-btn');if(rebuildBtn)rebuildBtn.style.display='none';
+  var analysisOut=document.getElementById('cd-analysis-out');if(analysisOut)analysisOut.textContent='';
   // Open SmartBrief by default
   var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
   openModal('cardDetailModal');
@@ -3278,6 +3290,19 @@ function cdGetBrief(){
   var combined=own&&notesBlock?notesBlock+'\n\n---\nMy own draft:\n'+own:own||notesBlock;
   var fullBrief=(g('cdTitle')+(combined?'\n'+combined:''));
   return{title:g('cdTitle'),hook:hook,notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
+}
+
+/* ═══ SWIPE FILE ═══ */
+function cdSaveToSwipeFile(){
+  var text = document.getElementById('cdRpText')?.value.trim();
+  var analysis = _cdOutputs['repurposeAnalysis']||'';
+  var plat = document.getElementById('cdRpPlat')?.value||'';
+  if(!text){toast('No content to save');return;}
+  if(!S.swipeFile) S.swipeFile=[];
+  var item={id:'sw'+Date.now(),content:text,analysis:analysis,platform:plat,savedAt:new Date().toISOString()};
+  S.swipeFile.unshift(item);
+  persist();
+  toast('Saved to Swipe File!');
 }
 
 function cdSaveHookToLib(){
