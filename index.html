@@ -575,7 +575,7 @@ select.fi{cursor:pointer}
     <div class="auth-tagline">Built for the way your brain works.</div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
-      <button class="auth-tab" onclick="switchAuthTab('signup')">Create Account</button>
+      <button class="auth-tab" onclick="goToPricing()">Get Started</button>
     </div>
     <div id="formLogin">
       <div class="auth-field"><label>Email</label><input class="auth-input" type="email" id="liEmail" placeholder="you@example.com" /></div>
@@ -583,6 +583,7 @@ select.fi{cursor:pointer}
       <button class="auth-btn" id="liBtn" onclick="doLogin()">Sign In</button>
       <div class="auth-err" id="liErr"></div>
       <div class="auth-hint">Forgot password? <span onclick="doReset()">Reset it</span></div>
+      <div class="auth-hint" style="margin-top:8px">New here? <span onclick="goToPricing()">See membership options</span></div>
     </div>
     <div id="formSignup" style="display:none">
       <div class="auth-field"><label>Email</label><input class="auth-input" type="email" id="suEmail" placeholder="you@example.com" /></div>
@@ -590,6 +591,7 @@ select.fi{cursor:pointer}
       <button class="auth-btn" id="suBtn" onclick="doSignup()">Create Account</button>
       <div class="auth-err" id="suErr"></div>
       <div class="auth-msg" id="suMsg"></div>
+      <div class="auth-hint" style="margin-top:8px">Already have an account? <span onclick="switchAuthTab('login')">Sign in</span></div>
     </div>
   </div>
 </div>
@@ -1917,6 +1919,11 @@ function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.rem
 document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&&!e.target.closest('.u-popup'))closeUMenu();});
 async function doSignOut(){closeUMenu();await sb.auth.signOut();}
 
+function goToPricing(){
+  // Hide auth screen, show the locked/pricing screen
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('lockedScreen').classList.add('show');
+}
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
   document.getElementById('formLogin').style.display=t==='login'?'block':'none';
@@ -1941,9 +1948,40 @@ async function doSignup(){
   if(!em||!pw){err.textContent='Please fill in all fields';return;}
   if(pw.length<6){err.textContent='Password must be at least 6 characters';return;}
   btn.disabled=true;btn.textContent='Creating account...';err.textContent='';msg.textContent='';
-  var {error}=await sb.auth.signUp({email:em,password:pw});
-  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Create Account';}
-  else{msg.textContent='Account created! Check your email to confirm, then sign in.';btn.disabled=false;btn.textContent='Create Account';switchAuthTab('login');}
+  var {data,error}=await sb.auth.signUp({email:em,password:pw});
+  if(error){
+    err.textContent=error.message;
+    btn.disabled=false;btn.textContent='Create Account';
+  } else {
+    // Check if they came from a plan selection
+    var intendedPlan=sessionStorage.getItem('intendedPlan');
+    if(intendedPlan&&data.user){
+      msg.textContent='Account created! Opening checkout...';
+      btn.textContent='Create Account';btn.disabled=false;
+      // Small delay then open Stripe
+      setTimeout(async function(){
+        try{
+          var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/create-checkout',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
+            body:JSON.stringify({plan:intendedPlan,userId:data.user.id,userEmail:em})
+          });
+          var d=await res.json();
+          if(d.url){
+            sessionStorage.removeItem('intendedPlan');
+            window.open(d.url,'_blank');
+            msg.textContent='Checkout opened! Complete your payment, then check your email to confirm your account.';
+          }
+        }catch(e){
+          msg.textContent='Account created! Check your email to confirm, then sign in.';
+        }
+      },800);
+    } else {
+      msg.textContent='Account created! Check your email to confirm, then sign in.';
+      btn.disabled=false;btn.textContent='Create Account';
+      switchAuthTab('login');
+    }
+  }
 }
 async function doReset(){
   var em=document.getElementById('liEmail').value.trim();
@@ -3401,6 +3439,7 @@ async function redeemInviteCode(){
 function lockedSignIn(){
   document.getElementById('lockedScreen').classList.remove('show');
   document.getElementById('authScreen').classList.remove('hidden');
+  switchAuthTab('login');
 }
 
 function openPanicModal(){
