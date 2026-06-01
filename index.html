@@ -892,6 +892,9 @@ select.fi{cursor:pointer}
       <!-- PICK UP WHERE YOU LEFT OFF -->
       <div id="pickUpWrap"></div>
 
+      <!-- TASKS DUE TODAY + TOMORROW -->
+      <div id="tasksDueWrap"></div>
+
       <div class="guide-wrap" id="guideWrap">
         <div class="guide-hdr" onclick="toggleGuide(this)">
           <div class="guide-hdr-left"><span style="font-size:15px">📖</span><span class="guide-hdr-title">How to use each section</span></div>
@@ -1438,7 +1441,7 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" /></div>
+          <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" onchange="ideaDateChanged()" /></div>
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="time" id="ideaTime" /></div>
         </div>
         <div class="fl"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
@@ -1454,6 +1457,30 @@ select.fi{cursor:pointer}
             Add images or slides
             <input type="file" id="ideaImgInput" multiple accept="image/*" style="display:none" onchange="handleIdeaImages(this)" />
           </label>
+        </div>
+        <!-- REMINDER TOGGLE -->
+        <div id="ideaReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;align-items:center;justify-content:space-between;gap:10px">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--teal)">📬 Email reminders</div>
+            <div style="font-size:11px;color:var(--tl);margin-top:1px">Day before + morning of your post date</div>
+          </div>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none">
+            <div style="position:relative;width:36px;height:20px;flex-shrink:0">
+              <input type="checkbox" id="ideaReminderOn" style="opacity:0;width:0;height:0;position:absolute" onchange="ideaToggleReminder(this)" />
+              <div id="ideaReminderTrack" style="position:absolute;inset:0;background:var(--bl);border-radius:100px;transition:background .2s"></div>
+              <div id="ideaReminderThumb" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+            </div>
+            <span id="ideaReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
+          </label>
+        </div>
+        <!-- TASK BREAKDOWN -->
+        <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
+            <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
+          </div>
+          <div id="cdTaskList" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps sync to your Task board and Calendar.</div>
         </div>
       </div>
       <div class="cd2-right">
@@ -1657,7 +1684,7 @@ select.fi{cursor:pointer}
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><input class="fi" type="time" id="cdTime" /></div>
         </div>
         <!-- REMINDER TOGGLE -->
-        <div id="cdReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;display:none;align-items:center;justify-content:space-between;gap:10px">
+        <div id="cdReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;align-items:center;justify-content:space-between;gap:10px">
           <div>
             <div style="font-size:12px;font-weight:600;color:var(--teal)">📬 Email reminders</div>
             <div style="font-size:11px;color:var(--tl);margin-top:1px">Day before + morning of your post date</div>
@@ -2915,6 +2942,56 @@ function copyLastDraft(id){
 function renderDashboard(){
   renderGS();
   renderPickUp();
+  renderTasksDue();
+}
+
+function renderTasksDue(){
+  var el=document.getElementById('tasksDueWrap');
+  if(!el)return;
+  var today=new Date();today.setHours(0,0,0,0);
+  var tomorrow=new Date(today);tomorrow.setDate(tomorrow.getDate()+1);
+  var fmt=function(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+  var todayStr=fmt(today);
+  var tomorrowStr=fmt(tomorrow);
+
+  var dueTodayT=S.tasks.filter(function(t){return t.date===todayStr&&t.status!=='done';});
+  var dueTomorrowT=S.tasks.filter(function(t){return t.date===tomorrowStr&&t.status!=='done';});
+  var dueTodayC=S.ideas.filter(function(i){return i.date===todayStr&&i.status!=='published';});
+  var dueTomorrowC=S.ideas.filter(function(i){return i.date===tomorrowStr&&i.status!=='published';});
+
+  var hasToday=dueTodayT.length||dueTodayC.length;
+  var hasTomorrow=dueTomorrowT.length||dueTomorrowC.length;
+  if(!hasToday&&!hasTomorrow){el.innerHTML='';return;}
+
+  function taskRow(t,isContent){
+    var icon=isContent?'📝':'☑';
+    var onclick=isContent?'cdOpen(\''+t.id+'\')':'openTaskEditModal(\''+t.id+'\')';
+    var energy=!isContent&&t.energy?'<span style="font-size:9px;padding:2px 7px;border-radius:100px;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp')+');color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥':t.energy==='medium'?'⚡':'🌿')+' '+t.energy+'</span>':'';
+    return'<div onclick="'+onclick+'" style="display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--bl);cursor:pointer;transition:background .12s" onmouseover="this.style.background=\'var(--p)\'" onmouseout="this.style.background=\'\'">'+
+      '<span style="font-size:14px;flex-shrink:0">'+icon+'</span>'+
+      '<span style="flex:1;font-size:13px;font-weight:500;color:var(--e)">'+esc(t.title)+'</span>'+
+      (energy||'')+
+      '<span style="font-size:10px;color:var(--tl);flex-shrink:0">'+(isContent?cap(t.platform||''):'')+'</span>'+
+    '</div>';
+  }
+
+  var html='<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh);margin-bottom:22px">';
+  html+='<div style="padding:12px 16px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between">';
+  html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t)">📅 On Your Plate</div>';
+  html+='</div>';
+
+  if(hasToday){
+    html+='<div style="padding:6px 14px 2px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);background:var(--rp)">Today</div>';
+    dueTodayT.forEach(function(t){html+=taskRow(t,false);});
+    dueTodayC.forEach(function(t){html+=taskRow(t,true);});
+  }
+  if(hasTomorrow){
+    html+='<div style="padding:6px 14px 2px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);background:var(--gp)">Tomorrow</div>';
+    dueTomorrowT.forEach(function(t){html+=taskRow(t,false);});
+    dueTomorrowC.forEach(function(t){html+=taskRow(t,true);});
+  }
+  html+='</div>';
+  el.innerHTML=html;
 }
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
@@ -3476,13 +3553,25 @@ function saveIdea(){
   var ownContent=ownEl?ownEl.value:'';
   var stageEl=document.querySelector('.cd-stage.active');
   var status=stageEl?stageEl.dataset.s:'idea';
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  var reminderCb = document.getElementById('ideaReminderOn');
+  var reminder = reminderCb ? reminderCb.checked : false;
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
   cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
+  // Reset reminder UI
+  if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
+  var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
   persist();closeModal('cardDetailModal');renderKanban();renderCalendar();
-  toast(date?'Added to planner + calendar ✓':'Idea added ✓');
+  if(reminder && _currentUser){
+    var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
+    scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(){
+      toast(date?'Added + reminders scheduled ✓':'Idea added ✓');
+    });
+  } else {
+    toast(date?'Added to planner + calendar ✓':'Idea added ✓');
+  }
 }
 function openTaskEditModal(id){
   const t=S.tasks.find(x=>x.id===id);if(!t)return;
@@ -5100,8 +5189,42 @@ async function testReminder(email) {
   toast('Test reminder sent to ' + email + ' ✓');
 }
 
+function ideaDateChanged() {
+  var dateVal = document.getElementById('ideaDate').value;
+  var wrap = document.getElementById('ideaReminderWrap');
+  if (!wrap) return;
+  wrap.style.display = dateVal ? 'flex' : 'none';
+  if (!dateVal) {
+    var cb = document.getElementById('ideaReminderOn');
+    if (cb) { cb.checked = false; ideaToggleReminder(cb); }
+  }
+}
+function ideaDateChanged() {
+  var dateVal = document.getElementById('ideaDate').value;
+  var wrap = document.getElementById('ideaReminderWrap');
+  if (!wrap) return;
+  wrap.style.display = dateVal ? 'flex' : 'none';
+  if (!dateVal) {
+    var cb = document.getElementById('ideaReminderOn');
+    if (cb) { cb.checked = false; ideaToggleReminder(cb); }
+  }
+}
+function ideaToggleReminder(cb) {
+  var track = document.getElementById('ideaReminderTrack');
+  var thumb = document.getElementById('ideaReminderThumb');
+  var lbl = document.getElementById('ideaReminderLbl');
+  if (!track) return;
+  if (cb.checked) {
+    track.style.background = 'var(--teal)';
+    thumb.style.transform = 'translateX(16px)';
+    lbl.textContent = 'On';
+  } else {
+    track.style.background = 'var(--bl)';
+    thumb.style.transform = 'translateX(0)';
+    lbl.textContent = 'Off';
+  }
+}
 function cdDateChanged() {
-  var dateVal = document.getElementById('cdDate').value;
   var wrap = document.getElementById('cdReminderWrap');
   if (!wrap) return;
   if (dateVal) {
