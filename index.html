@@ -112,13 +112,13 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .sec-title::after{content:'';flex:1;height:1px;background:var(--bl)}
 
 /* DRAFT CARDS */
-.drafts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:13px}
-.dc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;cursor:pointer;transition:all .18s;box-shadow:0 1px 4px var(--sh)}
+.drafts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.dc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;cursor:pointer;transition:all .18s;box-shadow:0 1px 4px var(--sh)}
 .dc:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--shm);border-color:var(--b)}
-.dc-title{font-family:var(--fb);font-size:15px;font-weight:700;color:var(--e);line-height:1.35;margin-bottom:8px;letter-spacing:.01em}
-.dc-preview{font-size:13.5px;color:var(--t);line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
+.dc-title{font-family:var(--fb);font-size:13px;font-weight:700;color:var(--e);line-height:1.3;margin-bottom:5px;letter-spacing:.01em}
+.dc-preview{font-size:12px;color:var(--t);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
 .dc-foot{display:flex;align-items:center;justify-content:space-between}
-.dc-date{font-size:11px;color:var(--tl)}
+.dc-date{font-size:10px;color:var(--tl)}
 
 /* TAGS */
 .tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:100px;font-size:9.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
@@ -1652,8 +1652,23 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" /></div>
+          <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" onchange="cdDateChanged()" /></div>
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><input class="fi" type="time" id="cdTime" /></div>
+        </div>
+        <!-- REMINDER TOGGLE -->
+        <div id="cdReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;display:none;align-items:center;justify-content:space-between;gap:10px">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--teal)">📬 Email reminders</div>
+            <div style="font-size:11px;color:var(--tl);margin-top:1px">Day before + morning of your post date</div>
+          </div>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none">
+            <div style="position:relative;width:36px;height:20px;flex-shrink:0">
+              <input type="checkbox" id="cdReminderOn" style="opacity:0;width:0;height:0;position:absolute" onchange="cdToggleReminder(this)" />
+              <div id="cdReminderTrack" style="position:absolute;inset:0;background:var(--bl);border-radius:100px;transition:background .2s"></div>
+              <div id="cdReminderThumb" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+            </div>
+            <span id="cdReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
+          </label>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
           <textarea class="fi" id="cdHook" style="min-height:64px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
@@ -3268,13 +3283,13 @@ function dcHTML(d){
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   const platColors={'instagram':'#B5512A','newsletter':'#3A8C8C','email':'#3A8C8C','substack':'#3A8C8C','linkedin':'#7A9EC2','blog':'#C47A3A','tiktok':'#98286A','facebook':'#2A3E98','other':'#9A7A5A'};
   const bc=platColors[d.platform]||'#9A7A5A';
-  return`<div class="dc" data-id="${d.id}" style="border-top:4px solid ${bc};border-left:3px solid ${bc};overflow:hidden">
-    <div style="padding:14px 16px 0">
-      <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${bc};margin-bottom:6px">${cap(d.platform||'draft')}</div>
+  return`<div class="dc" data-id="${d.id}" style="border-top:3px solid ${bc};overflow:hidden">
+    <div style="padding:10px 12px 0">
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${bc};margin-bottom:4px">${cap(d.platform||'draft')}</div>
       <div class="dc-title" style="color:${bc}">${esc(d.title||'Untitled draft')}</div>
       <div class="dc-preview">${esc(d.content)}</div>
     </div>
-    <div class="dc-foot" style="padding:0 16px 14px"><span class="dc-date">${dt}</span></div>
+    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span></div>
   </div>`;
 }
 function renderRecentDrafts(){
@@ -3418,6 +3433,8 @@ function saveCalEntry(){
 }
 function openIdeaModal(status){
   S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';S._pendingIdeaImages=[];cdRenderTasks();
+  var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
+  var rc=document.getElementById('cdReminderOn');if(rc){rc.checked=false;cdToggleReminder(rc);}
   // Clear all fields
   document.getElementById('cdTitle').value='';
   document.getElementById('cdPlat').value='instagram';
@@ -3920,6 +3937,14 @@ function cdOpen(id){
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
+  // Populate reminder toggle
+  var remWrap=document.getElementById('cdReminderWrap');
+  var remCb=document.getElementById('cdReminderOn');
+  if(remWrap && remCb){
+    remWrap.style.display=x.date?'flex':'none';
+    remCb.checked=x.reminder||false;
+    cdToggleReminder(remCb);
+  }
   _cdTasks=x.cdTasks?JSON.parse(JSON.stringify(x.cdTasks)):[];cdRenderTasks();
 
   // Set stage buttons
@@ -4047,6 +4072,10 @@ function cdSave(){
   x.notes=document.getElementById('cdNotes').value;
   var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
   x.images=S._pendingIdeaImages||x.images||[];
+  // Save reminder preference
+  var reminderCb = document.getElementById('cdReminderOn');
+  var reminderWasOff = !x.reminder;
+  x.reminder = reminderCb ? reminderCb.checked : false;
   // Persist AI outputs and own content so they survive close/reopen
   var ownEl=document.getElementById('cdOwnContent');
   x.ownContent=ownEl?ownEl.value:'';
@@ -4070,7 +4099,16 @@ function cdSave(){
   }
   S.cdId=null;
   persist();closeModal('cardDetailModal');
-  renderKanban();renderCalendar();toast('Card saved ✓');
+  renderKanban();renderCalendar();
+  // Schedule Brevo reminders if toggled on
+  if(x.reminder && _currentUser){
+    var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
+    scheduleBrevoReminders(x, _currentUser.email, uName).then(function(){
+      toast('Card saved + reminders scheduled ✓');
+    }).catch(function(){ toast('Card saved ✓'); });
+  } else {
+    toast('Card saved ✓');
+  }
 }
 
 function cdDelete() {
@@ -4827,13 +4865,9 @@ function handleIdeaImages(input) {
   Array.from(input.files).forEach(function(file) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      S._pendingIdeaImages.push({ name: file.name, data: e.target.result });
-      if (area) {
-        var img = document.createElement('div');
-        img.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl)';
-        img.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover" />';
-        area.appendChild(img);
-      }
+      var imgObj = { name: file.name, data: e.target.result };
+      S._pendingIdeaImages.push(imgObj);
+      if (area) cdRenderImageThumb(area, imgObj, S._pendingIdeaImages.length - 1);
     };
     reader.readAsDataURL(file);
   });
@@ -4860,18 +4894,38 @@ function handleCdImages(input) {
 function cdRenderImageThumb(area, img, idx) {
   if (!area) return;
   var wrap = document.createElement('div');
-  wrap.style.cssText = 'position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--bl);flex-shrink:0';
+  wrap.style.cssText = 'position:relative;width:72px;height:72px;border-radius:6px;overflow:hidden;border:1px solid var(--bl);flex-shrink:0;cursor:pointer';
   var im = document.createElement('img');
   im.src = img.data;
   im.style.cssText = 'width:100%;height:100%;object-fit:cover';
+  im.title = 'Click to view full size';
+  // Click image to open lightbox
+  (function(imgData, imgName){ im.addEventListener('click', function(e){ e.stopPropagation(); openImgLightbox(imgData, imgName); }); })(img.data, img.name);
+  // Remove button
   var btn = document.createElement('button');
   btn.title = 'Remove';
-  btn.style.cssText = 'position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(42,26,14,.65);border:none;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1';
-  btn.textContent = 'x';
-  (function(i){ btn.addEventListener('click', function(){ cdRemoveImage(i); }); })(idx);
+  btn.style.cssText = 'position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(42,26,14,.75);border:none;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1';
+  btn.textContent = '✕';
+  (function(i){ btn.addEventListener('click', function(e){ e.stopPropagation(); cdRemoveImage(i); }); })(idx);
   wrap.appendChild(im);
   wrap.appendChild(btn);
   area.appendChild(wrap);
+}
+
+function openImgLightbox(src, name) {
+  var existing = document.getElementById('imgLightbox');
+  if (existing) existing.remove();
+  var lb = document.createElement('div');
+  lb.id = 'imgLightbox';
+  lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:14px';
+  lb.innerHTML = '<img src="'+src+'" style="max-width:100%;max-height:75vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5);object-fit:contain" />'
+    + '<div style="display:flex;gap:10px">'
+    + '<a href="'+src+'" download="'+(name||'image')+'" style="background:var(--teal);color:white;padding:10px 20px;border-radius:var(--rsm);font-family:var(--fb);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer">⬇ Download to Post</a>'
+    + '<button onclick="document.getElementById(\'imgLightbox\').remove()" style="background:rgba(255,255,255,.15);color:white;border:none;padding:10px 20px;border-radius:var(--rsm);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer">Close</button>'
+    + '</div>'
+    + '<div style="font-size:11px;color:rgba(255,255,255,.5)">Tap outside to close</div>';
+  lb.addEventListener('click', function(e){ if(e.target===lb) lb.remove(); });
+  document.body.appendChild(lb);
 }
 
 function cdRemoveImage(idx) {
@@ -5038,6 +5092,97 @@ let _tt;
 function toast(msg){const el=document.getElementById('toast');if(!el){console.log('Toast:',msg);return;}el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
 // init called by auth system via initFlowStateApp
+/* ═══════════════════ BREVO REMINDERS ═══════════════════ */
+var _BREVO_API_KEY = 'REPLACE_WITH_BREVO_KEY_VIA_SUPABASE';
+var _BREVO_SENDER = { name: 'Flow State Studio', email: 'jess@flowstatefreelance.co' };
+
+function cdDateChanged() {
+  var dateVal = document.getElementById('cdDate').value;
+  var wrap = document.getElementById('cdReminderWrap');
+  if (!wrap) return;
+  if (dateVal) {
+    wrap.style.display = 'flex';
+  } else {
+    wrap.style.display = 'none';
+    var cb = document.getElementById('cdReminderOn');
+    if (cb) { cb.checked = false; cdToggleReminder(cb); }
+  }
+}
+
+function cdToggleReminder(cb) {
+  var track = document.getElementById('cdReminderTrack');
+  var thumb = document.getElementById('cdReminderThumb');
+  var lbl = document.getElementById('cdReminderLbl');
+  if (!track) return;
+  if (cb.checked) {
+    track.style.background = 'var(--teal)';
+    thumb.style.transform = 'translateX(16px)';
+    lbl.textContent = 'On';
+  } else {
+    track.style.background = 'var(--bl)';
+    thumb.style.transform = 'translateX(0)';
+    lbl.textContent = 'Off';
+  }
+}
+
+async function scheduleBrevoReminders(idea, userEmail, userName) {
+  if (!idea.reminder || !idea.date || !userEmail) return;
+  var postDate = new Date(idea.date + 'T09:00:00');
+  var dayBefore = new Date(postDate); dayBefore.setDate(dayBefore.getDate() - 1);
+  var caption = idea.ownContent || idea.notes || '';
+  var captionSnip = caption.length > 200 ? caption.slice(0, 200) + '...' : caption;
+  var platform = idea.platform ? idea.platform.charAt(0).toUpperCase() + idea.platform.slice(1) : 'your platform';
+  var firstName = userName || 'there';
+
+  var emails = [
+    {
+      scheduledAt: dayBefore.toISOString(),
+      subject: 'Heads up — you\'re posting tomorrow on ' + platform + ' 📅',
+      html: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
+        <div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>
+        <div style="font-size:15px;color:#7A6555;margin-bottom:20px">Your content reminder</div>
+        <p>Hey ${firstName},</p>
+        <p>Just a heads up that you planned to post <strong>${esc(idea.title)}</strong> tomorrow on <strong>${platform}</strong>.</p>
+        ${captionSnip ? `<div style="background:#F5EFE3;border-left:3px solid #B5512A;padding:14px 16px;border-radius:6px;margin:16px 0;font-size:13px;line-height:1.7;color:#4A3728">${captionSnip.replace(/\n/g,'<br>')}</div>` : ''}
+        <p>Head to the Studio to review your content and get ready to post.</p>
+        <a href="https://flowstatestudio.co" style="display:inline-block;background:#B5512A;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px">Open Flow State Studio →</a>
+        <p style="font-size:11px;color:#9A8A7A;margin-top:24px">You set this reminder in Flow State Studio. Reply to this email if you have any questions.</p>
+      </div>`
+    },
+    {
+      scheduledAt: postDate.toISOString(),
+      subject: 'Today\'s the day — time to post on ' + platform + ' 🚀',
+      html: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
+        <div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>
+        <div style="font-size:15px;color:#7A6555;margin-bottom:20px">Post day reminder</div>
+        <p>Hey ${firstName},</p>
+        <p>Today is the day you planned to post <strong>${esc(idea.title)}</strong> on <strong>${platform}</strong>. You've got this.</p>
+        ${captionSnip ? `<div style="background:#F5EFE3;border-left:3px solid #3A8C8C;padding:14px 16px;border-radius:6px;margin:16px 0;font-size:13px;line-height:1.7;color:#4A3728">${captionSnip.replace(/\n/g,'<br>')}</div>` : ''}
+        <a href="https://flowstatestudio.co" style="display:inline-block;background:#3A8C8C;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px">Open Flow State Studio →</a>
+        <p style="font-size:11px;color:#9A8A7A;margin-top:24px">You set this reminder in Flow State Studio.</p>
+      </div>`
+    }
+  ];
+
+  var now = new Date();
+  for (var e of emails) {
+    if (new Date(e.scheduledAt) <= now) continue; // skip past dates
+    try {
+      await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: { 'api-key': _BREVO_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: _BREVO_SENDER,
+          to: [{ email: userEmail, name: firstName }],
+          subject: e.subject,
+          htmlContent: e.html,
+          scheduledAt: e.scheduledAt
+        })
+      });
+    } catch(err) { console.warn('Brevo reminder failed:', err); }
+  }
+}
+
 /* ═══════════════════ MOBILE NAV ═══════════════════ */
 function toggleMobNav(){
   var sb=document.querySelector('.sidebar');
