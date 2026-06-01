@@ -175,7 +175,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
-.studio-wrap{display:grid;grid-template-columns:330px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
+.studio-wrap{display:grid;grid-template-columns:380px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 4px var(--sh)}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
@@ -804,17 +804,17 @@ select.fi{cursor:pointer}
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
   <div style="margin-top:auto;min-height:20px"></div>
-  <div style="padding:20px 16px 16px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:2.4">
-    © 2026 Flow State Studio. All rights reserved.<br>
-    <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
-    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span><br>
-    <span onclick="openFeedbackModal()" style="cursor:pointer;text-decoration:underline;color:var(--r)">✦ Share Feedback</span> ·
-    <span onclick="openSupportModal()" style="cursor:pointer;text-decoration:underline">Get Support</span>
-  </div>
   <div class="sb-usage" id="creditBar">
     <div class="sb-usage-lbl" id="creditLabel">✦ Studio in Session</div>
     <div class="usage-bar-wrap"><div class="usage-bar" id="creditBarFill" style="width:100%"></div></div>
     <div id="creditSub" style="font-size:9px;color:var(--tl);margin-top:4px;letter-spacing:.04em"></div>
+  </div>
+  <div style="padding:10px 16px 16px;font-size:9px;color:var(--tl);letter-spacing:.04em;line-height:2.6">
+    <span onclick="openFeedbackModal()" style="cursor:pointer;text-decoration:underline;color:var(--r)">✦ Share Feedback</span> ·
+    <span onclick="openSupportModal()" style="cursor:pointer;text-decoration:underline">Get Support</span><br>
+    <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
+    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span><br>
+    © 2026 Flow State Studio. All rights reserved.
   </div>
 </aside>
 
@@ -872,7 +872,7 @@ select.fi{cursor:pointer}
             <div class="wdc-sub">Plan it out</div>
           </div>
 
-          <div class="wdc-card" onclick="quickCreateCard('Substack Article','Substack Article','substack')">
+          <div class="wdc-card" onclick="quickCreate('Article','substack')">
             <div class="wdc-icon">📝</div>
             <div class="wdc-title">Substack</div>
             <div class="wdc-sub">Write an article</div>
@@ -1046,11 +1046,11 @@ select.fi{cursor:pointer}
     <div class="main-hdr">
       <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with the Studio - both save to your library</div></div>
     </div>
-    <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
+    <div class="main-body" style="padding-top:16px;padding-bottom:48px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
         <div class="sp">
           <div class="sp-in">
-            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
+            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Article">Article</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
             <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
@@ -1062,7 +1062,9 @@ select.fi{cursor:pointer}
         </div>
         <div class="sp out-panel">
           <div style="padding:14px 20px 0;flex-shrink:0">
-            <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:6px">✍️ Write Your Own</div>
+            <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:8px">✍️ Write Your Own</div>
+            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:15px;font-family:var(--fh);font-weight:600" />
+            <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
             <textarea id="studioOwnTA" class="fi" placeholder="Start writing here - your own draft, hook, or rough ideas. Use the generate tools on the left to get AI inspiration, or skip them entirely and just write." style="min-height:280px;font-size:14px;line-height:1.85;margin-bottom:8px;resize:vertical;flex:1"></textarea>
             <div style="display:flex;gap:6px;margin-bottom:12px">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="studioOwnCopy()">Copy</button>
@@ -1074,7 +1076,7 @@ select.fi{cursor:pointer}
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
           </div>
-          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
+          <div class="out-bdy" id="outBdy" style="min-height:420px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
           <!-- WRITE YOUR OWN PANEL -->
           <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
             <div style="display:flex;gap:10px">
@@ -1082,7 +1084,7 @@ select.fi{cursor:pointer}
                 <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="email">Email</option><option value="substack">Substack</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
               </div>
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Format</label>
-                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
+                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Substack / Article">Substack / Article</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
               </div>
             </div>
             <div style="flex:1;display:flex;flex-direction:column">
@@ -1447,7 +1449,7 @@ select.fi{cursor:pointer}
             <select class="fi" id="ideaFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
               <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option>
+              <option value="Newsletter">Newsletter</option><option value="Substack / Article">Substack / Article</option>
               <option value="Freebie">Freebie</option><option value="Event">Event</option>
               <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
@@ -1686,7 +1688,7 @@ select.fi{cursor:pointer}
             <select class="fi" id="cdFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
               <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option>
+              <option value="Newsletter">Newsletter</option><option value="Substack / Article">Substack / Article</option>
               <option value="Freebie">Freebie</option><option value="Event">Event</option>
               <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
