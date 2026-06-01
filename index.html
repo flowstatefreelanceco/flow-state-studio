@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
 <title>Flow State Studio</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233A8C8C'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23F5EFE3' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,12 +40,12 @@
   --sh:rgba(42,26,14,.08);--shm:rgba(42,26,14,.15);
   --sage:#5A6E50;--sagep:#DCE8D4;
   --fh:'Caveat',cursive;           /* handwritten - studio name/wordmark */
-  --fd:'Cormorant Garamond',Georgia,serif;  /* display - section headers */
+  --fd:'Caveat',cursive;                   /* display - uses handwritten font */
   --fb:'Jost',system-ui,sans-serif;         /* body - everything else */
   --sw:238px;--rad:10px;--rsm:6px
 }
-html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);font-size:15px;line-height:1.65}
-.app{display:flex;height:100vh;overflow:hidden}
+html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);background:var(--p);color:var(--e);font-size:15px;line-height:1.65;-webkit-text-size-adjust:100%}
+.app{display:flex;height:100vh;height:-webkit-fill-available;overflow:hidden}
 
 /* SIDEBAR */
 .sidebar{width:var(--sw);min-width:var(--sw);background:var(--sb);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;border-right:1px solid var(--b)}
@@ -50,10 +53,10 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .sb-wordmark{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);letter-spacing:.01em;line-height:1.2}
 .sb-tagline{font-size:9px;color:var(--t);margin-top:4px;letter-spacing:.16em;text-transform:uppercase}
 .sb-line{width:22px;height:1.5px;background:var(--teal);border-radius:1px;margin-top:14px}
-.sb-nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;overflow-y:auto}
+.sb-nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .sb-nav::-webkit-scrollbar{width:0}
 .sb-section{font-size:8.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--tl);padding:10px 12px 5px;margin-top:6px}
-.nav-i{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;color:var(--t);font-size:13.5px;font-weight:400;margin-bottom:1px;user-select:none;letter-spacing:.01em}
+.nav-i{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .15s;color:var(--t);font-size:13.5px;font-weight:400;margin-bottom:1px;user-select:none;letter-spacing:.01em;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .nav-i:hover{background:var(--sb2);color:var(--e)}
 .nav-i.active{background:var(--rp);color:var(--r);border-left:2px solid var(--r);padding-left:10px;font-weight:500}
 .nav-ico{width:15px;height:15px;flex-shrink:0;opacity:.7}
@@ -70,7 +73,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .main-hdr h1{font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
 .main-hdr .sub{font-size:14px;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
-.main-body{flex:1;overflow-y:auto;padding:24px 36px 48px}
+.main-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 36px 48px}
 
 /* VIEWS */
 .view{display:none;flex-direction:column;height:100%}
@@ -159,7 +162,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc-head{padding:14px 16px 10px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .kc-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t)}
 .kc-count{font-family:var(--fh);font-size:28px;font-weight:600;color:var(--e)}
-.kc-body{flex:1;overflow-y:auto;padding:12px}
+.kc-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;min-height:0}
 .kc-body::-webkit-scrollbar{width:0}
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
 .kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;margin-bottom:14px;cursor:pointer;transition:all .18s;position:relative;box-shadow:0 2px 6px var(--sh);overflow:hidden}
@@ -168,7 +171,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
 .kc-card:hover .cc-del{opacity:1}
-.empty-kc{text-align:center;padding:28px 12px;color:var(--tl);font-size:12px}
+.empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
 .studio-wrap{display:grid;grid-template-columns:330px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden}
@@ -176,7 +179,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--p);color:var(--e);f
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
 .fl-lbl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:7px;display:block}
-.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:14px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
+.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:16px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
 .fi:focus{border-color:var(--r);background:var(--w)}
 textarea.fi{resize:vertical;min-height:85px;line-height:1.65}
 select.fi{cursor:pointer}
@@ -269,7 +272,7 @@ select.fi{cursor:pointer}
 .btn-danger:hover{background:#EDD5C8}
 
 /* MODALS */
-.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.6);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
 .modal-ov.open{display:flex}
 .modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,14,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
 
@@ -528,7 +531,7 @@ select.fi{cursor:pointer}
 /* ═══════════════════ MOBILE ═══════════════════ */
 /* Mobile nav toggle button */
 .mob-nav-btn{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:500;background:var(--e);color:var(--p);border:none;border-radius:100px;padding:10px 22px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(42,26,14,.25);gap:7px;align-items:center;white-space:nowrap}
-.mob-overlay{display:none;position:fixed;inset:0;background:rgba(42,26,14,.45);z-index:398;backdrop-filter:blur(2px)}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(42,26,14,.55);z-index:398}
 
 @media(max-width:768px){
 
@@ -565,10 +568,11 @@ select.fi{cursor:pointer}
   .kanban-3,.kanban-4{grid-template-columns:1fr;gap:8px;overflow-x:unset;overflow-y:auto}
   .kanban{flex-direction:column;overflow:auto}
   .kc{min-height:unset;overflow:hidden}
+  .empty-kc{padding:8px 10px !important;font-size:11px !important}
   .kc-head{padding:8px 12px !important}
   .kc-title{font-size:10px !important;letter-spacing:.08em !important}
   .kc-count{font-size:20px !important}
-  .kc-body{padding:6px !important}
+  .kc-body{padding:4px !important;min-height:0 !important}
   .kc-card{margin-bottom:5px !important;padding:0 !important}
   .kc-card .cc-inner{padding:8px 10px !important}
   .kc-card .cc-title{font-size:12px !important;margin-bottom:3px !important}
@@ -576,6 +580,12 @@ select.fi{cursor:pointer}
   .cc-tag,.cc-plat{font-size:9px !important;padding:2px 5px !important}
   .kc-add{padding:5px 8px !important}
   .kc-add .btn{font-size:11px !important;padding:6px !important}
+  /* task card inner sections - shrink on mobile */
+  .kc-card [style*="font-size:19px"]{font-size:13px !important;line-height:1.3 !important}
+  .kc-card [style*="padding:14px 16px 12px"]{padding:6px 10px !important}
+  .kc-card [style*="padding:8px 16px;display:flex"]{padding:4px 10px !important}
+  .kc-card [style*="padding:10px 16px;background"]{padding:4px 10px !important}
+  .kc-card [style*="padding:8px 12px;display:flex"]{padding:4px 8px !important}
 
   /* CALENDAR */
   .cal-nav h2{font-size:16px;min-width:unset}
@@ -2613,6 +2623,8 @@ function _appInit(){
 }
 
 function load(){ /* data loaded via initFlowStateApp */ }
+/* ═══════════════════ PERSIST (DEBOUNCED) ═══════════════════ */
+var _persistTimer = null;
 function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
@@ -2622,10 +2634,18 @@ function persist(){
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
-  // Save to Supabase (cross-device)
-  if(window._supabasePersist)window._supabasePersist(dataToSave);
-  // Also save to localStorage as backup
-  try{localStorage.setItem('fss_v1',JSON.stringify(dataToSave));}catch(e){}
+  // Save to localStorage immediately (instant, no network)
+  try{
+    var json = JSON.stringify(dataToSave);
+    // Warn if approaching localStorage limit (>3MB)
+    if(json.length > 3000000) console.warn('FSS: data approaching localStorage limit, consider reducing image storage');
+    localStorage.setItem('fss_v1', json);
+  }catch(e){ console.warn('localStorage save failed:', e); }
+  // Debounce Supabase save - wait 1.5s of inactivity before hitting network
+  clearTimeout(_persistTimer);
+  _persistTimer = setTimeout(function(){
+    if(window._supabasePersist) window._supabasePersist(dataToSave);
+  }, 1500);
 }
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
@@ -2869,7 +2889,7 @@ function renderKanban(){
     const cards=S.ideas.filter(i=>i.status===col.id);
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:14px 16px">
+      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
         <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span></div>
@@ -3111,7 +3131,7 @@ async function generate(){
   const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use ${S.studio.type}.`;
   const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
   try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})});
+    const res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})},45000);
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
     const d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
@@ -3220,8 +3240,35 @@ function saveDraftEdit(){
 function copyDraftModal(){const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));}
 
 /* ═══════════════════ MODALS ═══════════════════ */
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+/* ═══════════════════ FETCH WITH TIMEOUT ═══════════════════ */
+function fetchWithTimeout(url, options, ms){
+  ms = ms || 30000;
+  var controller = new AbortController();
+  var timer = setTimeout(function(){ controller.abort(); }, ms);
+  return fetch(url, Object.assign({}, options, { signal: controller.signal }))
+    .finally(function(){ clearTimeout(timer); });
+}
+
+var _scrollY = 0;
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  _scrollY = window.scrollY || 0;
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + _scrollY + 'px';
+  document.body.style.width = '100%';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  var anyOpen = document.querySelector('.modal-ov.open');
+  if(!anyOpen){
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, _scrollY);
+  }
+}
 document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
 function openWelcome(){openModal('welcomeModal');}
 function closeWelcome(){closeModal('welcomeModal');localStorage.setItem('studioWelcomeSeen','1');}
@@ -4556,7 +4603,7 @@ async function ideaGenerate(type) {
   };
   var maxTok = type === 'substack' ? 1400 : 800;
   try {
-    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    var r = await fetchWithTimeout('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: maxTok, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.caption }] })
     });
     var d = await r.json();
@@ -4585,7 +4632,7 @@ async function ideaRepurpose() {
     'Output format: ' + fmt + ' for ' + plat + '\n\n' +
     'Original post to repurpose:\n' + text;
   try {
-    var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    var r = await fetchWithTimeout('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] })
     });
     var d = await r.json();
