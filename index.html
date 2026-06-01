@@ -5093,8 +5093,11 @@ function toast(msg){const el=document.getElementById('toast');if(!el){console.lo
 
 // init called by auth system via initFlowStateApp
 /* ═══════════════════ BREVO REMINDERS ═══════════════════ */
-var _BREVO_API_KEY = 'REPLACE_WITH_BREVO_KEY_VIA_SUPABASE';
-var _BREVO_SENDER = { name: 'Flow State Studio', email: 'jess@flowstatefreelance.co' };
+async function testReminder(email) {
+  var idea = { title: 'Test Post', platform: 'instagram', date: new Date(Date.now()+86400000).toISOString().slice(0,10), notes: 'This is a test reminder from Flow State Studio.', reminder: true, ownContent: '' };
+  await scheduleBrevoReminders(idea, email, 'there');
+  toast('Test reminder sent to ' + email + ' ✓');
+}
 
 function cdDateChanged() {
   var dateVal = document.getElementById('cdDate').value;
@@ -5133,12 +5136,13 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
   var captionSnip = caption.length > 200 ? caption.slice(0, 200) + '...' : caption;
   var platform = idea.platform ? idea.platform.charAt(0).toUpperCase() + idea.platform.slice(1) : 'your platform';
   var firstName = userName || 'there';
+  var EDGE_URL = 'https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/send-reminder';
 
   var emails = [
     {
       scheduledAt: dayBefore.toISOString(),
       subject: 'Heads up — you\'re posting tomorrow on ' + platform + ' 📅',
-      html: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
+      htmlContent: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
         <div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>
         <div style="font-size:15px;color:#7A6555;margin-bottom:20px">Your content reminder</div>
         <p>Hey ${firstName},</p>
@@ -5152,7 +5156,7 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
     {
       scheduledAt: postDate.toISOString(),
       subject: 'Today\'s the day — time to post on ' + platform + ' 🚀',
-      html: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
+      htmlContent: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
         <div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>
         <div style="font-size:15px;color:#7A6555;margin-bottom:20px">Post day reminder</div>
         <p>Hey ${firstName},</p>
@@ -5166,20 +5170,14 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
 
   var now = new Date();
   for (var e of emails) {
-    if (new Date(e.scheduledAt) <= now) continue; // skip past dates
+    if (new Date(e.scheduledAt) <= now) continue;
     try {
-      await fetch('https://api.brevo.com/v3/smtp/email', {
+      await fetch(EDGE_URL, {
         method: 'POST',
-        headers: { 'api-key': _BREVO_API_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sender: _BREVO_SENDER,
-          to: [{ email: userEmail, name: firstName }],
-          subject: e.subject,
-          htmlContent: e.html,
-          scheduledAt: e.scheduledAt
-        })
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (window._supabaseAnonKey || '') },
+        body: JSON.stringify({ to: userEmail, toName: firstName, subject: e.subject, htmlContent: e.htmlContent, scheduledAt: e.scheduledAt })
       });
-    } catch(err) { console.warn('Brevo reminder failed:', err); }
+    } catch(err) { console.warn('Reminder send failed:', err); }
   }
 }
 
