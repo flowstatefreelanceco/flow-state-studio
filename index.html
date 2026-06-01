@@ -3692,7 +3692,11 @@ function renderKanban(){
   }).join('');
 }
 function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
-function deleteIdea(id){S.ideas=S.ideas.filter(i=>i.id!==id);persist();renderKanban();}
+function deleteIdea(id){
+  S.ideas=S.ideas.filter(i=>i.id!==id);
+  S.calEntries=S.calEntries.filter(e=>e.id!=='cal_'+id&&e._ideaId!==id);
+  persist();renderKanban();renderCalendar();
+}
 function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;persist();renderKanban();}}
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
