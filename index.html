@@ -5172,11 +5172,13 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
   for (var e of emails) {
     if (new Date(e.scheduledAt) <= now) continue;
     try {
-      await fetch(EDGE_URL, {
+      var resp = await fetch(EDGE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SKEY },
         body: JSON.stringify({ to: userEmail, toName: firstName, subject: e.subject, htmlContent: e.htmlContent, scheduledAt: e.scheduledAt })
       });
+      var respText = await resp.text();
+      console.log('Edge function response:', resp.status, respText);
     } catch(err) { console.warn('Reminder send failed:', err); }
   }
 }
