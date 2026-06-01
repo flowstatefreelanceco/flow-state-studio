@@ -422,7 +422,7 @@ select.fi{cursor:pointer}
 /* WHAT DO YOU WANT TO CREATE */
 .wdc-wrap{margin-bottom:24px}
 .wdc-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:12px}
-.wdc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.wdc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
 .wdc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 12px;text-align:center;cursor:pointer;transition:all .18s;box-shadow:0 1px 3px var(--sh)}
 .wdc-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px var(--shm);border-color:var(--teal)}
 .wdc-card:active{transform:translateY(-1px)}
@@ -554,7 +554,6 @@ select.fi{cursor:pointer}
 
   /* WHAT TO CREATE */
   .wdc-grid{grid-template-columns:repeat(3,1fr);gap:8px}
-  .wdc-card{padding:12px 8px}
   .wdc-icon{font-size:20px}
   .wdc-title{font-size:12px}
   .wdc-sub{font-size:10px;display:none}
@@ -598,6 +597,7 @@ select.fi{cursor:pointer}
 
   /* PRICING */
   .pricing-features,.pricing-cards{grid-template-columns:1fr}
+  .cd-sales-grid{grid-template-columns:1fr !important}
   .pricing-wrap{padding:24px 16px 60px}
 
   /* CARD DETAIL MODAL */
@@ -833,6 +833,11 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Blog / Article</div>
             <div class="wdc-sub">Plan it out</div>
           </div>
+          <div class="wdc-card" onclick="quickCreateCard('Substack Article','Substack Article','substack')">
+            <div class="wdc-icon">📝</div>
+            <div class="wdc-title">Substack</div>
+            <div class="wdc-sub">Write an article</div>
+          </div>
           <div class="wdc-card" onclick="openIdeaModal('idea')">
             <div class="wdc-icon">✨</div>
             <div class="wdc-title">Something else</div>
@@ -1029,7 +1034,7 @@ select.fi{cursor:pointer}
                 <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="email">Email</option><option value="substack">Substack</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
               </div>
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Format</label>
-                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
+                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
               </div>
             </div>
             <div style="flex:1;display:flex;flex-direction:column">
@@ -1380,9 +1385,9 @@ select.fi{cursor:pointer}
             <select class="fi" id="ideaFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
               <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Freebie">Freebie</option>
-              <option value="Event">Event</option><option value="Blog Post">Blog Post</option>
-              <option value="Other">Other</option>
+              <option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option>
+              <option value="Freebie">Freebie</option><option value="Event">Event</option>
+              <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
           </div>
         </div>
@@ -1425,6 +1430,7 @@ select.fi{cursor:pointer}
               <button class="ai2-btn" onclick="ideaGenerate('hooks')"><span class="ai2-btn-label">5 Hooks</span><span class="ai2-btn-sub">Pick your favorite</span></button>
               <button class="ai2-btn" onclick="ideaGenerate('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
               <button class="ai2-btn" onclick="ideaGenerate('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
+              <button class="ai2-btn" onclick="ideaGenerate('substack')" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack Article</span><span class="ai2-btn-sub">Full article with sections</span></button>
             </div>
             <div class="ai2-out" id="ideaAIOut"></div>
             <div class="ai2-out-acts" id="ideaAIActs">
@@ -1594,9 +1600,9 @@ select.fi{cursor:pointer}
             <select class="fi" id="cdFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
               <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Freebie">Freebie</option>
-              <option value="Event">Event</option><option value="Blog Post">Blog Post</option>
-              <option value="Other">Other</option>
+              <option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option>
+              <option value="Freebie">Freebie</option><option value="Event">Event</option>
+              <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
           </div>
         </div>
@@ -1678,6 +1684,7 @@ select.fi{cursor:pointer}
               <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
               <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
               <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
+              <button class="ai2-btn" onclick="cdGen2('substack')" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack Article</span><span class="ai2-btn-sub">Full article with sections</span></button>
             </div>
             <div class="ai2-loading" id="cd-load-generate">Writing...</div>
             <div class="ai2-out" id="cd-out-generate"></div>
@@ -1859,7 +1866,7 @@ select.fi{cursor:pointer}
       <!-- STAT STRIP -->
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">10+</span> AI tools built in</div>
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">6</span> content formats generated</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">7</span> content formats generated</div>
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--g);font-size:16px;font-family:var(--fh);font-weight:700">1</span> place for everything</div>
       </div>
     </div>
@@ -1869,11 +1876,25 @@ select.fi{cursor:pointer}
 
     <!-- FEATURE GRID -->
     <div class="pricing-features">
-      <div class="pf-card">
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
         <div class="pf-icon">✦</div>
         <div>
-          <div class="pf-title">Creative Director Mode</div>
-          <div class="pf-desc">Stuck staring at a blank page? One button gets you your angle, hook, emotion, and what to avoid, before you write a single word. Built for ND brains that need a starting point, not a blank canvas.</div>
+          <div class="pf-title" style="color:var(--r);font-size:15px">Your Creative Director — Three Ways to Use It</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">The Creative Director isn't one button — it's a whole creative system built into the Studio. Think of it as having a world-class content strategist available every time you sit down to create.</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Brain Not Cooperating?</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Hit the panic button on your dashboard and get your angle, hook, emotion, and what to avoid — before you write a single word. Instant creative direction, no blank-page spiral.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ Strategy Session</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Inside every content card, the Creative Director reads your brief and gives you a full strategic direction — the angle, the hook to lead with, the emotion to create, and the one thing to avoid. Before you write.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🔍 Content Autopsy</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste any post that stopped your scroll. The Creative Director dissects exactly why it worked — hook type, emotional trigger, audience psychology — then rebuilds it completely in your voice. No recycled content. All original.</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="pf-card">
@@ -1886,8 +1907,8 @@ select.fi{cursor:pointer}
       <div class="pf-card">
         <div class="pf-icon">✍️</div>
         <div>
-          <div class="pf-title">Writing Studio — 6 Formats</div>
-          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, and full emails, all in your brand voice. Write your own or use AI as a starting point. Everything saves to one library.</div>
+          <div class="pf-title">Writing Studio — 7 Formats</div>
+          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, full emails, and complete Substack articles, all in your brand voice. Write your own or use AI as a starting point. Everything saves to one library.</div>
         </div>
       </div>
       <div class="pf-card">
@@ -1895,13 +1916,6 @@ select.fi{cursor:pointer}
         <div>
           <div class="pf-title">Caption Variations</div>
           <div class="pf-desc">One idea, three angles. Warm, direct, and story-led versions of the same post so you can pick the one that fits your energy today without starting from scratch three times.</div>
-        </div>
-      </div>
-      <div class="pf-card">
-        <div class="pf-icon">🔍</div>
-        <div>
-          <div class="pf-title">Content Autopsy</div>
-          <div class="pf-desc">Paste any post that stopped your scroll. The Creative Director dissects exactly why it worked, the hook type, emotional trigger, audience psychology, then rebuilds it as your own original content.</div>
         </div>
       </div>
       <div class="pf-card">
@@ -4069,7 +4083,7 @@ function openPanicModal(){
     'LinkedIn':['Caption','Blog Post'],
     'TikTok':['Reel','Caption'],
     'Blog':['Blog Post'],
-    'Substack':['Newsletter','Blog Post']
+    'Substack':['Newsletter','Blog Post','Article']
   };
   var randPlat=plats[Math.floor(Math.random()*plats.length)];
   var fmtOptions=platPairs[randPlat]||fmts;
@@ -4237,11 +4251,12 @@ async function cdGen2(type) {
     reel: 'Write a Reel/TikTok script for: ' + b.brief + '. Format: HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Make it conversational and energetic.',
     newsletter: 'Write an engaging newsletter opening for: ' + b.brief + '. Tone: ' + toneDesc + '. Max 4 sentences. Should make the reader want to keep reading.',
     email: 'Write a marketing email for: ' + b.brief + '. Include: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
+    substack: 'Write a full Substack article for: ' + b.brief + '. Format: Title (compelling, not clickbait), Subheadline (one sentence that earns the read), Opening hook (2-3 sentences that pull the reader in immediately), 3-4 body sections with clear but unpretentious headers, Closing paragraph that feels like a real person signing off, Optional: one sentence subscribe CTA at the end. Tone: ' + toneDesc + '. Write like a real human, not a content marketer. No bullet point overload.',
     variations: 'Write 3 different caption variations for: ' + b.brief + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each clearly. All for ' + b.plat + '.',
     hooks: 'Generate 5 scroll-stopping opening hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Each hook should be different in style (question, bold statement, statistic, story opener, controversy). Number them 1-5. Just the hook line, nothing else.',
     series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Each post should stand alone but connect to a bigger theme. For each: one sentence title + one sentence description. Number them 1-5.'
   };
-  var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : 900);
+  var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
   if (load) load.classList.remove('show');
   if (result && type === 'hooks') {
     _cdOutputs['hookList'] = result;
@@ -4514,11 +4529,13 @@ async function ideaGenerate(type) {
     caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
     hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
     carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
-    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.'
+    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.',
+    substack: 'Write a full Substack article for: ' + brief + '. Include: a compelling title, one-sentence subheadline, strong opening hook, 3-4 body sections with simple headers, and a warm closing. Write like a real human, not a content marketer. No bullet overload.'
   };
+  var maxTok = type === 'substack' ? 1400 : 800;
   try {
     var r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 800, system: sys, messages: [{ role: 'user', content: prompts[type] }] })
+      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: maxTok, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.caption }] })
     });
     var d = await r.json();
     S.ideaAIOut = stripMD((d.content && d.content[0] && d.content[0].text) || '');
