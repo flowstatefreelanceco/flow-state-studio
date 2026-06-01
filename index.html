@@ -564,19 +564,27 @@ select.fi{cursor:pointer}
   /* KANBAN */
   .kanban-3,.kanban-4{grid-template-columns:1fr;gap:10px;overflow-x:unset;overflow-y:auto}
   .kanban{flex-direction:column;overflow:auto}
-  .kc{min-height:160px}
+  .kc{min-height:120px}
+  .kc-card{margin-bottom:8px}
+  .kc-card .cc-title{font-size:13px;margin-bottom:5px}
+  .kc-card .cc-foot{gap:3px}
+  .cc-tag,.cc-plat{font-size:9px;padding:2px 6px}
 
   /* CALENDAR */
-  .cal-nav h2{font-size:20px;min-width:unset}
-  .cal-cell{min-height:52px;padding:4px}
-  .day-n{font-size:9px;width:17px;height:17px}
-  .day-row{font-size:8px}
-  .dot{width:4px;height:4px}
+  .cal-nav h2{font-size:16px;min-width:unset}
+  .cal-grid{font-size:9px}
+  .cal-cell{min-height:44px;padding:3px 2px}
+  .cal-day-hdr{font-size:8px;padding:4px 2px}
+  .day-n{font-size:8px;width:15px;height:15px;margin-bottom:1px}
+  .cal-cell.today .day-n{font-size:8px}
+  .day-row{font-size:7.5px;padding:1px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dot{width:3px;height:3px}
 
   /* WRITING STUDIO */
-  .studio-wrap{grid-template-columns:1fr;overflow:visible;height:auto}
-  .sp{max-height:none;overflow:visible}
-  .out-panel{min-height:300px}
+  .studio-wrap{grid-template-columns:1fr;overflow:visible;height:auto;display:flex;flex-direction:column;gap:12px}
+  .sp{max-height:none;overflow:visible;flex-shrink:0}
+  .sp-in{padding:14px}
+  .out-panel{min-height:280px;flex-shrink:0}
 
   /* DRAFTS */
   .drafts-grid{grid-template-columns:1fr}
@@ -616,10 +624,14 @@ select.fi{cursor:pointer}
   .modal-xl{max-width:100%}
   .m-title{font-size:18px}
 
+  /* WELCOME MODAL - bottom sheet on mobile */
+  #welcomeModal{align-items:flex-end !important;padding:0 !important}
+  #welcomeModal .modal{border-radius:16px 16px 0 0 !important;max-height:82vh !important;margin:0 !important;width:100% !important;max-width:100% !important;overflow-y:auto}
+
   /* WELCOME STEPS */
-  .welcome-steps{gap:12px}
-  .w-step{gap:10px}
-  .w-num{width:26px;height:26px;font-size:13px;flex-shrink:0}
+  .welcome-steps{gap:10px}
+  .w-step{gap:8px;align-items:flex-start}
+  .w-num{width:24px;height:24px;font-size:12px;flex-shrink:0;margin-top:2px}
 
   /* AI BTN GRID */
   .ai2-btn-grid{grid-template-columns:1fr 1fr}
@@ -1329,16 +1341,15 @@ select.fi{cursor:pointer}
 <div class="modal-ov" id="welcomeModal">
   <div class="modal modal-xl">
     <div class="m-title">Welcome to your Studio ✦</div>
-    <div class="m-sub">This is your personal content workspace. Here's how it all works - read this once and you'll feel right at home.</div>
+    <div class="m-sub">Your personal content workspace. Read this once and you'll feel right at home.</div>
     <div class="welcome-steps">
-      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up your settings first</h4><p>Go to Settings and add your studio name and Brand Profile. The Brand Profile is the most important part - it tells the Studio who you are, who you serve, and what you offer so every draft sounds like <em>you</em>.</p></div></div>
-      <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Use the Library to spark ideas</h4><p>Hooks, Prompts, CTAs, and Story Ideas are all pre-loaded for your wellness/VA niche. Browse, filter by category, and copy anything that resonates. Add your own anytime.</p></div></div>
-      <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan content in the Content Planner</h4><p>Add posts, carousels, newsletters, freebies, events - anything you're creating. Move each one from Idea → In Progress → Ready → Published as you go. Nothing falls through the cracks.</p></div></div>
-      <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Plan it on the Calendar</h4><p>Add calendar entries to map out when content will go live. You can see everything by month and track what's scheduled vs. published.</p></div></div>
-      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Generate drafts in the Writing Studio</h4><p>Pick your content type, platform, and tone - give the Studio a brief, and get a full draft. Save it to your library, copy it, or use it as a starting point.</p></div></div>
-      <div class="w-step"><div class="w-num">6</div><div class="w-step-body"><h4>Your data is saved automatically</h4><p>Everything you create saves to your account instantly and syncs across all your devices. Pick up on your phone exactly where you left off on your laptop.</p></div></div>
+      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up Settings first</h4><p>Add your studio name and Brand Profile so every draft sounds like you.</p></div></div>
+      <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Browse the Library</h4><p>Hooks, Prompts, CTAs pre-loaded for your niche. Copy anything that resonates.</p></div></div>
+      <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan in the Content Planner</h4><p>Move ideas from Idea to In Progress to Ready to Published. Nothing falls through.</p></div></div>
+      <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Generate in the Writing Studio</h4><p>Pick type, platform, tone, give a brief, get a full draft.</p></div></div>
+      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Everything saves automatically</h4><p>Syncs across all your devices instantly.</p></div></div>
     </div>
-    <div class="m-acts"><button class="btn btn-p" style="min-width:140px" onclick="closeWelcome()">Got it, let's go ✦</button></div>
+    <div class="m-acts"><button class="btn btn-p full" onclick="closeWelcome()">Got it, let's go ✦</button></div>
   </div>
 </div>
 
