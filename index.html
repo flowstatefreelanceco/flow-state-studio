@@ -800,6 +800,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="sb-section">Think</div>
     <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Notebooks</div>
+    <div class="nav-i" data-view="guides"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h7l3 3v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M11 2v4h3M6 8h6M6 11h6M6 14h4"/></svg>Guides</div>
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
@@ -1369,6 +1370,316 @@ select.fi{cursor:pointer}
         </div>
         <div class="bd-right" id="bdRight">
           <div class="bd-empty"><div class="sym">🧠</div><h3>Select a notebook</h3><p>Choose a notebook on the left, or create your first one to start writing.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="view-guides" class="view">
+    <div class="main-hdr">
+      <div><h1>Guides</h1><div class="sub">Practical playbooks for the way your brain actually works</div></div>
+    </div>
+    <div class="main-body">
+      <div class="guides-wrap">
+        <div class="guide-hero">
+          <div class="guide-hero-eyebrow">Flow State Studio</div>
+          <div class="guide-hero-title">Your creative OS, in action.</div>
+          <div class="guide-hero-desc">These guides are built for neurodivergent creators who are done forcing themselves into systems that weren't designed for them. Use these as a starting point, then make them yours.</div>
+        </div>
+
+        <div class="guide-tabs">
+          <div class="guide-tab active" onclick="switchGuideTab('burnout')">ND Rescue Kit</div>
+          <div class="guide-tab" onclick="switchGuideTab('cycle')">Content Cycle</div>
+        </div>
+
+        <!-- GUIDE 1: ND RESCUE KIT -->
+        <div class="guide-panel active" id="guide-burnout">
+
+          <div class="gs-section-label">Start here when you don't know where to start</div>
+          <div class="guide-card full rust-accent" style="margin-bottom:12px">
+            <div style="display:flex;align-items:flex-start;gap:16px">
+              <div>
+                <span class="gc-tag rust">Burnout Rescue Kit</span>
+                <div class="gc-title" style="font-size:20px">You're overwhelmed. That's okay. Here's what to do right now.</div>
+                <div class="gc-desc" style="font-size:14px;margin-top:6px">This isn't a 10-step productivity system. It's a reset. When your brain is full and your to-do list feels like it's staring at you, this is the starting point. We'll get you to one small, clear next action, and that's enough.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-cards">
+            <div class="guide-card">
+              <span class="gc-icon">🧠</span>
+              <div class="gc-title">Step 1: Brain dump first, plan second</div>
+              <div class="gc-desc">Before you do anything else, open Notebooks and do a Brain Dump session. Get everything out of your head and into the Studio. It doesn't need to be organized. Just write. The goal is to stop holding all of it in your working memory.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">🎯</span>
+              <div class="gc-title">Step 2: Pick ONE thing</div>
+              <div class="gc-desc">When the brain dump is done, look at what you wrote and pick the single thing that would create the most relief if it was finished. Not the most urgent, not the most impressive. The one that would make you breathe easier. That's your next action.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">⚡</span>
+              <div class="gc-title">Step 3: Match to your energy level</div>
+              <div class="gc-desc">Before you open a task, check in. Are you high energy, medium energy, or running on fumes? Your Task Board has energy tags for a reason. On low days, only do low-energy tasks. Protecting your energy is not laziness, it's how you stay consistent long-term.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">⏱</span>
+              <div class="gc-title">Step 4: Time block for your brain</div>
+              <div class="gc-desc">ND brains do better with shorter, protected work blocks than long open-ended sessions. Try 25 minutes on, 10 minutes off. Add your task to the Calendar with a realistic time estimate. When the block ends, stop, even if you're not finished. Stopping on time builds trust with yourself.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">How to use the Studio to reduce content overwhelm</div>
+
+          <div class="feature-callout">
+            <div class="fc-icon">✦</div>
+            <div class="fc-body">
+              <div class="fc-title">Hit the panic button</div>
+              <div class="fc-text">When you have absolutely no idea what to post, the Creative Director button on your dashboard generates a full content direction instantly. Platform, format, hook angle, emotion to create, what to avoid. You go from blank page to brief in under a minute.</div>
+            </div>
+          </div>
+
+          <div class="guide-cards">
+            <div class="guide-card teal-accent">
+              <span class="gc-icon">🗂</span>
+              <div class="gc-title">Keep ideas in the Planner, not in your head</div>
+              <div class="gc-desc">Every time a content idea hits you, add it to the Content Planner as an Idea. Don't think about it yet. Just capture it. When you sit down to actually create, you'll already have a list to pull from instead of staring at a blank page.</div>
+            </div>
+            <div class="guide-card teal-accent">
+              <span class="gc-icon">✍️</span>
+              <div class="gc-title">Use the Writing Studio to start, not to finish</div>
+              <div class="gc-desc">The AI draft is not a finished post. It's a starting point that breaks the blank page paralysis. Generate the draft, edit what doesn't feel like you, and publish. Most of your thinking happens in the editing, not the generating.</div>
+            </div>
+            <div class="guide-card teal-accent">
+              <span class="gc-icon">🪝</span>
+              <div class="gc-title">Start with a hook, not a caption</div>
+              <div class="gc-desc">The Hook Builder is your secret weapon for starting. When you don't know how to open a post, generate five hooks for your idea, pick the one that clicks, and write from there. The hook is the hardest part. Once that's done, the rest comes easier.</div>
+            </div>
+            <div class="guide-card teal-accent">
+              <span class="gc-icon">📅</span>
+              <div class="gc-title">Put it on the calendar before you make it</div>
+              <div class="gc-desc">Scheduling content before it exists creates gentle accountability without pressure. Add a calendar entry for the post, even if it's just an idea. Seeing it on the calendar gives your brain a container for the work instead of a floating obligation.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Batching your content the ND way</div>
+
+          <div class="guide-card full gold-accent" style="margin-bottom:12px">
+            <span class="gc-tag gold">Batch Strategy</span>
+            <div class="gc-title">Do one thing many times, not many things once</div>
+            <div class="gc-desc" style="font-size:14px">Batching is not about spending eight hours creating content on a Sunday. That's a burnout setup. ND-friendly batching means picking one task type and doing a focused burst of just that. Ideas only. Hooks only. Drafts only. Scheduling only. Switching between modes is where the energy drain happens.</div>
+          </div>
+
+          <div class="guide-cards">
+            <div class="guide-card">
+              <span class="gc-icon">💡</span>
+              <div class="gc-title">Batch 1: Idea capture (15 min)</div>
+              <div class="gc-desc">Open the Content Planner. Set a 15-minute timer. Brain dump every content idea you have, no judging, no developing. Just capture. You're filling the pipeline, not building content yet.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">🪝</span>
+              <div class="gc-title">Batch 2: Hook generation (20 min)</div>
+              <div class="gc-desc">Pick your top 5 ideas from the Planner. Open each card and run the Hook Builder. Choose your favourite hook for each. Now you have 5 posts with strong openings ready to develop. Save anything you like to the Hooks Library.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">✍️</span>
+              <div class="gc-title">Batch 3: Draft generation (30 min)</div>
+              <div class="gc-desc">Take your hooked ideas into the Writing Studio. Generate drafts for each one. Edit, adjust tone, make it yours. Move each card to Draft in the Planner when it's done. One batch session, multiple posts ready.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">📅</span>
+              <div class="gc-title">Batch 4: Schedule it (10 min)</div>
+              <div class="gc-desc">Add your drafts to the Calendar with publish dates. Move cards to Scheduled in the Planner. You're done. You now have a week (or more) of content ready without a single marathon session.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Planning a launch without the spiral</div>
+
+          <div class="guide-card full" style="margin-bottom:12px">
+            <span class="gc-tag rust">Launch Mode</span>
+            <div class="gc-title" style="font-size:18px">Launches feel overwhelming because there's no container for them. Here's how to build one.</div>
+            <div class="gc-desc" style="font-size:13.5px;margin-top:8px">A launch is just a lot of small tasks that need to happen in order. The Studio is built to hold all of them so you don't have to. Here's the framework.</div>
+          </div>
+
+          <div class="guide-cards">
+            <div class="guide-card">
+              <span class="gc-icon">🗓</span>
+              <div class="gc-title">Set your launch date first</div>
+              <div class="gc-desc">Add your launch date to the Calendar. Then work backwards. If you're launching in 4 weeks, you need content planned for weeks 1, 2, 3, and launch week. Put each phase on the calendar now, even roughly.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">📋</span>
+              <div class="gc-title">Use Tasks for the non-content work</div>
+              <div class="gc-desc">Sales page, email sequence, checkout link, graphics. These live in your Task Board. Break each one into substeps with time estimates and energy tags. Assign them to calendar blocks across your launch runway so nothing gets left to the last minute.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">🔄</span>
+              <div class="gc-title">Pre-load a Content Series</div>
+              <div class="gc-desc">Use the Content Series Builder on your launch topic to generate 5 connected posts. These become your launch content runway. Space them across your launch period. One idea, five pieces of content, done in one session.</div>
+            </div>
+            <div class="guide-card">
+              <span class="gc-icon">🎯</span>
+              <div class="gc-title">Know your one CTA before you start</div>
+              <div class="gc-desc">Every piece of launch content should point to one place. Decide your single call to action before you write anything. Browse the CTA Library if you need starting points. A clear CTA makes writing every post faster because you always know where you're leading people.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Practical implementation for ND brains</div>
+
+          <ul class="guide-tips">
+            <li><div class="tip-icon rust">✦</div><div><strong>Your system only works if it's frictionless enough to actually use.</strong> If something in the Studio feels like too many steps, skip it. The best workflow is the one you'll actually do.</div></li>
+            <li><div class="tip-icon teal">◎</div><div><strong>Consistency beats perfection every time.</strong> Three posts a week published reliably beats 10 posts planned and none posted. Set a pace you can hold on your worst week, not your best.</div></li>
+            <li><div class="tip-icon gold">✶</div><div><strong>Use the Caption Variations tool when you're stuck on tone.</strong> If the draft doesn't sound like you, generate three variations and see which one clicks. Sometimes you need to see options before you know what feels right.</div></li>
+            <li><div class="tip-icon rust">✦</div><div><strong>Add the Studio to your home screen.</strong> Reducing the steps between idea and capture is how you actually capture ideas. The fewer clicks, the more ideas make it in.</div></li>
+            <li><div class="tip-icon teal">◎</div><div><strong>Review your Content Planner once a week, not every day.</strong> Pick one day to move cards, check what's scheduled, and plan the coming week. That one session is your whole planning practice. Everything else is just doing the work.</div></li>
+            <li><div class="tip-icon gold">✶</div><div><strong>Done is the standard, not polished.</strong> Published content that's 80% great reaches people. Perfect content sitting in Drafts reaches no one.</div></li>
+          </ul>
+
+        </div>
+
+        <!-- GUIDE 2: CONTENT CYCLE -->
+        <div class="guide-panel" id="guide-cycle">
+
+          <div class="gs-section-label">The four-phase content cycle</div>
+          <div class="guide-card full rust-accent" style="margin-bottom:20px">
+            <span class="gc-tag rust">Content Cycle Framework</span>
+            <div class="gc-title" style="font-size:20px">Your content is supposed to ebb and flow, not sprint forever.</div>
+            <div class="gc-desc" style="font-size:14px;margin-top:6px">Most content advice treats every week the same. Post consistently, show up, repeat. But sustainable content creation has a rhythm, like a tide. Grow, nurture, convert, rest and reset. Each phase serves your audience differently, and together they build a business that doesn't require you to be always on.</div>
+          </div>
+
+          <div class="wave-cycle">
+            <div class="wave-phase" style="border-color:#C8DED8">
+              <div class="wave-phase-num" style="background:var(--tealp);color:var(--teal)">01</div>
+              <div class="wave-phase-name">Grow</div>
+              <div class="wave-phase-desc">Reach new people and expand your audience with content that travels</div>
+              <div class="wave-phase-goal" style="color:var(--teal)">Audience growth</div>
+            </div>
+            <div class="wave-phase" style="border-color:#D4C8E2">
+              <div class="wave-phase-num" style="background:#EDE4F5;color:#7A5C9C">02</div>
+              <div class="wave-phase-name">Nurture</div>
+              <div class="wave-phase-desc">Pour into your existing audience, build trust and deepen the relationship</div>
+              <div class="wave-phase-goal" style="color:#7A5C9C">Retention + trust</div>
+            </div>
+            <div class="wave-phase" style="border-color:#E0BDAA">
+              <div class="wave-phase-num" style="background:var(--rp);color:var(--r)">03</div>
+              <div class="wave-phase-name">Convert</div>
+              <div class="wave-phase-desc">Make offers, invite people in, and move the right ones toward working with you</div>
+              <div class="wave-phase-goal" style="color:var(--r)">Sales + enrollment</div>
+            </div>
+            <div class="wave-phase" style="border-color:#E8D4A8">
+              <div class="wave-phase-num" style="background:var(--gp);color:var(--g)">04</div>
+              <div class="wave-phase-name">Reflect</div>
+              <div class="wave-phase-desc">Slow down, share behind-the-scenes, and reconnect with why you do this work</div>
+              <div class="wave-phase-goal" style="color:var(--g)">Community + renewal</div>
+            </div>
+          </div>
+
+          <div class="guide-card full" style="margin-bottom:8px">
+            <div class="gc-title" style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--t)">How long is each phase?</div>
+            <div class="gc-desc" style="margin-top:6px">One week per phase is the default, making it a clean four-week cycle. But if a phase is working, stay in it. Nurture weeks can run two to three weeks when your audience engagement is high. Convert phases can be shorter if your offer is time-limited. The cycle is a guide, not a rule. Stretch or compress each phase to match your actual business rhythm.</div>
+          </div>
+
+          <div class="gs-section-label">Phase 01: Grow, reach new people</div>
+          <div class="guide-cards">
+            <div class="guide-card teal-accent">
+              <span class="gc-tag teal">What to create</span>
+              <div class="gc-title">Content that travels beyond your current followers</div>
+              <div class="gc-desc">Shareable takes on common problems in your niche. Educational posts that answer a question your ideal client is searching. Relatable observations that make people tag a friend. Opinion posts that spark conversation and shares. Your goal: be found by people who don't know you yet.</div>
+            </div>
+            <div class="guide-card teal-accent">
+              <span class="gc-tag teal">Studio tools to use</span>
+              <div class="gc-title">Hook Builder + Content Series</div>
+              <div class="gc-desc">Run the Hook Builder on your grow-phase ideas to find the most shareable angles. Use the Content Series Builder to turn one strong concept into five posts that cover it from multiple entry points, each one a door for a new follower to find you.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Phase 02: Nurture, pour into your people</div>
+          <div class="guide-cards">
+            <div class="guide-card" style="border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,var(--w))">
+              <span class="gc-tag" style="background:#EDE4F5;color:#7A5C9C">What to create</span>
+              <div class="gc-title">Content that deepens trust with people already following you</div>
+              <div class="gc-desc">Behind-the-scenes of your process or thinking. Personal stories that reveal your values and perspective. Client wins and transformation stories, with permission. Lessons you've learned the hard way. Answers to questions your audience actually asks you. Your goal: make your existing audience feel seen, supported, and glad they followed you.</div>
+            </div>
+            <div class="guide-card" style="border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,var(--w))">
+              <span class="gc-tag" style="background:#EDE4F5;color:#7A5C9C">Studio tools to use</span>
+              <div class="gc-title">Writing Studio + Notebooks</div>
+              <div class="gc-desc">Use your Notebooks to brain dump stories and reflections, then bring the best ones into the Writing Studio for a newsletter or long-form post. Caption Variations is useful here too: try the warm and story-led versions of your drafts to find the nurture tone.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Phase 03: Convert, make the ask</div>
+          <div class="guide-cards">
+            <div class="guide-card rust-accent">
+              <span class="gc-tag rust">What to create</span>
+              <div class="gc-title">Content that creates clarity around your offer and moves people to act</div>
+              <div class="gc-desc">Posts that name the specific problem your offer solves. Addressing common objections directly and honestly. What's included, what it costs, and who it's for. Testimonials and results, real ones. A clear and direct call to action on every post. Your goal: make it easy for the right people to say yes, and easy for the wrong people to self-select out.</div>
+            </div>
+            <div class="guide-card rust-accent">
+              <span class="gc-tag rust">Studio tools to use</span>
+              <div class="gc-title">Content Autopsy + CTA Library</div>
+              <div class="gc-desc">Paste top-performing sales content from others into the Content Autopsy to understand why it worked, then rebuild it in your voice. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Strategy Session on your offer to get a directional angle before you write.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Phase 04: Reflect, slow down intentionally</div>
+          <div class="guide-cards">
+            <div class="guide-card gold-accent">
+              <span class="gc-tag gold">What to create</span>
+              <div class="gc-title">Content that reconnects you (and your audience) to meaning and community</div>
+              <div class="gc-desc">Monthly or seasonal recaps of what you're noticing, learning, or building. Gratitude posts that name your community specifically. Behind-the-scenes of your life or creative process, the parts that aren't polished. Questions that invite your audience to share their experience. Your goal: show up as a human, not a content machine. Give yourself and your audience space to breathe.</div>
+            </div>
+            <div class="guide-card gold-accent">
+              <span class="gc-tag gold">Studio tools to use</span>
+              <div class="gc-title">Notebooks + Brain Dump</div>
+              <div class="gc-desc">The reflect phase is the right time to do a Brain Dump session in Notebooks. Empty everything out about the last cycle: what worked, what felt hard, what you want more of. This becomes the raw material for your next grow phase. Reflection feeds the cycle forward.</div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">What a four-week cycle looks like in practice</div>
+
+          <div style="margin-bottom:16px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:8px">Week 1: Grow</div>
+            <div class="example-week">
+              <div class="ew-day"><div class="ew-day-name">Mon</div><div class="ew-day-content">Educational post: common myth in your niche</div><div class="ew-day-type" style="background:var(--tealp);color:var(--teal)">Teach</div></div>
+              <div class="ew-day"><div class="ew-day-name">Tue</div><div class="ew-day-content">Shareable take: unpopular opinion or hot take</div><div class="ew-day-type" style="background:var(--tealp);color:var(--teal)">Opinion</div></div>
+              <div class="ew-day"><div class="ew-day-name">Wed</div><div class="ew-day-content">Answer a question new followers commonly ask</div><div class="ew-day-type" style="background:var(--tealp);color:var(--teal)">FAQ</div></div>
+              <div class="ew-day"><div class="ew-day-name">Thu</div><div class="ew-day-content">Relatable moment that makes people tag a friend</div><div class="ew-day-type" style="background:var(--tealp);color:var(--teal)">Relatable</div></div>
+              <div class="ew-day"><div class="ew-day-name">Fri</div><div class="ew-day-content">Value drop: quick tip they can use today</div><div class="ew-day-type" style="background:var(--tealp);color:var(--teal)">Value</div></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#7A5C9C;margin-bottom:8px;margin-top:16px">Week 2: Nurture</div>
+            <div class="example-week">
+              <div class="ew-day"><div class="ew-day-name">Mon</div><div class="ew-day-content">A story about a lesson you learned the hard way</div><div class="ew-day-type" style="background:#EDE4F5;color:#7A5C9C">Story</div></div>
+              <div class="ew-day"><div class="ew-day-name">Tue</div><div class="ew-day-content">Client transformation story (with permission)</div><div class="ew-day-type" style="background:#EDE4F5;color:#7A5C9C">Social proof</div></div>
+              <div class="ew-day"><div class="ew-day-name">Wed</div><div class="ew-day-content">Behind-the-scenes of how you work or think</div><div class="ew-day-type" style="background:#EDE4F5;color:#7A5C9C">BTS</div></div>
+              <div class="ew-day"><div class="ew-day-name">Thu</div><div class="ew-day-content">Your actual values or beliefs about your niche</div><div class="ew-day-type" style="background:#EDE4F5;color:#7A5C9C">Values</div></div>
+              <div class="ew-day"><div class="ew-day-name">Fri</div><div class="ew-day-content">Ask your audience a question that invites them in</div><div class="ew-day-type" style="background:#EDE4F5;color:#7A5C9C">Engage</div></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--r);margin-bottom:8px;margin-top:16px">Week 3: Convert</div>
+            <div class="example-week">
+              <div class="ew-day"><div class="ew-day-name">Mon</div><div class="ew-day-content">Name the problem your offer solves specifically</div><div class="ew-day-type" style="background:var(--rp);color:var(--r)">Problem</div></div>
+              <div class="ew-day"><div class="ew-day-name">Tue</div><div class="ew-day-content">Address the #1 objection your ideal client has</div><div class="ew-day-type" style="background:var(--rp);color:var(--r)">Objection</div></div>
+              <div class="ew-day"><div class="ew-day-name">Wed</div><div class="ew-day-content">What's included, who it's for, what it costs</div><div class="ew-day-type" style="background:var(--rp);color:var(--r)">Offer</div></div>
+              <div class="ew-day"><div class="ew-day-name">Thu</div><div class="ew-day-content">A real result or testimonial with context</div><div class="ew-day-type" style="background:var(--rp);color:var(--r)">Proof</div></div>
+              <div class="ew-day"><div class="ew-day-name">Fri</div><div class="ew-day-content">Direct CTA: here's how to work with me</div><div class="ew-day-type" style="background:var(--rp);color:var(--r)">CTA</div></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--g);margin-bottom:8px;margin-top:16px">Week 4: Reflect</div>
+            <div class="example-week">
+              <div class="ew-day"><div class="ew-day-name">Mon</div><div class="ew-day-content">What you noticed or learned this month</div><div class="ew-day-type" style="background:var(--gp);color:var(--g)">Reflect</div></div>
+              <div class="ew-day"><div class="ew-day-name">Wed</div><div class="ew-day-content">A peek at what you're working on or excited about</div><div class="ew-day-type" style="background:var(--gp);color:var(--g)">Sneak peek</div></div>
+              <div class="ew-day"><div class="ew-day-name">Fri</div><div class="ew-day-content">Gratitude or community shoutout post</div><div class="ew-day-type" style="background:var(--gp);color:var(--g)">Community</div></div>
+            </div>
+          </div>
+
+          <div class="gs-section-label">Making the cycle work for an ND brain</div>
+          <ul class="guide-tips">
+            <li><div class="tip-icon rust">✦</div><div><strong>You don't need 5 posts a week.</strong> This framework works with 3 posts a week, 2 posts a week, or even 1. The ratio matters more than the volume. Whatever your pace, make sure each phase is still represented across your cycle.</div></li>
+            <li><div class="tip-icon teal">◎</div><div><strong>Batch your content by phase, not by week.</strong> At the start of a grow phase, batch all five grow posts in one session. Your brain stays in the same mode the whole time, which is much easier than switching between grow and convert thinking every other post.</div></li>
+            <li><div class="tip-icon gold">✶</div><div><strong>Use the Content Planner to tag your cycle phase.</strong> Add the phase name to the notes field of each content card. When you look at your Planner, you can immediately see if you're missing a phase or over-indexing on one type.</div></li>
+            <li><div class="tip-icon rust">✦</div><div><strong>Let the reflect phase be genuinely lighter.</strong> Fewer posts, more presence. The reflect phase is designed to give you breathing room. You're allowed to post less. Protect this week so the next grow phase can launch from a full tank.</div></li>
+            <li><div class="tip-icon teal">◎</div><div><strong>The cycle compounds over time.</strong> Month one, you're building the habit. Month three, you're building trust. Month six, people know your rhythm and show up for it. Consistency with this framework over six months is more powerful than any single viral post.</div></li>
+          </ul>
+
         </div>
       </div>
     </div>
@@ -5531,6 +5842,14 @@ function initFlowStateApp(savedData) {
   _appInit();
 }
 
+
+/* ═══════════════════ GUIDES ═══════════════════ */
+function switchGuideTab(tab){
+  document.querySelectorAll('.guide-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.guide-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.guide-tab[onclick*="' + tab + '"]').classList.add('active');
+  document.getElementById('guide-' + tab).classList.add('active');
+}
 </script>
 </body>
 </html>
