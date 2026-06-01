@@ -5136,7 +5136,7 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
   var captionSnip = caption.length > 200 ? caption.slice(0, 200) + '...' : caption;
   var platform = idea.platform ? idea.platform.charAt(0).toUpperCase() + idea.platform.slice(1) : 'your platform';
   var firstName = userName || 'there';
-  var EDGE_URL = 'https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/send-reminder';
+  var EDGE_URL = 'https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/send-reminder-emails';
 
   var emails = [
     {
