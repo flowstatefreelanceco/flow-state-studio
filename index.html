@@ -643,7 +643,9 @@ select.fi{cursor:pointer}
   <div style="padding:8px 14px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:1.6">
     © 2026 Flow State Studio. All rights reserved.<br>
     <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
-    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span>
+    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span><br>
+    <span onclick="openFeedbackModal()" style="cursor:pointer;text-decoration:underline;color:var(--r)">✦ Share Feedback</span> ·
+    <span onclick="openSupportModal()" style="cursor:pointer;text-decoration:underline">Get Support</span>
   </div>
   <div class="sb-usage" id="creditBar">
     <div class="sb-usage-lbl" id="creditLabel">✦ Studio in Session</div>
@@ -797,6 +799,18 @@ select.fi{cursor:pointer}
                 <li><strong>CTAs:</strong> always end your content with a clear call to action - pick one that matches your goal for that post (engagement, sales, or growth).</li>
                 <li><strong>Story Ideas:</strong> use these when you open Instagram and have no idea what to post - they're designed to be quick and authentic.</li>
                 <li><strong>Favorite:</strong> hit the heart on anything you love so you can find it again fast.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🖼️</span>Feed Preview</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">See your Instagram grid before you post. Any Instagram content card with an uploaded image shows up here as a visual grid you can rearrange by dragging.</p>
+              <ul class="guide-tips">
+                <li><strong>Add images:</strong> open any Instagram content card in the Content Planner, scroll to the image upload section, and add your photo or graphic.</li>
+                <li><strong>Drag to rearrange:</strong> not happy with the order? Drag tiles around to see how different sequences look together before you commit to posting.</li>
+                <li><strong>Click any tile:</strong> tapping a grid image opens the full content card so you can edit the caption or details without leaving Feed Preview.</li>
+                <li><strong>Tip:</strong> use this before a batch-posting session to check your grid has visual variety - mix graphics, photos, and text tiles so it doesn't look repetitive.</li>
               </ul>
             </div>
           </div>
@@ -1931,8 +1945,60 @@ select.fi{cursor:pointer}
     <div class="m-acts" style="margin-top:14px"><button class="btn btn-g" onclick="closeModal('panicModal')">Close</button></div>
   </div>
 </div>
+<!-- FEEDBACK MODAL -->
+<div class="modal-ov" id="feedbackModal">
+  <div class="modal" style="max-width:520px">
+    <div class="m-title">✦ Share Feedback</div>
+    <div class="m-sub">Your thoughts make Flow State Studio better. Tell me what's on your mind.</div>
+    <div class="two-col">
+      <div class="fl"><label class="fl-lbl">First Name</label><input class="fi" id="fbFirstName" placeholder="First name" /></div>
+      <div class="fl"><label class="fl-lbl">Last Name</label><input class="fi" id="fbLastName" placeholder="Last name" /></div>
+    </div>
+    <div class="fl"><label class="fl-lbl">Email</label><input class="fi" id="fbEmail" type="email" placeholder="your@email.com" /></div>
+    <div class="fl"><label class="fl-lbl">Category</label>
+      <select class="fi" id="fbCategory">
+        <option value="🐛 Bug Report">🐛 Bug Report</option>
+        <option value="✨ Feature Request">✨ Feature Request</option>
+        <option value="💡 Improvement Idea">💡 Improvement Idea</option>
+        <option value="🙋 Question">🙋 Question</option>
+        <option value="💬 General Feedback" selected>💬 General Feedback</option>
+        <option value="❤️ Just wanted to say thanks">❤️ Just wanted to say thanks</option>
+      </select>
+    </div>
+    <div class="fl"><label class="fl-lbl">Subject</label><input class="fi" id="fbSubject" placeholder="Brief summary" /></div>
+    <div class="fl"><label class="fl-lbl">Message</label>
+      <textarea class="fi" id="fbMessage" style="min-height:110px;font-size:14px" placeholder="Tell me everything. The more detail the better."></textarea>
+    </div>
+    <div id="fbStatus" style="font-size:12.5px;min-height:18px;margin-bottom:4px"></div>
+    <div class="m-acts">
+      <button class="btn btn-g" onclick="closeModal('feedbackModal')">Cancel</button>
+      <button class="btn btn-p" id="fbSubmitBtn" onclick="submitFeedback()">Send Feedback ✦</button>
+    </div>
+    <div style="font-size:10px;color:var(--tl);margin-top:10px;text-align:center;line-height:1.6">Can't send? Email me directly at <a href="mailto:jess@flowstatefreelance.co" style="color:var(--r)">jess@flowstatefreelance.co</a></div>
+  </div>
 </div>
 
+<!-- SUPPORT MODAL -->
+<div class="modal-ov" id="supportModal">
+  <div class="modal" style="max-width:440px;text-align:center">
+    <div style="font-size:36px;margin-bottom:12px">🙋</div>
+    <div class="m-title">Get Support</div>
+    <div class="m-sub" style="margin-bottom:20px">Have a question or need help? I'm here. Reach out directly and I'll get back to you as soon as I can.</div>
+    <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div style="font-size:14px;font-weight:600;color:var(--e)">jess@flowstatefreelance.co</div>
+      <button class="btn btn-g" style="font-size:12px;padding:6px 12px;flex-shrink:0" onclick="navigator.clipboard.writeText('jess@flowstatefreelance.co').then(()=>toast('Email copied ✓'))">Copy</button>
+    </div>
+    <button class="btn btn-p full" style="margin-bottom:10px" onclick="window.open('mailto:jess@flowstatefreelance.co?subject=Flow State Studio Support','_blank')">Open in My Email App</button>
+    <div style="font-size:11.5px;color:var(--tl);margin-bottom:18px">Or use the feedback form to send a message directly from here.</div>
+    <div class="m-acts" style="justify-content:center">
+      <button class="btn btn-g" onclick="closeModal('supportModal')">Close</button>
+      <button class="btn btn-brass" onclick="closeModal('supportModal');openFeedbackModal('🙋 Question')">Open Feedback Form</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 const SURL="https://cucxwgmsatzlsgzhwghy.supabase.co";
 const SKEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA";
@@ -4582,6 +4648,129 @@ let _tt;
 function toast(msg){const el=document.getElementById('toast');if(!el){console.log('Toast:',msg);return;}el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
 // init called by auth system via initFlowStateApp
+/* ═══════════════════ FEEDBACK & SUPPORT ═══════════════════ */
+// EmailJS config — fill in your IDs after setting up emailjs.com
+var _EMAILJS_PUBLIC_KEY = 'rIlAPYD4J4BoKYjNm';
+var _EMAILJS_SERVICE_ID = 'service_ndgtrje';
+var _EMAILJS_TEMPLATE_ID = 'template_jsxg8bi';
+// Google Form field entry IDs — fill in after creating your Google Form
+var _GFORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
+var _GFORM_FIELDS = {
+  firstName: 'entry.XXXXXXXXX',
+  lastName:  'entry.XXXXXXXXX',
+  email:     'entry.XXXXXXXXX',
+  category:  'entry.XXXXXXXXX',
+  subject:   'entry.XXXXXXXXX',
+  message:   'entry.XXXXXXXXX'
+};
+
+function openFeedbackModal(presetCategory) {
+  // Pre-fill from logged-in account
+  var user = _currentUser;
+  if (user) {
+    var meta = user.user_metadata || {};
+    document.getElementById('fbFirstName').value = meta.first_name || meta.name || '';
+    document.getElementById('fbLastName').value = meta.last_name || '';
+    document.getElementById('fbEmail').value = user.email || '';
+  }
+  if (presetCategory) {
+    var sel = document.getElementById('fbCategory');
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === presetCategory) { sel.selectedIndex = i; break; }
+    }
+  }
+  document.getElementById('fbSubject').value = '';
+  document.getElementById('fbMessage').value = '';
+  document.getElementById('fbStatus').textContent = '';
+  document.getElementById('fbStatus').style.color = '';
+  document.getElementById('fbSubmitBtn').disabled = false;
+  openModal('feedbackModal');
+}
+
+function openSupportModal() {
+  openModal('supportModal');
+}
+
+async function submitFeedback() {
+  var firstName = document.getElementById('fbFirstName').value.trim();
+  var lastName  = document.getElementById('fbLastName').value.trim();
+  var email     = document.getElementById('fbEmail').value.trim();
+  var category  = document.getElementById('fbCategory').value;
+  var subject   = document.getElementById('fbSubject').value.trim();
+  var message   = document.getElementById('fbMessage').value.trim();
+  var status    = document.getElementById('fbStatus');
+  var btn       = document.getElementById('fbSubmitBtn');
+
+  if (!firstName || !email || !subject || !message) {
+    status.textContent = 'Please fill in first name, email, subject, and message.';
+    status.style.color = 'var(--r)';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  status.textContent = '';
+
+  var templateParams = {
+    from_first: firstName,
+    from_last:  lastName,
+    from_email: email,
+    category:   category,
+    subject:    subject,
+    message:    message,
+    reply_to:   email
+  };
+
+  var sent = false;
+
+  // Try EmailJS first (if configured)
+  if (_EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+    try {
+      emailjs.init(_EMAILJS_PUBLIC_KEY);
+      await emailjs.send(_EMAILJS_SERVICE_ID, _EMAILJS_TEMPLATE_ID, templateParams);
+      sent = true;
+    } catch(e) {
+      console.warn('EmailJS error:', e);
+    }
+  }
+
+  // Log to Google Form (silent background post, no-cors)
+  if (_GFORM_URL !== 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse') {
+    try {
+      var body = new URLSearchParams();
+      body.append(_GFORM_FIELDS.firstName, firstName);
+      body.append(_GFORM_FIELDS.lastName,  lastName);
+      body.append(_GFORM_FIELDS.email,     email);
+      body.append(_GFORM_FIELDS.category,  category);
+      body.append(_GFORM_FIELDS.subject,   subject);
+      body.append(_GFORM_FIELDS.message,   message);
+      fetch(_GFORM_URL, { method: 'POST', mode: 'no-cors', body: body });
+    } catch(e) { console.warn('Form log error:', e); }
+  }
+
+  // Fallback: open mailto if EmailJS not configured yet
+  if (!sent && _EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+    var mailBody = category + '\n\n' + message + '\n\nFrom: ' + firstName + ' ' + lastName + ' (' + email + ')';
+    window.open('mailto:jess@flowstatefreelance.co?subject=' + encodeURIComponent('[Flow State Feedback] ' + subject) + '&body=' + encodeURIComponent(mailBody), '_blank');
+    status.textContent = "Your email app just opened with the message pre-filled. Hit send from there!";
+    status.style.color = 'var(--teal)';
+    btn.disabled = false;
+    btn.textContent = 'Send Feedback ✦';
+    return;
+  }
+
+  btn.textContent = 'Send Feedback ✦';
+  btn.disabled = false;
+  if (sent) {
+    status.textContent = '✦ Sent! Thank you, I read every single one.';
+    status.style.color = 'var(--teal)';
+    setTimeout(function() { closeModal('feedbackModal'); }, 2200);
+  } else {
+    status.textContent = 'Something went sideways - try emailing jess@flowstatefreelance.co directly.';
+    status.style.color = 'var(--r)';
+  }
+}
+
 initAuth();
 
 function initFlowStateApp(savedData) {
