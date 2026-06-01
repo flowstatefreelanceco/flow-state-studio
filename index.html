@@ -3560,15 +3560,14 @@ function saveIdea(){
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
-  // Reset reminder UI
   if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
   var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
   persist();closeModal('cardDetailModal');renderKanban();renderCalendar();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
-    scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(){
-      toast(date?'Added + reminders scheduled ✓':'Idea added ✓');
-    });
+    scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(result){
+      toast(result ? 'Added + reminders scheduled ✓' : 'Added ✓ (reminder scheduling failed)');
+    }).catch(function(){ toast(date?'Added to planner + calendar ✓':'Idea added ✓'); });
   } else {
     toast(date?'Added to planner + calendar ✓':'Idea added ✓');
   }
@@ -4164,8 +4163,11 @@ function cdSave(){
   x.images=S._pendingIdeaImages||x.images||[];
   // Save reminder preference
   var reminderCb = document.getElementById('cdReminderOn');
-  var reminderWasOff = !x.reminder;
-  x.reminder = reminderCb ? reminderCb.checked : false;
+  var reminderNowOn = reminderCb ? reminderCb.checked : false;
+  var reminderWasPreviouslyOn = x.reminder || false;
+  x.reminder = reminderNowOn;
+  // Only schedule if reminder was just turned ON (not already on from a previous save)
+  var shouldSchedule = reminderNowOn && !reminderWasPreviouslyOn;
   // Persist AI outputs and own content so they survive close/reopen
   var ownEl=document.getElementById('cdOwnContent');
   x.ownContent=ownEl?ownEl.value:'';
@@ -4191,10 +4193,10 @@ function cdSave(){
   persist();closeModal('cardDetailModal');
   renderKanban();renderCalendar();
   // Schedule Brevo reminders if toggled on
-  if(x.reminder && _currentUser){
+  if(shouldSchedule && _currentUser){
     var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
-    scheduleBrevoReminders(x, _currentUser.email, uName).then(function(){
-      toast('Card saved + reminders scheduled ✓');
+    scheduleBrevoReminders(x, _currentUser.email, uName).then(function(result){
+      toast(result ? 'Card saved + reminders scheduled ✓' : 'Card saved ✓ (reminder scheduling failed — check your connection)');
     }).catch(function(){ toast('Card saved ✓'); });
   } else {
     toast('Card saved ✓');
@@ -5189,26 +5191,6 @@ async function testReminder(email) {
   toast('Test reminder sent to ' + email + ' ✓');
 }
 
-function ideaDateChanged() {
-  var dateVal = document.getElementById('ideaDate').value;
-  var wrap = document.getElementById('ideaReminderWrap');
-  if (!wrap) return;
-  wrap.style.display = dateVal ? 'flex' : 'none';
-  if (!dateVal) {
-    var cb = document.getElementById('ideaReminderOn');
-    if (cb) { cb.checked = false; ideaToggleReminder(cb); }
-  }
-}
-function ideaDateChanged() {
-  var dateVal = document.getElementById('ideaDate').value;
-  var wrap = document.getElementById('ideaReminderWrap');
-  if (!wrap) return;
-  wrap.style.display = dateVal ? 'flex' : 'none';
-  if (!dateVal) {
-    var cb = document.getElementById('ideaReminderOn');
-    if (cb) { cb.checked = false; ideaToggleReminder(cb); }
-  }
-}
 function ideaToggleReminder(cb) {
   var track = document.getElementById('ideaReminderTrack');
   var thumb = document.getElementById('ideaReminderThumb');
@@ -5253,56 +5235,65 @@ function cdToggleReminder(cb) {
 }
 
 async function scheduleBrevoReminders(idea, userEmail, userName) {
-  if (!idea.reminder || !idea.date || !userEmail) return;
-  var postDate = new Date(idea.date + 'T09:00:00');
-  var dayBefore = new Date(postDate); dayBefore.setDate(dayBefore.getDate() - 1);
+  if (!idea.reminder || !idea.date || !userEmail) return false;
+  // Use UTC 13:00 (9am EST / 6am PST) as the send time
+  // This ensures emails arrive in the morning for North American users
+  var dateParts = idea.date.split('-');
+  var postDate = new Date(Date.UTC(parseInt(dateParts[0]), parseInt(dateParts[1])-1, parseInt(dateParts[2]), 13, 0, 0));
+  var dayBefore = new Date(postDate);
+  dayBefore.setUTCDate(dayBefore.getUTCDate() - 1);
   var caption = idea.ownContent || idea.notes || '';
   var captionSnip = caption.length > 200 ? caption.slice(0, 200) + '...' : caption;
   var platform = idea.platform ? idea.platform.charAt(0).toUpperCase() + idea.platform.slice(1) : 'your platform';
   var firstName = userName || 'there';
   var EDGE_URL = 'https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/hyper-action';
+  // Safe HTML escape for email content (not using esc() to avoid double-encoding)
+  var safeHtml = function(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
 
   var emails = [
     {
       scheduledAt: dayBefore.toISOString(),
       subject: 'Heads up — you\'re posting tomorrow on ' + platform + ' 📅',
-      htmlContent: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
-        <div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>
-        <div style="font-size:15px;color:#7A6555;margin-bottom:20px">Your content reminder</div>
-        <p>Hey ${firstName},</p>
-        <p>Just a heads up that you planned to post <strong>${esc(idea.title)}</strong> tomorrow on <strong>${platform}</strong>.</p>
-        ${captionSnip ? `<div style="background:#F5EFE3;border-left:3px solid #B5512A;padding:14px 16px;border-radius:6px;margin:16px 0;font-size:13px;line-height:1.7;color:#4A3728">${captionSnip.replace(/\n/g,'<br>')}</div>` : ''}
-        <p>Head to the Studio to review your content and get ready to post.</p>
-        <a href="https://flowstatestudio.co" style="display:inline-block;background:#B5512A;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px">Open Flow State Studio →</a>
-        <p style="font-size:11px;color:#9A8A7A;margin-top:24px">You set this reminder in Flow State Studio. Reply to this email if you have any questions.</p>
-      </div>`
+      htmlContent: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">'
+        + '<div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>'
+        + '<div style="font-size:15px;color:#7A6555;margin-bottom:20px">Your content reminder</div>'
+        + '<p>Hey ' + safeHtml(firstName) + ',</p>'
+        + '<p>Just a heads up that you planned to post <strong>' + safeHtml(idea.title) + '</strong> tomorrow on <strong>' + safeHtml(platform) + '</strong>.</p>'
+        + (captionSnip ? '<div style="background:#F5EFE3;border-left:3px solid #B5512A;padding:14px 16px;border-radius:6px;margin:16px 0;font-size:13px;line-height:1.7;color:#4A3728">' + safeHtml(captionSnip).replace(/\n/g,'<br>') + '</div>' : '')
+        + '<p>Head to the Studio to review your content and get ready to post.</p>'
+        + '<a href="https://flowstatestudio.co" style="display:inline-block;background:#B5512A;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px">Open Flow State Studio →</a>'
+        + '<p style="font-size:11px;color:#9A8A7A;margin-top:24px">You set this reminder in Flow State Studio. Reply to this email if you have any questions.</p>'
+        + '</div>'
     },
     {
       scheduledAt: postDate.toISOString(),
       subject: 'Today\'s the day — time to post on ' + platform + ' 🚀',
-      htmlContent: `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">
-        <div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>
-        <div style="font-size:15px;color:#7A6555;margin-bottom:20px">Post day reminder</div>
-        <p>Hey ${firstName},</p>
-        <p>Today is the day you planned to post <strong>${esc(idea.title)}</strong> on <strong>${platform}</strong>. You've got this.</p>
-        ${captionSnip ? `<div style="background:#F5EFE3;border-left:3px solid #3A8C8C;padding:14px 16px;border-radius:6px;margin:16px 0;font-size:13px;line-height:1.7;color:#4A3728">${captionSnip.replace(/\n/g,'<br>')}</div>` : ''}
-        <a href="https://flowstatestudio.co" style="display:inline-block;background:#3A8C8C;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px">Open Flow State Studio →</a>
-        <p style="font-size:11px;color:#9A8A7A;margin-top:24px">You set this reminder in Flow State Studio.</p>
-      </div>`
+      htmlContent: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">'
+        + '<div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>'
+        + '<div style="font-size:15px;color:#7A6555;margin-bottom:20px">Post day reminder</div>'
+        + '<p>Hey ' + safeHtml(firstName) + ',</p>'
+        + '<p>Today is the day you planned to post <strong>' + safeHtml(idea.title) + '</strong> on <strong>' + safeHtml(platform) + '</strong>. You\'ve got this.</p>'
+        + (captionSnip ? '<div style="background:#F5EFE3;border-left:3px solid #3A8C8C;padding:14px 16px;border-radius:6px;margin:16px 0;font-size:13px;line-height:1.7;color:#4A3728">' + safeHtml(captionSnip).replace(/\n/g,'<br>') + '</div>' : '')
+        + '<a href="https://flowstatestudio.co" style="display:inline-block;background:#3A8C8C;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px">Open Flow State Studio →</a>'
+        + '<p style="font-size:11px;color:#9A8A7A;margin-top:24px">You set this reminder in Flow State Studio.</p>'
+        + '</div>'
     }
   ];
 
   var now = new Date();
+  var anySuccess = false;
   for (var e of emails) {
-    if (new Date(e.scheduledAt) <= now) continue;
+    if (new Date(e.scheduledAt) <= now) continue; // skip past dates
     try {
-      await fetch(EDGE_URL, {
+      var resp = await fetch(EDGE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SKEY },
         body: JSON.stringify({ to: userEmail, toName: firstName, subject: e.subject, htmlContent: e.htmlContent, scheduledAt: e.scheduledAt })
       });
+      if (resp.ok) anySuccess = true;
     } catch(err) { console.warn('Reminder send failed:', err); }
   }
+  return anySuccess;
 }
 
 /* ═══════════════════ MOBILE NAV ═══════════════════ */
