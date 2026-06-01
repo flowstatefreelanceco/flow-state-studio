@@ -5465,12 +5465,9 @@ function copyBrandProfile() {
   if (bp.offers)  lines.push('Offers: ' + bp.offers);
   if (bp.voice)   lines.push('Brand voice: ' + bp.voice);
   if (bp.pov)     lines.push('Unique POV: ' + bp.pov);
-  if (bp.extra)   lines.push('Additional context:
-' + bp.extra);
+  if (bp.extra)   lines.push('Additional context:\n' + bp.extra);
   if (!lines.length) { toast('Your Brand Profile is empty - fill it in first'); return; }
-  var text = 'Brand Profile:
-' + lines.join('
-');
+  var text = 'Brand Profile:\n' + lines.join('\n');
   navigator.clipboard.writeText(text).then(function() {
     toast('Brand Profile copied - paste it anywhere ✦');
   }).catch(function() {
