@@ -139,16 +139,16 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .cal-nav h2{font-family:var(--fh);font-size:28px;font-weight:600;min-width:180px;text-align:center}
 .btn-ico{width:32px;height:32px;border:1px solid var(--b);background:var(--w);border-radius:var(--rsm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--e);transition:all .15s;font-size:17px;flex-shrink:0}
 .btn-ico:hover{background:var(--p);border-color:var(--t)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bl);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--bl);border:1px solid var(--b);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh)}
 .cal-hd{background:var(--em);color:rgba(245,239,227,.65);text-align:center;padding:9px 4px;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.14em}
-.cal-cell{background:var(--w);min-height:88px;height:auto;padding:6px;cursor:pointer;transition:background .12s;vertical-align:top}
+.cal-cell{background:var(--w);min-height:60px;height:auto;padding:6px;cursor:pointer;transition:background .12s;vertical-align:top;min-width:0;overflow:hidden}
 .cal-cell:hover{background:#F0E8D8}
 .cal-cell.other{background:#F5F0E8}
 .cal-cell.other .day-n{color:var(--b)}
 .cal-cell.today{background:#FBF0E8}
 .day-n{font-size:11px;font-weight:500;color:var(--t);width:20px;height:20px;display:flex;align-items:center;justify-content:center;margin-bottom:2px;flex-shrink:0}
 .cal-cell.today .day-n{background:var(--r);color:white;border-radius:50%;font-size:10.5px}
-.day-dots{display:flex;flex-direction:column;gap:2px}
+.day-dots{display:flex;flex-direction:column;gap:2px;min-width:0}
 .day-row{display:flex;align-items:center;gap:3px;font-size:9.5px;color:var(--e);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4}
 .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .dot-instagram{background:#B5522A}.dot-newsletter{background:#5A6E50}.dot-linkedin{background:#2A5A98}
@@ -597,10 +597,10 @@ select.fi{cursor:pointer}
   #calGridWrap{overflow-x:scroll !important;overflow-y:visible !important;-webkit-overflow-scrolling:touch;width:100vw;margin-left:-16px;padding:0 16px;box-sizing:border-box}
   .cal-grid{min-width:560px !important;font-size:10px}
   .cal-hd{padding:6px 3px !important;font-size:8.5px !important}
-  .cal-cell{min-height:56px !important;padding:3px !important}
+  .cal-cell{min-height:40px !important;padding:3px !important;min-width:0 !important}
   .day-n{font-size:10px !important;width:17px !important;height:17px !important;margin-bottom:1px}
   .cal-cell.today .day-n{font-size:10px !important}
-  .day-row{font-size:8px !important;padding:1px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .day-row{font-size:8px !important;padding:1px 2px;word-break:break-word;white-space:normal !important}
   .dot{width:4px;height:4px}
 
   /* WRITING STUDIO */
@@ -3060,7 +3060,7 @@ function renderDots(es,max,fs){
   return es.slice(0,max).map(e=>{
     var dotColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--b)';
     var textColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--e)';
-    return `<div class="day-row"><span style="width:5px;height:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:3px"></span><span style="overflow:hidden;text-overflow:ellipsis;font-size:${fs}px;color:${textColor};font-weight:500">${esc(e.title)}</span></div>`;
+    return `<div class="day-row" style="display:flex;align-items:flex-start;max-width:100%"><span style="width:5px;height:5px;min-width:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:5px"></span><span style="font-size:${fs}px;color:${textColor};font-weight:500;min-width:0;word-break:break-word;overflow-wrap:break-word;line-height:1.3">${esc(e.title)}</span></div>`;
   }).join('');
 }
 
