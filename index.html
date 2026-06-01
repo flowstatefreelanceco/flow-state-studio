@@ -549,7 +549,9 @@ select.fi{cursor:pointer}
   .main-hdr .sub{font-size:12px}
   .hdr-acts{flex-wrap:wrap;gap:6px}
   .hdr-acts .btn{font-size:12px;padding:7px 12px}
-  .main-body{padding:14px 16px 80px}
+  .main-body{padding:14px 16px 80px;overflow-y:auto !important;-webkit-overflow-scrolling:touch}
+  /* unlock the overflow:hidden on kanban/studio main-body wrappers */
+  .main-body[style*="overflow:hidden"]{overflow-y:auto !important;height:auto !important;min-height:unset !important}
 
   /* STATS */
   .stats-row{grid-template-columns:1fr 1fr;gap:8px}
@@ -565,8 +567,8 @@ select.fi{cursor:pointer}
   .pickup-grid{grid-template-columns:1fr}
 
   /* KANBAN */
-  .kanban-3,.kanban-4{grid-template-columns:1fr;gap:8px;overflow-x:unset;overflow-y:auto}
-  .kanban{flex-direction:column;overflow:auto}
+  .kanban-3,.kanban-4{grid-template-columns:1fr;gap:8px;overflow:visible !important}
+  .kanban{flex-direction:column;overflow:visible !important;flex:unset !important;min-height:unset !important;height:auto !important}
   .kc{min-height:unset;overflow:hidden}
   .empty-kc{padding:8px 10px !important;font-size:11px !important}
   .kc-head{padding:8px 12px !important}
@@ -590,11 +592,12 @@ select.fi{cursor:pointer}
   /* CALENDAR */
   .cal-nav h2{font-size:15px !important;min-width:unset !important}
   .cal-grid{font-size:9px}
-  .cal-cell{min-height:40px !important;padding:3px 2px}
+  .cal-hd{padding:4px 2px !important;font-size:8px !important}
+  .cal-cell{min-height:0 !important;height:auto !important;padding:3px 2px}
   .cal-day-hdr{font-size:8px;padding:4px 2px}
   .day-n{font-size:8px !important;width:14px !important;height:14px !important;margin-bottom:1px}
   .cal-cell.today .day-n{font-size:8px !important}
-  .day-row{font-size:7.5px;padding:1px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .day-row{font-size:7px !important;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:14px}
   .dot{width:3px;height:3px}
 
   /* WRITING STUDIO */
@@ -795,8 +798,8 @@ select.fi{cursor:pointer}
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
-  <div style="margin-top:auto"></div>
-  <div style="padding:16px 14px 14px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:2.2">
+  <div style="margin-top:auto;min-height:20px"></div>
+  <div style="padding:20px 16px 16px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:2.4">
     © 2026 Flow State Studio. All rights reserved.<br>
     <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
     <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span><br>
