@@ -1032,6 +1032,10 @@ select.fi{cursor:pointer}
         <button class="btn-ico" onclick="calBack()">‹</button>
         <h2 id="calLabel"></h2>
         <button class="btn-ico" onclick="calFwd()">›</button>
+        <div style="margin-left:auto;display:flex;gap:4px;background:var(--bl);border-radius:var(--rsm);padding:3px">
+          <button id="calToggleMonth" onclick="setCalView('month')" style="padding:5px 12px;font-size:11px;font-weight:600;border:none;border-radius:4px;cursor:pointer;background:var(--r);color:white;font-family:var(--fb);transition:all .15s">Month</button>
+          <button id="calToggleWeek" onclick="setCalView('week')" style="padding:5px 12px;font-size:11px;font-weight:600;border:none;border-radius:4px;cursor:pointer;background:transparent;color:var(--t);font-family:var(--fb);transition:all .15s">Week</button>
+        </div>
       </div>
       <div id="calGridWrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%"><div class="cal-grid" id="calGrid"></div></div>
     </div>
@@ -2966,33 +2970,53 @@ function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=s
 /* ═══════════════════ CALENDAR ═══════════════════ */
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-function isMobileCal(){return window.innerWidth < 600;}
-
-function calBack(){
-  if(isMobileCal()){
-    // go back one week
-    var d=new Date(S.calYear,S.calMonth,S.calWeekStart||1);
-    d.setDate(d.getDate()-7);
-    S.calYear=d.getFullYear();S.calMonth=d.getMonth();S.calWeekStart=d.getDate();
-  } else {
-    changeMonth(-1); return;
+function setCalView(v){
+  S.calView = v;
+  var mb = document.getElementById('calToggleMonth');
+  var wb = document.getElementById('calToggleWeek');
+  if(mb && wb){
+    mb.style.background = v==='month' ? 'var(--r)' : 'transparent';
+    mb.style.color = v==='month' ? 'white' : 'var(--t)';
+    wb.style.background = v==='week' ? 'var(--r)' : 'transparent';
+    wb.style.color = v==='week' ? 'white' : 'var(--t)';
   }
   renderCalendar();
 }
+
+function calBack(){
+  if(S.calView==='week'){
+    var d=new Date(S.calYear,S.calMonth,S.calWeekStart||1);
+    d.setDate(d.getDate()-7);
+    S.calYear=d.getFullYear();S.calMonth=d.getMonth();S.calWeekStart=d.getDate();
+    renderCalendar();
+  } else {
+    changeMonth(-1);
+  }
+}
 function calFwd(){
-  if(isMobileCal()){
+  if(S.calView==='week'){
     var d=new Date(S.calYear,S.calMonth,S.calWeekStart||1);
     d.setDate(d.getDate()+7);
     S.calYear=d.getFullYear();S.calMonth=d.getMonth();S.calWeekStart=d.getDate();
+    renderCalendar();
   } else {
-    changeMonth(1); return;
+    changeMonth(1);
   }
-  renderCalendar();
 }
 function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
 
 function renderCalendar(){
-  if(isMobileCal()){renderCalWeek();return;}
+  if(!S.calView) S.calView='month';
+  // Sync toggle button state
+  var mb=document.getElementById('calToggleMonth');
+  var wb=document.getElementById('calToggleWeek');
+  if(mb && wb){
+    mb.style.background=S.calView==='month'?'var(--r)':'transparent';
+    mb.style.color=S.calView==='month'?'white':'var(--t)';
+    wb.style.background=S.calView==='week'?'var(--r)':'transparent';
+    wb.style.color=S.calView==='week'?'white':'var(--t)';
+  }
+  if(S.calView==='week'){renderCalWeek();return;}
   renderCalMonth();
 }
 
@@ -5156,11 +5180,6 @@ async function submitFeedback() {
     status.style.color = 'var(--r)';
   }
 }
-
-// Re-render calendar on orientation change / resize
-window.addEventListener('resize', function(){
-  if(S.view==='calendar') renderCalendar();
-});
 
 initAuth();
 
