@@ -828,7 +828,7 @@ select.fi{cursor:pointer}
 .cal-picker-opt-desc{font-size:11.5px;color:var(--t);line-height:1.55}
 
 @media(max-width:768px){
-  .guide-index-grid{grid-template-columns:1fr}
+  .guide-index-grid{grid-template-columns:1fr !important}
   .gd-cards{grid-template-columns:1fr}
   .gd-wave{grid-template-columns:1fr 1fr}
   .gd-week{grid-template-columns:repeat(3,1fr)}
@@ -1543,12 +1543,11 @@ select.fi{cursor:pointer}
       <div id="guides-index">
         <div style="max-width:780px">
           <p style="font-size:14px;color:var(--t);line-height:1.75;margin-bottom:24px">These guides are built for neurodivergent creators who are done forcing themselves into systems that weren't designed for them. Click any guide to open it.</p>
-          <div class="guide-index-grid">
+          <div class="guide-index-grid" style="grid-template-columns:repeat(3,1fr)">
 
-            <!-- Card 1: ND Rescue Kit -->
+            <!-- ND Rescue Kit -->
             <div class="guide-index-card rust" onclick="openGuideDetail('burnout')">
               <div class="gic-deco">✦</div>
-              <div class="gic-eyebrow rust">Guide 01</div>
               <span class="gic-icon">🧠</span>
               <div class="gic-title">ND Rescue Kit</div>
               <div class="gic-desc">What to do when you're overwhelmed and don't know where to start. A reset, not a productivity system.</div>
@@ -1556,15 +1555,13 @@ select.fi{cursor:pointer}
                 <span class="gic-tag">Overwhelm</span>
                 <span class="gic-tag">Batching</span>
                 <span class="gic-tag">Launch Planning</span>
-                <span class="gic-tag">Studio Workflow</span>
               </div>
               <div class="gic-cta rust">Read the guide →</div>
             </div>
 
-            <!-- Card 2: Content Cycle -->
+            <!-- Content Cycle -->
             <div class="guide-index-card teal" onclick="openGuideDetail('cycle')">
               <div class="gic-deco">🌊</div>
-              <div class="gic-eyebrow teal">Guide 02</div>
               <span class="gic-icon">🌊</span>
               <div class="gic-title">Content Cycle Framework</div>
               <div class="gic-desc">A four-phase content rhythm that grows your audience, nurtures your community, and gives you space to breathe.</div>
@@ -1577,6 +1574,20 @@ select.fi{cursor:pointer}
               <div class="gic-cta teal">Read the guide →</div>
             </div>
 
+            <!-- The Unstuck Guide -->
+            <div class="guide-index-card" style="border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,#EDE4F5)" onclick="openGuideDetail('unstuck')">
+              <div class="gic-deco" style="color:#7A5C9C">✦</div>
+              <span class="gic-icon">✨</span>
+              <div class="gic-title">The Unstuck Guide</div>
+              <div class="gic-desc">For when your inner critic says it's all been done before. Reframes for perfectionism and creative paralysis, paired with Studio workflows to get you moving again.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Inner Critic</span>
+                <span class="gic-tag">Perfectionism</span>
+                <span class="gic-tag">Starting</span>
+              </div>
+              <div class="gic-cta" style="color:#7A5C9C">Read the guide →</div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -1587,7 +1598,7 @@ select.fi{cursor:pointer}
           <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
           <div class="guide-detail-hero rust">
             <div class="guide-detail-hero-deco">✦</div>
-            <div class="gdh-eyebrow rust">Guide 01, ND Rescue Kit</div>
+            <div class="gdh-eyebrow rust">ND Rescue Kit</div>
             <div class="gdh-title">You're overwhelmed. That's okay. Here's what to do right now.</div>
             <div class="gdh-desc">This isn't a 10-step productivity system. It's a reset. When your brain is full and your to-do list feels like it's staring at you, this is the starting point. We'll get you to one small, clear next action, and that's enough.</div>
           </div>
@@ -1686,7 +1697,7 @@ select.fi{cursor:pointer}
           <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
           <div class="guide-detail-hero teal">
             <div class="guide-detail-hero-deco">🌊</div>
-            <div class="gdh-eyebrow teal">Guide 02, Content Cycle Framework</div>
+            <div class="gdh-eyebrow teal">Content Cycle Framework</div>
             <div class="gdh-title">Your content is supposed to ebb and flow, not sprint forever.</div>
             <div class="gdh-desc">Most content advice treats every week the same. But sustainable content creation has a rhythm, like a tide. Grow, nurture, convert, reflect. Each phase serves your audience differently, and together they build a business that doesn't require you to be always on.</div>
           </div>
@@ -1787,6 +1798,112 @@ select.fi{cursor:pointer}
             <li><div class="gd-tip-icon rust">✦</div><div><strong>Let the reflect phase be genuinely lighter.</strong> Fewer posts, more presence. The reflect phase is designed to give you breathing room. Protect this week so the next grow phase can launch from a full tank.</div></li>
             <li><div class="gd-tip-icon teal">◎</div><div><strong>The cycle compounds over time.</strong> Month one, you're building the habit. Month three, you're building trust. Month six, people know your rhythm and show up for it. Consistency with this framework over six months is more powerful than any single viral post.</div></li>
           </ul>
+        </div>
+      </div>
+
+      <!-- DETAIL: The Unstuck Guide -->
+      <div id="guide-detail-unstuck" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero" style="background:linear-gradient(135deg,#F4F0FA,#EDE4F5);border:1.5px solid #D4C8E2">
+            <div class="guide-detail-hero-deco" style="color:#7A5C9C">✦</div>
+            <div class="gdh-eyebrow" style="color:#7A5C9C">The Unstuck Guide</div>
+            <div class="gdh-title">It has been done before. Do it anyway.</div>
+            <div class="gdh-desc">The inner critic that says your idea isn't original enough, your niche is too crowded, or someone already said it better is not telling you the truth. It's telling you it's scared. This guide is about learning to tell the difference, then creating anyway.</div>
+          </div>
+
+          <div class="gd-section-lbl">The reframe first</div>
+          <div class="gd-card full" style="border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,var(--w));margin-bottom:12px">
+            <div class="gd-card-title" style="font-size:18px">Everything has been done before. That's not the point.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:6px">There are thousands of fitness coaches, therapists, copywriters, photographers, and healers online. People still choose one over another. They choose based on voice, on resonance, on the specific way someone explains a thing. Your job is not to be the first person to talk about your topic. Your job is to be the person your specific audience hears it from. Nobody else has your combination of experience, perspective, and way of putting things. That's not a small thing. That's the whole thing.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card purple">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">What the inner critic is actually doing</div>
+              <div class="gd-card-desc">The "it's been done" thought is a protection mechanism, not an assessment of quality. Your brain is trying to keep you from the risk of being seen and judged. Recognizing it as fear rather than fact is the first move. You don't argue with it. You notice it, name it, and create anyway.</div>
+            </div>
+            <div class="gd-card purple">
+              <span class="gd-card-icon">🔁</span>
+              <div class="gd-card-title">Originality is a remix, not an invention</div>
+              <div class="gd-card-desc">Every creator you admire is remixing influences, experiences, and ideas they absorbed from somewhere else. The question isn't whether your idea is new. It's whether your take on it is honest and specific to you. Specific always beats generic. Personal always beats polished.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">When you can't start: the practical moves</div>
+          <div class="gd-callout rust" style="margin-bottom:12px">
+            <div class="gd-callout-icon">✦</div>
+            <div>
+              <div class="gd-callout-eyebrow rust">The Studio move for this</div>
+              <div class="gd-callout-text">Open the Content Planner, create a card, and fill in just the brief field with whatever half-formed thought is stuck in your head. Don't judge it. Don't develop it yet. Then run Strategy Session. Let the Creative Director give you an angle before you decide if the idea is worth anything. Most ideas look better once they have a direction.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">⏱</span>
+              <div class="gd-card-title">The two-minute start rule</div>
+              <div class="gd-card-desc">When you can't begin, the goal is not to write a good post. The goal is to write for two minutes without stopping. Open the Writing Studio, set a mental timer, and type whatever comes out. No editing, no deleting. Two minutes of movement breaks the freeze more reliably than waiting until you feel ready.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🪝</span>
+              <div class="gd-card-title">Start with what bothers you, not what inspires you</div>
+              <div class="gd-card-desc">When inspiration isn't there, frustration usually is. What's a piece of advice in your industry you disagree with? What do clients always get wrong before they come to you? What would you say to your past self? Contrarian and honest beats inspired and generic every time. Use the Hook Builder to turn that frustration into an opening line.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">📌</span>
+              <div class="gd-card-title">Steal from your own past work</div>
+              <div class="gd-card-desc">Open your Swipe File or Saved Drafts. Find something you wrote that felt right at the time. Run Caption Variations on it. Build a Content Series from the core idea. Your best thinking from six months ago is invisible to someone discovering you today. Nothing is too old to revisit.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🔍</span>
+              <div class="gd-card-title">Learn from what already works</div>
+              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche, and paste it into the Content Autopsy. Let the Creative Director break down why it worked, then rebuild the structure in your voice with your topic. You're not copying. You're learning from signal and applying it honestly.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">When perfectionism is the block</div>
+          <div class="gd-card full purple" style="margin-bottom:12px">
+            <div class="gd-card-eyebrow purple">The reframe</div>
+            <div class="gd-card-title" style="font-size:18px">Perfectionism isn't high standards. It's fear with better branding.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:4px">High standards produce work and refine it. Perfectionism produces nothing and calls that careful. The difference is whether the standard is serving the work or protecting you from the moment of publishing. If you've been editing the same draft for three days, it's probably done. What you're doing now is stalling.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card purple">
+              <span class="gd-card-icon">✂️</span>
+              <div class="gd-card-title">The 80% rule</div>
+              <div class="gd-card-desc">Set a personal policy: when a draft is 80% of where you want it, it ships. The last 20% almost never changes how it lands for the reader, but it costs you hours and keeps you in your head. 80% published beats 100% sitting in Drafts every single time.</div>
+            </div>
+            <div class="gd-card purple">
+              <span class="gd-card-icon">📤</span>
+              <div class="gd-card-title">Use the friction of publishing as a deadline</div>
+              <div class="gd-card-desc">Put the post on your Calendar with today's date. Add a task with a time estimate of 10 minutes for final edits. When the time is up, it goes. Externalizing the deadline moves the decision out of your head and into your system, where your ND brain can actually work with it.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">When you start strong and then abandon it</div>
+          <div class="gd-cards">
+            <div class="gd-card">
+              <span class="gd-card-icon">💡</span>
+              <div class="gd-card-title">Capture the energy, not the finished thing</div>
+              <div class="gd-card-desc">When an idea hits with force, your job in that moment is not to finish it. It's to capture the core of it before the energy fades. Open a Notebook, dump the raw idea, the feeling, the angle. Even two sentences. The draft can come later. The spark is what to protect.</div>
+            </div>
+            <div class="gd-card">
+              <span class="gd-card-icon">🗂</span>
+              <div class="gd-card-title">Turn abandoned drafts into new starts</div>
+              <div class="gd-card-desc">Go to your Saved Drafts. Find something you left half-finished. Paste the opening paragraph into the Writing Studio as your starting point and generate from there. Or run Caption Variations on just the hook. Abandoned work is not wasted. It's pre-work for the next version of the same idea.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Six things to remember when you're stuck</div>
+          <ul class="gd-tips">
+            <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">✦</div><div><strong>The thought "someone already said this" is almost always fear, not fact.</strong> Someone has. Your audience hasn't heard it from you yet, and that's the part that matters.</div></li>
+            <li><div class="gd-tip-icon rust">◎</div><div><strong>You don't need a new idea. You need a new angle on an existing one.</strong> Run Strategy Session on something you've already posted. The Creative Director will find an angle you haven't used yet.</div></li>
+            <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">✶</div><div><strong>Movement beats motivation.</strong> You won't feel like creating before you start. The feeling comes after. Open the app first. Wait for inspiration after.</div></li>
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>Your Notebooks are full of content you've already written.</strong> Open them before you decide you have nothing to say. Half your best ideas are already there, unfinished and waiting.</div></li>
+            <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">◎</div><div><strong>Specificity is the cure for feeling generic.</strong> Any time a draft feels too bland, make one detail more specific. A real person, a real moment, a real number. Specificity is what makes people feel seen.</div></li>
+            <li><div class="gd-tip-icon rust">✶</div><div><strong>Finishing something imperfect is an act of self-respect.</strong> You are allowed to put things into the world that aren't your best work. Consistency builds trust. Occasional brilliance doesn't.</div></li>
+          </ul>
+
         </div>
       </div>
 
@@ -2444,8 +2561,8 @@ select.fi{cursor:pointer}
       <div class="pf-card">
         <div class="pf-icon">✍️</div>
         <div>
-          <div class="pf-title">Writing Studio: 7 Formats</div>
-          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, full emails, and long-form articles, all in your brand voice. Write your own or use AI as a starting point. Side-by-side layout so you can write and generate without switching screens.</div>
+          <div class="pf-title">Writing Studio + Saved Drafts</div>
+          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
         </div>
       </div>
 
@@ -2521,29 +2638,24 @@ select.fi{cursor:pointer}
         </div>
       </div>
 
-      <!-- SAVED DRAFTS -->
-      <div class="pf-card">
-        <div class="pf-icon">📄</div>
-        <div>
-          <div class="pf-title">Saved Drafts Library</div>
-          <div class="pf-desc">Every draft you generate or write yourself saves automatically to your personal library. Filter, search, copy, and export your drafts as a CSV anytime. Your writing never disappears into a chat window again.</div>
-        </div>
-      </div>
-
       <!-- GUIDES: new full-width card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,#F0F9F9,var(--tealp));border-color:var(--teal)">
         <div class="pf-icon" style="color:var(--teal)">📖</div>
         <div>
           <div class="pf-title" style="color:var(--teal);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
           <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="cd-sales-grid">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🧠 ND Rescue Kit</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. Covers the four-step reset, how to use every Studio tool to reduce content stress, ND-friendly batching, and launch planning without the spiral.</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
             </div>
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🌊 Content Cycle Framework</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific implementation tips.</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific tips.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">✦ The Unstuck Guide</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">For when the inner critic says it's all been done before. Reframes for perfectionism, starting paralysis, and creative drought, paired with specific Studio workflows to get you moving again.</div>
             </div>
           </div>
         </div>
@@ -2575,7 +2687,7 @@ select.fi{cursor:pointer}
           <li>Unlimited Notebooks + Brain Dump</li>
           <li>Saved Drafts library + CSV export</li>
           <li>Swipe File for your best AI outputs</li>
-          <li>ND Rescue Kit + Content Cycle guides</li>
+          <li>Three built-in strategy guides for ND creators</li>
           <li>125 AI generations per month</li>
           <li>Locked in at founding price forever</li>
         </ul>
