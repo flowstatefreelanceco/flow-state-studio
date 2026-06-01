@@ -562,13 +562,20 @@ select.fi{cursor:pointer}
   .pickup-grid{grid-template-columns:1fr}
 
   /* KANBAN */
-  .kanban-3,.kanban-4{grid-template-columns:1fr;gap:10px;overflow-x:unset;overflow-y:auto}
+  .kanban-3,.kanban-4{grid-template-columns:1fr;gap:8px;overflow-x:unset;overflow-y:auto}
   .kanban{flex-direction:column;overflow:auto}
-  .kc{min-height:120px}
-  .kc-card{margin-bottom:8px}
-  .kc-card .cc-title{font-size:13px;margin-bottom:5px}
-  .kc-card .cc-foot{gap:3px}
-  .cc-tag,.cc-plat{font-size:9px;padding:2px 6px}
+  .kc{min-height:unset;overflow:hidden}
+  .kc-head{padding:8px 12px !important}
+  .kc-title{font-size:10px !important;letter-spacing:.08em !important}
+  .kc-count{font-size:20px !important}
+  .kc-body{padding:6px !important}
+  .kc-card{margin-bottom:5px !important;padding:0 !important}
+  .kc-card .cc-inner{padding:8px 10px !important}
+  .kc-card .cc-title{font-size:12px !important;margin-bottom:3px !important}
+  .kc-card .cc-foot{gap:3px !important}
+  .cc-tag,.cc-plat{font-size:9px !important;padding:2px 5px !important}
+  .kc-add{padding:5px 8px !important}
+  .kc-add .btn{font-size:11px !important;padding:6px !important}
 
   /* CALENDAR */
   .cal-nav h2{font-size:16px;min-width:unset}
@@ -581,10 +588,10 @@ select.fi{cursor:pointer}
   .dot{width:3px;height:3px}
 
   /* WRITING STUDIO */
-  .studio-wrap{grid-template-columns:1fr;overflow:visible;height:auto;display:flex;flex-direction:column;gap:12px}
-  .sp{max-height:none;overflow:visible;flex-shrink:0}
-  .sp-in{padding:14px}
-  .out-panel{min-height:280px;flex-shrink:0}
+  .studio-wrap{display:block !important;height:auto !important;overflow:visible !important}
+  .sp{max-height:none !important;overflow:visible !important;margin-bottom:12px}
+  .sp-in{padding:14px !important}
+  .out-panel{min-height:260px}
 
   /* DRAFTS */
   .drafts-grid{grid-template-columns:1fr}
@@ -624,9 +631,13 @@ select.fi{cursor:pointer}
   .modal-xl{max-width:100%}
   .m-title{font-size:18px}
 
-  /* WELCOME MODAL - bottom sheet on mobile */
-  #welcomeModal{align-items:flex-end !important;padding:0 !important}
-  #welcomeModal .modal{border-radius:16px 16px 0 0 !important;max-height:82vh !important;margin:0 !important;width:100% !important;max-width:100% !important;overflow-y:auto}
+  /* WELCOME MODAL - centered on mobile, not bottom sheet */
+  #welcomeModal{align-items:center !important;padding:12px !important}
+  #welcomeModal .modal{border-radius:10px !important;max-height:88vh;overflow-y:auto;width:100% !important;max-width:100% !important}
+
+  /* PANIC BAR - stack on mobile */
+  .panic-bar{flex-direction:column !important;align-items:flex-start !important;gap:12px !important;padding:14px 16px !important}
+  .panic-btn{width:100% !important;text-align:center !important}
 
   /* WELCOME STEPS */
   .welcome-steps{gap:10px}
@@ -809,12 +820,12 @@ select.fi{cursor:pointer}
         <div class="gs-items" id="gsItems"></div>
       </div>
       <!-- PANIC BUTTON -->
-      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div class="panic-bar" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
         <div>
           <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
-          <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction - angle, hook, emotion, what to avoid - before you write a single word.</div>
+          <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
         </div>
-        <button onclick="openPanicModal()" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
+        <button onclick="openPanicModal()" class="panic-btn" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
       </div>
       <!-- WHAT TO CREATE TODAY -->
       <div class="wdc-wrap">
@@ -1339,15 +1350,15 @@ select.fi{cursor:pointer}
 <!-- MODALS -->
 <!-- Welcome -->
 <div class="modal-ov" id="welcomeModal">
-  <div class="modal modal-xl">
-    <div class="m-title">Welcome to your Studio ✦</div>
-    <div class="m-sub">Your personal content workspace. Read this once and you'll feel right at home.</div>
-    <div class="welcome-steps">
-      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4>Set up Settings first</h4><p>Add your studio name and Brand Profile so every draft sounds like you.</p></div></div>
-      <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4>Browse the Library</h4><p>Hooks, Prompts, CTAs pre-loaded for your niche. Copy anything that resonates.</p></div></div>
-      <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4>Plan in the Content Planner</h4><p>Move ideas from Idea to In Progress to Ready to Published. Nothing falls through.</p></div></div>
-      <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4>Generate in the Writing Studio</h4><p>Pick type, platform, tone, give a brief, get a full draft.</p></div></div>
-      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4>Everything saves automatically</h4><p>Syncs across all your devices instantly.</p></div></div>
+  <div class="modal modal-xl" style="max-width:480px">
+    <div class="m-title" style="font-size:20px;margin-bottom:4px">Welcome to your Studio ✦</div>
+    <div class="m-sub" style="margin-bottom:14px;font-size:13px">Here's the quick version so you can get started.</div>
+    <div class="welcome-steps" style="gap:8px;margin-bottom:16px">
+      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4 style="margin-bottom:1px">Settings first</h4><p style="font-size:12px;margin:0">Add your Brand Profile so every AI draft sounds like you.</p></div></div>
+      <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4 style="margin-bottom:1px">Browse the Library</h4><p style="font-size:12px;margin:0">Pre-loaded hooks, CTAs, and prompts for your niche.</p></div></div>
+      <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4 style="margin-bottom:1px">Plan in the Content Planner</h4><p style="font-size:12px;margin:0">Move ideas from Idea to Published. Nothing falls through.</p></div></div>
+      <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4 style="margin-bottom:1px">Generate in Writing Studio</h4><p style="font-size:12px;margin:0">Brief, generate, done. 7 formats, all in your voice.</p></div></div>
+      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4 style="margin-bottom:1px">Everything saves automatically</h4><p style="font-size:12px;margin:0">Syncs across all your devices.</p></div></div>
     </div>
     <div class="m-acts"><button class="btn btn-p full" onclick="closeWelcome()">Got it, let's go ✦</button></div>
   </div>
@@ -2858,12 +2869,12 @@ function renderKanban(){
     const cards=S.ideas.filter(i=>i.status===col.id);
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer;padding:14px 16px">
+      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:14px 16px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
         <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span></div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
-      </div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
+      </div></div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
