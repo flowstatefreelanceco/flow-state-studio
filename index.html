@@ -535,10 +535,10 @@ select.fi{cursor:pointer}
   /* NAV */
   .mob-nav-btn{display:flex}
   .mob-overlay.show{display:block}
-  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:399;transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);width:82vw;max-width:300px;min-width:unset}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:399;transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);width:82vw !important;max-width:300px;min-width:0 !important}
   .sidebar.mob-open{transform:translateX(0)}
-  .app{flex-direction:column}
-  .main{width:100%;min-width:0}
+  .app{display:block}
+  .main{width:100vw;max-width:100vw;min-width:0;height:100vh}
 
   /* HEADER */
   .main-hdr{padding:14px 16px 12px;flex-wrap:wrap;gap:8px}
