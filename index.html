@@ -589,16 +589,17 @@ select.fi{cursor:pointer}
   .kc-card [style*="padding:10px 16px;background"]{padding:4px 10px !important}
   .kc-card [style*="padding:8px 12px;display:flex"]{padding:4px 8px !important}
 
-  /* CALENDAR */
-  .cal-nav h2{font-size:15px !important;min-width:unset !important}
-  .cal-grid{font-size:9px}
-  .cal-hd{padding:4px 2px !important;font-size:8px !important}
-  .cal-cell{min-height:0 !important;height:auto !important;padding:3px 2px}
-  .cal-day-hdr{font-size:8px;padding:4px 2px}
-  .day-n{font-size:8px !important;width:14px !important;height:14px !important;margin-bottom:1px}
-  .cal-cell.today .day-n{font-size:8px !important}
-  .day-row{font-size:7px !important;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:14px}
-  .dot{width:3px;height:3px}
+  /* CALENDAR - horizontal scroll so all 7 cols are visible */
+  .cal-nav h2{font-size:18px !important;min-width:unset !important}
+  .cal-nav{gap:8px;margin-bottom:12px}
+  .cal-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
+  .cal-grid{min-width:560px;font-size:10px}
+  .cal-hd{padding:6px 4px !important;font-size:9px !important}
+  .cal-cell{min-height:60px !important;padding:4px 3px}
+  .day-n{font-size:10px !important;width:18px !important;height:18px !important;margin-bottom:2px}
+  .cal-cell.today .day-n{font-size:10px !important}
+  .day-row{font-size:8.5px !important;padding:1px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dot{width:4px;height:4px}
 
   /* WRITING STUDIO */
   .studio-wrap{display:block !important;height:auto !important;overflow:visible !important;align-items:unset !important;padding-bottom:80px}
@@ -630,9 +631,11 @@ select.fi{cursor:pointer}
   .pricing-wrap{padding:24px 16px 60px}
 
   /* CARD DETAIL MODAL */
-  .cd2-wrap{grid-template-columns:1fr;height:auto;min-height:unset}
-  .cd2-left{border-right:none;border-bottom:1px solid var(--bl);padding:14px 16px}
-  .cd2-right{padding:14px 16px;background:var(--bluep)}
+  .cd2-wrap{grid-template-columns:1fr !important;height:auto !important;min-height:unset !important;overflow:visible !important}
+  .cd2-left{border-right:none;border-bottom:1px solid var(--bl);padding:14px 16px;overflow:visible !important}
+  .cd2-right{padding:14px 16px;background:var(--bluep);overflow:visible !important}
+  /* The modal panel itself must scroll, not the inner panels */
+  #cardDetailModal .cd-modal-panel{overflow-y:auto !important;-webkit-overflow-scrolling:touch}
   .cd-stages{gap:4px;flex-wrap:wrap}
   .cd-stage{font-size:10px;padding:5px 8px}
 
@@ -1029,7 +1032,7 @@ select.fi{cursor:pointer}
         <h2 id="calLabel"></h2>
         <button class="btn-ico" onclick="changeMonth(1)">›</button>
       </div>
-      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-scroll-wrap"><div class="cal-grid" id="calGrid"></div></div>
     </div>
   </div>
 
