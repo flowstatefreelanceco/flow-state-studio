@@ -524,6 +524,118 @@ select.fi{cursor:pointer}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--tl)}
+
+/* ═══════════════════ MOBILE ═══════════════════ */
+/* Mobile nav toggle button */
+.mob-nav-btn{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:500;background:var(--e);color:var(--p);border:none;border-radius:100px;padding:10px 22px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(42,26,14,.25);gap:7px;align-items:center;white-space:nowrap}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(42,26,14,.45);z-index:398;backdrop-filter:blur(2px)}
+
+@media(max-width:768px){
+
+  /* NAV */
+  .mob-nav-btn{display:flex}
+  .mob-overlay.show{display:block}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:399;transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);width:82vw;max-width:300px;min-width:unset}
+  .sidebar.mob-open{transform:translateX(0)}
+  .app{flex-direction:column}
+  .main{width:100%;min-width:0}
+
+  /* HEADER */
+  .main-hdr{padding:14px 16px 12px;flex-wrap:wrap;gap:8px}
+  .main-hdr h1{font-size:20px}
+  .main-hdr .sub{font-size:12px}
+  .hdr-acts{flex-wrap:wrap;gap:6px}
+  .hdr-acts .btn{font-size:12px;padding:7px 12px}
+  .main-body{padding:14px 16px 80px}
+
+  /* STATS */
+  .stats-row{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-card .val{font-size:32px}
+
+  /* WHAT TO CREATE */
+  .wdc-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .wdc-card{padding:12px 8px}
+  .wdc-icon{font-size:20px}
+  .wdc-title{font-size:12px}
+  .wdc-sub{font-size:10px;display:none}
+
+  /* PICK UP WHERE YOU LEFT OFF */
+  .pickup-grid{grid-template-columns:1fr}
+
+  /* KANBAN */
+  .kanban-3,.kanban-4{grid-template-columns:1fr;gap:10px;overflow-x:unset;overflow-y:auto}
+  .kanban{flex-direction:column;overflow:auto}
+  .kc{min-height:160px}
+
+  /* CALENDAR */
+  .cal-nav h2{font-size:20px;min-width:unset}
+  .cal-cell{min-height:52px;padding:4px}
+  .day-n{font-size:9px;width:17px;height:17px}
+  .day-row{font-size:8px}
+  .dot{width:4px;height:4px}
+
+  /* WRITING STUDIO */
+  .studio-wrap{grid-template-columns:1fr;overflow:visible;height:auto}
+  .sp{max-height:none;overflow:visible}
+  .out-panel{min-height:300px}
+
+  /* DRAFTS */
+  .drafts-grid{grid-template-columns:1fr}
+
+  /* TWO COL FORMS */
+  .two-col{grid-template-columns:1fr}
+
+  /* LIBRARY */
+  .lib-grid{grid-template-columns:1fr}
+  .lib-toolbar{flex-wrap:wrap}
+
+  /* BRAIN DUMP */
+  .bd-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .bd-left{border-right:none;border-bottom:1px solid var(--bl);max-height:200px}
+
+  /* FEED */
+  .feed-grid{max-width:100%}
+
+  /* PRICING */
+  .pricing-features,.pricing-cards{grid-template-columns:1fr}
+  .pricing-wrap{padding:24px 16px 60px}
+
+  /* CARD DETAIL MODAL */
+  .cd2-wrap{grid-template-columns:1fr;height:auto;min-height:unset}
+  .cd2-left{border-right:none;border-bottom:1px solid var(--bl);padding:14px 16px}
+  .cd2-right{padding:14px 16px;background:var(--bluep)}
+  .cd-stages{gap:4px;flex-wrap:wrap}
+  .cd-stage{font-size:10px;padding:5px 8px}
+
+  /* IDEA MODAL */
+  .cd2-wrap .cd2-left,.cd2-wrap .cd2-right{padding:14px 16px}
+
+  /* MODALS */
+  .modal{padding:20px;border-radius:10px;max-height:92vh}
+  .modal-ov{padding:12px}
+  .modal-xl{max-width:100%}
+  .m-title{font-size:18px}
+
+  /* WELCOME STEPS */
+  .welcome-steps{gap:12px}
+  .w-step{gap:10px}
+  .w-num{width:26px;height:26px;font-size:13px;flex-shrink:0}
+
+  /* AI BTN GRID */
+  .ai2-btn-grid{grid-template-columns:1fr 1fr}
+
+  /* GUIDE */
+  .guide-wrap{margin-bottom:14px}
+}
+
+@media(max-width:420px){
+  .wdc-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-row{grid-template-columns:1fr}
+  .main-hdr h1{font-size:18px}
+  .ai2-btn-grid{grid-template-columns:1fr}
+  .cd-stages{gap:3px}
+  .cd-stage{font-size:9px;padding:4px 6px}
+}
 </style>
 <style>
 /* AUTH */
@@ -607,6 +719,14 @@ select.fi{cursor:pointer}
 </div>
 
 <div id="appWrap"><div class="app">
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="mob-overlay" id="mobOverlay" onclick="closeMobNav()"></div>
+<!-- MOBILE NAV TOGGLE -->
+<button class="mob-nav-btn" id="mobNavBtn" onclick="toggleMobNav()">
+  <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="4" x2="16" y2="4"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="14" x2="16" y2="14"/></svg>
+  Menu
+</button>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -1730,80 +1850,153 @@ select.fi{cursor:pointer}
 <!-- LOCKED / PRICING SCREEN -->
 <div id="lockedScreen">
   <div class="pricing-wrap">
+
+    <!-- HERO -->
     <div class="pricing-hero">
       <div class="pricing-wordmark">Flow State Studio ✦</div>
-      <div class="pricing-tagline">The content workspace built for the way your brain actually works - not the way productivity gurus think it should.</div>
+      <div class="pricing-tagline">The content workspace built for the way your brain actually works, not the way productivity gurus think it should.</div>
       <div class="pricing-nd">🧠 Designed for ADHD &amp; neurodivergent creators</div>
+      <!-- STAT STRIP -->
+      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">10+</span> AI tools built in</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">6</span> content formats generated</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--g);font-size:16px;font-family:var(--fh);font-weight:700">1</span> place for everything</div>
+      </div>
     </div>
+
+    <!-- SECTION LABEL -->
+    <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Everything inside the Studio</div>
 
     <!-- FEATURE GRID -->
     <div class="pricing-features">
       <div class="pf-card">
         <div class="pf-icon">✦</div>
-        <div><div class="pf-title">Creative Director Mode</div><div class="pf-desc">Stuck staring at a blank page? Hit one button and get your angle, hook, emotion, and what to avoid - before you write a single word. Built for ND brains that need a starting point, not a blank canvas.</div></div>
+        <div>
+          <div class="pf-title">Creative Director Mode</div>
+          <div class="pf-desc">Stuck staring at a blank page? One button gets you your angle, hook, emotion, and what to avoid, before you write a single word. Built for ND brains that need a starting point, not a blank canvas.</div>
+        </div>
       </div>
       <div class="pf-card">
         <div class="pf-icon">🪝</div>
-        <div><div class="pf-title">Hook Builder</div><div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, and build a full post from it. No more losing the thread between your idea and your caption.</div></div>
-      </div>
-      <div class="pf-card">
-        <div class="pf-icon">🗂</div>
-        <div><div class="pf-title">Content Planner</div><div class="pf-desc">A visual board that moves with you - from half-baked idea to published. See everything at once without losing track. Perfect for brains that think in big pictures, not lists.</div></div>
+        <div>
+          <div class="pf-title">Hook Builder</div>
+          <div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
+        </div>
       </div>
       <div class="pf-card">
         <div class="pf-icon">✍️</div>
-        <div><div class="pf-title">Writing Studio</div><div class="pf-desc">Generate captions, carousels, newsletters, reels, emails and more - all in your brand voice. Write your own or use AI as your starting point. Both live in the same place.</div></div>
+        <div>
+          <div class="pf-title">Writing Studio — 6 Formats</div>
+          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, and full emails, all in your brand voice. Write your own or use AI as a starting point. Everything saves to one library.</div>
+        </div>
       </div>
       <div class="pf-card">
-        <div class="pf-icon">☑</div>
-        <div><div class="pf-title">Task Breakdown</div><div class="pf-desc">Break any content idea into steps that sync to your task board and calendar. Because ND brains need the big idea AND the tiny next action - in the same place.</div></div>
+        <div class="pf-icon">⇕</div>
+        <div>
+          <div class="pf-title">Caption Variations</div>
+          <div class="pf-desc">One idea, three angles. Warm, direct, and story-led versions of the same post so you can pick the one that fits your energy today without starting from scratch three times.</div>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🔍</div>
+        <div>
+          <div class="pf-title">Content Autopsy</div>
+          <div class="pf-desc">Paste any post that stopped your scroll. The Creative Director dissects exactly why it worked, the hook type, emotional trigger, audience psychology, then rebuilds it as your own original content.</div>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">☆</div>
+        <div>
+          <div class="pf-title">Content Series Builder</div>
+          <div class="pf-desc">Turn one idea into a five-part content series, each post standing alone but connecting to a bigger theme. Never run out of what to say next.</div>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🗂</div>
+        <div>
+          <div class="pf-title">Content Planner</div>
+          <div class="pf-desc">A visual kanban board that moves with you from half-baked idea to published. See everything at once without losing track, perfect for brains that think in big pictures, not spreadsheets.</div>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-icon">🖼️</div>
+        <div>
+          <div class="pf-title">Feed Preview</div>
+          <div class="pf-desc">See your Instagram grid before you post. Upload images to your content cards and they appear as a live grid you can drag and rearrange until it looks right, no third-party app needed.</div>
+        </div>
       </div>
       <div class="pf-card">
         <div class="pf-icon">📅</div>
-        <div><div class="pf-title">Calendar + Tasks</div><div class="pf-desc">Your content and tasks on one calendar, color-coded so you always know what's what. No more switching between five apps to figure out what day it is and what you're supposed to be doing.</div></div>
+        <div>
+          <div class="pf-title">Calendar + Task Board</div>
+          <div class="pf-desc">Content and tasks on one calendar, color-coded so you always know what's what. No more switching between five apps to figure out what you're supposed to be doing today.</div>
+        </div>
       </div>
       <div class="pf-card">
         <div class="pf-icon">🧠</div>
-        <div><div class="pf-title">Notebooks &amp; Brain Dump</div><div class="pf-desc">Unlimited notebooks for your thoughts, ideas, and half-finished drafts. No format required. Just write - and save your drafts straight to a notebook when you're done.</div></div>
+        <div>
+          <div class="pf-title">Notebooks &amp; Brain Dump</div>
+          <div class="pf-desc">Unlimited notebooks for your thoughts, half-finished ideas, and client notes. No format required. Just write. Brain Dump mode is specifically for when your head is full and you need to get it out fast.</div>
+        </div>
       </div>
       <div class="pf-card">
         <div class="pf-icon">🔗</div>
-        <div><div class="pf-title">Hook, CTA &amp; Prompt Library</div><div class="pf-desc">Hundreds of pre-written hooks, CTAs, and writing prompts built for wellness and service businesses. Filter by vibe, bookmark your favourites, save your own.</div></div>
+        <div>
+          <div class="pf-title">Hook, CTA &amp; Prompt Library</div>
+          <div class="pf-desc">Hundreds of pre-written hooks, CTAs, and writing prompts built for wellness and service businesses. Filter by category, bookmark your favourites, and save your own when you write something good.</div>
+        </div>
       </div>
+      <div class="pf-card">
+        <div class="pf-icon">☑</div>
+        <div>
+          <div class="pf-title">Task Breakdown Inside Cards</div>
+          <div class="pf-desc">Break any content idea into steps that sync straight to your task board and calendar. Because ND brains need the big idea AND the tiny next action in the same place, not two separate tools.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOCIAL PROOF / POSITIONING STRIP -->
+    <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:28px 32px;margin-bottom:40px;text-align:center">
+      <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);margin-bottom:10px;line-height:1.3">One tool. Every part of your content workflow.</div>
+      <div style="font-size:14px;color:var(--el);line-height:1.75;max-width:560px;margin:0 auto">No more jumping between Notion, Trello, Canva, a notes app, and three different AI tabs. Flow State Studio is the one place where your ideas, planning, writing, and scheduling all live together, built specifically for how neurodivergent brains work best.</div>
     </div>
 
     <div class="pricing-divider"></div>
 
     <!-- PRICING CARDS -->
+    <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Founding Member Pricing — Lock it in forever</div>
     <div class="pricing-cards">
       <div class="pc">
-        <div class="pc-name">Starter Founders Membership</div>
+        <div class="pc-name">Starter</div>
         <div class="pc-price">$9.50<span>/month</span></div>
         <div class="pc-credits">125 AI credits / month</div>
         <ul class="pc-features">
-          <li>All tools - Content Planner, Writing Studio, Hook Builder, Creative Director</li>
-          <li>Task board + calendar sync</li>
-          <li>Notebooks + Brain Dump sessions</li>
-          <li>Full hook, CTA &amp; prompt library</li>
+          <li>All 10+ AI tools unlocked</li>
+          <li>Content Planner, Calendar, Task Board</li>
+          <li>Feed Preview (Instagram grid)</li>
+          <li>Writing Studio — all 6 content formats</li>
+          <li>Hook, CTA &amp; Prompt Library</li>
+          <li>Unlimited Notebooks + Brain Dump</li>
           <li>Save unlimited drafts</li>
           <li>125 AI generations per month</li>
           <li>Locked in at founding price forever</li>
         </ul>
-        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member - $9.50/mo</button>
+        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member — $9.50/mo</button>
       </div>
       <div class="pc featured">
         <div class="pc-badge">Most Popular</div>
-        <div class="pc-name">Unlimited Founders Membership</div>
+        <div class="pc-name">Unlimited</div>
         <div class="pc-price">$19.50<span>/month</span></div>
         <div class="pc-credits">Unlimited AI credits</div>
         <ul class="pc-features">
           <li>Everything in Starter</li>
-          <li>Unlimited AI generations - generate as much as you need, whenever you need it</li>
+          <li>Unlimited AI generations, no caps, no countdowns</li>
           <li>Perfect for batch content days, launches, and high-output weeks</li>
+          <li>Generate as much as you need, whenever you need it</li>
           <li>Zero limits, zero anxiety about running out mid-flow</li>
           <li>Locked in at founding price forever</li>
         </ul>
-        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member - $19.50/mo</button>
+        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member — $19.50/mo</button>
       </div>
     </div>
 
@@ -2424,6 +2617,7 @@ function setGreeting(){
 /* ═══════════════════ NAV ═══════════════════ */
 function navigate(v){
   if(!v||!document.getElementById("view-"+v))return;
+  closeMobNav();
   S.view=v;
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-i').forEach(el=>el.classList.remove('active'));
@@ -4649,6 +4843,26 @@ let _tt;
 function toast(msg){const el=document.getElementById('toast');if(!el){console.log('Toast:',msg);return;}el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
 // init called by auth system via initFlowStateApp
+/* ═══════════════════ MOBILE NAV ═══════════════════ */
+function toggleMobNav(){
+  var sb=document.querySelector('.sidebar');
+  var ov=document.getElementById('mobOverlay');
+  var btn=document.getElementById('mobNavBtn');
+  var isOpen=sb.classList.toggle('mob-open');
+  ov.classList.toggle('show',isOpen);
+  btn.innerHTML=isOpen
+    ?'<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="3" x2="15" y2="15"/><line x1="15" y1="3" x2="3" y2="15"/></svg> Close'
+    :'<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="4" x2="16" y2="4"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="14" x2="16" y2="14"/></svg> Menu';
+}
+function closeMobNav(){
+  var sb=document.querySelector('.sidebar');
+  var ov=document.getElementById('mobOverlay');
+  var btn=document.getElementById('mobNavBtn');
+  sb.classList.remove('mob-open');
+  ov.classList.remove('show');
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="4" x2="16" y2="4"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="14" x2="16" y2="14"/></svg> Menu';
+}
+
 /* ═══════════════════ FEEDBACK & SUPPORT ═══════════════════ */
 // EmailJS config — fill in your IDs after setting up emailjs.com
 var _EMAILJS_PUBLIC_KEY = 'rIlAPYD4J4BoKYjNm';
