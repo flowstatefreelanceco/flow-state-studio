@@ -1028,10 +1028,10 @@ select.fi{cursor:pointer}
       <div class="hdr-acts"><button class="btn btn-p" onclick="openCalModal()">+ Add Entry</button></div>
     </div>
     <div class="main-body cal-main-body">
-      <div class="cal-nav">
-        <button class="btn-ico" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-nav" id="calNav">
+        <button class="btn-ico" onclick="calBack()">‹</button>
         <h2 id="calLabel"></h2>
-        <button class="btn-ico" onclick="changeMonth(1)">›</button>
+        <button class="btn-ico" onclick="calFwd()">›</button>
       </div>
       <div id="calGridWrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%"><div class="cal-grid" id="calGrid"></div></div>
     </div>
@@ -2626,6 +2626,7 @@ const S = {
 /* ═══════════════════ INIT ═══════════════════ */
 function _appInit(){
   load(); applySettings(); setupChips();
+  S.calWeekStart = S.calWeekStart || new Date().getDate();
   renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban();
   renderAllLibs(); setGreeting();
   if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
@@ -2965,8 +2966,40 @@ function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=s
 /* ═══════════════════ CALENDAR ═══════════════════ */
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function isMobileCal(){return window.innerWidth < 600;}
+
+function calBack(){
+  if(isMobileCal()){
+    // go back one week
+    var d=new Date(S.calYear,S.calMonth,S.calWeekStart||1);
+    d.setDate(d.getDate()-7);
+    S.calYear=d.getFullYear();S.calMonth=d.getMonth();S.calWeekStart=d.getDate();
+  } else {
+    changeMonth(-1); return;
+  }
+  renderCalendar();
+}
+function calFwd(){
+  if(isMobileCal()){
+    var d=new Date(S.calYear,S.calMonth,S.calWeekStart||1);
+    d.setDate(d.getDate()+7);
+    S.calYear=d.getFullYear();S.calMonth=d.getMonth();S.calWeekStart=d.getDate();
+  } else {
+    changeMonth(1); return;
+  }
+  renderCalendar();
+}
+function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
+
 function renderCalendar(){
+  if(isMobileCal()){renderCalWeek();return;}
+  renderCalMonth();
+}
+
+function renderCalMonth(){
   document.getElementById('calLabel').textContent=`${MONTHS[S.calMonth]} ${S.calYear}`;
+  var calGrid=document.getElementById('calGrid');
+  calGrid.style.gridTemplateColumns='repeat(7,1fr)';
   const first=new Date(S.calYear,S.calMonth,1).getDay();
   const dim=new Date(S.calYear,S.calMonth+1,0).getDate();
   const prev=new Date(S.calYear,S.calMonth,0).getDate();
@@ -2975,16 +3008,9 @@ function renderCalendar(){
   for(let i=first-1;i>=0;i--)h+=`<div class="cal-cell other"><div class="day-n">${prev-i}</div></div>`;
   for(let d=1;d<=dim;d++){
     const ds=`${S.calYear}-${String(S.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const ideaEnts=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,_fromIdea:true}));
-    const taskEnts=S.tasks.filter(t=>t.date===ds).map(t=>({id:'task_'+t.id,title:t.title,platform:'other',status:t.status,_fromTask:true}));
-    const calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEnts.find(ie=>ie.title===e.title)&&!taskEnts.find(te=>te.title===e.title));
-    const es=[...ideaEnts,...taskEnts,...calOnly];
+    const es=getCalEntries(ds);
     const isTod=today.getDate()===d&&today.getMonth()===S.calMonth&&today.getFullYear()===S.calYear;
-    const dots=es.slice(0,3).map(e=>{
-      const dotColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--b)';
-      const textColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--e)';
-      return `<div class="day-row"><span style="width:5px;height:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:3px"></span><span style="overflow:hidden;text-overflow:ellipsis;font-size:12px;color:${textColor};font-weight:500">${esc(e.title)}</span></div>`;
-    }).join('');
+    const dots=renderDots(es,3,12);
     const more=es.length>3?`<div class="day-row" style="color:var(--tl);font-size:10px">+${es.length-3} more</div>`:'';
     h+=`<div class="cal-cell${isTod?' today':''}" onclick="calDayClick('${ds}')" style="cursor:pointer"><div class="day-n">${d}</div><div class="day-dots">${dots}${more}</div></div>`;
   }
@@ -2992,7 +3018,51 @@ function renderCalendar(){
   for(let d=1;d<=tot-first-dim;d++)h+=`<div class="cal-cell other"><div class="day-n">${d}</div></div>`;
   document.getElementById('calGrid').innerHTML=h;
 }
-function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
+
+function renderCalWeek(){
+  // Find the Sunday of the current week
+  var anchor=new Date(S.calYear,S.calMonth,S.calWeekStart||1);
+  // Snap to start of week (Sunday)
+  var dow=anchor.getDay();
+  anchor.setDate(anchor.getDate()-dow);
+  S.calYear=anchor.getFullYear();S.calMonth=anchor.getMonth();S.calWeekStart=anchor.getDate();
+
+  var weekEnd=new Date(anchor);weekEnd.setDate(anchor.getDate()+6);
+  var labelStart=`${MONTHS[anchor.getMonth()].slice(0,3)} ${anchor.getDate()}`;
+  var labelEnd=`${MONTHS[weekEnd.getMonth()].slice(0,3)} ${weekEnd.getDate()}`;
+  document.getElementById('calLabel').textContent=`${labelStart} – ${labelEnd}`;
+
+  var calGrid=document.getElementById('calGrid');
+  calGrid.style.gridTemplateColumns='repeat(7,1fr)';
+  var today=new Date();
+  var h=DAYS.map(d=>`<div class="cal-hd">${d.slice(0,1)}</div>`).join('');
+  for(var i=0;i<7;i++){
+    var day=new Date(anchor);day.setDate(anchor.getDate()+i);
+    var ds=`${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
+    var es=getCalEntries(ds);
+    var isTod=today.toDateString()===day.toDateString();
+    var isOther=day.getMonth()!==anchor.getMonth()&&i>0;
+    var dots=renderDots(es,3,11);
+    var more=es.length>3?`<div style="font-size:9px;color:var(--tl)">+${es.length-3}</div>`:'';
+    h+=`<div class="cal-cell${isTod?' today':''}${isOther?' other':''}" onclick="calDayClick('${ds}')" style="cursor:pointer;min-height:80px"><div class="day-n" style="font-size:10px">${day.getDate()}</div><div class="day-dots">${dots}${more}</div></div>`;
+  }
+  document.getElementById('calGrid').innerHTML=h;
+}
+
+function getCalEntries(ds){
+  var ideaEnts=S.ideas.filter(i=>i.date===ds).map(i=>({id:'idea_'+i.id,title:i.title,platform:i.platform,status:i.status,_fromIdea:true}));
+  var taskEnts=S.tasks.filter(t=>t.date===ds).map(t=>({id:'task_'+t.id,title:t.title,platform:'other',status:t.status,_fromTask:true}));
+  var calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEnts.find(ie=>ie.title===e.title)&&!taskEnts.find(te=>te.title===e.title));
+  return [...ideaEnts,...taskEnts,...calOnly];
+}
+
+function renderDots(es,max,fs){
+  return es.slice(0,max).map(e=>{
+    var dotColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--b)';
+    var textColor=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--e)';
+    return `<div class="day-row"><span style="width:5px;height:5px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;margin-right:3px;margin-top:3px"></span><span style="overflow:hidden;text-overflow:ellipsis;font-size:${fs}px;color:${textColor};font-weight:500">${esc(e.title)}</span></div>`;
+  }).join('');
+}
 
 /* ═══════════════════ LIBRARY ═══════════════════ */
 // cat → { strip: hex, border: hex, text: hex, bg: hex }
@@ -5086,6 +5156,11 @@ async function submitFeedback() {
     status.style.color = 'var(--r)';
   }
 }
+
+// Re-render calendar on orientation change / resize
+window.addEventListener('resize', function(){
+  if(S.view==='calendar') renderCalendar();
+});
 
 initAuth();
 
