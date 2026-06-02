@@ -1,5 +1,5 @@
 {
-  "version": "2.2",
+  "version": "2.3",
   "releasedAt": "2026-06-02",
-  "notes": "AI instruction field, length controls, credit reset fixes, Swipe File library, Guides section, calendar picker, and more."
+  "notes": "Bug fix: deleted content cards and tasks now fully remove from the calendar immediately."
 }
