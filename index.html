@@ -6342,11 +6342,7 @@ async function adjustLength(dir){
   var dirMap={shorter:'Rewrite this to be approximately 40% shorter. Keep the core message, hook, and voice exactly. Cut filler, tighten sentences, remove repetition.',longer:'Rewrite this to be approximately 40% longer. Keep the same voice and structure. Add more depth, examples, or detail to the existing points.',same:'Rewrite this with the same length and structure but fresher phrasing. Keep the voice identical.'};
   var bizCtx=buildBrandContext();
   var sys='You are a professional copywriter. Edit the following draft exactly as instructed. Output ONLY the revised content, no preamble, no explanation.'+bizCtx+(instr?' Also follow this creator instruction: '+instr:'');
-  var usr=dirMap[dir]+'
-
-Draft to edit:
-
-'+S.studio.output;
+  var usr=dirMap[dir]+'\n\nDraft to edit:\n\n'+S.studio.output;
   try{
     var res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1800,system:sys,messages:[{role:'user',content:usr}]})},45000);
     if(!res.ok){var e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+res.status);}
