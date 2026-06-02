@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="2.2">
+<html lang="en" data-version="2.3">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -5851,12 +5851,14 @@ function calEntryDelete(id,fromIdea,fromTask){
     var realId=id.replace('task_','');
     if(!confirm('Delete this task?'))return;
     S.tasks=S.tasks.filter(function(t){return t.id!==realId;});
+    S.calEntries=S.calEntries.filter(function(e){return e.id!=='task_'+realId&&e._taskId!==realId;});
     persist();closeModal('calDayModal');renderCalendar();renderTaskKanban();toast('Task deleted');return;
   }
   if(fromIdea){
     var realId=id.replace('idea_','');
     if(!confirm('Delete this content card? This also removes it from the planner.'))return;
     S.ideas=S.ideas.filter(function(i){return i.id!==realId;});
+    S.calEntries=S.calEntries.filter(function(e){return e.id!=='cal_'+realId&&e._ideaId!==realId;});
     persist();closeModal('calDayModal');renderCalendar();renderKanban();toast('Content card deleted');return;
   }
   if(!confirm('Delete this entry?'))return;
