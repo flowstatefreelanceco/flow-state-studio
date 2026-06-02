@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="2.1">
+<html lang="en" data-version="2.2">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -1193,6 +1193,7 @@ select.fi{cursor:pointer}
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="notesIn" placeholder="CTA, hashtags, word count, specific phrases..." style="min-height:56px"></textarea></div>
+            <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure. Or: make the hook stronger but leave the rest as is." style="min-height:56px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioTags" placeholder="e.g. ADHD, entrepreneurship, content marketing..." style="min-height:46px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioLinks" placeholder="Relevant URLs, references, or post links to include..." style="min-height:46px"></textarea></div>
             <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
@@ -1213,6 +1214,11 @@ select.fi{cursor:pointer}
           <div class="out-tb" style="border-top:none">
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
+          </div>
+          <div id="lengthBtns" style="display:none;padding:0 20px 10px;display:none;gap:6px">
+            <button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('shorter')">↑ Shorter</button>
+            <button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('same')">↺ Regenerate</button>
+            <button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('longer')">↓ Longer</button>
           </div>
           <div class="out-bdy" id="outBdy" style="min-height:420px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
           <!-- WRITE YOUR OWN PANEL -->
@@ -2316,6 +2322,9 @@ select.fi{cursor:pointer}
               <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
             </div>
             <div class="ai2-btn-grid">
+              <div style="margin-bottom:10px">
+                <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:50px;font-size:12.5px;resize:vertical"></textarea>
+              </div>
               <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
               <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
               <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
@@ -4011,7 +4020,9 @@ async function generate(){
   btn.disabled=true;btn.textContent='...Generating';
   document.getElementById('cpBtn').style.display='none';
   document.getElementById('svBtn').style.display='none';
+  document.getElementById('lengthBtns').style.display='none';
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
+  const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
   const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use ${S.studio.type}.`;
   const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
@@ -4023,6 +4034,7 @@ async function generate(){
     document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div>`;
     document.getElementById('cpBtn').style.display='inline-flex';
     document.getElementById('svBtn').style.display='inline-flex';
+    document.getElementById('lengthBtns').style.display='flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
@@ -5235,7 +5247,8 @@ async function cdGen2(type) {
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
+  var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.' + (cdInstr ? ' Follow this instruction from the creator: ' + cdInstr : '');
   var prompts = {
     caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
     story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
@@ -5400,9 +5413,14 @@ function checkCreditReset(){
   var ym=now.getFullYear()+'-'+(now.getMonth()+1);
   if(S.creditMonth!==ym){
     S.creditMonth=ym;
-    S.creditsUsed=0;
+    S.creditsUsed=0; // always reset to zero, no rollover
     persist();
   }
+}
+function creditResetDate(){
+  var now=new Date();
+  var next=new Date(now.getFullYear(),now.getMonth()+1,1);
+  return next.toLocaleDateString('en-US',{month:'long',day:'numeric'});
 }
 function canUseAI(){
   if(isUnlimited()) return true;
@@ -5433,13 +5451,13 @@ function renderCreditBar(){
   lbl.textContent='✦ Studio in Session';
   fill.style.width=pct+'%';
   fill.style.background=pct>40?'var(--teal)':pct>15?'var(--g)':'var(--r)';
-  if(sub)sub.textContent=remaining+' of '+limit+' credits remaining';
+  if(sub)sub.textContent=remaining+' of '+limit+' credits remaining'+(remaining===0?' (resets '+creditResetDate()+')':'');
 }
 function showCreditBlocked(){
   var limit=creditLimit();
-  toast('All '+limit+' credits used this month. Resets on the 1st ✦');
+  toast('All '+limit+' credits used this month. Resets '+creditResetDate()+' ✦');
   // Show a gentle modal
-  var msg='All '+limit+' credits used this month. They reset on the 1st.';
+  var msg='All '+limit+' credits used this month. They reset on '+creditResetDate()+'.';
   if(confirm(msg+'\n\nWant to learn about unlimited access?')){
     navigate('settings');
   }
@@ -6309,6 +6327,41 @@ function clearSwipeFile(){
   persist();
   renderSwipeFile();
   toast('Swipe File cleared');
+}
+
+/* ═══════════════════ LENGTH CONTROLS ═══════════════════ */
+async function adjustLength(dir){
+  if(!S.studio.output){return;}
+  var btn=document.getElementById('genBtn');
+  btn.disabled=true;
+  document.getElementById('lengthBtns').style.display='none';
+  document.getElementById('cpBtn').style.display='none';
+  document.getElementById('svBtn').style.display='none';
+  document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>'+(dir==='shorter'?'Making it shorter...':dir==='longer'?'Making it longer...':'Regenerating...')+'</div>';
+  var instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
+  var dirMap={shorter:'Rewrite this to be approximately 40% shorter. Keep the core message, hook, and voice exactly. Cut filler, tighten sentences, remove repetition.',longer:'Rewrite this to be approximately 40% longer. Keep the same voice and structure. Add more depth, examples, or detail to the existing points.',same:'Rewrite this with the same length and structure but fresher phrasing. Keep the voice identical.'};
+  var bizCtx=buildBrandContext();
+  var sys='You are a professional copywriter. Edit the following draft exactly as instructed. Output ONLY the revised content, no preamble, no explanation.'+bizCtx+(instr?' Also follow this creator instruction: '+instr:'');
+  var usr=dirMap[dir]+'
+
+Draft to edit:
+
+'+S.studio.output;
+  try{
+    var res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1800,system:sys,messages:[{role:'user',content:usr}]})},45000);
+    if(!res.ok){var e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'HTTP '+res.status);}
+    var d=await res.json();
+    S.studio.output=stripMD(d.content?.[0]?.text||'');
+    document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
+    document.getElementById('cpBtn').style.display='inline-flex';
+    document.getElementById('svBtn').style.display='inline-flex';
+    document.getElementById('lengthBtns').style.display='flex';
+    consumeCredit();persist();
+  }catch(e){
+    document.getElementById('outBdy').innerHTML='<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>'+esc(e.message)+'</p></div>';
+    toast('Error: '+e.message);
+  }
+  btn.disabled=false;btn.textContent='✦ Generate Draft';
 }
 </script>
 </body>
