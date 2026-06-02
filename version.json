@@ -1,1 +1,5 @@
-{"version":"2.1"}
+{
+  "version": "2.2",
+  "releasedAt": "2026-06-02",
+  "notes": "AI instruction field, length controls, credit reset fixes, Swipe File library, Guides section, calendar picker, and more."
+}
