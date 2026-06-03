@@ -1215,11 +1215,6 @@ select.fi{cursor:pointer}
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
           </div>
-          <div id="lengthBtns" style="display:none;padding:0 20px 10px;gap:6px">
-            <button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('shorter')">↑ Shorter</button>
-            <button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('same')">↺ Regenerate</button>
-            <button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('longer')">↓ Longer</button>
-          </div>
           <div class="out-bdy" id="outBdy" style="min-height:420px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
           <!-- WRITE YOUR OWN PANEL -->
           <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
@@ -4020,7 +4015,6 @@ async function generate(){
   btn.disabled=true;btn.textContent='...Generating';
   document.getElementById('cpBtn').style.display='none';
   document.getElementById('svBtn').style.display='none';
-  document.getElementById('lengthBtns').style.display='none';
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
@@ -4031,10 +4025,9 @@ async function generate(){
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
     const d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
-    document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div>`;
+    document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div><div id="lengthBtns" style="display:flex;gap:6px;padding:16px 0 0"><button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('shorter')">↑ Shorter</button><button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('same')">↺ Regenerate</button><button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('longer')">↓ Longer</button></div>`;
     document.getElementById('cpBtn').style.display='inline-flex';
     document.getElementById('svBtn').style.display='inline-flex';
-    document.getElementById('lengthBtns').style.display='flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
@@ -6336,7 +6329,6 @@ async function adjustLength(dir){
   if(!S.studio.output){return;}
   var btn=document.getElementById('genBtn');
   btn.disabled=true;
-  document.getElementById('lengthBtns').style.display='none';
   document.getElementById('cpBtn').style.display='none';
   document.getElementById('svBtn').style.display='none';
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>'+(dir==='shorter'?'Making it shorter...':dir==='longer'?'Making it longer...':'Regenerating...')+'</div>';
@@ -6351,9 +6343,9 @@ async function adjustLength(dir){
     var d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
+    document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div><div id="lengthBtns" style="display:flex;gap:6px;padding:16px 0 0"><button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('shorter')">↑ Shorter</button><button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('same')">↺ Regenerate</button><button class="btn btn-g" style="font-size:11px;padding:5px 12px;flex:1" onclick="adjustLength('longer')">↓ Longer</button></div>`;
     document.getElementById('cpBtn').style.display='inline-flex';
     document.getElementById('svBtn').style.display='inline-flex';
-    document.getElementById('lengthBtns').style.display='flex';
     consumeCredit();persist();
   }catch(e){
     document.getElementById('outBdy').innerHTML='<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>'+esc(e.message)+'</p></div>';
