@@ -1211,15 +1211,14 @@ select.fi{cursor:pointer}
             </div>
             <div style="height:1px;background:var(--bl);margin:0 -20px 0"></div>
           </div>
-          <div class="out-tb" style="border-top:none;flex-wrap:wrap;gap:8px">
+          <div class="out-tb" style="border-top:none">
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button>
-              <button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button>
-              <button class="btn btn-g" id="lenShort" onclick="adjustLength('shorter')" style="display:none;font-size:11px">&#8593; Shorter</button>
-              <button class="btn btn-g" id="lenSame" onclick="adjustLength('same')" style="display:none;font-size:11px">&#8635; Redo</button>
-              <button class="btn btn-g" id="lenLong" onclick="adjustLength('longer')" style="display:none;font-size:11px">&#8595; Longer</button>
-            </div>
+            <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
+          </div>
+          <div id="lenRow" style="display:none;gap:6px;padding:8px 20px;border-bottom:1px solid var(--bl);flex-shrink:0">
+            <button class="btn btn-g" id="lenShort" onclick="adjustLength('shorter')" style="font-size:11px;flex:1">&#8593; Shorter</button>
+            <button class="btn btn-g" id="lenSame" onclick="adjustLength('same')" style="font-size:11px;flex:1">&#8635; Redo</button>
+            <button class="btn btn-g" id="lenLong" onclick="adjustLength('longer')" style="font-size:11px;flex:1">&#8595; Longer</button>
           </div>
           <div class="out-bdy" id="outBdy" style="min-height:420px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
           <!-- WRITE YOUR OWN PANEL -->
@@ -2509,7 +2508,7 @@ select.fi{cursor:pointer}
     <!-- HERO -->
     <div class="pricing-hero">
       <div class="pricing-wordmark">Flow State Studio ✦</div>
-      <div class="pricing-tagline">The content workspace built for the way your brain actually works, not the way productivity gurus think it should.</div>
+      <div class="pricing-tagline">One place to start, create, and map out your content, built for ND brains that are tired of too many tools and never knowing where to begin.</div>
       <div class="pricing-nd">🧠 Designed for ADHD &amp; neurodivergent creators</div>
       <!-- STAT STRIP -->
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
@@ -4019,7 +4018,7 @@ async function generate(){
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
   btn.disabled=true;btn.textContent='...Generating';
-  ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});var lr=document.getElementById('lenRow');if(lr)lr.style.display='none';
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
@@ -4031,7 +4030,7 @@ async function generate(){
     const d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
-    ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='inline-flex';});
+    ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='inline-flex';});var lr=document.getElementById('lenRow');if(lr)lr.style.display='flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
@@ -6347,7 +6346,7 @@ async function adjustLength(dir){
     var d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
-    ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='inline-flex';});
+    ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='inline-flex';});var lr=document.getElementById('lenRow');if(lr)lr.style.display='flex';
     consumeCredit();persist();
   }catch(e){
     document.getElementById('outBdy').innerHTML='<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>'+esc(e.message)+'</p></div>';
