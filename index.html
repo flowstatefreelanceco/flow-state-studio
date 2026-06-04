@@ -883,6 +883,24 @@ select.fi{cursor:pointer}
 .wn-footer{flex-shrink:0;margin-top:18px;padding-top:16px;border-top:1px solid var(--bl);display:flex;justify-content:flex-end}
 .wn-got-it{background:var(--r);border:none;border-radius:var(--rsm);padding:10px 24px;color:white;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
 .wn-got-it:hover{background:var(--rh)}
+
+/* WEEKLY FOCUS */
+.wf-wrap{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
+.wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
+.wf-title{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--e);line-height:1.2}
+.wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
+.wf-reset{font-size:11px;color:var(--tl);cursor:pointer;padding:4px 10px;border-radius:100px;border:1px solid var(--bl);background:none;font-family:var(--fb);white-space:nowrap;flex-shrink:0}
+.wf-reset:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
+.wf-items{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.wf-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm)}
+.wf-item.done{background:var(--tealp);border-color:var(--teal);opacity:.75}
+.wf-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.wf-item-text{flex:1;font-size:13px;color:var(--e);line-height:1.4}
+.wf-item.done .wf-item-text{text-decoration:line-through;color:var(--t)}
+.wf-item-del{background:none;border:none;color:var(--tl);cursor:pointer;font-size:13px;padding:2px 4px;line-height:1;border-radius:4px}
+.wf-item-del:hover{color:var(--r)}
+.wf-empty{font-size:12.5px;color:var(--tl);padding:6px 0 10px;font-style:italic}
+.wf-add{display:flex;gap:8px}
 </style>
 </head>
 <body>
