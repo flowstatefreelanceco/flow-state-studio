@@ -1215,12 +1215,12 @@ select.fi{cursor:pointer}
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
           </div>
-          <div id="lenRow" style="display:none;gap:6px;padding:8px 20px;border-bottom:1px solid var(--bl);flex-shrink:0">
-            <button class="btn btn-g" id="lenShort" onclick="adjustLength('shorter')" style="font-size:11px;flex:1">&#8593; Shorter</button>
-            <button class="btn btn-g" id="lenSame" onclick="adjustLength('same')" style="font-size:11px;flex:1">&#8635; Redo</button>
-            <button class="btn btn-g" id="lenLong" onclick="adjustLength('longer')" style="font-size:11px;flex:1">&#8595; Longer</button>
-          </div>
           <div class="out-bdy" id="outBdy" style="min-height:420px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
+          <div id="lenRow">
+            <button class="btn btn-g" onclick="adjustLength('shorter')">&#8593; Shorter</button>
+            <button class="btn btn-g" onclick="adjustLength('same')">&#8635; Redo</button>
+            <button class="btn btn-g" onclick="adjustLength('longer')">&#8595; Longer</button>
+          </div>
           <!-- WRITE YOUR OWN PANEL -->
           <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
             <div style="display:flex;gap:10px">
@@ -3360,7 +3360,7 @@ const S = {
 function _appInit(){
   load(); applySettings(); setupChips();
   S.calWeekStart = S.calWeekStart || new Date().getDate();
-  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban();
+  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban(); setTimeout(renderTasksDue, 100);
   renderAllLibs(); setGreeting();
   if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
 }
@@ -3791,6 +3791,17 @@ function calFwd(){
 function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
 
 function renderCalendar(){
+  // Clean up orphaned cal entries whose parent idea/task no longer exists
+  var ideaIds=S.ideas.map(function(i){return i.id;});
+  var taskIds=S.tasks.map(function(t){return t.id;});
+  S.calEntries=S.calEntries.filter(function(e){
+    if(e._ideaId) return ideaIds.includes(e._ideaId);
+    if(e._taskId) return taskIds.includes(e._taskId);
+    if(e.id&&e.id.startsWith('cal_')) return ideaIds.includes(e.id.replace('cal_',''));
+    if(e.id&&e.id.startsWith('task_')) return taskIds.includes(e.id.replace('task_',''));
+    return true; // keep standalone entries
+  });
+
   if(!S.calView) S.calView='month';
   // Sync toggle button state
   var mb=document.getElementById('calToggleMonth');
@@ -4018,7 +4029,7 @@ async function generate(){
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
   btn.disabled=true;btn.textContent='...Generating';
-  ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});var lr=document.getElementById('lenRow');if(lr)lr.style.display='none';
+  document.getElementById('cpBtn').style.display='none';document.getElementById('svBtn').style.display='none';var lr=document.getElementById('lenRow');if(lr)lr.classList.remove('visible');
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
@@ -4030,7 +4041,7 @@ async function generate(){
     const d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
-    ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='inline-flex';});var lr=document.getElementById('lenRow');if(lr)lr.style.display='flex';
+    document.getElementById('cpBtn').style.display='inline-flex';document.getElementById('svBtn').style.display='inline-flex';var lr=document.getElementById('lenRow');if(lr)lr.classList.add('visible');
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
@@ -4041,7 +4052,9 @@ async function generate(){
 function copyOut(){if(S.studio.output)navigator.clipboard.writeText(S.studio.output).then(()=>toast('Copied ✓'));}
 function saveDraft(){
   if(!S.studio.output)return;
-  S.drafts.unshift({id:Date.now().toString(),title:S.studio.topic.slice(0,65),content:S.studio.output,platform:S.studio.plat,contentType:S.studio.type,tone:S.studio.tone,createdAt:new Date().toISOString()});
+  var dLinks=document.getElementById('studioLinks')?document.getElementById('studioLinks').value.trim():'';
+  var dTags=document.getElementById('studioTags')?document.getElementById('studioTags').value.trim():'';
+  S.drafts.unshift({id:Date.now().toString(),title:S.studio.topic.slice(0,65),content:S.studio.output,platform:S.studio.plat,contentType:S.studio.type,tone:S.studio.tone,links:dLinks,tags:dTags,createdAt:new Date().toISOString()});
   persist();
   const b=document.getElementById('svBadge');b.classList.add('show');setTimeout(()=>b.classList.remove('show'),2200);
   toast('Draft saved ✓');
@@ -4058,7 +4071,7 @@ function dcHTML(d){
       <div class="dc-title" style="color:${bc}">${esc(d.title||'Untitled draft')}</div>
       <div class="dc-preview">${esc(d.content)}</div>
     </div>
-    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span></div>
+    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span>${d.tags?'<span style="font-size:10px;color:var(--tl);margin-left:8px">'+ esc(d.tags)+'</span>':''}</div>
   </div>`;
 }
 function renderRecentDrafts(){
@@ -6346,7 +6359,7 @@ async function adjustLength(dir){
     var d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
-    ['cpBtn','svBtn','lenShort','lenSame','lenLong'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='inline-flex';});var lr=document.getElementById('lenRow');if(lr)lr.style.display='flex';
+    document.getElementById('cpBtn').style.display='inline-flex';document.getElementById('svBtn').style.display='inline-flex';var lr=document.getElementById('lenRow');if(lr)lr.classList.add('visible');
     consumeCredit();persist();
   }catch(e){
     document.getElementById('outBdy').innerHTML='<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>'+esc(e.message)+'</p></div>';
