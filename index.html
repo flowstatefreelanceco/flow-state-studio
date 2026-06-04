@@ -168,7 +168,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
 .kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;margin-bottom:8px;cursor:pointer;transition:all .18s;position:relative;box-shadow:0 1px 4px var(--sh);overflow:hidden}
 .kc-card:hover{box-shadow:0 8px 24px var(--shm);border-color:var(--teal);transform:translateY(-2px)}
-.kc-card .cc-title{font-size:13px;font-weight:600;color:var(--e);line-height:1.5;margin-bottom:5px;padding-right:18px;font-family:var(--fb)}
+.kc-card .cc-title{font-size:13px;font-weight:700;color:var(--e);line-height:1.3;margin-bottom:5px;padding-right:18px;font-family:var(--fb);letter-spacing:.01em}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
 .kc-card:hover .cc-del{opacity:1}
@@ -1052,6 +1052,22 @@ select.fi{cursor:pointer}
       <!-- TASKS DUE TODAY + TOMORROW -->
       <div id="tasksDueWrap"></div>
 
+      <!-- WEEKLY FOCUS WIDGET -->
+      <div class="wf-wrap" id="wfWrap" style="margin-bottom:16px">
+        <div class="wf-header">
+          <div>
+            <div class="wf-title" style="font-size:16px">This Week's Focus</div>
+            <div class="wf-sub">1-3 things. No dates, no pressure.</div>
+          </div>
+          <button class="wf-reset" onclick="resetWeeklyFocus()">Reset</button>
+        </div>
+        <div class="wf-items" id="wfItems"></div>
+        <div class="wf-add">
+          <input class="fi" id="wfInput" placeholder="Add a focus item..." onkeydown="if(event.key==='Enter')addWfItem()" style="font-size:12.5px" />
+          <button class="btn btn-p" onclick="addWfItem()" style="white-space:nowrap;font-size:12px">+ Add</button>
+        </div>
+      </div>
+
       <div class="guide-wrap" id="guideWrap">
         <div class="guide-hdr" onclick="toggleGuide(this)">
           <div class="guide-hdr-left"><span style="font-size:15px">📖</span><span class="guide-hdr-title">How to use each section</span></div>
@@ -1167,21 +1183,6 @@ select.fi{cursor:pointer}
       <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
-      <!-- WEEKLY FOCUS -->
-      <div class="wf-wrap" id="wfWrap" style="flex-shrink:0">
-        <div class="wf-header">
-          <div>
-            <div class="wf-title">This Week's Focus</div>
-            <div class="wf-sub">Pick 1-3 things. No dates, no pressure. Just what you want to move forward this week.</div>
-          </div>
-          <button class="wf-reset" onclick="resetWeeklyFocus()">Reset week</button>
-        </div>
-        <div class="wf-items" id="wfItems"></div>
-        <div class="wf-add">
-          <input class="fi" id="wfInput" placeholder="Add something to focus on this week..." onkeydown="if(event.key==='Enter')addWfItem()" style="font-size:13px" />
-          <button class="btn btn-p" onclick="addWfItem()" style="white-space:nowrap;font-size:13px">+ Add</button>
-        </div>
-      </div>
       <div class="kanban kanban-4" id="ideaKanban" style="flex:1;min-height:0;overflow-x:auto"></div>
     </div>
   </div>
@@ -3478,9 +3479,9 @@ function navigate(v){
   const ni=document.querySelector(`[data-view="${v}"]`);
   if(ni)ni.classList.add('active');
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
-  if(v==='dashboard')renderDashboard();
+  if(v==='dashboard'){renderDashboard();renderWeeklyFocus();}
   if(v==='calendar')renderCalendar();
-  if(v==='ideas'){renderKanban();renderWeeklyFocus();}
+  if(v==='ideas')renderKanban();
   if(v==='tasks')renderTaskKanban();
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='swipefile')renderSwipeFile();
