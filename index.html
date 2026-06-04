@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="2.4">
+<html lang="en" data-version="2.5">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -1026,6 +1026,23 @@ select.fi{cursor:pointer}
         </div>
         <button onclick="openPanicModal()" class="panic-btn" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
       </div>
+
+      <!-- WEEKLY FOCUS -->
+      <div class="wf-wrap" id="wfWrap">
+        <div class="wf-header">
+          <div>
+            <div class="wf-title" style="font-size:16px">This Week's Focus</div>
+            <div class="wf-sub">1-3 things. No dates, no pressure.</div>
+          </div>
+          <button class="wf-reset" onclick="resetWeeklyFocus()">Reset</button>
+        </div>
+        <div class="wf-items" id="wfItems"></div>
+        <div class="wf-add">
+          <input class="fi" id="wfInput" placeholder="Add a focus item..." onkeydown="if(event.key==='Enter')addWfItem()" style="font-size:12.5px" />
+          <button class="btn btn-p" onclick="addWfItem()" style="white-space:nowrap;font-size:12px">+ Add</button>
+        </div>
+      </div>
+
       <!-- WHAT TO CREATE TODAY -->
       <div class="wdc-wrap">
         <div class="wdc-label">What do you want to create today?</div>
@@ -1069,22 +1086,6 @@ select.fi{cursor:pointer}
 
       <!-- TASKS DUE TODAY + TOMORROW -->
       <div id="tasksDueWrap"></div>
-
-      <!-- WEEKLY FOCUS WIDGET -->
-      <div class="wf-wrap" id="wfWrap" style="margin-bottom:16px">
-        <div class="wf-header">
-          <div>
-            <div class="wf-title" style="font-size:16px">This Week's Focus</div>
-            <div class="wf-sub">1-3 things. No dates, no pressure.</div>
-          </div>
-          <button class="wf-reset" onclick="resetWeeklyFocus()">Reset</button>
-        </div>
-        <div class="wf-items" id="wfItems"></div>
-        <div class="wf-add">
-          <input class="fi" id="wfInput" placeholder="Add a focus item..." onkeydown="if(event.key==='Enter')addWfItem()" style="font-size:12.5px" />
-          <button class="btn btn-p" onclick="addWfItem()" style="white-space:nowrap;font-size:12px">+ Add</button>
-        </div>
-      </div>
 
       <div class="guide-wrap" id="guideWrap">
         <div class="guide-hdr" onclick="toggleGuide(this)">
@@ -2860,7 +2861,7 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- WHAT'S NEW MODAL -->
-<div class="modal-ov" id="whatsNewModal" style="align-items:center;justify-content:center">
+<div class="modal-ov" id="whatsNewModal">
   <div class="wn-wrap" style="position:relative">
     <button class="wn-close" onclick="closeModal('whatsNewModal')">✕</button>
     <div class="wn-header">
@@ -3750,7 +3751,7 @@ function renderTasksDue(){
 }
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
-const IDEA_COLS=[{id:'inflow',label:'In Flow',bg:'#EDE4F5',color:'#7A5C9C',bd:'#C4B0D8'},{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+const IDEA_COLS=[{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
 function renderKanban(){
   const el=document.getElementById('ideaKanban');
   el.innerHTML=IDEA_COLS.map(col=>{
@@ -3786,13 +3787,13 @@ function renderTaskKanban(){
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
         <!-- Title section - rust top strip -->
-        <div style="background:var(--rp);border-bottom:2px solid #E0BDAA;padding:8px 12px 8px;position:relative">
+        <div style="background:var(--p);border-bottom:2px solid var(--teal);padding:8px 12px 8px;position:relative">
           <button class="cc-del" onclick="event.stopPropagation();deleteTask('${t.id}')">✕</button>
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
             <div style="font-family:var(--fh);font-size:14px;font-weight:600;line-height:1.3;color:var(--e);flex:1">${esc(t.title)}</div>
             ${t.starred?'<span style="font-size:16px;color:var(--g);flex-shrink:0">★</span>':''}
           </div>
-          ${t.date?'<div style="font-size:12px;color:var(--r);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
+          ${t.date?'<div style="font-size:12px;color:var(--teal);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
         </div>
         <!-- Tags section - white -->
         ${(t.taskType||t.energy||t.timeEst)?'<div style="padding:5px 12px;display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid rgba(0,0,0,.06);background:#FAFAF8">'+(t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':'')+(t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Med':'🌿 Low')+'</span>':'')+(t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':'')+'</div>':''}
@@ -6266,6 +6267,9 @@ function checkForUpdate() {
     });
 }
 
+var _whatsNewChangelog = [];
+var _whatsNewVersion = '';
+
 function doAppUpdate() {
   // Show What's New modal first, then reload on dismiss
   if (_whatsNewChangelog && _whatsNewChangelog.length) {
@@ -6274,12 +6278,10 @@ function doAppUpdate() {
     var banner = document.getElementById('updateBanner');
     if (banner) banner.style.display = 'none';
   } else {
+    // No changelog loaded yet, just reload
     window.location.href = window.location.pathname + '?v=' + Date.now();
   }
 }
-
-var _whatsNewChangelog = [];
-var _whatsNewVersion = '';
 
 function renderWhatsNew(changelog){
   var el = document.getElementById('wnList');
