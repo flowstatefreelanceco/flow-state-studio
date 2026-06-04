@@ -1,5 +1,48 @@
 {
-  "version": "2.3",
-  "releasedAt": "2026-06-02",
-  "notes": "Bug fix: deleted content cards and tasks now fully remove from the calendar immediately."
+  "version": "2.4",
+  "releasedAt": "2026-06-03",
+  "changelog": [
+    {
+      "type": "feature",
+      "date": "Jun 3, 2026",
+      "title": "This Week's Focus",
+      "desc": "A no-pressure weekly checklist lives above your Content Planner. Pick 1-3 things to move forward this week, check them off as you go, no dates required."
+    },
+    {
+      "type": "new",
+      "date": "Jun 3, 2026",
+      "title": "In Flow Column",
+      "desc": "A new column in the Content Planner for ideas that are on your radar but not ready to schedule. Park things here with zero pressure."
+    },
+    {
+      "type": "feature",
+      "date": "Jun 3, 2026",
+      "title": "AI Instruction Field",
+      "desc": "Before generating in the Writing Studio or any content card, add a specific instruction for the AI, keep my voice, punch up the hook, make it shorter, whatever you need."
+    },
+    {
+      "type": "improvement",
+      "date": "Jun 3, 2026",
+      "title": "Tags and Links Saved with Drafts",
+      "desc": "Tags and links you add in the Writing Studio now save with your draft so nothing gets lost when you come back to it."
+    },
+    {
+      "type": "fix",
+      "date": "Jun 3, 2026",
+      "title": "Calendar Ghost Entries Fixed",
+      "desc": "Deleted content cards and tasks now fully disappear from the calendar immediately instead of turning black and hanging around."
+    },
+    {
+      "type": "improvement",
+      "date": "Jun 3, 2026",
+      "title": "Content Card Font Updated",
+      "desc": "Card titles in the Content Planner now use a cleaner, more readable font that matches the library cards."
+    },
+    {
+      "type": "fix",
+      "date": "Jun 3, 2026",
+      "title": "Dashboard Tasks Now Load on First Visit",
+      "desc": "The On Your Plate widget on the dashboard now shows today and tomorrow tasks immediately on load, no more needing to navigate away and back."
+    }
+  ]
 }
