@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-version="2.4">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -168,14 +168,14 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .kc-add{padding:6px 10px 10px;flex-shrink:0}
 .kc-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;margin-bottom:8px;cursor:pointer;transition:all .18s;position:relative;box-shadow:0 1px 4px var(--sh);overflow:hidden}
 .kc-card:hover{box-shadow:0 8px 24px var(--shm);border-color:var(--teal);transform:translateY(-2px)}
-.kc-card .cc-title{font-size:13px;font-weight:600;color:var(--e);line-height:1.3;margin-bottom:5px;padding-right:18px;font-family:var(--fh)}
+.kc-card .cc-title{font-size:13px;font-weight:600;color:var(--e);line-height:1.5;margin-bottom:5px;padding-right:18px;font-family:var(--fb)}
 .kc-card .cc-foot{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .kc-card .cc-del{position:absolute;top:8px;right:8px;font-size:11px;color:var(--tl);background:none;border:none;cursor:pointer;opacity:0;transition:opacity .15s;padding:2px}
 .kc-card:hover .cc-del{opacity:1}
 .empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
-.studio-wrap{display:grid;grid-template-columns:330px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
+.studio-wrap{display:grid;grid-template-columns:380px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 4px var(--sh)}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
@@ -724,6 +724,165 @@ select.fi{cursor:pointer}
 .u-item:hover{background:var(--p)}
 .u-item.danger{color:var(--r)}
 .u-sep{height:1px;background:var(--bl)}
+
+/* ═══ GUIDES ═══ */
+.guide-index-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.guide-index-card{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:28px 28px 24px;box-shadow:0 2px 8px var(--sh);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.guide-index-card:hover{box-shadow:0 6px 24px var(--shm);transform:translateY(-2px)}
+.guide-index-card.rust{border-color:#E0BDAA;background:linear-gradient(135deg,var(--rp),#EDD5C8)}
+.guide-index-card.teal{border-color:var(--teal);background:linear-gradient(135deg,#E8F5F5,var(--tealp))}
+.gic-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;margin-bottom:10px}
+.gic-eyebrow.rust{color:var(--r)}
+.gic-eyebrow.teal{color:var(--teal)}
+.gic-icon{font-size:32px;margin-bottom:12px;display:block}
+.gic-title{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:8px;line-height:1.2}
+.gic-desc{font-size:13px;color:var(--el);line-height:1.7;margin-bottom:16px}
+.gic-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.gic-tag{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:100px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.08);color:var(--e)}
+.gic-cta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
+.gic-cta.rust{color:var(--r)}
+.gic-cta.teal{color:var(--teal)}
+.gic-deco{position:absolute;right:-10px;bottom:-20px;font-family:var(--fh);font-size:100px;opacity:.07;line-height:1;pointer-events:none}
+
+/* guide detail page */
+.guide-detail-page{display:none;flex-direction:column;flex:1;min-height:0}
+.guide-detail-page.active{display:flex}
+.guide-detail-back{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--t);cursor:pointer;margin-bottom:20px;user-select:none;width:fit-content;padding:6px 12px;border-radius:100px;border:1px solid var(--bl);background:var(--w);transition:all .15s}
+.guide-detail-back:hover{color:var(--e);border-color:var(--b)}
+.guide-detail-hero{border-radius:var(--rad);padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}
+.guide-detail-hero.rust{background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA}
+.guide-detail-hero.teal{background:linear-gradient(135deg,#E8F5F5,var(--tealp));border:1.5px solid var(--teal)}
+.guide-detail-hero-deco{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-family:var(--fh);font-size:80px;opacity:.1;line-height:1;pointer-events:none}
+.gdh-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;margin-bottom:8px}
+.gdh-eyebrow.rust{color:var(--r)}
+.gdh-eyebrow.teal{color:var(--teal)}
+.gdh-title{font-family:var(--fh);font-size:28px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.2}
+.gdh-desc{font-size:14px;color:var(--el);line-height:1.75;max-width:540px}
+
+/* guide section label */
+.gd-section-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:14px;margin-top:28px;padding-bottom:8px;border-bottom:1px solid var(--bl)}
+.gd-section-lbl:first-of-type{margin-top:0}
+
+/* guide cards grid */
+.gd-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.gd-card{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:20px 22px;box-shadow:0 1px 4px var(--sh)}
+.gd-card.full{grid-column:1/-1}
+.gd-card.rust{border-color:#E0BDAA;background:linear-gradient(135deg,var(--rp),#fdf4ee)}
+.gd-card.teal{border-color:var(--tealp);background:linear-gradient(135deg,#eef8f8,var(--w))}
+.gd-card.gold{border-color:#E8D4A8;background:linear-gradient(135deg,var(--gp),var(--w))}
+.gd-card.purple{border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,var(--w))}
+.gd-card-icon{font-size:22px;margin-bottom:10px;display:block}
+.gd-card-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:8px}
+.gd-card-eyebrow.rust{background:var(--rp);color:var(--r)}
+.gd-card-eyebrow.teal{background:var(--tealp);color:var(--teal)}
+.gd-card-eyebrow.gold{background:var(--gp);color:var(--g)}
+.gd-card-eyebrow.purple{background:#EDE4F5;color:#7A5C9C}
+.gd-card-title{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.2}
+.gd-card-desc{font-size:13px;color:var(--t);line-height:1.7}
+
+/* feature callout */
+.gd-callout{display:flex;align-items:flex-start;gap:14px;border-radius:var(--rad);padding:16px 18px;margin-bottom:12px;border:1.5px solid}
+.gd-callout.teal{background:var(--tealp);border-color:var(--teal)}
+.gd-callout.rust{background:var(--rp);border-color:#E0BDAA}
+.gd-callout-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.gd-callout-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
+.gd-callout-eyebrow.teal{color:var(--teal)}
+.gd-callout-eyebrow.rust{color:var(--r)}
+.gd-callout-text{font-size:13px;color:var(--el);line-height:1.65}
+
+/* tips list */
+.gd-tips{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.gd-tips li{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--e);line-height:1.65}
+.gd-tip-icon{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:2px}
+.gd-tip-icon.rust{background:var(--rp);color:var(--r)}
+.gd-tip-icon.teal{background:var(--tealp);color:var(--teal)}
+.gd-tip-icon.gold{background:var(--gp);color:var(--g)}
+
+/* wave cycle */
+.gd-wave{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.gd-wave-phase{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:16px 14px;text-align:center;box-shadow:0 1px 4px var(--sh)}
+.gd-wave-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:12px;font-weight:700;font-family:var(--fh)}
+.gd-wave-name{font-size:11.5px;font-weight:700;color:var(--e);margin-bottom:5px}
+.gd-wave-desc{font-size:11px;color:var(--t);line-height:1.55}
+.gd-wave-goal{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-top:8px;padding-top:8px;border-top:1px solid var(--bl)}
+
+/* example week */
+.gd-week-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;margin-top:16px}
+.gd-week{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px}
+.gd-day{background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px;text-align:center}
+.gd-day-name{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:6px}
+.gd-day-content{font-size:10.5px;color:var(--e);line-height:1.5}
+.gd-day-type{display:inline-block;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:100px;margin-top:4px}
+
+/* cal picker modal */
+.cal-picker-modal{background:var(--w);border-radius:var(--rad);padding:28px;max-width:360px;width:100%}
+.cal-picker-title{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:6px}
+.cal-picker-sub{font-size:13px;color:var(--t);margin-bottom:20px}
+.cal-picker-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cal-picker-opt{background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rad);padding:20px 18px;cursor:pointer;transition:all .18s;text-align:left}
+.cal-picker-opt:hover{box-shadow:0 4px 16px var(--shm);transform:translateY(-2px)}
+.cal-picker-opt.rust:hover{border-color:var(--r);background:var(--rp)}
+.cal-picker-opt.teal:hover{border-color:var(--teal);background:var(--tealp)}
+.cal-picker-opt-icon{font-size:24px;margin-bottom:10px;display:block}
+.cal-picker-opt-title{font-size:14px;font-weight:700;color:var(--e);margin-bottom:4px}
+.cal-picker-opt-desc{font-size:11.5px;color:var(--t);line-height:1.55}
+
+@media(max-width:768px){
+  .guide-index-grid{grid-template-columns:1fr !important}
+  .gd-cards{grid-template-columns:1fr}
+  .gd-wave{grid-template-columns:1fr 1fr}
+  .gd-week{grid-template-columns:repeat(3,1fr)}
+  .cal-picker-opts{grid-template-columns:1fr}
+}
+
+/* ═══ SWIPE FILE ═══ */
+.swf-card{background:var(--w);border-radius:12px;overflow:hidden;box-shadow:0 2px 0 var(--b),0 1px 4px var(--sh);transition:transform .18s,box-shadow .18s;margin-bottom:14px}
+.swf-card:hover{transform:translateY(-2px);box-shadow:0 4px 0 var(--b),0 6px 20px var(--shm)}
+.swf-strip{height:6px;background:linear-gradient(90deg,var(--r),#C86A3F)}
+.swf-body{padding:16px 18px}
+.swf-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.swf-plat{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:3px 10px;border-radius:100px;background:var(--rp);color:var(--r)}
+.swf-date{font-size:10.5px;color:var(--tl);margin-left:auto}
+.swf-content{font-size:14px;color:var(--e);line-height:1.8;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.swf-content.expanded{-webkit-line-clamp:unset;overflow:visible}
+.swf-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.swf-btn{background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm);padding:7px 14px;font-family:var(--fb);font-size:12px;color:var(--t);cursor:pointer;transition:all .15s}
+.swf-btn:hover{background:var(--bl);color:var(--e)}
+.swf-btn.accent{background:var(--r);border-color:var(--r);color:white}
+.swf-btn.accent:hover{background:var(--rh)}
+.swf-btn.del{color:var(--tl)}
+.swf-btn.del:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
+.swf-analysis-toggle{font-size:11px;color:var(--teal);cursor:pointer;margin-left:auto;padding:4px 8px;border-radius:100px;border:1px solid var(--tealp);transition:all .15s;background:none}
+.swf-analysis-toggle:hover{background:var(--tealp)}
+.swf-analysis{display:none;margin-top:14px;background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:14px 16px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap}
+.swf-analysis.open{display:block}
+.swf-empty{text-align:center;padding:60px 20px;color:var(--t)}
+.swf-empty-icon{font-size:36px;opacity:.25;margin-bottom:14px}
+.swf-empty-title{font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:8px}
+.swf-empty-desc{font-size:13px;color:var(--tl);line-height:1.7;max-width:320px;margin:0 auto}
+
+/* WHAT'S NEW MODAL */
+.wn-wrap{background:var(--w);border-radius:16px;padding:28px;max-width:480px;width:100%;max-height:80vh;display:flex;flex-direction:column}
+.wn-header{margin-bottom:16px;flex-shrink:0}
+.wn-title{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--e);margin-bottom:3px}
+.wn-sub{font-size:13px;color:var(--t)}
+.wn-close{position:absolute;top:20px;right:20px;background:none;border:none;font-size:20px;color:var(--t);cursor:pointer;line-height:1;padding:4px;border-radius:6px}
+.wn-close:hover{color:var(--e);background:var(--p)}
+.wn-list{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:0}
+.wn-item{padding:16px 0;border-bottom:1px solid var(--bl)}
+.wn-item:last-child{border-bottom:none}
+.wn-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.wn-pill{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:100px}
+.wn-pill.feature{background:#E8D4F5;color:#6A3C9C}
+.wn-pill.fix{background:var(--tealp);color:var(--teal)}
+.wn-pill.improvement{background:var(--gp);color:var(--g)}
+.wn-pill.new{background:var(--rp);color:var(--r)}
+.wn-date{font-size:11px;color:var(--tl)}
+.wn-item-title{font-size:15px;font-weight:700;color:var(--e);margin-bottom:4px;line-height:1.3}
+.wn-item-desc{font-size:13px;color:var(--t);line-height:1.65}
+.wn-footer{flex-shrink:0;margin-top:18px;padding-top:16px;border-top:1px solid var(--bl);display:flex;justify-content:flex-end}
+.wn-got-it{background:var(--r);border:none;border-radius:var(--rsm);padding:10px 24px;color:white;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.wn-got-it:hover{background:var(--rh)}
 </style>
 </head>
 <body>
@@ -797,24 +956,26 @@ select.fi{cursor:pointer}
       <div class="nav-i nav-child" data-view="prompts">Prompts</div>
       <div class="nav-i nav-child" data-view="ctas">CTAs</div>
       <div class="nav-i nav-child" data-view="stories">Story Ideas</div>
+      <div class="nav-i nav-child" data-view="swipefile">Swipe File</div>
     </div>
     <div class="sb-section">Think</div>
     <div class="nav-i" data-view="braindump"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="9" cy="7" rx="5" ry="5"/><path d="M6.5 12v3M9 12v3M11.5 12v3M6.5 15h5"/></svg>Notebooks</div>
+    <div class="nav-i" data-view="guides"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h7l3 3v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M11 2v4h3M6 8h6M6 11h6M6 14h4"/></svg>Guides</div>
     <div class="nav-spacer"></div>
     <div class="nav-i" data-view="settings"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="2.5"/><path d="M9 2.5v1m0 11v1M2.5 9h1m11 0h1m-2.3-4.2-.7.7M5 13.5l-.7.7m0-9.2.7.7m8.5 8.5.7.7"/></svg>Settings</div>
   </nav>
   <div style="margin-top:auto;min-height:20px"></div>
-  <div style="padding:20px 16px 16px;font-size:9px;color:var(--tl);letter-spacing:.04em;border-top:1px solid var(--bl);line-height:2.4">
-    © 2026 Flow State Studio. All rights reserved.<br>
-    <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
-    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span><br>
-    <span onclick="openFeedbackModal()" style="cursor:pointer;text-decoration:underline;color:var(--r)">✦ Share Feedback</span> ·
-    <span onclick="openSupportModal()" style="cursor:pointer;text-decoration:underline">Get Support</span>
-  </div>
   <div class="sb-usage" id="creditBar">
     <div class="sb-usage-lbl" id="creditLabel">✦ Studio in Session</div>
     <div class="usage-bar-wrap"><div class="usage-bar" id="creditBarFill" style="width:100%"></div></div>
     <div id="creditSub" style="font-size:9px;color:var(--tl);margin-top:4px;letter-spacing:.04em"></div>
+  </div>
+  <div style="padding:10px 16px 16px;font-size:9px;color:var(--tl);letter-spacing:.04em;line-height:2.6">
+    <span onclick="openFeedbackModal()" style="cursor:pointer;text-decoration:underline;color:var(--r)">✦ Share Feedback</span> ·
+    <span onclick="openSupportModal()" style="cursor:pointer;text-decoration:underline">Get Support</span><br>
+    <span onclick="openModal('tosModal')" style="cursor:pointer;text-decoration:underline">Terms of Service</span> ·
+    <span onclick="openModal('privacyModal')" style="cursor:pointer;text-decoration:underline">Privacy Policy</span><br>
+    © 2026 Flow State Studio. All rights reserved.
   </div>
 </aside>
 
@@ -871,12 +1032,8 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Story</div>
             <div class="wdc-sub">Plan it out</div>
           </div>
-          <div class="wdc-card" onclick="quickCreateCard('Blog / Article','Blog Post','blog')">
-            <div class="wdc-icon">✍️</div>
-            <div class="wdc-title">Blog / Article</div>
-            <div class="wdc-sub">Plan it out</div>
-          </div>
-          <div class="wdc-card" onclick="quickCreateCard('Substack Article','Substack Article','substack')">
+
+          <div class="wdc-card" onclick="quickCreate('Article','substack')">
             <div class="wdc-icon">📝</div>
             <div class="wdc-title">Substack</div>
             <div class="wdc-sub">Write an article</div>
@@ -929,7 +1086,7 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">📅</span>Calendar</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Your monthly publishing map. Click any day to add a content entry - you'll see colored dots on the calendar showing what's planned.</p>
+              <p class="guide-desc">Your monthly content map. Click any day to add a content entry and see colored dots showing everything you have planned.</p>
               <ul class="guide-tips">
                 <li><strong>Use it for:</strong> mapping out when specific content goes live, not for writing the content itself.</li>
                 <li><strong>Statuses:</strong> Idea → Draft → Scheduled → Published. Update as you move through your workflow.</li>
@@ -1010,7 +1167,22 @@ select.fi{cursor:pointer}
       <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
-      <div class="kanban kanban-4" id="ideaKanban"></div>
+      <!-- WEEKLY FOCUS -->
+      <div class="wf-wrap" id="wfWrap" style="flex-shrink:0">
+        <div class="wf-header">
+          <div>
+            <div class="wf-title">This Week's Focus</div>
+            <div class="wf-sub">Pick 1-3 things. No dates, no pressure. Just what you want to move forward this week.</div>
+          </div>
+          <button class="wf-reset" onclick="resetWeeklyFocus()">Reset week</button>
+        </div>
+        <div class="wf-items" id="wfItems"></div>
+        <div class="wf-add">
+          <input class="fi" id="wfInput" placeholder="Add something to focus on this week..." onkeydown="if(event.key==='Enter')addWfItem()" style="font-size:13px" />
+          <button class="btn btn-p" onclick="addWfItem()" style="white-space:nowrap;font-size:13px">+ Add</button>
+        </div>
+      </div>
+      <div class="kanban kanban-4" id="ideaKanban" style="flex:1;min-height:0;overflow-x:auto"></div>
     </div>
   </div>
 
@@ -1028,8 +1200,8 @@ select.fi{cursor:pointer}
   <!-- CALENDAR -->
   <div id="view-calendar" class="view">
     <div class="main-hdr">
-      <div><h1>Content Calendar</h1><div class="sub">Plan your publishing schedule</div></div>
-      <div class="hdr-acts"><button class="btn btn-p" onclick="openCalModal()">+ Add Entry</button></div>
+      <div><h1>Content Calendar</h1><div class="sub">Map out your content and see everything at a glance</div></div>
+      <div class="hdr-acts"><button class="btn btn-p" onclick="openCalPicker()">+ Add Entry</button></div>
     </div>
     <div class="main-body cal-main-body">
       <div class="cal-nav" id="calNav">
@@ -1050,21 +1222,26 @@ select.fi{cursor:pointer}
     <div class="main-hdr">
       <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with the Studio - both save to your library</div></div>
     </div>
-    <div class="main-body" style="padding-top:16px;display:flex;flex-direction:column;flex:1;min-height:0">
+    <div class="main-body" style="padding-top:16px;padding-bottom:48px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
         <div class="sp">
           <div class="sp-in">
-            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post / Article">Blog / Article</div></div></div>
+            <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Article">Article</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
             <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:96px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="notesIn" placeholder="CTA, hashtags, word count, specific phrases..." style="min-height:56px"></textarea></div>
+            <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure. Or: make the hook stronger but leave the rest as is." style="min-height:56px"></textarea></div>
+            <div class="fl"><label class="fl-lbl">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioTags" placeholder="e.g. ADHD, entrepreneurship, content marketing..." style="min-height:46px"></textarea></div>
+            <div class="fl"><label class="fl-lbl">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioLinks" placeholder="Relevant URLs, references, or post links to include..." style="min-height:46px"></textarea></div>
             <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
           </div>
         </div>
         <div class="sp out-panel">
           <div style="padding:14px 20px 0;flex-shrink:0">
-            <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:6px">✍️ Write Your Own</div>
+            <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:8px">✍️ Write Your Own</div>
+            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:15px;font-family:var(--fh);font-weight:600" />
+            <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
             <textarea id="studioOwnTA" class="fi" placeholder="Start writing here - your own draft, hook, or rough ideas. Use the generate tools on the left to get AI inspiration, or skip them entirely and just write." style="min-height:280px;font-size:14px;line-height:1.85;margin-bottom:8px;resize:vertical;flex:1"></textarea>
             <div style="display:flex;gap:6px;margin-bottom:12px">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="studioOwnCopy()">Copy</button>
@@ -1076,7 +1253,7 @@ select.fi{cursor:pointer}
             <div style="display:flex;align-items:center;gap:10px"><span class="out-tit" style="font-size:14px">AI Draft Output</span><span class="sv-badge" id="svBadge">✓ Saved</span></div>
             <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
           </div>
-          <div class="out-bdy" id="outBdy"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
+          <div class="out-bdy" id="outBdy" style="min-height:420px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief and hit Generate - or write your own above.</p></div></div>
           <!-- WRITE YOUR OWN PANEL -->
           <div id="writePanel" style="display:none;flex-direction:column;flex:1;padding:20px;gap:12px">
             <div style="display:flex;gap:10px">
@@ -1084,7 +1261,7 @@ select.fi{cursor:pointer}
                 <select class="fi" id="writePlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="email">Email</option><option value="substack">Substack</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="tiktok">TikTok</option><option value="other">Other</option></select>
               </div>
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:6px">Format</label>
-                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
+                <select class="fi" id="writeFormat"><option value="Caption / Post">Post</option><option value="Carousel">Carousel</option><option value="Newsletter">Newsletter</option><option value="Substack / Article">Article</option><option value="Story">Story</option><option value="Reel / Video">Reel</option><option value="Blog Post">Blog Post</option><option value="Other">Other</option></select>
               </div>
             </div>
             <div style="flex:1;display:flex;flex-direction:column">
@@ -1237,6 +1414,26 @@ select.fi{cursor:pointer}
   </div>
 
   <!-- FEED PREVIEW -->
+
+  <!-- SWIPE FILE -->
+  <div id="view-swipefile" class="view">
+    <div class="main-hdr">
+      <div><h1>Swipe File</h1><div class="sub">Your saved Content Autopsy rebuilds, all in one place</div></div>
+      <div class="hdr-acts">
+        <button class="btn btn-g" id="swfClearBtn" onclick="clearSwipeFile()" style="display:none">Clear All</button>
+      </div>
+    </div>
+    <div class="main-body">
+      <div style="max-width:780px">
+        <div class="lib-toolbar" style="margin-bottom:16px">
+          <div class="lib-search"><span class="s-ico">⌕</span><input id="swfSearch" placeholder="Search your swipe file..." oninput="renderSwipeFile()" /></div>
+        </div>
+        <div class="lib-count" id="swfCount"></div>
+        <div id="swfGrid"></div>
+      </div>
+    </div>
+  </div>
+
   <div id="view-feedpreview" class="view">
     <div class="main-hdr">
       <div><h1>Feed Preview</h1><div class="sub">Your Instagram grid, visualized. Drag to rearrange.</div></div>
@@ -1307,7 +1504,10 @@ select.fi{cursor:pointer}
         <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
           <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
         </div>
-        <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
+          <button class="btn btn-g" onclick="copyBrandProfile()" title="Copy everything to clipboard so you can paste it into Claude, ChatGPT, Notion, or anywhere else">Copy Profile to Clipboard</button>
+        </div>
         <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> Brand Voice matters most. Be specific: "writes like a trusted colleague, direct but warm, short sentences, zero buzzwords."</div>
       </div>
       <div class="setting-sec">
@@ -1371,7 +1571,396 @@ select.fi{cursor:pointer}
     </div>
   </div>
 
+
+  <div id="view-guides" class="view">
+    <div class="main-hdr">
+      <div><h1>Guides</h1><div class="sub">Practical playbooks for the way your brain actually works</div></div>
+    </div>
+    <div class="main-body" id="guidesMainBody">
+
+      <!-- INDEX (default) -->
+      <div id="guides-index">
+        <div style="max-width:780px">
+          <p style="font-size:14px;color:var(--t);line-height:1.75;margin-bottom:24px">These guides are built for neurodivergent creators who are done forcing themselves into systems that weren't designed for them. Click any guide to open it.</p>
+          <div class="guide-index-grid" style="grid-template-columns:repeat(3,1fr)">
+
+            <!-- ND Rescue Kit -->
+            <div class="guide-index-card rust" onclick="openGuideDetail('burnout')">
+              <div class="gic-deco">✦</div>
+              <span class="gic-icon">🧠</span>
+              <div class="gic-title">ND Rescue Kit</div>
+              <div class="gic-desc">What to do when you're overwhelmed and don't know where to start. A reset, not a productivity system.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Overwhelm</span>
+                <span class="gic-tag">Batching</span>
+                <span class="gic-tag">Launch Planning</span>
+              </div>
+              <div class="gic-cta rust">Read the guide →</div>
+            </div>
+
+            <!-- Content Cycle -->
+            <div class="guide-index-card teal" onclick="openGuideDetail('cycle')">
+              <div class="gic-deco">🌊</div>
+              <span class="gic-icon">🌊</span>
+              <div class="gic-title">Content Cycle Framework</div>
+              <div class="gic-desc">A four-phase content rhythm that grows your audience, nurtures your community, and gives you space to breathe.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Grow</span>
+                <span class="gic-tag">Nurture</span>
+                <span class="gic-tag">Convert</span>
+                <span class="gic-tag">Reflect</span>
+              </div>
+              <div class="gic-cta teal">Read the guide →</div>
+            </div>
+
+            <!-- The Unstuck Guide -->
+            <div class="guide-index-card" style="border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,#EDE4F5)" onclick="openGuideDetail('unstuck')">
+              <div class="gic-deco" style="color:#7A5C9C">✦</div>
+              <span class="gic-icon">✨</span>
+              <div class="gic-title">The Unstuck Guide</div>
+              <div class="gic-desc">For when your inner critic says it's all been done before. Reframes for perfectionism and creative paralysis, paired with Studio workflows to get you moving again.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Inner Critic</span>
+                <span class="gic-tag">Perfectionism</span>
+                <span class="gic-tag">Starting</span>
+              </div>
+              <div class="gic-cta" style="color:#7A5C9C">Read the guide →</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL: ND Rescue Kit -->
+      <div id="guide-detail-burnout" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero rust">
+            <div class="guide-detail-hero-deco">✦</div>
+            <div class="gdh-eyebrow rust">ND Rescue Kit</div>
+            <div class="gdh-title">You're overwhelmed. That's okay. Here's what to do right now.</div>
+            <div class="gdh-desc">This isn't a 10-step productivity system. It's a reset. When your brain is full and your to-do list feels like it's staring at you, this is the starting point. We'll get you to one small, clear next action, and that's enough.</div>
+          </div>
+
+          <div class="gd-section-lbl">The four-step reset</div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">Step 1: Brain dump first, plan second</div>
+              <div class="gd-card-desc">Before you do anything else, open Notebooks and do a Brain Dump session. Get everything out of your head and into the Studio. It doesn't need to be organized. Just write. The goal is to stop holding all of it in your working memory.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🎯</span>
+              <div class="gd-card-title">Step 2: Pick ONE thing</div>
+              <div class="gd-card-desc">When the brain dump is done, look at what you wrote and pick the single thing that would create the most relief if it was finished. Not the most urgent, not the most impressive. The one that would make you breathe easier. That's your next action.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">⚡</span>
+              <div class="gd-card-title">Step 3: Match to your energy level</div>
+              <div class="gd-card-desc">Before you open a task, check in. Are you high energy, medium energy, or running on fumes? Your Task Board has energy tags for a reason. On low days, only do low-energy tasks. Protecting your energy is not laziness, it's how you stay consistent long-term.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">⏱</span>
+              <div class="gd-card-title">Step 4: Time block for your brain</div>
+              <div class="gd-card-desc">ND brains do better with shorter, protected work blocks than long open-ended sessions. Try 25 minutes on, 10 minutes off. Add your task to the Calendar with a realistic time estimate. When the block ends, stop, even if you're not finished. Stopping on time builds trust with yourself.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">How to use the Studio to reduce content overwhelm</div>
+          <div class="gd-callout teal" style="margin-bottom:12px">
+            <div class="gd-callout-icon">✦</div>
+            <div>
+              <div class="gd-callout-eyebrow teal">Hit the panic button</div>
+              <div class="gd-callout-text">When you have absolutely no idea what to post, the Creative Director button on your dashboard generates a full content direction instantly. Platform, format, hook angle, emotion to create, what to avoid. You go from blank page to brief in under a minute.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🗂</span>
+              <div class="gd-card-title">Keep ideas in the Planner, not in your head</div>
+              <div class="gd-card-desc">Every time a content idea hits you, add it to the Content Planner as an Idea. Don't think about it yet. Just capture it. When you sit down to actually create, you'll already have a list to pull from instead of staring at a blank page.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">✍️</span>
+              <div class="gd-card-title">Use the Writing Studio to start, not to finish</div>
+              <div class="gd-card-desc">The AI draft is not a finished post. It's a starting point that breaks the blank page paralysis. Generate the draft, edit what doesn't feel like you, and publish. Most of your thinking happens in the editing, not the generating.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🪝</span>
+              <div class="gd-card-title">Start with a hook, not a caption</div>
+              <div class="gd-card-desc">The Hook Builder is your secret weapon for starting. When you don't know how to open a post, generate five hooks for your idea, pick the one that clicks, and write from there. The hook is the hardest part. Once that's done, the rest comes easier.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">📅</span>
+              <div class="gd-card-title">Put it on the calendar before you make it</div>
+              <div class="gd-card-desc">Mapping out content before it exists creates gentle accountability without pressure. Add a calendar entry for the post, even if it's just an idea. Seeing it on the calendar gives your brain a container for the work instead of a floating obligation.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Batching your content the ND way</div>
+          <div class="gd-card full gold" style="margin-bottom:12px">
+            <div class="gd-card-eyebrow gold">Batch Strategy</div>
+            <div class="gd-card-title" style="font-size:18px">Do one thing many times, not many things once</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:4px">Batching is not about spending eight hours creating content on a Sunday. That's a burnout setup. ND-friendly batching means picking one task type and doing a focused burst of just that. Ideas only. Hooks only. Drafts only. Scheduling only. Switching between modes is where the energy drain happens.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card"><span class="gd-card-icon">💡</span><div class="gd-card-title">Batch 1: Idea capture (15 min)</div><div class="gd-card-desc">Open the Content Planner. Set a 15-minute timer. Brain dump every content idea you have, no judging, no developing. Just capture. You're filling the pipeline, not building content yet.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">🪝</span><div class="gd-card-title">Batch 2: Hook generation (20 min)</div><div class="gd-card-desc">Pick your top 5 ideas from the Planner. Open each card and run the Hook Builder. Choose your favourite hook for each. Now you have 5 posts with strong openings ready to develop.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">✍️</span><div class="gd-card-title">Batch 3: Draft generation (30 min)</div><div class="gd-card-desc">Take your hooked ideas into the Writing Studio. Generate drafts for each one. Edit, adjust tone, make it yours. Move each card to Draft in the Planner when it's done.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">📅</span><div class="gd-card-title">Batch 4: Map it out (10 min)</div><div class="gd-card-desc">Add your drafts to the Calendar with target publish dates. Move cards to Scheduled in the Planner. You're done. A week of content mapped out without a single marathon session.</div></div>
+          </div>
+
+          <div class="gd-section-lbl">Planning a launch without the spiral</div>
+          <div class="gd-cards">
+            <div class="gd-card"><span class="gd-card-icon">🗓</span><div class="gd-card-title">Set your launch date first</div><div class="gd-card-desc">Add your launch date to the Calendar. Then work backwards. If you're launching in 4 weeks, plan content for weeks 1, 2, 3, and launch week. Put each phase on the calendar now, even roughly.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">📋</span><div class="gd-card-title">Use Tasks for the non-content work</div><div class="gd-card-desc">Sales page, email sequence, checkout link, graphics. These live in your Task Board. Break each one into substeps with time estimates and energy tags. Assign them to calendar blocks so nothing gets left to the last minute.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">🔄</span><div class="gd-card-title">Pre-load a Content Series</div><div class="gd-card-desc">Use the Content Series Builder on your launch topic to generate 5 connected posts. These become your launch content runway. One idea, five pieces of content, done in one session.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">🎯</span><div class="gd-card-title">Know your one CTA before you start</div><div class="gd-card-desc">Every piece of launch content should point to one place. Decide your single call to action before you write anything. Browse the CTA Library if you need starting points. A clear CTA makes writing every post faster.</div></div>
+          </div>
+
+          <div class="gd-section-lbl">Six principles for making this stick</div>
+          <ul class="gd-tips">
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>Your system only works if it's frictionless enough to actually use.</strong> If something in the Studio feels like too many steps, skip it. The best workflow is the one you'll actually do.</div></li>
+            <li><div class="gd-tip-icon teal">◎</div><div><strong>Consistency beats perfection every time.</strong> Three posts a week published reliably beats 10 posts planned and none posted. Set a pace you can hold on your worst week, not your best.</div></li>
+            <li><div class="gd-tip-icon gold">✶</div><div><strong>Use Caption Variations when you're stuck on tone.</strong> If the draft doesn't sound like you, generate three variations and see which one clicks. Sometimes you need to see options before you know what feels right.</div></li>
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>Add the Studio to your home screen.</strong> Reducing the steps between idea and capture is how you actually capture ideas. The fewer clicks, the more ideas make it in.</div></li>
+            <li><div class="gd-tip-icon teal">◎</div><div><strong>Review your Content Planner once a week, not every day.</strong> Pick one day to move cards, check what's scheduled, and plan the coming week. That one session is your whole planning practice.</div></li>
+            <li><div class="gd-tip-icon gold">✶</div><div><strong>Done is the standard, not polished.</strong> Published content that's 80% great reaches people. Perfect content sitting in Drafts reaches no one.</div></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DETAIL: Content Cycle -->
+      <div id="guide-detail-cycle" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero teal">
+            <div class="guide-detail-hero-deco">🌊</div>
+            <div class="gdh-eyebrow teal">Content Cycle Framework</div>
+            <div class="gdh-title">Your content is supposed to ebb and flow, not sprint forever.</div>
+            <div class="gdh-desc">Most content advice treats every week the same. But sustainable content creation has a rhythm, like a tide. Grow, nurture, convert, reflect. Each phase serves your audience differently, and together they build a business that doesn't require you to be always on.</div>
+          </div>
+
+          <div class="gd-section-lbl">The four phases</div>
+          <div class="gd-wave">
+            <div class="gd-wave-phase" style="border-color:#C8DED8">
+              <div class="gd-wave-num" style="background:var(--tealp);color:var(--teal)">01</div>
+              <div class="gd-wave-name">Grow</div>
+              <div class="gd-wave-desc">Reach new people with content that travels beyond your current followers</div>
+              <div class="gd-wave-goal" style="color:var(--teal)">Audience growth</div>
+            </div>
+            <div class="gd-wave-phase" style="border-color:#D4C8E2">
+              <div class="gd-wave-num" style="background:#EDE4F5;color:#7A5C9C">02</div>
+              <div class="gd-wave-name">Nurture</div>
+              <div class="gd-wave-desc">Pour into your existing audience, build trust and deepen the relationship</div>
+              <div class="gd-wave-goal" style="color:#7A5C9C">Retention + trust</div>
+            </div>
+            <div class="gd-wave-phase" style="border-color:#E0BDAA">
+              <div class="gd-wave-num" style="background:var(--rp);color:var(--r)">03</div>
+              <div class="gd-wave-name">Convert</div>
+              <div class="gd-wave-desc">Make offers, invite people in, and move the right ones toward working with you</div>
+              <div class="gd-wave-goal" style="color:var(--r)">Sales + enrollment</div>
+            </div>
+            <div class="gd-wave-phase" style="border-color:#E8D4A8">
+              <div class="gd-wave-num" style="background:var(--gp);color:var(--g)">04</div>
+              <div class="gd-wave-name">Reflect</div>
+              <div class="gd-wave-desc">Slow down, share behind the scenes, and reconnect with why you do this work</div>
+              <div class="gd-wave-goal" style="color:var(--g)">Community + renewal</div>
+            </div>
+          </div>
+          <div class="gd-card full" style="margin-bottom:20px">
+            <div class="gd-card-title" style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--t)">How long is each phase?</div>
+            <div class="gd-card-desc" style="margin-top:6px">One week per phase is the default, making it a clean four-week cycle. But if a phase is working, stay in it. Nurture weeks can run two to three weeks when your audience engagement is high. Convert phases can be shorter if your offer is time-limited. The cycle is a guide, not a rule.</div>
+          </div>
+
+          <div class="gd-section-lbl">Phase 01: Grow</div>
+          <div class="gd-cards">
+            <div class="gd-card teal"><div class="gd-card-eyebrow teal">What to create</div><div class="gd-card-title">Content that travels beyond your current followers</div><div class="gd-card-desc">Shareable takes on common problems in your niche. Educational posts that answer a question your ideal client is searching. Relatable observations that make people tag a friend. Opinion posts that spark conversation and shares. Your goal: be found by people who don't know you yet.</div></div>
+            <div class="gd-card teal"><div class="gd-card-eyebrow teal">Studio tools to use</div><div class="gd-card-title">Hook Builder + Content Series</div><div class="gd-card-desc">Run the Hook Builder on your grow-phase ideas to find the most shareable angles. Use the Content Series Builder to turn one strong concept into five posts that cover it from multiple entry points, each one a door for a new follower to find you.</div></div>
+          </div>
+
+          <div class="gd-section-lbl">Phase 02: Nurture</div>
+          <div class="gd-cards">
+            <div class="gd-card purple"><div class="gd-card-eyebrow purple">What to create</div><div class="gd-card-title">Content that deepens trust with people already following you</div><div class="gd-card-desc">Behind-the-scenes of your process or thinking. Personal stories that reveal your values and perspective. Client wins and transformation stories, with permission. Lessons you've learned the hard way. Answers to questions your audience actually asks you. Your goal: make your existing audience feel seen, supported, and glad they followed you.</div></div>
+            <div class="gd-card purple"><div class="gd-card-eyebrow purple">Studio tools to use</div><div class="gd-card-title">Writing Studio + Notebooks</div><div class="gd-card-desc">Use your Notebooks to brain dump stories and reflections, then bring the best ones into the Writing Studio for a newsletter or long-form post. Caption Variations is useful here too: try the warm and story-led versions of your drafts to find the nurture tone.</div></div>
+          </div>
+
+          <div class="gd-section-lbl">Phase 03: Convert</div>
+          <div class="gd-cards">
+            <div class="gd-card rust"><div class="gd-card-eyebrow rust">What to create</div><div class="gd-card-title">Content that creates clarity around your offer and moves people to act</div><div class="gd-card-desc">Posts that name the specific problem your offer solves. Addressing common objections directly and honestly. What's included, what it costs, and who it's for. Testimonials and results, real ones. A clear and direct call to action on every post. Your goal: make it easy for the right people to say yes.</div></div>
+            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Content Autopsy + CTA Library</div><div class="gd-card-desc">Paste top-performing sales content from others into the Content Autopsy to understand why it worked, then rebuild it in your voice. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Strategy Session on your offer to get a directional angle before you write.</div></div>
+          </div>
+
+          <div class="gd-section-lbl">Phase 04: Reflect</div>
+          <div class="gd-cards">
+            <div class="gd-card gold"><div class="gd-card-eyebrow gold">What to create</div><div class="gd-card-title">Content that reconnects you and your audience to meaning and community</div><div class="gd-card-desc">Monthly or seasonal recaps of what you're noticing, learning, or building. Gratitude posts that name your community specifically. Behind-the-scenes of your life or creative process, the parts that aren't polished. Questions that invite your audience to share their experience. Your goal: show up as a human, not a content machine.</div></div>
+            <div class="gd-card gold"><div class="gd-card-eyebrow gold">Studio tools to use</div><div class="gd-card-title">Notebooks + Brain Dump</div><div class="gd-card-desc">The reflect phase is the right time to do a Brain Dump session in Notebooks. Empty everything out about the last cycle: what worked, what felt hard, what you want more of. This becomes the raw material for your next grow phase. Reflection feeds the cycle forward.</div></div>
+          </div>
+
+          <div class="gd-section-lbl">What a four-week cycle looks like in practice</div>
+          <div class="gd-week-lbl" style="color:var(--teal)">Week 1: Grow</div>
+          <div class="gd-week">
+            <div class="gd-day"><div class="gd-day-name">Mon</div><div class="gd-day-content">Educational post: common myth in your niche</div><div class="gd-day-type" style="background:var(--tealp);color:var(--teal)">Teach</div></div>
+            <div class="gd-day"><div class="gd-day-name">Tue</div><div class="gd-day-content">Shareable take or unpopular opinion</div><div class="gd-day-type" style="background:var(--tealp);color:var(--teal)">Opinion</div></div>
+            <div class="gd-day"><div class="gd-day-name">Wed</div><div class="gd-day-content">Answer a question new followers commonly ask</div><div class="gd-day-type" style="background:var(--tealp);color:var(--teal)">FAQ</div></div>
+            <div class="gd-day"><div class="gd-day-name">Thu</div><div class="gd-day-content">Relatable moment that makes people tag a friend</div><div class="gd-day-type" style="background:var(--tealp);color:var(--teal)">Relatable</div></div>
+            <div class="gd-day"><div class="gd-day-name">Fri</div><div class="gd-day-content">Value drop: quick tip they can use today</div><div class="gd-day-type" style="background:var(--tealp);color:var(--teal)">Value</div></div>
+          </div>
+          <div class="gd-week-lbl" style="color:#7A5C9C">Week 2: Nurture</div>
+          <div class="gd-week">
+            <div class="gd-day"><div class="gd-day-name">Mon</div><div class="gd-day-content">A lesson you learned the hard way</div><div class="gd-day-type" style="background:#EDE4F5;color:#7A5C9C">Story</div></div>
+            <div class="gd-day"><div class="gd-day-name">Tue</div><div class="gd-day-content">Client transformation story, with permission</div><div class="gd-day-type" style="background:#EDE4F5;color:#7A5C9C">Proof</div></div>
+            <div class="gd-day"><div class="gd-day-name">Wed</div><div class="gd-day-content">Behind-the-scenes of how you work or think</div><div class="gd-day-type" style="background:#EDE4F5;color:#7A5C9C">BTS</div></div>
+            <div class="gd-day"><div class="gd-day-name">Thu</div><div class="gd-day-content">Your actual values or beliefs about your niche</div><div class="gd-day-type" style="background:#EDE4F5;color:#7A5C9C">Values</div></div>
+            <div class="gd-day"><div class="gd-day-name">Fri</div><div class="gd-day-content">Ask your audience a question that invites them in</div><div class="gd-day-type" style="background:#EDE4F5;color:#7A5C9C">Engage</div></div>
+          </div>
+          <div class="gd-week-lbl" style="color:var(--r)">Week 3: Convert</div>
+          <div class="gd-week">
+            <div class="gd-day"><div class="gd-day-name">Mon</div><div class="gd-day-content">Name the problem your offer solves specifically</div><div class="gd-day-type" style="background:var(--rp);color:var(--r)">Problem</div></div>
+            <div class="gd-day"><div class="gd-day-name">Tue</div><div class="gd-day-content">Address the top objection your ideal client has</div><div class="gd-day-type" style="background:var(--rp);color:var(--r)">Objection</div></div>
+            <div class="gd-day"><div class="gd-day-name">Wed</div><div class="gd-day-content">What's included, who it's for, what it costs</div><div class="gd-day-type" style="background:var(--rp);color:var(--r)">Offer</div></div>
+            <div class="gd-day"><div class="gd-day-name">Thu</div><div class="gd-day-content">A real result or testimonial with context</div><div class="gd-day-type" style="background:var(--rp);color:var(--r)">Proof</div></div>
+            <div class="gd-day"><div class="gd-day-name">Fri</div><div class="gd-day-content">Direct CTA: here's how to work with me</div><div class="gd-day-type" style="background:var(--rp);color:var(--r)">CTA</div></div>
+          </div>
+          <div class="gd-week-lbl" style="color:var(--g)">Week 4: Reflect</div>
+          <div class="gd-week">
+            <div class="gd-day"><div class="gd-day-name">Mon</div><div class="gd-day-content">What you noticed or learned this month</div><div class="gd-day-type" style="background:var(--gp);color:var(--g)">Reflect</div></div>
+            <div class="gd-day"><div class="gd-day-name">Wed</div><div class="gd-day-content">A peek at what you're working on next</div><div class="gd-day-type" style="background:var(--gp);color:var(--g)">Sneak peek</div></div>
+            <div class="gd-day"><div class="gd-day-name">Fri</div><div class="gd-day-content">Gratitude or community shoutout post</div><div class="gd-day-type" style="background:var(--gp);color:var(--g)">Community</div></div>
+          </div>
+
+          <div class="gd-section-lbl" style="margin-top:28px">Making the cycle work for an ND brain</div>
+          <ul class="gd-tips">
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>You don't need 5 posts a week.</strong> This framework works with 3, 2, or even 1 post a week. The ratio of phase types matters more than the volume.</div></li>
+            <li><div class="gd-tip-icon teal">◎</div><div><strong>Batch your content by phase, not by week.</strong> At the start of a grow phase, batch all your grow posts in one session. Your brain stays in the same mode the whole time, which is much easier than switching between grow and convert thinking every other post.</div></li>
+            <li><div class="gd-tip-icon gold">✶</div><div><strong>Use the Content Planner to tag your cycle phase.</strong> Add the phase name to the notes field of each content card. When you look at your Planner, you can immediately see if you're missing a phase or over-indexing on one type.</div></li>
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>Let the reflect phase be genuinely lighter.</strong> Fewer posts, more presence. The reflect phase is designed to give you breathing room. Protect this week so the next grow phase can launch from a full tank.</div></li>
+            <li><div class="gd-tip-icon teal">◎</div><div><strong>The cycle compounds over time.</strong> Month one, you're building the habit. Month three, you're building trust. Month six, people know your rhythm and show up for it. Consistency with this framework over six months is more powerful than any single viral post.</div></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DETAIL: The Unstuck Guide -->
+      <div id="guide-detail-unstuck" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero" style="background:linear-gradient(135deg,#F4F0FA,#EDE4F5);border:1.5px solid #D4C8E2">
+            <div class="guide-detail-hero-deco" style="color:#7A5C9C">✦</div>
+            <div class="gdh-eyebrow" style="color:#7A5C9C">The Unstuck Guide</div>
+            <div class="gdh-title">It has been done before. Do it anyway.</div>
+            <div class="gdh-desc">The inner critic that says your idea isn't original enough, your niche is too crowded, or someone already said it better is not telling you the truth. It's telling you it's scared. This guide is about learning to tell the difference, then creating anyway.</div>
+          </div>
+
+          <div class="gd-section-lbl">The reframe first</div>
+          <div class="gd-card full" style="border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,var(--w));margin-bottom:12px">
+            <div class="gd-card-title" style="font-size:18px">Everything has been done before. That's not the point.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:6px">There are thousands of fitness coaches, therapists, copywriters, photographers, and healers online. People still choose one over another. They choose based on voice, on resonance, on the specific way someone explains a thing. Your job is not to be the first person to talk about your topic. Your job is to be the person your specific audience hears it from. Nobody else has your combination of experience, perspective, and way of putting things. That's not a small thing. That's the whole thing.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card purple">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">What the inner critic is actually doing</div>
+              <div class="gd-card-desc">The "it's been done" thought is a protection mechanism, not an assessment of quality. Your brain is trying to keep you from the risk of being seen and judged. Recognizing it as fear rather than fact is the first move. You don't argue with it. You notice it, name it, and create anyway.</div>
+            </div>
+            <div class="gd-card purple">
+              <span class="gd-card-icon">🔁</span>
+              <div class="gd-card-title">Originality is a remix, not an invention</div>
+              <div class="gd-card-desc">Every creator you admire is remixing influences, experiences, and ideas they absorbed from somewhere else. The question isn't whether your idea is new. It's whether your take on it is honest and specific to you. Specific always beats generic. Personal always beats polished.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">When you can't start: the practical moves</div>
+          <div class="gd-callout rust" style="margin-bottom:12px">
+            <div class="gd-callout-icon">✦</div>
+            <div>
+              <div class="gd-callout-eyebrow rust">The Studio move for this</div>
+              <div class="gd-callout-text">Open the Content Planner, create a card, and fill in just the brief field with whatever half-formed thought is stuck in your head. Don't judge it. Don't develop it yet. Then run Strategy Session. Let the Creative Director give you an angle before you decide if the idea is worth anything. Most ideas look better once they have a direction.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">⏱</span>
+              <div class="gd-card-title">The two-minute start rule</div>
+              <div class="gd-card-desc">When you can't begin, the goal is not to write a good post. The goal is to write for two minutes without stopping. Open the Writing Studio, set a mental timer, and type whatever comes out. No editing, no deleting. Two minutes of movement breaks the freeze more reliably than waiting until you feel ready.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🪝</span>
+              <div class="gd-card-title">Start with what bothers you, not what inspires you</div>
+              <div class="gd-card-desc">When inspiration isn't there, frustration usually is. What's a piece of advice in your industry you disagree with? What do clients always get wrong before they come to you? What would you say to your past self? Contrarian and honest beats inspired and generic every time. Use the Hook Builder to turn that frustration into an opening line.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">📌</span>
+              <div class="gd-card-title">Steal from your own past work</div>
+              <div class="gd-card-desc">Open your Swipe File or Saved Drafts. Find something you wrote that felt right at the time. Run Caption Variations on it. Build a Content Series from the core idea. Your best thinking from six months ago is invisible to someone discovering you today. Nothing is too old to revisit.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🔍</span>
+              <div class="gd-card-title">Learn from what already works</div>
+              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche, and paste it into the Content Autopsy. Let the Creative Director break down why it worked, then rebuild the structure in your voice with your topic. You're not copying. You're learning from signal and applying it honestly.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">When perfectionism is the block</div>
+          <div class="gd-card full purple" style="margin-bottom:12px">
+            <div class="gd-card-eyebrow purple">The reframe</div>
+            <div class="gd-card-title" style="font-size:18px">Perfectionism isn't high standards. It's fear with better branding.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:4px">High standards produce work and refine it. Perfectionism produces nothing and calls that careful. The difference is whether the standard is serving the work or protecting you from the moment of publishing. If you've been editing the same draft for three days, it's probably done. What you're doing now is stalling.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card purple">
+              <span class="gd-card-icon">✂️</span>
+              <div class="gd-card-title">The 80% rule</div>
+              <div class="gd-card-desc">Set a personal policy: when a draft is 80% of where you want it, it ships. The last 20% almost never changes how it lands for the reader, but it costs you hours and keeps you in your head. 80% published beats 100% sitting in Drafts every single time.</div>
+            </div>
+            <div class="gd-card purple">
+              <span class="gd-card-icon">📤</span>
+              <div class="gd-card-title">Use the friction of publishing as a deadline</div>
+              <div class="gd-card-desc">Put the post on your Calendar with today's date. Add a task with a time estimate of 10 minutes for final edits. When the time is up, it goes. Externalizing the deadline moves the decision out of your head and into your system, where your ND brain can actually work with it.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">When you start strong and then abandon it</div>
+          <div class="gd-cards">
+            <div class="gd-card">
+              <span class="gd-card-icon">💡</span>
+              <div class="gd-card-title">Capture the energy, not the finished thing</div>
+              <div class="gd-card-desc">When an idea hits with force, your job in that moment is not to finish it. It's to capture the core of it before the energy fades. Open a Notebook, dump the raw idea, the feeling, the angle. Even two sentences. The draft can come later. The spark is what to protect.</div>
+            </div>
+            <div class="gd-card">
+              <span class="gd-card-icon">🗂</span>
+              <div class="gd-card-title">Turn abandoned drafts into new starts</div>
+              <div class="gd-card-desc">Go to your Saved Drafts. Find something you left half-finished. Paste the opening paragraph into the Writing Studio as your starting point and generate from there. Or run Caption Variations on just the hook. Abandoned work is not wasted. It's pre-work for the next version of the same idea.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Six things to remember when you're stuck</div>
+          <ul class="gd-tips">
+            <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">✦</div><div><strong>The thought "someone already said this" is almost always fear, not fact.</strong> Someone has. Your audience hasn't heard it from you yet, and that's the part that matters.</div></li>
+            <li><div class="gd-tip-icon rust">◎</div><div><strong>You don't need a new idea. You need a new angle on an existing one.</strong> Run Strategy Session on something you've already posted. The Creative Director will find an angle you haven't used yet.</div></li>
+            <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">✶</div><div><strong>Movement beats motivation.</strong> You won't feel like creating before you start. The feeling comes after. Open the app first. Wait for inspiration after.</div></li>
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>Your Notebooks are full of content you've already written.</strong> Open them before you decide you have nothing to say. Half your best ideas are already there, unfinished and waiting.</div></li>
+            <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">◎</div><div><strong>Specificity is the cure for feeling generic.</strong> Any time a draft feels too bland, make one detail more specific. A real person, a real moment, a real number. Specificity is what makes people feel seen.</div></li>
+            <li><div class="gd-tip-icon rust">✶</div><div><strong>Finishing something imperfect is an act of self-respect.</strong> You are allowed to put things into the world that aren't your best work. Consistency builds trust. Occasional brilliance doesn't.</div></li>
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
 </main>
+</div>
+
+<!-- UPDATE NOTIFICATION BANNER -->
+<div id="updateBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9990;background:linear-gradient(135deg,var(--tealp),#C8E4E4);border-top:2px solid var(--teal);padding:14px 24px;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 -4px 20px rgba(42,26,14,.12)">
+  <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+    <span style="font-size:22px;flex-shrink:0">✦</span>
+    <div>
+      <div style="font-family:var(--fh);font-size:16px;font-weight:600;color:var(--e)">A new version of Flow State Studio is ready</div>
+      <div style="font-size:12px;color:var(--el);margin-top:2px">Click Update to get the latest features instantly. Takes one second.</div>
+    </div>
+  </div>
+  <button onclick="doAppUpdate()" style="padding:10px 22px;background:var(--teal);border:none;border-radius:var(--rsm);color:white;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--tealh)'" onmouseout="this.style.background='var(--teal)'">✦ Update Now</button>
 </div>
 
 <!-- MODALS -->
@@ -1395,7 +1984,7 @@ select.fi{cursor:pointer}
 <div class="modal-ov" id="calModal">
   <div class="modal">
     <div class="m-title" id="calModalTitle">Add Calendar Entry</div>
-    <div class="m-sub">Plan content on your calendar</div>
+    <div class="m-sub">Map out your content on the calendar</div>
     <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="calTitle" placeholder="What are you posting?" /></div>
     <div class="two-col">
       <div class="fl"><label class="fl-lbl">Platform</label><select class="fi" id="calPlat"><option value="instagram">Instagram</option><option value="newsletter">Newsletter</option><option value="email">Email</option><option value="substack">Substack</option><option value="linkedin">LinkedIn</option><option value="blog">Blog</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="other">Other</option></select></div>
@@ -1434,7 +2023,7 @@ select.fi{cursor:pointer}
             <select class="fi" id="ideaFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
               <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option>
+              <option value="Newsletter">Newsletter</option><option value="Substack / Article">Article</option>
               <option value="Freebie">Freebie</option><option value="Event">Event</option>
               <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
@@ -1673,7 +2262,7 @@ select.fi{cursor:pointer}
             <select class="fi" id="cdFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
               <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Substack Article">Substack Article</option>
+              <option value="Newsletter">Newsletter</option><option value="Substack / Article">Article</option>
               <option value="Freebie">Freebie</option><option value="Event">Event</option>
               <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
@@ -1766,6 +2355,9 @@ select.fi{cursor:pointer}
               <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
             </div>
             <div class="ai2-btn-grid">
+              <div style="margin-bottom:10px">
+                <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:50px;font-size:12.5px;resize:vertical"></textarea>
+              </div>
               <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
               <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
               <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
@@ -1949,12 +2541,12 @@ select.fi{cursor:pointer}
     <!-- HERO -->
     <div class="pricing-hero">
       <div class="pricing-wordmark">Flow State Studio ✦</div>
-      <div class="pricing-tagline">The content workspace built for the way your brain actually works, not the way productivity gurus think it should.</div>
+      <div class="pricing-tagline">One place to start, create, and map out your content, built for ND brains that are tired of too many tools and never knowing where to begin.</div>
       <div class="pricing-nd">🧠 Designed for ADHD &amp; neurodivergent creators</div>
       <!-- STAT STRIP -->
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">10+</span> AI tools built in</div>
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">7</span> content formats generated</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">12+</span> AI tools built in</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">7</span> content formats</div>
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--g);font-size:16px;font-family:var(--fh);font-weight:700">1</span> place for everything</div>
       </div>
     </div>
@@ -1964,12 +2556,14 @@ select.fi{cursor:pointer}
 
     <!-- FEATURE GRID -->
     <div class="pricing-features">
+
+      <!-- CREATIVE DIRECTOR: full-width hero card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
         <div class="pf-icon">✦</div>
         <div>
-          <div class="pf-title" style="color:var(--r);font-size:15px">Your Creative Director: Three Ways to Use It</div>
-          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">The Creative Director isn't one button, it's a whole creative system built into the Studio, Think of it as having a world-class content strategist available every time you sit down to create.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
+          <div class="pf-title" style="color:var(--r);font-size:15px">Your Creative Director: Five Ways to Use It</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">The Creative Director isn't one button, it's a whole creative system built into the Studio. Think of it as having a world-class content strategist available every time you sit down to create.</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Brain Not Cooperating?</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">Hit the panic button on your dashboard and get your angle, hook, emotion, and what to avoid, before you write a single word. Instant creative direction, no blank-page spiral.</div>
@@ -1983,8 +2577,43 @@ select.fi{cursor:pointer}
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste any post that stopped your scroll. The Creative Director dissects exactly why it worked, the hook type, emotional trigger, audience psychology, then rebuilds it completely in your voice. No recycled content. All original.</div>
             </div>
           </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✍️ Generate Content</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">From inside any content card, generate a full draft in your brand voice: caption, carousel, story, reel, newsletter, email, or full article. One click from brief to draft, ready to edit and publish.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">📌 Swipe File</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Save any AI output you love directly to your Swipe File. Build a personal reference library of your best angles, hooks, and copy so nothing brilliant ever gets lost in a chat window again.</div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- SUBSTACK HIGHLIGHT -->
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--gp),#EEE0C4);border-color:#D4BE90">
+        <div class="pf-icon">📝</div>
+        <div style="width:100%">
+          <div class="pf-title" style="color:var(--g);font-size:15px">Built for Substack creators</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Substack is having a moment, and long-form writing is one of the hardest content formats for ND brains. The Studio is built to change that. Generate full Substack-ready articles in your voice, with a compelling title, opening hook, body sections, and a warm close. Not a bullet list dressed up as an article. The real thing, ready to paste and publish.</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">📄 Full article generation</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Brief your idea, choose Article as your format, and get a complete long-form draft back. Title, hook, sections, close. Written in your voice, ready to edit and post.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">✦ Strategy before you write</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Run Strategy Session on your Substack idea before you draft anything. Get the angle, the emotional frame, and the one thing to avoid. Walk into your article knowing exactly where it is going.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">🪝 Hook your readers from line one</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Use the Hook Builder to generate five opening lines for your article before you write a word. Pick the one that pulls. Substack readers decide in the first two sentences whether they are staying.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOOK BUILDER -->
       <div class="pf-card">
         <div class="pf-icon">🪝</div>
         <div>
@@ -1992,13 +2621,17 @@ select.fi{cursor:pointer}
           <div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
         </div>
       </div>
+
+      <!-- WRITING STUDIO -->
       <div class="pf-card">
         <div class="pf-icon">✍️</div>
         <div>
-          <div class="pf-title">Writing Studio: 7 Formats</div>
-          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, full emails, and complete Substack articles, all in your brand voice. Write your own or use AI as a starting point. Everything saves to one library.</div>
+          <div class="pf-title">Writing Studio + Saved Drafts</div>
+          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
         </div>
       </div>
+
+      <!-- CAPTION VARIATIONS -->
       <div class="pf-card">
         <div class="pf-icon">⇕</div>
         <div>
@@ -2006,6 +2639,8 @@ select.fi{cursor:pointer}
           <div class="pf-desc">One idea, three angles. Warm, direct, and story-led versions of the same post so you can pick the one that fits your energy today without starting from scratch three times.</div>
         </div>
       </div>
+
+      <!-- CONTENT SERIES -->
       <div class="pf-card">
         <div class="pf-icon">☆</div>
         <div>
@@ -2013,6 +2648,8 @@ select.fi{cursor:pointer}
           <div class="pf-desc">Turn one idea into a five-part content series, each post standing alone but connecting to a bigger theme. Never run out of what to say next.</div>
         </div>
       </div>
+
+      <!-- CONTENT PLANNER -->
       <div class="pf-card">
         <div class="pf-icon">🗂</div>
         <div>
@@ -2020,6 +2657,8 @@ select.fi{cursor:pointer}
           <div class="pf-desc">A visual kanban board that moves with you from half-baked idea to published. See everything at once without losing track, perfect for brains that think in big pictures, not spreadsheets.</div>
         </div>
       </div>
+
+      <!-- FEED PREVIEW -->
       <div class="pf-card">
         <div class="pf-icon">🖼️</div>
         <div>
@@ -2027,40 +2666,98 @@ select.fi{cursor:pointer}
           <div class="pf-desc">See your Instagram grid before you post. Upload images to your content cards and they appear as a live grid you can drag and rearrange until it looks right, no third-party app needed.</div>
         </div>
       </div>
+
+      <!-- CALENDAR + TASKS -->
       <div class="pf-card">
         <div class="pf-icon">📅</div>
         <div>
           <div class="pf-title">Calendar + Task Board</div>
-          <div class="pf-desc">Content and tasks on one calendar, color-coded so you always know what's what. No more switching between five apps to figure out what you're supposed to be doing today.</div>
+          <div class="pf-desc">Content and tasks on one calendar, color-coded so you always know what's what. Tasks have energy level tags, time estimates, and substeps so your brain knows exactly what "do the thing" actually means today.</div>
         </div>
       </div>
+
+      <!-- NOTEBOOKS -->
       <div class="pf-card">
         <div class="pf-icon">🧠</div>
         <div>
-          <div class="pf-title">Notebooks &amp; Brain Dump</div>
+          <div class="pf-title">Notebooks + Brain Dump</div>
           <div class="pf-desc">Unlimited notebooks for your thoughts, half-finished ideas, and client notes. No format required. Just write. Brain Dump mode is specifically for when your head is full and you need to get it out fast.</div>
         </div>
       </div>
+
+      <!-- LIBRARY -->
       <div class="pf-card">
         <div class="pf-icon">🔗</div>
         <div>
-          <div class="pf-title">Hook, CTA &amp; Prompt Library</div>
-          <div class="pf-desc">Hundreds of pre-written hooks, CTAs, and writing prompts built for wellness and service businesses. Filter by category, bookmark your favourites, and save your own when you write something good.</div>
+          <div class="pf-title">Hook, CTA, Story + Prompt Library</div>
+          <div class="pf-desc">Hundreds of pre-written hooks, CTAs, story prompts, and writing prompts built for wellness and service businesses. Filter by category, toggle between grid and list view, and save your own when you write something worth keeping.</div>
         </div>
       </div>
+
+      <!-- TASK BREAKDOWN -->
       <div class="pf-card">
         <div class="pf-icon">☑</div>
         <div>
           <div class="pf-title">Task Breakdown Inside Cards</div>
-          <div class="pf-desc">Break any content idea into steps that sync straight to your task board and calendar. Because ND brains need the big idea AND the tiny next action in the same place, not two separate tools.</div>
+          <div class="pf-desc">Break any content idea into steps that sync straight to your task board and calendar. ND brains need the big idea AND the tiny next action in the same place, not two separate tools.</div>
         </div>
+      </div>
+
+      <!-- GUIDES: new full-width card -->
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,#F0F9F9,var(--tealp));border-color:var(--teal)">
+        <div class="pf-icon" style="color:var(--teal)">📖</div>
+        <div>
+          <div class="pf-title" style="color:var(--teal);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🧠 ND Rescue Kit</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🌊 Content Cycle Framework</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific tips.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">✦ The Unstuck Guide</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">For when the inner critic says it's all been done before. Reframes for perfectionism, starting paralysis, and creative drought, paired with specific Studio workflows to get you moving again.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROI / MENTAL LOAD STRIP -->
+    <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:32px 36px;margin-bottom:16px">
+      <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">The real cost of doing it without a system</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" class="cd-sales-grid">
+        <div style="text-align:center;padding:16px 12px">
+          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--r);line-height:1;margin-bottom:8px">3-5</div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Hours a week</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">spent staring, switching apps, and losing ideas before you write a single word</div>
+        </div>
+        <div style="text-align:center;padding:16px 12px;border-left:1px solid var(--bl);border-right:1px solid var(--bl)">
+          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--teal);line-height:1;margin-bottom:8px">4+</div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Apps to manage</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">a notes app, a planner, an AI tool, and somewhere to save drafts, all disconnected</div>
+        </div>
+        <div style="text-align:center;padding:16px 12px">
+          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--g);line-height:1;margin-bottom:8px">∞</div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Decisions per session</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">what to post, where to start, which tool to open, before any actual creating happens</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-radius:var(--rsm);padding:18px 22px;text-align:center">
+        <div style="font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.3">The Studio collapses all of that into one place.</div>
+        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">Less time stuck. Less mental overhead. More creating. Starting at $9.50 a month, for a brain that deserves a system built around it.</div>
       </div>
     </div>
 
-    <!-- SOCIAL PROOF / POSITIONING STRIP -->
-    <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:28px 32px;margin-bottom:40px;text-align:center">
+    <!-- POSITIONING STRIP -->
+    <div style="background:linear-gradient(135deg,var(--tealp),#C8E4E4);border:1.5px solid var(--teal);border-radius:var(--rad);padding:28px 32px;margin-bottom:40px;text-align:center">
       <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);margin-bottom:10px;line-height:1.3">One tool. Every part of your content workflow.</div>
-      <div style="font-size:14px;color:var(--el);line-height:1.75;max-width:560px;margin:0 auto">No more jumping between Notion, Trello, Canva, a notes app, and three different AI tabs. Flow State Studio is the one place where your ideas, planning, writing, and scheduling all live together, built specifically for how neurodivergent brains work best.</div>
+      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:560px;margin:0 auto">No more jumping between Notion, Trello, Canva, a notes app, and three different AI tabs. Flow State Studio is the one place where your ideas, planning, writing, and content mapping all live together, built specifically for how neurodivergent brains work best.</div>
     </div>
 
     <div class="pricing-divider"></div>
@@ -2073,17 +2770,19 @@ select.fi{cursor:pointer}
         <div class="pc-price">$9.50<span>/month</span></div>
         <div class="pc-credits">125 AI credits / month</div>
         <ul class="pc-features">
-          <li>All 10+ AI tools unlocked</li>
+          <li>All 12+ AI tools unlocked</li>
           <li>Content Planner, Calendar, Task Board</li>
           <li>Feed Preview (Instagram grid)</li>
-          <li>Writing Studio: all 6 content formats</li>
-          <li>Hook, CTA &amp; Prompt Library</li>
+          <li>Writing Studio: all 7 content formats</li>
+          <li>Hook, CTA, Story + Prompt Library</li>
           <li>Unlimited Notebooks + Brain Dump</li>
-          <li>Save unlimited drafts</li>
+          <li>Saved Drafts library + CSV export</li>
+          <li>Swipe File for your best AI outputs</li>
+          <li>Three built-in strategy guides for ND creators</li>
           <li>125 AI generations per month</li>
           <li>Locked in at founding price forever</li>
         </ul>
-        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member — $9.50/mo</button>
+        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member, $9.50/mo</button>
       </div>
       <div class="pc featured">
         <div class="pc-badge">Most Popular</div>
@@ -2098,7 +2797,7 @@ select.fi{cursor:pointer}
           <li>Zero limits, zero anxiety about running out mid-flow</li>
           <li>Locked in at founding price forever</li>
         </ul>
-        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member — $19.50/mo</button>
+        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member, $19.50/mo</button>
       </div>
     </div>
 
@@ -2117,6 +2816,41 @@ select.fi{cursor:pointer}
       Cancel anytime · Secured by Stripe · Your data is always yours<br>
       After payment, come back here and create your account to get started.<br>
       Already have an account? <a onclick="lockedSignIn()">Sign in here</a>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR PICKER MODAL -->
+<div class="modal-ov" id="calPickerModal">
+  <div class="cal-picker-modal">
+    <div class="cal-picker-title">Add to Calendar</div>
+    <div class="cal-picker-sub">What do you want to add?</div>
+    <div class="cal-picker-opts">
+      <div class="cal-picker-opt rust" onclick="closeModal('calPickerModal');openCalModal()">
+        <span class="cal-picker-opt-icon">📅</span>
+        <div class="cal-picker-opt-title">Content Entry</div>
+        <div class="cal-picker-opt-desc">Schedule a post, campaign, or content idea with platform and status</div>
+      </div>
+      <div class="cal-picker-opt teal" onclick="closeModal('calPickerModal');openTaskModal()">
+        <span class="cal-picker-opt-icon">☑</span>
+        <div class="cal-picker-opt-title">Task</div>
+        <div class="cal-picker-opt-desc">Add something to do with energy level, time estimate, and substeps</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT'S NEW MODAL -->
+<div class="modal-ov" id="whatsNewModal" style="align-items:center;justify-content:center">
+  <div class="wn-wrap" style="position:relative">
+    <button class="wn-close" onclick="closeModal('whatsNewModal')">✕</button>
+    <div class="wn-header">
+      <div class="wn-title">What's New</div>
+      <div class="wn-sub">Latest updates and improvements</div>
+    </div>
+    <div class="wn-list" id="wnList"></div>
+    <div class="wn-footer">
+      <button class="wn-got-it" onclick="dismissWhatsNew()">Got it ✦</button>
     </div>
   </div>
 </div>
@@ -2654,7 +3388,7 @@ const S = {
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
   settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
   plan:'beta',
-  swipeFile:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
+  swipeFile:[],weeklyFocus:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
   creditsUsed:0, // this month
   creditMonth:'', // YYYY-MM of current credit window
@@ -2674,7 +3408,7 @@ const S = {
 function _appInit(){
   load(); applySettings(); setupChips();
   S.calWeekStart = S.calWeekStart || new Date().getDate();
-  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban();
+  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban(); renderWeeklyFocus(); setTimeout(renderTasksDue, 100);
   renderAllLibs(); setGreeting();
   if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
 }
@@ -2687,7 +3421,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
@@ -2743,14 +3477,16 @@ function navigate(v){
   document.getElementById('view-'+v).classList.add('active');
   const ni=document.querySelector(`[data-view="${v}"]`);
   if(ni)ni.classList.add('active');
-  if(['hooks','ctas','stories','prompts'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
+  if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
   if(v==='dashboard')renderDashboard();
   if(v==='calendar')renderCalendar();
-  if(v==='ideas')renderKanban();
+  if(v==='ideas'){renderKanban();renderWeeklyFocus();}
   if(v==='tasks')renderTaskKanban();
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
+  if(v==='swipefile')renderSwipeFile();
   if(v==='drafts')renderDraftsGrid();
   if(v==='braindump')renderBrainDump();
+  if(v==='guides'){document.getElementById('guides-index').style.display='';document.querySelectorAll('.guide-detail-page').forEach(p=>p.classList.remove('active'));}
   if(v==='feedpreview')renderFeedPreview();
   if(v==='settings'){applySettings();renderMembershipSection();
     // Refresh plan from Supabase in case it changed (e.g. after Stripe payment)
@@ -2995,7 +3731,7 @@ function renderTasksDue(){
 }
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
-const IDEA_COLS=[{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+const IDEA_COLS=[{id:'inflow',label:'In Flow',bg:'#EDE4F5',color:'#7A5C9C',bd:'#C4B0D8'},{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
 function renderKanban(){
   const el=document.getElementById('ideaKanban');
   el.innerHTML=IDEA_COLS.map(col=>{
@@ -3013,7 +3749,11 @@ function renderKanban(){
   }).join('');
 }
 function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
-function deleteIdea(id){S.ideas=S.ideas.filter(i=>i.id!==id);persist();renderKanban();}
+function deleteIdea(id){
+  S.ideas=S.ideas.filter(i=>i.id!==id);
+  S.calEntries=S.calEntries.filter(e=>e.id!=='cal_'+id&&e._ideaId!==id);
+  persist();renderKanban();renderCalendar();
+}
 function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;persist();renderKanban();}}
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
@@ -3099,6 +3839,17 @@ function calFwd(){
 function changeMonth(dir){S.calMonth+=dir;if(S.calMonth>11){S.calMonth=0;S.calYear++;}if(S.calMonth<0){S.calMonth=11;S.calYear--;}renderCalendar();}
 
 function renderCalendar(){
+  // Clean up orphaned cal entries whose parent idea/task no longer exists
+  var ideaIds=S.ideas.map(function(i){return i.id;});
+  var taskIds=S.tasks.map(function(t){return t.id;});
+  S.calEntries=S.calEntries.filter(function(e){
+    if(e._ideaId) return ideaIds.includes(e._ideaId);
+    if(e._taskId) return taskIds.includes(e._taskId);
+    if(e.id&&e.id.startsWith('cal_')) return ideaIds.includes(e.id.replace('cal_',''));
+    if(e.id&&e.id.startsWith('task_')) return taskIds.includes(e.id.replace('task_',''));
+    return true; // keep standalone entries
+  });
+
   if(!S.calView) S.calView='month';
   // Sync toggle button state
   var mb=document.getElementById('calToggleMonth');
@@ -3326,9 +4077,9 @@ async function generate(){
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
   btn.disabled=true;btn.textContent='...Generating';
-  document.getElementById('cpBtn').style.display='none';
-  document.getElementById('svBtn').style.display='none';
+  document.getElementById('cpBtn').style.display='none';document.getElementById('svBtn').style.display='none';
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
+  const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
   const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use ${S.studio.type}.`;
   const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
@@ -3337,9 +4088,8 @@ async function generate(){
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
     const d=await res.json();
     S.studio.output=stripMD(d.content?.[0]?.text||'');
-    document.getElementById('outBdy').innerHTML=`<div class="out-txt">${esc(S.studio.output)}</div>`;
-    document.getElementById('cpBtn').style.display='inline-flex';
-    document.getElementById('svBtn').style.display='inline-flex';
+    document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
+    document.getElementById('cpBtn').style.display='inline-flex';document.getElementById('svBtn').style.display='inline-flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
@@ -3350,7 +4100,9 @@ async function generate(){
 function copyOut(){if(S.studio.output)navigator.clipboard.writeText(S.studio.output).then(()=>toast('Copied ✓'));}
 function saveDraft(){
   if(!S.studio.output)return;
-  S.drafts.unshift({id:Date.now().toString(),title:S.studio.topic.slice(0,65),content:S.studio.output,platform:S.studio.plat,contentType:S.studio.type,tone:S.studio.tone,createdAt:new Date().toISOString()});
+  var dLinks=document.getElementById('studioLinks')?document.getElementById('studioLinks').value.trim():'';
+  var dTags=document.getElementById('studioTags')?document.getElementById('studioTags').value.trim():'';
+  S.drafts.unshift({id:Date.now().toString(),title:S.studio.topic.slice(0,65),content:S.studio.output,platform:S.studio.plat,contentType:S.studio.type,tone:S.studio.tone,links:dLinks,tags:dTags,createdAt:new Date().toISOString()});
   persist();
   const b=document.getElementById('svBadge');b.classList.add('show');setTimeout(()=>b.classList.remove('show'),2200);
   toast('Draft saved ✓');
@@ -3367,7 +4119,7 @@ function dcHTML(d){
       <div class="dc-title" style="color:${bc}">${esc(d.title||'Untitled draft')}</div>
       <div class="dc-preview">${esc(d.content)}</div>
     </div>
-    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span></div>
+    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span>${d.tags?'<span style="font-size:10px;color:var(--tl);margin-left:8px">'+ esc(d.tags)+'</span>':''}</div>
   </div>`;
 }
 function renderRecentDrafts(){
@@ -4196,7 +4948,7 @@ function cdSave(){
   if(shouldSchedule && _currentUser){
     var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
     scheduleBrevoReminders(x, _currentUser.email, uName).then(function(result){
-      toast(result ? 'Card saved + reminders scheduled ✓' : 'Card saved ✓ (reminder scheduling failed — check your connection)');
+      toast(result ? 'Card saved + reminders scheduled ✓' : 'Card saved ✓ (reminder scheduling failed, check your connection)');
     }).catch(function(){ toast('Card saved ✓'); });
   } else {
     toast('Card saved ✓');
@@ -4444,6 +5196,7 @@ function openBrainDump(){
 }
 document.addEventListener('DOMContentLoaded',function(){
   checkPaymentSuccess();
+  setTimeout(checkForUpdate, 3000);
   var ta=document.getElementById('brainDumpTA');
   if(ta)ta.addEventListener('input',function(){
     var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
@@ -4551,7 +5304,8 @@ async function cdGen2(type) {
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.';
+  var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.' + (cdInstr ? ' Follow this instruction from the creator: ' + cdInstr : '');
   var prompts = {
     caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
     story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
@@ -4716,9 +5470,14 @@ function checkCreditReset(){
   var ym=now.getFullYear()+'-'+(now.getMonth()+1);
   if(S.creditMonth!==ym){
     S.creditMonth=ym;
-    S.creditsUsed=0;
+    S.creditsUsed=0; // always reset to zero, no rollover
     persist();
   }
+}
+function creditResetDate(){
+  var now=new Date();
+  var next=new Date(now.getFullYear(),now.getMonth()+1,1);
+  return next.toLocaleDateString('en-US',{month:'long',day:'numeric'});
 }
 function canUseAI(){
   if(isUnlimited()) return true;
@@ -4749,13 +5508,13 @@ function renderCreditBar(){
   lbl.textContent='✦ Studio in Session';
   fill.style.width=pct+'%';
   fill.style.background=pct>40?'var(--teal)':pct>15?'var(--g)':'var(--r)';
-  if(sub)sub.textContent=remaining+' of '+limit+' credits remaining';
+  if(sub)sub.textContent=remaining+' of '+limit+' credits remaining'+(remaining===0?' (resets '+creditResetDate()+')':'');
 }
 function showCreditBlocked(){
   var limit=creditLimit();
-  toast('All '+limit+' credits used this month. Resets on the 1st ✦');
+  toast('All '+limit+' credits used this month. Resets '+creditResetDate()+' ✦');
   // Show a gentle modal
-  var msg='All '+limit+' credits used this month. They reset on the 1st.';
+  var msg='All '+limit+' credits used this month. They reset on '+creditResetDate()+'.';
   if(confirm(msg+'\n\nWant to learn about unlimited access?')){
     navigate('settings');
   }
@@ -5149,12 +5908,14 @@ function calEntryDelete(id,fromIdea,fromTask){
     var realId=id.replace('task_','');
     if(!confirm('Delete this task?'))return;
     S.tasks=S.tasks.filter(function(t){return t.id!==realId;});
+    S.calEntries=S.calEntries.filter(function(e){return e.id!=='task_'+realId&&e._taskId!==realId;});
     persist();closeModal('calDayModal');renderCalendar();renderTaskKanban();toast('Task deleted');return;
   }
   if(fromIdea){
     var realId=id.replace('idea_','');
     if(!confirm('Delete this content card? This also removes it from the planner.'))return;
     S.ideas=S.ideas.filter(function(i){return i.id!==realId;});
+    S.calEntries=S.calEntries.filter(function(e){return e.id!=='cal_'+realId&&e._ideaId!==realId;});
     persist();closeModal('calDayModal');renderCalendar();renderKanban();toast('Content card deleted');return;
   }
   if(!confirm('Delete this entry?'))return;
@@ -5253,7 +6014,7 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
   var emails = [
     {
       scheduledAt: dayBefore.toISOString(),
-      subject: 'Heads up — you\'re posting tomorrow on ' + platform + ' 📅',
+      subject: 'Heads up, you\'re posting tomorrow on ' + platform + ' 📅',
       htmlContent: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">'
         + '<div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>'
         + '<div style="font-size:15px;color:#7A6555;margin-bottom:20px">Your content reminder</div>'
@@ -5267,7 +6028,7 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
     },
     {
       scheduledAt: postDate.toISOString(),
-      subject: 'Today\'s the day — time to post on ' + platform + ' 🚀',
+      subject: 'Today\'s the day, time to post on ' + platform + ' 🚀',
       htmlContent: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">'
         + '<div style="font-size:22px;font-weight:700;margin-bottom:6px">Flow State Studio ✦</div>'
         + '<div style="font-size:15px;color:#7A6555;margin-bottom:20px">Post day reminder</div>'
@@ -5439,12 +6200,95 @@ async function submitFeedback() {
   }
 }
 
+
+
+
+/* ═══ BRAND PROFILE COPY ═══ */
+function copyBrandProfile() {
+  var bp = S.brandProfile || {};
+  var lines = [];
+  if (bp.role || bp.niche) lines.push('Role: ' + [bp.role, bp.niche].filter(Boolean).join(' - '));
+  if (bp.client)  lines.push('Ideal client: ' + bp.client);
+  if (bp.offers)  lines.push('Offers: ' + bp.offers);
+  if (bp.voice)   lines.push('Brand voice: ' + bp.voice);
+  if (bp.pov)     lines.push('Unique POV: ' + bp.pov);
+  if (bp.extra)   lines.push('Additional context:\n' + bp.extra);
+  if (!lines.length) { toast('Your Brand Profile is empty - fill it in first'); return; }
+  var text = 'Brand Profile:\n' + lines.join('\n');
+  navigator.clipboard.writeText(text).then(function() {
+    toast('Brand Profile copied - paste it anywhere ✦');
+  }).catch(function() {
+    toast('Could not copy - try a different browser');
+  });
+}
+
+/* ═══ AUTO-UPDATE SYSTEM ═══ */
+// To release an update: push new index.html AND update version.json with a higher number.
+// Users will see the banner on next load and can update with one click - no action needed from them.
+function checkForUpdate() {
+  fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var latest = data.version || '';
+      var current = document.documentElement.dataset.version || '';
+      if (latest && current && latest !== current) {
+        // Store changelog from version.json and show What's New modal
+        var dismissed = localStorage.getItem('wnDismissed_' + latest);
+        if (!dismissed) {
+          _whatsNewChangelog = data.changelog || [];
+          _whatsNewVersion = latest;
+          var banner = document.getElementById('updateBanner');
+          if (banner) banner.style.display = 'flex';
+        }
+      }
+    })
+    .catch(function() {
+      // version.json not found or fetch failed - just stay quiet
+    });
+}
+
+function doAppUpdate() {
+  // Show What's New modal first, then reload on dismiss
+  if (_whatsNewChangelog && _whatsNewChangelog.length) {
+    renderWhatsNew(_whatsNewChangelog);
+    openModal('whatsNewModal');
+    var banner = document.getElementById('updateBanner');
+    if (banner) banner.style.display = 'none';
+  } else {
+    window.location.href = window.location.pathname + '?v=' + Date.now();
+  }
+}
+
+var _whatsNewChangelog = [];
+var _whatsNewVersion = '';
+
+function renderWhatsNew(changelog){
+  var el = document.getElementById('wnList');
+  if (!el) return;
+  var pillClass = {feature:'feature', fix:'fix', improvement:'improvement', new:'new'};
+  el.innerHTML = changelog.map(function(item){
+    var pill = pillClass[item.type] || 'feature';
+    return '<div class="wn-item">'
+      + '<div class="wn-meta"><span class="wn-pill '+pill+'">'+cap(item.type||'Feature')+'</span><span class="wn-date">'+esc(item.date||'')+'</span></div>'
+      + '<div class="wn-item-title">'+esc(item.title)+'</div>'
+      + '<div class="wn-item-desc">'+esc(item.desc)+'</div>'
+      + '</div>';
+  }).join('');
+}
+
+function dismissWhatsNew(){
+  if (_whatsNewVersion) localStorage.setItem('wnDismissed_' + _whatsNewVersion, '1');
+  closeModal('whatsNewModal');
+  window.location.href = window.location.pathname + '?v=' + Date.now();
+}
+
 initAuth();
 
 function initFlowStateApp(savedData) {
   // Merge saved data from Supabase into S
   if (savedData && Object.keys(savedData).length > 0) {
     if (savedData.drafts) S.drafts = savedData.drafts;
+    if (savedData.weeklyFocus) S.weeklyFocus = savedData.weeklyFocus;
     if (savedData.calEntries) S.calEntries = savedData.calEntries;
     if (savedData.ideas) S.ideas = savedData.ideas;
     if (savedData.tasks) S.tasks = savedData.tasks;
@@ -5467,6 +6311,166 @@ function initFlowStateApp(savedData) {
   _appInit();
 }
 
+
+/* ═══════════════════ GUIDES ═══════════════════ */
+function switchGuideTab(tab){
+  document.querySelectorAll('.guide-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.guide-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.guide-tab[onclick*="' + tab + '"]').classList.add('active');
+  document.getElementById('guide-' + tab).classList.add('active');
+}
+
+/* ═══════════════════ CALENDAR PICKER ═══════════════════ */
+function openCalPicker(){
+  openModal('calPickerModal');
+}
+
+/* ═══════════════════ GUIDE NAVIGATION ═══════════════════ */
+function openGuideDetail(id){
+  document.getElementById('guides-index').style.display='none';
+  document.querySelectorAll('.guide-detail-page').forEach(p=>p.classList.remove('active'));
+  var page=document.getElementById('guide-detail-'+id);
+  if(page){page.classList.add('active');}
+  var body=document.getElementById('guidesMainBody');
+  if(body)body.scrollTop=0;
+}
+function closeGuideDetail(){
+  document.querySelectorAll('.guide-detail-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('guides-index').style.display='';
+  var body=document.getElementById('guidesMainBody');
+  if(body)body.scrollTop=0;
+}
+
+/* ═══════════════════ SWIPE FILE ═══════════════════ */
+function renderSwipeFile(){
+  var items=S.swipeFile||[];
+  var q=(document.getElementById('swfSearch')?.value||'').toLowerCase();
+  if(q) items=items.filter(function(it){return (it.content||'').toLowerCase().includes(q)||(it.analysis||'').toLowerCase().includes(q)||(it.platform||'').toLowerCase().includes(q);});
+  var grid=document.getElementById('swfGrid');
+  var count=document.getElementById('swfCount');
+  var clearBtn=document.getElementById('swfClearBtn');
+  if(!grid)return;
+  var total=(S.swipeFile||[]).length;
+  if(clearBtn)clearBtn.style.display=total>0?'':'none';
+  if(count)count.textContent=items.length===total?total+' saved item'+(total===1?'':'s'):items.length+' of '+total+' items';
+  if(!items.length){
+    grid.innerHTML='<div class="swf-empty"><div class="swf-empty-icon">📌</div><div class="swf-empty-title">'+(q?'No matches found':'Your Swipe File is empty')+'</div><div class="swf-empty-desc">'+(q?'Try a different search term.':'Run a Content Autopsy on any post you love, then click "+ Swipe File" to save the rebuild here.')+'</div></div>';
+    return;
+  }
+  var html='';
+  items.forEach(function(item,i){
+    var plat=item.platform||'';
+    var date=item.savedAt?new Date(item.savedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+    var hasAnalysis=!!(item.analysis&&item.analysis.trim());
+    html+='<div class="swf-card" id="swfc-'+item.id+'">';
+    html+='<div class="swf-strip"></div>';
+    html+='<div class="swf-body">';
+    html+='<div class="swf-meta">';
+    if(plat)html+='<span class="swf-plat">'+plat+'</span>';
+    if(date)html+='<span class="swf-date">'+date+'</span>';
+    html+='</div>';
+    html+='<div class="swf-content" id="swfc-text-'+item.id+'">'+escHtml(item.content||'')+'</div>';
+    html+='<div class="swf-actions">';
+    html+='<button class="swf-btn accent" onclick="swfCopy(\''+item.id+'\')">Copy</button>';
+    html+='<button class="swf-btn" onclick="swfExpand(\''+item.id+'\')">Expand</button>';
+    if(hasAnalysis)html+='<button class="swf-analysis-toggle" id="swf-atoggle-'+item.id+'" onclick="swfToggleAnalysis(\''+item.id+'\')">View Autopsy</button>';
+    html+='<button class="swf-btn del" onclick="swfDelete(\''+item.id+'\')">Remove</button>';
+    html+='</div>';
+    if(hasAnalysis)html+='<div class="swf-analysis" id="swf-analysis-'+item.id+'">'+escHtml(item.analysis||'')+'</div>';
+    html+='</div></div>';
+  });
+  grid.innerHTML=html;
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function swfCopy(id){
+  var item=(S.swipeFile||[]).find(function(it){return it.id===id;});
+  if(!item)return;
+  navigator.clipboard.writeText(item.content||'').then(function(){toast('Copied to clipboard ✓');}).catch(function(){toast('Copy failed');});
+}
+
+function swfExpand(id){
+  var el=document.getElementById('swfc-text-'+id);
+  if(!el)return;
+  el.classList.toggle('expanded');
+}
+
+function swfToggleAnalysis(id){
+  var el=document.getElementById('swf-analysis-'+id);
+  var tog=document.getElementById('swf-atoggle-'+id);
+  if(!el)return;
+  var isOpen=el.classList.toggle('open');
+  if(tog)tog.textContent=isOpen?'Hide Autopsy':'View Autopsy';
+}
+
+function swfDelete(id){
+  if(!S.swipeFile)return;
+  S.swipeFile=S.swipeFile.filter(function(it){return it.id!==id;});
+  persist();
+  renderSwipeFile();
+  toast('Removed from Swipe File');
+}
+
+function clearSwipeFile(){
+  if(!(S.swipeFile||[]).length)return;
+  if(!confirm('Clear all '+S.swipeFile.length+' items from your Swipe File?'))return;
+  S.swipeFile=[];
+  persist();
+  renderSwipeFile();
+  toast('Swipe File cleared');
+}
+
+  btn.disabled=false;btn.textContent='✦ Generate Draft';
+}
+
+/* ═══════════════════ WEEKLY FOCUS ═══════════════════ */
+function renderWeeklyFocus(){
+  var el=document.getElementById('wfItems');
+  if(!el)return;
+  var items=S.weeklyFocus||[];
+  if(!items.length){
+    el.innerHTML='<div class="wf-empty">Nothing added yet. What do you want to make progress on this week?</div>';
+    return;
+  }
+  el.innerHTML=items.map(function(item,i){
+    return '<div class="wf-item'+(item.done?' done':'')+'" id="wfi-'+i+'">'
+      +'<input type="checkbox"'+(item.done?' checked':'')+' onchange="toggleWfItem('+i+')">'
+      +'<span class="wf-item-text">'+esc(item.text)+'</span>'
+      +'<button class="wf-item-del" onclick="deleteWfItem('+i+')" title="Remove">✕</button>'
+      +'</div>';
+  }).join('');
+}
+function addWfItem(){
+  var inp=document.getElementById('wfInput');
+  var text=inp.value.trim();
+  if(!text)return;
+  if((S.weeklyFocus||[]).length>=3){toast('Pick 1-3 things max. Finish one first.');return;}
+  if(!S.weeklyFocus)S.weeklyFocus=[];
+  S.weeklyFocus.push({text:text,done:false});
+  inp.value='';
+  persist();renderWeeklyFocus();
+}
+function toggleWfItem(i){
+  if(!S.weeklyFocus||!S.weeklyFocus[i])return;
+  S.weeklyFocus[i].done=!S.weeklyFocus[i].done;
+  persist();renderWeeklyFocus();
+  if(S.weeklyFocus[i].done)toast('Nice, one step forward ✦');
+}
+function deleteWfItem(i){
+  if(!S.weeklyFocus)return;
+  S.weeklyFocus.splice(i,1);
+  persist();renderWeeklyFocus();
+}
+function resetWeeklyFocus(){
+  if(!(S.weeklyFocus||[]).length)return;
+  if(!confirm('Clear this week\'s focus and start fresh?'))return;
+  S.weeklyFocus=[];
+  persist();renderWeeklyFocus();
+  toast('Fresh start.');
+}
 </script>
 </body>
 </html>
