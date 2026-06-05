@@ -907,6 +907,21 @@ select.fi{cursor:pointer}
 .ai-toggle-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--t);background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:6px 14px;cursor:pointer;transition:all .15s;font-family:var(--fb)}
 .ai-toggle-btn:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
 .ai-toggle-btn.active{color:var(--r);border-color:var(--r);background:var(--rp)}
+
+/* ANALOG / BRIDGE THE GAP TOGGLES */
+.card-section-toggle{border-radius:var(--rad);overflow:hidden;margin-bottom:10px;box-shadow:0 1px 4px var(--sh)}
+.card-section-toggle-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;cursor:pointer;user-select:none;transition:filter .15s}
+.card-section-toggle-hdr:hover{filter:brightness(.97)}
+.card-section-toggle-hdr.analog{background:linear-gradient(135deg,var(--gp),#EDE0C4);border-bottom:2px solid #D4A843}
+.card-section-toggle-hdr.bridge{background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA}
+.card-section-toggle-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:7px}
+.card-section-toggle-title.analog{color:var(--g)}
+.card-section-toggle-title.bridge{color:var(--r)}
+.card-section-toggle-body{display:none;background:var(--w)}
+.card-section-toggle-body.open{display:block}
+.card-section-toggle-chev{font-size:16px;color:var(--tl);transition:transform .2s}
+.card-section-toggle-body.open ~ .never,
+.card-section-toggle-hdr .card-section-toggle-chev{transition:transform .2s}
 </style>
 </head>
 <body>
@@ -2343,15 +2358,15 @@ select.fi{cursor:pointer}
         </div>
       </div>
       <div class="cd2-right">
-        <!-- WRITE YOUR OWN - always visible at top -->
-        <div style="background:white;border:1.5px solid #D4A843;border-radius:var(--rad);overflow:hidden;flex-shrink:0;margin-bottom:0;box-shadow:0 2px 8px rgba(196,122,58,.12)">
-          <div style="padding:12px 16px;border-bottom:2px solid #D4A843;background:linear-gradient(135deg,var(--gp),#EDE0C4);display:flex;align-items:center;justify-content:space-between">
-            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);display:flex;align-items:center;gap:7px">✍️ Write Your Own</div>
-            <div style="font-size:10px;color:var(--tl)">AI tools will use this as context</div>
+        <!-- GO ANALOG SECTION -->
+        <div class="card-section-toggle">
+          <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
+            <div class="card-section-toggle-title analog">✏️ Go Analog</div>
+            <span class="card-section-toggle-chev">-</span>
           </div>
-          <div style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Write your own draft, hook, or notes here first - the AI tools below will build on it.</div>
-            <textarea id="cdOwnContent" class="fi" style="min-height:110px;margin-bottom:8px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Start writing here... your hook, your angle, your rough draft. The AI tools below will read this and build on what you've written."></textarea>
+          <div class="card-section-toggle-body open" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your own draft, hook, or rough notes here. If you want the AI to build on it, check the box in Bridge the Gap below.</div>
+            <textarea id="cdOwnContent" class="fi" style="min-height:110px;margin-bottom:8px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Your hook, your angle, your rough draft. Just you and the page."></textarea>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
               <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
@@ -2359,6 +2374,13 @@ select.fi{cursor:pointer}
             </div>
           </div>
         </div>
+        <!-- BRIDGE THE GAP SECTION -->
+        <div class="card-section-toggle">
+          <div class="card-section-toggle-hdr bridge" onclick="toggleCardSection(this)">
+            <div class="card-section-toggle-title bridge">✦ Bridge the Gap</div>
+            <span class="card-section-toggle-chev">+</span>
+          </div>
+          <div class="card-section-toggle-body" style="padding:8px">
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA">
             <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Strategy Session</div>
@@ -2530,6 +2552,8 @@ select.fi{cursor:pointer}
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -6578,6 +6602,15 @@ function savePanicBrief(){
   S.drafts.unshift({id:Date.now().toString(),title:topic?topic.slice(0,65):'Creative Director Brief',content:content,platform:'dashboard',contentType:'Creative Direction',tone:'',createdAt:new Date().toISOString()});
   persist();renderGS();
   toast('Saved to Drafts ✓');
+}
+
+/* ═══ CARD SECTION TOGGLES ═══ */
+function toggleCardSection(hdr){
+  var body = hdr.nextElementSibling;
+  var chev = hdr.querySelector('.card-section-toggle-chev');
+  if(!body)return;
+  var isOpen = body.classList.toggle('open');
+  if(chev) chev.textContent = isOpen ? '-' : '+';
 }
 </script>
 </body>
