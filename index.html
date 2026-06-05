@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="2.8">
+<html lang="en" data-version="2.9">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -651,8 +651,6 @@ select.fi{cursor:pointer}
   .m-title{font-size:18px}
 
   /* WELCOME MODAL - centered on mobile, not bottom sheet */
-  #welcomeModal{align-items:center !important;padding:12px !important}
-  #welcomeModal .modal{border-radius:10px !important;max-height:88vh;overflow-y:auto;width:100% !important;max-width:100% !important}
 
   /* PANIC BAR - stack on mobile */
   .panic-bar{flex-direction:column !important;align-items:flex-start !important;gap:12px !important;padding:14px 16px !important}
@@ -1985,21 +1983,6 @@ select.fi{cursor:pointer}
 
 <!-- MODALS -->
 <!-- Welcome -->
-<div class="modal-ov" id="welcomeModal">
-  <div class="modal modal-xl" style="max-width:480px">
-    <div class="m-title" style="font-size:20px;margin-bottom:4px">Welcome to your Studio ✦</div>
-    <div class="m-sub" style="margin-bottom:14px;font-size:13px">Here's the quick version so you can get started.</div>
-    <div class="welcome-steps" style="gap:8px;margin-bottom:16px">
-      <div class="w-step"><div class="w-num">1</div><div class="w-step-body"><h4 style="margin-bottom:1px">Settings first</h4><p style="font-size:12px;margin:0">Add your Brand Profile so every AI draft sounds like you.</p></div></div>
-      <div class="w-step"><div class="w-num">2</div><div class="w-step-body"><h4 style="margin-bottom:1px">Browse the Library</h4><p style="font-size:12px;margin:0">Pre-loaded hooks, CTAs, and prompts for your niche.</p></div></div>
-      <div class="w-step"><div class="w-num">3</div><div class="w-step-body"><h4 style="margin-bottom:1px">Plan in the Content Planner</h4><p style="font-size:12px;margin:0">Move ideas from Idea to Published. Nothing falls through.</p></div></div>
-      <div class="w-step"><div class="w-num">4</div><div class="w-step-body"><h4 style="margin-bottom:1px">Generate in Writing Studio</h4><p style="font-size:12px;margin:0">Brief, generate, done. 7 formats, all in your voice.</p></div></div>
-      <div class="w-step"><div class="w-num">5</div><div class="w-step-body"><h4 style="margin-bottom:1px">Everything saves automatically</h4><p style="font-size:12px;margin:0">Syncs across all your devices.</p></div></div>
-    </div>
-    <div class="m-acts"><button class="btn btn-p full" onclick="closeWelcome()">Got it, let's go ✦</button></div>
-  </div>
-</div>
-
 <!-- Calendar Entry -->
 <div class="modal-ov" id="calModal">
   <div class="modal">
@@ -3437,7 +3420,6 @@ function _appInit(){
   S.calWeekStart = S.calWeekStart || new Date().getDate();
   renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban(); renderWeeklyFocus(); setTimeout(renderTasksDue, 100);
   renderAllLibs(); setGreeting();
-  if(!localStorage.getItem('studioWelcomeSeen')) openWelcome();
 }
 
 function load(){ /* data loaded via initFlowStateApp */ }
@@ -4251,8 +4233,6 @@ function closeModal(id){
   }
 }
 document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
-function openWelcome(){openModal('welcomeModal');}
-function closeWelcome(){closeModal('welcomeModal');localStorage.setItem('studioWelcomeSeen','1');}
 function openCalModal(ds){
   S.editingCalId=null;
   document.getElementById('calModalTitle').textContent='Add Calendar Entry';
@@ -4570,13 +4550,11 @@ function buildBrandContext(){
   return lines.length ? '\n\nBrand Profile:\n'+lines.join('\n') : '';
 }
 function resetOnboarding(){
-  localStorage.removeItem('studioWelcomeSeen');
   localStorage.removeItem('gsDismissed');
   S.gs.dismissed=false;
   const strip=document.getElementById('gsStrip');
   if(strip)strip.style.display='';
   persist();
-  openWelcome();
   toast('Welcome guide reset ✓');
 }
 function saveModel(){S.settings.model=document.getElementById('modelIn').value;persist();toast('Model saved ✓');}
