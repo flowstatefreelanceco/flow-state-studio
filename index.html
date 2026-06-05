@@ -1258,10 +1258,7 @@ select.fi{cursor:pointer}
             <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
             <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:10px;line-height:1.55">✦ For Article and Blog Post formats, the AI automatically generates a title and subtitle and places them in the fields above the output. You do not need to write them yourself.</div>
             <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:70px"></textarea></div>
-            <div class="fl"><label class="fl-lbl">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="notesIn" placeholder="CTA, hashtags, word count, specific phrases..." style="min-height:40px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure. Or: make the hook stronger but leave the rest as is." style="min-height:40px"></textarea></div>
-            <div class="fl"><label class="fl-lbl">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioTags" placeholder="e.g. ADHD, entrepreneurship, content marketing..." style="min-height:36px"></textarea></div>
-            <div class="fl"><label class="fl-lbl">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioLinks" placeholder="Relevant URLs, references, or post links to include..." style="min-height:36px"></textarea></div>
             <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:6px 0 10px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use my draft on the right as the AI starting point</span></label>
             <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
           </div>
@@ -1275,6 +1272,10 @@ select.fi{cursor:pointer}
             <div style="display:flex;gap:6px;margin-bottom:12px">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="studioOwnCopy()">Copy</button>
               <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="studioOwnSave()">Save to Drafts</button>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:10px">
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
             </div>
             <div style="height:1px;background:var(--bl);margin:0 -20px 0"></div>
           </div>
@@ -4096,7 +4097,6 @@ async function generate(){
   const hasDraft=ownDraftCbCheck&&ownDraftCbCheck.checked&&document.getElementById('studioOwnTA').value.trim();
   const hasInstr=document.getElementById('instrIn')&&document.getElementById('instrIn').value.trim();
   if(!topic&&!hasDraft&&!hasInstr){toast('Add a topic, instruction, or check use my draft');return;}
-  const notes=document.getElementById('notesIn').value.trim();
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
   btn.disabled=true;btn.textContent='...Generating';
@@ -4111,8 +4111,8 @@ async function generate(){
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
   const usr=ownDraft
-    ?`You have a draft to work from. ${instr?'Instruction: '+instr+'. ':''}Rewrite or refine this into a polished ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone. Keep the voice and ideas, improve the structure, hook, and flow.\n\nDraft:\n${ownDraft}${notes?'\n\nExtra notes: '+notes:''}`
-    :`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
+    ?`You have a draft to work from. ${instr?'Instruction: '+instr+'. ':''}Rewrite or refine this into a polished ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone. Keep the voice and ideas, improve the structure, hook, and flow.\n\nDraft:\n${ownDraft}`
+    :`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}`;
   try{
     const res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})},45000);
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
