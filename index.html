@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="2.9">
+<html lang="en" data-version="3.0">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -1982,11 +1982,7 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- UPDATE NOTIFICATION BANNER -->
-<div id="updateBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9990;background:linear-gradient(135deg,var(--tealp),#C8E4E4);border-top:2px solid var(--teal);padding:14px 24px;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 -4px 20px rgba(42,26,14,.12)">
-  <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
-    <span style="font-size:22px;flex-shrink:0">✦</span>
-    <div>
-      <div style="font-family:var(--fh);font-size:16px;font-weight:600;color:var(--e)">A new version of Flow State Studio is ready</div>
+
       <div style="font-size:12px;color:var(--el);margin-top:2px">Click Update to get the latest features instantly. Takes one second.</div>
     </div>
   </div>
@@ -6306,18 +6302,7 @@ function checkForUpdate() {
 var _whatsNewChangelog = [];
 var _whatsNewVersion = '';
 
-function doAppUpdate() {
-  // Show What's New modal first, then reload on dismiss
-  if (_whatsNewChangelog && _whatsNewChangelog.length) {
-    renderWhatsNew(_whatsNewChangelog);
-    openModal('whatsNewModal');
-    var banner = document.getElementById('updateBanner');
-    if (banner) banner.style.display = 'none';
-  } else {
-    // No changelog loaded yet, just reload
-    window.location.href = window.location.pathname + '?v=' + Date.now();
-  }
-}
+
 
 function renderWhatsNew(changelog){
   var el = document.getElementById('wnList');
@@ -6336,7 +6321,6 @@ function renderWhatsNew(changelog){
 function dismissWhatsNew(){
   if (_whatsNewVersion) localStorage.setItem('wnDismissed_' + _whatsNewVersion, '1');
   closeModal('whatsNewModal');
-  window.location.href = window.location.pathname + '?v=' + Date.now();
 }
 
 initAuth();
