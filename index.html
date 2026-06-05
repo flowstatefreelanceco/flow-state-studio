@@ -6593,11 +6593,7 @@ function toggleAIPanel(){
 function savePanicBrief(){
   var topic=document.getElementById('panicTopic').value.trim();
   var out=document.getElementById('panicOut').textContent.trim();
-  var content=out?topic+'
-
----
-
-'+out:topic;
+  var content=out?topic+'\n\n---\n\n'+out:topic;
   if(!content){toast('Nothing to save');return;}
   S.drafts.unshift({id:Date.now().toString(),title:topic?topic.slice(0,65):'Creative Director Brief',content:content,platform:'dashboard',contentType:'Creative Direction',tone:'',createdAt:new Date().toISOString()});
   persist();renderGS();
