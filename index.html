@@ -3003,7 +3003,8 @@ select.fi{cursor:pointer}
     <div id="panicOut" style="display:none;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;margin-top:14px;font-size:14px;line-height:1.85;white-space:pre-wrap;color:var(--e)"></div>
     <div id="panicActs" style="display:none;margin-top:10px;display:none;gap:8px">
       <button class="btn btn-g" onclick="navigator.clipboard.writeText(document.getElementById('panicOut').textContent).then(()=>toast('Copied ✓'))">Copy</button>
-      <button class="btn btn-brass" onclick="panicToCard()">→ Open as Content Card</button>
+      <button class="btn btn-brass" onclick="panicSaveDraft()">Save to Drafts</button>
+      <button class="btn btn-g" onclick="panicToCard()">→ Content Card</button>
     </div>
     <div class="m-acts" style="margin-top:14px"><button class="btn btn-g" onclick="closeModal('panicModal')">Close</button></div>
   </div>
@@ -5245,6 +5246,16 @@ function runPanicRandom(){
       if(actsEl)actsEl.style.display='flex';
     }
   });
+}
+
+function panicSaveDraft(){
+  var out=document.getElementById('panicOut').textContent.trim();
+  if(!out){toast('Nothing to save');return;}
+  var topic=document.getElementById('panicTopic').value.trim();
+  S.drafts.unshift({id:Date.now().toString(),title:topic?topic.slice(0,65):'Creative Director Brief',content:out,platform:'dashboard',contentType:'Creative Direction',tone:'',createdAt:new Date().toISOString()});
+  S.gs.draftGenerated=true;
+  persist();renderGS();
+  toast('Saved to Drafts ✓');
 }
 
 function panicToCard(){
