@@ -1,30 +1,36 @@
 {
-  "version": "2.7",
+  "version": "2.8",
   "releasedAt": "2026-06-04",
   "changelog": [
     {
-      "type": "improvement",
+      "type": "fix",
       "date": "Jun 4, 2026",
-      "title": "What's New shows automatically",
-      "desc": "When a new version is available, the What's New popup now appears on its own. No banner to click, no link to find."
+      "title": "AI Instruction Field Now Working",
+      "desc": "Instructions you add before generating in the Writing Studio and content cards are now properly passed to the AI and followed."
     },
     {
       "type": "fix",
       "date": "Jun 4, 2026",
-      "title": "Task Card Titles Fixed",
-      "desc": "Task card titles now use the correct readable font, matching Saved Drafts and Content Planner cards."
+      "title": "Em Dashes and Markdown Removed from Output",
+      "desc": "Generated content no longer contains em dashes, asterisks, pound signs, or other markdown symbols. Clean text every time."
+    },
+    {
+      "type": "fix",
+      "date": "Jun 4, 2026",
+      "title": "This Week's Focus Now Saves Correctly",
+      "desc": "Focus items now persist properly between sessions and across devices."
     },
     {
       "type": "feature",
       "date": "Jun 4, 2026",
-      "title": "This Week's Focus",
-      "desc": "A no-pressure weekly checklist on your dashboard. Pick 1-3 things, check them off, reset at the start of each week. No dates, no pressure."
+      "title": "Surprise Me on the Panic Button",
+      "desc": "No idea what to post? Hit Surprise Me and the Creative Director generates a random content idea AND full direction for you, no topic needed."
     },
     {
       "type": "improvement",
       "date": "Jun 4, 2026",
-      "title": "Task Card Design Updated",
-      "desc": "Task cards now use the tan background with a teal bottom strip."
+      "title": "Getting Started Updated",
+      "desc": "The Getting Started guide on the dashboard now includes the Swipe File and Guides so new members know they're there."
     }
   ]
 }
