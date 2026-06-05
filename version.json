@@ -1,36 +1,36 @@
 {
-  "version": "2.9",
+  "version": "3.0",
   "releasedAt": "2026-06-05",
   "changelog": [
     {
       "type": "improvement",
       "date": "Jun 5, 2026",
-      "title": "Welcome popup removed",
-      "desc": "The Getting Started guide lives on your dashboard now, so the popup is gone. What's New will show automatically whenever there's a real update."
+      "title": "Writing Studio redesigned",
+      "desc": "The left AI tools panel is now hidden by default. Click AI Tools in the header to open it. The writing area is front and centre so you can just write without feeling like you have to use AI."
+    },
+    {
+      "type": "improvement",
+      "date": "Jun 5, 2026",
+      "title": "Tags and Links moved to the right panel",
+      "desc": "Tags and Links now live next to your writing and save with both your own drafts and AI-generated drafts."
     },
     {
       "type": "fix",
       "date": "Jun 5, 2026",
-      "title": "AI Instruction Field Working",
-      "desc": "Instructions you type before generating are now properly followed by the AI in both the Writing Studio and content cards."
+      "title": "Article title and subtitle now generate correctly",
+      "desc": "When you select Article, Blog Post, or Substack as your platform, the AI now auto-generates a title and subtitle and places them in the fields above your draft."
+    },
+    {
+      "type": "improvement",
+      "date": "Jun 5, 2026",
+      "title": "Smaller input fields, more room for writing",
+      "desc": "The topic and instructions fields are more compact. The AI output area now fills the available space rather than being fixed at a small size."
     },
     {
       "type": "fix",
       "date": "Jun 5, 2026",
-      "title": "Clean Output, No Markdown",
-      "desc": "Generated content no longer contains em dashes, asterisks, pound signs, or other markdown formatting symbols."
-    },
-    {
-      "type": "fix",
-      "date": "Jun 5, 2026",
-      "title": "This Week's Focus Saves Correctly",
-      "desc": "Focus items now persist properly between sessions."
-    },
-    {
-      "type": "feature",
-      "date": "Jun 5, 2026",
-      "title": "Surprise Me on the Panic Button",
-      "desc": "No idea what to post? Hit Surprise Me and get a random content idea plus full creative direction with no topic needed."
+      "title": "Topic field no longer required",
+      "desc": "You can now generate using just the instructions field or the use my draft checkbox, without needing to fill in a topic."
     }
   ]
 }
