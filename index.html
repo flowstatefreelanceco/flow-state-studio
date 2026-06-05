@@ -4071,7 +4071,7 @@ function copyLib(id,section){
 
 /* ═══════════════════ AI STUDIO ═══════════════════ */
 function setupChips(){
-  setupCG('typeChips',v=>S.studio.type=v);
+  setupCG('typeChips',v=>{S.studio.type=v;toggleArticleHint(v);});
   setupCG('platChips',v=>S.studio.plat=v);
   setupCG('toneChips',v=>S.studio.tone=v);
 }
