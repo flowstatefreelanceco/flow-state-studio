@@ -3185,7 +3185,7 @@ async function initAuth(){
 async function loadUserData(){
   // Always try localStorage first as instant fallback
   var localData={};
-  try{var raw=localStorage.getItem('fss_v1');if(raw)localData=JSON.parse(raw);}catch(e){}
+  try{var raw=localStorage.getItem(lsKey());if(raw)localData=JSON.parse(raw);}catch(e){}
   if(!_currentUser)return localData;
   try{
     var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
@@ -3221,7 +3221,7 @@ async function loadUserData(){
       merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
       merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
       // Save merged back so next load is fast
-      try{localStorage.setItem('fss_v1',JSON.stringify(merged));}catch(e){}
+      try{localStorage.setItem(lsKey(),JSON.stringify(merged));}catch(e){}
       return merged;
     }
   }catch(e){console.warn('Supabase load failed, using localStorage:',e.message);}
@@ -3230,7 +3230,7 @@ async function loadUserData(){
 
 async function saveUserData(obj){
   if(!_currentUser)return;
-  try{localStorage.setItem('fss_v1',JSON.stringify(obj));}catch(e){}
+  try{localStorage.setItem(lsKey(),JSON.stringify(obj));}catch(e){}
   try{
     await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
   }catch(e){console.warn('Supabase save failed:',e.message);}
@@ -3458,6 +3458,11 @@ function _appInit(){
 function load(){ /* data loaded via initFlowStateApp */ }
 /* ═══════════════════ PERSIST (DEBOUNCED) ═══════════════════ */
 var _persistTimer = null;
+function lsKey(){
+  // Scope localStorage by user ID so multiple accounts on same browser stay isolated
+  return _currentUser ? 'fss_v1_'+_currentUser.id : 'fss_v1';
+}
+
 function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
@@ -3472,7 +3477,7 @@ function persist(){
     var json = JSON.stringify(dataToSave);
     // Warn if approaching localStorage limit (>3MB)
     if(json.length > 3000000) console.warn('FSS: data approaching localStorage limit, consider reducing image storage');
-    localStorage.setItem('fss_v1', json);
+    localStorage.setItem(lsKey(), json);
   }catch(e){ console.warn('localStorage save failed:', e); }
   // Debounce Supabase save - wait 1.5s of inactivity before hitting network
   clearTimeout(_persistTimer);
@@ -6309,7 +6314,7 @@ function checkForUpdate() {
       var latest = data.version || '';
       var current = document.documentElement.dataset.version || '';
       if (latest && current && latest !== current) {
-        var dismissed = localStorage.getItem('wnDismissed_' + latest);
+        var dismissed = localStorage.getItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + latest);
         if (!dismissed) {
           _whatsNewChangelog = data.changelog || [];
           _whatsNewVersion = latest;
@@ -6344,7 +6349,7 @@ function renderWhatsNew(changelog){
 }
 
 function dismissWhatsNew(){
-  if (_whatsNewVersion) localStorage.setItem('wnDismissed_' + _whatsNewVersion, '1');
+  if (_whatsNewVersion) localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
   closeModal('whatsNewModal');
 }
 
