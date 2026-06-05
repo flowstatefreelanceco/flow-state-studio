@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="2.7">
+<html lang="en" data-version="2.8">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -2985,7 +2985,10 @@ select.fi{cursor:pointer}
         </select>
       </div>
     </div>
-    <button class="btn btn-p full" id="panicBtn" onclick="runPanic()" style="font-size:14px;padding:12px">✦ Brief Me Now</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-p" id="panicBtn" onclick="runPanic()" style="font-size:14px;padding:12px;flex:2">✦ Brief Me</button>
+      <button class="btn btn-g" onclick="runPanicRandom()" style="font-size:13px;padding:12px;flex:1" title="Generate a random content idea and direction">🎲 Surprise Me</button>
+    </div>
     <div id="panicLoading" style="display:none;text-align:center;padding:16px 0;color:var(--t);font-size:13px">Thinking like a creative director...</div>
     <div id="panicOut" style="display:none;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;margin-top:14px;font-size:14px;line-height:1.85;white-space:pre-wrap;color:var(--e)"></div>
     <div id="panicActs" style="display:none;margin-top:10px;display:none;gap:8px">
@@ -3197,6 +3200,10 @@ async function loadUserData(){
       merged.favs=Object.assign({},sbData.favs||{},localData.favs||{});
       merged.gs=Object.assign({},sbData.gs||{},localData.gs||{});
       merged.aiCount=Math.max(localData.aiCount||0,sbData.aiCount||0);
+      merged.weeklyFocus=localData.weeklyFocus||sbData.weeklyFocus||[];
+      merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
+      merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
+      merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
       // Save merged back so next load is fast
       try{localStorage.setItem('fss_v1',JSON.stringify(merged));}catch(e){}
       return merged;
@@ -4101,7 +4108,7 @@ async function generate(){
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
-  const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use ${S.studio.type}.`;
+  const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use ${S.studio.type}.${instr?' IMPORTANT creator instruction: '+instr:''}`;
   const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
   try{
     const res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})},45000);
@@ -5196,6 +5203,36 @@ async function runPanic(){
     if(actsEl)actsEl.style.display='flex';
   }
 }
+function runPanicRandom(){
+  var plat=document.getElementById('panicPlat').value;
+  var fmt=document.getElementById('panicFormat').value;
+  var brand=buildBrandContext();
+  document.getElementById('panicLoading').style.display='block';
+  document.getElementById('panicOut').style.display='none';
+  var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
+  document.getElementById('panicBtn').disabled=true;
+  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
+  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate deeply with my ideal audience right now.
+
+Give me:
+1. THE IDEA - a specific, ready-to-use content topic (1 sentence)
+2. THE ANGLE - specific framing that will land (1-2 sentences)
+3. THE HOOK - one specific opening line to lead with
+4. THE EMOTION - what feeling to create and why
+5. THE WATCH OUT - one thing to avoid
+
+Be direct. No fluff. Make the idea specific, not generic.';
+  cdCallAI(sys,usr,700).then(function(result){
+    document.getElementById('panicLoading').style.display='none';
+    document.getElementById('panicBtn').disabled=false;
+    if(result){
+      var out=document.getElementById('panicOut');
+      out.textContent=stripMD(result);out.style.display='block';
+      if(actsEl)actsEl.style.display='flex';
+    }
+  });
+}
+
 function panicToCard(){
   var topic=document.getElementById('panicTopic').value.trim();
   var out=document.getElementById('panicOut').textContent;
@@ -5325,7 +5362,7 @@ async function cdGen2(type) {
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. Tone: ' + toneDesc + '.' + (cdInstr ? ' Follow this instruction from the creator: ' + cdInstr : '');
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols (no asterisks, no pound signs, no em dashes). Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
   var prompts = {
     caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
     story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
@@ -5550,6 +5587,8 @@ function stripMD(t){
   t=t.replace(/^[\*\-] /gm,'');
   t=t.replace(/^\d+\. /gm,'');
   t=t.replace(/`(.+?)`/g,'$1');
+  t=t.replace(/—/g,',');
+  t=t.replace(/^\*/gm,'');
   t=t.replace(/\n{3,}/g,'\n\n');
   return t.trim();
 }
