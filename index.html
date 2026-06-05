@@ -1252,6 +1252,7 @@ select.fi{cursor:pointer}
             <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure. Or: make the hook stronger but leave the rest as is." style="min-height:56px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioTags" placeholder="e.g. ADHD, entrepreneurship, content marketing..." style="min-height:46px"></textarea></div>
             <div class="fl"><label class="fl-lbl">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="studioLinks" placeholder="Relevant URLs, references, or post links to include..." style="min-height:46px"></textarea></div>
+            <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:6px 0 10px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use my draft on the right as the AI starting point</span></label>
             <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
           </div>
         </div>
@@ -4091,7 +4092,11 @@ async function generate(){
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
   const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use ${S.studio.type}.${instr?' IMPORTANT creator instruction: '+instr:''}`;
-  const usr=`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
+  const ownDraftCb=document.getElementById('useOwnDraft');
+  const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
+  const usr=ownDraft
+    ?`You have a draft to work from. ${instr?'Instruction: '+instr+'. ':''}Rewrite or refine this into a polished ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone. Keep the voice and ideas, improve the structure, hook, and flow.\n\nDraft:\n${ownDraft}${notes?'\n\nExtra notes: '+notes:''}`
+    :`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}${notes?'\n\nNotes: '+notes:''}`;
   try{
     const res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})},45000);
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
