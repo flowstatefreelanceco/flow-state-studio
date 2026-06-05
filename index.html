@@ -5190,16 +5190,7 @@ function runPanicRandom(){
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
   var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
-  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate deeply with my ideal audience right now.
-
-Give me:
-1. THE IDEA - a specific, ready-to-use content topic (1 sentence)
-2. THE ANGLE - specific framing that will land (1-2 sentences)
-3. THE HOOK - one specific opening line to lead with
-4. THE EMOTION - what feeling to create and why
-5. THE WATCH OUT - one thing to avoid
-
-Be direct. No fluff. Make the idea specific, not generic.';
+  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nGive me:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid\n\nBe direct. Make it specific.';
   cdCallAI(sys,usr,700).then(function(result){
     document.getElementById('panicLoading').style.display='none';
     document.getElementById('panicBtn').disabled=false;
