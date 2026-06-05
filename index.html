@@ -3006,7 +3006,7 @@ select.fi{cursor:pointer}
       <button class="btn btn-brass" onclick="panicSaveDraft()">Save to Drafts</button>
       <button class="btn btn-g" onclick="panicToCard()">→ Content Card</button>
     </div>
-    <div class="m-acts" style="margin-top:14px"><button class="btn btn-g" onclick="closeModal('panicModal')">Close</button></div>
+    <div class="m-acts" style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end"><button class="btn btn-brass" onclick="savePanicBrief()">Save Brief to Drafts</button><button class="btn btn-g" onclick="closeModal('panicModal')">Close</button></div>
   </div>
 </div>
 <!-- FEEDBACK MODAL -->
@@ -6564,6 +6564,20 @@ function toggleAIPanel(){
   if(!wrap)return;
   var isOpen=wrap.classList.toggle('ai-open');
   if(btn){btn.classList.toggle('active',isOpen);btn.textContent=isOpen?'✦ Hide AI Tools':'✦ AI Tools';}
+}
+
+function savePanicBrief(){
+  var topic=document.getElementById('panicTopic').value.trim();
+  var out=document.getElementById('panicOut').textContent.trim();
+  var content=out?topic+'
+
+---
+
+'+out:topic;
+  if(!content){toast('Nothing to save');return;}
+  S.drafts.unshift({id:Date.now().toString(),title:topic?topic.slice(0,65):'Creative Director Brief',content:content,platform:'dashboard',contentType:'Creative Direction',tone:'',createdAt:new Date().toISOString()});
+  persist();renderGS();
+  toast('Saved to Drafts ✓');
 }
 </script>
 </body>
