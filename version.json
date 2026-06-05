@@ -1,36 +1,36 @@
 {
-  "version": "2.8",
-  "releasedAt": "2026-06-04",
+  "version": "2.9",
+  "releasedAt": "2026-06-05",
   "changelog": [
     {
-      "type": "fix",
-      "date": "Jun 4, 2026",
-      "title": "AI Instruction Field Now Working",
-      "desc": "Instructions you add before generating in the Writing Studio and content cards are now properly passed to the AI and followed."
+      "type": "improvement",
+      "date": "Jun 5, 2026",
+      "title": "Welcome popup removed",
+      "desc": "The Getting Started guide lives on your dashboard now, so the popup is gone. What's New will show automatically whenever there's a real update."
     },
     {
       "type": "fix",
-      "date": "Jun 4, 2026",
-      "title": "Em Dashes and Markdown Removed from Output",
-      "desc": "Generated content no longer contains em dashes, asterisks, pound signs, or other markdown symbols. Clean text every time."
+      "date": "Jun 5, 2026",
+      "title": "AI Instruction Field Working",
+      "desc": "Instructions you type before generating are now properly followed by the AI in both the Writing Studio and content cards."
     },
     {
       "type": "fix",
-      "date": "Jun 4, 2026",
-      "title": "This Week's Focus Now Saves Correctly",
-      "desc": "Focus items now persist properly between sessions and across devices."
+      "date": "Jun 5, 2026",
+      "title": "Clean Output, No Markdown",
+      "desc": "Generated content no longer contains em dashes, asterisks, pound signs, or other markdown formatting symbols."
+    },
+    {
+      "type": "fix",
+      "date": "Jun 5, 2026",
+      "title": "This Week's Focus Saves Correctly",
+      "desc": "Focus items now persist properly between sessions."
     },
     {
       "type": "feature",
-      "date": "Jun 4, 2026",
+      "date": "Jun 5, 2026",
       "title": "Surprise Me on the Panic Button",
-      "desc": "No idea what to post? Hit Surprise Me and the Creative Director generates a random content idea AND full direction for you, no topic needed."
-    },
-    {
-      "type": "improvement",
-      "date": "Jun 4, 2026",
-      "title": "Getting Started Updated",
-      "desc": "The Getting Started guide on the dashboard now includes the Swipe File and Guides so new members know they're there."
+      "desc": "No idea what to post? Hit Surprise Me and get a random content idea plus full creative direction with no topic needed."
     }
   ]
 }
