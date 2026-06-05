@@ -925,6 +925,9 @@ select.fi{cursor:pointer}
 .card-section-toggle-chev{font-size:16px;color:var(--tl);transition:transform .2s}
 .card-section-toggle-body.open ~ .never,
 .card-section-toggle-hdr .card-section-toggle-chev{transition:transform .2s}
+
+/* ANALOG BADGE */
+.dc-analog-badge{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 8px;border-radius:100px;background:var(--gp);color:var(--g);border:1px solid #D4A843;margin-left:6px}
 </style>
 </head>
 <body>
@@ -1367,6 +1370,11 @@ select.fi{cursor:pointer}
           <option value="newest">Newest first</option>
           <option value="oldest">Oldest first</option>
           <option value="platform">By platform</option>
+        </select>
+        <select id="draftsFilterAnalog" class="fi" style="width:auto;min-width:120px;font-size:13px" onchange="renderDraftsGrid()">
+          <option value="">All drafts</option>
+          <option value="analog">Analog only</option>
+          <option value="ai">AI-assisted only</option>
         </select>
         <select id="draftsFilterPlat" class="fi" style="width:auto;min-width:130px;font-size:13px" onchange="renderDraftsGrid()">
           <option value="">All platforms</option>
@@ -3042,9 +3050,10 @@ select.fi{cursor:pointer}
         </select>
       </div>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-p" id="panicBtn" onclick="runPanic()" style="font-size:14px;padding:12px;flex:2">✦ Brief Me</button>
-      <button class="btn btn-g" onclick="runPanicRandom()" style="font-size:13px;padding:12px;flex:1" title="Generate a random content idea and direction">🎲 Surprise Me</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-p" id="panicBtn" onclick="runPanic()" style="font-size:14px;padding:12px;flex:2;min-width:120px">✦ Brief Me</button>
+      <button class="btn btn-g" onclick="runPanicRandom()" style="font-size:13px;padding:12px;flex:1;min-width:100px" title="Generate a random content idea and direction">🎲 Surprise Me</button>
+      <button class="btn btn-g" onclick="runAnalogPrompt()" style="font-size:13px;padding:12px;flex:1;min-width:100px;border-color:#D4A843;color:var(--g);background:var(--gp)" title="Get a writing prompt with no AI - just a spark">✏️ Analog Prompt</button>
     </div>
     <div id="panicLoading" style="display:none;text-align:center;padding:16px 0;color:var(--t);font-size:13px">Thinking like a creative director...</div>
     <div id="panicOut" style="display:none;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;margin-top:14px;font-size:14px;line-height:1.85;white-space:pre-wrap;color:var(--e)"></div>
@@ -4221,7 +4230,7 @@ function dcHTML(d){
       <div class="dc-title" style="color:${bc}">${esc(d.title||'Untitled draft')}</div>
       <div class="dc-preview">${esc(d.content)}</div>
     </div>
-    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span>${d.tags?'<span style="font-size:10px;color:var(--tl);margin-left:8px">'+ esc(d.tags)+'</span>':''}</div>
+    <div class="dc-foot" style="padding:0 12px 10px"><span class="dc-date">${dt}</span>${d.analog?'<span class="dc-analog-badge">✏️ Analog</span>':''} ${d.tags?'<span style="font-size:10px;color:var(--tl);margin-left:6px">'+esc(d.tags)+'</span>':''}</div>
   </div>`;
 }
 function renderRecentDrafts(){
@@ -4242,6 +4251,9 @@ function renderDraftsGrid(){
   let drafts=[...S.drafts];
   if(q)drafts=drafts.filter(d=>(d.title||'').toLowerCase().includes(q)||(d.content||'').toLowerCase().includes(q));
   if(platFilter)drafts=drafts.filter(d=>d.platform===platFilter);
+  const analogFilter=document.getElementById('draftsFilterAnalog')?.value||'';
+  if(analogFilter==='analog')drafts=drafts.filter(d=>d.analog);
+  if(analogFilter==='ai')drafts=drafts.filter(d=>!d.analog);
   if(sortBy==='oldest')drafts.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
   else if(sortBy==='platform')drafts.sort((a,b)=>(a.platform||'').localeCompare(b.platform||''));
   else drafts.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
@@ -5380,7 +5392,7 @@ function studioOwnSave(){
   var ownLinks=document.getElementById('studioLinks')?document.getElementById('studioLinks').value.trim():'';
   var ownTags=document.getElementById('studioTags')?document.getElementById('studioTags').value.trim():'';
   var titleVal=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
-  var draft={id:Date.now().toString(),title:titleVal||selType+' - own draft',content:el.value.trim(),platform:selPlat,format:selType,links:ownLinks,tags:ownTags,createdAt:new Date().toISOString()};
+  var draft={id:Date.now().toString(),title:titleVal||selType+' - own draft',content:el.value.trim(),platform:selPlat,format:selType,links:ownLinks,tags:ownTags,analog:true,createdAt:new Date().toISOString()};
   S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
   toast('Saved to drafts ✓');
 }
@@ -5392,7 +5404,7 @@ function cdSaveOwnDraft(){
   var el=document.getElementById('cdOwnContent');
   if(!el||!el.value.trim()){toast('Nothing to save yet');return;}
   var b=cdGetBrief();
-  var draft={id:Date.now().toString(),title:b.title||'Untitled draft',content:el.value.trim(),platform:b.plat,format:b.format,createdAt:new Date().toISOString()};
+  var draft={id:Date.now().toString(),title:b.title||'Untitled draft',content:el.value.trim(),platform:b.plat,format:b.format,analog:true,createdAt:new Date().toISOString()};
   S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
   var saved=document.getElementById('cdOwnSaved');if(saved){saved.style.opacity='1';setTimeout(()=>saved.style.opacity='0',2000);}
   toast('Draft saved ✓');
@@ -6630,6 +6642,16 @@ function toggleCardSection(hdr){
   if(!body)return;
   var isOpen = body.classList.toggle('open');
   if(chev) chev.textContent = isOpen ? '-' : '+';
+}
+
+function runAnalogPrompt(){
+  var prompts=['What is one thing you wish someone had told you when you first started your business?', 'Describe a moment this week that made you remember why you do this work.', 'What is the question your ideal client asks most often, and what is your honest answer?', 'Write about a time something went wrong in your business and what you actually learned from it.', 'What does a good day in your business look like? Be specific.', 'What is a belief about your industry that you disagree with? Say it plainly.', 'Who is one person your work has genuinely helped? What changed for them?', 'What is something you have figured out the hard way that your audience needs to hear?', 'Describe your ideal client not by their job title but by how they feel before they find you.', 'What would you create if you knew it would not be judged?', 'What part of your work feels effortless to you that feels impossible to others?', 'Write the post you have been avoiding writing. Start with why you have been avoiding it.', 'What does sustainability actually look like in your business right now, not the polished version?', 'What is one small thing you do differently from everyone else in your niche?', 'Write a letter to yourself from six months ago about where you are now.'];
+  var prompt=prompts[Math.floor(Math.random()*prompts.length)];
+  var out=document.getElementById('panicOut');
+  var acts=document.getElementById('panicActs');
+  out.textContent='✏️ Your analog writing prompt:\n\n'+prompt+'\n\nNo AI. Just you and the page. Open your Notebooks or write directly in the field above.';
+  out.style.display='block';
+  if(acts)acts.style.display='flex';
 }
 </script>
 </body>
