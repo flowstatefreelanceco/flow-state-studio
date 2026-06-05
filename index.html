@@ -932,6 +932,24 @@ select.fi{cursor:pointer}
 /* SALES PAGE SECTIONS */
 .pf-section-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin:32px 0 16px;padding-bottom:10px;border-bottom:1.5px solid var(--bl);display:flex;align-items:center;gap:10px}
 .pf-section-label::before{content:"";flex:1;height:1px;background:var(--bl);display:none}
+
+/* GUIDES CAROUSEL */
+.gc-carousel{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gc-carousel::-webkit-scrollbar{display:none}
+.gc-carousel-card{flex-shrink:0;width:200px;border-radius:var(--rad);padding:16px;cursor:pointer;transition:transform .18s,box-shadow .18s;border:1.5px solid var(--bl)}
+.gc-carousel-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px var(--shm)}
+.gc-carousel-card.rust{background:linear-gradient(135deg,var(--rp),#fdf4ee);border-color:#E0BDAA}
+.gc-carousel-card.teal{background:linear-gradient(135deg,#eef8f8,var(--w));border-color:var(--tealp)}
+.gc-carousel-card.purple{background:linear-gradient(135deg,#F4F0FA,var(--w));border-color:#D4C8E2}
+.gc-carousel-card.gold{background:linear-gradient(135deg,var(--gp),var(--w));border-color:#D4A843}
+.gc-c-icon{font-size:24px;margin-bottom:8px;display:block}
+.gc-c-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e);margin-bottom:5px;line-height:1.2}
+.gc-c-desc{font-size:11.5px;color:var(--t);line-height:1.55;margin-bottom:10px}
+.gc-c-cta{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.gc-c-cta.rust{color:var(--r)}
+.gc-c-cta.teal{color:var(--teal)}
+.gc-c-cta.purple{color:#7A5C9C}
+.gc-c-cta.gold{color:var(--g)}
 </style>
 </head>
 <body>
@@ -1118,6 +1136,40 @@ select.fi{cursor:pointer}
       <!-- TASKS DUE TODAY + TOMORROW -->
       <div id="tasksDueWrap"></div>
 
+      <!-- GUIDES CAROUSEL -->
+      <div style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t)">📖 Strategy Guides</div>
+          <span style="font-size:11px;color:var(--teal);cursor:pointer;font-weight:600" onclick="navigate('guides')">See all →</span>
+        </div>
+        <div class="gc-carousel">
+          <div class="gc-carousel-card rust" onclick="navigate('guides');setTimeout(()=>openGuideDetail('burnout'),100)">
+            <span class="gc-c-icon">🧠</span>
+            <div class="gc-c-title">ND Rescue Kit</div>
+            <div class="gc-c-desc">What to do when you're overwhelmed and don't know where to start.</div>
+            <div class="gc-c-cta rust">Read →</div>
+          </div>
+          <div class="gc-carousel-card teal" onclick="navigate('guides');setTimeout(()=>openGuideDetail('cycle'),100)">
+            <span class="gc-c-icon">🌊</span>
+            <div class="gc-c-title">Content Cycle</div>
+            <div class="gc-c-desc">A four-phase content rhythm that grows your audience without burning you out.</div>
+            <div class="gc-c-cta teal">Read →</div>
+          </div>
+          <div class="gc-carousel-card purple" onclick="navigate('guides');setTimeout(()=>openGuideDetail('unstuck'),100)">
+            <span class="gc-c-icon">✨</span>
+            <div class="gc-c-title">The Unstuck Guide</div>
+            <div class="gc-c-desc">For when the inner critic says it's all been done before.</div>
+            <div class="gc-c-cta purple">Read →</div>
+          </div>
+          <div class="gc-carousel-card gold" onclick="navigate('guides');setTimeout(()=>openGuideDetail('analog'),100)">
+            <span class="gc-c-icon">✏️</span>
+            <div class="gc-c-title">The Analog Way</div>
+            <div class="gc-c-desc">No AI required. What analog means and how to use the Studio your way.</div>
+            <div class="gc-c-cta gold">Read →</div>
+          </div>
+        </div>
+      </div>
+
       <div class="guide-wrap" id="guideWrap">
         <div class="guide-hdr" onclick="toggleGuide(this)">
           <div class="guide-hdr-left"><span style="font-size:15px">📖</span><span class="guide-hdr-title">How to use each section</span></div>
@@ -1237,12 +1289,13 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">📖</span>Guides</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Three built-in strategy playbooks written specifically for neurodivergent entrepreneurs. Find them under Think in the sidebar.</p>
+              <p class="guide-desc">Four built-in strategy playbooks written for neurodivergent entrepreneurs. Find them under Think in the sidebar, or use the guide cards at the top of your dashboard to jump straight in.</p>
               <ul class="guide-tips">
                 <li><strong>ND Rescue Kit:</strong> what to do when you are overwhelmed and do not know where to start. Four-step reset, ND-friendly batching, launch planning, and how to use every Studio tool to reduce content stress.</li>
                 <li><strong>Content Cycle Framework:</strong> a four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. Includes a full four-week example calendar.</li>
                 <li><strong>The Unstuck Guide:</strong> for when your inner critic says it has all been done before. Reframes for perfectionism and starting paralysis, paired with specific Studio workflows to get you moving again.</li>
-                <li><strong>Tip:</strong> if you are ever overwhelmed in the Studio, open the ND Rescue Kit first. That guide exists specifically for that moment.</li>
+                <li><strong>The Analog Way:</strong> no AI required. What analog means, why it is having a moment, how to use the Studio as a fully analog creator, and 15 writing prompts to spark content from your own experience.</li>
+                <li><strong>Tip:</strong> if you are ever overwhelmed, open the ND Rescue Kit. If you are not sure about AI, open The Analog Way. Both exist for exactly those moments.</li>
               </ul>
             </div>
           </div>
@@ -1667,7 +1720,7 @@ select.fi{cursor:pointer}
       <div id="guides-index">
         <div style="max-width:780px">
           <p style="font-size:14px;color:var(--t);line-height:1.75;margin-bottom:24px">These guides are built for neurodivergent creators who are done forcing themselves into systems that weren't designed for them. Click any guide to open it.</p>
-          <div class="guide-index-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="guide-index-grid" style="grid-template-columns:repeat(2,1fr)">
 
             <!-- ND Rescue Kit -->
             <div class="guide-index-card rust" onclick="openGuideDetail('burnout')">
@@ -1710,6 +1763,20 @@ select.fi{cursor:pointer}
                 <span class="gic-tag">Starting</span>
               </div>
               <div class="gic-cta" style="color:#7A5C9C">Read the guide →</div>
+            </div>
+
+            <!-- The Analog Way -->
+            <div class="guide-index-card" style="border-color:#D4A843;background:linear-gradient(135deg,var(--gp),#EDE0C4)" onclick="openGuideDetail('analog')">
+              <div class="gic-deco" style="color:var(--g)">✏️</div>
+              <span class="gic-icon">✏️</span>
+              <div class="gic-title">The Analog Way</div>
+              <div class="gic-desc">What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Analog</span>
+                <span class="gic-tag">No AI</span>
+                <span class="gic-tag">Writing prompts</span>
+              </div>
+              <div class="gic-cta" style="color:var(--g)">Read the guide →</div>
             </div>
 
           </div>
@@ -2026,6 +2093,132 @@ select.fi{cursor:pointer}
             <li><div class="gd-tip-icon rust">✦</div><div><strong>Your Notebooks are full of content you've already written.</strong> Open them before you decide you have nothing to say. Half your best ideas are already there, unfinished and waiting.</div></li>
             <li><div class="gd-tip-icon" style="background:#EDE4F5;color:#7A5C9C">◎</div><div><strong>Specificity is the cure for feeling generic.</strong> Any time a draft feels too bland, make one detail more specific. A real person, a real moment, a real number. Specificity is what makes people feel seen.</div></li>
             <li><div class="gd-tip-icon rust">✶</div><div><strong>Finishing something imperfect is an act of self-respect.</strong> You are allowed to put things into the world that aren't your best work. Consistency builds trust. Occasional brilliance doesn't.</div></li>
+          </ul>
+
+        </div>
+      </div>
+
+
+      <!-- DETAIL: The Analog Way -->
+      <div id="guide-detail-analog" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero" style="background:linear-gradient(135deg,var(--gp),#EDE0C4);border:1.5px solid #D4A843">
+            <div class="guide-detail-hero-deco" style="color:var(--g)">✏️</div>
+            <div class="gdh-eyebrow" style="color:var(--g)">The Analog Way</div>
+            <div class="gdh-title">You don't have to use AI to use this Studio.</div>
+            <div class="gdh-desc">Flow State Studio was built by someone who was done apologizing for how her brain works. That means it was built to hold all kinds of brains, including the ones that think better with a pen, a prompt, and space to breathe. This guide is for you.</div>
+          </div>
+
+          <div class="gd-section-lbl">What analog actually means right now</div>
+          <div class="gd-card full" style="margin-bottom:12px">
+            <div class="gd-card-title" style="font-size:18px">Analog is not anti-technology. It's pro-thinking.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:6px">Analog is trending right now because a lot of people, especially creative and neurodivergent people, are realizing that AI can speed things up but it can't replace the thinking that makes content actually mean something. Analog means starting from yourself. Your experience, your observations, your honest take on your niche. It's the part that no tool can generate because it comes from living the thing you're talking about.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card gold">
+              <span class="gd-card-icon">📈</span>
+              <div class="gd-card-title">Why it's having a moment</div>
+              <div class="gd-card-desc">Audiences are getting good at spotting AI-generated content. The posts that stop the scroll right now are the ones that feel human, specific, and a little imperfect. Personal stories. Honest opinions. Observations that only someone who's actually lived it could write. That's analog. And it's not going anywhere.</div>
+            </div>
+            <div class="gd-card gold">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">Why it works for ND creators specifically</div>
+              <div class="gd-card-desc">ND brains often think in associations, tangents, and unexpected connections. That's not a liability. That's exactly what makes analog content interesting. When you write from your own experience without editing yourself before you start, what comes out is specific, real, and resonant in a way that templated content almost never is.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">How to use the Studio fully analog</div>
+          <div class="gd-callout" style="background:var(--gp);border-color:#D4A843;margin-bottom:12px">
+            <div class="gd-callout-icon">✏️</div>
+            <div>
+              <div class="gd-callout-eyebrow" style="color:var(--g)">Go Analog is always open by default</div>
+              <div class="gd-callout-text">Every content card opens with the Go Analog section expanded and the Bridge the Gap AI tools collapsed. That is intentional. The Studio defaults to you. Open Bridge the Gap only when and if you want to.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card gold">
+              <span class="gd-card-icon">📋</span>
+              <div class="gd-card-title">Content Planner, analog style</div>
+              <div class="gd-card-desc">Use the Planner exactly as it is. Add your ideas as cards, track them from Idea to Published, and write your content directly in the Go Analog textarea. Nothing in the Planner requires AI. The kanban board, the calendar entries, the status tracking, all of it works without touching a single AI tool.</div>
+            </div>
+            <div class="gd-card gold">
+              <span class="gd-card-icon">✍️</span>
+              <div class="gd-card-title">Writing Studio, analog style</div>
+              <div class="gd-card-desc">Open Writing Studio and ignore the AI Tools button entirely. The right panel is a clean, open writing area. Add your title, your subtitle if you have one, and write. Hit Save to Drafts when you're done. The AI panel is there if you ever want it. It will not force itself on you.</div>
+            </div>
+            <div class="gd-card gold">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">Notebooks for your raw thinking</div>
+              <div class="gd-card-desc">Notebooks are the most analog part of the Studio. No AI, no prompts, no structure required. Open a notebook when you need to think out loud, brain dump, or capture something before it disappears. This is where your best content ideas tend to come from, and it is entirely yours.</div>
+            </div>
+            <div class="gd-card gold">
+              <span class="gd-card-icon">✏️</span>
+              <div class="gd-card-title">Analog Prompt on the dashboard</div>
+              <div class="gd-card-desc">Open the Creative Director on your dashboard and hit Analog Prompt instead of Brief Me or Surprise Me. You get a writing prompt with zero AI generation. Just a question or a nudge to get you thinking. No credits used, no output generated. Just a spark.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">15 analog writing prompts</div>
+          <div class="gd-card full gold" style="margin-bottom:12px">
+            <div class="gd-card-desc" style="font-size:13px">These are the same prompts in the Analog Prompt button. Use them here as journaling starters, content sparks, or just something to think about. None of them require AI. They just require you.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card">
+              <div class="gd-card-desc">What is one thing you wish someone had told you when you first started your business?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">Describe a moment this week that made you remember why you do this work.</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What is the question your ideal client asks most often, and what is your honest answer?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">Write about a time something went wrong in your business and what you actually learned from it.</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What does a good day in your business actually look like? Be specific.</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What is a belief about your industry that you disagree with? Say it plainly.</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">Who is one person your work has genuinely helped? What changed for them?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What is something you figured out the hard way that your audience needs to hear?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">Describe your ideal client not by their job title but by how they feel before they find you.</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What would you create if you knew it would not be judged?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What part of your work feels effortless to you that feels impossible to others?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">Write the post you have been avoiding writing. Start with why you have been avoiding it.</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What does sustainability actually look like in your business right now, not the polished version?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">What is one small thing you do differently from everyone else in your niche?</div>
+            </div>
+            <div class="gd-card">
+              <div class="gd-card-desc">Write a letter to yourself from six months ago about where you are now.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Six things to know as an analog creator here</div>
+          <ul class="gd-tips">
+            <li><div class="gd-tip-icon gold">✦</div><div><strong>You never have to open Bridge the Gap.</strong> The Studio works completely without it. Everything that requires AI is clearly labelled and always opt-in.</div></li>
+            <li><div class="gd-tip-icon teal">◎</div><div><strong>Your analog drafts get their own badge.</strong> In Saved Drafts, anything you wrote yourself shows an Analog badge. Filter by Analog Only anytime to see exactly what is yours.</div></li>
+            <li><div class="gd-tip-icon gold">✶</div><div><strong>The Notebooks are yours completely.</strong> No AI reads your notebooks unless you explicitly copy something into a content card or the Writing Studio. What's in your notebooks stays in your notebooks.</div></li>
+            <li><div class="gd-tip-icon teal">✦</div><div><strong>Analog content and AI content can coexist in the same system.</strong> You don't have to choose one mode forever. Some content comes from you entirely. Some days you want a spark. Both are fine. The Studio holds both without making you feel like one is more legitimate than the other.</div></li>
+            <li><div class="gd-tip-icon gold">◎</div><div><strong>Your voice is the point.</strong> Whether you write every word yourself or use AI to start and then rewrite everything, the goal is content that sounds like you. The tool doesn't matter. The voice does.</div></li>
+            <li><div class="gd-tip-icon teal">✶</div><div><strong>Done and authentic beats perfect and generated every time.</strong> The most powerful content you will ever make is the stuff only you could write. Keep the Analog Prompts close for when you need a way in.</div></li>
           </ul>
 
         </div>
@@ -2710,7 +2903,7 @@ select.fi{cursor:pointer}
         <div style="width:100%">
           <div class="pf-title" style="color:var(--g);font-size:15px">Built for Substack creators</div>
           <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Substack is having a moment, and long-form writing is one of the hardest content formats for ND brains. The Studio is built to change that. Generate full Substack-ready articles in your voice, with a compelling title, opening hook, body sections, and a warm close. Not a bullet list dressed up as an article. The real thing, ready to paste and publish.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">📄 Full article generation</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">Brief your idea, choose Article as your format, and get a complete long-form draft back. Title, hook, sections, close. Written in your voice, ready to edit and post.</div>
@@ -2899,7 +3092,7 @@ select.fi{cursor:pointer}
           <li>Unlimited Notebooks + Brain Dump</li>
           <li>Saved Drafts library + CSV export</li>
           <li>Swipe File for your best AI outputs</li>
-          <li>Three built-in strategy guides for ND creators</li>
+          <li>Four built-in strategy guides including The Analog Way</li>
           <li>125 AI generations per month</li>
           <li>Locked in at founding price forever</li>
         </ul>
