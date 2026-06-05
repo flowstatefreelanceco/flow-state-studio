@@ -175,7 +175,8 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
-.studio-wrap{display:grid;grid-template-columns:380px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
+.studio-wrap{display:grid;grid-template-columns:1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
+.studio-wrap.ai-open{grid-template-columns:360px 1fr}
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 4px var(--sh)}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
@@ -899,6 +900,13 @@ select.fi{cursor:pointer}
 .wf-item-del:hover{color:var(--r)}
 .wf-empty{font-size:12.5px;color:var(--tl);padding:6px 0 10px;font-style:italic}
 .wf-add{display:flex;gap:8px}
+
+/* AI TOOLS PANEL */
+#aiToolsPanel{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.studio-wrap.ai-open #aiToolsPanel{display:block}
+.ai-toggle-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--t);background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:6px 14px;cursor:pointer;transition:all .15s;font-family:var(--fb)}
+.ai-toggle-btn:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
+.ai-toggle-btn.active{color:var(--r);border-color:var(--r);background:var(--rp)}
 </style>
 </head>
 <body>
@@ -1238,11 +1246,12 @@ select.fi{cursor:pointer}
   <!-- AI STUDIO -->
   <div id="view-studio" class="view" style="overflow:hidden">
     <div class="main-hdr">
-      <div><h1>Writing Studio</h1><div class="sub">Write your own or generate with the Studio - both save to your library</div></div>
+      <div><h1>Writing Studio</h1><div class="sub">Write your own or use AI. Both save to your library.</div></div>
+      <div class="hdr-acts"><button class="ai-toggle-btn" id="aiToggleBtn" onclick="toggleAIPanel()">✦ AI Tools</button></div>
     </div>
     <div class="main-body" style="padding-top:16px;padding-bottom:48px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
-        <div class="sp">
+        <div class="sp" id="aiToolsPanel">
           <div class="sp-in">
             <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Article">Article</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
             <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
@@ -4095,9 +4104,9 @@ async function generate(){
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
-  const isArticle=['Substack / Article','Blog Post'].includes(S.studio.type);
+  const isArticle=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(S.studio.type)||S.studio.plat==='substack';
   const sys=isArticle
-    ?'You are a professional writer for wellness and service-based businesses.'+bizCtx+'\n Output EXACTLY in this format:\nTITLE: [title]\nSUBTITLE: [one sentence subtitle]\nBODY:\n[full article body, no markdown, no em dashes]'+(instr?' IMPORTANT creator instruction: '+instr:'')
+    ?'You are a professional writer for wellness and service-based businesses.'+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article. No markdown, no em dashes, no asterisks.'+(instr?' IMPORTANT creator instruction: '+instr:'')
     :'You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.'+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
@@ -6524,6 +6533,15 @@ function showWhatsNew(){
       openModal('whatsNewModal');
     })
     .catch(function(){toast('Could not load changelog');});
+}
+
+/* ═══ AI TOOLS PANEL TOGGLE ═══ */
+function toggleAIPanel(){
+  var wrap=document.querySelector('.studio-wrap');
+  var btn=document.getElementById('aiToggleBtn');
+  if(!wrap)return;
+  var isOpen=wrap.classList.toggle('ai-open');
+  if(btn){btn.classList.toggle('active',isOpen);btn.textContent=isOpen?'✦ Hide AI Tools':'✦ AI Tools';}
 }
 </script>
 </body>
