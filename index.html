@@ -5299,7 +5299,10 @@ function studioOwnSave(){
   var typeEl=document.getElementById('typeChips');
   var selType='Draft';
   if(typeEl){var selT=typeEl.querySelector('.chip.sel');if(selT)selType=selT.dataset.val;}
-  var draft={id:Date.now().toString(),title:selType+' - own draft',content:el.value.trim(),platform:selPlat,format:selType,createdAt:new Date().toISOString()};
+  var ownLinks=document.getElementById('studioLinks')?document.getElementById('studioLinks').value.trim():'';
+  var ownTags=document.getElementById('studioTags')?document.getElementById('studioTags').value.trim():'';
+  var titleVal=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
+  var draft={id:Date.now().toString(),title:titleVal||selType+' - own draft',content:el.value.trim(),platform:selPlat,format:selType,links:ownLinks,tags:ownTags,createdAt:new Date().toISOString()};
   S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
   toast('Saved to drafts ✓');
 }
