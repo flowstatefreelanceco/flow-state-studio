@@ -4082,7 +4082,10 @@ function setupCG(id,cb){
 async function generate(){
   if(false){toast('Add your API key in Settings first');navigate('settings');return;}
   const topic=document.getElementById('topicIn').value.trim();
-  if(!topic){toast('Please enter a topic or brief');return;}
+  const ownDraftCbCheck=document.getElementById('useOwnDraft');
+  const hasDraft=ownDraftCbCheck&&ownDraftCbCheck.checked&&document.getElementById('studioOwnTA').value.trim();
+  const hasInstr=document.getElementById('instrIn')&&document.getElementById('instrIn').value.trim();
+  if(!topic&&!hasDraft&&!hasInstr){toast('Add a topic, instruction, or check use my draft');return;}
   const notes=document.getElementById('notesIn').value.trim();
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
@@ -4091,7 +4094,16 @@ async function generate(){
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
-  const sys=`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use ${S.studio.type}.${instr?' IMPORTANT creator instruction: '+instr:''}`;
+  const isArticle=['Substack / Article','Blog Post'].includes(S.studio.type);
+  const sys=isArticle
+    ?`You are a professional writer for wellness and service-based businesses.${bizCtx}
+ Output your response EXACTLY in this format with no deviation:
+TITLE: [title here]
+SUBTITLE: [one sentence subtitle here]
+BODY:
+[full article body here, no markdown, no em dashes, write like a real human]${instr?' IMPORTANT creator instruction: '+instr:''}`
+    :`You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.${bizCtx}
+Output ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use ${S.studio.type}.${instr?' IMPORTANT creator instruction: '+instr:''}`;
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
   const usr=ownDraft
@@ -4101,7 +4113,11 @@ async function generate(){
     const res=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]})},45000);
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`HTTP ${res.status}`);}
     const d=await res.json();
-    S.studio.output=stripMD(d.content?.[0]?.text||'');
+    var rawOut=stripMD(d.content?.[0]?.text||'');
+    var titleM=rawOut.match(/^TITLE:\s*(.+)/m);
+    var subM=rawOut.match(/^SUBTITLE:\s*(.+)/m);
+    var bodyM=rawOut.match(/BODY:\s*([\s\S]+)$/m);
+    if(titleM&&subM&&bodyM){var tEl=document.getElementById('studioTitle');var sEl=document.getElementById('studioSubtitle');if(tEl)tEl.value=titleM[1].trim();if(sEl)sEl.value=subM[1].trim();S.studio.output=bodyM[1].trim();}else{S.studio.output=rawOut;}
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
     document.getElementById('cpBtn').style.display='inline-flex';document.getElementById('svBtn').style.display='inline-flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
