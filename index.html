@@ -928,6 +928,10 @@ select.fi{cursor:pointer}
 
 /* ANALOG BADGE */
 .dc-analog-badge{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 8px;border-radius:100px;background:var(--gp);color:var(--g);border:1px solid #D4A843;margin-left:6px}
+
+/* SALES PAGE SECTIONS */
+.pf-section-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin:32px 0 16px;padding-bottom:10px;border-bottom:1.5px solid var(--bl);display:flex;align-items:center;gap:10px}
+.pf-section-label::before{content:"";flex:1;height:1px;background:var(--bl);display:none}
 </style>
 </head>
 <body>
@@ -2626,21 +2630,46 @@ select.fi{cursor:pointer}
     <!-- HERO -->
     <div class="pricing-hero">
       <div class="pricing-wordmark">Flow State Studio ✦</div>
-      <div class="pricing-tagline">One place to start, create, and map out your content, built for ND brains that are tired of too many tools and never knowing where to begin.</div>
-      <div class="pricing-nd">🧠 Designed for ADHD &amp; neurodivergent creators</div>
+      <div class="pricing-tagline">Built different, by someone who thinks different. A content system for ND entrepreneurs who are done with too many tabs, too many tools, and brilliant ideas that never make it out of their head.</div>
+      <div class="pricing-nd">🧠 Built by an ND brain, for ND brains</div>
       <!-- STAT STRIP -->
       <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">12+</span> AI tools built in</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">✏️ + ✦</span> Analog and AI</div>
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">7</span> content formats</div>
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--g);font-size:16px;font-family:var(--fh);font-weight:700">1</span> place for everything</div>
       </div>
     </div>
 
-    <!-- SECTION LABEL -->
-    <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Everything inside the Studio</div>
+    <!-- YOUR WAY BLEND CARD -->
+    <div style="background:linear-gradient(135deg,var(--gp),#EDE0C4);border:1.5px solid #D4A843;border-radius:var(--rad);padding:28px 32px;margin-bottom:32px;text-align:center">
+      <div style="font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.3">Write your own. Use AI when you want it. Neither is the wrong choice here.</div>
+      <div style="font-size:14px;color:var(--el);line-height:1.75;max-width:580px;margin:0 auto">I built this because I was done apologizing for how my brain works. Not every ND creator wants AI and this system was not built to force it on you. Some days you want a blank page. Some days you want a spark. Flow State Studio holds both without judgment. Go Analog when you just want to write. Bridge the Gap when you want the tools. Your brain, your call.</div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">✏️</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g)">Go Analog</div>
+          <div style="font-size:12px;color:var(--el);margin-top:3px">Write your own. No AI required.</div>
+        </div>
+        <div style="color:var(--bl);font-size:24px;display:flex;align-items:center">+</div>
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">✦</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">Bridge the Gap</div>
+          <div style="font-size:12px;color:var(--el);margin-top:3px">AI tools when you want a spark.</div>
+        </div>
+        <div style="color:var(--bl);font-size:24px;display:flex;align-items:center">=</div>
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">🧠</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">Your way</div>
+          <div style="font-size:12px;color:var(--el);margin-top:3px">Content that actually feels like you.</div>
+        </div>
+      </div>
+    </div>
 
     <!-- FEATURE GRID -->
     <div class="pricing-features">
+
+      <!-- SECTION: CREATE & WRITE -->
+      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">✍️ Create and write</div></div>
 
       <!-- CREATIVE DIRECTOR: full-width hero card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
@@ -2734,6 +2763,9 @@ select.fi{cursor:pointer}
         </div>
       </div>
 
+      <!-- SECTION: PLAN & ORGANISE -->
+      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
+
       <!-- CONTENT PLANNER -->
       <div class="pf-card">
         <div class="pf-icon">🗂</div>
@@ -2788,6 +2820,9 @@ select.fi{cursor:pointer}
         </div>
       </div>
 
+      <!-- SECTION: STRATEGY & GUIDES -->
+      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
+
       <!-- GUIDES: new full-width card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,#F0F9F9,var(--tealp));border-color:var(--teal)">
         <div class="pf-icon" style="color:var(--teal)">📖</div>
@@ -2815,34 +2850,34 @@ select.fi{cursor:pointer}
 
     <!-- ROI / MENTAL LOAD STRIP -->
     <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:32px 36px;margin-bottom:16px">
-      <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">The real cost of doing it without a system</div>
+      <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Sound familiar?</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" class="cd-sales-grid">
         <div style="text-align:center;padding:16px 12px">
           <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--r);line-height:1;margin-bottom:8px">3-5</div>
           <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Hours a week</div>
-          <div style="font-size:12.5px;color:var(--t);line-height:1.6">spent staring, switching apps, and losing ideas before you write a single word</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">spent task-switching between tools, losing the idea somewhere in between, and starting over</div>
         </div>
         <div style="text-align:center;padding:16px 12px;border-left:1px solid var(--bl);border-right:1px solid var(--bl)">
           <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--teal);line-height:1;margin-bottom:8px">4+</div>
           <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Apps to manage</div>
-          <div style="font-size:12.5px;color:var(--t);line-height:1.6">a notes app, a planner, an AI tool, and somewhere to save drafts, all disconnected</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">none of them talking to each other, none of them built for a brain that works like yours</div>
         </div>
         <div style="text-align:center;padding:16px 12px">
           <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--g);line-height:1;margin-bottom:8px">∞</div>
           <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Decisions per session</div>
-          <div style="font-size:12.5px;color:var(--t);line-height:1.6">what to post, where to start, which tool to open, before any actual creating happens</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">what to post, where to start, which app to open, before a single word gets written</div>
         </div>
       </div>
       <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-radius:var(--rsm);padding:18px 22px;text-align:center">
-        <div style="font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.3">The Studio collapses all of that into one place.</div>
-        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">Less time stuck. Less mental overhead. More creating. Starting at $9.50 a month, for a brain that deserves a system built around it.</div>
+        <div style="font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.3">That is the problem this was built to solve.</div>
+        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">One place for all of it. Your ideas, your planning, your writing, your tools. Starting at $9.50 a month, for a brain that deserves a system that actually works with it.</div>
       </div>
     </div>
 
     <!-- POSITIONING STRIP -->
     <div style="background:linear-gradient(135deg,var(--tealp),#C8E4E4);border:1.5px solid var(--teal);border-radius:var(--rad);padding:28px 32px;margin-bottom:40px;text-align:center">
-      <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);margin-bottom:10px;line-height:1.3">One tool. Every part of your content workflow.</div>
-      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:560px;margin:0 auto">No more jumping between Notion, Trello, Canva, a notes app, and three different AI tabs. Flow State Studio is the one place where your ideas, planning, writing, and content mapping all live together, built specifically for how neurodivergent brains work best.</div>
+      <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);margin-bottom:10px;line-height:1.3">Consistent without burning out. That is what this is for.</div>
+      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:560px;margin:0 auto">Not more productivity. Not a better schedule. Consistent content creation that does not cost you everything, built around how you actually think, work, and show up.</div>
     </div>
 
     <div class="pricing-divider"></div>
@@ -2855,7 +2890,8 @@ select.fi{cursor:pointer}
         <div class="pc-price">$9.50<span>/month</span></div>
         <div class="pc-credits">125 AI credits / month</div>
         <ul class="pc-features">
-          <li>All 12+ AI tools unlocked</li>
+          <li>Write your own (Go Analog) or generate with AI (Bridge the Gap)</li>
+          <li>All 12+ AI tools available when you want them</li>
           <li>Content Planner, Calendar, Task Board</li>
           <li>Feed Preview (Instagram grid)</li>
           <li>Writing Studio: all 7 content formats</li>
