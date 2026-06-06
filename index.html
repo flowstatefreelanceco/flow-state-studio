@@ -310,7 +310,7 @@ select.fi{cursor:pointer}
 .info-b code{background:rgba(42,28,16,.08);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11.5px;color:var(--e)}
 
 /* LOCKED / PRICING SCREEN */
-#lockedScreen{position:fixed;inset:0;background:var(--p);z-index:9990;overflow-y:auto;display:none}
+#lockedScreen{position:fixed;inset:0;background:var(--p);z-index:10000;overflow-y:auto;display:none}
 #lockedScreen.show{display:block}
 .pricing-wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
 .pricing-hero{text-align:center;margin-bottom:56px}
@@ -4136,17 +4136,21 @@ document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&
 async function doSignOut(){closeUMenu();await sb.auth.signOut();}
 
 function goToPricing(fromLanding){
-  var authScreen = document.getElementById('authScreen');
+  var authEl = document.getElementById('authScreen');
   var backBtn = document.getElementById('pricingBackBtn');
-  if(authScreen) authScreen.classList.add('hidden');
-  document.getElementById('lockedScreen').classList.add('show');
-  // Show back button only when coming from the landing page
+  var lockedEl = document.getElementById('lockedScreen');
+  if(authEl) authEl.classList.add('hidden');
+  if(lockedEl) lockedEl.classList.add('show');
   if(backBtn) backBtn.style.display = fromLanding ? 'block' : 'none';
 }
 function backToLanding(){
-  document.getElementById('lockedScreen').classList.remove('show');
-  document.getElementById('authScreen').classList.remove('hidden');
-  document.getElementById('authScreen').scrollTop = 0;
+  var lockedEl = document.getElementById('lockedScreen');
+  var authEl = document.getElementById('authScreen');
+  if(lockedEl) lockedEl.classList.remove('show');
+  if(authEl){
+    authEl.classList.remove('hidden');
+    authEl.scrollTop = 0;
+  }
 }
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
