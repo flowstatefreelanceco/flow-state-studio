@@ -1,36 +1,41 @@
 {
-  "version": "3.0",
-  "releasedAt": "2026-06-05",
+  "version": "3.2",
   "changelog": [
     {
-      "type": "improvement",
-      "date": "Jun 5, 2026",
-      "title": "Writing Studio redesigned",
-      "desc": "The left AI tools panel is now hidden by default. Click AI Tools in the header to open it. The writing area is front and centre so you can just write without feeling like you have to use AI."
+      "type": "new",
+      "date": "June 2026",
+      "title": "Content Buckets",
+      "desc": "Tag content cards by topic or offer and see patterns over time. Which formats work best for which products? Now you can find out. Add your own buckets, tag cards as you create them, and see a visual breakdown right above your kanban."
+    },
+    {
+      "type": "new",
+      "date": "June 2026",
+      "title": "New Landing Page",
+      "desc": "The login screen is now a full landing page so new visitors actually know what they're logging into. Includes a video walkthrough, screenshot carousel, and the analog + AI positioning front and centre."
     },
     {
       "type": "improvement",
-      "date": "Jun 5, 2026",
-      "title": "Tags and Links moved to the right panel",
-      "desc": "Tags and Links now live next to your writing and save with both your own drafts and AI-generated drafts."
+      "date": "June 2026",
+      "title": "Sales Page Glow-Up",
+      "desc": "The features breakdown is now colour-coded by section. Create & Write in rust, Plan & Organise in teal, Guides in rust. Section labels are bold pill badges instead of flat rules. Each card has a coloured icon background."
+    },
+    {
+      "type": "new",
+      "date": "June 2026",
+      "title": "The Analog Way Added to Guides",
+      "desc": "The fourth guide is now visible in the Built-in Guides section of the sales page. What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required."
     },
     {
       "type": "fix",
-      "date": "Jun 5, 2026",
-      "title": "Article title and subtitle now generate correctly",
-      "desc": "When you select Article, Blog Post, or Substack as your platform, the AI now auto-generates a title and subtitle and places them in the fields above your draft."
+      "date": "June 2026",
+      "title": "What's New Popup Fixed",
+      "desc": "The update notification now fires after your account loads, not before. This means it correctly shows for every account independently and won't stay silently dismissed across different users on the same device."
     },
     {
       "type": "improvement",
-      "date": "Jun 5, 2026",
-      "title": "Smaller input fields, more room for writing",
-      "desc": "The topic and instructions fields are more compact. The AI output area now fills the available space rather than being fixed at a small size."
-    },
-    {
-      "type": "fix",
-      "date": "Jun 5, 2026",
-      "title": "Topic field no longer required",
-      "desc": "You can now generate using just the instructions field or the use my draft checkbox, without needing to fill in a topic."
+      "date": "June 2026",
+      "title": "Mobile Improvements",
+      "desc": "Content Planner now scrolls properly on mobile with the Bucket Insights strip visible. Landing page bridge card stacks correctly on small screens. Bucket manage button scaled for touch."
     }
   ]
 }
