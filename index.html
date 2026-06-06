@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="3.0">
+<html lang="en" data-version="3.1">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -688,6 +688,10 @@ select.fi{cursor:pointer}
 
   /* GUIDE */
   .guide-wrap{margin-bottom:14px}
+
+  /* BUCKET INSIGHTS */
+  #bucketInsightsWrap{margin-bottom:10px}
+  #bucketInsightsWrap .btn{font-size:9px !important;padding:3px 8px !important}
 }
 
 @media(max-width:420px){
@@ -1490,6 +1494,21 @@ select.fi{cursor:pointer}
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
+            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">◈</span>Content Buckets</span><span class="guide-toggle">›</span></div>
+            <div class="guide-detail">
+              <p class="guide-desc">Tag your content cards by topic or offer so you can start seeing patterns over time. Which formats perform best for which products? Buckets help you figure that out without a spreadsheet.</p>
+              <ul class="guide-tips">
+                <li><strong>What a bucket is:</strong> a label for the topic or offer a piece of content is about. Examples: Flow State Studio, 1:1 Coaching, Freebie, Personal. You create your own to match your actual business.</li>
+                <li><strong>How to tag a card:</strong> open any content card in the Planner and select a bucket from the Content Bucket dropdown. It sits right below the Format field.</li>
+                <li><strong>Adding a new bucket:</strong> click the + New button next to the dropdown, type your bucket name, and it saves immediately. It will appear in every card from then on.</li>
+                <li><strong>Managing buckets:</strong> click Manage at the top of the Content by Bucket strip in the Planner to add or remove buckets from your list.</li>
+                <li><strong>Reading the insights:</strong> the Content by Bucket strip above your kanban shows a bar for each bucket. Each segment of the bar is a different format. Hover to see what it is. The number on the right is total cards for that bucket.</li>
+                <li><strong>What worked note:</strong> there is an optional What worked? field at the bottom of every card. Use it after something performs well. No requirement, just a useful place to note it before you forget.</li>
+                <li><strong>Tip:</strong> even rough tagging is useful. You do not need to tag everything. Just start with your main offer and see what patterns show up after a few weeks.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✅</span>Tasks</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
               <p class="guide-desc">A kanban board for everything that is not content. Business tasks, admin, client work, launch to-dos. Energy level tags and time estimates make it ND-friendly by design.</p>
@@ -1573,8 +1592,22 @@ select.fi{cursor:pointer}
       <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
       <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
     </div>
-    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
-      <div class="kanban kanban-4" id="ideaKanban" style="flex:1;min-height:0;overflow-x:auto"></div>
+    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch">
+      <!-- CONTENT INSIGHTS STRIP -->
+      <div id="bucketInsightsWrap" style="flex-shrink:0;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleBucketInsights()">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tl);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span>Content by Bucket</span>
+            <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;color:var(--tl)">what you've made so far</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+            <button class="btn btn-g" style="font-size:10px;padding:3px 10px" onclick="event.stopPropagation();openBucketManager()">Manage</button>
+            <span id="bucketInsightsChevron" style="font-size:12px;color:var(--tl);transition:transform .2s">▾</span>
+          </div>
+        </div>
+        <div id="bucketInsightsBody" style="max-height:400px;overflow:hidden;transition:max-height .3s ease"></div>
+      </div>
+      <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
     </div>
   </div>
 
@@ -2545,6 +2578,12 @@ select.fi{cursor:pointer}
             </select>
           </div>
         </div>
+        <div class="fl"><label class="fl-lbl">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select class="fi" id="ideaBucket" style="flex:1"></select>
+            <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="addNewBucketInline()">+ New</button>
+          </div>
+        </div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" onchange="ideaDateChanged()" /></div>
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><select class="fi" id="ideaTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
@@ -2554,6 +2593,9 @@ select.fi{cursor:pointer}
         </div>
         <div class="fl"><label class="fl-lbl">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
           <textarea class="fi" id="ideaNotes" style="min-height:90px;font-size:14px" placeholder="Key points, angle, CTA, deadline...">
+        </div>
+        <div class="fl"><label class="fl-lbl">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional note)</span></label>
+          <textarea class="fi" id="ideaPerfNote" style="min-height:48px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
         </div>
         <div class="fl">
           <label class="fl-lbl">Upload Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
@@ -2823,11 +2865,20 @@ select.fi{cursor:pointer}
             <span id="cdReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
           </label>
         </div>
+        <div class="fl"><label class="fl-lbl">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select class="fi" id="cdBucket" style="flex:1"></select>
+            <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="addNewBucketInline()">+ New</button>
+          </div>
+        </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
           <textarea class="fi" id="cdHook" style="min-height:64px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
           <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
+        </div>
+        <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional note)</span></label>
+          <textarea class="fi" id="cdPerfNote" style="min-height:48px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
         </div>
         <!-- IMAGE UPLOAD -->
         <div class="fl">
@@ -3595,6 +3646,21 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- SUPPORT MODAL -->
+<div class="modal-ov" id="bucketManagerModal">
+  <div class="modal" style="max-width:400px">
+    <div class="m-title">Content Buckets</div>
+    <div class="m-sub" style="margin-bottom:16px">Add your products, offers, or content topics. Tag any content card with a bucket to track patterns over time.</div>
+    <div id="bucketList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px">
+      <input class="fi" id="newBucketInput" placeholder="e.g. 1:1 Coaching" style="flex:1;font-size:13px" onkeydown="if(event.key==='Enter')saveBucketFromInput()" />
+      <button class="btn btn-p" onclick="saveBucketFromInput()">Add</button>
+    </div>
+    <div class="m-acts" style="margin-top:18px">
+      <button class="btn btn-g" onclick="closeModal('bucketManagerModal')">Done</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-ov" id="supportModal">
   <div class="modal" style="max-width:440px;text-align:center">
     <div style="font-size:36px;margin-bottom:12px">🙋</div>
@@ -3661,6 +3727,160 @@ function showPaymentSuccess(plan){
   el.appendChild(inner);
   document.body.appendChild(el);
 }
+
+// ── CONTENT BUCKETS ──────────────────────────────────────────
+
+var _bucketInsightsOpen = true;
+
+function getBuckets(){
+  if(!S.settings.buckets || !S.settings.buckets.length){
+    S.settings.buckets = ['Flow State Studio','1:1 Coaching','Freebie','Personal'];
+    // Don't persist here — will be persisted on next natural save
+  }
+  return S.settings.buckets;
+}
+
+function populateBucketSelect(val){
+  var buckets = getBuckets();
+  var opts = '<option value="">-- no bucket --</option>' + buckets.map(function(b){
+    return '<option value="'+b+'"'+(val===b?' selected':'')+'>'+b+'</option>';
+  }).join('');
+  ['cdBucket','ideaBucket'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.innerHTML = opts;
+  });
+}
+
+function addNewBucketInline(){
+  openBucketManager();
+  // Focus the input after modal opens
+  setTimeout(function(){
+    var inp = document.getElementById('newBucketInput');
+    if(inp) inp.focus();
+  }, 150);
+}
+
+function openBucketManager(){
+  renderBucketList();
+  openModal('bucketManagerModal');
+}
+
+function renderBucketList(){
+  var el = document.getElementById('bucketList');
+  if(!el) return;
+  var buckets = getBuckets();
+  if(!buckets.length){ el.innerHTML = '<div style="font-size:12px;color:var(--tl);text-align:center;padding:12px">No buckets yet. Add one below.</div>'; return; }
+  el.innerHTML = buckets.map(function(b, i){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px 12px">'
+      + '<span style="font-size:13px;color:var(--e);font-weight:500">'+b+'</span>'
+      + '<button onclick="deleteBucket('+i+')" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:16px;line-height:1;padding:0 2px" title="Remove">×</button>'
+      + '</div>';
+  }).join('');
+}
+
+function deleteBucket(i){
+  if(!S.settings.buckets) return;
+  S.settings.buckets.splice(i, 1);
+  persist();
+  renderBucketList();
+  renderBucketInsights();
+  populateBucketSelect('');
+}
+
+function saveBucketFromInput(){
+  var inp = document.getElementById('newBucketInput');
+  var name = (inp.value || '').trim();
+  if(!name) return;
+  if(!S.settings.buckets) S.settings.buckets = getBuckets().slice();
+  if(S.settings.buckets.indexOf(name) === -1){
+    S.settings.buckets.push(name);
+    persist();
+    renderBucketList();
+    renderBucketInsights();
+    // Re-populate selects, selecting the new bucket
+    populateBucketSelect(name);
+    // Set the new bucket as selected in any open card modal
+    ['cdBucket','ideaBucket'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.value = name;
+    });
+    toast('Bucket added ✓');
+  }
+  inp.value = '';
+}
+
+function toggleBucketInsights(){
+  _bucketInsightsOpen = !_bucketInsightsOpen;
+  var body = document.getElementById('bucketInsightsBody');
+  var chev = document.getElementById('bucketInsightsChevron');
+  if(body) body.style.maxHeight = _bucketInsightsOpen ? '400px' : '0px';
+  if(chev) chev.style.transform = _bucketInsightsOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+function renderBucketInsights(){
+  var body = document.getElementById('bucketInsightsBody');
+  if(!body) return;
+  var ideas = S.ideas || [];
+  var buckets = getBuckets();
+
+  // Count by bucket + format
+  var counts = {};
+  buckets.forEach(function(b){ counts[b] = {}; });
+  var unbucketed = 0;
+  ideas.forEach(function(idea){
+    var b = idea.bucket;
+    var f = idea.format || 'Other';
+    if(!b || buckets.indexOf(b) === -1){ unbucketed++; return; }
+    if(!counts[b][f]) counts[b][f] = 0;
+    counts[b][f]++;
+  });
+
+  var totalByBucket = {};
+  buckets.forEach(function(b){
+    totalByBucket[b] = Object.values(counts[b]).reduce(function(a,c){return a+c;},0);
+  });
+  var maxCount = Math.max(1, Math.max.apply(null, buckets.map(function(b){return totalByBucket[b];})));
+
+  // Color palette for formats
+  var fmtColors = {'Caption / Post':'var(--teal)','Carousel':'var(--r)','Reel / Video':'#7A5C9C','Story':'#C47A3A','Newsletter':'var(--sage)','Substack / Article':'#4a7fa5','Freebie':'#b36c37','Other':'var(--tl)'};
+
+  var noData = buckets.every(function(b){return totalByBucket[b]===0;});
+
+  if(noData){
+    body.innerHTML = '<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 20px;font-size:12.5px;color:var(--tl);text-align:center">Tag content cards with a bucket to start seeing patterns here.</div>';
+    body.style.maxHeight = body.scrollHeight + 'px';
+    return;
+  }
+
+  var rows = buckets.filter(function(b){return totalByBucket[b]>0;}).map(function(b){
+    var total = totalByBucket[b];
+    var pct = Math.round((total / maxCount) * 100);
+    var fmtBreakdown = Object.entries(counts[b]).sort(function(a,b){return b[1]-a[1];}).map(function(e){
+      return '<span style="font-size:11px;color:var(--t);white-space:nowrap">'+e[0]+' <strong style="color:var(--e)">'+e[1]+'</strong></span>';
+    }).join('<span style="color:var(--bl);margin:0 4px">·</span>');
+
+    // Segmented bar
+    var barSegs = Object.entries(counts[b]).sort(function(a,b){return b[1]-a[1];}).map(function(e){
+      var segPct = Math.round((e[1]/total)*100);
+      var col = fmtColors[e[0]] || 'var(--tl)';
+      return '<div style="height:100%;width:'+segPct+'%;background:'+col+';transition:width .3s" title="'+e[0]+': '+e[1]+'"></div>';
+    }).join('');
+
+    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bl)">'
+      + '<div style="width:min(140px,30vw);flex-shrink:0;font-size:12px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+b+'">'+b+'</div>'
+      + '<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">'
+      + '  <div style="height:8px;background:var(--bl);border-radius:100px;overflow:hidden;display:flex">'+barSegs+'</div>'
+      + '  <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center">'+fmtBreakdown+'</div>'
+      + '</div>'
+      + '<div style="width:28px;flex-shrink:0;text-align:right;font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e)">'+total+'</div>'
+      + '</div>';
+  }).join('');
+
+  body.innerHTML = '<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 18px">'+ rows +'</div>';
+  if(_bucketInsightsOpen) body.style.maxHeight = body.scrollHeight + 'px';
+}
+
+// ── END CONTENT BUCKETS ──────────────────────────────────────
 
 // Landing page login overlay
 function openLoginCard(){
@@ -3835,6 +4055,8 @@ async function bootApp(){
     if(typeof renderCalendar==='function')renderCalendar();
     if(typeof renderKanban==='function')renderKanban();
   }, 200);
+  // Check for update AFTER user is loaded so dismissed key uses correct user ID
+  setTimeout(checkForUpdate, 2500);
 }
 
 function addUserMenu(){
@@ -4003,7 +4225,7 @@ const S = {
   drafts:[], calEntries:[], ideas:[], tasks:[],
   hooks:[], ctas:[], stories:[], prompts:[],
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
-  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
+  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5',buckets:['Flow State Studio','1:1 Coaching','Freebie','Personal']},
   plan:'beta',
   swipeFile:[],weeklyFocus:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
@@ -4101,7 +4323,7 @@ function navigate(v){
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
   if(v==='dashboard'){renderDashboard();renderWeeklyFocus();}
   if(v==='calendar')renderCalendar();
-  if(v==='ideas')renderKanban();
+  if(v==='ideas'){renderKanban();renderBucketInsights();}
   if(v==='tasks')renderTaskKanban();
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='swipefile')renderSwipeFile();
@@ -4362,7 +4584,7 @@ function renderKanban(){
       <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span></div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span>${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div></div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
@@ -4908,6 +5130,8 @@ function openIdeaModal(status){
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
   var hkElNew=document.getElementById('cdHook');if(hkElNew)hkElNew.value='';
+  var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value='';
+  populateBucketSelect('');
   // Set stage
   var defStatus=status||'idea';
   document.querySelectorAll('.cd-stage').forEach(function(el){el.classList.toggle('active',el.dataset.s===defStatus);});
@@ -4942,14 +5166,14 @@ function saveIdea(){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('ideaReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
   cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
   if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
   var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
-  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();
+  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
     scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(result){
@@ -5411,6 +5635,8 @@ function cdOpen(id){
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
+  var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value=x.perfNote||'';
+  populateBucketSelect(x.bucket||'');
   // Populate reminder toggle
   var remWrap=document.getElementById('cdReminderWrap');
   var remCb=document.getElementById('cdReminderOn');
@@ -5545,6 +5771,8 @@ function cdSave(){
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
   var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
+  var pnEl=document.getElementById('cdPerfNote');x.perfNote=pnEl?pnEl.value.trim():'';
+  var bkEl=document.getElementById('cdBucket');x.bucket=bkEl?bkEl.value:'';
   x.images=S._pendingIdeaImages||x.images||[];
   // Save reminder preference
   var reminderCb = document.getElementById('cdReminderOn');
@@ -5576,7 +5804,7 @@ function cdSave(){
   }
   S.cdId=null;
   persist();closeModal('cardDetailModal');
-  renderKanban();renderCalendar();
+  renderKanban();renderCalendar();renderBucketInsights();
   // Schedule Brevo reminders if toggled on
   if(shouldSchedule && _currentUser){
     var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
@@ -5863,7 +6091,6 @@ function openBrainDump(){
 }
 document.addEventListener('DOMContentLoaded',function(){
   checkPaymentSuccess();
-  setTimeout(checkForUpdate, 3000);
   var ta=document.getElementById('brainDumpTA');
   if(ta)ta.addEventListener('input',function(){
     var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
@@ -6898,24 +7125,27 @@ function copyBrandProfile() {
 // To release an update: push new index.html AND update version.json with a higher number.
 // Users will see the banner on next load and can update with one click - no action needed from them.
 function checkForUpdate() {
+  var current = document.documentElement.dataset.version || '';
   fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var latest = data.version || '';
-      var current = document.documentElement.dataset.version || '';
-      if (latest && current && latest !== current) {
-        var dismissed = localStorage.getItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + latest);
-        if (!dismissed) {
-          _whatsNewChangelog = data.changelog || [];
-          _whatsNewVersion = latest;
-          // Show What's New modal automatically, no click needed
-          renderWhatsNew(_whatsNewChangelog);
-          openModal('whatsNewModal');
-        }
+      if (!latest || !current || latest === current) return;
+      // Always use user-scoped dismissed key so owner vs beta don't share state
+      var userPrefix = _currentUser ? 'u' + _currentUser.id + '_' : 'anon_';
+      var dismissedKey = userPrefix + 'wnDismissed_' + latest;
+      // Clear any old no-prefix dismissed key that may have permanently hidden updates
+      localStorage.removeItem('wnDismissed_' + latest);
+      var dismissed = localStorage.getItem(dismissedKey);
+      if (!dismissed) {
+        _whatsNewChangelog = data.changelog || [];
+        _whatsNewVersion = latest;
+        renderWhatsNew(_whatsNewChangelog);
+        openModal('whatsNewModal');
       }
     })
     .catch(function() {
-      // version.json not found or fetch failed - just stay quiet
+      // version.json not found or fetch failed — stay quiet
     });
 }
 
@@ -6939,7 +7169,10 @@ function renderWhatsNew(changelog){
 }
 
 function dismissWhatsNew(){
-  if (_whatsNewVersion) localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
+  if(_whatsNewVersion){
+    var userPrefix = _currentUser ? 'u' + _currentUser.id + '_' : 'anon_';
+    localStorage.setItem(userPrefix + 'wnDismissed_' + _whatsNewVersion, '1');
+  }
   closeModal('whatsNewModal');
 }
 
