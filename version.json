@@ -1,41 +1,29 @@
 {
-  "version": "3.2",
+  "version": "3.3",
   "changelog": [
     {
       "type": "new",
       "date": "June 2026",
-      "title": "Content Buckets",
-      "desc": "Tag content cards by topic or offer and see patterns over time. Which formats work best for which products? Now you can find out. Add your own buckets, tag cards as you create them, and see a visual breakdown right above your kanban."
+      "title": "Content Buckets — track what's working",
+      "desc": "Tag any content card with a topic or offer (like '1:1 Coaching' or 'Freebie') and see a live breakdown in your Content Planner. At a glance you can tell which formats you're using most for each topic. Add your own buckets, tag as you go, and let the pattern show up on its own."
     },
     {
       "type": "new",
       "date": "June 2026",
-      "title": "New Landing Page",
-      "desc": "The login screen is now a full landing page so new visitors actually know what they're logging into. Includes a video walkthrough, screenshot carousel, and the analog + AI positioning front and centre."
+      "title": "What worked? note on every card",
+      "desc": "There's now an optional note field at the bottom of every content card. No pressure to fill it in — but if something performs well, it's a handy place to jot it before you forget."
     },
     {
       "type": "improvement",
       "date": "June 2026",
-      "title": "Sales Page Glow-Up",
-      "desc": "The features breakdown is now colour-coded by section. Create & Write in rust, Plan & Organise in teal, Guides in rust. Section labels are bold pill badges instead of flat rules. Each card has a coloured icon background."
-    },
-    {
-      "type": "new",
-      "date": "June 2026",
-      "title": "The Analog Way Added to Guides",
-      "desc": "The fourth guide is now visible in the Built-in Guides section of the sales page. What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required."
+      "title": "Content Planner has a new look",
+      "desc": "The Planner now has the Content by Bucket strip above your kanban so you can see your content patterns without leaving the view. Collapse it when you don't need it, expand it when you do."
     },
     {
       "type": "fix",
       "date": "June 2026",
-      "title": "What's New Popup Fixed",
-      "desc": "The update notification now fires after your account loads, not before. This means it correctly shows for every account independently and won't stay silently dismissed across different users on the same device."
-    },
-    {
-      "type": "improvement",
-      "date": "June 2026",
-      "title": "Mobile Improvements",
-      "desc": "Content Planner now scrolls properly on mobile with the Bucket Insights strip visible. Landing page bridge card stacks correctly on small screens. Bucket manage button scaled for touch."
+      "title": "A few things that needed sorting",
+      "desc": "The update popup now works properly for every account. The Learn More button on the login page now goes to the right place. Some mobile scroll fixes in the Planner so the view doesn't get cut off."
     }
   ]
 }
