@@ -317,11 +317,28 @@ select.fi{cursor:pointer}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
 .pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
 .pricing-nd{display:inline-flex;align-items:center;gap:6px;background:var(--rp);border:1px solid #E0BDAA;border-radius:100px;padding:6px 16px;font-size:12px;font-weight:600;color:var(--r);letter-spacing:.04em;text-transform:uppercase;margin-top:8px}
-.pricing-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:48px}
-.pf-card{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:18px 20px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 1px 4px var(--sh)}
+.pricing-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:48px}
+.pf-card{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:20px 22px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 2px 8px var(--sh);transition:transform .15s,box-shadow .15s}
+.pf-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--shm)}
+.pf-icon-wrap{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .pf-icon{font-size:22px;flex-shrink:0;margin-top:1px}
-.pf-title{font-size:14px;font-weight:600;color:var(--e);margin-bottom:3px}
-.pf-desc{font-size:12.5px;color:var(--t);line-height:1.6}
+.pf-title{font-size:14px;font-weight:600;color:var(--e);margin-bottom:4px}
+.pf-desc{font-size:12.5px;color:var(--t);line-height:1.65}
+/* Section color themes */
+.pf-card.rust{background:linear-gradient(135deg,#fdf5ee,var(--w));border-color:rgba(179,108,55,.25)}
+.pf-card.rust .pf-icon-wrap{background:var(--rp);border:1px solid rgba(179,108,55,.2)}
+.pf-card.rust .pf-title{color:var(--r)}
+.pf-card.teal{background:linear-gradient(135deg,#eaf5f5,var(--w));border-color:rgba(0,132,132,.2)}
+.pf-card.teal .pf-icon-wrap{background:#dff0f0;border:1px solid rgba(0,132,132,.15)}
+.pf-card.teal .pf-title{color:var(--teal)}
+.pf-card.sage{background:linear-gradient(135deg,#eef3eb,var(--w));border-color:rgba(90,110,80,.2)}
+.pf-card.sage .pf-icon-wrap{background:var(--sagep);border:1px solid rgba(90,110,80,.15)}
+.pf-card.sage .pf-title{color:var(--sage)}
+.pf-card.gold{background:linear-gradient(135deg,#fdf3e0,var(--w));border-color:rgba(179,140,50,.25)}
+.pf-card.gold .pf-icon-wrap{background:var(--gp);border:1px solid rgba(179,140,50,.2)}
+.pf-card.gold .pf-title{color:var(--g)}
+/* Section label */
+.pf-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--w);background:var(--e);border-radius:100px;padding:5px 14px;display:inline-flex;align-items:center;gap:7px;margin:28px 0 14px}
 .pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
 .pc{background:var(--w);border:2px solid var(--bl);border-radius:14px;padding:28px;position:relative;transition:border-color .2s}
 .pc.featured{border-color:var(--r);background:var(--rp)}
@@ -1044,8 +1061,7 @@ select.fi{cursor:pointer}
 .dc-analog-badge{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 8px;border-radius:100px;background:var(--gp);color:var(--g);border:1px solid #D4A843;margin-left:6px}
 
 /* SALES PAGE SECTIONS */
-.pf-section-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin:32px 0 16px;padding-bottom:10px;border-bottom:1.5px solid var(--bl);display:flex;align-items:center;gap:10px}
-.pf-section-label::before{content:"";flex:1;height:1px;background:var(--bl);display:none}
+.pf-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--w);background:var(--e);border-radius:100px;padding:5px 14px;display:inline-flex;align-items:center;gap:7px;margin:28px 0 14px}
 
 /* GUIDES CAROUSEL */
 .gc-carousel{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -1089,7 +1105,7 @@ select.fi{cursor:pointer}
       <p class="lp-sub">Flow State Studio is a content workspace for ND entrepreneurs who are done with too many tabs, too many tools, and brilliant ideas that never make it out of their head. Go analog when you just want to write. Use AI when you want a spark. Neither is the wrong choice here.</p>
       <div class="lp-ctas">
         <button class="lp-btn-primary" onclick="openLoginCard()">Sign In</button>
-        <button class="lp-btn-secondary" onclick="window.open('https://flowstatestudio.co','_blank')">Learn More</button>
+        <button class="lp-btn-secondary" onclick="goToPricing()">Learn More</button>
       </div>
     </section>
 
@@ -1189,7 +1205,7 @@ select.fi{cursor:pointer}
       <p>Your ideas, your planning, your writing, your tools. Starting at $9.50/month, for a brain that deserves a system that actually works with it.</p>
       <div class="lp-bottom-ctas">
         <button class="lp-btn-light" onclick="openLoginCard()">Sign In to Studio</button>
-        <button class="lp-btn-outline-light" onclick="window.open('https://flowstatestudio.co','_blank')">See Membership Options</button>
+        <button class="lp-btn-outline-light" onclick="goToPricing()">See Membership Options</button>
       </div>
     </div>
 
@@ -3081,22 +3097,22 @@ select.fi{cursor:pointer}
     </div>
 
     <!-- YOUR WAY BLEND CARD -->
-    <div style="background:linear-gradient(135deg,var(--gp),#EDE0C4);border:1.5px solid #D4A843;border-radius:var(--rad);padding:28px 32px;margin-bottom:32px;text-align:center">
+    <div style="background:linear-gradient(135deg,#e0f2f2,#c8e8e8);border:1.5px solid rgba(0,132,132,.3);border-radius:var(--rad);padding:28px 32px;margin-bottom:32px;text-align:center">
       <div style="font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.3">Write your own. Use AI when you want it. Neither is the wrong choice here.</div>
-      <div style="font-size:14px;color:var(--el);line-height:1.75;max-width:580px;margin:0 auto">I built this because I was done apologizing for how my brain works. Not every ND creator wants AI and this system was not built to force it on you. Some days you want a blank page. Some days you want a spark. Flow State Studio holds both without judgment. Go Analog when you just want to write. Bridge the Gap when you want the tools. Your brain, your call.</div>
+      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:580px;margin:0 auto">I built this because I was done apologizing for how my brain works. Not every ND creator wants AI and this system was not built to force it on you. Some days you want a blank page. Some days you want a spark. Flow State Studio holds both without judgment. Go Analog when you just want to write. Bridge the Gap when you want the tools. Your brain, your call.</div>
       <div style="display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap">
         <div style="text-align:center">
           <div style="font-size:22px;margin-bottom:4px">✏️</div>
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g)">Go Analog</div>
-          <div style="font-size:12px;color:var(--el);margin-top:3px">Write your own. No AI required.</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Go Analog</div>
+          <div style="font-size:12px;color:var(--tealh);margin-top:3px">Write your own. No AI required.</div>
         </div>
-        <div style="color:var(--bl);font-size:24px;display:flex;align-items:center">+</div>
+        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">+</div>
         <div style="text-align:center">
           <div style="font-size:22px;margin-bottom:4px">✦</div>
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">Bridge the Gap</div>
-          <div style="font-size:12px;color:var(--el);margin-top:3px">AI tools when you want a spark.</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Bridge the Gap</div>
+          <div style="font-size:12px;color:var(--tealh);margin-top:3px">AI tools when you want a spark.</div>
         </div>
-        <div style="color:var(--bl);font-size:24px;display:flex;align-items:center">=</div>
+        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">=</div>
         <div style="text-align:center">
           <div style="font-size:22px;margin-bottom:4px">🧠</div>
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">Your way</div>
@@ -3168,8 +3184,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- HOOK BUILDER -->
-      <div class="pf-card">
-        <div class="pf-icon">🪝</div>
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">🪝</div>
         <div>
           <div class="pf-title">Hook Builder</div>
           <div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
@@ -3177,8 +3193,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- WRITING STUDIO -->
-      <div class="pf-card">
-        <div class="pf-icon">✍️</div>
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">✍️</div>
         <div>
           <div class="pf-title">Writing Studio + Saved Drafts</div>
           <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
@@ -3186,8 +3202,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- CAPTION VARIATIONS -->
-      <div class="pf-card">
-        <div class="pf-icon">⇕</div>
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">⇕</div>
         <div>
           <div class="pf-title">Caption Variations</div>
           <div class="pf-desc">One idea, three angles. Warm, direct, and story-led versions of the same post so you can pick the one that fits your energy today without starting from scratch three times.</div>
@@ -3195,8 +3211,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- CONTENT SERIES -->
-      <div class="pf-card">
-        <div class="pf-icon">☆</div>
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">☆</div>
         <div>
           <div class="pf-title">Content Series Builder</div>
           <div class="pf-desc">Turn one idea into a five-part content series, each post standing alone but connecting to a bigger theme. Never run out of what to say next.</div>
@@ -3207,8 +3223,8 @@ select.fi{cursor:pointer}
       <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
 
       <!-- CONTENT PLANNER -->
-      <div class="pf-card">
-        <div class="pf-icon">🗂</div>
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🗂</div>
         <div>
           <div class="pf-title">Content Planner</div>
           <div class="pf-desc">A visual kanban board that moves with you from half-baked idea to published. See everything at once without losing track, perfect for brains that think in big pictures, not spreadsheets.</div>
@@ -3216,8 +3232,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- FEED PREVIEW -->
-      <div class="pf-card">
-        <div class="pf-icon">🖼️</div>
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🖼️</div>
         <div>
           <div class="pf-title">Feed Preview</div>
           <div class="pf-desc">See your Instagram grid before you post. Upload images to your content cards and they appear as a live grid you can drag and rearrange until it looks right, no third-party app needed.</div>
@@ -3225,8 +3241,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- CALENDAR + TASKS -->
-      <div class="pf-card">
-        <div class="pf-icon">📅</div>
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">📅</div>
         <div>
           <div class="pf-title">Calendar + Task Board</div>
           <div class="pf-desc">Content and tasks on one calendar, color-coded so you always know what's what. Tasks have energy level tags, time estimates, and substeps so your brain knows exactly what "do the thing" actually means today.</div>
@@ -3234,8 +3250,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- NOTEBOOKS -->
-      <div class="pf-card">
-        <div class="pf-icon">🧠</div>
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🧠</div>
         <div>
           <div class="pf-title">Notebooks + Brain Dump</div>
           <div class="pf-desc">Unlimited notebooks for your thoughts, half-finished ideas, and client notes. No format required. Just write. Brain Dump mode is specifically for when your head is full and you need to get it out fast.</div>
@@ -3243,8 +3259,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- LIBRARY -->
-      <div class="pf-card">
-        <div class="pf-icon">🔗</div>
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🔗</div>
         <div>
           <div class="pf-title">Hook, CTA, Story + Prompt Library</div>
           <div class="pf-desc">Hundreds of pre-written hooks, CTAs, story prompts, and writing prompts built for wellness and service businesses. Filter by category, toggle between grid and list view, and save your own when you write something worth keeping.</div>
@@ -3252,8 +3268,8 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- TASK BREAKDOWN -->
-      <div class="pf-card">
-        <div class="pf-icon">☑</div>
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">☑</div>
         <div>
           <div class="pf-title">Task Breakdown Inside Cards</div>
           <div class="pf-desc">Break any content idea into steps that sync straight to your task board and calendar. ND brains need the big idea AND the tiny next action in the same place, not two separate tools.</div>
@@ -3264,23 +3280,27 @@ select.fi{cursor:pointer}
       <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
 
       <!-- GUIDES: new full-width card -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,#F0F9F9,var(--tealp));border-color:var(--teal)">
-        <div class="pf-icon" style="color:var(--teal)">📖</div>
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
+        <div class="pf-icon" style="color:var(--r)">📖</div>
         <div>
-          <div class="pf-title" style="color:var(--teal);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
+          <div class="pf-title" style="color:var(--r);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
           <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🧠 ND Rescue Kit</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 ND Rescue Kit</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
             </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🌊 Content Cycle Framework</div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🌊 Content Cycle Framework</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific tips.</div>
             </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid var(--tealp)">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">✦ The Unstuck Guide</div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ The Unstuck Guide</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">For when the inner critic says it's all been done before. Reframes for perfectionism, starting paralysis, and creative drought, paired with specific Studio workflows to get you moving again.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✏️ The Analog Way</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required. For the days you just want a blank page and a pencil.</div>
             </div>
           </div>
         </div>
