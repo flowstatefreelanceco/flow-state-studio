@@ -1141,22 +1141,14 @@ select.fi{cursor:pointer}
     <div class="lp-preview">
       <div class="lp-section-lbl">A peek inside</div>
       <div class="lp-video-wrap" id="lpVideoWrap">
-        <div class="lp-video-placeholder" id="lpVideoPlaceholder">
-          <button class="lp-play-btn" onclick="playLpVideo()">
+        <div class="lp-video-placeholder" id="lpVideoPlaceholder" onclick="playLpVideo()" style="display:none">
+          <button class="lp-play-btn">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
           </button>
-          <div class="lp-video-label">Watch the walkthrough</div>
-          <div class="lp-video-note">~2 min tour of the Studio</div>
+          <div class="lp-video-label">Studio BTS</div>
+          <div class="lp-video-note">A look inside Flow State Studio</div>
         </div>
-        <!--
-          TO ADD YOUR VIDEO — choose one option then delete the other:
-
-          OPTION A: Upload preview.mp4 + preview-poster.jpg to Vercel alongside index.html, uncomment below:
-          <video id="lpVideo" src="preview.mp4" controls preload="none" poster="preview-poster.jpg" style="width:100%;height:100%;object-fit:cover;display:block"></video>
-
-          OPTION B: YouTube embed — paste your video ID, uncomment below, and remove onclick from lp-video-placeholder:
-          <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=0" frameborder="0" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%"></iframe>
-        -->
+        <video id="lpVideo" src="preview.mp4" controls autoplay muted loop preload="auto" style="width:100%;height:100%;object-fit:cover;display:block"></video>
       </div>
     </div>
 
@@ -1164,34 +1156,17 @@ select.fi{cursor:pointer}
     <div class="lp-shots">
       <div class="lp-section-lbl" style="padding:0 24px 18px">Inside the Studio</div>
       <div class="lp-shots-track" id="lpShotsTrack">
-        <!--
-          ADD YOUR SCREENSHOTS:
-          Upload them to Vercel (screenshot-1.png, screenshot-2.png, etc.)
-          Replace these placeholder divs with real <img> tags like:
-          <div class="lp-shot"><img src="screenshot-1.png" alt="Writing Studio" /><div class="lp-shot-cap">Writing Studio</div></div>
-        -->
-        <div class="lp-shot" style="min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px">
-          <span style="font-size:32px">🖼</span>
-          <span style="font-size:13px;color:var(--t);font-weight:500">Screenshot 1</span>
-          <span style="font-size:11px;color:var(--tl)">Replace with: <code>screenshot-1.png</code></span>
-        </div>
-        <div class="lp-shot" style="min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px">
-          <span style="font-size:32px">🖼</span>
-          <span style="font-size:13px;color:var(--t);font-weight:500">Screenshot 2</span>
-          <span style="font-size:11px;color:var(--tl)">Replace with: <code>screenshot-2.png</code></span>
-        </div>
-        <div class="lp-shot" style="min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px">
-          <span style="font-size:32px">🖼</span>
-          <span style="font-size:13px;color:var(--t);font-weight:500">Screenshot 3</span>
-          <span style="font-size:11px;color:var(--tl)">Replace with: <code>screenshot-3.png</code></span>
-        </div>
-        <div class="lp-shot" style="min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px">
-          <span style="font-size:32px">🖼</span>
-          <span style="font-size:13px;color:var(--t);font-weight:500">Screenshot 4</span>
-          <span style="font-size:11px;color:var(--tl)">Replace with: <code>screenshot-4.png</code></span>
-        </div>
+        <div class="lp-shot"><img src="screenshot-1.png" alt="Dashboard" loading="lazy" /><div class="lp-shot-cap">✦ Dashboard</div></div>
+        <div class="lp-shot"><img src="screenshot-5.png" alt="Writing Studio" loading="lazy" /><div class="lp-shot-cap">✍️ Writing Studio</div></div>
+        <div class="lp-shot"><img src="screenshot-2.png" alt="Content Kanban" loading="lazy" /><div class="lp-shot-cap">🗂 Content Planner</div></div>
+        <div class="lp-shot"><img src="screenshot-3.png" alt="Content Card" loading="lazy" /><div class="lp-shot-cap">📄 Content Card</div></div>
+        <div class="lp-shot"><img src="screenshot-4.png" alt="Hooks" loading="lazy" /><div class="lp-shot-cap">🪝 Hook Builder</div></div>
+        <div class="lp-shot"><img src="screenshot-7.png" alt="Calendar" loading="lazy" /><div class="lp-shot-cap">📅 Calendar</div></div>
+        <div class="lp-shot"><img src="screenshot-6.png" alt="Task Kanban" loading="lazy" /><div class="lp-shot-cap">☑ Task Board</div></div>
+        <div class="lp-shot"><img src="screenshot-8.png" alt="Guides" loading="lazy" /><div class="lp-shot-cap">📖 Guides</div></div>
+        <div class="lp-shot"><img src="screenshot-9.png" alt="Notebooks" loading="lazy" /><div class="lp-shot-cap">🧠 Notebooks</div></div>
       </div>
-      <div class="lp-shots-hint">← scroll to explore →</div>
+      <div class="lp-shots-hint">← swipe to explore →</div>
     </div>
 
     <!-- WHO IT'S FOR -->
@@ -3680,11 +3655,13 @@ function handleOverlayClick(e){
   if(e.target===document.getElementById('lpLoginOverlay'))closeLoginCard();
 }
 function playLpVideo(){
-  // If you're using Option A (video file), uncomment these lines:
-  // var v=document.getElementById('lpVideo');
-  // if(v){document.getElementById('lpVideoPlaceholder').classList.add('hidden');v.style.display='block';v.play();}
-  // For now, opens Learn More as fallback until video is added
-  window.open('https://flowstatestudio.co','_blank');
+  var placeholder=document.getElementById('lpVideoPlaceholder');
+  var video=document.getElementById('lpVideo');
+  if(placeholder&&video){
+    placeholder.style.display='none';
+    video.style.display='block';
+    video.play();
+  }
 }
 
 function proceedToSignup(plan){
