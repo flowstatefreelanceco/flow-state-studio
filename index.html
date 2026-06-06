@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="3.1">
+<html lang="en" data-version="3.0">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -688,10 +688,6 @@ select.fi{cursor:pointer}
 
   /* GUIDE */
   .guide-wrap{margin-bottom:14px}
-
-  /* BUCKET INSIGHTS */
-  #bucketInsightsWrap{margin-bottom:10px}
-  #bucketInsightsWrap .btn{font-size:9px !important;padding:3px 8px !important}
 }
 
 @media(max-width:420px){
@@ -1109,7 +1105,7 @@ select.fi{cursor:pointer}
       <p class="lp-sub">Flow State Studio is a content workspace for ND entrepreneurs who are done with too many tabs, too many tools, and brilliant ideas that never make it out of their head. Go analog when you just want to write. Use AI when you want a spark. Neither is the wrong choice here.</p>
       <div class="lp-ctas">
         <button class="lp-btn-primary" onclick="openLoginCard()">Sign In</button>
-        <button class="lp-btn-secondary" onclick="goToPricing(true)">Learn More</button>
+        <button class="lp-btn-secondary" onclick="goToPricing()">Learn More</button>
       </div>
     </section>
 
@@ -1209,7 +1205,7 @@ select.fi{cursor:pointer}
       <p>Your ideas, your planning, your writing, your tools. Starting at $9.50/month, for a brain that deserves a system that actually works with it.</p>
       <div class="lp-bottom-ctas">
         <button class="lp-btn-light" onclick="openLoginCard()">Sign In to Studio</button>
-        <button class="lp-btn-outline-light" onclick="goToPricing(true)">See Membership Options</button>
+        <button class="lp-btn-outline-light" onclick="goToPricing()">See Membership Options</button>
       </div>
     </div>
 
@@ -1245,6 +1241,328 @@ select.fi{cursor:pointer}
   </div>
 
 </div><!-- /authScreen -->
+
+<!-- LOCKED / PRICING SCREEN -->
+<div id="lockedScreen">
+  <div class="pricing-wrap">
+
+    <!-- HERO -->
+    <div class="pricing-hero">
+      <div class="pricing-wordmark">Flow State Studio ✦</div>
+      <div class="pricing-tagline">Built different, by someone who thinks different. A content system for ND entrepreneurs who are done with too many tabs, too many tools, and brilliant ideas that never make it out of their head.</div>
+      <div class="pricing-nd">🧠 Built by an ND brain, for ND brains</div>
+      <!-- STAT STRIP -->
+      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">✏️ + ✦</span> Analog and AI</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">7</span> content formats</div>
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--g);font-size:16px;font-family:var(--fh);font-weight:700">1</span> place for everything</div>
+      </div>
+    </div>
+
+    <!-- YOUR WAY BLEND CARD -->
+    <div style="background:linear-gradient(135deg,#e0f2f2,#c8e8e8);border:1.5px solid rgba(0,132,132,.3);border-radius:var(--rad);padding:28px 32px;margin-bottom:32px;text-align:center">
+      <div style="font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.3">Write your own. Use AI when you want it. Neither is the wrong choice here.</div>
+      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:580px;margin:0 auto">I built this because I was done apologizing for how my brain works. Not every ND creator wants AI and this system was not built to force it on you. Some days you want a blank page. Some days you want a spark. Flow State Studio holds both without judgment. Go Analog when you just want to write. Bridge the Gap when you want the tools. Your brain, your call.</div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">✏️</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Go Analog</div>
+          <div style="font-size:12px;color:var(--tealh);margin-top:3px">Write your own. No AI required.</div>
+        </div>
+        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">+</div>
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">✦</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Bridge the Gap</div>
+          <div style="font-size:12px;color:var(--tealh);margin-top:3px">AI tools when you want a spark.</div>
+        </div>
+        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">=</div>
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">🧠</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">Your way</div>
+          <div style="font-size:12px;color:var(--el);margin-top:3px">Content that actually feels like you.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURE GRID -->
+    <div class="pricing-features">
+
+      <!-- SECTION: CREATE & WRITE -->
+      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">✍️ Create and write</div></div>
+
+      <!-- CREATIVE DIRECTOR: full-width hero card -->
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
+        <div class="pf-icon">✦</div>
+        <div>
+          <div class="pf-title" style="color:var(--r);font-size:15px">Your Creative Director: Five Ways to Use It</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">The Creative Director isn't one button, it's a whole creative system built into the Studio. Think of it as having a world-class content strategist available every time you sit down to create.</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Brain Not Cooperating?</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Hit the panic button on your dashboard and get your angle, hook, emotion, and what to avoid, before you write a single word. Instant creative direction, no blank-page spiral.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ Strategy Session</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Inside every content card, the Creative Director reads your brief and gives you a full strategic direction: the angle, the hook to lead with, the emotion to create, and the one thing to avoid. Before you write.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🔍 Content Autopsy</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste any post that stopped your scroll. The Creative Director dissects exactly why it worked, the hook type, emotional trigger, audience psychology, then rebuilds it completely in your voice. No recycled content. All original.</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✍️ Generate Content</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">From inside any content card, generate a full draft in your brand voice: caption, carousel, story, reel, newsletter, email, or full article. One click from brief to draft, ready to edit and publish.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">📌 Swipe File</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Save any AI output you love directly to your Swipe File. Build a personal reference library of your best angles, hooks, and copy so nothing brilliant ever gets lost in a chat window again.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBSTACK HIGHLIGHT -->
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--gp),#EEE0C4);border-color:#D4BE90">
+        <div class="pf-icon">📝</div>
+        <div style="width:100%">
+          <div class="pf-title" style="color:var(--g);font-size:15px">Built for Substack creators</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Substack is having a moment, and long-form writing is one of the hardest content formats for ND brains. The Studio is built to change that. Generate full Substack-ready articles in your voice, with a compelling title, opening hook, body sections, and a warm close. Not a bullet list dressed up as an article. The real thing, ready to paste and publish.</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">📄 Full article generation</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Brief your idea, choose Article as your format, and get a complete long-form draft back. Title, hook, sections, close. Written in your voice, ready to edit and post.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">✦ Strategy before you write</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Run Strategy Session on your Substack idea before you draft anything. Get the angle, the emotional frame, and the one thing to avoid. Walk into your article knowing exactly where it is going.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">🪝 Hook your readers from line one</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Use the Hook Builder to generate five opening lines for your article before you write a word. Pick the one that pulls. Substack readers decide in the first two sentences whether they are staying.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOOK BUILDER -->
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">🪝</div>
+        <div>
+          <div class="pf-title">Hook Builder</div>
+          <div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
+        </div>
+      </div>
+
+      <!-- WRITING STUDIO -->
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">✍️</div>
+        <div>
+          <div class="pf-title">Writing Studio + Saved Drafts</div>
+          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
+        </div>
+      </div>
+
+      <!-- CAPTION VARIATIONS -->
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">⇕</div>
+        <div>
+          <div class="pf-title">Caption Variations</div>
+          <div class="pf-desc">One idea, three angles. Warm, direct, and story-led versions of the same post so you can pick the one that fits your energy today without starting from scratch three times.</div>
+        </div>
+      </div>
+
+      <!-- CONTENT SERIES -->
+      <div class="pf-card rust">
+        <div class="pf-icon-wrap">☆</div>
+        <div>
+          <div class="pf-title">Content Series Builder</div>
+          <div class="pf-desc">Turn one idea into a five-part content series, each post standing alone but connecting to a bigger theme. Never run out of what to say next.</div>
+        </div>
+      </div>
+
+      <!-- SECTION: PLAN & ORGANISE -->
+      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
+
+      <!-- CONTENT PLANNER -->
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🗂</div>
+        <div>
+          <div class="pf-title">Content Planner</div>
+          <div class="pf-desc">A visual kanban board that moves with you from half-baked idea to published. See everything at once without losing track, perfect for brains that think in big pictures, not spreadsheets.</div>
+        </div>
+      </div>
+
+      <!-- FEED PREVIEW -->
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🖼️</div>
+        <div>
+          <div class="pf-title">Feed Preview</div>
+          <div class="pf-desc">See your Instagram grid before you post. Upload images to your content cards and they appear as a live grid you can drag and rearrange until it looks right, no third-party app needed.</div>
+        </div>
+      </div>
+
+      <!-- CALENDAR + TASKS -->
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">📅</div>
+        <div>
+          <div class="pf-title">Calendar + Task Board</div>
+          <div class="pf-desc">Content and tasks on one calendar, color-coded so you always know what's what. Tasks have energy level tags, time estimates, and substeps so your brain knows exactly what "do the thing" actually means today.</div>
+        </div>
+      </div>
+
+      <!-- NOTEBOOKS -->
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🧠</div>
+        <div>
+          <div class="pf-title">Notebooks + Brain Dump</div>
+          <div class="pf-desc">Unlimited notebooks for your thoughts, half-finished ideas, and client notes. No format required. Just write. Brain Dump mode is specifically for when your head is full and you need to get it out fast.</div>
+        </div>
+      </div>
+
+      <!-- LIBRARY -->
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">🔗</div>
+        <div>
+          <div class="pf-title">Hook, CTA, Story + Prompt Library</div>
+          <div class="pf-desc">Hundreds of pre-written hooks, CTAs, story prompts, and writing prompts built for wellness and service businesses. Filter by category, toggle between grid and list view, and save your own when you write something worth keeping.</div>
+        </div>
+      </div>
+
+      <!-- TASK BREAKDOWN -->
+      <div class="pf-card teal">
+        <div class="pf-icon-wrap">☑</div>
+        <div>
+          <div class="pf-title">Task Breakdown Inside Cards</div>
+          <div class="pf-desc">Break any content idea into steps that sync straight to your task board and calendar. ND brains need the big idea AND the tiny next action in the same place, not two separate tools.</div>
+        </div>
+      </div>
+
+      <!-- SECTION: STRATEGY & GUIDES -->
+      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
+
+      <!-- GUIDES: new full-width card -->
+      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
+        <div class="pf-icon" style="color:var(--r)">📖</div>
+        <div>
+          <div class="pf-title" style="color:var(--r);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 ND Rescue Kit</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🌊 Content Cycle Framework</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific tips.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ The Unstuck Guide</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">For when the inner critic says it's all been done before. Reframes for perfectionism, starting paralysis, and creative drought, paired with specific Studio workflows to get you moving again.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✏️ The Analog Way</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required. For the days you just want a blank page and a pencil.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROI / MENTAL LOAD STRIP -->
+    <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:32px 36px;margin-bottom:16px">
+      <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Sound familiar?</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" class="cd-sales-grid">
+        <div style="text-align:center;padding:16px 12px">
+          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--r);line-height:1;margin-bottom:8px">3-5</div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Hours a week</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">spent task-switching between tools, losing the idea somewhere in between, and starting over</div>
+        </div>
+        <div style="text-align:center;padding:16px 12px;border-left:1px solid var(--bl);border-right:1px solid var(--bl)">
+          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--teal);line-height:1;margin-bottom:8px">4+</div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Apps to manage</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">none of them talking to each other, none of them built for a brain that works like yours</div>
+        </div>
+        <div style="text-align:center;padding:16px 12px">
+          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--g);line-height:1;margin-bottom:8px">∞</div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Decisions per session</div>
+          <div style="font-size:12.5px;color:var(--t);line-height:1.6">what to post, where to start, which app to open, before a single word gets written</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-radius:var(--rsm);padding:18px 22px;text-align:center">
+        <div style="font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.3">That is the problem this was built to solve.</div>
+        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">One place for all of it. Your ideas, your planning, your writing, your tools. Starting at $9.50 a month, for a brain that deserves a system that actually works with it.</div>
+      </div>
+    </div>
+
+    <!-- POSITIONING STRIP -->
+    <div style="background:linear-gradient(135deg,var(--tealp),#C8E4E4);border:1.5px solid var(--teal);border-radius:var(--rad);padding:28px 32px;margin-bottom:40px;text-align:center">
+      <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);margin-bottom:10px;line-height:1.3">Consistent without burning out. That is what this is for.</div>
+      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:560px;margin:0 auto">Not more productivity. Not a better schedule. Consistent content creation that does not cost you everything, built around how you actually think, work, and show up.</div>
+    </div>
+
+    <div class="pricing-divider"></div>
+
+    <!-- PRICING CARDS -->
+    <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Founding Member Pricing, locked in forever</div>
+    <div class="pricing-cards">
+      <div class="pc">
+        <div class="pc-name">Starter</div>
+        <div class="pc-price">$9.50<span>/month</span></div>
+        <div class="pc-credits">125 AI credits / month</div>
+        <ul class="pc-features">
+          <li>Write your own (Go Analog) or generate with AI (Bridge the Gap)</li>
+          <li>All 12+ AI tools available when you want them</li>
+          <li>Content Planner, Calendar, Task Board</li>
+          <li>Feed Preview (Instagram grid)</li>
+          <li>Writing Studio: all 7 content formats</li>
+          <li>Hook, CTA, Story + Prompt Library</li>
+          <li>Unlimited Notebooks + Brain Dump</li>
+          <li>Saved Drafts library + CSV export</li>
+          <li>Swipe File for your best AI outputs</li>
+          <li>Four built-in strategy guides including The Analog Way</li>
+          <li>125 AI generations per month</li>
+          <li>Locked in at founding price forever</li>
+        </ul>
+        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member, $9.50/mo</button>
+      </div>
+      <div class="pc featured">
+        <div class="pc-badge">Most Popular</div>
+        <div class="pc-name">Unlimited</div>
+        <div class="pc-price">$19.50<span>/month</span></div>
+        <div class="pc-credits">Unlimited AI credits</div>
+        <ul class="pc-features">
+          <li>Everything in Starter</li>
+          <li>Unlimited AI generations, no caps, no countdowns</li>
+          <li>Perfect for batch content days, launches, and high-output weeks</li>
+          <li>Generate as much as you need, whenever you need it</li>
+          <li>Zero limits, zero anxiety about running out mid-flow</li>
+          <li>Locked in at founding price forever</li>
+        </ul>
+        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member, $19.50/mo</button>
+      </div>
+    </div>
+
+    <!-- INVITE CODE -->
+    <div style="text-align:center;margin-bottom:32px;padding:24px;background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);max-width:420px;margin-left:auto;margin-right:auto">
+      <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:6px">Got an invite code?</div>
+      <div style="font-size:13px;color:var(--t);margin-bottom:14px">Beta testers enter your code below for free access.</div>
+      <div style="display:flex;gap:8px">
+        <input id="inviteCodeInput" class="fi" placeholder="Enter invite code..." style="flex:1;text-transform:uppercase;letter-spacing:.08em;font-size:14px" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')redeemInviteCode()" />
+        <button class="btn btn-p" onclick="redeemInviteCode()" style="white-space:nowrap">Redeem →</button>
+      </div>
+      <div id="inviteCodeMsg" style="font-size:12px;margin-top:8px;min-height:16px"></div>
+    </div>
+
+    <div class="pricing-footer">
+      Cancel anytime · Secured by Stripe · Your data is always yours<br>
+      After payment, come back here and create your account to get started.<br>
+      Already have an account? <a onclick="lockedSignIn()">Sign in here</a>
+    </div>
+  </div>
+</div>
 
 <div id="appWrap"><div class="app">
 
@@ -1494,21 +1812,6 @@ select.fi{cursor:pointer}
             </div>
           </div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
-            <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">◈</span>Content Buckets</span><span class="guide-toggle">›</span></div>
-            <div class="guide-detail">
-              <p class="guide-desc">Tag your content cards by topic or offer so you can start seeing patterns over time. Which formats perform best for which products? Buckets help you figure that out without a spreadsheet.</p>
-              <ul class="guide-tips">
-                <li><strong>What a bucket is:</strong> a label for the topic or offer a piece of content is about. Examples: Flow State Studio, 1:1 Coaching, Freebie, Personal. You create your own to match your actual business.</li>
-                <li><strong>How to tag a card:</strong> open any content card in the Planner and select a bucket from the Content Bucket dropdown. It sits right below the Format field.</li>
-                <li><strong>Adding a new bucket:</strong> click the + New button next to the dropdown, type your bucket name, and it saves immediately. It will appear in every card from then on.</li>
-                <li><strong>Managing buckets:</strong> click Manage at the top of the Content by Bucket strip in the Planner to add or remove buckets from your list.</li>
-                <li><strong>Reading the insights:</strong> the Content by Bucket strip above your kanban shows a bar for each bucket. Each segment of the bar is a different format. Hover to see what it is. The number on the right is total cards for that bucket.</li>
-                <li><strong>What worked note:</strong> there is an optional What worked? field at the bottom of every card. Use it after something performs well. No requirement, just a useful place to note it before you forget.</li>
-                <li><strong>Tip:</strong> even rough tagging is useful. You do not need to tag everything. Just start with your main offer and see what patterns show up after a few weeks.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✅</span>Tasks</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
               <p class="guide-desc">A kanban board for everything that is not content. Business tasks, admin, client work, launch to-dos. Energy level tags and time estimates make it ND-friendly by design.</p>
@@ -1592,22 +1895,8 @@ select.fi{cursor:pointer}
       <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
       <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
     </div>
-    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch">
-      <!-- CONTENT INSIGHTS STRIP -->
-      <div id="bucketInsightsWrap" style="flex-shrink:0;margin-bottom:14px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleBucketInsights()">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tl);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span>Content by Bucket</span>
-            <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;color:var(--tl)">what you've made so far</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
-            <button class="btn btn-g" style="font-size:10px;padding:3px 10px" onclick="event.stopPropagation();openBucketManager()">Manage</button>
-            <span id="bucketInsightsChevron" style="font-size:12px;color:var(--tl);transition:transform .2s">▾</span>
-          </div>
-        </div>
-        <div id="bucketInsightsBody" style="max-height:400px;overflow:hidden;transition:max-height .3s ease"></div>
-      </div>
-      <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
+    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
+      <div class="kanban kanban-4" id="ideaKanban" style="flex:1;min-height:0;overflow-x:auto"></div>
     </div>
   </div>
 
@@ -1928,13 +2217,13 @@ select.fi{cursor:pointer}
         <h3>Brand Profile</h3>
         <p class="setting-desc">These fields are automatically woven into every AI generation. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
         <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. Business coaching for creative entrepreneurs" /></div>
-          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Business Coach and Brand Strategist" /></div>
+          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. VA/OBM for wellness entrepreneurs" /></div>
+          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Holistic Virtual Assistant and OBM" /></div>
         </div>
-        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. Service-based business owners ready to grow without burning out" /></div>
-        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital products, courses" /></div>
-        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, direct, and real. No fluff, no hustle culture" /></div>
-        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. Sustainable growth beats fast growth every time" /></div>
+        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. Wellness coaches, healers, and spiritual practitioners ready to scale" /></div>
+        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. VA packages, OBM retainers, 1:1 strategy intensives" /></div>
+        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
+        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
         <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
           <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
         </div>
@@ -1951,13 +2240,12 @@ select.fi{cursor:pointer}
       </div>
       <div class="setting-sec" id="inviteCodeSection" style="display:none">
         <h3>Beta Invite Code</h3>
-        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically, no manual steps needed.</p>
+        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically , no SQL needed.</p>
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1" id="inviteCodeDisplay">••••••••••••••</div>
-          <button class="btn btn-g" id="inviteRevealBtn" onclick="revealInviteCode()">Show</button>
-          <button class="btn btn-g" id="inviteCopyBtn" onclick="copyInviteCode()">Copy</button>
+          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO</div>
+          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO').then(()=>toast('Code copied ✓'))">Copy</button>
         </div>
-        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in, no action needed from you.</div>
+        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
       </div>
       <div class="setting-sec">
         <h3>Export &amp; Import</h3>
@@ -2579,12 +2867,6 @@ select.fi{cursor:pointer}
             </select>
           </div>
         </div>
-        <div class="fl"><label class="fl-lbl">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <div style="display:flex;gap:8px;align-items:center">
-            <select class="fi" id="ideaBucket" style="flex:1"></select>
-            <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="addNewBucketInline()">+ New</button>
-          </div>
-        </div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" onchange="ideaDateChanged()" /></div>
           <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><select class="fi" id="ideaTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
@@ -2594,9 +2876,6 @@ select.fi{cursor:pointer}
         </div>
         <div class="fl"><label class="fl-lbl">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
           <textarea class="fi" id="ideaNotes" style="min-height:90px;font-size:14px" placeholder="Key points, angle, CTA, deadline...">
-        </div>
-        <div class="fl"><label class="fl-lbl">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional note)</span></label>
-          <textarea class="fi" id="ideaPerfNote" style="min-height:48px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
         </div>
         <div class="fl">
           <label class="fl-lbl">Upload Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
@@ -2866,20 +3145,11 @@ select.fi{cursor:pointer}
             <span id="cdReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
           </label>
         </div>
-        <div class="fl"><label class="fl-lbl">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <div style="display:flex;gap:8px;align-items:center">
-            <select class="fi" id="cdBucket" style="flex:1"></select>
-            <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="addNewBucketInline()">+ New</button>
-          </div>
-        </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
           <textarea class="fi" id="cdHook" style="min-height:64px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
           <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
-        </div>
-        <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional note)</span></label>
-          <textarea class="fi" id="cdPerfNote" style="min-height:48px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
         </div>
         <!-- IMAGE UPLOAD -->
         <div class="fl">
@@ -3131,332 +3401,6 @@ select.fi{cursor:pointer}
 
 <div class="toast" id="toast"></div>
 
-<!-- LOCKED / PRICING SCREEN -->
-<div id="lockedScreen">
-  <div class="pricing-wrap">
-    <!-- BACK TO LANDING -->
-    <div id="pricingBackBtn" style="display:none;margin-bottom:16px">
-      <button onclick="backToLanding()" style="background:none;border:none;color:var(--tl);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;font-family:var(--fb)">‹ Back</button>
-    </div>
-
-    <!-- HERO -->
-    <div class="pricing-hero">
-      <div class="pricing-wordmark">Flow State Studio ✦</div>
-      <div class="pricing-tagline">Built different, by someone who thinks different. A content system for ND entrepreneurs who are done with too many tabs, too many tools, and brilliant ideas that never make it out of their head.</div>
-      <div class="pricing-nd">🧠 Built by an ND brain, for ND brains</div>
-      <!-- STAT STRIP -->
-      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px">
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--r);font-size:16px;font-family:var(--fh);font-weight:700">✏️ + ✦</span> Analog and AI</div>
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--teal);font-size:16px;font-family:var(--fh);font-weight:700">7</span> content formats</div>
-        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--e);display:flex;align-items:center;gap:7px;box-shadow:0 1px 4px var(--sh)"><span style="color:var(--g);font-size:16px;font-family:var(--fh);font-weight:700">1</span> place for everything</div>
-      </div>
-    </div>
-
-    <!-- YOUR WAY BLEND CARD -->
-    <div style="background:linear-gradient(135deg,#e0f2f2,#c8e8e8);border:1.5px solid rgba(0,132,132,.3);border-radius:var(--rad);padding:28px 32px;margin-bottom:32px;text-align:center">
-      <div style="font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.3">Write your own. Use AI when you want it. Neither is the wrong choice here.</div>
-      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:580px;margin:0 auto">I built this because I was done apologizing for how my brain works. Not every ND creator wants AI and this system was not built to force it on you. Some days you want a blank page. Some days you want a spark. Flow State Studio holds both without judgment. Go Analog when you just want to write. Bridge the Gap when you want the tools. Your brain, your call.</div>
-      <div style="display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap">
-        <div style="text-align:center">
-          <div style="font-size:22px;margin-bottom:4px">✏️</div>
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Go Analog</div>
-          <div style="font-size:12px;color:var(--tealh);margin-top:3px">Write your own. No AI required.</div>
-        </div>
-        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">+</div>
-        <div style="text-align:center">
-          <div style="font-size:22px;margin-bottom:4px">✦</div>
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Bridge the Gap</div>
-          <div style="font-size:12px;color:var(--tealh);margin-top:3px">AI tools when you want a spark.</div>
-        </div>
-        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">=</div>
-        <div style="text-align:center">
-          <div style="font-size:22px;margin-bottom:4px">🧠</div>
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">Your way</div>
-          <div style="font-size:12px;color:var(--el);margin-top:3px">Content that actually feels like you.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FEATURE GRID -->
-    <div class="pricing-features">
-
-      <!-- SECTION: CREATE & WRITE -->
-      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">✍️ Create and write</div></div>
-
-      <!-- CREATIVE DIRECTOR: full-width hero card -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
-        <div class="pf-icon">✦</div>
-        <div>
-          <div class="pf-title" style="color:var(--r);font-size:15px">Your Creative Director: Five Ways to Use It</div>
-          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">The Creative Director isn't one button, it's a whole creative system built into the Studio. Think of it as having a world-class content strategist available every time you sit down to create.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px" class="cd-sales-grid">
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Brain Not Cooperating?</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Hit the panic button on your dashboard and get your angle, hook, emotion, and what to avoid, before you write a single word. Instant creative direction, no blank-page spiral.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ Strategy Session</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Inside every content card, the Creative Director reads your brief and gives you a full strategic direction: the angle, the hook to lead with, the emotion to create, and the one thing to avoid. Before you write.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🔍 Content Autopsy</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste any post that stopped your scroll. The Creative Director dissects exactly why it worked, the hook type, emotional trigger, audience psychology, then rebuilds it completely in your voice. No recycled content. All original.</div>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="cd-sales-grid">
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✍️ Generate Content</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">From inside any content card, generate a full draft in your brand voice: caption, carousel, story, reel, newsletter, email, or full article. One click from brief to draft, ready to edit and publish.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">📌 Swipe File</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Save any AI output you love directly to your Swipe File. Build a personal reference library of your best angles, hooks, and copy so nothing brilliant ever gets lost in a chat window again.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SUBSTACK HIGHLIGHT -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--gp),#EEE0C4);border-color:#D4BE90">
-        <div class="pf-icon">📝</div>
-        <div style="width:100%">
-          <div class="pf-title" style="color:var(--g);font-size:15px">Built for Substack creators</div>
-          <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Substack is having a moment, and long-form writing is one of the hardest content formats for ND brains. The Studio is built to change that. Generate full Substack-ready articles in your voice, with a compelling title, opening hook, body sections, and a warm close. Not a bullet list dressed up as an article. The real thing, ready to paste and publish.</div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">📄 Full article generation</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Brief your idea, choose Article as your format, and get a complete long-form draft back. Title, hook, sections, close. Written in your voice, ready to edit and post.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">✦ Strategy before you write</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Run Strategy Session on your Substack idea before you draft anything. Get the angle, the emotional frame, and the one thing to avoid. Walk into your article knowing exactly where it is going.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #D4BE90">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--g);margin-bottom:5px">🪝 Hook your readers from line one</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Use the Hook Builder to generate five opening lines for your article before you write a word. Pick the one that pulls. Substack readers decide in the first two sentences whether they are staying.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- HOOK BUILDER -->
-      <div class="pf-card rust">
-        <div class="pf-icon-wrap">🪝</div>
-        <div>
-          <div class="pf-title">Hook Builder</div>
-          <div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
-        </div>
-      </div>
-
-      <!-- WRITING STUDIO -->
-      <div class="pf-card rust">
-        <div class="pf-icon-wrap">✍️</div>
-        <div>
-          <div class="pf-title">Writing Studio + Saved Drafts</div>
-          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
-        </div>
-      </div>
-
-      <!-- CAPTION VARIATIONS -->
-      <div class="pf-card rust">
-        <div class="pf-icon-wrap">⇕</div>
-        <div>
-          <div class="pf-title">Caption Variations</div>
-          <div class="pf-desc">One idea, three angles. Warm, direct, and story-led versions of the same post so you can pick the one that fits your energy today without starting from scratch three times.</div>
-        </div>
-      </div>
-
-      <!-- CONTENT SERIES -->
-      <div class="pf-card rust">
-        <div class="pf-icon-wrap">☆</div>
-        <div>
-          <div class="pf-title">Content Series Builder</div>
-          <div class="pf-desc">Turn one idea into a five-part content series, each post standing alone but connecting to a bigger theme. Never run out of what to say next.</div>
-        </div>
-      </div>
-
-      <!-- SECTION: PLAN & ORGANISE -->
-      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
-
-      <!-- CONTENT PLANNER -->
-      <div class="pf-card teal">
-        <div class="pf-icon-wrap">🗂</div>
-        <div>
-          <div class="pf-title">Content Planner</div>
-          <div class="pf-desc">A visual kanban board that moves with you from half-baked idea to published. See everything at once without losing track, perfect for brains that think in big pictures, not spreadsheets.</div>
-        </div>
-      </div>
-
-      <!-- FEED PREVIEW -->
-      <div class="pf-card teal">
-        <div class="pf-icon-wrap">🖼️</div>
-        <div>
-          <div class="pf-title">Feed Preview</div>
-          <div class="pf-desc">See your Instagram grid before you post. Upload images to your content cards and they appear as a live grid you can drag and rearrange until it looks right, no third-party app needed.</div>
-        </div>
-      </div>
-
-      <!-- CALENDAR + TASKS -->
-      <div class="pf-card teal">
-        <div class="pf-icon-wrap">📅</div>
-        <div>
-          <div class="pf-title">Calendar + Task Board</div>
-          <div class="pf-desc">Content and tasks on one calendar, color-coded so you always know what's what. Tasks have energy level tags, time estimates, and substeps so your brain knows exactly what "do the thing" actually means today.</div>
-        </div>
-      </div>
-
-      <!-- NOTEBOOKS -->
-      <div class="pf-card teal">
-        <div class="pf-icon-wrap">🧠</div>
-        <div>
-          <div class="pf-title">Notebooks + Brain Dump</div>
-          <div class="pf-desc">Unlimited notebooks for your thoughts, half-finished ideas, and client notes. No format required. Just write. Brain Dump mode is specifically for when your head is full and you need to get it out fast.</div>
-        </div>
-      </div>
-
-      <!-- LIBRARY -->
-      <div class="pf-card teal">
-        <div class="pf-icon-wrap">🔗</div>
-        <div>
-          <div class="pf-title">Hook, CTA, Story + Prompt Library</div>
-          <div class="pf-desc">Hundreds of pre-written hooks, CTAs, story prompts, and writing prompts built for wellness and service businesses. Filter by category, toggle between grid and list view, and save your own when you write something worth keeping.</div>
-        </div>
-      </div>
-
-      <!-- TASK BREAKDOWN -->
-      <div class="pf-card teal">
-        <div class="pf-icon-wrap">☑</div>
-        <div>
-          <div class="pf-title">Task Breakdown Inside Cards</div>
-          <div class="pf-desc">Break any content idea into steps that sync straight to your task board and calendar. ND brains need the big idea AND the tiny next action in the same place, not two separate tools.</div>
-        </div>
-      </div>
-
-      <!-- SECTION: STRATEGY & GUIDES -->
-      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
-
-      <!-- GUIDES: new full-width card -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
-        <div class="pf-icon" style="color:var(--r)">📖</div>
-        <div>
-          <div class="pf-title" style="color:var(--r);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
-          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 ND Rescue Kit</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🌊 Content Cycle Framework</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific tips.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ The Unstuck Guide</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">For when the inner critic says it's all been done before. Reframes for perfectionism, starting paralysis, and creative drought, paired with specific Studio workflows to get you moving again.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✏️ The Analog Way</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required. For the days you just want a blank page and a pencil.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ROI / MENTAL LOAD STRIP -->
-    <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:32px 36px;margin-bottom:16px">
-      <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Sound familiar?</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" class="cd-sales-grid">
-        <div style="text-align:center;padding:16px 12px">
-          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--r);line-height:1;margin-bottom:8px">3-5</div>
-          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Hours a week</div>
-          <div style="font-size:12.5px;color:var(--t);line-height:1.6">spent task-switching between tools, losing the idea somewhere in between, and starting over</div>
-        </div>
-        <div style="text-align:center;padding:16px 12px;border-left:1px solid var(--bl);border-right:1px solid var(--bl)">
-          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--teal);line-height:1;margin-bottom:8px">4+</div>
-          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Apps to manage</div>
-          <div style="font-size:12.5px;color:var(--t);line-height:1.6">none of them talking to each other, none of them built for a brain that works like yours</div>
-        </div>
-        <div style="text-align:center;padding:16px 12px">
-          <div style="font-family:var(--fh);font-size:44px;font-weight:700;color:var(--g);line-height:1;margin-bottom:8px">∞</div>
-          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e);margin-bottom:6px">Decisions per session</div>
-          <div style="font-size:12.5px;color:var(--t);line-height:1.6">what to post, where to start, which app to open, before a single word gets written</div>
-        </div>
-      </div>
-      <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-radius:var(--rsm);padding:18px 22px;text-align:center">
-        <div style="font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.3">That is the problem this was built to solve.</div>
-        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">One place for all of it. Your ideas, your planning, your writing, your tools. Starting at $9.50 a month, for a brain that deserves a system that actually works with it.</div>
-      </div>
-    </div>
-
-    <!-- POSITIONING STRIP -->
-    <div style="background:linear-gradient(135deg,var(--tealp),#C8E4E4);border:1.5px solid var(--teal);border-radius:var(--rad);padding:28px 32px;margin-bottom:40px;text-align:center">
-      <div style="font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);margin-bottom:10px;line-height:1.3">Consistent without burning out. That is what this is for.</div>
-      <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:560px;margin:0 auto">Not more productivity. Not a better schedule. Consistent content creation that does not cost you everything, built around how you actually think, work, and show up.</div>
-    </div>
-
-    <div class="pricing-divider"></div>
-
-    <!-- PRICING CARDS -->
-    <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Founding Member Pricing, locked in forever</div>
-    <div class="pricing-cards">
-      <div class="pc">
-        <div class="pc-name">Starter</div>
-        <div class="pc-price">$9.50<span>/month</span></div>
-        <div class="pc-credits">125 AI credits / month</div>
-        <ul class="pc-features">
-          <li>Write your own (Go Analog) or generate with AI (Bridge the Gap)</li>
-          <li>All 12+ AI tools available when you want them</li>
-          <li>Content Planner, Calendar, Task Board</li>
-          <li>Feed Preview (Instagram grid)</li>
-          <li>Writing Studio: all 7 content formats</li>
-          <li>Hook, CTA, Story + Prompt Library</li>
-          <li>Unlimited Notebooks + Brain Dump</li>
-          <li>Saved Drafts library + CSV export</li>
-          <li>Swipe File for your best AI outputs</li>
-          <li>Four built-in strategy guides including The Analog Way</li>
-          <li>125 AI generations per month</li>
-          <li>Locked in at founding price forever</li>
-        </ul>
-        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member, $9.50/mo</button>
-      </div>
-      <div class="pc featured">
-        <div class="pc-badge">Most Popular</div>
-        <div class="pc-name">Unlimited</div>
-        <div class="pc-price">$19.50<span>/month</span></div>
-        <div class="pc-credits">Unlimited AI credits</div>
-        <ul class="pc-features">
-          <li>Everything in Starter</li>
-          <li>Unlimited AI generations, no caps, no countdowns</li>
-          <li>Perfect for batch content days, launches, and high-output weeks</li>
-          <li>Generate as much as you need, whenever you need it</li>
-          <li>Zero limits, zero anxiety about running out mid-flow</li>
-          <li>Locked in at founding price forever</li>
-        </ul>
-        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member, $19.50/mo</button>
-      </div>
-    </div>
-
-    <!-- INVITE CODE -->
-    <div style="text-align:center;margin-bottom:32px;padding:24px;background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);max-width:420px;margin-left:auto;margin-right:auto">
-      <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:6px">Got an invite code?</div>
-      <div style="font-size:13px;color:var(--t);margin-bottom:14px">Beta testers enter your code below for free access.</div>
-      <div style="display:flex;gap:8px">
-        <input id="inviteCodeInput" class="fi" placeholder="Enter invite code..." style="flex:1;text-transform:uppercase;letter-spacing:.08em;font-size:14px" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')redeemInviteCode()" />
-        <button class="btn btn-p" onclick="redeemInviteCode()" style="white-space:nowrap">Redeem →</button>
-      </div>
-      <div id="inviteCodeMsg" style="font-size:12px;margin-top:8px;min-height:16px"></div>
-    </div>
-
-    <div class="pricing-footer">
-      Cancel anytime · Secured by Stripe · Your data is always yours<br>
-      After payment, come back here and create your account to get started.<br>
-      Already have an account? <a onclick="lockedSignIn()">Sign in here</a>
-    </div>
-  </div>
-</div>
-
 <!-- CALENDAR PICKER MODAL -->
 <div class="modal-ov" id="calPickerModal">
   <div class="cal-picker-modal">
@@ -3584,7 +3528,7 @@ select.fi{cursor:pointer}
     <div class="m-title">✦ Creative Director Mode</div>
     <div class="m-sub">Tell me what you're trying to create and I'll give you the angle, hook, emotion, and what to avoid - before you write a word.</div>
     <div class="fl"><label class="fl-lbl">What are you working on?</label>
-      <textarea class="fi" id="panicTopic" style="min-height:80px;font-size:14px" placeholder="e.g. A carousel about why ND brains struggle with consistency - for my coaching audience..."></textarea>
+      <textarea class="fi" id="panicTopic" style="min-height:80px;font-size:14px" placeholder="e.g. A carousel about why ADHD brains struggle with consistency - for my VA/OBM audience..."></textarea>
     </div>
     <div class="two-col">
       <div class="fl"><label class="fl-lbl">Platform</label>
@@ -3651,21 +3595,6 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- SUPPORT MODAL -->
-<div class="modal-ov" id="bucketManagerModal">
-  <div class="modal" style="max-width:400px">
-    <div class="m-title">Content Buckets</div>
-    <div class="m-sub" style="margin-bottom:16px">Tag content cards by topic or offer to track patterns over time. Use whatever labels match your business, e.g. Product, 1:1 Offer, Freebie, Personal.</div>
-    <div id="bucketList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px"></div>
-    <div style="display:flex;gap:8px">
-      <input class="fi" id="newBucketInput" placeholder="e.g. Product, Freebie, 1:1 Offer..." style="flex:1;font-size:13px" onkeydown="if(event.key==='Enter')saveBucketFromInput()" />
-      <button class="btn btn-p" onclick="saveBucketFromInput()">Add</button>
-    </div>
-    <div class="m-acts" style="margin-top:18px">
-      <button class="btn btn-g" onclick="closeModal('bucketManagerModal')">Done</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-ov" id="supportModal">
   <div class="modal" style="max-width:440px;text-align:center">
     <div style="font-size:36px;margin-bottom:12px">🙋</div>
@@ -3732,211 +3661,6 @@ function showPaymentSuccess(plan){
   el.appendChild(inner);
   document.body.appendChild(el);
 }
-
-// ── CONTENT BUCKETS ──────────────────────────────────────────
-
-var _bucketInsightsOpen = true;
-
-function getBuckets(){
-  if(!S.settings.buckets){
-    S.settings.buckets = [];
-  }
-  return S.settings.buckets;
-}
-
-function populateBucketSelect(val){
-  var buckets = getBuckets();
-  var opts = buckets.length
-    ? '<option value="">-- no bucket --</option>' + buckets.map(function(b){
-        return '<option value="'+b+'"'+(val===b?' selected':'')+'>'+b+'</option>';
-      }).join('')
-    : '<option value="">-- add buckets via Manage --</option>';
-  ['cdBucket','ideaBucket'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) el.innerHTML = opts;
-  });
-}
-
-function addNewBucketInline(){
-  openBucketManager();
-  // Focus the input after modal opens
-  setTimeout(function(){
-    var inp = document.getElementById('newBucketInput');
-    if(inp) inp.focus();
-  }, 150);
-}
-
-function openBucketManager(){
-  renderBucketList();
-  openModal('bucketManagerModal');
-}
-
-function renderBucketList(){
-  var el = document.getElementById('bucketList');
-  if(!el) return;
-  var buckets = getBuckets();
-  if(!buckets.length){
-    el.innerHTML = '<div style="font-size:12px;color:var(--tl);text-align:center;padding:16px 12px;border:1.5px dashed var(--bl);border-radius:var(--rsm)">No buckets yet. Add your first one below.</div>';
-    return;
-  }
-  el.innerHTML = buckets.map(function(b, i){
-    return '<div style="display:flex;align-items:center;gap:8px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:6px 10px" id="bucketRow_'+i+'">'
-      + '<span style="font-size:13px;color:var(--e);font-weight:500;flex:1" id="bucketLabel_'+i+'">'+esc(b)+'</span>'
-      + '<input class="fi" style="flex:1;font-size:13px;display:none;padding:4px 8px" id="bucketEdit_'+i+'" value="'+esc(b)+'" onkeydown="if(event.key===\'Enter\')saveBucketEdit('+i+');if(event.key===\'Escape\')cancelBucketEdit('+i+')" />'
-      + '<button onclick="startBucketEdit('+i+')" id="bucketEditBtn_'+i+'" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:12px;padding:2px 6px;border-radius:4px;white-space:nowrap" title="Rename">✎</button>'
-      + '<button onclick="saveBucketEdit('+i+')" id="bucketSaveBtn_'+i+'" style="background:none;border:none;color:var(--teal);cursor:pointer;font-size:11px;padding:2px 6px;border-radius:4px;display:none;white-space:nowrap;font-weight:600">Save</button>'
-      + '<button onclick="deleteBucket('+i+')" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:18px;line-height:1;padding:0 2px" title="Remove">×</button>'
-      + '</div>';
-  }).join('');
-}
-
-function startBucketEdit(i){
-  var label = document.getElementById('bucketLabel_'+i);
-  var input = document.getElementById('bucketEdit_'+i);
-  var editBtn = document.getElementById('bucketEditBtn_'+i);
-  var saveBtn = document.getElementById('bucketSaveBtn_'+i);
-  if(label) label.style.display = 'none';
-  if(input){ input.style.display = 'block'; input.focus(); input.select(); }
-  if(editBtn) editBtn.style.display = 'none';
-  if(saveBtn) saveBtn.style.display = 'inline';
-}
-
-function cancelBucketEdit(i){
-  var label = document.getElementById('bucketLabel_'+i);
-  var input = document.getElementById('bucketEdit_'+i);
-  var editBtn = document.getElementById('bucketEditBtn_'+i);
-  var saveBtn = document.getElementById('bucketSaveBtn_'+i);
-  if(label) label.style.display = '';
-  if(input) input.style.display = 'none';
-  if(editBtn) editBtn.style.display = '';
-  if(saveBtn) saveBtn.style.display = 'none';
-}
-
-function saveBucketEdit(i){
-  var input = document.getElementById('bucketEdit_'+i);
-  if(!input) return;
-  var newName = input.value.trim();
-  if(!newName){ cancelBucketEdit(i); return; }
-  var buckets = getBuckets();
-  var oldName = buckets[i];
-  buckets[i] = newName;
-  // Update any existing cards that use the old bucket name
-  S.ideas.forEach(function(idea){ if(idea.bucket === oldName) idea.bucket = newName; });
-  persist();
-  renderBucketList();
-  populateBucketSelect('');
-  renderBucketInsights();
-  toast('Bucket renamed ✓');
-}
-
-function deleteBucket(i){
-  if(!S.settings.buckets) return;
-  S.settings.buckets.splice(i, 1);
-  persist();
-  renderBucketList();
-  renderBucketInsights();
-  populateBucketSelect('');
-}
-
-function saveBucketFromInput(){
-  var inp = document.getElementById('newBucketInput');
-  var name = (inp.value || '').trim();
-  if(!name) return;
-  if(!S.settings.buckets) S.settings.buckets = getBuckets().slice();
-  if(S.settings.buckets.indexOf(name) === -1){
-    S.settings.buckets.push(name);
-    persist();
-    renderBucketList();
-    renderBucketInsights();
-    // Re-populate selects, selecting the new bucket
-    populateBucketSelect(name);
-    // Set the new bucket as selected in any open card modal
-    ['cdBucket','ideaBucket'].forEach(function(id){
-      var el = document.getElementById(id);
-      if(el) el.value = name;
-    });
-    toast('Bucket added ✓');
-  }
-  inp.value = '';
-}
-
-function toggleBucketInsights(){
-  _bucketInsightsOpen = !_bucketInsightsOpen;
-  var body = document.getElementById('bucketInsightsBody');
-  var chev = document.getElementById('bucketInsightsChevron');
-  if(body) body.style.maxHeight = _bucketInsightsOpen ? '400px' : '0px';
-  if(chev) chev.style.transform = _bucketInsightsOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
-}
-
-function renderBucketInsights(){
-  var body = document.getElementById('bucketInsightsBody');
-  if(!body) return;
-  var ideas = S.ideas || [];
-  var buckets = getBuckets();
-
-  // Count by bucket + format
-  var counts = {};
-  buckets.forEach(function(b){ counts[b] = {}; });
-  var unbucketed = 0;
-  ideas.forEach(function(idea){
-    var b = idea.bucket;
-    var f = idea.format || 'Other';
-    if(!b || buckets.indexOf(b) === -1){ unbucketed++; return; }
-    if(!counts[b][f]) counts[b][f] = 0;
-    counts[b][f]++;
-  });
-
-  var totalByBucket = {};
-  buckets.forEach(function(b){
-    totalByBucket[b] = Object.values(counts[b]).reduce(function(a,c){return a+c;},0);
-  });
-  var maxCount = Math.max(1, Math.max.apply(null, buckets.map(function(b){return totalByBucket[b];})));
-
-  // Color palette for formats
-  var fmtColors = {'Caption / Post':'var(--teal)','Carousel':'var(--r)','Reel / Video':'#7A5C9C','Story':'#C47A3A','Newsletter':'var(--sage)','Substack / Article':'#4a7fa5','Freebie':'#b36c37','Other':'var(--tl)'};
-
-  var noData = buckets.every(function(b){return totalByBucket[b]===0;});
-
-  if(noData){
-    var noBuckets = !buckets.length;
-    body.innerHTML = '<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 20px;font-size:12.5px;color:var(--tl);text-align:center">'
-      + (noBuckets
-        ? 'Add your first bucket to start tracking content patterns. <span style="color:var(--r);cursor:pointer;font-weight:600" onclick="openBucketManager()">Add a bucket →</span>'
-        : 'Tag content cards with a bucket to start seeing patterns here.')
-      + '</div>';
-    body.style.maxHeight = '400px';
-    return;
-  }
-
-  var rows = buckets.filter(function(b){return totalByBucket[b]>0;}).map(function(b){
-    var total = totalByBucket[b];
-    var pct = Math.round((total / maxCount) * 100);
-    var fmtBreakdown = Object.entries(counts[b]).sort(function(a,b){return b[1]-a[1];}).map(function(e){
-      return '<span style="font-size:11px;color:var(--t);white-space:nowrap">'+e[0]+' <strong style="color:var(--e)">'+e[1]+'</strong></span>';
-    }).join('<span style="color:var(--bl);margin:0 4px">·</span>');
-
-    // Segmented bar
-    var barSegs = Object.entries(counts[b]).sort(function(a,b){return b[1]-a[1];}).map(function(e){
-      var segPct = Math.round((e[1]/total)*100);
-      var col = fmtColors[e[0]] || 'var(--tl)';
-      return '<div style="height:100%;width:'+segPct+'%;background:'+col+';transition:width .3s" title="'+e[0]+': '+e[1]+'"></div>';
-    }).join('');
-
-    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bl)">'
-      + '<div style="width:min(140px,30vw);flex-shrink:0;font-size:12px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+b+'">'+b+'</div>'
-      + '<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">'
-      + '  <div style="height:8px;background:var(--bl);border-radius:100px;overflow:hidden;display:flex">'+barSegs+'</div>'
-      + '  <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center">'+fmtBreakdown+'</div>'
-      + '</div>'
-      + '<div style="width:28px;flex-shrink:0;text-align:right;font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e)">'+total+'</div>'
-      + '</div>';
-  }).join('');
-
-  body.innerHTML = '<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 18px">'+ rows +'</div>';
-  if(_bucketInsightsOpen) body.style.maxHeight = body.scrollHeight + 'px';
-}
-
-// ── END CONTENT BUCKETS ──────────────────────────────────────
 
 // Landing page login overlay
 function openLoginCard(){
@@ -4111,8 +3835,6 @@ async function bootApp(){
     if(typeof renderCalendar==='function')renderCalendar();
     if(typeof renderKanban==='function')renderKanban();
   }, 200);
-  // Check for update AFTER user is loaded so dismissed key uses correct user ID
-  setTimeout(checkForUpdate, 2500);
 }
 
 function addUserMenu(){
@@ -4135,22 +3857,10 @@ function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.rem
 document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&&!e.target.closest('.u-popup'))closeUMenu();});
 async function doSignOut(){closeUMenu();await sb.auth.signOut();}
 
-function goToPricing(fromLanding){
-  var authEl = document.getElementById('authScreen');
-  var backBtn = document.getElementById('pricingBackBtn');
-  var lockedEl = document.getElementById('lockedScreen');
-  if(authEl) authEl.classList.add('hidden');
-  if(lockedEl) lockedEl.classList.add('show');
-  if(backBtn) backBtn.style.display = fromLanding ? 'block' : 'none';
-}
-function backToLanding(){
-  var lockedEl = document.getElementById('lockedScreen');
-  var authEl = document.getElementById('authScreen');
-  if(lockedEl) lockedEl.classList.remove('show');
-  if(authEl){
-    authEl.classList.remove('hidden');
-    authEl.scrollTop = 0;
-  }
+function goToPricing(){
+  // Hide auth screen, show the locked/pricing screen
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('lockedScreen').classList.add('show');
 }
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
@@ -4215,7 +3925,7 @@ async function doReset(){
 
 /* ═══════════════════ DATA ═══════════════════ */
 const HOOKS_DEFAULT = [
-  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a service-based business..."},
+  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a wellness business..."},
   {id:'h2',cat:'Educational',text:"The one system that saved me 10+ hours a week (and you can steal it)."},
   {id:'h3',cat:'Educational',text:"3 signs you're ready to hire a VA - and don't even realize it yet."},
   {id:'h4',cat:'Educational',text:"What [X result] actually takes. Hint: it's simpler than you think."},
@@ -4231,7 +3941,7 @@ const HOOKS_DEFAULT = [
   {id:'h14',cat:'Storytelling',text:"The moment I stopped doing things the 'right' way was the moment my business changed."},
   {id:'h15',cat:'Comparison',text:"Before vs. after having a content system: what my week actually looks like now."},
   {id:'h16',cat:'Comparison',text:"DIY everything vs. delegating: the honest truth about what each one costs you."},
-  {id:'h17',cat:'Comparison',text:"The difference between [OPTION A] and [OPTION B] - and why it matters for where your business is right now."},
+  {id:'h17',cat:'Comparison',text:"VA vs. OBM - the difference and why it matters for where your business is right now."},
   {id:'h18',cat:'Curiosity',text:"I'm going to say something that might be controversial about content strategy..."},
   {id:'h19',cat:'Curiosity',text:"The thing everyone gets wrong about showing up on Instagram as a service provider."},
   {id:'h20',cat:'Curiosity',text:"Can I share something I've never posted about publicly before?"}
@@ -4241,7 +3951,7 @@ const CTAS_DEFAULT = [
   {id:'c2',cat:'Engagement',text:"Drop your questions in the comments - I read every single one."},
   {id:'c3',cat:'Engagement',text:"Double tap if this is exactly what you needed today."},
   {id:'c4',cat:'Engagement',text:"Tell me: does this resonate? Comment below."},
-  {id:'c5',cat:'Share & Tag',text:"Tag a fellow business owner who needs to see this."},
+  {id:'c5',cat:'Share & Tag',text:"Tag a fellow wellness business owner who needs to see this."},
   {id:'c6',cat:'Share & Tag',text:"Share this with someone who's been thinking about hiring support."},
   {id:'c7',cat:'Share & Tag',text:"Send this to your VA - they deserve the appreciation. 🤍"},
   {id:'c8',cat:'Lead Generation',text:"DM me the word READY to learn more about working together."},
@@ -4250,7 +3960,7 @@ const CTAS_DEFAULT = [
   {id:'c11',cat:'Link & Click',text:"Full details + application link in my bio."},
   {id:'c12',cat:'Link & Click',text:"Book your discovery call using the link in my bio."},
   {id:'c13',cat:'Link & Click',text:"Read the full post at the link in my bio."},
-  {id:'c14',cat:'Follow & Subscribe',text:"Follow for more behind-the-scenes of running a service-based business."},
+  {id:'c14',cat:'Follow & Subscribe',text:"Follow for more behind-the-scenes of a VA/OBM business serving wellness pros."},
   {id:'c15',cat:'Follow & Subscribe',text:"Join the newsletter for weekly content tips - link in bio."},
   {id:'c16',cat:'Direct Sales',text:"Spots are limited - DM me to get started."},
   {id:'c17',cat:'Direct Sales',text:"Book your intensive using the link in bio."},
@@ -4271,17 +3981,17 @@ const STORIES_DEFAULT = [
   {id:'s12',cat:'Social Proof',text:"What changes for my clients once we start working together (the honest version)."},
   {id:'s13',cat:'Storytelling',text:"Story time: the project that taught me the most about my business (and myself)."},
   {id:'s14',cat:'Storytelling',text:"Real talk: here's what a hard week in this business actually looks like."},
-  {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my business."},
+  {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my VA/OBM practice."},
   {id:'s16',cat:'Storytelling',text:"How I went from overwhelmed freelancer to actually loving what I do - the real story."}
 ];
 const PROMPTS_DEFAULT = [
-  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter for a service-based entrepreneur. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
-  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions for a service-based entrepreneur about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
-  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter for a service-based entrepreneur. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
+  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter for a wellness-focused VA/OBM. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
+  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions for a wellness entrepreneur about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
+  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter for a wellness entrepreneur. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
   {id:'p4',cat:'Script Rewrite',title:'Brand Voice Rewriter',text:"Rewrite this content in a warm, grounded, clear brand voice. Remove any corporate language. Make it sound like I'm talking to a trusted colleague in the wellness space. Here is the content: [PASTE CONTENT]"},
   {id:'p5',cat:'Script Rewrite',title:'60-Second Reel Script',text:"Turn this rough idea into a polished 60-second reel script: [PASTE IDEA]. Hook in the first 3 seconds - short and punchy. Build naturally. End with a clear CTA. Warm, confident tone throughout."},
-  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist for a service-based entrepreneur. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
-  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting the right clients and converting them? Where are the gaps? [PASTE PLAN]"},
+  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist for a VA/OBM who serves wellness and spirituality professionals. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
+  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting wellness entrepreneurs who are ready to hire support? Where are the gaps? [PASTE PLAN]"},
   {id:'p8',cat:'Sales Copy',title:'Warm DM Script',text:"Write a DM script for reaching out to a potential client who is a wellness coach or healer. Keep it warm and non-salesy - lead with curiosity, not a pitch. Mention [YOUR OFFER] naturally in the second or third message."},
   {id:'p9',cat:'Sales Copy',title:'Short Sales Email',text:"Write a concise sales email for [OFFER]. Tone: warm, clear, confident. Include: what it is, who it's for, what they get, and a clear CTA. Under 200 words. No fake urgency or hype."}
 ];
@@ -4293,7 +4003,7 @@ const S = {
   drafts:[], calEntries:[], ideas:[], tasks:[],
   hooks:[], ctas:[], stories:[], prompts:[],
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
-  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5',buckets:[]},
+  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
   plan:'beta',
   swipeFile:[],weeklyFocus:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
@@ -4391,7 +4101,7 @@ function navigate(v){
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
   if(v==='dashboard'){renderDashboard();renderWeeklyFocus();}
   if(v==='calendar')renderCalendar();
-  if(v==='ideas'){renderKanban();renderBucketInsights();}
+  if(v==='ideas')renderKanban();
   if(v==='tasks')renderTaskKanban();
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='swipefile')renderSwipeFile();
@@ -4652,7 +4362,7 @@ function renderKanban(){
       <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span>${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span></div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div></div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
@@ -4996,8 +4706,8 @@ async function generate(){
   const bizCtx=buildBrandContext();
   const isArticle=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(S.studio.type)||S.studio.plat==='substack';
   const sys=isArticle
-    ?'You are a professional writer for service-based entrepreneurs.'+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article. No markdown, no em dashes, no asterisks.'+(instr?' IMPORTANT creator instruction: '+instr:'')
-    :'You are a professional copywriter for service-based entrepreneurs. Write compelling, authentic content that feels genuinely human.'+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
+    ?'You are a professional writer for wellness and service-based businesses.'+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article. No markdown, no em dashes, no asterisks.'+(instr?' IMPORTANT creator instruction: '+instr:'')
+    :'You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.'+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
   const usr=ownDraft
@@ -5198,8 +4908,6 @@ function openIdeaModal(status){
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
   var hkElNew=document.getElementById('cdHook');if(hkElNew)hkElNew.value='';
-  var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value='';
-  populateBucketSelect('');
   // Set stage
   var defStatus=status||'idea';
   document.querySelectorAll('.cd-stage').forEach(function(el){el.classList.toggle('active',el.dataset.s===defStatus);});
@@ -5234,14 +4942,14 @@ function saveIdea(){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('ideaReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
   cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
   if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
   var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
-  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
+  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
     scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(result){
@@ -5449,24 +5157,8 @@ async function getAnonKey(){
   return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA';
 }
 
-function revealInviteCode(){
-  var display = document.getElementById('inviteCodeDisplay');
-  var btn = document.getElementById('inviteRevealBtn');
-  if(!display||!btn) return;
-  if(display.dataset.revealed === '1'){
-    display.textContent = '••••••••••••••';
-    display.dataset.revealed = '0';
-    btn.textContent = 'Show';
-  } else {
-    display.textContent = INVITE_CODE;
-    display.dataset.revealed = '1';
-    btn.textContent = 'Hide';
-  }
-}
-function copyInviteCode(){
-  navigator.clipboard.writeText(INVITE_CODE).then(function(){ toast('Code copied ✓'); });
-}
 function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Flow State Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
+function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
   S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra')};
@@ -5493,12 +5185,9 @@ function resetOnboarding(){
   persist();
   toast('Welcome guide reset ✓');
 }
-function saveModel(){/* model managed internally */}
-function clearAll(){
-  if(S.plan!=='owner'){toast('Not available');return;}
-  if(!confirm('Delete everything? Export a backup first!'))return;
-  localStorage.clear();location.reload();
-}
+function saveModel(){S.settings.model=document.getElementById('modelIn').value;persist();toast('Model saved ✓');}
+function toggleKey(){const i=document.getElementById('keyIn');i.type=i.type==='password'?'text':'password';}
+function clearAll(){if(!confirm('Delete everything? Export a backup first!'))return;localStorage.clear();location.reload();}
 function exportCSV(){
   if(!S.drafts||!S.drafts.length){toast('No drafts to export yet');return;}
   var headers=['Title','Platform','Format','Date Saved','Content'];
@@ -5722,8 +5411,6 @@ function cdOpen(id){
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
-  var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value=x.perfNote||'';
-  populateBucketSelect(x.bucket||'');
   // Populate reminder toggle
   var remWrap=document.getElementById('cdReminderWrap');
   var remCb=document.getElementById('cdReminderOn');
@@ -5858,8 +5545,6 @@ function cdSave(){
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
   var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
-  var pnEl=document.getElementById('cdPerfNote');x.perfNote=pnEl?pnEl.value.trim():'';
-  var bkEl=document.getElementById('cdBucket');x.bucket=bkEl?bkEl.value:'';
   x.images=S._pendingIdeaImages||x.images||[];
   // Save reminder preference
   var reminderCb = document.getElementById('cdReminderOn');
@@ -5891,7 +5576,7 @@ function cdSave(){
   }
   S.cdId=null;
   persist();closeModal('cardDetailModal');
-  renderKanban();renderCalendar();renderBucketInsights();
+  renderKanban();renderCalendar();
   // Schedule Brevo reminders if toggled on
   if(shouldSchedule && _currentUser){
     var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
@@ -6016,7 +5701,7 @@ async function lockedUpgrade(plan){
   }catch(e){toast('Error: '+e.message);}
   btn.textContent=orig;btn.disabled=false;
 }
-const INVITE_CODE = (function(){try{return atob('RkxPV0JFVEFTVFVESU8=');}catch(e){return '';}})();
+const INVITE_CODE = 'FLOWBETASTUDIO';
 
 async function redeemInviteCode(){
   var input = document.getElementById('inviteCodeInput');
@@ -6116,7 +5801,7 @@ async function runPanic(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
-  var sys='You are a world-class creative director for service-based entrepreneurs.'+brand+' Be direct, specific, and zero-fluff. Talk like a creative director briefing a copywriter.';
+  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Talk like a creative director briefing a copywriter.';
   var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nGive me:\n1. THE ANGLE - specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK - one specific opening line to lead with\n3. THE EMOTION - what feeling to create and why it matters for my niche\n4. THE WATCH OUT - one thing to avoid that would make it feel generic or off-brand\n\nBe direct. No fluff.';
   var result=await cdCallAI(sys,usr,600);
   document.getElementById('panicLoading').style.display='none';
@@ -6135,7 +5820,7 @@ function runPanicRandom(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
-  var sys='You are a world-class creative director for service-based entrepreneurs.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
+  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
   var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nGive me:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid\n\nBe direct. Make it specific.';
   cdCallAI(sys,usr,700).then(function(result){
     document.getElementById('panicLoading').style.display='none';
@@ -6178,6 +5863,7 @@ function openBrainDump(){
 }
 document.addEventListener('DOMContentLoaded',function(){
   checkPaymentSuccess();
+  setTimeout(checkForUpdate, 3000);
   var ta=document.getElementById('brainDumpTA');
   if(ta)ta.addEventListener('input',function(){
     var words=this.value.trim().split(/\s+/).filter(function(w){return w;}).length;
@@ -6257,7 +5943,7 @@ async function cdSmartBrief() {
   var out = document.getElementById('cd-smartBrief-out');
   load.classList.add('show'); out.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a world-class creative director and content strategist for service-based entrepreneurs.' + brand +
+  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
     ' You think like a creative director - you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
     'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
   var usr = 'I need your creative direction on this piece of content.\n\n' +
@@ -6289,7 +5975,7 @@ async function cdGen2(type) {
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
-  var sys = 'You are a professional content writer for service-based entrepreneurs.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols (no asterisks, no pound signs, no em dashes). Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols (no asterisks, no pound signs, no em dashes). Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
   var prompts = {
     caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
     story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
@@ -6352,7 +6038,7 @@ async function cdBuildCaptionFromHook() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = 'You are a professional content writer for service-based entrepreneurs.' + brand + ' Output ONLY the finished caption. No preamble.';
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished caption. No preamble.';
   var usr = 'Write a ' + b.plat + ' caption starting with this exact hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Tone: ' + (toneMap[tone]||'warm')+'. Keep hook exactly as written. 2-4 short paragraphs, end with a natural CTA. No hashtags.';
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -6370,7 +6056,7 @@ async function cdBuildFromHook() {
   if (!_cdHookSel) return;
   var b = cdGetBrief();
   var brand = buildBrandContext();
-  var sys = 'You are a professional content writer for service-based entrepreneurs.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
   var usr = 'Write a full ' + b.plat + ' caption starting with this hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Keep the hook exactly as written. Add value in the middle, end with a natural CTA.';
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -6429,7 +6115,7 @@ async function cdRepurpose2() {
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for service-based entrepreneurs.' + brand + ' Output ONLY the repurposed content. No preamble.';
+  var sys = 'You are an expert content strategist and copywriter for wellness businesses.' + brand + ' Output ONLY the repurposed content. No preamble.';
   var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
   var result = await cdCallAI(sys, usr, 1000);
   if (load) load.classList.remove('show');
@@ -6577,7 +6263,7 @@ async function ideaGenerate(type) {
   var a = document.getElementById('ideaAIActs');
   o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a professional copywriter for service-based entrepreneurs.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
   var prompts = {
     caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
     hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
@@ -6606,12 +6292,12 @@ async function ideaRepurpose() {
   var a = document.getElementById('ideaAIActs');
   o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for service-based entrepreneurs.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
+  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
   var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work - the structure, the hook, the angle, the emotional pull - then rebuild it completely for my niche and voice.' +
     '\n\nYour job is NOT to reword it. Your job is to:\n' +
     '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
     '2. Take that same winning framework\n' +
-    '3. Rebuild it with MY niche, MY voice, and MY audience based on the brand profile above\n' +
+    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
     '4. Make it feel 100% original - someone who saw both posts should not recognize the connection\n\n' +
     'Output format: ' + fmt + ' for ' + plat + '\n\n' +
     'Original post to repurpose:\n' + text;
@@ -7212,27 +6898,24 @@ function copyBrandProfile() {
 // To release an update: push new index.html AND update version.json with a higher number.
 // Users will see the banner on next load and can update with one click - no action needed from them.
 function checkForUpdate() {
-  var current = document.documentElement.dataset.version || '';
   fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var latest = data.version || '';
-      if (!latest || !current || latest === current) return;
-      // Always use user-scoped dismissed key so owner vs beta don't share state
-      var userPrefix = _currentUser ? 'u' + _currentUser.id + '_' : 'anon_';
-      var dismissedKey = userPrefix + 'wnDismissed_' + latest;
-      // Clear any old no-prefix dismissed key that may have permanently hidden updates
-      localStorage.removeItem('wnDismissed_' + latest);
-      var dismissed = localStorage.getItem(dismissedKey);
-      if (!dismissed) {
-        _whatsNewChangelog = data.changelog || [];
-        _whatsNewVersion = latest;
-        renderWhatsNew(_whatsNewChangelog);
-        openModal('whatsNewModal');
+      var current = document.documentElement.dataset.version || '';
+      if (latest && current && latest !== current) {
+        var dismissed = localStorage.getItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + latest);
+        if (!dismissed) {
+          _whatsNewChangelog = data.changelog || [];
+          _whatsNewVersion = latest;
+          // Show What's New modal automatically, no click needed
+          renderWhatsNew(_whatsNewChangelog);
+          openModal('whatsNewModal');
+        }
       }
     })
     .catch(function() {
-      // version.json not found or fetch failed — stay quiet
+      // version.json not found or fetch failed - just stay quiet
     });
 }
 
@@ -7256,10 +6939,7 @@ function renderWhatsNew(changelog){
 }
 
 function dismissWhatsNew(){
-  if(_whatsNewVersion){
-    var userPrefix = _currentUser ? 'u' + _currentUser.id + '_' : 'anon_';
-    localStorage.setItem(userPrefix + 'wnDismissed_' + _whatsNewVersion, '1');
-  }
+  if (_whatsNewVersion) localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
   closeModal('whatsNewModal');
 }
 
