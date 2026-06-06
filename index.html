@@ -1895,8 +1895,22 @@ select.fi{cursor:pointer}
       <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
       <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
     </div>
-    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
-      <div class="kanban kanban-4" id="ideaKanban" style="flex:1;min-height:0;overflow-x:auto"></div>
+    <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch">
+      <!-- CONTENT INSIGHTS STRIP -->
+      <div id="bucketInsightsWrap" style="flex-shrink:0;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleBucketInsights()">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tl);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span>Content by Bucket</span>
+            <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;color:var(--tl)">what you've made so far</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+            <button class="btn btn-g" style="font-size:10px;padding:3px 10px" onclick="event.stopPropagation();openBucketManager()">Manage</button>
+            <span id="bucketInsightsChevron" style="font-size:12px;color:var(--tl);transition:transform .2s">▾</span>
+          </div>
+        </div>
+        <div id="bucketInsightsBody" style="max-height:400px;overflow:hidden;transition:max-height .3s ease"></div>
+      </div>
+      <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
     </div>
   </div>
 
@@ -2246,6 +2260,15 @@ select.fi{cursor:pointer}
           <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO').then(()=>toast('Code copied ✓'))">Copy</button>
         </div>
         <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
+      </div>
+      <div class="setting-sec">
+        <h3>Content Buckets</h3>
+        <p class="setting-desc">Tag content cards by topic or offer to track patterns over time. Add your own buckets to match your business, e.g. Product, 1:1 Offer, Freebie, Personal.</p>
+        <div id="settingsBucketList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px"></div>
+        <div style="display:flex;gap:8px">
+          <input class="fi" id="settingsNewBucket" placeholder="e.g. 1:1 Offer, Freebie, Product..." style="flex:1;font-size:13px" onkeydown="if(event.key==='Enter')addSettingsBucket()" />
+          <button class="btn btn-p" onclick="addSettingsBucket()">Add</button>
+        </div>
       </div>
       <div class="setting-sec">
         <h3>Export &amp; Import</h3>
@@ -3151,6 +3174,15 @@ select.fi{cursor:pointer}
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
           <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
         </div>
+        <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select class="fi" id="cdBucket" style="flex:1"></select>
+            <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
+          </div>
+        </div>
+        <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="cdPerfNote" style="min-height:48px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
+        </div>
         <!-- IMAGE UPLOAD -->
         <div class="fl">
           <label class="fl-lbl">Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional, shows in Feed Preview)</span></label>
@@ -3595,6 +3627,21 @@ select.fi{cursor:pointer}
 </div>
 
 <!-- SUPPORT MODAL -->
+<div class="modal-ov" id="bucketManagerModal">
+  <div class="modal" style="max-width:400px">
+    <div class="m-title">Content Buckets</div>
+    <div class="m-sub" style="margin-bottom:16px">Tag content cards by topic or offer to track patterns over time. Use whatever labels match your business.</div>
+    <div id="bucketList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px">
+      <input class="fi" id="newBucketInput" placeholder="e.g. Product, Freebie, 1:1 Offer..." style="flex:1;font-size:13px" onkeydown="if(event.key==='Enter')saveBucketFromInput()" />
+      <button class="btn btn-p" onclick="saveBucketFromInput()">Add</button>
+    </div>
+    <div class="m-acts" style="margin-top:18px">
+      <button class="btn btn-g" onclick="closeModal('bucketManagerModal')">Done</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-ov" id="supportModal">
   <div class="modal" style="max-width:440px;text-align:center">
     <div style="font-size:36px;margin-bottom:12px">🙋</div>
@@ -4003,7 +4050,7 @@ const S = {
   drafts:[], calEntries:[], ideas:[], tasks:[],
   hooks:[], ctas:[], stories:[], prompts:[],
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
-  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5'},
+  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5',buckets:[]},
   plan:'beta',
   swipeFile:[],weeklyFocus:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
@@ -4101,7 +4148,7 @@ function navigate(v){
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
   if(v==='dashboard'){renderDashboard();renderWeeklyFocus();}
   if(v==='calendar')renderCalendar();
-  if(v==='ideas')renderKanban();
+  if(v==='ideas'){renderKanban();renderBucketInsights();}
   if(v==='tasks')renderTaskKanban();
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='swipefile')renderSwipeFile();
@@ -4109,7 +4156,7 @@ function navigate(v){
   if(v==='braindump')renderBrainDump();
   if(v==='guides'){document.getElementById('guides-index').style.display='';document.querySelectorAll('.guide-detail-page').forEach(p=>p.classList.remove('active'));}
   if(v==='feedpreview')renderFeedPreview();
-  if(v==='settings'){applySettings();renderMembershipSection();
+  if(v==='settings'){applySettings();renderMembershipSection();renderSettingsBuckets();
     // Refresh plan from Supabase in case it changed (e.g. after Stripe payment)
     if(_currentUser){
       sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle().then(function(res){
@@ -4362,7 +4409,7 @@ function renderKanban(){
       <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span></div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span>${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div></div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
@@ -4908,6 +4955,8 @@ function openIdeaModal(status){
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
   var hkElNew=document.getElementById('cdHook');if(hkElNew)hkElNew.value='';
+  var pnElNew=document.getElementById('cdPerfNote');if(pnElNew)pnElNew.value='';
+  populateBucketSelect('');
   // Set stage
   var defStatus=status||'idea';
   document.querySelectorAll('.cd-stage').forEach(function(el){el.classList.toggle('active',el.dataset.s===defStatus);});
@@ -4942,14 +4991,14 @@ function saveIdea(){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('ideaReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
   cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
   if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
   var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
-  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();
+  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
     scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(result){
@@ -5411,6 +5460,8 @@ function cdOpen(id){
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
+  var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value=x.perfNote||'';
+  populateBucketSelect(x.bucket||'');
   // Populate reminder toggle
   var remWrap=document.getElementById('cdReminderWrap');
   var remCb=document.getElementById('cdReminderOn');
@@ -5545,6 +5596,8 @@ function cdSave(){
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
   var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
+  var bkEl=document.getElementById('cdBucket');x.bucket=bkEl?bkEl.value:'';
+  var pnEl=document.getElementById('cdPerfNote');x.perfNote=pnEl?pnEl.value.trim():'';
   x.images=S._pendingIdeaImages||x.images||[];
   // Save reminder preference
   var reminderCb = document.getElementById('cdReminderOn');
@@ -6942,6 +6995,205 @@ function dismissWhatsNew(){
   if (_whatsNewVersion) localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
   closeModal('whatsNewModal');
 }
+
+// ── CONTENT BUCKETS ──────────────────────────────────────────
+var _bucketInsightsOpen = true;
+
+function getBuckets(){
+  if(!S.settings.buckets) S.settings.buckets = [];
+  return S.settings.buckets;
+}
+
+function populateBucketSelect(val){
+  var buckets = getBuckets();
+  var opts = buckets.length
+    ? '<option value="">-- no bucket --</option>' + buckets.map(function(b){
+        return '<option value="'+b+'"'+(val===b?' selected':'')+'>'+b+'</option>';
+      }).join('')
+    : '<option value="">-- add buckets in Settings --</option>';
+  ['cdBucket','ideaBucket'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.innerHTML = opts;
+  });
+}
+
+function openBucketManager(){
+  renderBucketList();
+  openModal('bucketManagerModal');
+}
+
+function renderBucketList(){
+  var el = document.getElementById('bucketList');
+  if(!el) return;
+  var buckets = getBuckets();
+  if(!buckets.length){
+    el.innerHTML = '<div style="font-size:12px;color:var(--tl);text-align:center;padding:16px 12px;border:1.5px dashed var(--bl);border-radius:var(--rsm)">No buckets yet. Add your first one below.</div>';
+    return;
+  }
+  el.innerHTML = buckets.map(function(b,i){
+    return '<div style="display:flex;align-items:center;gap:8px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:6px 10px" id="bucketRow_'+i+'">'
+      + '<span style="font-size:13px;color:var(--e);font-weight:500;flex:1" id="bucketLabel_'+i+'">'+esc(b)+'</span>'
+      + '<input class="fi" style="flex:1;font-size:13px;display:none;padding:4px 8px" id="bucketEdit_'+i+'" value="'+esc(b)+'" onkeydown="if(event.key===\'Enter\')saveBucketEdit('+i+');if(event.key===\'Escape\')cancelBucketEdit('+i+')" />'
+      + '<button onclick="startBucketEdit('+i+')" id="bucketEditBtn_'+i+'" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:13px;padding:2px 6px" title="Rename">✎</button>'
+      + '<button onclick="saveBucketEdit('+i+')" id="bucketSaveBtn_'+i+'" style="background:none;border:none;color:var(--teal);cursor:pointer;font-size:11px;padding:2px 6px;display:none;font-weight:600">Save</button>'
+      + '<button onclick="deleteBucket('+i+')" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:18px;line-height:1;padding:0 2px" title="Remove">×</button>'
+      + '</div>';
+  }).join('');
+}
+
+function startBucketEdit(i){
+  document.getElementById('bucketLabel_'+i).style.display='none';
+  document.getElementById('bucketEdit_'+i).style.display='block';
+  document.getElementById('bucketEdit_'+i).focus();
+  document.getElementById('bucketEditBtn_'+i).style.display='none';
+  document.getElementById('bucketSaveBtn_'+i).style.display='inline';
+}
+function cancelBucketEdit(i){
+  document.getElementById('bucketLabel_'+i).style.display='';
+  document.getElementById('bucketEdit_'+i).style.display='none';
+  document.getElementById('bucketEditBtn_'+i).style.display='';
+  document.getElementById('bucketSaveBtn_'+i).style.display='none';
+}
+function saveBucketEdit(i){
+  var inp = document.getElementById('bucketEdit_'+i);
+  if(!inp) return;
+  var newName = inp.value.trim();
+  if(!newName){ cancelBucketEdit(i); return; }
+  var buckets = getBuckets();
+  var oldName = buckets[i];
+  buckets[i] = newName;
+  S.ideas.forEach(function(idea){ if(idea.bucket===oldName) idea.bucket=newName; });
+  persist();
+  renderBucketList();
+  renderSettingsBuckets();
+  populateBucketSelect('');
+  renderBucketInsights();
+  toast('Bucket renamed ✓');
+}
+function deleteBucket(i){
+  if(!S.settings.buckets) return;
+  S.settings.buckets.splice(i,1);
+  persist();
+  renderBucketList();
+  renderSettingsBuckets();
+  populateBucketSelect('');
+  renderBucketInsights();
+}
+function saveBucketFromInput(){
+  var inp = document.getElementById('newBucketInput');
+  var name = (inp?inp.value:'').trim();
+  if(!name) return;
+  if(!S.settings.buckets) S.settings.buckets = [];
+  if(S.settings.buckets.indexOf(name)===-1){
+    S.settings.buckets.push(name);
+    persist();
+    renderBucketList();
+    renderSettingsBuckets();
+    populateBucketSelect(name);
+    ['cdBucket','ideaBucket'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=name;});
+    renderBucketInsights();
+    toast('Bucket added ✓');
+  }
+  if(inp) inp.value='';
+}
+
+// Settings page bucket list
+function renderSettingsBuckets(){
+  var el = document.getElementById('settingsBucketList');
+  if(!el) return;
+  var buckets = getBuckets();
+  if(!buckets.length){
+    el.innerHTML = '<div style="font-size:12px;color:var(--tl);padding:8px 0">No buckets yet. Add one below.</div>';
+    return;
+  }
+  el.innerHTML = buckets.map(function(b,i){
+    return '<div style="display:flex;align-items:center;gap:8px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:8px 12px">'
+      + '<span style="font-size:13px;color:var(--e);font-weight:500;flex:1">'+esc(b)+'</span>'
+      + '<button onclick="deleteBucketFromSettings('+i+')" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:18px;line-height:1;padding:0 2px" title="Remove">×</button>'
+      + '</div>';
+  }).join('');
+}
+function deleteBucketFromSettings(i){
+  if(!S.settings.buckets) return;
+  S.settings.buckets.splice(i,1);
+  persist();
+  renderSettingsBuckets();
+  populateBucketSelect('');
+  renderBucketInsights();
+}
+function addSettingsBucket(){
+  var inp = document.getElementById('settingsNewBucket');
+  var name = (inp?inp.value:'').trim();
+  if(!name) return;
+  if(!S.settings.buckets) S.settings.buckets = [];
+  if(S.settings.buckets.indexOf(name)===-1){
+    S.settings.buckets.push(name);
+    persist();
+    renderSettingsBuckets();
+    populateBucketSelect('');
+    renderBucketInsights();
+    toast('Bucket added ✓');
+  }
+  if(inp) inp.value='';
+}
+
+function toggleBucketInsights(){
+  _bucketInsightsOpen = !_bucketInsightsOpen;
+  var body = document.getElementById('bucketInsightsBody');
+  var chev = document.getElementById('bucketInsightsChevron');
+  if(body) body.style.maxHeight = _bucketInsightsOpen ? '400px' : '0px';
+  if(chev) chev.style.transform = _bucketInsightsOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+function renderBucketInsights(){
+  var body = document.getElementById('bucketInsightsBody');
+  if(!body) return;
+  var ideas = S.ideas || [];
+  var buckets = getBuckets();
+  var fmtColors = {'Caption / Post':'var(--teal)','Carousel':'var(--r)','Reel / Video':'#7A5C9C','Story':'#C47A3A','Newsletter':'var(--sage)','Substack / Article':'#4a7fa5','Other':'var(--tl)'};
+  var counts = {};
+  buckets.forEach(function(b){ counts[b]={}; });
+  ideas.forEach(function(idea){
+    var b=idea.bucket; var f=idea.format||'Other';
+    if(!b||buckets.indexOf(b)===-1) return;
+    if(!counts[b][f]) counts[b][f]=0;
+    counts[b][f]++;
+  });
+  var totalByBucket = {};
+  buckets.forEach(function(b){ totalByBucket[b]=Object.values(counts[b]).reduce(function(a,c){return a+c;},0); });
+  var noData = buckets.every(function(b){return totalByBucket[b]===0;});
+  if(!buckets.length||noData){
+    body.innerHTML='<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 18px;font-size:12.5px;color:var(--tl);text-align:center">'
+      +(!buckets.length
+        ? 'Add buckets in <strong style="cursor:pointer;color:var(--r)" onclick="navigate(\'settings\')">Settings</strong> to start tracking content patterns.'
+        : 'Tag content cards with a bucket to start seeing patterns here.')
+      +'</div>';
+    if(_bucketInsightsOpen) body.style.maxHeight='400px';
+    return;
+  }
+  var rows = buckets.filter(function(b){return totalByBucket[b]>0;}).map(function(b){
+    var total=totalByBucket[b];
+    var fmtBreakdown=Object.entries(counts[b]).sort(function(a,b){return b[1]-a[1];}).map(function(e){
+      return '<span style="font-size:11px;color:var(--t);white-space:nowrap">'+e[0]+' <strong style="color:var(--e)">'+e[1]+'</strong></span>';
+    }).join('<span style="color:var(--bl);margin:0 3px">·</span>');
+    var barSegs=Object.entries(counts[b]).sort(function(a,b){return b[1]-a[1];}).map(function(e){
+      var pct=Math.round((e[1]/total)*100);
+      var col=fmtColors[e[0]]||'var(--tl)';
+      return '<div style="height:100%;width:'+pct+'%;background:'+col+'" title="'+e[0]+': '+e[1]+'"></div>';
+    }).join('');
+    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bl)">'
+      +'<div style="width:min(140px,30vw);flex-shrink:0;font-size:12px;font-weight:600;color:var(--e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(b)+'</div>'
+      +'<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">'
+      +'<div style="height:8px;background:var(--bl);border-radius:100px;overflow:hidden;display:flex">'+barSegs+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:4px">'+fmtBreakdown+'</div>'
+      +'</div>'
+      +'<div style="width:26px;flex-shrink:0;text-align:right;font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e)">'+total+'</div>'
+      +'</div>';
+  }).join('');
+  body.innerHTML='<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 18px">'+rows+'</div>';
+  if(_bucketInsightsOpen) body.style.maxHeight='400px';
+}
+// ── END CONTENT BUCKETS ──────────────────────────────────────
 
 initAuth();
 
