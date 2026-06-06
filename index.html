@@ -1928,13 +1928,13 @@ select.fi{cursor:pointer}
         <h3>Brand Profile</h3>
         <p class="setting-desc">These fields are automatically woven into every AI generation. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
         <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. VA/OBM for wellness entrepreneurs" /></div>
-          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Holistic Virtual Assistant and OBM" /></div>
+          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. Business coaching for creative entrepreneurs" /></div>
+          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Business Coach and Brand Strategist" /></div>
         </div>
-        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. Wellness coaches, healers, and spiritual practitioners ready to scale" /></div>
-        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. VA packages, OBM retainers, 1:1 strategy intensives" /></div>
-        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
-        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
+        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. Service-based business owners ready to grow without burning out" /></div>
+        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital products, courses" /></div>
+        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, direct, and real. No fluff, no hustle culture" /></div>
+        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. Sustainable growth beats fast growth every time" /></div>
         <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
           <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
         </div>
@@ -1951,12 +1951,13 @@ select.fi{cursor:pointer}
       </div>
       <div class="setting-sec" id="inviteCodeSection" style="display:none">
         <h3>Beta Invite Code</h3>
-        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically , no SQL needed.</p>
+        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically, no manual steps needed.</p>
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO</div>
-          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO').then(()=>toast('Code copied ✓'))">Copy</button>
+          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1" id="inviteCodeDisplay">••••••••••••••</div>
+          <button class="btn btn-g" id="inviteRevealBtn" onclick="revealInviteCode()">Show</button>
+          <button class="btn btn-g" id="inviteCopyBtn" onclick="copyInviteCode()">Copy</button>
         </div>
-        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
+        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in, no action needed from you.</div>
       </div>
       <div class="setting-sec">
         <h3>Export &amp; Import</h3>
@@ -3583,7 +3584,7 @@ select.fi{cursor:pointer}
     <div class="m-title">✦ Creative Director Mode</div>
     <div class="m-sub">Tell me what you're trying to create and I'll give you the angle, hook, emotion, and what to avoid - before you write a word.</div>
     <div class="fl"><label class="fl-lbl">What are you working on?</label>
-      <textarea class="fi" id="panicTopic" style="min-height:80px;font-size:14px" placeholder="e.g. A carousel about why ADHD brains struggle with consistency - for my VA/OBM audience..."></textarea>
+      <textarea class="fi" id="panicTopic" style="min-height:80px;font-size:14px" placeholder="e.g. A carousel about why ND brains struggle with consistency - for my coaching audience..."></textarea>
     </div>
     <div class="two-col">
       <div class="fl"><label class="fl-lbl">Platform</label>
@@ -4210,7 +4211,7 @@ async function doReset(){
 
 /* ═══════════════════ DATA ═══════════════════ */
 const HOOKS_DEFAULT = [
-  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a wellness business..."},
+  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a service-based business..."},
   {id:'h2',cat:'Educational',text:"The one system that saved me 10+ hours a week (and you can steal it)."},
   {id:'h3',cat:'Educational',text:"3 signs you're ready to hire a VA - and don't even realize it yet."},
   {id:'h4',cat:'Educational',text:"What [X result] actually takes. Hint: it's simpler than you think."},
@@ -4226,7 +4227,7 @@ const HOOKS_DEFAULT = [
   {id:'h14',cat:'Storytelling',text:"The moment I stopped doing things the 'right' way was the moment my business changed."},
   {id:'h15',cat:'Comparison',text:"Before vs. after having a content system: what my week actually looks like now."},
   {id:'h16',cat:'Comparison',text:"DIY everything vs. delegating: the honest truth about what each one costs you."},
-  {id:'h17',cat:'Comparison',text:"VA vs. OBM - the difference and why it matters for where your business is right now."},
+  {id:'h17',cat:'Comparison',text:"The difference between [OPTION A] and [OPTION B] - and why it matters for where your business is right now."},
   {id:'h18',cat:'Curiosity',text:"I'm going to say something that might be controversial about content strategy..."},
   {id:'h19',cat:'Curiosity',text:"The thing everyone gets wrong about showing up on Instagram as a service provider."},
   {id:'h20',cat:'Curiosity',text:"Can I share something I've never posted about publicly before?"}
@@ -4236,7 +4237,7 @@ const CTAS_DEFAULT = [
   {id:'c2',cat:'Engagement',text:"Drop your questions in the comments - I read every single one."},
   {id:'c3',cat:'Engagement',text:"Double tap if this is exactly what you needed today."},
   {id:'c4',cat:'Engagement',text:"Tell me: does this resonate? Comment below."},
-  {id:'c5',cat:'Share & Tag',text:"Tag a fellow wellness business owner who needs to see this."},
+  {id:'c5',cat:'Share & Tag',text:"Tag a fellow business owner who needs to see this."},
   {id:'c6',cat:'Share & Tag',text:"Share this with someone who's been thinking about hiring support."},
   {id:'c7',cat:'Share & Tag',text:"Send this to your VA - they deserve the appreciation. 🤍"},
   {id:'c8',cat:'Lead Generation',text:"DM me the word READY to learn more about working together."},
@@ -4245,7 +4246,7 @@ const CTAS_DEFAULT = [
   {id:'c11',cat:'Link & Click',text:"Full details + application link in my bio."},
   {id:'c12',cat:'Link & Click',text:"Book your discovery call using the link in my bio."},
   {id:'c13',cat:'Link & Click',text:"Read the full post at the link in my bio."},
-  {id:'c14',cat:'Follow & Subscribe',text:"Follow for more behind-the-scenes of a VA/OBM business serving wellness pros."},
+  {id:'c14',cat:'Follow & Subscribe',text:"Follow for more behind-the-scenes of running a service-based business."},
   {id:'c15',cat:'Follow & Subscribe',text:"Join the newsletter for weekly content tips - link in bio."},
   {id:'c16',cat:'Direct Sales',text:"Spots are limited - DM me to get started."},
   {id:'c17',cat:'Direct Sales',text:"Book your intensive using the link in bio."},
@@ -4266,17 +4267,17 @@ const STORIES_DEFAULT = [
   {id:'s12',cat:'Social Proof',text:"What changes for my clients once we start working together (the honest version)."},
   {id:'s13',cat:'Storytelling',text:"Story time: the project that taught me the most about my business (and myself)."},
   {id:'s14',cat:'Storytelling',text:"Real talk: here's what a hard week in this business actually looks like."},
-  {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my VA/OBM practice."},
+  {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my business."},
   {id:'s16',cat:'Storytelling',text:"How I went from overwhelmed freelancer to actually loving what I do - the real story."}
 ];
 const PROMPTS_DEFAULT = [
-  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter for a wellness-focused VA/OBM. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
-  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions for a wellness entrepreneur about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
-  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter for a wellness entrepreneur. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
+  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter for a service-based entrepreneur. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
+  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions for a service-based entrepreneur about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
+  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter for a service-based entrepreneur. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
   {id:'p4',cat:'Script Rewrite',title:'Brand Voice Rewriter',text:"Rewrite this content in a warm, grounded, clear brand voice. Remove any corporate language. Make it sound like I'm talking to a trusted colleague in the wellness space. Here is the content: [PASTE CONTENT]"},
   {id:'p5',cat:'Script Rewrite',title:'60-Second Reel Script',text:"Turn this rough idea into a polished 60-second reel script: [PASTE IDEA]. Hook in the first 3 seconds - short and punchy. Build naturally. End with a clear CTA. Warm, confident tone throughout."},
-  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist for a VA/OBM who serves wellness and spirituality professionals. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
-  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting wellness entrepreneurs who are ready to hire support? Where are the gaps? [PASTE PLAN]"},
+  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist for a service-based entrepreneur. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
+  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting the right clients and converting them? Where are the gaps? [PASTE PLAN]"},
   {id:'p8',cat:'Sales Copy',title:'Warm DM Script',text:"Write a DM script for reaching out to a potential client who is a wellness coach or healer. Keep it warm and non-salesy - lead with curiosity, not a pitch. Mention [YOUR OFFER] naturally in the second or third message."},
   {id:'p9',cat:'Sales Copy',title:'Short Sales Email',text:"Write a concise sales email for [OFFER]. Tone: warm, clear, confident. Include: what it is, who it's for, what they get, and a clear CTA. Under 200 words. No fake urgency or hype."}
 ];
@@ -4991,8 +4992,8 @@ async function generate(){
   const bizCtx=buildBrandContext();
   const isArticle=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(S.studio.type)||S.studio.plat==='substack';
   const sys=isArticle
-    ?'You are a professional writer for wellness and service-based businesses.'+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article. No markdown, no em dashes, no asterisks.'+(instr?' IMPORTANT creator instruction: '+instr:'')
-    :'You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.'+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
+    ?'You are a professional writer for service-based entrepreneurs.'+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article. No markdown, no em dashes, no asterisks.'+(instr?' IMPORTANT creator instruction: '+instr:'')
+    :'You are a professional copywriter for service-based entrepreneurs. Write compelling, authentic content that feels genuinely human.'+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
   const usr=ownDraft
@@ -5444,8 +5445,24 @@ async function getAnonKey(){
   return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA';
 }
 
+function revealInviteCode(){
+  var display = document.getElementById('inviteCodeDisplay');
+  var btn = document.getElementById('inviteRevealBtn');
+  if(!display||!btn) return;
+  if(display.dataset.revealed === '1'){
+    display.textContent = '••••••••••••••';
+    display.dataset.revealed = '0';
+    btn.textContent = 'Show';
+  } else {
+    display.textContent = INVITE_CODE;
+    display.dataset.revealed = '1';
+    btn.textContent = 'Hide';
+  }
+}
+function copyInviteCode(){
+  navigator.clipboard.writeText(INVITE_CODE).then(function(){ toast('Code copied ✓'); });
+}
 function saveName(){S.settings.name=document.getElementById('nameIn').value.trim()||'Flow State Studio';S.gs.nameSet=true;persist();applySettings();renderGS();toast('Studio name saved ✓');}
-function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
   S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra')};
@@ -5472,9 +5489,12 @@ function resetOnboarding(){
   persist();
   toast('Welcome guide reset ✓');
 }
-function saveModel(){S.settings.model=document.getElementById('modelIn').value;persist();toast('Model saved ✓');}
-function toggleKey(){const i=document.getElementById('keyIn');i.type=i.type==='password'?'text':'password';}
-function clearAll(){if(!confirm('Delete everything? Export a backup first!'))return;localStorage.clear();location.reload();}
+function saveModel(){/* model managed internally */}
+function clearAll(){
+  if(S.plan!=='owner'){toast('Not available');return;}
+  if(!confirm('Delete everything? Export a backup first!'))return;
+  localStorage.clear();location.reload();
+}
 function exportCSV(){
   if(!S.drafts||!S.drafts.length){toast('No drafts to export yet');return;}
   var headers=['Title','Platform','Format','Date Saved','Content'];
@@ -5992,7 +6012,7 @@ async function lockedUpgrade(plan){
   }catch(e){toast('Error: '+e.message);}
   btn.textContent=orig;btn.disabled=false;
 }
-const INVITE_CODE = 'FLOWBETASTUDIO';
+const INVITE_CODE = (function(){try{return atob('RkxPV0JFVEFTVFVESU8=');}catch(e){return '';}})();
 
 async function redeemInviteCode(){
   var input = document.getElementById('inviteCodeInput');
@@ -6092,7 +6112,7 @@ async function runPanic(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
-  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Talk like a creative director briefing a copywriter.';
+  var sys='You are a world-class creative director for service-based entrepreneurs.'+brand+' Be direct, specific, and zero-fluff. Talk like a creative director briefing a copywriter.';
   var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nGive me:\n1. THE ANGLE - specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK - one specific opening line to lead with\n3. THE EMOTION - what feeling to create and why it matters for my niche\n4. THE WATCH OUT - one thing to avoid that would make it feel generic or off-brand\n\nBe direct. No fluff.';
   var result=await cdCallAI(sys,usr,600);
   document.getElementById('panicLoading').style.display='none';
@@ -6111,7 +6131,7 @@ function runPanicRandom(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
-  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
+  var sys='You are a world-class creative director for service-based entrepreneurs.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
   var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nGive me:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid\n\nBe direct. Make it specific.';
   cdCallAI(sys,usr,700).then(function(result){
     document.getElementById('panicLoading').style.display='none';
@@ -6233,7 +6253,7 @@ async function cdSmartBrief() {
   var out = document.getElementById('cd-smartBrief-out');
   load.classList.add('show'); out.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
+  var sys = 'You are a world-class creative director and content strategist for service-based entrepreneurs.' + brand +
     ' You think like a creative director - you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
     'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
   var usr = 'I need your creative direction on this piece of content.\n\n' +
@@ -6265,7 +6285,7 @@ async function cdGen2(type) {
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols (no asterisks, no pound signs, no em dashes). Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
+  var sys = 'You are a professional content writer for service-based entrepreneurs.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols (no asterisks, no pound signs, no em dashes). Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
   var prompts = {
     caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
     story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
@@ -6328,7 +6348,7 @@ async function cdBuildCaptionFromHook() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished caption. No preamble.';
+  var sys = 'You are a professional content writer for service-based entrepreneurs.' + brand + ' Output ONLY the finished caption. No preamble.';
   var usr = 'Write a ' + b.plat + ' caption starting with this exact hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Tone: ' + (toneMap[tone]||'warm')+'. Keep hook exactly as written. 2-4 short paragraphs, end with a natural CTA. No hashtags.';
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -6346,7 +6366,7 @@ async function cdBuildFromHook() {
   if (!_cdHookSel) return;
   var b = cdGetBrief();
   var brand = buildBrandContext();
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = 'You are a professional content writer for service-based entrepreneurs.' + brand + ' Output ONLY the finished content. No preamble.';
   var usr = 'Write a full ' + b.plat + ' caption starting with this hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Keep the hook exactly as written. Add value in the middle, end with a natural CTA.';
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -6405,7 +6425,7 @@ async function cdRepurpose2() {
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for wellness businesses.' + brand + ' Output ONLY the repurposed content. No preamble.';
+  var sys = 'You are an expert content strategist and copywriter for service-based entrepreneurs.' + brand + ' Output ONLY the repurposed content. No preamble.';
   var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
   var result = await cdCallAI(sys, usr, 1000);
   if (load) load.classList.remove('show');
@@ -6553,7 +6573,7 @@ async function ideaGenerate(type) {
   var a = document.getElementById('ideaAIActs');
   o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = 'You are a professional copywriter for service-based entrepreneurs.' + brand + ' Output ONLY the finished content. No preamble.';
   var prompts = {
     caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
     hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
@@ -6582,12 +6602,12 @@ async function ideaRepurpose() {
   var a = document.getElementById('ideaAIActs');
   o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
+  var sys = 'You are an expert content strategist and copywriter for service-based entrepreneurs.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
   var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work - the structure, the hook, the angle, the emotional pull - then rebuild it completely for my niche and voice.' +
     '\n\nYour job is NOT to reword it. Your job is to:\n' +
     '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
     '2. Take that same winning framework\n' +
-    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
+    '3. Rebuild it with MY niche, MY voice, and MY audience based on the brand profile above\n' +
     '4. Make it feel 100% original - someone who saw both posts should not recognize the connection\n\n' +
     'Output format: ' + fmt + ' for ' + plat + '\n\n' +
     'Original post to repurpose:\n' + text;
