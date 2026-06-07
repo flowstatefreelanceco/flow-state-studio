@@ -519,9 +519,9 @@ select.fi{cursor:pointer}
 .cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
 
 /* CARD DETAIL REBUILT */
-.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:0}
-.cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:visible;display:flex;flex-direction:column;gap:14px}
-.cd2-right{padding:20px 24px;overflow-y:visible;background:var(--bluep);display:flex;flex-direction:column;gap:12px;padding-bottom:80px}
+.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;height:auto}
+.cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:visible;display:flex;flex-direction:column;gap:14px;height:fit-content}
+.cd2-right{padding:20px 24px;padding-bottom:80px;overflow-y:visible;background:var(--bluep);display:flex;flex-direction:column;gap:12px;height:fit-content}
 .ai2-section{background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(122,158,194,.12)}
 .ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
 .ai2-section-hdr:hover{filter:brightness(.97)}
@@ -3938,6 +3938,7 @@ async function loadUserData(){
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
       merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
       merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
+      merged.globalAiInstr=localData.globalAiInstr||sbData.globalAiInstr||'';
       // Save merged back so next load is fast
       try{localStorage.setItem(lsKey(),JSON.stringify(merged));}catch(e){}
       return merged;
@@ -5114,7 +5115,10 @@ function saveIdea(){
   S._pendingIdeaImages=[];
   if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
   var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
-  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
+  persist();
+  clearTimeout(_persistTimer);
+  if(window._supabasePersist){var _snap={drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,notebooks:S.notebooks,notes:S.notes,brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,favs:S.favs,settings:S.settings,gs:S.gs,globalAiInstr:S.globalAiInstr||''};window._supabasePersist(_snap);}
+  closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
     scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(result){
@@ -5746,7 +5750,11 @@ function cdSave(){
     S.calEntries=S.calEntries.filter(function(e){return e.id!==calId;});
   }
   S.cdId=null;
-  persist();closeModal('cardDetailModal');
+  persist();
+  // Flush immediately on explicit save - don't wait for debounce
+  clearTimeout(_persistTimer);
+  if(window._supabasePersist){var _saveSnap={drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,notebooks:S.notebooks,notes:S.notes,brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,favs:S.favs,settings:S.settings,gs:S.gs,globalAiInstr:S.globalAiInstr||''};window._supabasePersist(_saveSnap);}
+  closeModal('cardDetailModal');
   renderKanban();renderCalendar();
   // Schedule Brevo reminders if toggled on
   if(shouldSchedule && _currentUser){
