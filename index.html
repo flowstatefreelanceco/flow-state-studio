@@ -836,8 +836,10 @@ select.fi{cursor:pointer}
 @media(max-width:600px){
   .lp-nav{padding:14px 20px}
   .lp-hero{padding:40px 20px 36px}
-  .lp-features{padding:0 12px 40px}
-  .lp-feat{min-width:160px;padding:14px 12px}
+  .lp-features{padding:0 12px 40px;flex-direction:column;align-items:center}
+  .lp-feat{min-width:unset;width:100%;max-width:340px;padding:14px 16px;flex-direction:column;align-items:center;text-align:center}
+  .lp-feat-icon-wrap{margin-bottom:4px}
+  .lp-feat-text strong,.lp-feat-text span{display:block;text-align:center}
   .lp-preview{padding:0 16px 40px}
   .lp-bridge{padding:0 16px 40px}
   .lp-bridge-card{flex-direction:column;padding:20px}
