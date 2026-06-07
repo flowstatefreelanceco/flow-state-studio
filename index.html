@@ -3309,6 +3309,11 @@ select.fi{cursor:pointer}
             <span class="card-section-toggle-chev">+</span>
           </div>
           <div class="card-section-toggle-body" style="padding:8px">
+        <!-- GLOBAL AI INSTRUCTIONS -->
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:12px 14px;margin-bottom:10px">
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t);margin-bottom:6px">✦ Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--tl)">(optional — applies to all tools below)</span></label>
+          <textarea class="fi" id="cdInstrIn" placeholder="e.g. Keep my voice exactly, punch up the hook, make it shorter, always end with a question..." style="min-height:50px;font-size:12.5px;resize:vertical;margin-bottom:0"></textarea>
+        </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA">
             <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Strategy Session</div>
@@ -3335,9 +3340,6 @@ select.fi{cursor:pointer}
               <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
             </div>
             <div class="ai2-btn-grid">
-              <div style="margin-bottom:10px">
-                <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:50px;font-size:12.5px;resize:vertical"></textarea>
-              </div>
               <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
               <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
               <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
