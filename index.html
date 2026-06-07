@@ -6282,7 +6282,11 @@ function cdRenderSeries(text) {
 }
 
 async function cdAutopsy() {
-  var text = document.getElementById('cdRpText').value.trim();
+  console.log('[DEBUG] cdAutopsy fired');
+  var textEl = document.getElementById('cdRpText');
+  console.log('[DEBUG] cdRpText element:', textEl);
+  var text = textEl ? textEl.value.trim() : '';
+  console.log('[DEBUG] text length:', text.length);
   if (!text) { toast('Paste some content first'); return; }
   var plat = document.getElementById('cdRpPlat').value;
   var load = document.getElementById('cd-load-repurpose');
