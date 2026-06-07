@@ -312,19 +312,32 @@ select.fi{cursor:pointer}
 /* LOCKED / PRICING SCREEN */
 #lockedScreen{position:fixed;inset:0;background:var(--p);z-index:10000;overflow-y:auto;display:none}
 #lockedScreen.show{display:block}
-/* STICKY SECTION NAV */
-.pricing-sticky-nav{position:sticky;top:0;z-index:50;background:var(--p);border-bottom:1px solid var(--bl);padding:10px 24px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 -24px 32px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.psn-pill{background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--t);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--fb);-webkit-tap-highlight-color:transparent}
-.psn-pill:hover{border-color:var(--b);color:var(--e)}
-.psn-pill.active-create{background:var(--rp);border-color:rgba(179,108,55,.4);color:var(--r)}
-.psn-pill.active-plan{background:#e0f2f2;border-color:rgba(0,132,132,.3);color:var(--teal)}
-.psn-pill.active-strategy{background:var(--rp);border-color:rgba(179,108,55,.4);color:var(--r)}
-.psn-pill.active-pricing{background:var(--e);border-color:var(--e);color:var(--p)}
-/* Section anchor offset for sticky nav */
-.pricing-section-anchor{scroll-margin-top:56px}
+/* SECTION TOGGLE TABS */
+.pricing-section-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.pst{border-radius:14px;padding:16px 14px;cursor:pointer;border:2px solid transparent;transition:all .18s;text-align:center;user-select:none;-webkit-tap-highlight-color:transparent}
+.pst-icon{font-size:24px;margin-bottom:6px}
+.pst-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;line-height:1.3}
+.pst-sub{font-size:11px;font-weight:400;opacity:.75;margin-top:3px;letter-spacing:0;text-transform:none}
+/* inactive state */
+.pst.create{background:var(--rp);border-color:rgba(179,108,55,.2);color:var(--r)}
+.pst.plan{background:#e0f2f2;border-color:rgba(0,132,132,.15);color:var(--teal)}
+.pst.strategy{background:var(--sagep);border-color:rgba(90,110,80,.15);color:var(--sage)}
+.pst.pricing-tab{background:var(--gp);border-color:rgba(179,140,50,.2);color:var(--g)}
+/* active state — stronger */
+.pst.active.create{background:var(--r);border-color:var(--r);color:#fff}
+.pst.active.plan{background:var(--teal);border-color:var(--teal);color:#fff}
+.pst.active.strategy{background:var(--sage);border-color:var(--sage);color:#fff}
+.pst.active.pricing-tab{background:var(--g);border-color:var(--g);color:#fff}
+/* Section panels */
+.pf-panel{display:none}
+.pf-panel.active{display:contents}
+.pf-panel-block{display:none}
+.pf-panel-block.active{display:block}
 @media(max-width:600px){
-  .pricing-sticky-nav{padding:8px 16px;gap:6px;margin:0 -16px 24px}
-  .psn-pill{font-size:11px;padding:6px 12px}
+  .pricing-section-tabs{grid-template-columns:1fr 1fr;gap:8px}
+  .pst{padding:14px 10px}
+  .pst-icon{font-size:20px;margin-bottom:4px}
+  .pst-label{font-size:11px}
 }
 .pricing-hero{text-align:center;margin-bottom:56px}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
@@ -1310,18 +1323,36 @@ select.fi{cursor:pointer}
     <!-- FEATURE GRID -->
     <div class="pricing-features">
 
-      <!-- STICKY SECTION NAV -->
-      <div style="grid-column:1/-1;margin:-8px -24px 8px">
-        <div class="pricing-sticky-nav" id="pricingStickyNav">
-          <button class="psn-pill" id="pill-create" onclick="scrollToSection('section-create')">✍️ Create</button>
-          <button class="psn-pill" id="pill-plan" onclick="scrollToSection('section-plan')">🗂 Plan</button>
-          <button class="psn-pill" id="pill-strategy" onclick="scrollToSection('section-strategy')">📖 Strategy</button>
-          <button class="psn-pill" id="pill-pricing" onclick="scrollToSection('section-pricing')">💳 Pricing</button>
+      <!-- SECTION TOGGLE TABS -->
+      <div style="grid-column:1/-1;margin-bottom:4px">
+        <div class="pricing-section-tabs">
+          <div class="pst create active" onclick="showPricingSection('create',this)">
+            <div class="pst-icon">✍️</div>
+            <div class="pst-label">Create</div>
+            <div class="pst-sub">Write &amp; generate</div>
+          </div>
+          <div class="pst plan" onclick="showPricingSection('plan',this)">
+            <div class="pst-icon">🗂</div>
+            <div class="pst-label">Plan</div>
+            <div class="pst-sub">Organise &amp; schedule</div>
+          </div>
+          <div class="pst strategy" onclick="showPricingSection('strategy',this)">
+            <div class="pst-icon">📖</div>
+            <div class="pst-label">Strategy</div>
+            <div class="pst-sub">Guides &amp; playbooks</div>
+          </div>
+          <div class="pst pricing-tab" onclick="showPricingSection('pricing',this)">
+            <div class="pst-icon">💳</div>
+            <div class="pst-label">Pricing</div>
+            <div class="pst-sub">Plans &amp; access</div>
+          </div>
         </div>
       </div>
 
       <!-- SECTION: CREATE & WRITE -->
-      <div id="section-create" class="pricing-section-anchor" style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">✍️ Create and write</div></div>
+      <div id="panel-create" style="grid-column:1/-1;display:block">
+        <div style="margin-bottom:16px"><div class="pf-section-label">✍️ Create and write</div></div>
+        <div class="pricing-features" style="margin-bottom:0">
 
       <!-- CREATIVE DIRECTOR: full-width hero card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
@@ -1416,7 +1447,10 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- SECTION: PLAN & ORGANISE -->
-      <div id="section-plan" class="pricing-section-anchor" style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
+      </div></div><!-- /panel-create inner grid + panel -->
+      <div id="panel-plan" style="grid-column:1/-1;display:none">
+        <div style="margin-bottom:16px"><div class="pf-section-label">🗂 Plan and organise</div></div>
+        <div class="pricing-features" style="margin-bottom:0">
 
       <!-- CONTENT PLANNER -->
       <div class="pf-card teal">
@@ -1473,7 +1507,10 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- SECTION: STRATEGY & GUIDES -->
-      <div id="section-strategy" class="pricing-section-anchor" style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
+      </div></div><!-- /panel-plan inner grid + panel -->
+      <div id="panel-strategy" style="grid-column:1/-1;display:none">
+        <div style="margin-bottom:16px"><div class="pf-section-label">📖 Strategy and guides</div></div>
+        <div class="pricing-features" style="margin-bottom:0">
 
       <!-- GUIDES: new full-width card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
@@ -1502,9 +1539,13 @@ select.fi{cursor:pointer}
         </div>
       </div>
 
-    </div>
+      </div><!-- /panel-strategy inner grid -->
+      </div><!-- /panel-strategy -->
 
-    <!-- ROI / MENTAL LOAD STRIP -->
+    </div><!-- /pricing-features outer grid -->
+
+    <!-- PRICING PANEL (shown/hidden by tab) -->
+    <div id="panel-pricing" style="display:none">
     <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:32px 36px;margin-bottom:16px">
       <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Sound familiar?</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" class="cd-sales-grid">
@@ -1588,6 +1629,8 @@ select.fi{cursor:pointer}
       </div>
       <div id="inviteCodeMsg" style="font-size:12px;margin-top:8px;min-height:16px"></div>
     </div>
+
+    </div><!-- /panel-pricing -->
 
     <div class="pricing-footer">
       Cancel anytime · Secured by Stripe · Your data is always yours<br>
@@ -3904,7 +3947,7 @@ async function bootApp(){
   // Check if user is locked
   if(S.plan==='locked'){
     document.getElementById('lockedScreen').classList.add('show');
-    setTimeout(initPricingScrollSpy, 150);
+    
     return;
   }
   document.getElementById('appWrap').classList.add('show');
@@ -3945,7 +3988,7 @@ function goToPricing(fromLanding){
   if(authEl) authEl.classList.add('hidden');
   if(lockedEl){ lockedEl.classList.add('show'); lockedEl.scrollTop = 0; }
   if(backBtn) backBtn.style.display = fromLanding ? 'block' : 'none';
-  setTimeout(initPricingScrollSpy, 150);
+  
 }
 function backToLanding(){
   var lockedEl = document.getElementById('lockedScreen');
@@ -7040,50 +7083,26 @@ function dismissWhatsNew(){
   closeModal('whatsNewModal');
 }
 
-// ── PRICING STICKY NAV ───────────────────────────────────────
-function scrollToSection(id){
-  var el = document.getElementById(id);
+// ── PRICING SECTION TOGGLE ───────────────────────────────────
+function showPricingSection(section, clickedTab){
+  // Hide all panels
+  ['create','plan','strategy','pricing'].forEach(function(s){
+    var panel = document.getElementById('panel-'+s);
+    if(panel) panel.style.display = 'none';
+  });
+  // Show selected panel
+  var active = document.getElementById('panel-'+section);
+  if(active) active.style.display = (section === 'create' || section === 'plan' || section === 'strategy') ? 'block' : 'block';
+  // Update tab active states
+  document.querySelectorAll('.pst').forEach(function(tab){
+    tab.classList.remove('active');
+  });
+  if(clickedTab) clickedTab.classList.add('active');
+  // Scroll locked screen to top of feature area
   var locked = document.getElementById('lockedScreen');
-  if(!el) return;
-  var top = el.getBoundingClientRect().top + (locked ? locked.scrollTop : window.scrollY) - 52;
-  if(locked){
-    locked.scrollTo({top: top, behavior: 'smooth'});
-  } else {
-    window.scrollTo({top: top, behavior: 'smooth'});
-  }
+  if(locked) locked.scrollTo({top: 0, behavior: 'smooth'});
 }
-
-function initPricingScrollSpy(){
-  var sections = [
-    {id:'section-create', pill:'pill-create', cls:'active-create'},
-    {id:'section-plan',   pill:'pill-plan',   cls:'active-plan'},
-    {id:'section-strategy',pill:'pill-strategy',cls:'active-strategy'},
-    {id:'section-pricing',pill:'pill-pricing', cls:'active-pricing'}
-  ];
-  var locked = document.getElementById('lockedScreen');
-  if(!locked) return;
-
-  function updateActive(){
-    var scrollTop = locked.scrollTop;
-    var winH = locked.clientHeight;
-    var current = null;
-    sections.forEach(function(s){
-      var el = document.getElementById(s.id);
-      if(!el) return;
-      var rect = el.getBoundingClientRect();
-      var elTop = rect.top + scrollTop - locked.getBoundingClientRect().top;
-      if(elTop - 80 <= scrollTop) current = s;
-    });
-    sections.forEach(function(s){
-      var pill = document.getElementById(s.pill);
-      if(!pill) return;
-      pill.className = 'psn-pill' + (current && current.pill === s.pill ? ' ' + s.cls : '');
-    });
-  }
-  locked.addEventListener('scroll', updateActive, {passive:true});
-  updateActive();
-}
-// ── END PRICING STICKY NAV ───────────────────────────────────
+// ── END PRICING SECTION TOGGLE ───────────────────────────────
 
 // ── CONTENT BUCKETS ──────────────────────────────────────────
 var _bucketInsightsOpen = true;
