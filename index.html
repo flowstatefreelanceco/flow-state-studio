@@ -4250,7 +4250,7 @@ function navigate(v){
   renderPickUp();
   // auto-collapse GS strip when all done
   const allDone=GS_STEPS.every(s=>S.gs[s.key]);
-  const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
+  const dismissed=localStorage.getItem(lsKey()+'_gsDismissed')||S.gs.dismissed;
   if(allDone||dismissed){const strip=document.getElementById('gsStrip');if(strip)strip.style.display='none';}
 }
 document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>navigate(el.dataset.view)));
@@ -4264,7 +4264,7 @@ const GS_STEPS=[
 ];
 function renderGS(){
   const strip=document.getElementById('gsStrip');
-  const dismissed=localStorage.getItem('gsDismissed')||S.gs.dismissed;
+  const dismissed=localStorage.getItem(lsKey()+'_gsDismissed')||S.gs.dismissed;
   const allDone=GS_STEPS.every(s=>S.gs[s.key]);
   if(dismissed||allDone){if(strip)strip.style.display='none';return;}
   if(strip)strip.style.display='';
@@ -4362,7 +4362,7 @@ function renderFeedPreview(){
 }
 
 function dismissGS(){
-  localStorage.setItem('gsDismissed','1');
+  localStorage.setItem(lsKey()+'_gsDismissed','1');
   S.gs.dismissed=true;
   const strip=document.getElementById('gsStrip');
   if(strip)strip.style.display='none';
@@ -5309,7 +5309,7 @@ function buildBrandContext(){
   return lines.length ? '\n\nBrand Profile:\n'+lines.join('\n') : '';
 }
 function resetOnboarding(){
-  localStorage.removeItem('gsDismissed');
+  localStorage.removeItem(lsKey()+'_gsDismissed');
   S.gs.dismissed=false;
   const strip=document.getElementById('gsStrip');
   if(strip)strip.style.display='';
