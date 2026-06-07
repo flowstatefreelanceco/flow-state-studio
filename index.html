@@ -3977,14 +3977,14 @@ function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.rem
 document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&&!e.target.closest('.u-popup'))closeUMenu();});
 async function doSignOut(){closeUMenu();await sb.auth.signOut();}
 
-function goToPricing(fromLanding){
+function goToPricing(fromLanding,skipHistory){
   var authEl = document.getElementById('authScreen');
   var backBtn = document.getElementById('pricingBackBtn');
   var lockedEl = document.getElementById('lockedScreen');
   if(authEl) authEl.classList.add('hidden');
   if(lockedEl){ lockedEl.classList.add('show'); lockedEl.scrollTop = 0; }
   if(backBtn) backBtn.style.display = fromLanding ? 'block' : 'none';
-  
+  if(!skipHistory) window.history.pushState({fssScreen:'pricing'},'','#pricing');
 }
 function backToLanding(){
   var lockedEl = document.getElementById('lockedScreen');
@@ -7322,6 +7322,10 @@ window.addEventListener('popstate',function(e){
     document.getElementById('appWrap').classList.remove('show');
     document.getElementById('authScreen').classList.remove('hidden');
     document.getElementById('authScreen').scrollTop=0;
+  } else if(state.fssScreen==='pricing'){
+    // Back to pricing/sales page from landing
+    backToLanding();
+    goToPricing(true,true);
   } else if(state.fssScreen==='app'&&state.fssView){
     // Back/forward within app views
     navigate(state.fssView,true);
