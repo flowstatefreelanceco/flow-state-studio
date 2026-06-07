@@ -5063,6 +5063,7 @@ function openIdeaModal(status){
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
   var hkElNew=document.getElementById('cdHook');if(hkElNew)hkElNew.value='';
+  var instrElNew=document.getElementById('cdInstrIn');if(instrElNew)instrElNew.value='';
   var pnElNew=document.getElementById('cdPerfNote');if(pnElNew)pnElNew.value='';
   populateBucketSelect('');
   // Set stage
@@ -5099,7 +5100,7 @@ function saveIdea(){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('ideaReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiInstr:document.getElementById('cdInstrIn')?document.getElementById('cdInstrIn').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
   cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
@@ -5568,6 +5569,7 @@ function cdOpen(id){
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
+  var instrEl=document.getElementById('cdInstrIn');if(instrEl)instrEl.value=x.aiInstr||'';
   var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value=x.perfNote||'';
   populateBucketSelect(x.bucket||'');
   // Populate reminder toggle
@@ -5706,6 +5708,7 @@ function cdSave(){
   var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
   var bkEl=document.getElementById('cdBucket');x.bucket=bkEl?bkEl.value:'';
   var pnEl=document.getElementById('cdPerfNote');x.perfNote=pnEl?pnEl.value.trim():'';
+  var instrSaveEl=document.getElementById('cdInstrIn');x.aiInstr=instrSaveEl?instrSaveEl.value.trim():'';
   x.images=S._pendingIdeaImages||x.images||[];
   // Save reminder preference
   var reminderCb = document.getElementById('cdReminderOn');
@@ -5797,10 +5800,16 @@ function cdGetBrief(){
   var own=g('cdOwnContent');
   var hook=g('cdHook');
   var notes=g('cdNotes');
+  var bucket=g('cdBucket');
+  var perfNote=g('cdPerfNote');
+  var instr=g('cdInstrIn');
+  var tone=_cdSelTone||'warm';
+  var toneMap={warm:'warm, personal, and human',direct:'direct, punchy, and clear',story:'story-led and narrative',educational:'educational and value-packed',playful:'playful and witty'};
+  var toneDesc=toneMap[tone]||'warm and authentic';
   var notesBlock=[hook?'Hook/Subject: '+hook:'',notes].filter(Boolean).join('\n');
   var combined=own&&notesBlock?notesBlock+'\n\n---\nMy own draft:\n'+own:own||notesBlock;
   var fullBrief=(g('cdTitle')+(combined?'\n'+combined:''));
-  return{title:g('cdTitle'),hook:hook,notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
+  return{title:g('cdTitle'),hook:hook,notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief,tone:tone,toneDesc:toneDesc,bucket:bucket,perfNote:perfNote,instr:instr};
 }
 
 /* ═══ SWIPE FILE ═══ */
@@ -6104,14 +6113,20 @@ async function cdSmartBrief() {
   var out = document.getElementById('cd-smartBrief-out');
   load.classList.add('show'); out.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
+  var sys = 'You are a world-class creative director and content strategist.' + brand +
     ' You think like a creative director - you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
-    'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
+    'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.' +
+    (b.instr ? ' IMPORTANT creator instruction to honour: ' + b.instr : '');
+  var extra = [];
+  if (b.toneDesc) extra.push('Desired tone: ' + b.toneDesc);
+  if (b.bucket) extra.push('Content bucket / pillar: ' + b.bucket);
+  if (b.perfNote) extra.push('Past performance note: ' + b.perfNote);
   var usr = 'I need your creative direction on this piece of content.\n\n' +
     'Brief: ' + b.brief + '\n' +
     'Platform: ' + b.plat + '\n' +
-    'Format: ' + b.fmt + '\n\n' +
-    'Give me:\n' +
+    'Format: ' + b.fmt + '\n' +
+    (extra.length ? extra.join('\n') + '\n' : '') +
+    '\nGive me:\n' +
     '1. THE ANGLE - the specific perspective or framing that will make this land with my audience (1-2 sentences)\n' +
     '2. THE HOOK - one specific opening line or hook I should lead with\n' +
     '3. THE EMOTION - what feeling should this create in my reader and why that matters for my niche\n' +
@@ -6264,6 +6279,70 @@ function cdRenderSeries(text) {
   list.classList.add('show');
 }
 
+async function cdAutopsy() {
+  var text = document.getElementById('cdRpText').value.trim();
+  if (!text) { toast('Paste some content first'); return; }
+  var plat = document.getElementById('cdRpPlat').value;
+  var load = document.getElementById('cd-load-repurpose');
+  var sbs = document.getElementById('cd-repurpose-sidebyside');
+  var analysisOut = document.getElementById('cd-analysis-out');
+  var rebuildBtn = document.getElementById('cd-rebuild-btn');
+  var rebuildOut = document.getElementById('cd-out-repurpose');
+  if (load) load.classList.add('show');
+  if (sbs) sbs.style.display = 'none';
+  if (analysisOut) analysisOut.textContent = '';
+  if (rebuildOut) rebuildOut.textContent = '';
+  if (rebuildBtn) rebuildBtn.style.display = 'none';
+  var brand = buildBrandContext();
+  var b2 = cdGetBrief();
+  var sys = 'You are an expert content strategist.' + brand + ' Analyse why a piece of content works. Be specific: identify the hook type, emotional angle, structure, pacing, and what makes it scroll-stopping. Output ONLY the analysis, no preamble.' + (b2.instr ? ' Creator instruction: ' + b2.instr : '');
+  var usr = 'Run a Content Autopsy on this ' + plat + ' post. Break down exactly why it works — the hook, emotional angle, structure, pacing, and what makes it scroll-stopping.
+
+Post:
+' + text;
+  var result = await cdCallAI(sys, usr, 800);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _cdOutputs['repurposeAnalysis'] = result;
+    if (analysisOut) analysisOut.textContent = result;
+    if (sbs) sbs.style.display = 'flex';
+    if (rebuildBtn) rebuildBtn.style.display = 'block';
+    toast('Autopsy complete — hit Rebuild to rewrite in your voice');
+  }
+}
+
+async function cdRebuildAfterAnalysis() {
+  var text = document.getElementById('cdRpText').value.trim();
+  var analysis = _cdOutputs['repurposeAnalysis'] || '';
+  if (!text) { toast('No content to rebuild'); return; }
+  var b = cdGetBrief();
+  var plat = document.getElementById('cdRpPlat').value;
+  var load = document.getElementById('cd-load-repurpose');
+  var out = document.getElementById('cd-out-repurpose');
+  var rebuildBtn = document.getElementById('cd-rebuild-btn');
+  if (load) load.classList.add('show');
+  if (rebuildBtn) rebuildBtn.disabled = true;
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist and copywriter.' + brand + ' Output ONLY the finished rebuilt content. No preamble, no explanation.' + (b.instr ? ' IMPORTANT creator instruction: ' + b.instr : '');
+  var usr = 'Here is a ' + plat + ' post and an analysis of why it works:
+
+Original post:
+' + text + '
+
+Autopsy analysis:
+' + analysis + '
+
+Now rebuild it completely from scratch in my voice for my audience. Target platform: ' + b.plat + '. Format: ' + b.fmt + '. Tone: ' + (b.toneDesc||'warm and authentic') + '. Make it 100% original — same structural DNA, completely different content.' + (b.bucket ? ' Content bucket/pillar: ' + b.bucket + '.' : '') + ';
+  var result = await cdCallAI(sys, usr, 1000);
+  if (load) load.classList.remove('show');
+  if (rebuildBtn) rebuildBtn.disabled = false;
+  if (result) {
+    _cdOutputs['repurpose'] = result;
+    if (out) { out.textContent = result; }
+    toast('Rebuilt in your voice ✓');
+  }
+}
+
 async function cdRepurpose2() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!text) { toast('Paste some content first'); return; }
@@ -6276,8 +6355,9 @@ async function cdRepurpose2() {
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for wellness businesses.' + brand + ' Output ONLY the repurposed content. No preamble.';
-  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
+  var cdInstr2 = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
+  var sys = 'You are an expert content strategist and copywriter.' + brand + ' Output ONLY the repurposed content. No preamble.' + (cdInstr2 ? ' IMPORTANT creator instruction: ' + cdInstr2 : '');
+  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '. Tone: ' + (b.toneDesc||'warm and authentic') + '.\n\nOriginal post:\n' + text;
   var result = await cdCallAI(sys, usr, 1000);
   if (load) load.classList.remove('show');
   if (result) {
@@ -6803,6 +6883,7 @@ function ideaToggleReminder(cb) {
 function cdDateChanged() {
   var wrap = document.getElementById('cdReminderWrap');
   if (!wrap) return;
+  var dateVal = (document.getElementById('cdDate') || {}).value || '';
   if (dateVal) {
     wrap.style.display = 'flex';
   } else {
