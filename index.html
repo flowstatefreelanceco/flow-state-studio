@@ -714,6 +714,11 @@ select.fi{cursor:pointer}
 @media(hover:none){
   .nb-del,.note-del,.kc-card .cc-del{opacity:1 !important;}
 }
+.yw-row{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:20px;flex-wrap:nowrap}
+@media(max-width:700px){
+  .yw-row{flex-direction:column;gap:20px;align-items:center}
+  .yw-sep{display:none}
+}
 @media(max-width:420px){
   .wdc-grid{grid-template-columns:repeat(2,1fr)}
   .stats-row{grid-template-columns:1fr}
@@ -1301,20 +1306,20 @@ select.fi{cursor:pointer}
     <div style="background:linear-gradient(135deg,#e0f2f2,#c8e8e8);border:1.5px solid rgba(0,132,132,.3);border-radius:var(--rad);padding:28px 32px;margin-bottom:32px;text-align:center">
       <div style="font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.3">Write your own. Use AI when you want it. Neither is the wrong choice here.</div>
       <div style="font-size:14px;color:var(--tealh);line-height:1.75;max-width:580px;margin:0 auto">I built this because I was done apologizing for how my brain works. Not every ND creator wants AI and this system was not built to force it on you. Some days you want a blank page. Some days you want a spark. Flow State Studio holds both without judgment. Go Analog when you just want to write. Bridge the Gap when you want the tools. Your brain, your call.</div>
-      <div style="display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap">
-        <div style="text-align:center">
+      <div class="yw-row">
+        <div style="text-align:center;min-width:100px">
           <div style="font-size:22px;margin-bottom:4px">✏️</div>
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Go Analog</div>
           <div style="font-size:12px;color:var(--tealh);margin-top:3px">Write your own. No AI required.</div>
         </div>
-        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">+</div>
-        <div style="text-align:center">
+        <div class="yw-sep" style="color:var(--teal);font-size:24px;line-height:1">+</div>
+        <div style="text-align:center;min-width:100px">
           <div style="font-size:22px;margin-bottom:4px">✦</div>
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal)">Bridge the Gap</div>
           <div style="font-size:12px;color:var(--tealh);margin-top:3px">AI tools when you want a spark.</div>
         </div>
-        <div style="color:var(--teal);font-size:24px;display:flex;align-items:center">=</div>
-        <div style="text-align:center">
+        <div class="yw-sep" style="color:var(--teal);font-size:24px;line-height:1">=</div>
+        <div style="text-align:center;min-width:100px">
           <div style="font-size:22px;margin-bottom:4px">🧠</div>
           <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">Your way</div>
           <div style="font-size:12px;color:var(--el);margin-top:3px">Content that actually feels like you.</div>
