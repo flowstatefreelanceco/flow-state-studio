@@ -519,9 +519,9 @@ select.fi{cursor:pointer}
 .cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
 
 /* CARD DETAIL REBUILT */
-.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:calc(100vh - 120px)}
+.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:0}
 .cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:visible;display:flex;flex-direction:column;gap:14px}
-.cd2-right{padding:20px 24px;overflow-y:visible;background:var(--bluep);display:flex;flex-direction:column;gap:12px}
+.cd2-right{padding:20px 24px;overflow-y:visible;background:var(--bluep);display:flex;flex-direction:column;gap:12px;padding-bottom:80px}
 .ai2-section{background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(122,158,194,.12)}
 .ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
 .ai2-section-hdr:hover{filter:brightness(.97)}
@@ -6287,11 +6287,7 @@ function cdRenderSeries(text) {
 }
 
 async function cdAutopsy() {
-  console.log('[DEBUG] cdAutopsy fired');
-  var textEl = document.getElementById('cdRpText');
-  console.log('[DEBUG] cdRpText element:', textEl);
-  var text = textEl ? textEl.value.trim() : '';
-  console.log('[DEBUG] text length:', text.length);
+  var text = document.getElementById('cdRpText').value.trim();
   if (!text) { toast('Paste some content first'); return; }
   var plat = document.getElementById('cdRpPlat').value;
   var load = document.getElementById('cd-load-repurpose');
