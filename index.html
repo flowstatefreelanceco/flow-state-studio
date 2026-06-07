@@ -6321,15 +6321,7 @@ async function cdRebuildAfterAnalysis() {
   if (rebuildBtn) rebuildBtn.disabled = true;
   var brand = buildBrandContext();
   var sys = 'You are an expert content strategist and copywriter.' + brand + ' Output ONLY the finished rebuilt content. No preamble, no explanation.' + (b.instr ? ' IMPORTANT creator instruction: ' + b.instr : '');
-  var usr = 'Here is a ' + plat + ' post and an analysis of why it works:
-
-Original post:
-' + text + '
-
-Autopsy analysis:
-' + analysis + '
-
-Now rebuild it completely from scratch in my voice for my audience. Target platform: ' + b.plat + '. Format: ' + b.fmt + '. Tone: ' + (b.toneDesc||'warm and authentic') + '. Make it 100% original — same structural DNA, completely different content.' + (b.bucket ? ' Content bucket/pillar: ' + b.bucket + '.' : '') + ';
+  var usr = 'Here is a ' + plat + ' post and an analysis of why it works:\n\nOriginal post:\n' + text + '\n\nAutopsy analysis:\n' + analysis + '\n\nNow rebuild it completely from scratch in my voice for my audience. Target platform: ' + b.plat + '. Format: ' + b.fmt + '. Tone: ' + (b.toneDesc||'warm and authentic') + '. Make it 100% original — same structural DNA, completely different content.' + (b.bucket ? ' Content bucket/pillar: ' + b.bucket + '.' : '') + '';
   var result = await cdCallAI(sys, usr, 1000);
   if (load) load.classList.remove('show');
   if (rebuildBtn) rebuildBtn.disabled = false;
