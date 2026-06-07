@@ -333,14 +333,12 @@ select.fi{cursor:pointer}
 .pf-panel.active{display:contents}
 .pf-panel-block{display:none}
 .pf-panel-block.active{display:block}
-.pricing-wrap{max-width:600px;margin:0 auto;padding:40px 24px 80px;width:100%}
-.pricing-features{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px}
-@media(min-width:560px){.pricing-features{grid-template-columns:1fr 1fr}}
+.pricing-wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
 .pricing-hero{text-align:center;margin-bottom:56px}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
 .pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
 .pricing-nd{display:inline-flex;align-items:center;gap:6px;background:var(--rp);border:1px solid #E0BDAA;border-radius:100px;padding:6px 16px;font-size:12px;font-weight:600;color:var(--r);letter-spacing:.04em;text-transform:uppercase;margin-top:8px}
-.pricing-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:48px}
+.pricing-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 .pf-card{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:20px 22px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 2px 8px var(--sh);transition:transform .15s,box-shadow .15s}
 .pf-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--shm)}
 .pf-icon-wrap{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -362,8 +360,7 @@ select.fi{cursor:pointer}
 .pf-card.gold .pf-title{color:var(--g)}
 /* Section label */
 .pf-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--w);background:var(--e);border-radius:100px;padding:5px 14px;display:inline-flex;align-items:center;gap:7px;margin:28px 0 14px}
-.pricing-cards{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:32px}
-@media(min-width:560px){.pricing-cards{grid-template-columns:1fr 1fr}}
+.pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
 .pc{background:var(--w);border:2px solid var(--bl);border-radius:14px;padding:28px;position:relative;transition:border-color .2s}
 .pc.featured{border-color:var(--r);background:var(--rp)}
 .pc-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:100px;white-space:nowrap}
@@ -674,6 +671,7 @@ select.fi{cursor:pointer}
   /* PRICING */
   .cd-sales-grid{grid-template-columns:1fr !important}
   .pricing-wrap{padding:24px 16px 60px}
+  .pricing-features,.pricing-cards{grid-template-columns:1fr}
 
   /* CARD DETAIL MODAL - single scroll context */
   .cd2-wrap{grid-template-columns:1fr !important;height:auto !important;min-height:unset !important}
