@@ -3312,7 +3312,7 @@ select.fi{cursor:pointer}
         <!-- GLOBAL AI INSTRUCTIONS -->
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:12px 14px;margin-bottom:10px">
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t);margin-bottom:6px">✦ Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--tl)">(optional — applies to all tools below)</span></label>
-          <textarea class="fi" id="cdInstrIn" placeholder="e.g. Keep my voice exactly, punch up the hook, make it shorter, always end with a question..." style="min-height:50px;font-size:12.5px;resize:vertical;margin-bottom:0"></textarea>
+          <textarea class="fi" id="cdInstrIn" placeholder="e.g. Keep my voice exactly, punch up the hook, make it shorter, always end with a question..." style="min-height:50px;font-size:12.5px;resize:vertical;margin-bottom:0" oninput="S.globalAiInstr=this.value;persist()"></textarea>
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA">
@@ -3958,13 +3958,17 @@ async function bootApp(){
   _appBooted=true;
   window._supabasePersist=function(obj){saveUserData(obj);};
   document.getElementById('loadingScreen').classList.remove('hidden');
-  var saved=await loadUserData();
-  // Load plan from Supabase profiles table
+  var saved;
   try{
-    var {data:profile}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
-    if(profile&&profile.plan) S.plan=profile.plan;
-  }catch(e){ /* profiles table may not exist yet - defaults to beta */ }
-  document.getElementById('loadingScreen').classList.add('hidden');
+    saved=await loadUserData();
+    // Load plan from Supabase profiles table
+    try{
+      var {data:profile}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
+      if(profile&&profile.plan) S.plan=profile.plan;
+    }catch(e){ /* profiles table may not exist yet - defaults to beta */ }
+  }finally{
+    document.getElementById('loadingScreen').classList.add('hidden');
+  }
   // Check if user is locked
   if(S.plan==='locked'){
     document.getElementById('lockedScreen').classList.add('show');
@@ -4174,7 +4178,8 @@ const S = {
   longformProfile:{title:'',format:'book',premise:'',targetReader:'',coreArgument:'',tone:'',themes:''},
   activeProfile:'brand',
   aiCount:0,
-  notebooks:[], notes:[], activeNotebook:null
+  notebooks:[], notes:[], activeNotebook:null,
+  globalAiInstr:''
 };
 
 /* ═══════════════════ INIT ═══════════════════ */
@@ -4200,7 +4205,7 @@ function persist(){
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
     creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
-    favs:S.favs,settings:S.settings,gs:S.gs
+    favs:S.favs,settings:S.settings,gs:S.gs,globalAiInstr:S.globalAiInstr||''
   };
   // Save to localStorage immediately (instant, no network)
   try{
@@ -5804,7 +5809,7 @@ function cdGetBrief(){
   var notes=g('cdNotes');
   var bucket=g('cdBucket');
   var perfNote=g('cdPerfNote');
-  var instr=g('cdInstrIn');
+  var instr=g('cdInstrIn')||S.globalAiInstr||'';
   var tone=_cdSelTone||'warm';
   var toneMap={warm:'warm, personal, and human',direct:'direct, punchy, and clear',story:'story-led and narrative',educational:'educational and value-packed',playful:'playful and witty'};
   var toneDesc=toneMap[tone]||'warm and authentic';
@@ -7458,8 +7463,14 @@ function initFlowStateApp(savedData) {
   if (savedData.offerProfile) S.offerProfile = Object.assign({}, S.offerProfile, savedData.offerProfile);
   if (savedData.longformProfile) S.longformProfile = Object.assign({}, S.longformProfile, savedData.longformProfile);
   if (savedData.activeProfile) S.activeProfile = savedData.activeProfile;
+  if (savedData.globalAiInstr) S.globalAiInstr = savedData.globalAiInstr;
   }
   _appInit();
+  // Restore global AI instructions field
+  setTimeout(function(){
+    var instrEl = document.getElementById('cdInstrIn');
+    if (instrEl && S.globalAiInstr) instrEl.value = S.globalAiInstr;
+  }, 100);
 }
 
 
