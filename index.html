@@ -312,7 +312,20 @@ select.fi{cursor:pointer}
 /* LOCKED / PRICING SCREEN */
 #lockedScreen{position:fixed;inset:0;background:var(--p);z-index:10000;overflow-y:auto;display:none}
 #lockedScreen.show{display:block}
-.pricing-wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+/* STICKY SECTION NAV */
+.pricing-sticky-nav{position:sticky;top:0;z-index:50;background:var(--p);border-bottom:1px solid var(--bl);padding:10px 24px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 -24px 32px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.psn-pill{background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--t);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--fb);-webkit-tap-highlight-color:transparent}
+.psn-pill:hover{border-color:var(--b);color:var(--e)}
+.psn-pill.active-create{background:var(--rp);border-color:rgba(179,108,55,.4);color:var(--r)}
+.psn-pill.active-plan{background:#e0f2f2;border-color:rgba(0,132,132,.3);color:var(--teal)}
+.psn-pill.active-strategy{background:var(--rp);border-color:rgba(179,108,55,.4);color:var(--r)}
+.psn-pill.active-pricing{background:var(--e);border-color:var(--e);color:var(--p)}
+/* Section anchor offset for sticky nav */
+.pricing-section-anchor{scroll-margin-top:56px}
+@media(max-width:600px){
+  .pricing-sticky-nav{padding:8px 16px;gap:6px;margin:0 -16px 24px}
+  .psn-pill{font-size:11px;padding:6px 12px}
+}
 .pricing-hero{text-align:center;margin-bottom:56px}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
 .pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
@@ -1097,7 +1110,7 @@ select.fi{cursor:pointer}
       <p class="lp-sub">Flow State Studio is a content workspace for ND entrepreneurs who are done with too many tabs, too many tools, and brilliant ideas that never make it out of their head. Go analog when you just want to write. Use AI when you want a spark. Neither is the wrong choice here.</p>
       <div class="lp-ctas">
         <button class="lp-btn-primary" onclick="openLoginCard()">Sign In</button>
-        <button class="lp-btn-secondary" onclick="goToPricing()">Learn More</button>
+        <button class="lp-btn-secondary" onclick="goToPricing(true)">Learn More</button>
       </div>
     </section>
 
@@ -1215,7 +1228,7 @@ select.fi{cursor:pointer}
       <p>Your ideas, your planning, your writing, your tools. Starting at $9.50/month, for a brain that deserves a system that actually works with it.</p>
       <div class="lp-bottom-ctas">
         <button class="lp-btn-light" onclick="openLoginCard()">Sign In to Studio</button>
-        <button class="lp-btn-outline-light" onclick="goToPricing()">See Membership Options</button>
+        <button class="lp-btn-outline-light" onclick="goToPricing(true)">See Membership Options</button>
       </div>
     </div>
 
@@ -1297,8 +1310,18 @@ select.fi{cursor:pointer}
     <!-- FEATURE GRID -->
     <div class="pricing-features">
 
+      <!-- STICKY SECTION NAV -->
+      <div style="grid-column:1/-1;margin:-8px -24px 8px">
+        <div class="pricing-sticky-nav" id="pricingStickyNav">
+          <button class="psn-pill" id="pill-create" onclick="scrollToSection('section-create')">✍️ Create</button>
+          <button class="psn-pill" id="pill-plan" onclick="scrollToSection('section-plan')">🗂 Plan</button>
+          <button class="psn-pill" id="pill-strategy" onclick="scrollToSection('section-strategy')">📖 Strategy</button>
+          <button class="psn-pill" id="pill-pricing" onclick="scrollToSection('section-pricing')">💳 Pricing</button>
+        </div>
+      </div>
+
       <!-- SECTION: CREATE & WRITE -->
-      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">✍️ Create and write</div></div>
+      <div id="section-create" class="pricing-section-anchor" style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">✍️ Create and write</div></div>
 
       <!-- CREATIVE DIRECTOR: full-width hero card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
@@ -1393,7 +1416,7 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- SECTION: PLAN & ORGANISE -->
-      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
+      <div id="section-plan" class="pricing-section-anchor" style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">🗂 Plan and organise</div></div>
 
       <!-- CONTENT PLANNER -->
       <div class="pf-card teal">
@@ -1450,7 +1473,7 @@ select.fi{cursor:pointer}
       </div>
 
       <!-- SECTION: STRATEGY & GUIDES -->
-      <div style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
+      <div id="section-strategy" class="pricing-section-anchor" style="grid-column:1/-1;margin:8px 0 4px"><div class="pf-section-label">📖 Strategy and guides</div></div>
 
       <!-- GUIDES: new full-width card -->
       <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
@@ -1516,7 +1539,7 @@ select.fi{cursor:pointer}
     <div class="pricing-divider"></div>
 
     <!-- PRICING CARDS -->
-    <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Founding Member Pricing, locked in forever</div>
+    <div id="section-pricing" class="pricing-section-anchor" style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Founding Member Pricing, locked in forever</div>
     <div class="pricing-cards">
       <div class="pc">
         <div class="pc-name">Starter</div>
@@ -3881,6 +3904,7 @@ async function bootApp(){
   // Check if user is locked
   if(S.plan==='locked'){
     document.getElementById('lockedScreen').classList.add('show');
+    setTimeout(initPricingScrollSpy, 150);
     return;
   }
   document.getElementById('appWrap').classList.add('show');
@@ -3914,10 +3938,20 @@ function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.rem
 document.addEventListener('click',function(e){if(!e.target.closest('.user-btn')&&!e.target.closest('.u-popup'))closeUMenu();});
 async function doSignOut(){closeUMenu();await sb.auth.signOut();}
 
-function goToPricing(){
-  // Hide auth screen, show the locked/pricing screen
-  document.getElementById('authScreen').classList.add('hidden');
-  document.getElementById('lockedScreen').classList.add('show');
+function goToPricing(fromLanding){
+  var authEl = document.getElementById('authScreen');
+  var backBtn = document.getElementById('pricingBackBtn');
+  var lockedEl = document.getElementById('lockedScreen');
+  if(authEl) authEl.classList.add('hidden');
+  if(lockedEl){ lockedEl.classList.add('show'); lockedEl.scrollTop = 0; }
+  if(backBtn) backBtn.style.display = fromLanding ? 'block' : 'none';
+  setTimeout(initPricingScrollSpy, 150);
+}
+function backToLanding(){
+  var lockedEl = document.getElementById('lockedScreen');
+  var authEl = document.getElementById('authScreen');
+  if(lockedEl) lockedEl.classList.remove('show');
+  if(authEl){ authEl.classList.remove('hidden'); authEl.scrollTop = 0; }
 }
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
@@ -7005,6 +7039,51 @@ function dismissWhatsNew(){
   if (_whatsNewVersion) localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
   closeModal('whatsNewModal');
 }
+
+// ── PRICING STICKY NAV ───────────────────────────────────────
+function scrollToSection(id){
+  var el = document.getElementById(id);
+  var locked = document.getElementById('lockedScreen');
+  if(!el) return;
+  var top = el.getBoundingClientRect().top + (locked ? locked.scrollTop : window.scrollY) - 52;
+  if(locked){
+    locked.scrollTo({top: top, behavior: 'smooth'});
+  } else {
+    window.scrollTo({top: top, behavior: 'smooth'});
+  }
+}
+
+function initPricingScrollSpy(){
+  var sections = [
+    {id:'section-create', pill:'pill-create', cls:'active-create'},
+    {id:'section-plan',   pill:'pill-plan',   cls:'active-plan'},
+    {id:'section-strategy',pill:'pill-strategy',cls:'active-strategy'},
+    {id:'section-pricing',pill:'pill-pricing', cls:'active-pricing'}
+  ];
+  var locked = document.getElementById('lockedScreen');
+  if(!locked) return;
+
+  function updateActive(){
+    var scrollTop = locked.scrollTop;
+    var winH = locked.clientHeight;
+    var current = null;
+    sections.forEach(function(s){
+      var el = document.getElementById(s.id);
+      if(!el) return;
+      var rect = el.getBoundingClientRect();
+      var elTop = rect.top + scrollTop - locked.getBoundingClientRect().top;
+      if(elTop - 80 <= scrollTop) current = s;
+    });
+    sections.forEach(function(s){
+      var pill = document.getElementById(s.pill);
+      if(!pill) return;
+      pill.className = 'psn-pill' + (current && current.pill === s.pill ? ' ' + s.cls : '');
+    });
+  }
+  locked.addEventListener('scroll', updateActive, {passive:true});
+  updateActive();
+}
+// ── END PRICING STICKY NAV ───────────────────────────────────
 
 // ── CONTENT BUCKETS ──────────────────────────────────────────
 var _bucketInsightsOpen = true;
