@@ -5582,6 +5582,7 @@ function cdOpen(id){
   document.getElementById('cdNotes').value=x.notes||'';
   var hkEl=document.getElementById('cdHook');if(hkEl)hkEl.value=x.hook||'';
   var instrEl=document.getElementById('cdInstrIn');if(instrEl)instrEl.value=x.aiInstr||S.globalAiInstr||'';
+  var rpTextEl=document.getElementById('cdRpText');if(rpTextEl)rpTextEl.value=x.rpText||'';
   var pnEl=document.getElementById('cdPerfNote');if(pnEl)pnEl.value=x.perfNote||'';
   populateBucketSelect(x.bucket||'');
   // Populate reminder toggle
@@ -5621,6 +5622,20 @@ function cdOpen(id){
     _cdOutputs=Object.assign({},x.aiOutputs);
 
     // Smart Brief
+    if(_cdOutputs['repurposeAnalysis']){
+      var analysisOut=document.getElementById('cd-analysis-out');
+      var sbs=document.getElementById('cd-repurpose-sidebyside');
+      var rebuildBtn=document.getElementById('cd-rebuild-btn');
+      if(analysisOut){analysisOut.textContent=_cdOutputs['repurposeAnalysis'];}
+      if(sbs){sbs.style.display='flex';sbs.classList.add('show');}
+      if(rebuildBtn)rebuildBtn.style.display='block';
+    }
+    if(_cdOutputs['repurpose']){
+      var rpOut=document.getElementById('cd-out-repurpose');
+      if(rpOut){rpOut.textContent=_cdOutputs['repurpose'];rpOut.classList.add('show');}
+      var rpActs=document.getElementById('cd-acts-repurpose');
+      if(rpActs)rpActs.classList.add('show');
+    }
     if(_cdOutputs['smartBrief']){
       var sbO=document.getElementById('cd-smartBrief-out');
       if(sbO){sbO.textContent=_cdOutputs['smartBrief'];sbO.classList.add('show');}
@@ -5720,7 +5735,7 @@ function cdSave(){
   var hookEl=document.getElementById('cdHook');x.hook=hookEl?hookEl.value:'';
   var bkEl=document.getElementById('cdBucket');x.bucket=bkEl?bkEl.value:'';
   var pnEl=document.getElementById('cdPerfNote');x.perfNote=pnEl?pnEl.value.trim():'';
-  var instrSaveEl=document.getElementById('cdInstrIn');x.aiInstr=instrSaveEl?instrSaveEl.value.trim():'';
+  var instrSaveEl=document.getElementById('cdInstrIn');var instrVal=instrSaveEl?instrSaveEl.value.trim():'';x.aiInstr=instrVal;if(instrVal)S.globalAiInstr=instrVal;
   x.images=S._pendingIdeaImages||x.images||[];
   // Save reminder preference
   var reminderCb = document.getElementById('cdReminderOn');
@@ -5733,6 +5748,7 @@ function cdSave(){
   var ownEl=document.getElementById('cdOwnContent');
   x.ownContent=ownEl?ownEl.value:'';
   x.aiOutputs=Object.assign({},_cdOutputs);
+  var rpTextEl=document.getElementById('cdRpText');if(rpTextEl)x.rpText=rpTextEl.value;
   x.aiHookSel=_cdHookSel||'';
   x.cdTasks=JSON.parse(JSON.stringify(_cdTasks));
   cdSyncTasks(x.title,x.id);
@@ -6318,8 +6334,9 @@ async function cdAutopsy() {
   if (result) {
     _cdOutputs['repurposeAnalysis'] = result;
     if (analysisOut) analysisOut.textContent = result;
-    if (sbs) sbs.style.display = 'flex';
+    if (sbs) { sbs.style.display = 'flex'; sbs.classList.add('show'); }
     if (rebuildBtn) rebuildBtn.style.display = 'block';
+    persist();
     toast('Autopsy complete — hit Rebuild to rewrite in your voice');
   }
 }
@@ -6344,6 +6361,7 @@ async function cdRebuildAfterAnalysis() {
   if (result) {
     _cdOutputs['repurpose'] = result;
     if (out) { out.textContent = result; }
+    persist();
     toast('Rebuilt in your voice ✓');
   }
 }
@@ -6369,6 +6387,7 @@ async function cdRepurpose2() {
     _cdOutputs['repurpose'] = result;
     if (out) { out.textContent = result; out.classList.add('show'); }
     if (acts) acts.classList.add('show');
+    persist();
   }
 }
 
