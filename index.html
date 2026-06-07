@@ -6296,10 +6296,7 @@ async function cdAutopsy() {
   var brand = buildBrandContext();
   var b2 = cdGetBrief();
   var sys = 'You are an expert content strategist.' + brand + ' Analyse why a piece of content works. Be specific: identify the hook type, emotional angle, structure, pacing, and what makes it scroll-stopping. Output ONLY the analysis, no preamble.' + (b2.instr ? ' Creator instruction: ' + b2.instr : '');
-  var usr = 'Run a Content Autopsy on this ' + plat + ' post. Break down exactly why it works — the hook, emotional angle, structure, pacing, and what makes it scroll-stopping.
-
-Post:
-' + text;
+  var usr = 'Run a Content Autopsy on this ' + plat + ' post. Break down exactly why it works — the hook, emotional angle, structure, pacing, and what makes it scroll-stopping.\n\nPost:\n' + text;
   var result = await cdCallAI(sys, usr, 800);
   if (load) load.classList.remove('show');
   if (result) {
