@@ -1168,21 +1168,39 @@ select.fi{cursor:pointer}
       </div>
     </div>
 
-    <!-- SCREENSHOTS CAROUSEL -->
-    <div class="lp-shots">
-      <div class="lp-section-lbl" style="padding:0 24px 18px">Inside the Studio</div>
-      <div class="lp-shots-track" id="lpShotsTrack">
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-1.png" alt="Dashboard" loading="lazy" /><div class="lp-shot-cap">✦ Dashboard</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-5.png" alt="Writing Studio" loading="lazy" /><div class="lp-shot-cap">✍️ Writing Studio</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-2.png" alt="Content Kanban" loading="lazy" /><div class="lp-shot-cap">🗂 Content Planner</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-3.png" alt="Content Card" loading="lazy" /><div class="lp-shot-cap">📄 Content Card</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-4.png" alt="Hooks" loading="lazy" /><div class="lp-shot-cap">🪝 Hook Builder</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-7.png" alt="Calendar" loading="lazy" /><div class="lp-shot-cap">📅 Calendar</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-6.png" alt="Task Kanban" loading="lazy" /><div class="lp-shot-cap">☑ Task Board</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-8.png" alt="Guides" loading="lazy" /><div class="lp-shot-cap">📖 Guides</div></div>
-        <div class="lp-shot"><img class="lp-shot-img" src="screenshot-9.png" alt="Notebooks" loading="lazy" /><div class="lp-shot-cap">🧠 Notebooks</div></div>
+    <!-- THREE KEY FEATURES -->
+    <div class="lp-preview">
+      <div class="lp-section-lbl">What's inside</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
+          <div style="width:44px;height:44px;border-radius:10px;background:#e0f2f2;border:1px solid rgba(0,132,132,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✍️</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Writing Studio</div>
+            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Write your own or generate with AI. Captions, carousels, reels, newsletters, Substack articles, and more. Every draft saves automatically so nothing gets lost. Go analog when you want to, use AI when you need a spark.</div>
+          </div>
+        </div>
+
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--rp);border:1px solid rgba(179,108,55,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📄</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Content Cards</div>
+            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Every piece of content gets its own card with a brief, hook, body, platform, format, date, and AI tools built in. Your Creative Director reads your brief and gives you a full strategic direction before you write a word.</div>
+          </div>
+        </div>
+
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--sagep);border:1px solid rgba(90,110,80,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🔗</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Prompt Library</div>
+            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Hundreds of ready-to-use hooks, CTAs, story prompts, and writing prompts built for service-based businesses. Filter by category, save your own favourites, and never stare at a blank page again.</div>
+          </div>
+        </div>
+
       </div>
-      <div class="lp-shots-hint">← swipe to explore →</div>
+      <div style="text-align:center;margin-top:18px">
+        <button onclick="goToPricing(true)" style="background:none;border:none;color:var(--teal);font-size:13px;cursor:pointer;font-family:var(--fb);font-weight:500;text-decoration:underline;text-underline-offset:3px">See everything that's inside →</button>
+      </div>
     </div>
 
     <!-- WHO IT'S FOR -->
@@ -1511,7 +1529,7 @@ select.fi{cursor:pointer}
       <div class="pc">
         <div class="pc-name">Starter</div>
         <div class="pc-price">$9.50<span>/month</span></div>
-        <div class="pc-credits">125 AI credits / month</div>
+        <div class="pc-credits">100 AI credits / month</div>
         <ul class="pc-features">
           <li>Write your own (Go Analog) or generate with AI (Bridge the Gap)</li>
           <li>All 12+ AI tools available when you want them</li>
@@ -1523,7 +1541,7 @@ select.fi{cursor:pointer}
           <li>Saved Drafts library + CSV export</li>
           <li>Swipe File for your best AI outputs</li>
           <li>Four built-in strategy guides including The Analog Way</li>
-          <li>125 AI generations per month</li>
+          <li>100 AI generations per month</li>
           <li>Locked in at founding price forever</li>
         </ul>
         <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member, $9.50/mo</button>
@@ -2212,7 +2230,7 @@ select.fi{cursor:pointer}
           <div style="border:2px solid var(--bl);border-radius:var(--rad);padding:20px;background:var(--w);transition:border-color .15s" onmouseover="this.style.borderColor='var(--r)'" onmouseout="this.style.borderColor='var(--bl)'">
             <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$9.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
-            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">125 AI credits/month. Locked in at founding price forever.</div>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">100 AI credits/month. Locked in at founding price forever.</div>
             <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member</button>
           </div>
           <div style="border:2px solid var(--r);border-radius:var(--rad);padding:20px;background:var(--rp);position:relative">
@@ -6185,7 +6203,7 @@ function isUnlimited(){
 }
 function creditLimit(){
   if(S.plan==='owner'||S.plan==='unlimited') return Infinity;
-  if(S.plan==='starter') return 125;
+  if(S.plan==='starter') return 100;
   return 50; // beta default
 }
 function checkCreditReset(){
