@@ -3946,6 +3946,7 @@ async function bootApp(){
     return;
   }
   document.getElementById('appWrap').classList.add('show');
+  window.history.pushState({fssScreen:'app',fssView:S.view||'dashboard'},'','#'+(S.view||'dashboard'));
   initFlowStateApp(saved);
   addUserMenu();
   checkCreditReset();
@@ -4212,8 +4213,9 @@ function setGreeting(){
 }
 
 /* ═══════════════════ NAV ═══════════════════ */
-function navigate(v){
+function navigate(v,skipHistory){
   if(!v||!document.getElementById("view-"+v))return;
+  if(!skipHistory)window.history.pushState({fssView:v,fssScreen:"app"},"","#"+v);
   closeMobNav();
   // Close any open modals when navigating
   document.querySelectorAll('.modal-ov.open').forEach(function(m){m.classList.remove('open');});
@@ -7299,6 +7301,32 @@ function renderBucketInsights(){
 // ── END CONTENT BUCKETS ──────────────────────────────────────
 
 initAuth();
+
+// ── BROWSER BACK/FORWARD BUTTON SUPPORT ──────────────────────
+// Set initial history state (landing page)
+window.history.replaceState({fssScreen:'landing'},'','');
+
+window.addEventListener('popstate',function(e){
+  var state=e.state;
+  if(!state){
+    // No state = went back before any history — go to landing
+    if(document.getElementById('appWrap').classList.contains('show')){
+      document.getElementById('appWrap').classList.remove('show');
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('authScreen').scrollTop=0;
+    }
+    return;
+  }
+  if(state.fssScreen==='landing'){
+    // Back to landing
+    document.getElementById('appWrap').classList.remove('show');
+    document.getElementById('authScreen').classList.remove('hidden');
+    document.getElementById('authScreen').scrollTop=0;
+  } else if(state.fssScreen==='app'&&state.fssView){
+    // Back/forward within app views
+    navigate(state.fssView,true);
+  }
+});
 
 // ESC to close login card
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLoginCard();});
