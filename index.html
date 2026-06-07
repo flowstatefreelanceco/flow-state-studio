@@ -333,12 +333,9 @@ select.fi{cursor:pointer}
 .pf-panel.active{display:contents}
 .pf-panel-block{display:none}
 .pf-panel-block.active{display:block}
-@media(max-width:600px){
-  .pricing-section-tabs{grid-template-columns:1fr 1fr;gap:8px}
-  .pst{padding:14px 10px}
-  .pst-icon{font-size:20px;margin-bottom:4px}
-  .pst-label{font-size:11px}
-}
+.pricing-wrap{max-width:600px;margin:0 auto;padding:40px 24px 80px;width:100%}
+.pricing-features{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px}
+@media(min-width:560px){.pricing-features{grid-template-columns:1fr 1fr}}
 .pricing-hero{text-align:center;margin-bottom:56px}
 .pricing-wordmark{font-family:var(--fh);font-size:38px;font-weight:700;color:var(--e);margin-bottom:8px}
 .pricing-tagline{font-size:16px;color:var(--t);line-height:1.6;max-width:520px;margin:0 auto 10px}
@@ -365,7 +362,8 @@ select.fi{cursor:pointer}
 .pf-card.gold .pf-title{color:var(--g)}
 /* Section label */
 .pf-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--w);background:var(--e);border-radius:100px;padding:5px 14px;display:inline-flex;align-items:center;gap:7px;margin:28px 0 14px}
-.pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.pricing-cards{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:32px}
+@media(min-width:560px){.pricing-cards{grid-template-columns:1fr 1fr}}
 .pc{background:var(--w);border:2px solid var(--bl);border-radius:14px;padding:28px;position:relative;transition:border-color .2s}
 .pc.featured{border-color:var(--r);background:var(--rp)}
 .pc-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:100px;white-space:nowrap}
@@ -674,7 +672,6 @@ select.fi{cursor:pointer}
   .feed-grid{max-width:100%}
 
   /* PRICING */
-  .pricing-features,.pricing-cards{grid-template-columns:1fr}
   .cd-sales-grid{grid-template-columns:1fr !important}
   .pricing-wrap{padding:24px 16px 60px}
 
@@ -1324,7 +1321,7 @@ select.fi{cursor:pointer}
     <div class="pricing-features">
 
       <!-- SECTION TOGGLE TABS -->
-      <div style="grid-column:1/-1;margin-bottom:4px">
+      <div style="grid-column:1/-1">
         <div class="pricing-section-tabs">
           <div class="pst create active" onclick="showPricingSection('create',this)">
             <div class="pst-icon">✍️</div>
