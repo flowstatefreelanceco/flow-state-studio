@@ -177,10 +177,8 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
-.studio-wrap{display:grid;grid-template-columns:1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
-.studio-wrap.ai-open{grid-template-columns:280px minmax(340px,1fr)}
+.studio-wrap{display:grid;grid-template-columns:280px 1fr;gap:16px;flex:1;min-height:0;overflow:hidden;align-items:stretch}
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 4px var(--sh)}
-#aiToolsPanel{max-width:280px}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
 .fl-lbl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:7px;display:block}
@@ -648,6 +646,7 @@ select.fi{cursor:pointer}
 
   /* WRITING STUDIO */
   .studio-wrap{display:block !important;height:auto !important;overflow:visible !important;align-items:unset !important;padding-bottom:80px}
+  #aiToolsPanel{max-width:100% !important;margin-bottom:12px}
   .sp{max-height:none !important;overflow:visible !important;margin-bottom:12px}
   .sp-in{padding:14px !important}
   .out-panel{min-height:unset !important;height:auto !important;overflow:visible !important}
@@ -1052,8 +1051,7 @@ select.fi{cursor:pointer}
 .wf-add{display:flex;gap:8px}
 
 /* AI TOOLS PANEL */
-#aiToolsPanel{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.studio-wrap.ai-open #aiToolsPanel{display:flex}
+#aiToolsPanel{display:flex;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .ai-toggle-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--t);background:var(--w);border:1.5px solid var(--bl);border-radius:100px;padding:6px 14px;cursor:pointer;transition:all .15s;font-family:var(--fb)}
 .ai-toggle-btn:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
 .ai-toggle-btn.active{color:var(--r);border-color:var(--r);background:var(--rp)}
@@ -2023,13 +2021,12 @@ select.fi{cursor:pointer}
   <div id="view-studio" class="view" style="overflow:hidden">
     <div class="main-hdr">
       <div><h1>Writing Studio</h1><div class="sub">Write your own or use AI. Both save to your library.</div></div>
-      <div class="hdr-acts"><button class="ai-toggle-btn" id="aiToggleBtn" onclick="toggleAIPanel()">✦ AI Tools</button></div>
     </div>
     <div class="main-body" style="padding-top:16px;padding-bottom:48px;display:flex;flex-direction:column;flex:1;min-height:0">
       <div class="studio-wrap">
 
         <!-- LEFT: AI TOOLS PANEL -->
-        <div class="sp" id="aiToolsPanel" style="flex-direction:column;overflow:hidden">
+        <div class="sp" id="aiToolsPanel" style="flex-direction:column">
           <div class="card-section-toggle-hdr bridge" style="border-radius:var(--rad) var(--rad) 0 0;cursor:default;flex-shrink:0">
             <span class="card-section-toggle-title bridge">✦ Bridge the Gap</span>
             <span style="font-size:10px;color:var(--r);opacity:.7">AI tools</span>
