@@ -177,7 +177,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
-.studio-wrap{display:grid;grid-template-columns:1fr;gap:0;flex:1;min-height:0;overflow:hidden;align-items:stretch}
+.studio-wrap{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 4px var(--sh)}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
@@ -190,10 +190,10 @@ select.fi{cursor:pointer}
 .chip{padding:5px 11px;border-radius:100px;border:1px solid var(--b);background:var(--p);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fb);user-select:none}
 .chip:hover{border-color:var(--r);color:var(--r)}
 .chip.sel{background:var(--r);border-color:var(--r);color:white}
-.out-panel{display:flex;flex-direction:column;overflow:hidden;height:100%;min-height:500px}
+.out-panel{display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);box-shadow:0 1px 4px var(--sh)}
 .out-tb{padding:14px 22px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
 .out-tit{font-family:var(--fd);font-size:18px;font-weight:500;color:var(--e)}
-.out-bdy{flex:1;padding:22px;overflow-y:auto;min-height:320px;-webkit-overflow-scrolling:touch}
+.out-bdy{padding:22px;min-height:320px}
 .out-ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--t);gap:10px}
 .out-ph .sym{font-size:36px;opacity:.22}
 .out-ph h3{font-family:var(--fd);font-size:21px;font-weight:400;color:var(--t)}
@@ -645,11 +645,10 @@ select.fi{cursor:pointer}
   .dot{width:4px;height:4px}
 
   /* WRITING STUDIO */
-  .studio-wrap{display:block !important;height:auto !important;overflow:visible !important;align-items:unset !important;padding-bottom:80px}
-  .sp{max-height:none !important;overflow:visible !important;margin-bottom:12px}
+  .studio-wrap{overflow:visible !important}
+  .out-panel{overflow:visible !important;min-height:unset !important;border-radius:var(--rad)}
   .sp-in{padding:14px !important}
-  .out-panel{min-height:unset !important;height:auto !important;overflow:visible !important}
-  .out-bdy{min-height:200px !important;overflow-y:visible !important}
+  .out-bdy{min-height:200px}
   #studioAnalogBody,#studioBridgeBody{overflow:visible !important}
 
   /* DRAFTS */
@@ -2016,15 +2015,15 @@ select.fi{cursor:pointer}
   </div>
 
   <!-- AI STUDIO -->
-  <div id="view-studio" class="view" style="overflow:hidden">
+  <div id="view-studio" class="view">
     <div class="main-hdr">
       <div><h1>Writing Studio</h1><div class="sub">Write your own or use AI. Both save to your library.</div></div>
     </div>
-    <div class="main-body" style="padding-top:16px;padding-bottom:48px;display:flex;flex-direction:column;flex:1;min-height:0">
+    <div class="main-body">
       <div class="studio-wrap">
 
         <!-- SINGLE COLUMN: WRITE + AI OUTPUT -->
-        <div class="sp out-panel" style="display:flex;flex-direction:column;overflow-y:auto">
+        <div class="sp out-panel">
 
           <!-- GO ANALOG — open by default -->
           <div class="card-section-toggle-hdr analog" onclick="toggleStudioSection('analog')" id="studioAnalogHdr" style="border-radius:var(--rad) var(--rad) 0 0;flex-shrink:0">
@@ -2056,7 +2055,7 @@ select.fi{cursor:pointer}
             </div>
             <span class="card-section-toggle-arrow" id="studioBridgeArrow">›</span>
           </div>
-          <div id="studioBridgeBody" style="display:none;flex-direction:column;flex:1">
+          <div id="studioBridgeBody" style="display:none;flex-direction:column">
 
             <!-- AI TOOLS -->
             <div style="padding:14px 16px 12px;border-bottom:1px solid var(--bl)">
@@ -2075,7 +2074,7 @@ select.fi{cursor:pointer}
               <div style="display:flex;align-items:center;gap:10px"><span class="sv-badge" id="svBadge">✓ Saved</span></div>
               <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
             </div>
-            <div class="out-bdy" id="outBdy" style="flex:1;min-height:280px;padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief above and hit Generate.</p></div></div>
+            <div class="out-bdy" id="outBdy" style="padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief above and hit Generate.</p></div></div>
 
           </div>
 
@@ -3272,7 +3271,7 @@ select.fi{cursor:pointer}
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
             <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
           </div>
-          <div id="cdTaskList" style="display:flex;flex-direction:column;gap:6px"></div>
+          <div id="cdTaskList2" style="display:flex;flex-direction:column;gap:6px"></div>
           <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps added here sync to your Task board and Calendar.</div>
         </div>
       </div>
@@ -5744,9 +5743,9 @@ function cdRemoveTask(id){
   cdRenderTasks();
 }
 function cdRenderTasks(){
-  var el=document.getElementById('cdTaskList');if(!el)return;
-  if(!_cdTasks.length){el.innerHTML='<div style="font-size:12px;color:var(--tl);font-style:italic">No steps yet - click + Add Step</div>';return;}
-  el.innerHTML=_cdTasks.map(t=>`<div style="display:flex;gap:6px;align-items:center">
+  var html;
+  if(!_cdTasks.length){html='<div style="font-size:12px;color:var(--tl);font-style:italic">No steps yet - click + Add Step</div>';}
+  else{html=_cdTasks.map(t=>`<div style="display:flex;gap:6px;align-items:center">
     <input type="text" value="${esc(t.title)}" placeholder="e.g. Write the hook..." 
       oninput="var tk=_cdTasks.find(x=>x.id==='${t.id}');if(tk)tk.title=this.value"
       style="flex:1;padding:6px 9px;border:1px solid var(--b);border-radius:var(--rsm);font-family:var(--fb);font-size:12.5px;background:var(--w);color:var(--e);outline:none" />
@@ -5754,7 +5753,9 @@ function cdRenderTasks(){
       oninput="var tk=_cdTasks.find(x=>x.id==='${t.id}');if(tk)tk.date=this.value"
       style="width:120px;padding:6px 8px;border:1px solid var(--b);border-radius:var(--rsm);font-family:var(--fb);font-size:12px;background:var(--w);color:var(--e);outline:none" />
     <button onclick="cdRemoveTask('${t.id}')" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:14px;padding:2px 4px">✕</button>
-  </div>`).join('');
+  </div>`).join('');}
+  var el=document.getElementById('cdTaskList');if(el)el.innerHTML=html;
+  var el2=document.getElementById('cdTaskList2');if(el2)el2.innerHTML=html;
 }
 function cdSyncTasks(ideaTitle,ideaId){
   _cdTasks.forEach(function(ct){
