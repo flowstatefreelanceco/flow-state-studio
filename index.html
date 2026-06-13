@@ -1591,7 +1591,7 @@ select.fi{cursor:pointer}
           <li>Swipe File for your best AI outputs</li>
           <li>Four built-in strategy guides including The Analog Way</li>
           <li>100 AI generations per month</li>
-          <li>Locked in at founding price forever</li>
+          <li>Founding Member price through August 31st</li>
         </ul>
         <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member, $9.50/mo</button>
       </div>
@@ -1606,7 +1606,7 @@ select.fi{cursor:pointer}
           <li>Perfect for batch content days, launches, and high-output weeks</li>
           <li>Generate as much as you need, whenever you need it</li>
           <li>Zero limits, zero anxiety about running out mid-flow</li>
-          <li>Locked in at founding price forever</li>
+          <li>Founding Member price through August 31st</li>
         </ul>
         <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member, $19.50/mo</button>
       </div>
@@ -1615,7 +1615,7 @@ select.fi{cursor:pointer}
     <!-- INVITE CODE -->
     <div style="text-align:center;margin-bottom:32px;padding:24px;background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);max-width:420px;margin-left:auto;margin-right:auto">
       <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:6px">Got an invite code?</div>
-      <div style="font-size:13px;color:var(--t);margin-bottom:14px">Beta testers enter your code below for free access.</div>
+      <div style="font-size:13px;color:var(--t);margin-bottom:14px">Enter your code here for free access.</div>
       <div style="display:flex;gap:8px">
         <input id="inviteCodeInput" class="fi" placeholder="Enter invite code..." style="flex:1;text-transform:uppercase;letter-spacing:.08em;font-size:14px" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')redeemInviteCode()" />
         <button class="btn btn-p" onclick="redeemInviteCode()" style="white-space:nowrap">Redeem →</button>
@@ -2285,19 +2285,24 @@ select.fi{cursor:pointer}
           <div style="border:2px solid var(--bl);border-radius:var(--rad);padding:20px;background:var(--w);transition:border-color .15s" onmouseover="this.style.borderColor='var(--r)'" onmouseout="this.style.borderColor='var(--bl)'">
             <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$9.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
-            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">100 AI credits/month. Locked in at founding price forever.</div>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:6px">100 AI credits/month. Locked in at founding price forever.</div><div style="font-size:11.5px;font-weight:600;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:5px 10px;margin-bottom:10px">Founding Member price available through August 31st</div>
             <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member</button>
           </div>
           <div style="border:2px solid var(--r);border-radius:var(--rad);padding:20px;background:var(--rp);position:relative">
             <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px">Most Popular</div>
             <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$19.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
-            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:14px">Unlimited AI credits. Zero limits. Locked in at founding price forever.</div>
+            <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:6px">Unlimited AI credits. Zero limits. Locked in at founding price forever.</div><div style="font-size:11.5px;font-weight:600;color:var(--teal);background:rgba(0,132,132,.08);border-radius:var(--rsm);padding:5px 10px;margin-bottom:10px">Founding Member price available through August 31st</div>
             <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member</button>
           </div>
         </div>
         <div id="alreadyUnlimited" style="display:none;text-align:center;padding:14px;background:var(--tealp);border-radius:var(--rsm);color:var(--teal);font-size:13px;font-weight:500">
           ✦ You have unlimited access - thank you for being part of Flow State Studio!
+        </div>
+        <div id="manageSubSection" style="display:none;margin-top:14px;padding:14px;border:1px solid var(--bl);border-radius:var(--rsm);background:var(--p)">
+          <div style="font-size:13px;color:var(--t);margin-bottom:10px">Need to make changes to your subscription? You can manage billing, update payment info, or cancel anytime through Stripe.</div>
+          <button class="btn btn-g" style="width:100%" onclick="openCustomerPortal()">Manage Subscription →</button>
+          <div style="font-size:11px;color:var(--tl);margin-top:8px">You keep access until the end of your current billing period. Founding Member pricing is locked for as long as your subscription stays active.</div>
         </div>
       </div>
       <div class="setting-sec">
@@ -5244,6 +5249,9 @@ function renderMembershipSection(){
   if(invSec)invSec.style.display=S.plan==='owner'?'block':'none';
   var clearSec=document.getElementById('clearDataSection');
   if(clearSec)clearSec.style.display=S.plan==='owner'?'block':'none';
+  var manageSubSec=document.getElementById('manageSubSection');
+  var isPaid=(plan==='starter'||plan==='unlimited');
+  if(manageSubSec)manageSubSec.style.display=isPaid?'block':'none';
   if(isUnlimited()){
     planCreditsEl.textContent='Unlimited AI credits';
     if(upgradeOpts)upgradeOpts.style.display='none';
@@ -5259,6 +5267,31 @@ function renderMembershipSection(){
       if(starterBtn){starterBtn.textContent='Current Plan';starterBtn.disabled=true;starterBtn.style.opacity='.5';}
     }
   }
+}
+
+async function openCustomerPortal(){
+  if(!_currentUser){toast('Please sign in first');return;}
+  var btn=event.target;
+  btn.textContent='Opening billing portal...';
+  btn.disabled=true;
+  try{
+    var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/customer-portal',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
+      body:JSON.stringify({userId:_currentUser.id,userEmail:_currentUser.email})
+    });
+    var data=await res.json();
+    if(data.url){
+      window.open(data.url,'_blank');
+      toast('Billing portal opened ✦');
+    } else {
+      toast('Error: '+(data.error||'Could not open billing portal'));
+    }
+  }catch(e){
+    toast('Error: '+e.message);
+  }
+  btn.textContent='Manage Subscription →';
+  btn.disabled=false;
 }
 
 async function startUpgrade(plan){
