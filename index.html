@@ -3850,21 +3850,26 @@ async function initAuth(){
         sessionStorage.removeItem('pendingInviteCode');
       }
 
-      // 2. Check for pending paid plan by email
-      var paidPlan=sessionStorage.getItem('paidPlan');
-      if(paidPlan){
-        try{
-          // Check pending_plans table first
-          var {data:pending}=await sb.from('pending_plans')
-            .select('plan').eq('email',session.user.email.toLowerCase()).maybeSingle();
-          var planToApply=pending?.plan||paidPlan;
-          await sb.from('profiles').upsert({id:session.user.id,plan:planToApply});
+      // 2. ALWAYS check pending_plans table for paid plan — webhook writes here
+      // regardless of whether sessionStorage survived the redirect
+      try{
+        var {data:pending}=await sb.from('pending_plans')
+          .select('plan').eq('email',session.user.email.toLowerCase()).maybeSingle();
+        if(pending?.plan){
+          await sb.from('profiles').upsert({id:session.user.id,plan:pending.plan});
           await sb.from('pending_plans').delete().eq('email',session.user.email.toLowerCase());
-          S.plan=planToApply;
-        }catch(e){}
-        sessionStorage.removeItem('paidPlan');
-        sessionStorage.removeItem('intendedPlan');
-      }
+          S.plan=pending.plan;
+        } else {
+          // Fall back to sessionStorage if webhook hasn't fired yet
+          var paidPlan=sessionStorage.getItem('paidPlan');
+          if(paidPlan){
+            await sb.from('profiles').upsert({id:session.user.id,plan:paidPlan});
+            S.plan=paidPlan;
+          }
+        }
+      }catch(e){}
+      sessionStorage.removeItem('paidPlan');
+      sessionStorage.removeItem('intendedPlan');
 
       document.getElementById('authScreen').classList.add('hidden');
       await bootApp();
@@ -4028,19 +4033,22 @@ async function doSignup(){
     btn.disabled=false;btn.textContent='Create Account';
   } else {
     btn.disabled=false;btn.textContent='Create Account';
-    // Check if they already paid (pending_plans table or sessionStorage)
-    var paidPlan=sessionStorage.getItem('paidPlan')||sessionStorage.getItem('intendedPlan');
-    if(paidPlan&&data.user){
-      // Try to find pending plan by email
+    // Always check pending_plans by email (webhook may have already written it)
+    if(data.user){
       try{
         var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',em.toLowerCase()).maybeSingle();
-        var planToApply=pending?.plan||paidPlan;
-        await sb.from('profiles').upsert({id:data.user.id,plan:planToApply});
-        await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
-        sessionStorage.removeItem('paidPlan');
-        sessionStorage.removeItem('intendedPlan');
-        msg.style.color='var(--teal)';
-        msg.textContent='Account created with '+planToApply+' access! Check your email to confirm, then sign in.';
+        var paidPlan=sessionStorage.getItem('paidPlan')||sessionStorage.getItem('intendedPlan');
+        var planToApply=pending?.plan||paidPlan||null;
+        if(planToApply){
+          await sb.from('profiles').upsert({id:data.user.id,plan:planToApply});
+          await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
+          sessionStorage.removeItem('paidPlan');
+          sessionStorage.removeItem('intendedPlan');
+          msg.style.color='var(--teal)';
+          msg.textContent='Account created with '+planToApply+' access! Check your email to confirm, then sign in.';
+        } else {
+          msg.textContent='Account created! Check your email to confirm, then sign in.';
+        }
       }catch(e){
         msg.textContent='Account created! Check your email to confirm, then sign in.';
       }
