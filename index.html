@@ -5702,7 +5702,8 @@ function cdSetStage(el) {
 }
 
 function cdSelTone(el) {
-  document.querySelectorAll('.ai2-tone-chip').forEach(function(c) { c.classList.remove('sel'); });
+  var modal = document.getElementById('cdModal') || document.getElementById('ideaDetailModal') || el.closest('.modal-overlay') || document.body;
+  modal.querySelectorAll('.ai2-tone-chip').forEach(function(c) { c.classList.remove('sel'); });
   el.classList.add('sel');
   _cdSelTone = el.dataset.t;
 }
@@ -6167,11 +6168,18 @@ async function cdSmartBrief() {
 }
 
 async function cdGen2(type) {
+  // Auto-open the generate section so output is visible
+  var genBody = document.getElementById('ai2-generate-body');
+  var genChev = document.getElementById('ai2-generate-chev');
+  if (genBody && !genBody.classList.contains('open')) {
+    genBody.classList.add('open');
+    if (genChev) genChev.textContent = '‹';
+  }
   var b = cdGetBrief();
   if (!b.title && !b.notes && !b.ownContent) { toast('Add a title, brief, or write something first'); return; }
-  var load = document.getElementById('cd-load-'+type);
-  var out = document.getElementById('cd-out-'+type);
-  var acts = document.getElementById('cd-acts-'+type);
+  var load = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
+  var out = document.getElementById('cd-out-'+type) || document.getElementById('cd-out-generate');
+  var acts = document.getElementById('cd-acts-'+type) || document.getElementById('cd-acts-generate');
   if (load) load.classList.add('show');
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
