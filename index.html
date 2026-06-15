@@ -3178,7 +3178,11 @@ select.fi{cursor:pointer}
       <button class="btn btn-danger" style="padding:6px 11px;font-size:12px;flex-shrink:0;margin-top:4px" onclick="deleteDraft()">Delete</button>
     </div>
     <div class="m-sub" id="draftModalMeta"></div>
-    <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;max-height:360px;overflow-y:auto;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e)" id="draftModalContent"></div>
+    <textarea id="draftModalContent" class="fi" style="min-height:280px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;color:var(--e);resize:vertical;margin-bottom:8px"></textarea>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="btn btn-brass" style="font-size:12px" onclick="saveDraftEdit()">Save Changes</button>
+      <button class="btn btn-g" style="font-size:12px" onclick="navigator.clipboard.writeText(document.getElementById('draftModalContent').value).then(()=>toast('Copied ✓'))">Copy</button>
+    </div>
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--bl);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t)">Save to Notebook:</span>
       <select id="draftNbSelect" class="fi" style="width:auto;min-width:160px;font-size:12px;padding:6px 10px"></select>
@@ -3297,6 +3301,24 @@ select.fi{cursor:pointer}
             </div>
           </div>
         </div>
+
+        <!-- CAROUSEL SLIDES SECTION -->
+        <div class="card-section-toggle">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,#d7e7fe,#e8f0fe);border-bottom:2px solid #b8ccf0">
+            <div class="card-section-toggle-title" style="color:#4d1e15">🗂 Carousel Slides</div>
+            <span class="card-section-toggle-chev">+</span>
+          </div>
+          <div class="card-section-toggle-body" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Paste or write your carousel copy here. One slide per section.</div>
+            <div id="cdCarouselSlides" style="display:flex;flex-direction:column;gap:8px"></div>
+            <button onclick="cdAddSlide()" style="margin-top:8px;font-size:11.5px;color:var(--teal);background:none;border:1px dashed var(--teal);border-radius:var(--rsm);padding:6px 14px;cursor:pointer;font-family:var(--fb);width:100%">+ Add Slide</button>
+            <div style="display:flex;gap:6px;margin-top:10px">
+              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopySlides()">Copy All</button>
+              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveSlides()">Save as Draft</button>
+            </div>
+          </div>
+        </div>
+
         <!-- BRIDGE THE GAP SECTION -->
         <div class="card-section-toggle">
           <div class="card-section-toggle-hdr bridge" onclick="toggleCardSection(this)">
@@ -4936,7 +4958,7 @@ function openDraftModal(id){
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
   document.getElementById('draftModalTitle').textContent=d.title;
   document.getElementById('draftModalMeta').textContent=`${cap(d.platform||'')}${d.contentType?' · '+d.contentType:''} · ${dt}`;
-  document.getElementById('draftModalContent').textContent=d.content||'';
+  document.getElementById('draftModalContent').value=d.content||'';
   // Populate notebook select
   const nbSel=document.getElementById('draftNbSelect');
   if(nbSel){
@@ -5043,7 +5065,11 @@ function saveCalEntry(){
   toast('Entry saved ✓');
 }
 function openIdeaModal(status){
-  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';S._pendingIdeaImages=[];cdRenderTasks();
+  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];
+  var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';
+  // Clear carousel slides
+  var slidesContainer=document.getElementById('cdCarouselSlides');if(slidesContainer)slidesContainer.innerHTML='';
+  S._pendingIdeaImages=[];cdRenderTasks();
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
   var rc=document.getElementById('cdReminderOn');if(rc){rc.checked=false;cdToggleReminder(rc);}
   // Clear all fields
@@ -5682,6 +5708,9 @@ function cdOpen(id){
     // Default open: SmartBrief and Generate when nothing saved yet
     var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
     var gb=document.getElementById('ai2-generate-body');if(gb){gb.classList.add('open');var gc=document.getElementById('ai2-generate-chev');if(gc)gc.textContent='-';}
+  // Init carousel with 3 default slides
+  var sc=document.getElementById('cdCarouselSlides');
+  if(sc&&sc.children.length===0){cdAddSlide();cdAddSlide();cdAddSlide();}
   }
 
   openModal('cardDetailModal');
@@ -6128,6 +6157,53 @@ function studioOwnSave(){
   S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
   toast('Saved to drafts ✓');
 }
+function cdAddSlide(){
+  var container=document.getElementById('cdCarouselSlides');
+  if(!container)return;
+  var count=container.querySelectorAll('.cd-slide-wrap').length+1;
+  var wrap=document.createElement('div');
+  wrap.className='cd-slide-wrap';
+  wrap.style.cssText='background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm);overflow:hidden';
+  wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:#d7e7fe;border-bottom:1px solid #b8ccf0">'
+    +'<span style="font-size:10.5px;font-weight:700;color:#4d1e15;letter-spacing:.06em">Slide '+count+'</span>'
+    +'<button onclick="this.closest(\'.cd-slide-wrap\').remove();cdRenumberSlides()" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:12px;padding:0 2px">✕</button>'
+    +'</div>'
+    +'<textarea placeholder="Slide '+count+' copy..." style="width:100%;padding:10px;font-family:var(--fb);font-size:13px;line-height:1.7;border:none;background:var(--p);color:var(--e);resize:vertical;min-height:70px;outline:none;box-sizing:border-box"></textarea>';
+  container.appendChild(wrap);
+}
+function cdRenumberSlides(){
+  var container=document.getElementById('cdCarouselSlides');
+  if(!container)return;
+  container.querySelectorAll('.cd-slide-wrap').forEach(function(w,i){
+    var lbl=w.querySelector('span');
+    var ta=w.querySelector('textarea');
+    if(lbl)lbl.textContent='Slide '+(i+1);
+    if(ta&&ta.placeholder.startsWith('Slide '))ta.placeholder='Slide '+(i+1)+' copy...';
+  });
+}
+function cdGetSlides(){
+  var container=document.getElementById('cdCarouselSlides');
+  if(!container)return '';
+  var lines=[];
+  container.querySelectorAll('.cd-slide-wrap').forEach(function(w,i){
+    var ta=w.querySelector('textarea');
+    var text=ta?ta.value.trim():'';
+    if(text)lines.push('Slide '+(i+1)+':\n'+text);
+  });
+  return lines.join('\n\n');
+}
+function cdCopySlides(){
+  var txt=cdGetSlides();
+  if(txt)navigator.clipboard.writeText(txt).then(function(){toast('Slides copied ✓');});
+  else toast('No slides to copy yet');
+}
+function cdSaveSlides(){
+  var txt=cdGetSlides();
+  if(!txt){toast('Add some slide content first');return;}
+  var title=document.getElementById('cdTitle')?document.getElementById('cdTitle').value.trim():'';
+  S.drafts.unshift({id:Date.now().toString(),title:(title||'Carousel').slice(0,65),content:txt,platform:'instagram',contentType:'Carousel',analog:true,createdAt:new Date().toISOString()});
+  persist();toast('Carousel saved to drafts ✓');
+}
 function cdCopyOwn(){
   var el=document.getElementById('cdOwnContent');
   if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
@@ -6439,8 +6515,9 @@ async function cdCallAI(sys, usr, maxTok) {
 }
 
 function cdCopy2(type) {
-  var txt = _cdOutputs[type] || '';
-  if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied'); });
+  var txt = (type==='hooks' ? (_cdOutputs['hookBuilt']||_cdOutputs['hookList']||'') : _cdOutputs[type]) || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied ✓'); });
+  else toast('Nothing to copy yet');
 }
 
 function cdSaveDraft2(type){
