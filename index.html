@@ -3920,7 +3920,8 @@ async function loadUserData(){
       merged.favs=Object.assign({},sbData.favs||{},localData.favs||{});
       merged.gs=Object.assign({},sbData.gs||{},localData.gs||{});
       merged.aiCount=Math.max(localData.aiCount||0,sbData.aiCount||0);
-      merged.weeklyFocus=localData.weeklyFocus||sbData.weeklyFocus||[];
+      // weeklyFocus - prefer Supabase as source of truth (persisted after every toggle)
+      merged.weeklyFocus=sbData.weeklyFocus||localData.weeklyFocus||[];
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
       merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
       merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
