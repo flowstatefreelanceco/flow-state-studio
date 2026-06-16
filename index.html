@@ -385,7 +385,7 @@ select.fi{cursor:pointer}
 @media(max-width:900px){#cd-repurpose-sidebyside.show{flex-direction:column}}
 /* ═══════════════ FEED PREVIEW ═══════════════ */
 .feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;max-width:640px;margin:0 auto}
-.feed-cell{aspect-ratio:4/3;background:var(--bl);position:relative;overflow:hidden;cursor:pointer;border-radius:2px}
+.feed-cell{aspect-ratio:3/4;background:var(--bl);position:relative;overflow:hidden;cursor:pointer;border-radius:2px}
 .feed-cell img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .feed-cell.placeholder{background:var(--p);border:2px dashed var(--b);display:flex;align-items:center;justify-content:center;cursor:default}
 .feed-cell.dragging{opacity:.4;border:2px dashed var(--r)}
@@ -3944,6 +3944,7 @@ async function loadUserData(){
       merged.aiCount=Math.max(localData.aiCount||0,sbData.aiCount||0);
       // weeklyFocus - prefer Supabase as source of truth (persisted after every toggle)
       merged.weeklyFocus=sbData.weeklyFocus||localData.weeklyFocus||[];
+      merged.lastCardId=sbData.lastCardId||localData.lastCardId||'';
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
       merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
       merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
@@ -4209,7 +4210,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
@@ -4433,7 +4434,7 @@ function renderPickUp(){
   const el=document.getElementById('pickUpWrap');
   if(!el)return;
   const lastDraft=S.drafts[0];
-  const lastIdea=S.ideas.find(i=>i.status==='inprogress')||S.ideas[0];
+  const lastIdea=(S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId))||S.ideas.find(i=>i.status==='inprogress')||S.ideas[0];
   if(!lastDraft&&!lastIdea){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   el.innerHTML=`<div class="pickup-wrap">
@@ -5068,7 +5069,8 @@ function openIdeaModal(status){
   S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';
   // Clear carousel slides
-  var slidesContainer=document.getElementById('cdCarouselSlides');if(slidesContainer)slidesContainer.innerHTML='';
+  var slidesContainer=document.getElementById('cdCarouselSlides');
+  if(slidesContainer){slidesContainer.innerHTML='';cdAddSlide();cdAddSlide();cdAddSlide();}
   S._pendingIdeaImages=[];cdRenderTasks();
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
   var rc=document.getElementById('cdReminderOn');if(rc){rc.checked=false;cdToggleReminder(rc);}
@@ -5647,6 +5649,22 @@ function cdOpen(id){
   // Restore own content
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
 
+  // Restore carousel slides
+  var slidesContainer=document.getElementById('cdCarouselSlides');
+  if(slidesContainer){
+    slidesContainer.innerHTML='';
+    var slides=x.carouselSlides&&x.carouselSlides.length?x.carouselSlides:['','',''];
+    slides.forEach(function(txt){
+      cdAddSlide();
+      var wraps=slidesContainer.querySelectorAll('.cd-slide-wrap');
+      var lastTA=wraps[wraps.length-1].querySelector('textarea');
+      if(lastTA)lastTA.value=txt;
+    });
+  }
+
+  // Track last opened for pick up where you left off
+  S.lastCardId=id;
+
   // Restore any previously generated AI outputs
   if(x.aiOutputs&&Object.keys(x.aiOutputs).length){
     _cdOutputs=Object.assign({},x.aiOutputs);
@@ -5769,6 +5787,13 @@ function cdSave(){
   x.aiOutputs=Object.assign({},_cdOutputs);
   x.aiHookSel=_cdHookSel||'';
   x.cdTasks=JSON.parse(JSON.stringify(_cdTasks));
+  // Save carousel slides
+  var slidesContainer=document.getElementById('cdCarouselSlides');
+  if(slidesContainer){
+    x.carouselSlides=Array.from(slidesContainer.querySelectorAll('.cd-slide-wrap textarea')).map(function(ta){return ta.value;});
+  }
+  // Track last opened card for pick up where you left off
+  S.lastCardId=x.id;
   cdSyncTasks(x.title,x.id);
   renderTaskKanban();
   renderCalendar();
@@ -6675,14 +6700,19 @@ function handleIdeaImages(input) {
   if (!input.files || !input.files.length) return;
   if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
   var area = document.getElementById('ideaImgArea');
-  Array.from(input.files).forEach(function(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var imgObj = { name: file.name, data: e.target.result };
+  var files = Array.from(input.files);
+  var promises = files.map(function(file) {
+    return new Promise(function(resolve) {
+      var reader = new FileReader();
+      reader.onload = function(e) { resolve({ name: file.name, data: e.target.result }); };
+      reader.readAsDataURL(file);
+    });
+  });
+  Promise.all(promises).then(function(imgObjs) {
+    imgObjs.forEach(function(imgObj) {
       S._pendingIdeaImages.push(imgObj);
       if (area) cdRenderImageThumb(area, imgObj, S._pendingIdeaImages.length - 1);
-    };
-    reader.readAsDataURL(file);
+    });
   });
   input.value = '';
 }
@@ -6691,15 +6721,20 @@ function handleIdeaImages(input) {
 function handleCdImages(input) {
   if (!input.files || !input.files.length) return;
   if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
-  Array.from(input.files).forEach(function(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var imgObj = { name: file.name, data: e.target.result };
+  var files = Array.from(input.files);
+  var promises = files.map(function(file) {
+    return new Promise(function(resolve) {
+      var reader = new FileReader();
+      reader.onload = function(e) { resolve({ name: file.name, data: e.target.result }); };
+      reader.readAsDataURL(file);
+    });
+  });
+  Promise.all(promises).then(function(imgObjs) {
+    var area = document.getElementById('cdImgArea');
+    imgObjs.forEach(function(imgObj) {
       S._pendingIdeaImages.push(imgObj);
-      var area = document.getElementById('cdImgArea');
       cdRenderImageThumb(area, imgObj, S._pendingIdeaImages.length - 1);
-    };
-    reader.readAsDataURL(file);
+    });
   });
   input.value = '';
 }
