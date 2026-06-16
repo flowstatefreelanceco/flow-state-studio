@@ -2314,7 +2314,7 @@ select.fi{cursor:pointer}
         <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
         <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
         <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="bpExtra" style="min-height:90px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
+          <textarea class="fi" id="bpExtra" style="min-height:56px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
         </div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
@@ -3017,7 +3017,7 @@ select.fi{cursor:pointer}
           </div>
           <div class="card-section-toggle-body open" style="padding:14px 16px">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your own notes, hook, or rough draft here. Everything saves with the card.</div>
-            <textarea id="cdOwnContentNew" class="fi" style="min-height:90px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Your hook, your angle, your rough draft. Just you and the page."></textarea>
+            <textarea id="cdOwnContentNew" class="fi" style="min-height:64px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Your hook, your angle, your rough draft. Just you and the page."></textarea>
           </div>
         </div>
         <!-- BRIDGE THE GAP -->
@@ -3248,10 +3248,10 @@ select.fi{cursor:pointer}
           </label>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
-          <textarea class="fi" id="cdHook" style="min-height:64px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
+          <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
-          <textarea class="fi" id="cdNotes" style="min-height:140px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
+          <textarea class="fi" id="cdNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
           <div style="display:flex;gap:8px;align-items:center">
@@ -3260,7 +3260,7 @@ select.fi{cursor:pointer}
           </div>
         </div>
         <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="cdPerfNote" style="min-height:48px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
+          <textarea class="fi" id="cdPerfNote" style="min-height:32px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
         </div>
         <!-- IMAGE UPLOAD -->
         <div class="fl">
@@ -3350,7 +3350,7 @@ select.fi{cursor:pointer}
             </div>
             <div class="ai2-btn-grid">
               <div style="margin-bottom:10px">
-                <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:50px;font-size:12.5px;resize:vertical"></textarea>
+                <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:28px;font-size:12.5px;resize:vertical"></textarea>
               </div>
               <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
               <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
@@ -3438,7 +3438,7 @@ select.fi{cursor:pointer}
                 <option value="LinkedIn">From LinkedIn</option><option value="a blog">From a blog</option>
                 <option value="a newsletter">From a newsletter</option><option value="somewhere">From somewhere</option>
               </select>
-              <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post, caption, or article here. For carousels, paste each slide on a new line..." style="min-height:110px"></textarea>
+              <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post, caption, or article here. For carousels, paste each slide on a new line..." style="min-height:70px"></textarea>
             </div>
 
             <!-- Output target -->
