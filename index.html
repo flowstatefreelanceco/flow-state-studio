@@ -312,7 +312,7 @@ select.fi{cursor:pointer}
 #lockedScreen{position:fixed;inset:0;background:var(--p);z-index:10000;overflow-y:auto;display:none}
 #lockedScreen.show{display:block}
 /* SECTION TOGGLE TABS */
-.pricing-section-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.pricing-section-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
 .pst{border-radius:12px;padding:12px 10px;cursor:pointer;border:2px solid transparent;transition:all .18s;text-align:center;user-select:none;-webkit-tap-highlight-color:transparent}
 .pst-icon{font-size:20px;margin-bottom:4px}
 .pst-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;line-height:1.3}
@@ -1334,11 +1334,6 @@ select.fi{cursor:pointer}
             <div class="pst-label">Strategy</div>
             <div class="pst-sub">Guides &amp; playbooks</div>
           </div>
-          <div class="pst pricing-tab" onclick="showPricingSection('pricing',this)">
-            <div class="pst-icon">💳</div>
-            <div class="pst-label">Pricing</div>
-            <div class="pst-sub">Plans &amp; access</div>
-          </div>
         </div>
       </div>
 
@@ -1538,7 +1533,7 @@ select.fi{cursor:pointer}
     </div><!-- /pricing-features outer grid -->
 
     <!-- PRICING PANEL (shown/hidden by tab) -->
-    <div id="panel-pricing" style="display:none">
+    <div id="panel-pricing" style="display:block;margin-top:32px;padding-top:32px;border-top:1px solid var(--bl)">
     <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:32px 36px;margin-bottom:16px">
       <div style="text-align:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--tl);margin-bottom:20px">Sound familiar?</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px" class="cd-sales-grid">
@@ -3174,7 +3169,7 @@ select.fi{cursor:pointer}
 <div class="modal-ov" id="draftModal" style="padding-bottom:80px">
   <div class="modal modal-xl">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-      <div class="m-title" id="draftModalTitle"></div>
+      <input class="fi" id="draftModalTitle" placeholder="Draft title..." style="font-size:18px;font-weight:700;font-family:var(--fh);border:none;background:transparent;padding:0;margin-bottom:4px;color:var(--e)" />
       <button class="btn btn-danger" style="padding:6px 11px;font-size:12px;flex-shrink:0;margin-top:4px" onclick="deleteDraft()">Delete</button>
     </div>
     <div class="m-sub" id="draftModalMeta"></div>
@@ -4957,7 +4952,7 @@ function openDraftModal(id){
   const d=S.drafts.find(x=>x.id===id);if(!d)return;
   S.viewingDraftId=id;
   const dt=new Date(d.createdAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  document.getElementById('draftModalTitle').textContent=d.title;
+  document.getElementById('draftModalTitle').value=d.title;
   document.getElementById('draftModalMeta').textContent=`${cap(d.platform||'')}${d.contentType?' · '+d.contentType:''} · ${dt}`;
   document.getElementById('draftModalContent').value=d.content||'';
   // Populate notebook select
@@ -4993,9 +4988,11 @@ function deleteDraft(){
 }
 function saveDraftEdit(){
   const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(!d)return;
-  const el=document.getElementById('draftModalContent');
-  if(el)d.content=el.value;
-  persist();toast('Draft saved ✓');
+  const titleEl=document.getElementById('draftModalTitle');
+  const contentEl=document.getElementById('draftModalContent');
+  if(titleEl&&titleEl.value.trim())d.title=titleEl.value.trim();
+  if(contentEl)d.content=contentEl.value;
+  persist();renderDraftsGrid();toast('Draft saved ✓');
 }
 function copyDraftModal(){const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));}
 
