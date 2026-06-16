@@ -6417,6 +6417,63 @@ function cdRenderSeries(text) {
   list.classList.add('show');
 }
 
+async function cdAutopsy() {
+  var text = document.getElementById('cdRpText').value.trim();
+  if (!text) { toast('Paste some content to analyse first'); return; }
+  var load = document.getElementById('cd-load-repurpose');
+  var sbs = document.getElementById('cd-repurpose-sidebyside');
+  var analysisOut = document.getElementById('cd-analysis-out');
+  var rebuildBtn = document.getElementById('cd-rebuild-btn');
+  if (load) load.classList.add('show');
+  if (sbs) sbs.style.display = 'none';
+  var brand = buildBrandContext();
+  var sys = 'You are an expert content strategist.' + brand + ' Be direct and specific. No fluff.';
+  var usr = 'Run a Content Autopsy on this post. Break down exactly what makes it work (or not work):\n\n'
+    + '1. HOOK: What type of hook is this and why does it stop the scroll?\n'
+    + '2. STRUCTURE: How is it built? What is the flow?\n'
+    + '3. EMOTIONAL ANGLE: What feeling does it create and why does that work?\n'
+    + '4. WHAT WORKS: The 2-3 things that make this effective.\n'
+    + '5. WHAT TO AVOID: If I were to rebuild this, what would I not copy?\n\n'
+    + 'Post to analyse:\n' + text;
+  var result = await cdCallAI(sys, usr, 800);
+  if (load) load.classList.remove('show');
+  if (result) {
+    _cdOutputs['repurposeAnalysis'] = result;
+    if (analysisOut) analysisOut.textContent = result;
+    if (sbs) sbs.style.display = 'flex';
+    if (rebuildBtn) rebuildBtn.style.display = 'block';
+  }
+}
+
+async function cdRebuildAfterAnalysis() {
+  var analysis = _cdOutputs['repurposeAnalysis'] || '';
+  var text = document.getElementById('cdRpText').value.trim();
+  if (!analysis) { toast('Run the Content Autopsy first'); return; }
+  var b = cdGetBrief();
+  var outFmt = document.getElementById('cdRpOutFmt') ? document.getElementById('cdRpOutFmt').value : b.fmt;
+  var load = document.getElementById('cd-load-repurpose');
+  var out = document.getElementById('cd-out-repurpose');
+  var rebuildBtn = document.getElementById('cd-rebuild-btn');
+  if (load) load.classList.add('show');
+  if (rebuildBtn) rebuildBtn.disabled = true;
+  var brand = buildBrandContext();
+  var tone = _cdSelTone || 'warm';
+  var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
+  var sys = 'You are an expert content writer.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols.';
+  var usr = 'I analysed this post and here is what makes it work:\n\n' + analysis
+    + '\n\nNow rebuild it completely for my brand, niche, and voice. Do NOT copy the original wording. Take the structure and emotional angle that works, then make it 100% original for my audience.'
+    + '\n\nFormat: ' + outFmt + ' for ' + b.plat + '.'
+    + '\nTone: ' + (toneMap[tone] || 'warm and authentic') + '.'
+    + (b.brief ? '\nMy topic/angle: ' + b.brief : '');
+  var result = await cdCallAI(sys, usr, 1000);
+  if (load) load.classList.remove('show');
+  if (rebuildBtn) rebuildBtn.disabled = false;
+  if (result) {
+    _cdOutputs['repurpose'] = result;
+    if (out) { out.textContent = result; out.classList.add('show'); }
+  }
+}
+
 async function cdRepurpose2() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!text) { toast('Paste some content first'); return; }
