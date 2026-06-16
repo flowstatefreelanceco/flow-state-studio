@@ -5811,7 +5811,7 @@ function cdSave(){
   }
   S.cdId=null;
   persist();closeModal('cardDetailModal');
-  renderKanban();renderCalendar();
+  renderKanban();renderCalendar();renderBucketInsights();
   // Schedule Brevo reminders if toggled on
   if(shouldSchedule && _currentUser){
     var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
