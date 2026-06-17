@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brains That Build — A Networking Event for Neurodivergent Entrepreneurs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5EFE3;
+    --paper:#FBF8F2;
+    --brown:#4d1e15;
+    --brown-light:#6b2a1c;
+    --teal:#008484;
+    --teal-light:#e3f3f3;
+    --coral:#E8714F;
+    --coral-light:#fce8e1;
+    --sage:#A8C0A0;
+    --sage-light:#eaf1e7;
+    --border:#E0D5C0;
+    --fh:'Caveat',cursive;
+    --fb:'Jost',system-ui,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--fb);
+    background:var(--cream);
+    color:var(--brown);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--coral-light)}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+
+  /* ===== NAV ===== */
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 28px;
+    max-width:1100px;margin:0 auto;
+  }
+  .nav-mark{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--brown)}
+  .nav-cta{
+    font-family:var(--fb);font-size:13.5px;font-weight:600;
+    background:var(--brown);color:var(--cream);
+    padding:10px 20px;border-radius:100px;
+    text-decoration:none;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(77,30,21,.25)}
+
+  /* ===== HERO ===== */
+  .hero{
+    padding:48px 0 64px;
+    position:relative;
+  }
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--teal);
+    background:var(--teal-light);
+    padding:7px 16px;border-radius:100px;
+    margin-bottom:26px;
+  }
+  .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--coral)}
+  .hero h1{
+    font-family:var(--fh);
+    font-weight:700;
+    font-size:clamp(48px,7.5vw,86px);
+    line-height:0.98;
+    color:var(--brown);
+    margin-bottom:8px;
+    letter-spacing:-.01em;
+  }
+  .hero h1 .accent{color:var(--coral)}
+  .hero-sub{
+    font-size:clamp(17px,2.2vw,21px);
+    color:var(--brown-light);
+    max-width:620px;
+    margin-top:20px;
+    line-height:1.55;
+    font-weight:400;
+  }
+  .hero-sub strong{color:var(--brown);font-weight:600}
+
+  .hero-meta-row{
+    display:flex;flex-wrap:wrap;gap:14px;
+    margin-top:34px;
+  }
+  .meta-chip{
+    display:flex;align-items:center;gap:9px;
+    background:var(--paper);
+    border:1.5px solid var(--border);
+    padding:11px 18px;
+    border-radius:12px;
+    font-size:14px;font-weight:500;
+    color:var(--brown);
+  }
+  .meta-chip .ico{font-size:16px}
+
+  .hero-cta-row{margin-top:38px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .btn-primary{
+    font-family:var(--fb);font-size:16px;font-weight:600;
+    background:var(--coral);color:white;
+    padding:17px 34px;border-radius:100px;
+    text-decoration:none;display:inline-block;
+    box-shadow:0 8px 24px rgba(232,113,79,.35);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(232,113,79,.45)}
+  .hero-cta-note{font-size:13.5px;color:var(--brown-light);opacity:.85}
+
+  /* ===== HOSTS STRIP ===== */
+  .hosts-strip{
+    background:var(--paper);
+    border-top:1.5px solid var(--border);
+    border-bottom:1.5px solid var(--border);
+    padding:36px 0;
+  }
+  .hosts-inner{
+    display:flex;align-items:center;gap:40px;flex-wrap:wrap;
+  }
+  .host-card{display:flex;align-items:center;gap:14px}
+  .host-avatar{
+    width:54px;height:54px;border-radius:50%;
+    background:var(--teal);color:white;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--fh);font-size:22px;font-weight:600;
+    flex-shrink:0;
+  }
+  .host-avatar.coral{background:var(--coral)}
+  .host-name{font-weight:600;font-size:15.5px;color:var(--brown)}
+  .host-role{font-size:13px;color:var(--brown-light);opacity:.8}
+  .hosts-plus{
+    font-size:13.5px;color:var(--teal);font-weight:600;
+    border-left:1.5px solid var(--border);
+    padding-left:32px;
+  }
+
+  /* ===== WHY THIS ROOM (mirror section) ===== */
+  .section{padding:80px 0}
+  .section-label{
+    font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--coral);margin-bottom:16px;
+  }
+  .section h2{
+    font-family:var(--fh);font-weight:700;
+    font-size:clamp(32px,4.5vw,48px);
+    color:var(--brown);
+    margin-bottom:28px;
+    line-height:1.1;
+  }
+  .mirror-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;
+    margin-top:36px;
+  }
+  .mirror-card{
+    background:var(--paper);
+    border:1.5px solid var(--border);
+    border-radius:16px;
+    padding:26px 28px;
+    font-size:16px;
+    line-height:1.6;
+    color:var(--brown-light);
+  }
+  .mirror-card.full{grid-column:1/-1}
+  .mirror-card strong{color:var(--brown);font-weight:600}
+
+  /* ===== THE AGENDA (signature timeline) ===== */
+  .agenda-section{
+    background:var(--brown);
+    color:var(--cream);
+    padding:88px 0;
+    border-radius:32px;
+    margin:0 20px;
+  }
+  .agenda-section .wrap{max-width:1060px}
+  .agenda-section .section-label{color:var(--coral)}
+  .agenda-section h2{color:var(--cream)}
+  .agenda-sub{
+    color:#D9C9B8;font-size:16.5px;max-width:560px;margin-bottom:48px;line-height:1.6;
+  }
+  .agenda-list{position:relative}
+  .agenda-list::before{
+    content:'';position:absolute;left:23px;top:8px;bottom:8px;width:1.5px;
+    background:rgba(245,239,227,.18);
+  }
+  .agenda-item{
+    display:flex;gap:28px;
+    padding-bottom:38px;position:relative;
+  }
+  .agenda-item:last-child{padding-bottom:0}
+  .agenda-time{
+    flex-shrink:0;width:48px;
+    font-family:var(--fh);font-size:15px;font-weight:600;
+    color:var(--coral);
+    padding-top:2px;
+  }
+  .agenda-dot{
+    flex-shrink:0;width:14px;height:14px;border-radius:50%;
+    background:var(--coral);
+    margin-top:5px;
+    box-shadow:0 0 0 5px var(--brown);
+    position:relative;z-index:2;
+  }
+  .agenda-body h3{
+    font-size:19px;font-weight:600;margin-bottom:6px;color:var(--cream);
+  }
+  .agenda-body p{
+    font-size:15px;color:#D9C9B8;line-height:1.55;max-width:480px;
+  }
+  .agenda-badge{
+    display:inline-block;font-size:11.5px;font-weight:600;
+    background:rgba(232,113,79,.18);color:var(--coral);
+    padding:3px 11px;border-radius:100px;margin-bottom:8px;letter-spacing:.04em;
+  }
+
+  /* ===== WHO'S IN THE ROOM ===== */
+  .room-section{padding:80px 0;text-align:center}
+  .room-section h2{
+    font-family:var(--fh);font-weight:700;font-size:clamp(32px,4.5vw,46px);
+    color:var(--brown);margin-bottom:14px;
+  }
+  .room-sub{font-size:16px;color:var(--brown-light);max-width:540px;margin:0 auto 44px}
+  .room-avatars{
+    display:flex;justify-content:center;align-items:center;gap:-10px;
+    margin-bottom:36px;
+  }
+  .avatar-stack{display:flex}
+  .stack-avatar{
+    width:62px;height:62px;border-radius:50%;
+    border:3px solid var(--cream);
+    margin-left:-14px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--fh);font-size:22px;font-weight:600;color:white;
+  }
+  .stack-avatar:first-child{margin-left:0}
+  .room-note{
+    font-size:14px;color:var(--brown-light);
+    background:var(--sage-light);
+    display:inline-block;padding:10px 22px;border-radius:100px;
+    border:1px solid var(--sage);
+  }
+
+  /* ===== FINAL CTA ===== */
+  .final-cta{
+    padding:90px 0 100px;
+    text-align:center;
+  }
+  .final-cta h2{
+    font-family:var(--fh);font-weight:700;
+    font-size:clamp(36px,5.5vw,58px);
+    color:var(--brown);margin-bottom:18px;line-height:1.05;
+  }
+  .final-cta p{
+    font-size:17px;color:var(--brown-light);
+    max-width:480px;margin:0 auto 38px;line-height:1.6;
+  }
+  .final-meta{
+    display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:34px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer{
+    border-top:1.5px solid var(--border);
+    padding:36px 0;
+    text-align:center;
+    font-size:13.5px;color:var(--brown-light);opacity:.75;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:760px){
+    .nav{padding:18px 20px}
+    .wrap{padding:0 20px}
+    .hero{padding:32px 0 48px}
+    .hero-cta-row{flex-direction:column;align-items:flex-start}
+    .btn-primary{width:100%;text-align:center}
+    .mirror-grid{grid-template-columns:1fr}
+    .hosts-inner{gap:24px}
+    .hosts-plus{border-left:none;padding-left:0;border-top:1.5px solid var(--border);padding-top:20px;width:100%}
+    .agenda-section{margin:0 12px;border-radius:22px;padding:56px 0}
+    .agenda-item{gap:18px}
+    .agenda-time{width:40px;font-size:13px}
+    .section{padding:56px 0}
+    .room-section{padding:56px 0}
+    .final-cta{padding:64px 0 72px}
+  }
+
+  /* Reduced motion */
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+
+  /* Focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2.5px solid var(--teal);outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-mark">✦ Flow State Studio</div>
+    <a href="https://us06web.zoom.us/meeting/register/vEVV79FjQRySFOJQzgLvgg#/registration" class="nav-cta">Save my seat</a>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-eyebrow"><span class="dot"></span> A live networking event, hosted on Zoom</div>
+      <h1>Brains That<br>Build<span class="accent">.</span></h1>
+      <p class="hero-sub">A room built for neurodivergent entrepreneurs to <strong>show up as you actually are</strong> — share what you do, how your brain runs your business, where you're stuck, and who might be able to help.</p>
+
+      <div class="hero-meta-row">
+        <div class="meta-chip"><span class="ico">📅</span> Wednesday, July 22nd</div>
+        <div class="meta-chip"><span class="ico">🕐</span> 10am PST · 12pm CST · 1pm EST</div>
+        <div class="meta-chip"><span class="ico">💻</span> Live on Zoom, one hour</div>
+      </div>
+
+      <div class="hero-cta-row">
+        <a href="https://us06web.zoom.us/meeting/register/vEVV79FjQRySFOJQzgLvgg#/registration" class="btn-primary">Save my seat →</a>
+        <span class="hero-cta-note">Free to attend. Spots are limited to keep the room real.</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hosts-strip">
+    <div class="wrap hosts-inner">
+      <div class="host-card">
+        <div class="host-avatar">JP</div>
+        <div>
+          <div class="host-name">Jess Palmer</div>
+          <div class="host-role">Founder, Flow State Studio</div>
+        </div>
+      </div>
+      <div class="host-card">
+        <div class="host-avatar coral">S</div>
+        <div>
+          <div class="host-name">Steph</div>
+          <div class="host-role">ND Registered Dietitian</div>
+        </div>
+      </div>
+      <div class="hosts-plus">Hosted by two ND business owners who built this because they needed it too</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-label">Why this room exists</div>
+      <h2>You've masked your way<br>through enough rooms.</h2>
+      <div class="mirror-grid">
+        <div class="mirror-card">
+          You've sat through networking events that wanted the polished version. The elevator pitch. The neat little box.
+        </div>
+        <div class="mirror-card">
+          This isn't that. This is a room for <strong>how your brain actually builds your business</strong> — the chaos, the bursts, the systems that work because they're yours.
+        </div>
+        <div class="mirror-card full">
+          Bring the thing you're proud of. Bring the thing you're stuck on. Bring the idea that doesn't have a name yet. <strong>Grow your community, find people to barter and trade with, explore real collaborations</strong> — with people who already get it.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="agenda-section">
+    <div class="wrap">
+      <div class="section-label">The hour, mapped out</div>
+      <h2>Exactly what to expect.</h2>
+      <p class="agenda-sub">No surprises, no cold calls. Know the shape of the room before you walk in.</p>
+
+      <div class="agenda-list">
+        <div class="agenda-item">
+          <div class="agenda-time">10:00</div>
+          <div class="agenda-dot"></div>
+          <div class="agenda-body">
+            <span class="agenda-badge">As you arrive</span>
+            <h3>Drop your bio in the chat</h3>
+            <p>Introduce yourself however feels right. Name, what you do, what brought you here. No pressure to perform it.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">10:05</div>
+          <div class="agenda-dot"></div>
+          <div class="agenda-body">
+            <span class="agenda-badge">Opening</span>
+            <h3>Steph's story</h3>
+            <p>How an ND brain built a registered dietitian practice that actually works for her.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">10:15</div>
+          <div class="agenda-dot"></div>
+          <div class="agenda-body">
+            <span class="agenda-badge">Opening</span>
+            <h3>Jess's story</h3>
+            <p>Why Flow State Studio exists, and what it took to stop apologizing for how her brain works.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">10:25</div>
+          <div class="agenda-dot"></div>
+          <div class="agenda-body">
+            <span class="agenda-badge">Open floor — optional</span>
+            <h3>3 minutes, if you want them</h3>
+            <p>Anyone who wants to share gets the floor. Who you are, what you do, where you're struggling. Totally optional — plenty of people just listen, and that's a full way to participate.</p>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">10:55</div>
+          <div class="agenda-dot"></div>
+          <div class="agenda-body">
+            <span class="agenda-badge">Before we go</span>
+            <h3>Who was in the room</h3>
+            <p>Everyone who signs up gets a follow-up sheet with names, handles, and bios from the chat — so the connections don't end when the call does.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="room-section">
+    <div class="wrap">
+      <h2>This room is for you if you're —</h2>
+      <p class="room-sub">a neurodivergent entrepreneur, coach, creative, or service provider who has ever felt like your brain needed a different kind of room to build in.</p>
+      <div class="room-avatars">
+        <div class="avatar-stack">
+          <div class="stack-avatar" style="background:var(--teal)">✦</div>
+          <div class="stack-avatar" style="background:var(--coral)">✦</div>
+          <div class="stack-avatar" style="background:var(--sage)">✦</div>
+          <div class="stack-avatar" style="background:var(--brown)">✦</div>
+        </div>
+      </div>
+      <div class="room-note">Your seat is one of the ✦ above. We just don't know your name yet.</div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="wrap">
+      <h2>The room is forming.<br>Come build in it.</h2>
+      <p>One hour. One Zoom link. A room full of brains that build differently — and build anyway.</p>
+      <a href="https://us06web.zoom.us/meeting/register/vEVV79FjQRySFOJQzgLvgg#/registration" class="btn-primary">Save my seat →</a>
+      <div class="final-meta">
+        <div class="meta-chip"><span class="ico">📅</span> Wed, July 22nd</div>
+        <div class="meta-chip"><span class="ico">🕐</span> 10am PST / 1pm EST</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Brains That Build · Hosted by Jess Palmer (Flow State Studio) and Steph · Built for the way your brain works.
+  </footer>
+
+</body>
+</html>

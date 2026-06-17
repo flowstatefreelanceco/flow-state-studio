@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/brains-that-build", "destination": "/brains-that-build.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
