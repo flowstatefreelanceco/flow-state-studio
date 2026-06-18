@@ -232,27 +232,34 @@
   }
 
   /* ===== FEATURED SPEAKERS ===== */
-  .speakers-section{padding:80px 0;text-align:center}
+  .speakers-section{
+    padding:80px 0;text-align:center;
+    background:var(--teal);
+    margin:0 0 0 0;
+  }
+  .speakers-section .section-label{color:rgba(255,255,255,.7)}
+  .speakers-section h2{color:white}
+  .speakers-section p{color:rgba(255,255,255,.8)}
   .speakers-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
     margin-top:40px;text-align:left;
   }
   .speaker-card{
-    background:var(--paper);
-    border:1.5px solid var(--border);
+    background:white;
+    border:none;
     border-radius:16px;
     padding:30px 26px;
   }
   .speaker-avatar{
     width:56px;height:56px;border-radius:50%;
-    background:var(--blue);color:var(--brown);
+    background:var(--teal-light);color:var(--teal);
     display:flex;align-items:center;justify-content:center;
     font-size:24px;margin-bottom:16px;
   }
   .speaker-role{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
   .speaker-card h3{font-size:18px;font-weight:600;color:var(--brown);margin-bottom:8px}
   .speaker-card p{font-size:14px;color:var(--brown-light);line-height:1.55}
-  .speakers-note{font-size:14px;color:var(--brown-light);margin-top:28px;font-style:italic}
+  .speakers-note{font-size:14px;color:rgba(255,255,255,.65);margin-top:28px;font-style:italic}
 
   /* ===== WHO'S IN THE ROOM ===== */
   .room-section{padding:80px 0;text-align:center}
@@ -283,15 +290,19 @@
   .final-cta{
     padding:90px 0 100px;
     text-align:center;
+    background:var(--brown);
   }
   .final-cta h2{
     font-family:var(--fh);font-weight:700;
     font-size:clamp(36px,5.5vw,58px);
-    color:var(--brown);margin-bottom:18px;line-height:1.05;
+    color:var(--cream);margin-bottom:18px;line-height:1.05;
   }
   .final-cta p{
-    font-size:17px;color:var(--brown-light);
+    font-size:17px;color:rgba(245,239,227,.75);
     max-width:480px;margin:0 auto 38px;line-height:1.6;
+  }
+  .final-cta .meta-chip{
+    background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);color:var(--cream);
   }
   .final-meta{
     display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:34px;
@@ -299,10 +310,11 @@
 
   /* ===== FOOTER ===== */
   .footer{
-    border-top:1.5px solid var(--border);
-    padding:36px 0;
+    background:var(--brown);
+    border-top:1px solid rgba(255,255,255,.1);
+    padding:28px 0;
     text-align:center;
-    font-size:13.5px;color:var(--brown-light);opacity:.75;
+    font-size:13.5px;color:rgba(245,239,227,.5);
   }
 
   /* ===== RESPONSIVE ===== */
@@ -318,7 +330,7 @@
     .agenda-section{padding:48px 0}
     .agenda-item{gap:18px}
     .agenda-time{width:40px;font-size:13px}
-    .speakers-grid{grid-template-columns:1fr}
+    .speakers-grid{grid-template-columns:1fr 1fr}
     .section{padding:56px 0}
     .room-section{padding:56px 0}
     .final-cta{padding:64px 0 72px}
@@ -343,7 +355,7 @@
   <header class="hero">
     <div class="wrap">
       <div class="hero-eyebrow"><span class="dot"></span> A live networking event</div>
-      <h1>Brains That Build<span class="accent">.</span></h1>
+      <h1>Brains That <span style="position:relative;display:inline-block">Build<span class="accent">.</span><span style="position:absolute;bottom:-4px;left:0;right:0;height:5px;background:var(--rust);border-radius:3px;opacity:.6"></span></span></h1>
       <p class="hero-sub">A room built for neurodivergent entrepreneurs to <strong>show up as you actually are</strong>. Share what you do, how your brain runs your business, where you're stuck, and who might be able to help.</p>
 
       <div class="hero-meta-row">
@@ -394,14 +406,14 @@
         <div class="host-avatar">JP</div>
         <div>
           <div class="host-name">Jess Palmer</div>
-          <div class="host-role">Founder, Flow State Studio &amp; VA/OBM</div>
+          <div class="host-role">Founder, Flow State Studio · VA/OBM &amp; Freelance Strategist</div>
         </div>
       </div>
       <div class="host-card">
         <div class="host-avatar rust">SK</div>
         <div>
           <div class="host-name">Stephanie Kolsrud, RD</div>
-          <div class="host-role">Registered Dietitian</div>
+          <div class="host-role">Registered Dietitian &amp; Neurodivergent Eating Expert</div>
         </div>
       </div>
       <div class="hosts-plus">Hosted by two ND business owners who built their businesses because they had to</div>
@@ -434,7 +446,7 @@
 
       <div class="agenda-list">
         <div class="agenda-item">
-          <div class="agenda-time">10:00</div>
+          <div class="agenda-time">1:00</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
             <span class="agenda-badge">As you arrive</span>
@@ -443,7 +455,7 @@
           </div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">10:05</div>
+          <div class="agenda-time">1:05</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
             <span class="agenda-badge">Opening</span>
@@ -452,43 +464,43 @@
           </div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">10:12</div>
+          <div class="agenda-time">1:12</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
             <span class="agenda-badge">Journey</span>
             <h3>Stephanie's journey</h3>
-            <p>How an ND brain built a registered dietitian practice that actually works for her.</p>
+            <p>From years of dieting and a binge-restrict cycle she didn't have a name for, to discovering that her neurodivergence was the missing piece nobody was talking about. How she stopped fighting her brain, built a practice as a Registered Dietitian and Intuitive Eating Coach serving neurodivergent folks, and created the Eat Like YOU method around working with her brain instead of against it.</p>
           </div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">10:22</div>
+          <div class="agenda-time">1:22</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
             <span class="agenda-badge">Journey</span>
             <h3>Jess's journey</h3>
-            <p>Why Flow State Studio exists and what it took to stop apologizing for how her brain works.</p>
+            <p>From burning out in jobs that were never built for her brain, to building a VA and OBM practice that let her work on her own terms, to realizing her neurodivergent clients needed systems that actually fit how they think. How she went from supporting other people's businesses to building Flow State Studio, a content workspace built for ND entrepreneurs, alongside her freelance strategy work.</p>
           </div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">10:32</div>
+          <div class="agenda-time">1:32</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
             <span class="agenda-badge">Featured speakers</span>
             <h3>Hear from ND business owners</h3>
-            <p>A few pre-selected speakers share quick stories about running their businesses on an ND brain, a photographer, a brand designer, a strategist, and more.</p>
+            <p>A few pre-selected speakers share quick stories about running their businesses on an ND brain: a photographer, brand designer, life coach, and social media brand manager.</p>
           </div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">10:50</div>
+          <div class="agenda-time">1:50</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
-            <span class="agenda-badge">Open floor, optional</span>
-            <h3>3 minutes, if you want them</h3>
-            <p>Anyone who wants to share gets the floor. Totally optional, plenty of people just listen, and that's a full way to participate.</p>
+            <span class="agenda-badge">If time permits</span>
+            <h3>Open floor</h3>
+            <p>If time allows, we'll open the floor for anyone who wants to share. No pressure at all.</p>
           </div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">10:58</div>
+          <div class="agenda-time">1:58</div>
           <div class="agenda-dot"></div>
           <div class="agenda-body">
             <span class="agenda-badge">Before we go</span>
@@ -502,9 +514,10 @@
 
   <section class="speakers-section">
     <div class="wrap">
-      <div class="section-label center" style="text-align:center">Featured speakers</div>
-      <h2 style="font-family:var(--fh);font-weight:700;font-size:clamp(32px,4.5vw,46px);color:var(--brown);margin-bottom:8px">Built by ND brains, just like yours.</h2>
-      <p style="font-size:16px;color:var(--brown-light);max-width:520px;margin:0 auto">A few pre-selected guests will share short, honest stories about running their business on an ND brain.</p>
+      <div class="section-label center">Featured speakers</div>
+      <div style="display:inline-block;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);border-radius:100px;padding:10px 24px;font-family:var(--fh);font-size:20px;font-weight:600;color:white;margin-bottom:20px;letter-spacing:.01em">Built by ND brains, just like yours.</div>
+      <h2 style="font-family:var(--fh);font-weight:700;font-size:clamp(32px,4.5vw,46px);color:white;margin-bottom:8px">All speakers run their businesses<br>on an ND brain.</h2>
+      <p style="font-size:16px;color:rgba(255,255,255,.75);max-width:520px;margin:0 auto">A few pre-selected guests share short, honest stories about what that actually looks like.</p>
 
       <div class="speakers-grid">
         <div class="speaker-card">
@@ -520,13 +533,19 @@
           <p>How a different kind of brain shapes brands that actually feel like the people behind them.</p>
         </div>
         <div class="speaker-card">
-          <div class="speaker-avatar">📈</div>
+          <div class="speaker-avatar">🌱</div>
           <div class="speaker-role">Speaker</div>
-          <h3>Strategist</h3>
-          <p>Building business strategy that works with an ND brain instead of constantly fighting it.</p>
+          <h3>Life Coach</h3>
+          <p>Coaching from lived ND experience and what it means to build a practice that works for your brain.</p>
+        </div>
+        <div class="speaker-card">
+          <div class="speaker-avatar">📱</div>
+          <div class="speaker-role">Speaker</div>
+          <h3>Social Media Brand Manager</h3>
+          <p>Running a social media business with an ND brain and turning that into a creative advantage.</p>
         </div>
       </div>
-      <p class="speakers-note">More speakers to be announced soon.</p>
+
     </div>
   </section>
 
