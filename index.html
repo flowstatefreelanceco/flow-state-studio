@@ -181,9 +181,12 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
 .fl-lbl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:7px;display:block}
-.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:16px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
+.fi{width:100%;background:var(--p);border:1px solid var(--b);border-radius:var(--rsm);padding:8px 11px;font-family:var(--fb);font-size:14px;color:var(--e);outline:none;-webkit-appearance:none;transition:border-color .15s}
 .fi:focus{border-color:var(--r);background:var(--w)}
-textarea.fi{resize:vertical;line-height:1.65}
+.setting-sec .fi{padding:7px 10px !important;font-size:13.5px !important}
+.setting-sec textarea.fi{min-height:52px !important}
+.cd2-left .fi{padding:7px 10px !important;font-size:13px !important}
+.cd2-left textarea.fi{font-size:13px !important}
 select.fi{cursor:pointer}
 .chip-g{display:flex;flex-wrap:wrap;gap:4px}
 .chip{padding:5px 11px;border-radius:100px;border:1px solid var(--b);background:var(--p);font-size:11.5px;color:var(--t);cursor:pointer;transition:all .15s;font-family:var(--fb);user-select:none}
@@ -475,6 +478,16 @@ select.fi{cursor:pointer}
 
 /* PICK UP WHERE YOU LEFT OFF */
 .pickup-wrap{margin-bottom:24px}
+.idea-list-sort{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:var(--t)}
+.idea-list-sort select{padding:5px 10px;border:1px solid var(--bl);border-radius:var(--rsm);font-family:var(--fb);font-size:12px;background:var(--w);color:var(--e);cursor:pointer}
+.idea-list-row{display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);margin-bottom:7px;cursor:pointer;transition:border-color .12s,box-shadow .12s}
+.idea-list-row:hover{border-color:var(--r);box-shadow:0 2px 8px var(--sh)}
+.idea-list-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.idea-list-title{flex:1;font-size:13.5px;font-weight:600;color:var(--e);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.idea-list-meta{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.idea-list-badge{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.idea-list-date{font-size:11.5px;color:var(--tl);min-width:64px;text-align:right}
+.idea-list-empty{text-align:center;padding:60px 20px;color:var(--tl);font-size:13.5px}
 .pickup-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:12px}
 .pickup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .pickup-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:18px 20px;box-shadow:0 1px 3px var(--sh);display:flex;flex-direction:column}
@@ -574,6 +587,7 @@ select.fi{cursor:pointer}
 .mob-overlay{display:none;position:fixed;inset:0;background:rgba(42,26,14,.55);z-index:398}
 
 @media(max-width:768px){
+  .fi{font-size:16px !important} /* prevent iOS auto-zoom */
 
   /* NAV */
   .mob-nav-btn{display:flex}
@@ -1030,7 +1044,7 @@ select.fi{cursor:pointer}
 .wn-got-it:hover{background:var(--rh)}
 
 /* WEEKLY FOCUS */
-.wf-wrap{background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
+.wf-wrap{background:linear-gradient(135deg,var(--tealp),#e8f3f3);border:1.5px solid #b8dcdc;border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
 .wf-title{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--e);line-height:1.2}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
@@ -1959,7 +1973,10 @@ select.fi{cursor:pointer}
   <div id="view-ideas" class="view">
     <div class="main-hdr">
       <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
-      <div class="hdr-acts"><button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button></div>
+      <div class="hdr-acts">
+        <button class="btn btn-g" id="plannerViewToggle" onclick="togglePlannerView()" style="font-size:12.5px">☰ List View</button>
+        <button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button>
+      </div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch">
       <!-- CONTENT INSIGHTS STRIP -->
@@ -1977,6 +1994,7 @@ select.fi{cursor:pointer}
         <div id="bucketInsightsBody" style="max-height:400px;overflow:hidden;transition:max-height .3s ease"></div>
       </div>
       <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
+      <div id="ideaListView" style="display:none;flex-shrink:0"></div>
     </div>
   </div>
 
@@ -4207,7 +4225,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
@@ -4266,7 +4284,22 @@ function navigate(v){
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){S.gs.libVisited=true;persist();const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');}
   if(v==='dashboard'){renderDashboard();renderWeeklyFocus();}
   if(v==='calendar')renderCalendar();
-  if(v==='ideas'){renderKanban();renderBucketInsights();}
+  if(v==='ideas'){
+    renderKanban();renderBucketInsights();
+    var kanban=document.getElementById('ideaKanban');
+    var list=document.getElementById('ideaListView');
+    var btn=document.getElementById('plannerViewToggle');
+    if(S.plannerView==='list'){
+      if(kanban)kanban.style.display='none';
+      if(list)list.style.display='block';
+      if(btn)btn.textContent='▦ Board View';
+      renderIdeaListView();
+    } else {
+      if(kanban)kanban.style.display='';
+      if(list)list.style.display='none';
+      if(btn)btn.textContent='☰ List View';
+    }
+  }
   if(v==='tasks')renderTaskKanban();
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='swipefile')renderSwipeFile();
@@ -4437,7 +4470,7 @@ function renderPickUp(){
   el.innerHTML=`<div class="pickup-wrap">
     <div class="pickup-label">Pick up where you left off</div>
     <div class="pickup-grid">
-      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid var(--teal)">
+      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid var(--teal);background:linear-gradient(135deg,var(--tealp),var(--w) 60%)">
         <div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
         <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
@@ -4446,7 +4479,7 @@ function renderPickUp(){
           <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--teal)"><div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
-      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid var(--r)">
+      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid var(--r);background:linear-gradient(135deg,var(--rp),var(--w) 60%)">
         <div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div>
         <div class="pickup-title">${esc(lastIdea.title)}</div>
         <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
@@ -4497,9 +4530,9 @@ function renderTasksDue(){
     '</div>';
   }
 
-  var html='<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh);margin-bottom:22px">';
-  html+='<div style="padding:12px 16px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between">';
-  html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t)">📅 On Your Plate</div>';
+  var html='<div style="background:var(--w);border:1.5px solid #b9d2f5;border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh);margin-bottom:22px">';
+  html+='<div style="padding:12px 16px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;background:var(--blue)">';
+  html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--e)">📅 On Your Plate</div>';
   html+='</div>';
 
   if(hasToday){
@@ -4518,6 +4551,68 @@ function renderTasksDue(){
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
 const IDEA_COLS=[{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+function togglePlannerView(){
+  S.plannerView=(S.plannerView==='list')?'kanban':'list';
+  var kanban=document.getElementById('ideaKanban');
+  var list=document.getElementById('ideaListView');
+  var btn=document.getElementById('plannerViewToggle');
+  if(S.plannerView==='list'){
+    if(kanban)kanban.style.display='none';
+    if(list)list.style.display='block';
+    if(btn)btn.textContent='▦ Board View';
+    renderIdeaListView();
+  } else {
+    if(kanban)kanban.style.display='';
+    if(list)list.style.display='none';
+    if(btn)btn.textContent='☰ List View';
+  }
+  persist();
+}
+function renderIdeaListView(){
+  var el=document.getElementById('ideaListView');
+  if(!el)return;
+  var sortBy=S.plannerSort||'date';
+  var statusColors={idea:'var(--tl)',inprogress:'var(--r)',ready:'var(--teal)',published:'#1A521A'};
+  var statusBg={idea:'var(--bl)',inprogress:'var(--rp)',ready:'var(--tealp)',published:'#D0EAD0'};
+  var statusLabel={idea:'Idea',inprogress:'In Progress',ready:'Ready',published:'Published'};
+  var items=S.ideas.slice();
+  if(sortBy==='date'){
+    items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
+  } else if(sortBy==='dateDesc'){
+    items.sort(function(a,b){return (b.date||'0000').localeCompare(a.date||'0000');});
+  } else if(sortBy==='title'){
+    items.sort(function(a,b){return (a.title||'').localeCompare(b.title||'');});
+  } else if(sortBy==='status'){
+    var order={idea:0,inprogress:1,ready:2,published:3};
+    items.sort(function(a,b){return (order[a.status]||0)-(order[b.status]||0);});
+  }
+  var html='<div class="idea-list-sort">Sort by <select onchange="S.plannerSort=this.value;persist();renderIdeaListView()">'
+    +'<option value="date"'+(sortBy==='date'?' selected':'')+'>Date (earliest first)</option>'
+    +'<option value="dateDesc"'+(sortBy==='dateDesc'?' selected':'')+'>Date (latest first)</option>'
+    +'<option value="title"'+(sortBy==='title'?' selected':'')+'>Title (A-Z)</option>'
+    +'<option value="status"'+(sortBy==='status'?' selected':'')+'>Status</option>'
+    +'</select></div>';
+  if(!items.length){
+    html+='<div class="idea-list-empty">No content cards yet. Click + Add Content to get started.</div>';
+  } else {
+    items.forEach(function(idea){
+      var dt='';
+      if(idea.date){try{dt=new Date(idea.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){}}
+      var color=statusColors[idea.status]||'var(--tl)';
+      var bg=statusBg[idea.status]||'var(--bl)';
+      var label=statusLabel[idea.status]||cap(idea.status||'');
+      html+='<div class="idea-list-row" onclick="cdOpen(\''+idea.id+'\')">'
+        +'<span class="idea-list-dot" style="background:'+color+'"></span>'
+        +'<span class="idea-list-title">'+esc(idea.title||'Untitled')+'</span>'
+        +'<div class="idea-list-meta">'
+        +(idea.platform?'<span style="font-size:11px;color:var(--tl)">'+cap(idea.platform)+'</span>':'')
+        +'<span class="idea-list-badge" style="background:'+bg+';color:'+color+'">'+label+'</span>'
+        +'<span class="idea-list-date">'+(dt||'No date')+'</span>'
+        +'</div></div>';
+    });
+  }
+  el.innerHTML=html;
+}
 function renderKanban(){
   const el=document.getElementById('ideaKanban');
   el.innerHTML=IDEA_COLS.map(col=>{
@@ -4533,12 +4628,14 @@ function renderKanban(){
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
+  if(S.plannerView==='list')renderIdeaListView();
 }
 function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
 function deleteIdea(id){
   S.ideas=S.ideas.filter(i=>i.id!==id);
   S.calEntries=S.calEntries.filter(e=>e.id!=='cal_'+id&&e._ideaId!==id);
-  persist();renderKanban();renderCalendar();
+  if(S.lastCardId===id)S.lastCardId='';
+  persist();renderKanban();renderCalendar();renderDashboard();renderBucketInsights();
 }
 function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;persist();renderKanban();}}
 
@@ -5825,7 +5922,8 @@ function cdSave(){
 function cdDelete() {
   if (!confirm('Delete this card?')) return;
   S.ideas = S.ideas.filter(function(a) { return a.id !== S.cdId; });
-  persist(); closeModal('cardDetailModal'); renderKanban(); toast('Deleted');
+  if(S.lastCardId===S.cdId)S.lastCardId='';
+  persist(); closeModal('cardDetailModal'); renderKanban(); renderDashboard(); renderBucketInsights(); toast('Deleted');
 }
 
 var _cdTasks=[];
@@ -6969,7 +7067,8 @@ function calEntryDelete(id,fromIdea,fromTask){
     if(!confirm('Delete this content card? This also removes it from the planner.'))return;
     S.ideas=S.ideas.filter(function(i){return i.id!==realId;});
     S.calEntries=S.calEntries.filter(function(e){return e.id!=='cal_'+realId&&e._ideaId!==realId;});
-    persist();closeModal('calDayModal');renderCalendar();renderKanban();toast('Content card deleted');return;
+    if(S.lastCardId===realId)S.lastCardId='';
+    persist();closeModal('calDayModal');renderCalendar();renderKanban();renderDashboard();renderBucketInsights();toast('Content card deleted');return;
   }
   if(!confirm('Delete this entry?'))return;
   S.calEntries=S.calEntries.filter(function(e){return e.id!==id;});
@@ -7554,6 +7653,8 @@ function initFlowStateApp(savedData) {
   if (savedData && Object.keys(savedData).length > 0) {
     if (savedData.drafts) S.drafts = savedData.drafts;
     if (savedData.weeklyFocus) S.weeklyFocus = savedData.weeklyFocus;
+    if (savedData.plannerView) S.plannerView = savedData.plannerView;
+    if (savedData.plannerSort) S.plannerSort = savedData.plannerSort;
     if (savedData.calEntries) S.calEntries = savedData.calEntries;
     if (savedData.ideas) S.ideas = savedData.ideas;
     if (savedData.tasks) S.tasks = savedData.tasks;
