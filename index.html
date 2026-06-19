@@ -2002,10 +2002,14 @@ select.fi{cursor:pointer}
   <div id="view-tasks" class="view">
     <div class="main-hdr">
       <div><h1>Tasks</h1><div class="sub" id="taskSubDate"></div></div>
-      <div class="hdr-acts"><button class="btn btn-p" onclick="openTaskModal()">+ Add Task</button></div>
+      <div class="hdr-acts">
+        <button class="btn btn-g" id="taskViewToggle" onclick="toggleTaskView()" style="font-size:12.5px">☰ List View</button>
+        <button class="btn btn-p" onclick="openTaskModal()">+ Add Task</button>
+      </div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
       <div class="kanban kanban-3" id="taskKanban"></div>
+      <div id="taskListView" style="display:none;overflow-y:auto;flex:1"></div>
     </div>
   </div>
 
@@ -4225,7 +4229,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs
   };
@@ -4300,7 +4304,22 @@ function navigate(v){
       if(btn)btn.textContent='☰ List View';
     }
   }
-  if(v==='tasks')renderTaskKanban();
+  if(v==='tasks'){
+    renderTaskKanban();
+    var tkanban=document.getElementById('taskKanban');
+    var tlist=document.getElementById('taskListView');
+    var tbtn=document.getElementById('taskViewToggle');
+    if(S.taskView==='list'){
+      if(tkanban)tkanban.style.display='none';
+      if(tlist)tlist.style.display='block';
+      if(tbtn)tbtn.textContent='▦ Board View';
+      renderTaskListView();
+    } else {
+      if(tkanban)tkanban.style.display='';
+      if(tlist)tlist.style.display='none';
+      if(tbtn)tbtn.textContent='☰ List View';
+    }
+  }
   if(['hooks','ctas','stories','prompts'].includes(v))renderLib(v);
   if(v==='swipefile')renderSwipeFile();
   if(v==='drafts')renderDraftsGrid();
@@ -4641,6 +4660,74 @@ function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=s
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
 const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'var(--blue)',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+function toggleTaskView(){
+  S.taskView=(S.taskView==='list')?'kanban':'list';
+  var kanban=document.getElementById('taskKanban');
+  var list=document.getElementById('taskListView');
+  var btn=document.getElementById('taskViewToggle');
+  if(S.taskView==='list'){
+    if(kanban)kanban.style.display='none';
+    if(list)list.style.display='block';
+    if(btn)btn.textContent='▦ Board View';
+    renderTaskListView();
+  } else {
+    if(kanban)kanban.style.display='';
+    if(list)list.style.display='none';
+    if(btn)btn.textContent='☰ List View';
+  }
+  persist();
+}
+function renderTaskListView(){
+  var el=document.getElementById('taskListView');
+  if(!el)return;
+  var sortBy=S.taskSort||'date';
+  var statusColors={todo:'var(--blue)',inprogress:'var(--r)',done:'#1A521A'};
+  var statusBg={todo:'var(--bluep)',inprogress:'var(--rp)',done:'#D0EAD0'};
+  var statusLabel={todo:'To Do',inprogress:'In Progress',done:'Done'};
+  var items=S.tasks.slice();
+  if(sortBy==='date'){
+    items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
+  } else if(sortBy==='dateDesc'){
+    items.sort(function(a,b){return (b.date||'0000').localeCompare(a.date||'0000');});
+  } else if(sortBy==='title'){
+    items.sort(function(a,b){return (a.title||'').localeCompare(b.title||'');});
+  } else if(sortBy==='status'){
+    var order={todo:0,inprogress:1,done:2};
+    items.sort(function(a,b){return (order[a.status]||0)-(order[b.status]||0);});
+  } else if(sortBy==='energy'){
+    var eOrder={high:0,medium:1,low:2};
+    items.sort(function(a,b){return (eOrder[a.energy]??3)-(eOrder[b.energy]??3);});
+  }
+  var html='<div class="idea-list-sort">Sort by <select onchange="S.taskSort=this.value;persist();renderTaskListView()">'
+    +'<option value="date"'+(sortBy==='date'?' selected':'')+'>Date (earliest first)</option>'
+    +'<option value="dateDesc"'+(sortBy==='dateDesc'?' selected':'')+'>Date (latest first)</option>'
+    +'<option value="title"'+(sortBy==='title'?' selected':'')+'>Title (A-Z)</option>'
+    +'<option value="status"'+(sortBy==='status'?' selected':'')+'>Status</option>'
+    +'<option value="energy"'+(sortBy==='energy'?' selected':'')+'>Energy level</option>'
+    +'</select></div>';
+  if(!items.length){
+    html+='<div class="idea-list-empty">No tasks yet. Click + Add Task to get started.</div>';
+  } else {
+    items.forEach(function(t){
+      var dt='';
+      if(t.date){try{dt=new Date(t.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){}}
+      var color=statusColors[t.status]||'var(--tl)';
+      var bg=statusBg[t.status]||'var(--bl)';
+      var label=statusLabel[t.status]||cap(t.status||'');
+      var energyIcon=t.energy==='high'?'🔥':t.energy==='medium'?'⚡':t.energy==='low'?'🌿':'';
+      html+='<div class="idea-list-row" onclick="openTaskEditModal(\''+t.id+'\')">'
+        +'<span class="idea-list-dot" style="background:'+color+'"></span>'
+        +'<span class="idea-list-title">'+(t.starred?'★ ':'')+esc(t.title)+'</span>'
+        +'<div class="idea-list-meta">'
+        +(energyIcon?'<span style="font-size:13px">'+energyIcon+'</span>':'')
+        +(t.taskType?'<span style="font-size:11px;color:var(--tl)">'+cap(t.taskType)+'</span>':'')
+        +'<span class="idea-list-badge" style="background:'+bg+';color:'+color+'">'+label+'</span>'
+        +'<span class="idea-list-date">'+(dt||'No date')+'</span>'
+        +'</div></div>';
+    });
+  }
+  el.innerHTML=html;
+}
 function renderTaskKanban(){
   const el=document.getElementById('taskKanban');
   el.innerHTML=TASK_COLS.map(col=>{
@@ -4671,6 +4758,7 @@ function renderTaskKanban(){
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
+  if(S.taskView==='list')renderTaskListView();
 }
 function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
 function deleteTask(id){
@@ -7655,6 +7743,8 @@ function initFlowStateApp(savedData) {
     if (savedData.weeklyFocus) S.weeklyFocus = savedData.weeklyFocus;
     if (savedData.plannerView) S.plannerView = savedData.plannerView;
     if (savedData.plannerSort) S.plannerSort = savedData.plannerSort;
+    if (savedData.taskView) S.taskView = savedData.taskView;
+    if (savedData.taskSort) S.taskSort = savedData.taskSort;
     if (savedData.calEntries) S.calEntries = savedData.calEntries;
     if (savedData.ideas) S.ideas = savedData.ideas;
     if (savedData.tasks) S.tasks = savedData.tasks;
