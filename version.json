@@ -1,29 +1,12 @@
 {
-  "version": "3.3",
+  "version": "3.4",
+  "releasedAt": "2026-06-22",
   "changelog": [
     {
       "type": "new",
-      "date": "June 2026",
-      "title": "Content Buckets — track what's working",
-      "desc": "Tag any content card with a topic or offer (like '1:1 Coaching' or 'Freebie') and see a live breakdown in your Content Planner. At a glance you can tell which formats you're using most for each topic. Add your own buckets, tag as you go, and let the pattern show up on its own."
-    },
-    {
-      "type": "new",
-      "date": "June 2026",
-      "title": "What worked? note on every card",
-      "desc": "There's now an optional note field at the bottom of every content card. No pressure to fill it in — but if something performs well, it's a handy place to jot it before you forget."
-    },
-    {
-      "type": "improvement",
-      "date": "June 2026",
-      "title": "Content Planner has a new look",
-      "desc": "The Planner now has the Content by Bucket strip above your kanban so you can see your content patterns without leaving the view. Collapse it when you don't need it, expand it when you do."
-    },
-    {
-      "type": "fix",
-      "date": "June 2026",
-      "title": "A few things that needed sorting",
-      "desc": "The update popup now works properly for every account. The Learn More button on the login page now goes to the right place. Some mobile scroll fixes in the Planner so the view doesn't get cut off."
+      "date": "Jun 22, 2026",
+      "title": "Director Chat",
+      "desc": "A new open chat with your Creative Director, right under Writing Studio in the sidebar. Rework anything you're already creating in the Studio, write in a different voice for another offer or business, or just think out loud before you start. The conversation saves automatically and you can export it as a text file anytime."
     }
   ]
 }
