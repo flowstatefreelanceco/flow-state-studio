@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="3.5">
+<html lang="en" data-version="3.6">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -929,9 +929,11 @@ select.fi{cursor:pointer}
 .guide-index-card:hover{box-shadow:0 6px 24px var(--shm);transform:translateY(-2px)}
 .guide-index-card.rust{border-color:#E0BDAA;background:linear-gradient(135deg,var(--rp),#EDD5C8)}
 .guide-index-card.teal{border-color:var(--teal);background:linear-gradient(135deg,#E8F5F5,var(--tealp))}
+.guide-index-card.sage{border-color:#BFD4B2;background:linear-gradient(135deg,var(--sagep),#EAF1E4)}
 .gic-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;margin-bottom:10px}
 .gic-eyebrow.rust{color:var(--r)}
 .gic-eyebrow.teal{color:var(--teal)}
+.gic-eyebrow.sage{color:var(--sage)}
 .gic-icon{font-size:32px;margin-bottom:12px;display:block}
 .gic-title{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:8px;line-height:1.2}
 .gic-desc{font-size:13px;color:var(--el);line-height:1.7;margin-bottom:16px}
@@ -940,6 +942,7 @@ select.fi{cursor:pointer}
 .gic-cta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600}
 .gic-cta.rust{color:var(--r)}
 .gic-cta.teal{color:var(--teal)}
+.gic-cta.sage{color:var(--sage)}
 .gic-deco{position:absolute;right:-10px;bottom:-20px;font-family:var(--fh);font-size:100px;opacity:.07;line-height:1;pointer-events:none}
 
 /* guide detail page */
@@ -950,10 +953,12 @@ select.fi{cursor:pointer}
 .guide-detail-hero{border-radius:var(--rad);padding:32px 36px;margin-bottom:28px;position:relative;overflow:hidden}
 .guide-detail-hero.rust{background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA}
 .guide-detail-hero.teal{background:linear-gradient(135deg,#E8F5F5,var(--tealp));border:1.5px solid var(--teal)}
+.guide-detail-hero.sage{background:linear-gradient(135deg,var(--sagep),#EAF1E4);border:1.5px solid #BFD4B2}
 .guide-detail-hero-deco{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-family:var(--fh);font-size:80px;opacity:.1;line-height:1;pointer-events:none}
 .gdh-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;margin-bottom:8px}
 .gdh-eyebrow.rust{color:var(--r)}
 .gdh-eyebrow.teal{color:var(--teal)}
+.gdh-eyebrow.sage{color:var(--sage)}
 .gdh-title{font-family:var(--fh);font-size:28px;font-weight:700;color:var(--e);margin-bottom:10px;line-height:1.2}
 .gdh-desc{font-size:14px;color:var(--el);line-height:1.75;max-width:540px}
 
@@ -969,12 +974,14 @@ select.fi{cursor:pointer}
 .gd-card.teal{border-color:var(--tealp);background:linear-gradient(135deg,#eef8f8,var(--w))}
 .gd-card.gold{border-color:#E8D4A8;background:linear-gradient(135deg,var(--gp),var(--w))}
 .gd-card.purple{border-color:#D4C8E2;background:linear-gradient(135deg,#F4F0FA,var(--w))}
+.gd-card.sage{border-color:#BFD4B2;background:linear-gradient(135deg,var(--sagep),var(--w))}
 .gd-card-icon{font-size:22px;margin-bottom:10px;display:block}
 .gd-card-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:8px}
 .gd-card-eyebrow.rust{background:var(--rp);color:var(--r)}
 .gd-card-eyebrow.teal{background:var(--tealp);color:var(--teal)}
 .gd-card-eyebrow.gold{background:var(--gp);color:var(--g)}
 .gd-card-eyebrow.purple{background:#EDE4F5;color:#7A5C9C}
+.gd-card-eyebrow.sage{background:var(--sagep);color:var(--sage)}
 .gd-card-title{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.2}
 .gd-card-desc{font-size:13px;color:var(--t);line-height:1.7}
 
@@ -982,10 +989,12 @@ select.fi{cursor:pointer}
 .gd-callout{display:flex;align-items:flex-start;gap:14px;border-radius:var(--rad);padding:16px 18px;margin-bottom:12px;border:1.5px solid}
 .gd-callout.teal{background:var(--tealp);border-color:var(--teal)}
 .gd-callout.rust{background:var(--rp);border-color:#E0BDAA}
+.gd-callout.sage{background:var(--sagep);border-color:#BFD4B2}
 .gd-callout-icon{font-size:20px;flex-shrink:0;margin-top:1px}
 .gd-callout-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
 .gd-callout-eyebrow.teal{color:var(--teal)}
 .gd-callout-eyebrow.rust{color:var(--r)}
+.gd-callout-eyebrow.sage{color:var(--sage)}
 .gd-callout-text{font-size:13px;color:var(--el);line-height:1.65}
 
 /* tips list */
@@ -995,6 +1004,7 @@ select.fi{cursor:pointer}
 .gd-tip-icon.rust{background:var(--rp);color:var(--r)}
 .gd-tip-icon.teal{background:var(--tealp);color:var(--teal)}
 .gd-tip-icon.gold{background:var(--gp);color:var(--g)}
+.gd-tip-icon.sage{background:var(--sagep);color:var(--sage)}
 
 /* wave cycle */
 .gd-wave{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
@@ -1135,6 +1145,7 @@ select.fi{cursor:pointer}
 .gc-carousel-card.teal{background:linear-gradient(135deg,#eef8f8,var(--w));border-color:var(--tealp)}
 .gc-carousel-card.purple{background:linear-gradient(135deg,#F4F0FA,var(--w));border-color:#D4C8E2}
 .gc-carousel-card.gold{background:linear-gradient(135deg,var(--gp),var(--w));border-color:#D4A843}
+.gc-carousel-card.sage{background:linear-gradient(135deg,var(--sagep),var(--w));border-color:#BFD4B2}
 .gc-c-icon{font-size:24px;margin-bottom:8px;display:block}
 .gc-c-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e);margin-bottom:5px;line-height:1.2}
 .gc-c-desc{font-size:11.5px;color:var(--t);line-height:1.55;margin-bottom:10px}
@@ -1143,6 +1154,7 @@ select.fi{cursor:pointer}
 .gc-c-cta.teal{color:var(--teal)}
 .gc-c-cta.purple{color:#7A5C9C}
 .gc-c-cta.gold{color:var(--g)}
+.gc-c-cta.sage{color:var(--sage)}
 </style>
 </head>
 <body>
@@ -1265,6 +1277,14 @@ select.fi{cursor:pointer}
           <div>
             <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Prompt Library</div>
             <div style="font-size:13.5px;color:var(--t);line-height:1.7">Hundreds of ready-to-use hooks, CTAs, story prompts, and writing prompts built for service-based businesses. Filter by category, save your own favourites, and never stare at a blank page again.</div>
+          </div>
+        </div>
+
+        <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--sagep);border:1px solid #BFD4B2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📖</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Strategy Guides</div>
+            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Real playbooks built into the Studio, not generic help docs. Overwhelm resets, content rhythm frameworks, creative block reframes, and a gentle plan for coming back after a quiet stretch.</div>
           </div>
         </div>
 
@@ -1589,7 +1609,7 @@ select.fi{cursor:pointer}
         <div>
           <div class="pf-title" style="color:var(--r);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
           <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 ND Rescue Kit</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
@@ -1605,6 +1625,10 @@ select.fi{cursor:pointer}
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✏️ The Analog Way</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required. For the days you just want a blank page and a pencil.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🌱 The IG Resurrection Guide</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A gentle, practical plan for posting again after a ghosted or quiet account. Content and posting, engagement and the algorithm, SEO over hashtags, and why community matters more than reach.</div>
             </div>
           </div>
         </div>
@@ -1670,7 +1694,7 @@ select.fi{cursor:pointer}
           <li>Unlimited Notebooks + Brain Dump</li>
           <li>Saved Drafts library + CSV export</li>
           <li>Swipe File for your best AI outputs</li>
-          <li>Four built-in strategy guides including The Analog Way</li>
+          <li>Five built-in strategy guides including The Analog Way</li>
           <li>100 AI generations per month</li>
           <li>Founding Member price through August 31st</li>
         </ul>
@@ -1896,6 +1920,12 @@ select.fi{cursor:pointer}
             <div class="gc-c-desc">No AI required. What analog means and how to use the Studio your way.</div>
             <div class="gc-c-cta gold">Read →</div>
           </div>
+          <div class="gc-carousel-card sage" onclick="navigate('guides');setTimeout(()=>openGuideDetail('igresurrection'),100)">
+            <span class="gc-c-icon">🌱</span>
+            <div class="gc-c-title">The IG Resurrection Guide</div>
+            <div class="gc-c-desc">Coming back to a quiet or ghosted account, without the overwhelm.</div>
+            <div class="gc-c-cta sage">Read →</div>
+          </div>
         </div>
       </div>
 
@@ -2037,14 +2067,15 @@ select.fi{cursor:pointer}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">📖</span>Guides</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">Four built-in strategy playbooks written for neurodivergent entrepreneurs. Find them under Think in the sidebar, or use the guide cards at the top of your dashboard to jump straight in.</p>
+              <p class="guide-desc">Five built-in strategy playbooks written for neurodivergent entrepreneurs. Find them under Think in the sidebar, or use the guide cards at the top of your dashboard to jump straight in.</p>
               <ul class="guide-tips">
                 <li><strong>ND Rescue Kit:</strong> what to do when you are overwhelmed and do not know where to start. Four-step reset, ND-friendly batching, launch planning, and how to use every Studio tool to reduce content stress.</li>
                 <li><strong>Content Cycle Framework:</strong> a four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. Includes a full four-week example calendar.</li>
                 <li><strong>The Unstuck Guide:</strong> for when your inner critic says it has all been done before. Reframes for perfectionism and starting paralysis, paired with specific Studio workflows to get you moving again.</li>
                 <li><strong>The Analog Way:</strong> no AI required. What analog means, why it is having a moment, how to use the Studio as a fully analog creator, and 15 writing prompts to spark content from your own experience.</li>
-                <li><strong>Dashboard carousel:</strong> the four guide cards at the top of your dashboard link directly to each guide so you never have to hunt for them.</li>
-                <li><strong>Tip:</strong> if you are ever overwhelmed, open the ND Rescue Kit. If you are not sure about AI, open The Analog Way. Both exist for exactly those moments.</li>
+                <li><strong>The IG Resurrection Guide:</strong> a gentle, practical plan for posting again after a ghosted or quiet account. Covers content and posting, engagement and the algorithm, SEO over hashtags, why community matters more than reach, and a low-overwhelm way to actually begin.</li>
+                <li><strong>Dashboard carousel:</strong> the guide cards at the top of your dashboard link directly to each guide so you never have to hunt for them.</li>
+                <li><strong>Tip:</strong> if you are ever overwhelmed, open the ND Rescue Kit. If you are not sure about AI, open The Analog Way. If your account has gone quiet, open The IG Resurrection Guide. Each one exists for exactly that moment.</li>
               </ul>
             </div>
           </div>
@@ -2616,6 +2647,21 @@ select.fi{cursor:pointer}
               <div class="gic-cta" style="color:var(--g)">Read the guide →</div>
             </div>
 
+            <!-- The IG Resurrection Guide -->
+            <div class="guide-index-card sage" onclick="openGuideDetail('igresurrection')">
+              <div class="gic-deco" style="color:var(--sage)">🌱</div>
+              <span class="gic-icon">🌱</span>
+              <div class="gic-title">The IG Resurrection Guide</div>
+              <div class="gic-desc">A gentle, practical plan for posting again after a ghosted or quiet account, without the overwhelm, the shame spiral, or the pressure to "show up everywhere."</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Restarting</span>
+                <span class="gic-tag">Algorithm</span>
+                <span class="gic-tag">SEO</span>
+                <span class="gic-tag">Community</span>
+              </div>
+              <div class="gic-cta sage">Read the guide →</div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -3056,6 +3102,186 @@ select.fi{cursor:pointer}
             <li><div class="gd-tip-icon teal">✦</div><div><strong>Analog content and AI content can coexist in the same system.</strong> You don't have to choose one mode forever. Some content comes from you entirely. Some days you want a spark. Both are fine. The Studio holds both without making you feel like one is more legitimate than the other.</div></li>
             <li><div class="gd-tip-icon gold">◎</div><div><strong>Your voice is the point.</strong> Whether you write every word yourself or use AI to start and then rewrite everything, the goal is content that sounds like you. The tool doesn't matter. The voice does.</div></li>
             <li><div class="gd-tip-icon teal">✶</div><div><strong>Done and authentic beats perfect and generated every time.</strong> The most powerful content you will ever make is the stuff only you could write. Keep the Analog Prompts close for when you need a way in.</div></li>
+          </ul>
+
+        </div>
+      </div>
+
+      <!-- DETAIL: The IG Resurrection Guide -->
+      <div id="guide-detail-igresurrection" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero sage">
+            <div class="guide-detail-hero-deco" style="color:var(--sage)">🌱</div>
+            <div class="gdh-eyebrow sage">The IG Resurrection Guide</div>
+            <div class="gdh-title">Your account isn't dead. It's just resting.</div>
+            <div class="gdh-desc">A ghosted Instagram doesn't mean you failed. It usually means life happened, your brain needed a break, or the pressure to perform got bigger than the desire to post. This guide is for coming back without the shame spiral, the fear of "starting over," or the overwhelm of not knowing where to even click first. Slow and honest beats loud and burnt out.</div>
+          </div>
+
+          <div class="gd-section-lbl">Before you post anything, read this</div>
+          <div class="gd-card full sage" style="margin-bottom:12px">
+            <div class="gd-card-title" style="font-size:18px">Nobody is keeping score except you.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:6px">The fear of coming back usually sounds like: people will notice I disappeared, my old content looks dated now, I have to explain where I went. Almost none of that is true in practice. Most followers didn't notice the gap the way you did, because they weren't watching your account the way you were. The algorithm doesn't remember you were gone and hold it against you. It just looks at what you post now. You don't owe anyone an explanation, a comeback story, or a highlight reel. You just owe yourself a low-pressure way back in.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card sage">
+              <span class="gd-card-icon">👻</span>
+              <div class="gd-card-title">Going quiet is not the same as starting over</div>
+              <div class="gd-card-desc">Your account keeps its history, your followers, and your past content whether you posted yesterday or eight months ago. You are not starting from zero. You are picking back up. That distinction matters more than it sounds like it should, because "starting over" carries way more pressure than "picking back up."</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">The shame spiral is the actual blocker, not the algorithm</div>
+              <div class="gd-card-desc">Most ND creators who go quiet aren't stuck because they don't know what to post. They're stuck because the longer the gap gets, the more it feels like a thing that needs to be addressed before they're "allowed" to post again. It doesn't. You can just post. The gap does not need a eulogy.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">The first week back: content and posting</div>
+          <div class="gd-callout sage" style="margin-bottom:12px">
+            <div class="gd-callout-icon">🌱</div>
+            <div>
+              <div class="gd-callout-eyebrow sage">The Studio move for this</div>
+              <div class="gd-callout-text">Open Director Chat and tell it you're coming back after a quiet stretch and want a few low-pressure post ideas to ease back in, not a big relaunch. Or open the Content Planner, drop a half-formed idea into a card, and run Strategy Session before you write a single word.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card sage">
+              <span class="gd-card-icon">1️⃣</span>
+              <div class="gd-card-title">Post the gap, briefly, then move on</div>
+              <div class="gd-card-desc">One short, honest line acknowledging you've been quiet does more good than ignoring it or over-explaining it. "Took a break, I'm back, here's what's on my mind" is enough. One sentence, not a paragraph. Then go straight into actual content. The apology tour is optional and usually unnecessary.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">2️⃣</span>
+              <div class="gd-card-title">Pick the easiest format first, not the best one</div>
+              <div class="gd-card-desc">Your first post back should be whatever takes the least effort to make, not whatever performs best. A single photo with a caption. A simple Story. The goal of post one is just to post. Save the polished carousel for week three, once momentum exists again.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">3️⃣</span>
+              <div class="gd-card-title">Three posts in the first week, not seven</div>
+              <div class="gd-card-desc">A realistic restart is three posts across a week: one feed post, one Story, one piece of light engagement (commenting on others, replying to DMs). That's a comeback. It does not need to look like you never left.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">📋</span>
+              <div class="gd-card-title">Use the Planner to make the decision once</div>
+              <div class="gd-card-desc">Pick your three posts for the week in one sitting and drop them into the Content Planner. Deciding what to post every single day is exhausting. Deciding once, for the whole week, removes the daily friction that often causes another quiet stretch.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Engagement and the algorithm, without the hustle culture</div>
+          <div class="gd-card full sage" style="margin-bottom:12px">
+            <div class="gd-card-eyebrow sage">The reframe</div>
+            <div class="gd-card-title" style="font-size:18px">The algorithm rewards consistency of showing up, not constant posting.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:4px">Instagram's systems are looking for signals that you're an active account worth showing to people: posting regularly even if it's not daily, replying to comments and DMs, watching and engaging with content in your niche, and people spending real time on what you share. None of that requires posting every day or chasing trends that don't fit you. It requires being present in a way that's sustainable for you specifically.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card sage">
+              <span class="gd-card-icon">💬</span>
+              <div class="gd-card-title">Engagement is a two-way habit, not a broadcast</div>
+              <div class="gd-card-desc">Spend 10 minutes before or after you post replying to comments, answering DMs, and commenting genuinely on a few accounts in your space. This does more for how the algorithm treats your account than almost anything else, and it costs less energy than making another piece of content.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">⏱</span>
+              <div class="gd-card-title">Reply within the first hour when you can</div>
+              <div class="gd-card-desc">Early engagement on a post tells the algorithm it's worth showing to more people. You don't need to be glued to your phone, but if you can check in once shortly after posting and reply to early comments, it gives that post a better chance without any extra content creation.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🔁</span>
+              <div class="gd-card-title">Consistency beats frequency</div>
+              <div class="gd-card-desc">Posting twice a week for two months reliably will outperform posting daily for a week and then disappearing again. Pick a rhythm you can actually sustain on a hard week, not your best-case-scenario rhythm. Realistic and repeated wins over ambitious and abandoned.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🚫</span>
+              <div class="gd-card-title">You do not have to be everywhere</div>
+              <div class="gd-card-desc">You don't need Reels, Stories, carousels, and a newsletter all running at once to "be consistent." Pick one or two formats that don't drain you and let the rest be occasional. Showing up exhausted everywhere is worse for your account, and for you, than showing up steadily in one place.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">SEO over hashtags</div>
+          <div class="gd-card full sage" style="margin-bottom:12px">
+            <div class="gd-card-title" style="font-size:18px">Hashtags are a 2018 strategy. Searchable captions are the current one.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:6px">Instagram now functions a lot like a search engine. People type what they're looking for into the search bar the same way they would on Google. That means the words you actually use in your caption, your alt text, and your profile matter more than a wall of hashtags ever did. A handful of relevant hashtags is still fine. They are no longer the main lever.</div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🔎</span>
+              <div class="gd-card-title">Write captions like someone is searching for them</div>
+              <div class="gd-card-desc">Use the actual words your ideal audience would type into the search bar: your niche, your service, the problem you solve, the city you're in if it's relevant. "ND-friendly business coach for overwhelmed freelancers" gets found. Clever wordplay with no keywords doesn't.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🏷</span>
+              <div class="gd-card-title">Front-load the first line</div>
+              <div class="gd-card-desc">The first sentence of your caption carries the most search and scroll-stopping weight. Lead with the clearest, most specific version of what the post is about, not a vague hook designed only for suspense.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🖼</span>
+              <div class="gd-card-title">Use alt text on purpose</div>
+              <div class="gd-card-desc">Alt text exists for accessibility first, and it also feeds the algorithm information about your content. Write a genuine, descriptive line about the image instead of leaving it blank or keyword-stuffing it. It helps real people and helps your discoverability at the same time.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">#️⃣</span>
+              <div class="gd-card-title">A few specific hashtags, not thirty generic ones</div>
+              <div class="gd-card-desc">Three to five specific, relevant hashtags do more than a maxed-out list of broad ones. Specific niche hashtags get you in front of the right small audience. Broad hashtags get you lost in an ocean of unrelated content.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Why community matters more than reach</div>
+          <div class="gd-cards">
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🫂</span>
+              <div class="gd-card-title">A smaller, real audience outperforms a bigger, quiet one</div>
+              <div class="gd-card-desc">A thousand people who comment, reply to your Stories, and actually buy from or refer you matter more than ten thousand who scroll past silently. Coming back is a good moment to stop chasing reach and start nurturing the people who are already there.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">📩</span>
+              <div class="gd-card-title">DMs and Story replies are where relationships actually form</div>
+              <div class="gd-card-desc">Public posts get people to notice you. Private replies are where they decide to trust you. If you only have energy for one type of engagement this week, make it the DMs and Story replies you've let pile up.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🤝</span>
+              <div class="gd-card-title">Show up in other people's comments, not just your own</div>
+              <div class="gd-card-desc">Commenting thoughtfully on a handful of accounts in your niche puts you back in front of new people without making a single new post. It rebuilds visibility and relationships at the same time, and it's far less draining than producing content from nothing.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">A mindful, low-overwhelm way to actually begin</div>
+          <div class="gd-callout sage" style="margin-bottom:12px">
+            <div class="gd-callout-icon">✦</div>
+            <div>
+              <div class="gd-callout-eyebrow sage">Start here, not with a strategy document</div>
+              <div class="gd-callout-text">You do not need a full content calendar, a rebrand, or a niche overhaul before you're "allowed" to post again. Open the app, write one honest sentence about anything, and let that be today's win. Strategy can come in week two. Momentum has to come first.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card">
+              <span class="gd-card-icon">🪶</span>
+              <div class="gd-card-title">Pick one small action, not a five-step plan</div>
+              <div class="gd-card-desc">Today's task is not "fix my Instagram." Today's task is "reply to three comments" or "post one Story." A five-step relaunch plan sounds productive and usually becomes another reason to stall. One small, finishable action moves you forward today.</div>
+            </div>
+            <div class="gd-card">
+              <span class="gd-card-icon">📓</span>
+              <div class="gd-card-title">Brain dump before you draft</div>
+              <div class="gd-card-desc">Open a Notebook and write down everything you've wanted to say but haven't, with no structure or editing. You're not writing a post yet. You're clearing the backlog in your head so the actual posting feels lighter.</div>
+            </div>
+            <div class="gd-card">
+              <span class="gd-card-icon">🗓</span>
+              <div class="gd-card-title">Give yourself a real, lower bar</div>
+              <div class="gd-card-desc">Define what "back" means for you specifically: maybe it's two posts a week for a month, not daily content forever. Write that number down somewhere you'll see it, so the goal you're working toward is one you actually set, not one you assumed you needed.</div>
+            </div>
+            <div class="gd-card">
+              <span class="gd-card-icon">🌤</span>
+              <div class="gd-card-title">Expect a quiet stretch to happen again, and plan for it</div>
+              <div class="gd-card-desc">ND brains go through natural cycles of output and rest. Treat the next quiet stretch as expected maintenance, not failure. The goal isn't to never go quiet again. It's to make coming back easier and less loaded every time it happens.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Six things to remember when you're coming back</div>
+          <ul class="gd-tips">
+            <li><div class="gd-tip-icon sage">🌱</div><div><strong>The gap is smaller in other people's eyes than it is in yours.</strong> Most followers were not tracking your absence the way you were. You're allowed to just start posting again.</div></li>
+            <li><div class="gd-tip-icon rust">◎</div><div><strong>Engagement is a habit you rebuild, not a switch you flip.</strong> Ten minutes of replying and commenting most days will rebuild your presence faster than one big content push.</div></li>
+            <li><div class="gd-tip-icon sage">✶</div><div><strong>Searchable captions matter more than hashtag volume now.</strong> Write like your ideal audience is typing into the search bar, because increasingly, they are.</div></li>
+            <li><div class="gd-tip-icon rust">✦</div><div><strong>A smaller, real community beats a bigger, silent one.</strong> Coming back is a good time to nurture the people already there instead of chasing new reach.</div></li>
+            <li><div class="gd-tip-icon sage">◎</div><div><strong>Pick the lowest-effort format for your first post back.</strong> Momentum matters more than polish when you're just getting started again.</div></li>
+            <li><div class="gd-tip-icon rust">✶</div><div><strong>Quiet stretches will happen again, and that's allowed.</strong> The goal is a softer landing next time, not permanent, unbroken consistency.</div></li>
           </ul>
 
         </div>

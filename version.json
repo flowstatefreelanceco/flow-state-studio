@@ -1,12 +1,12 @@
 {
-  "version": "3.4",
+  "version": "3.6",
   "releasedAt": "2026-06-22",
   "changelog": [
     {
       "type": "new",
       "date": "Jun 22, 2026",
-      "title": "Director Chat",
-      "desc": "A new open chat with your Creative Director, right under Writing Studio in the sidebar. Rework anything you're already creating in the Studio, write in a different voice for another offer or business, or just think out loud before you start. The conversation saves automatically and you can export it as a text file anytime."
+      "title": "The IG Resurrection Guide",
+      "desc": "A new strategy guide for coming back after a quiet or ghosted Instagram account. Covers posting and content without overwhelm, engagement and the algorithm, SEO over hashtags, and why community matters more than reach. Find it under Guides on your dashboard."
     }
   ]
 }
