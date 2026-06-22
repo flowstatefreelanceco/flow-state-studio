@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="3.4">
+<html lang="en" data-version="3.5">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -222,6 +222,28 @@ select.fi{cursor:pointer}
 .dc-empty p{font-size:12.5px;max-width:300px;line-height:1.65;color:var(--tl)}
 .dc-chip{font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:100px;padding:6px 13px;cursor:pointer;font-family:var(--fb);transition:opacity .15s}
 .dc-chip:hover{opacity:.75}
+.dc-hist-btn{display:flex;align-items:center;gap:6px;font-size:11.5px;padding:6px 12px;background:none;border:1px solid var(--bl);border-radius:var(--rsm);color:var(--e);cursor:pointer;font-family:var(--fb)}
+.dc-hist-btn:hover{background:var(--p)}
+.dc-hist-overlay{position:fixed;inset:0;background:rgba(77,30,21,.25);z-index:9000;display:none}
+.dc-hist-overlay.open{display:block}
+.dc-hist-panel{position:fixed;top:0;left:0;height:100%;width:300px;max-width:85vw;background:var(--w);box-shadow:4px 0 20px var(--shm);z-index:9001;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .22s ease}
+.dc-hist-overlay.open .dc-hist-panel{transform:translateX(0)}
+.dc-hist-hdr{padding:18px 18px 14px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dc-hist-title{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e)}
+.dc-hist-close{background:none;border:none;font-size:18px;color:var(--t);cursor:pointer;padding:4px}
+.dc-hist-new{margin:14px 18px;padding:9px 14px;background:var(--teal);color:#fff;border:none;border-radius:var(--rsm);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb);text-align:center}
+.dc-hist-new:hover{background:var(--tealh)}
+.dc-hist-list{flex:1;overflow-y:auto;padding:0 10px 14px}
+.dc-hist-item{display:flex;align-items:flex-start;gap:8px;padding:11px 10px;border-radius:var(--rsm);cursor:pointer;margin-bottom:2px;position:relative}
+.dc-hist-item:hover{background:var(--p)}
+.dc-hist-item.active{background:var(--tealp)}
+.dc-hist-item-body{flex:1;min-width:0}
+.dc-hist-item-title{font-size:13px;color:var(--e);font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dc-hist-item-date{font-size:10.5px;color:var(--tl);margin-top:3px}
+.dc-hist-item-del{flex-shrink:0;background:none;border:none;color:var(--tl);cursor:pointer;padding:2px 4px;font-size:13px;opacity:0;transition:opacity .15s}
+.dc-hist-item:hover .dc-hist-item-del{opacity:1}
+.dc-hist-item-del:hover{color:var(--r)}
+.dc-hist-empty{padding:30px 18px;text-align:center;color:var(--tl);font-size:12.5px;line-height:1.6}
 
 /* LIBRARY */
 .lib-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -1921,7 +1943,7 @@ select.fi{cursor:pointer}
                 <li><strong>Rework what you're already writing:</strong> bring a draft over from the Writing Studio or a content card and ask for it warmer, more direct, or a totally different angle.</li>
                 <li><strong>Switch voices on the fly:</strong> paste any copy and tell it which business or tone to write in. No need to set up a separate brand profile first.</li>
                 <li><strong>Think out loud:</strong> talk through an idea before you commit it to a content card or draft.</li>
-                <li><strong>It remembers:</strong> the conversation saves automatically and is there whenever you come back. Use New Chat to start fresh.</li>
+                <li><strong>It remembers, every conversation:</strong> click History to see every past chat, switch back to any of them, or delete the ones you don't need. Starting a New Chat never deletes the old one.</li>
                 <li><strong>Export anytime:</strong> click Export to copy the whole chat or download it as a text file to keep.</li>
               </ul>
             </div>
@@ -2172,6 +2194,7 @@ select.fi{cursor:pointer}
         <div><h1>Ask Your Creative Director</h1><div class="sub">Open chat. Paste anything, ask for a different voice, work through whatever you're stuck on.</div></div>
       </div>
       <div style="display:flex;gap:8px">
+        <button class="dc-hist-btn" onclick="dirChatOpenHistory()"><svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h12M3 13h8"/></svg>History</button>
         <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="directorChatExport()">Export</button>
         <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="directorChatClear()">+ New Chat</button>
       </div>
@@ -2195,6 +2218,18 @@ select.fi{cursor:pointer}
             <button class="btn btn-p" id="dirChatSendBtn" style="padding:10px 16px;flex-shrink:0" onclick="directorChatSend()">Send</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- CHAT HISTORY SLIDE-OUT -->
+    <div class="dc-hist-overlay" id="dcHistOverlay" onclick="if(event.target===this)dirChatCloseHistory()">
+      <div class="dc-hist-panel">
+        <div class="dc-hist-hdr">
+          <span class="dc-hist-title">Chat History</span>
+          <button class="dc-hist-close" onclick="dirChatCloseHistory()">✕</button>
+        </div>
+        <button class="dc-hist-new" onclick="directorChatClear()">+ New Chat</button>
+        <div class="dc-hist-list" id="dcHistList"></div>
       </div>
     </div>
   </div>
@@ -4024,6 +4059,28 @@ async function initAuth(){
 }
 
 
+// Migrate legacy single-array directorChat into the multi-conversation directorChats shape.
+// Safe to call on already-migrated data (returns it untouched).
+function dirChatMigrate(chatsArr, legacyFlatArr){
+  if(Array.isArray(chatsArr) && chatsArr.length) return chatsArr;
+  if(Array.isArray(legacyFlatArr) && legacyFlatArr.length){
+    return [{
+      id:'dc'+Date.now(),
+      title:dirChatTitleFrom(legacyFlatArr),
+      messages:legacyFlatArr,
+      createdAt:legacyFlatArr[0].ts||new Date().toISOString(),
+      updatedAt:legacyFlatArr[legacyFlatArr.length-1].ts||new Date().toISOString()
+    }];
+  }
+  return [];
+}
+function dirChatTitleFrom(messages){
+  var firstUser=(messages||[]).find(function(m){return m.role==='user';});
+  if(!firstUser||!firstUser.content) return 'New chat';
+  var t=firstUser.content.trim().replace(/\s+/g,' ');
+  return t.length>48?t.slice(0,48)+'...':t;
+}
+
 async function loadUserData(){
   // Always try localStorage first as instant fallback
   var localData={};
@@ -4064,9 +4121,11 @@ async function loadUserData(){
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
       merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
       merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
-      // directorChat - prefer whichever has more messages (most complete conversation)
-      var locChat=localData.directorChat||[];var sbChat=sbData.directorChat||[];
-      merged.directorChat=locChat.length>=sbChat.length?locChat:sbChat;
+      // directorChats - prefer whichever side has more conversations (most complete history)
+      var locChats=dirChatMigrate(localData.directorChats,localData.directorChat);
+      var sbChats=dirChatMigrate(sbData.directorChats,sbData.directorChat);
+      merged.directorChats=locChats.length>=sbChats.length?locChats:sbChats;
+      merged.activeDirectorChatId=localData.activeDirectorChatId||sbData.activeDirectorChatId||(merged.directorChats[0]&&merged.directorChats[0].id)||null;
       // Save merged back so next load is fast
       try{localStorage.setItem(lsKey(),JSON.stringify(merged));}catch(e){}
       return merged;
@@ -4306,7 +4365,7 @@ const S = {
   activeProfile:'brand',
   aiCount:0,
   notebooks:[], notes:[], activeNotebook:null,
-  directorChat:[]
+  directorChats:[], activeDirectorChatId:null
 };
 
 /* ═══════════════════ INIT ═══════════════════ */
@@ -4332,7 +4391,7 @@ function persist(){
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
     creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
-    favs:S.favs,settings:S.settings,gs:S.gs,directorChat:S.directorChat||[]
+    favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null
   };
   // Save to localStorage immediately (instant, no network)
   try{
@@ -4427,7 +4486,7 @@ function navigate(v){
   if(v==='braindump')renderBrainDump();
   if(v==='guides'){document.getElementById('guides-index').style.display='';document.querySelectorAll('.guide-detail-page').forEach(p=>p.classList.remove('active'));}
   if(v==='feedpreview')renderFeedPreview();
-  if(v==='directorchat')renderDirectorChat();
+  if(v==='directorchat'){renderDirectorChat();renderDirChatHistory();}
   if(v==='settings'){applySettings();renderMembershipSection();renderSettingsBuckets();
     // Refresh plan from Supabase in case it changed (e.g. after Stripe payment)
     if(_currentUser){
@@ -6916,10 +6975,19 @@ async function cdCallAIChat(messages, maxTok){
   }
 }
 
+// Get the active conversation object, creating one if none exists yet.
+function dirChatGetActive(){
+  S.directorChats=S.directorChats||[];
+  var c=S.directorChats.find(function(c){return c.id===S.activeDirectorChatId;});
+  if(!c && S.directorChats.length){ c=S.directorChats[0]; S.activeDirectorChatId=c.id; }
+  return c||null;
+}
+
 function renderDirectorChat(){
   var log=document.getElementById('dirChatLog');
   if(!log)return;
-  var chat=S.directorChat||[];
+  var active=dirChatGetActive();
+  var chat=(active&&active.messages)||[];
   if(!chat.length){
     log.innerHTML='<div class="dc-empty"><div class="sym">&#10070;</div><h3>Ask your Creative Director anything</h3><p>Paste a caption, an email, anything you\'re working on, and ask for it in a different voice. Or just think out loud here.</p></div>';
     return;
@@ -6940,7 +7008,8 @@ function dirChatEscape(t){
 }
 
 function dirChatCopy(i){
-  var chat=S.directorChat||[];
+  var active=dirChatGetActive();
+  var chat=(active&&active.messages)||[];
   var m=chat[i];
   if(!m||!m.content){toast('Nothing to copy');return;}
   navigator.clipboard.writeText(m.content).then(function(){toast('Copied ✓');});
@@ -6982,35 +7051,56 @@ async function directorChatSend(){
   var text=input.value.trim();
   if(!text)return;
   var btn=document.getElementById('dirChatSendBtn');
-  S.directorChat=S.directorChat||[];
-  S.directorChat.push({role:'user',content:text,ts:new Date().toISOString()});
+  S.directorChats=S.directorChats||[];
+  var active=dirChatGetActive();
+  if(!active){
+    active={id:'dc'+Date.now(),title:'New chat',messages:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    S.directorChats.unshift(active);
+    S.activeDirectorChatId=active.id;
+  }
+  var isFirstMessage=!active.messages.length;
+  active.messages.push({role:'user',content:text,ts:new Date().toISOString()});
+  if(isFirstMessage) active.title=dirChatTitleFrom(active.messages);
+  active.updatedAt=new Date().toISOString();
   input.value='';
   renderDirectorChat();
   persist();
   if(btn)btn.disabled=true;
   dirChatShowTyping();
   // Build message history for the API (role/content only)
-  var apiMessages=S.directorChat.map(function(m){return {role:m.role,content:m.content};});
+  var apiMessages=active.messages.map(function(m){return {role:m.role,content:m.content};});
   var reply=await cdCallAIChat(apiMessages, 1200);
   dirChatHideTyping();
   if(btn)btn.disabled=false;
   if(reply){
-    S.directorChat.push({role:'assistant',content:reply,ts:new Date().toISOString()});
+    active.messages.push({role:'assistant',content:reply,ts:new Date().toISOString()});
+    active.updatedAt=new Date().toISOString();
     renderDirectorChat();
     persist();
   }
 }
 
 function directorChatClear(){
-  if(!S.directorChat||!S.directorChat.length){return;}
-  if(!confirm('Start a new chat? This clears the current conversation.'))return;
-  S.directorChat=[];
+  // Starts a brand new conversation. The current one (if it has messages) stays in history.
+  var active=dirChatGetActive();
+  if(active && !active.messages.length){
+    // Already on an empty new chat - nothing to do
+    dirChatCloseHistory();
+    return;
+  }
+  S.directorChats=S.directorChats||[];
+  var fresh={id:'dc'+Date.now(),title:'New chat',messages:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+  S.directorChats.unshift(fresh);
+  S.activeDirectorChatId=fresh.id;
   renderDirectorChat();
+  renderDirChatHistory();
+  dirChatCloseHistory();
   persist();
 }
 
 function dirChatAsText(){
-  var chat=S.directorChat||[];
+  var active=dirChatGetActive();
+  var chat=(active&&active.messages)||[];
   var lines=['Ask Your Creative Director chat export','Exported '+new Date().toLocaleString(),''];
   chat.forEach(function(m){
     lines.push(m.role==='user'?'You:':'Creative Director:');
@@ -7021,7 +7111,8 @@ function dirChatAsText(){
 }
 
 function directorChatExport(){
-  var chat=S.directorChat||[];
+  var active=dirChatGetActive();
+  var chat=(active&&active.messages)||[];
   if(!chat.length){toast('Nothing to export yet');return;}
   var txt=dirChatAsText();
   if(confirm('Copy this chat to your clipboard?\n\nClick Cancel to download it as a text file instead.')){
@@ -7036,6 +7127,68 @@ function directorChatExport(){
     URL.revokeObjectURL(url);
     toast('Chat downloaded ✓');
   }
+}
+
+/* CHAT HISTORY PANEL */
+function dirChatRelativeDate(iso){
+  if(!iso)return '';
+  var d=new Date(iso);
+  var now=new Date();
+  var sameDay=d.toDateString()===now.toDateString();
+  if(sameDay) return d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+  var yesterday=new Date(now); yesterday.setDate(now.getDate()-1);
+  if(d.toDateString()===yesterday.toDateString()) return 'Yesterday';
+  var daysAgo=Math.round((now-d)/86400000);
+  if(daysAgo<7) return daysAgo+'d ago';
+  return d.toLocaleDateString([], {month:'short',day:'numeric'});
+}
+
+function renderDirChatHistory(){
+  var list=document.getElementById('dcHistList');
+  if(!list)return;
+  var chats=(S.directorChats||[]).slice().sort(function(a,b){return new Date(b.updatedAt)-new Date(a.updatedAt);});
+  if(!chats.length){
+    list.innerHTML='<div class="dc-hist-empty">No past chats yet. Start typing below and this fills up as you go.</div>';
+    return;
+  }
+  list.innerHTML=chats.map(function(c){
+    var isActive=c.id===S.activeDirectorChatId;
+    var title=dirChatEscape(c.title||'New chat');
+    return '<div class="dc-hist-item'+(isActive?' active':'')+'" onclick="dirChatSwitchTo(\''+c.id+'\')">'
+      +'<div class="dc-hist-item-body"><div class="dc-hist-item-title">'+title+'</div><div class="dc-hist-item-date">'+dirChatRelativeDate(c.updatedAt)+'</div></div>'
+      +'<button class="dc-hist-item-del" onclick="event.stopPropagation();dirChatDelete(\''+c.id+'\')" title="Delete chat">✕</button>'
+      +'</div>';
+  }).join('');
+}
+
+function dirChatSwitchTo(id){
+  S.activeDirectorChatId=id;
+  renderDirectorChat();
+  renderDirChatHistory();
+  dirChatCloseHistory();
+  persist();
+}
+
+function dirChatDelete(id){
+  if(!confirm('Delete this chat? This cannot be undone.'))return;
+  S.directorChats=(S.directorChats||[]).filter(function(c){return c.id!==id;});
+  if(S.activeDirectorChatId===id){
+    S.activeDirectorChatId=(S.directorChats[0]&&S.directorChats[0].id)||null;
+  }
+  renderDirectorChat();
+  renderDirChatHistory();
+  persist();
+}
+
+function dirChatOpenHistory(){
+  renderDirChatHistory();
+  var ov=document.getElementById('dcHistOverlay');
+  if(ov)ov.classList.add('open');
+}
+
+function dirChatCloseHistory(){
+  var ov=document.getElementById('dcHistOverlay');
+  if(ov)ov.classList.remove('open');
 }
 
 function cdCopy2(type) {
@@ -8020,7 +8173,8 @@ function initFlowStateApp(savedData) {
   if (savedData.offerProfile) S.offerProfile = Object.assign({}, S.offerProfile, savedData.offerProfile);
   if (savedData.longformProfile) S.longformProfile = Object.assign({}, S.longformProfile, savedData.longformProfile);
   if (savedData.activeProfile) S.activeProfile = savedData.activeProfile;
-  if (savedData.directorChat) S.directorChat = savedData.directorChat;
+  S.directorChats = dirChatMigrate(savedData.directorChats, savedData.directorChat);
+  S.activeDirectorChatId = savedData.activeDirectorChatId || (S.directorChats[0] && S.directorChats[0].id) || null;
   }
   _appInit();
 }
