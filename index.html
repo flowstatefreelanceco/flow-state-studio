@@ -208,6 +208,18 @@ select.fi{cursor:pointer}
 .ld{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:lb 1.2s infinite ease-in-out}
 .ld:nth-child(2){animation-delay:.2s}.ld:nth-child(3){animation-delay:.4s}
 @keyframes lb{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-6px);opacity:1}}
+/* DIRECTOR CHAT */
+.dc-msg{display:flex;margin-bottom:16px}
+.dc-msg.user{justify-content:flex-end}
+.dc-msg.assistant{justify-content:flex-start}
+.dc-bubble{max-width:80%;padding:11px 15px;border-radius:14px;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.dc-msg.user .dc-bubble{background:var(--teal);color:#fff;border-radius:14px 14px 3px 14px}
+.dc-msg.assistant .dc-bubble{background:var(--p);border:1px solid var(--bl);color:var(--e);border-radius:14px 14px 14px 3px}
+.dc-msg.assistant .dc-bubble .dc-copy{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--teal);background:none;border:1px solid var(--teal);border-radius:100px;padding:2px 9px;margin-top:9px;cursor:pointer;font-family:var(--fb)}
+.dc-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--t);gap:8px;padding:40px 20px}
+.dc-empty .sym{font-size:34px;opacity:.22}
+.dc-empty h3{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--t)}
+.dc-empty p{font-size:12.5px;max-width:300px;line-height:1.65;color:var(--tl)}
 
 /* LIBRARY */
 .lib-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -1670,6 +1682,7 @@ select.fi{cursor:pointer}
     <div class="nav-i" data-view="calendar"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="12" rx="2"/><path d="M2 7h14M6 2v2M12 2v2"/></svg>Calendar</div>
     <div class="sb-section">Create</div>
     <div class="nav-i" data-view="studio"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 15l3-3 2 2 4-5 3 4"/><circle cx="14" cy="4" r="2"/><path d="M2 2h7"/></svg>Writing Studio</div>
+    <div class="nav-i" data-view="directorchat"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4h12a1 1 0 011 1v7a1 1 0 01-1 1H8l-3.5 3v-3H3a1 1 0 01-1-1V5a1 1 0 011-1z"/><circle cx="6.5" cy="8.2" r=".6" fill="currentColor" stroke="none"/><circle cx="9" cy="8.2" r=".6" fill="currentColor" stroke="none"/><circle cx="11.5" cy="8.2" r=".6" fill="currentColor" stroke="none"/></svg>Ask Your Creative Director</div>
     <div class="nav-i" data-view="drafts"><svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M6 7h6M6 10.5h4"/></svg>Saved Drafts</div>
     <div class="nav-i nav-parent" onclick="toggleLibNav(this)">
       <svg class="nav-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="3" rx="1"/><rect x="2" y="8" width="10" height="3" rx="1"/><rect x="2" y="13" width="7" height="2" rx="1"/></svg>
@@ -2097,6 +2110,26 @@ select.fi{cursor:pointer}
 
           </div>
 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASK YOUR CREATIVE DIRECTOR -->
+  <div id="view-directorchat" class="view">
+    <div class="main-hdr">
+      <div><h1>Ask Your Creative Director</h1><div class="sub">Open chat. Paste anything, ask for a different voice, work through whatever you're stuck on.</div></div>
+      <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="directorChatClear()">+ New Chat</button>
+    </div>
+    <div class="main-body" style="padding:0">
+      <div id="dirChatWrap" style="display:flex;flex-direction:column;height:100%;max-width:760px;margin:0 auto;width:100%">
+        <div id="dirChatLog" style="flex:1;overflow-y:auto;padding:20px 18px 10px"></div>
+        <div style="padding:12px 16px 18px;border-top:1px solid var(--bl);flex-shrink:0">
+          <div style="font-size:11px;color:var(--t);margin-bottom:8px;line-height:1.5">Tip: paste your copy and tell it which business or voice to write in &mdash; e.g. "rewrite this for my VA/OBM brand, more direct and professional."</div>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <textarea id="dirChatInput" class="fi" placeholder="Ask anything, or paste copy to shift into another voice..." style="min-height:44px;max-height:160px;font-size:13.5px;resize:none;flex:1" onkeydown="dirChatKeydown(event)"></textarea>
+            <button class="btn btn-p" id="dirChatSendBtn" style="padding:10px 16px;flex-shrink:0" onclick="directorChatSend()">Send</button>
+          </div>
         </div>
       </div>
     </div>
@@ -3967,6 +4000,9 @@ async function loadUserData(){
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
       merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
       merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
+      // directorChat - prefer whichever has more messages (most complete conversation)
+      var locChat=localData.directorChat||[];var sbChat=sbData.directorChat||[];
+      merged.directorChat=locChat.length>=sbChat.length?locChat:sbChat;
       // Save merged back so next load is fast
       try{localStorage.setItem(lsKey(),JSON.stringify(merged));}catch(e){}
       return merged;
@@ -4205,7 +4241,8 @@ const S = {
   longformProfile:{title:'',format:'book',premise:'',targetReader:'',coreArgument:'',tone:'',themes:''},
   activeProfile:'brand',
   aiCount:0,
-  notebooks:[], notes:[], activeNotebook:null
+  notebooks:[], notes:[], activeNotebook:null,
+  directorChat:[]
 };
 
 /* ═══════════════════ INIT ═══════════════════ */
@@ -4231,7 +4268,7 @@ function persist(){
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
     creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
-    favs:S.favs,settings:S.settings,gs:S.gs
+    favs:S.favs,settings:S.settings,gs:S.gs,directorChat:S.directorChat||[]
   };
   // Save to localStorage immediately (instant, no network)
   try{
@@ -4326,6 +4363,7 @@ function navigate(v){
   if(v==='braindump')renderBrainDump();
   if(v==='guides'){document.getElementById('guides-index').style.display='';document.querySelectorAll('.guide-detail-page').forEach(p=>p.classList.remove('active'));}
   if(v==='feedpreview')renderFeedPreview();
+  if(v==='directorchat')renderDirectorChat();
   if(v==='settings'){applySettings();renderMembershipSection();renderSettingsBuckets();
     // Refresh plan from Supabase in case it changed (e.g. after Stripe payment)
     if(_currentUser){
@@ -6781,6 +6819,125 @@ async function cdCallAI(sys, usr, maxTok) {
   }
 }
 
+/* ASK YOUR CREATIVE DIRECTOR - open multi-turn chat */
+function dirChatSystemPrompt(){
+  var bp=S.brandProfile||{};
+  var hasBrand=Object.keys(bp).some(function(k){return bp[k];});
+  var sys="You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You're in an open chat space where the person can paste any kind of copy or ask for help in any voice or tone, not just their main brand. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes. Keep responses focused and usable, formatted in plain text (no markdown headers).";
+  if(hasBrand){
+    sys+="\n\nFor reference, their primary brand/voice profile (use only if relevant to what they're asking, since they may be asking you to write in a totally different voice for another business):";
+    if(bp.niche)sys+="\nNiche: "+bp.niche;
+    if(bp.role)sys+="\nRole: "+bp.role;
+    if(bp.voice)sys+="\nVoice: "+bp.voice;
+    if(bp.pov)sys+="\nPOV: "+bp.pov;
+  }
+  return sys;
+}
+
+async function cdCallAIChat(messages, maxTok){
+  checkCreditReset();
+  if(!canUseAI()){showCreditBlocked();return '';}
+  try{
+    var r = await fetchWithTimeout('/api/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model: S.settings.model||'claude-sonnet-4-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(), messages: messages })
+    }, 45000);
+    var d = await r.json();
+    var result = (d.content && d.content[0] && d.content[0].text) || '';
+    if(result) consumeCredit();
+    return result;
+  }catch(e){
+    toast('Error: '+e.message);
+    return '';
+  }
+}
+
+function renderDirectorChat(){
+  var log=document.getElementById('dirChatLog');
+  if(!log)return;
+  var chat=S.directorChat||[];
+  if(!chat.length){
+    log.innerHTML='<div class="dc-empty"><div class="sym">&#10070;</div><h3>Ask your Creative Director anything</h3><p>Paste a caption, an email, anything you\'re working on, and ask for it in a different voice. Or just think out loud here.</p></div>';
+    return;
+  }
+  var html='';
+  chat.forEach(function(m,i){
+    var safe=dirChatEscape(m.content||'');
+    html+='<div class="dc-msg '+(m.role==='user'?'user':'assistant')+'"><div class="dc-bubble">'+safe+(m.role==='assistant'?'<br><button class="dc-copy" onclick="dirChatCopy('+i+')">Copy</button>':'')+'</div></div>';
+  });
+  log.innerHTML=html;
+  log.scrollTop=log.scrollHeight;
+}
+
+function dirChatEscape(t){
+  var d=document.createElement('div');
+  d.textContent=t;
+  return d.innerHTML;
+}
+
+function dirChatCopy(i){
+  var chat=S.directorChat||[];
+  var m=chat[i];
+  if(!m||!m.content){toast('Nothing to copy');return;}
+  navigator.clipboard.writeText(m.content).then(function(){toast('Copied ✓');});
+}
+
+function dirChatKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){
+    e.preventDefault();
+    directorChatSend();
+  }
+}
+
+function dirChatShowTyping(){
+  var log=document.getElementById('dirChatLog');
+  if(!log)return;
+  var t=document.createElement('div');
+  t.className='dc-msg assistant';
+  t.id='dirChatTyping';
+  t.innerHTML='<div class="dc-bubble"><div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div></div></div>';
+  log.appendChild(t);
+  log.scrollTop=log.scrollHeight;
+}
+
+function dirChatHideTyping(){
+  var t=document.getElementById('dirChatTyping');
+  if(t)t.remove();
+}
+
+async function directorChatSend(){
+  var input=document.getElementById('dirChatInput');
+  if(!input)return;
+  var text=input.value.trim();
+  if(!text)return;
+  var btn=document.getElementById('dirChatSendBtn');
+  S.directorChat=S.directorChat||[];
+  S.directorChat.push({role:'user',content:text,ts:new Date().toISOString()});
+  input.value='';
+  renderDirectorChat();
+  persist();
+  if(btn)btn.disabled=true;
+  dirChatShowTyping();
+  // Build message history for the API (role/content only)
+  var apiMessages=S.directorChat.map(function(m){return {role:m.role,content:m.content};});
+  var reply=await cdCallAIChat(apiMessages, 1200);
+  dirChatHideTyping();
+  if(btn)btn.disabled=false;
+  if(reply){
+    S.directorChat.push({role:'assistant',content:reply,ts:new Date().toISOString()});
+    renderDirectorChat();
+    persist();
+  }
+}
+
+function directorChatClear(){
+  if(!S.directorChat||!S.directorChat.length){return;}
+  if(!confirm('Start a new chat? This clears the current conversation.'))return;
+  S.directorChat=[];
+  renderDirectorChat();
+  persist();
+}
+
 function cdCopy2(type) {
   var txt = (type==='hooks' ? (_cdOutputs['hookBuilt']||_cdOutputs['hookList']||'') : _cdOutputs[type]) || '';
   if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied ✓'); });
@@ -7763,6 +7920,7 @@ function initFlowStateApp(savedData) {
   if (savedData.offerProfile) S.offerProfile = Object.assign({}, S.offerProfile, savedData.offerProfile);
   if (savedData.longformProfile) S.longformProfile = Object.assign({}, S.longformProfile, savedData.longformProfile);
   if (savedData.activeProfile) S.activeProfile = savedData.activeProfile;
+  if (savedData.directorChat) S.directorChat = savedData.directorChat;
   }
   _appInit();
 }
