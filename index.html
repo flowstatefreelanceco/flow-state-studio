@@ -2222,7 +2222,7 @@ select.fi{cursor:pointer}
     <div class="main-hdr" style="border-top:3px solid var(--teal);border-bottom:1px solid var(--bl)">
       <div style="display:flex;align-items:flex-end;gap:12px">
         <div style="width:36px;height:36px;border-radius:50%;background:var(--tealp);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:2px"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--teal)" stroke-width="1.6"><path d="M3 4h12a1 1 0 011 1v7a1 1 0 01-1 1H8l-3.5 3v-3H3a1 1 0 01-1-1V5a1 1 0 011-1z"/><circle cx="6.5" cy="8.2" r=".6" fill="var(--teal)" stroke="none"/><circle cx="9" cy="8.2" r=".6" fill="var(--teal)" stroke="none"/><circle cx="11.5" cy="8.2" r=".6" fill="var(--teal)" stroke="none"/></svg></div>
-        <div><h1>Ask Your Creative Director</h1><div class="sub">Open chat. Paste anything, ask for a different voice, work through whatever you're stuck on.</div></div>
+        <div><h1>Ask Your Creative Director</h1><div class="sub">Open chat. Paste anything, ask for a different voice, get a real answer on timing or strategy, work through whatever you're stuck on.</div></div>
       </div>
       <div style="display:flex;gap:8px">
         <button class="dc-hist-btn" onclick="dirChatOpenHistory()"><svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h12M3 9h12M3 13h8"/></svg>History</button>
@@ -2235,6 +2235,7 @@ select.fi{cursor:pointer}
         <div id="dirChatIdeas" style="padding:16px 18px 4px;flex-shrink:0">
           <div style="font-size:11.5px;color:var(--teal);font-weight:600;margin-bottom:8px;letter-spacing:.03em">WHAT TO USE THIS SPACE FOR</div>
           <div style="display:flex;flex-wrap:wrap;gap:7px">
+            <div class="dc-chip" onclick="dirChatFillExample(this)">Ask when's the best time to post or send something</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rework something you're already creating in the Studio</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rewrite something for another business or offer</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Shift the tone of a piece you're already working on</div>
@@ -2506,6 +2507,25 @@ select.fi{cursor:pointer}
           <button class="btn btn-g" onclick="copyBrandProfile()" title="Copy everything to clipboard so you can paste it into Claude, ChatGPT, Notion, or anywhere else">Copy Profile to Clipboard</button>
         </div>
         <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> Brand Voice matters most. Be specific: "writes like a trusted colleague, direct but warm, short sentences, zero buzzwords."</div>
+      </div>
+      <div class="setting-sec">
+        <h3>Strategy &amp; Logistics</h3>
+        <p class="setting-desc">This is what turns your Creative Director from a voice coach into an actual strategist. Fill it out once and Director Chat will use it to answer real questions, like when to send something or how often to post, instead of bouncing the question back to you.</p>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Primary Platforms</label><input class="fi" id="bpPlatforms" placeholder="e.g. Instagram, email newsletter" /></div>
+          <div class="fl"><label class="fl-lbl">Posting Frequency</label><input class="fi" id="bpFrequency" placeholder="e.g. 3x/week IG, weekly newsletter" /></div>
+        </div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Audience Timezone</label><input class="fi" id="bpTimezone" placeholder="e.g. mostly US Eastern, some UK" /></div>
+          <div class="fl"><label class="fl-lbl">Current Phase / Goal</label><input class="fi" id="bpPhase" placeholder="e.g. launch push for Brains That Build" /></div>
+        </div>
+        <div class="fl"><label class="fl-lbl">What's Worked Before <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="bpWhatWorked" style="min-height:56px" placeholder="Best days/times you've noticed for opens or engagement, formats that overperformed, launches that landed well..."></textarea>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="saveBrandProfile()">Save Strategy Profile</button>
+        </div>
+        <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> No analytics tool hooked up yet, so "What's Worked Before" is how you hand-feed it real signal. Even a rough note like "newsletter opens are always better on Tuesdays" makes a real difference.</div>
       </div>
       <div class="setting-sec">
         <h3>Onboarding &amp; Welcome Guide</h3>
@@ -4585,7 +4605,7 @@ const S = {
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
   editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
-  brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:''},
+  brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:'',platforms:'',frequency:'',timezone:'',phase:'',whatWorked:''},
   offerProfile:{name:'',price:'',whoFor:'',transformation:'',objections:'',keyMsg:'',callToAction:''},
   longformProfile:{title:'',format:'book',premise:'',targetReader:'',coreArgument:'',tone:'',themes:''},
   activeProfile:'brand',
@@ -4643,6 +4663,8 @@ function applySettings(){
   const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
   setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
   setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
+  setVal('bpPlatforms',bp.platforms);setVal('bpFrequency',bp.frequency);setVal('bpTimezone',bp.timezone);
+  setVal('bpPhase',bp.phase);setVal('bpWhatWorked',bp.whatWorked);
 }
 function setGreeting(){
   const h=new Date().getHours();
@@ -5936,7 +5958,7 @@ function saveName(){S.settings.name=document.getElementById('nameIn').value.trim
 function saveKey(){S.settings.apiKey=document.getElementById('keyIn').value.trim();S.gs.keySet=!!S.settings.apiKey;persist();renderGS();toast('API key saved ✓');}
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
-  S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra')};
+  S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra'),platforms:g('bpPlatforms'),frequency:g('bpFrequency'),timezone:g('bpTimezone'),phase:g('bpPhase'),whatWorked:g('bpWhatWorked')};
   const hasContent=Object.values(S.brandProfile).some(v=>v.length>0);
   S.gs.bizSet=hasContent;
   persist();renderGS();toast('Brand profile saved ✓');
@@ -5949,6 +5971,11 @@ function buildBrandContext(){
   if(bp.offers)  lines.push(`Offers: ${bp.offers}`);
   if(bp.voice)   lines.push(`Brand voice: ${bp.voice}`);
   if(bp.pov)     lines.push(`Unique POV: ${bp.pov}`);
+  if(bp.platforms) lines.push(`Primary platforms: ${bp.platforms}`);
+  if(bp.frequency) lines.push(`Posting frequency: ${bp.frequency}`);
+  if(bp.timezone)  lines.push(`Audience timezone: ${bp.timezone}`);
+  if(bp.phase)      lines.push(`Current phase / goal: ${bp.phase}`);
+  if(bp.whatWorked) lines.push(`What's worked before: ${bp.whatWorked}`);
   if(bp.extra)   lines.push(`\nAdditional context:\n${bp.extra}`);
   return lines.length ? '\n\nBrand Profile:\n'+lines.join('\n') : '';
 }
@@ -7172,13 +7199,22 @@ async function cdCallAI(sys, usr, maxTok) {
 function dirChatSystemPrompt(){
   var bp=S.brandProfile||{};
   var hasBrand=Object.keys(bp).some(function(k){return bp[k];});
-  var sys="You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You're in an open chat space where the person can paste anything they're working on and ask you to rework it, get unstuck, or write in a different voice entirely for another offer or business. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes. Keep responses focused and usable, formatted in plain text (no markdown headers).";
+  var sys="You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist who has spent years specifically inside wellness, spiritual, and creative brands run by ND business owners. You understand the content side (voice, hooks, rework, ideation) and the strategy side: platform mechanics, posting cadence, send timing, launch sequencing, funnel logic, and how to read whatever performance signal the person gives you.\n\n"+
+    "When someone asks a strategy or logistics question (when to post, how often, what order to launch things, which platform to prioritize, how to pace a launch window), give a real, specific, opinionated answer. Do not hand the decision back to them with something like 'whenever works best for you' unless you genuinely have zero basis to go on, and even then, give your best default recommendation first and name the one or two factors that would change it. Reason from general platform and audience behavior (for example: newsletters for wellness/spiritual audiences tend to open better earlier in the week and mid-morning; weekday evenings often beat weekday mornings for IG engagement in personal-brand spaces; launch emails want runway before a cart-close reminder) AND from anything specific you know about this person's audience below. Treat their own notes about what's worked before as the strongest signal, stronger than general platform wisdom, whenever it's available.\n\n"+
+    "Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes. Keep responses focused and usable, formatted in plain text (no markdown headers). It is fine to say 'here's what I'd do' and commit to a recommendation. You're in an open chat space where the person can also paste anything they're working on and ask you to rework it, get unstuck, or write in a totally different voice for another offer or business entirely, so stay flexible to that too.";
   if(hasBrand){
-    sys+="\n\nFor reference, their primary brand/voice profile (use only if relevant to what they're asking, since they may be asking you to write in a totally different voice for another business):";
+    sys+="\n\nFor reference, their brand and strategy profile (use the voice/POV fields only if relevant to what they're asking, since they may be asking you to write in a totally different voice for another business, but DO use the logistics fields below whenever the question is about timing, cadence, or strategy):";
     if(bp.niche)sys+="\nNiche: "+bp.niche;
     if(bp.role)sys+="\nRole: "+bp.role;
     if(bp.voice)sys+="\nVoice: "+bp.voice;
     if(bp.pov)sys+="\nPOV: "+bp.pov;
+    if(bp.platforms)sys+="\nPrimary platforms: "+bp.platforms;
+    if(bp.frequency)sys+="\nCurrent posting frequency: "+bp.frequency;
+    if(bp.timezone)sys+="\nAudience timezone: "+bp.timezone;
+    if(bp.phase)sys+="\nCurrent phase / goal: "+bp.phase;
+    if(bp.whatWorked)sys+="\nWhat's worked before (treat this as their strongest, most reliable signal): "+bp.whatWorked;
+  } else {
+    sys+="\n\nThey haven't filled out their Strategy & Logistics profile yet (Settings > Strategy & Logistics), so you don't know their platforms, cadence, or timezone. If a question really hinges on that, give your best general recommendation anyway, then mention in passing that filling out that section would let you get more specific.";
   }
   return sys;
 }
@@ -7215,7 +7251,7 @@ function renderDirectorChat(){
   var active=dirChatGetActive();
   var chat=(active&&active.messages)||[];
   if(!chat.length){
-    log.innerHTML='<div class="dc-empty"><div class="sym">&#10070;</div><h3>Ask your Creative Director anything</h3><p>Paste a caption, an email, anything you\'re working on, and ask for it in a different voice. Or just think out loud here.</p></div>';
+    log.innerHTML='<div class="dc-empty"><div class="sym">&#10070;</div><h3>Ask your Creative Director anything</h3><p>Paste a caption, an email, anything you\'re working on, and ask for it in a different voice. Or ask the strategy stuff: when to send, how often to post, what to do next. Or just think out loud here.</p></div>';
     return;
   }
   var html='';
@@ -8089,6 +8125,11 @@ function copyBrandProfile() {
   if (bp.voice)   lines.push('Brand voice: ' + bp.voice);
   if (bp.pov)     lines.push('Unique POV: ' + bp.pov);
   if (bp.extra)   lines.push('Additional context:\n' + bp.extra);
+  if (bp.platforms) lines.push('Primary platforms: ' + bp.platforms);
+  if (bp.frequency) lines.push('Posting frequency: ' + bp.frequency);
+  if (bp.timezone)  lines.push('Audience timezone: ' + bp.timezone);
+  if (bp.phase)     lines.push('Current phase / goal: ' + bp.phase);
+  if (bp.whatWorked) lines.push('What\'s worked before:\n' + bp.whatWorked);
   if (!lines.length) { toast('Your Brand Profile is empty - fill it in first'); return; }
   var text = 'Brand Profile:\n' + lines.join('\n');
   navigator.clipboard.writeText(text).then(function() {
