@@ -1,18 +1,5 @@
-{
-  "version": "3.8",
-  "releasedAt": "2026-06-25",
-  "changelog": [
-    {
-      "type": "new",
-      "date": "Jun 25, 2026",
-      "title": "Director Chat Just Got a Strategy Upgrade",
-      "desc": "Ask Your Creative Director can now answer real strategy questions, not just rewrite copy. Ask when to send your newsletter, how often to post, or what to prioritize next, and get a real answer instead of \"whenever works for you.\" Powers this with a new Strategy & Logistics section under Settings (right after Brand Profile), where you can tell it your platforms, posting frequency, audience timezone, current goal, and what's worked for you before. There's also a new guide, Big Brain Energy (Strategy Edition), under Guides on your dashboard, covering exactly what to ask it and how to start leaning into strategy without it feeling like a whole new skill."
-    },
-    {
-      "type": "new",
-      "date": "Jun 22, 2026",
-      "title": "The IG Resurrection Guide",
-      "desc": "A new strategy guide for coming back after a quiet or ghosted Instagram account. Covers posting and content without overwhelm, engagement and the algorithm, SEO over hashtags, and why community matters more than reach. Find it under Guides on your dashboard."
-    }
-  ]
-}
+{"version":"3.9","date":"2026-06-27","entries":[
+  {"type":"feature","text":"Director Chat is now available everywhere as a floating popup, not just its own page."},
+  {"type":"feature","text":"Browser back and forward buttons now work throughout the Studio, including inside guides."},
+  {"type":"improvement","text":"Mobile layout reviewed across the whole app."}
+]}
