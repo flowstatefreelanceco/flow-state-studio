@@ -4560,13 +4560,30 @@ async function loadUserData(){
     var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
     if(!error&&data&&data.data){
       var sbData=JSON.parse(data.data);
-      // Smart merge: union arrays by ID, prefer most recently created item
+      // Smart merge: union arrays by ID, prefer whichever side was actually edited more recently.
+      // Falls back to "local wins" only when neither side has an updatedAt to compare (older data
+      // saved before this fix existed) - this is what previously caused a stale local copy to
+      // silently overwrite a newer Supabase edit any time two tabs/sessions were open.
       function mergeArrays(loc,sb_){
         var map={};
-        // Add supabase items first
+        function ts(item){
+          var v=item&&(item.updatedAt||item.createdAt);
+          return v?new Date(v).getTime():0;
+        }
         (sb_||[]).forEach(function(x){if(x&&x.id)map[x.id]=x;});
-        // localStorage items overwrite - they are more recent user actions
-        (loc||[]).forEach(function(x){if(x&&x.id)map[x.id]=x;});
+        (loc||[]).forEach(function(x){
+          if(!x||!x.id)return;
+          var existing=map[x.id];
+          if(!existing){map[x.id]=x;return;}
+          var locTime=ts(x),sbTime=ts(existing);
+          if(locTime&&sbTime){
+            // Both sides have a usable timestamp - keep whichever is actually newer.
+            map[x.id]=locTime>=sbTime?x:existing;
+          } else {
+            // No reliable timestamp on one or both sides - fall back to prior behavior.
+            map[x.id]=x;
+          }
+        });
         return Object.values(map);
       }
       var merged={};
@@ -5328,7 +5345,7 @@ function deleteIdea(id){
   if(S.lastCardId===id)S.lastCardId='';
   persist();renderKanban();renderCalendar();renderDashboard();renderBucketInsights();
 }
-function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;persist();renderKanban();}}
+function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;i.updatedAt=new Date().toISOString();persist();renderKanban();}}
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
 const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'var(--blue)',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
@@ -5441,7 +5458,7 @@ function deleteTask(id){
   });
   persist();renderTaskKanban();renderCalendar();
 }
-function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;persist();renderTaskKanban();}}
+function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;t.updatedAt=new Date().toISOString();persist();renderTaskKanban();}}
 
 /* ═══════════════════ CALENDAR ═══════════════════ */
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -5851,6 +5868,7 @@ function saveDraftEdit(){
   const contentEl=document.getElementById('draftModalContent');
   if(titleEl&&titleEl.value.trim())d.title=titleEl.value.trim();
   if(contentEl)d.content=contentEl.value;
+  d.updatedAt=new Date().toISOString();
   persist();renderDraftsGrid();toast('Draft saved ✓');
 }
 function copyDraftModal(){const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));}
@@ -5974,7 +5992,7 @@ function saveIdea(){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('ideaReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks))};
+  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
   cdSyncTasks(title,idea.id);
   S.ideas.push(idea);
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
@@ -6083,6 +6101,7 @@ function saveTask(){
     if(t){
       t.title=title;t.date=date;t.time=time;t.notes=notes;t.status=status;
       t.taskType=taskType;t.energy=energy;t.timeEst=timeEst;t.starred=starred;
+      t.updatedAt=new Date().toISOString();
       const calId='cal_task_'+t.id;
       if(date){
         const idx=S.calEntries.findIndex(e=>e.id===calId);
@@ -6097,7 +6116,7 @@ function saveTask(){
     persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task saved ✓');return;
   }
   // New task
-  const task={id:Date.now().toString(),title,status,date,time,notes,taskType,energy,timeEst,starred};
+  const task={id:Date.now().toString(),title,status,date,time,notes,taskType,energy,timeEst,starred,updatedAt:new Date().toISOString()};
   S.tasks.push(task);
   if(date){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status,date,time,notes});}
   persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task added ✓');
@@ -6648,6 +6667,7 @@ function cdSave(){
   x.aiOutputs=Object.assign({},_cdOutputs);
   x.aiHookSel=_cdHookSel||'';
   x.cdTasks=JSON.parse(JSON.stringify(_cdTasks));
+  x.updatedAt=new Date().toISOString();
   // Save carousel slides
   var slidesContainer=document.getElementById('cdCarouselSlides');
   if(slidesContainer){
