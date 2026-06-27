@@ -5927,7 +5927,7 @@ function openIdeaModal(status){
   // Clear carousel slides
   var slidesContainer=document.getElementById('cdCarouselSlides');
   if(slidesContainer){slidesContainer.innerHTML='';cdAddSlide();cdAddSlide();cdAddSlide();}
-  S._pendingIdeaImages=[];cdRenderTasks();
+  S._pendingIdeaImages=[];cdRenderTasks();cdRefreshImageArea();
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
   var rc=document.getElementById('cdReminderOn');if(rc){rc.checked=false;cdToggleReminder(rc);}
   // Clear all fields
