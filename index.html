@@ -6779,7 +6779,10 @@ function cdGetBrief(){
   var own=g('cdOwnContent');
   var hook=g('cdHook');
   var notes=g('cdNotes');
-  var notesBlock=[hook?'Hook/Subject: '+hook:'',notes].filter(Boolean).join('\n');
+  var slidesContainer=document.getElementById('cdCarouselSlides');
+  var slideTexts=slidesContainer?Array.from(slidesContainer.querySelectorAll('.cd-slide-wrap textarea')).map(function(ta){return ta.value.trim();}).filter(Boolean):[];
+  var slidesBlock=slideTexts.length?'Carousel slides written so far:\n'+slideTexts.map(function(t,i){return (i+1)+'. '+t;}).join('\n'):'';
+  var notesBlock=[hook?'Hook/Subject: '+hook:'',notes,slidesBlock].filter(Boolean).join('\n');
   var combined=own&&notesBlock?notesBlock+'\n\n---\nMy own draft:\n'+own:own||notesBlock;
   var fullBrief=(g('cdTitle')+(combined?'\n'+combined:''));
   return{title:g('cdTitle'),hook:hook,notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
