@@ -5959,7 +5959,7 @@ function saveCalEntry(){
   toast('Entry saved ✓');
 }
 function openIdeaModal(status){
-  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];
+  S.cdId=null;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdTasks=[];_cdSelTone='warm';
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value='';
   // Clear carousel slides
   var slidesContainer=document.getElementById('cdCarouselSlides');
@@ -5988,6 +5988,10 @@ function openIdeaModal(status){
     var acts=document.getElementById('cd-acts-'+sec);if(acts)acts.classList.remove('show');
   });
   var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
+  var hookListNew=document.getElementById('cd-hook-list');if(hookListNew){hookListNew.innerHTML='';hookListNew.classList.remove('show');}
+  var buildAreaNew=document.getElementById('cd-hook-build-area');if(buildAreaNew)buildAreaNew.style.display='none';
+  var seriesListNew=document.getElementById('cd-series-list');if(seriesListNew){seriesListNew.innerHTML='';seriesListNew.classList.remove('show');}
+  document.querySelectorAll('#cardDetailModal .ai2-tone-chip').forEach(function(c){c.classList.toggle('sel',c.dataset.t==='warm');});
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
   var sbs=document.getElementById('cd-repurpose-sidebyside');if(sbs)sbs.classList.remove('show');
   var rebuildBtn=document.getElementById('cd-rebuild-btn');if(rebuildBtn)rebuildBtn.style.display='none';
@@ -6496,7 +6500,7 @@ var _openNotes = new Set();
 function cdOpen(id){
   var x=S.ideas.find(function(a){return a.id===id;});
   if(!x)return;
-  S.cdId=id;S.cdOut='';_cdOutputs={};_cdHookSel='';
+  S.cdId=id;S.cdOut='';_cdOutputs={};_cdHookSel='';_cdSelTone='warm';
   // Migrate legacy 'hooks' key to 'hookList'
   if(x.aiOutputs&&x.aiOutputs['hooks']&&!x.aiOutputs['hookList']){
     x.aiOutputs['hookList']=x.aiOutputs['hooks'];
@@ -6542,6 +6546,7 @@ function cdOpen(id){
   var hookList=document.getElementById('cd-hook-list');if(hookList){hookList.innerHTML='';hookList.classList.remove('show');}
   var buildArea=document.getElementById('cd-hook-build-area');if(buildArea)buildArea.style.display='none';
   var seriesList=document.getElementById('cd-series-list');if(seriesList){seriesList.innerHTML='';seriesList.classList.remove('show');}
+  document.querySelectorAll('#cardDetailModal .ai2-tone-chip').forEach(function(c){c.classList.toggle('sel',c.dataset.t==='warm');});
   var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
 
