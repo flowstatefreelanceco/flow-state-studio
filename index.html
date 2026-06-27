@@ -4872,6 +4872,7 @@ function lsKey(){
   return _currentUser ? 'fss_v1_'+_currentUser.id : 'fss_v1';
 }
 
+var _lastUnsavedSnapshot=null;
 function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
@@ -4889,11 +4890,29 @@ function persist(){
     localStorage.setItem(lsKey(), json);
   }catch(e){ console.warn('localStorage save failed:', e); }
   // Debounce Supabase save - wait 1.5s of inactivity before hitting network
+  _lastUnsavedSnapshot=dataToSave;
   clearTimeout(_persistTimer);
   _persistTimer = setTimeout(function(){
     if(window._supabasePersist) window._supabasePersist(dataToSave);
+    _lastUnsavedSnapshot=null;
   }, 1500);
 }
+// If the person closes the tab, refreshes, or switches away within the 1.5s
+// debounce window above, flush the pending Supabase save immediately instead
+// of losing it - localStorage already has it instantly, but without this the
+// Supabase copy (what other devices/tabs load) could miss the latest change.
+function flushPendingSave(){
+  if(_lastUnsavedSnapshot && window._supabasePersist){
+    clearTimeout(_persistTimer);
+    window._supabasePersist(_lastUnsavedSnapshot);
+    _lastUnsavedSnapshot=null;
+  }
+}
+window.addEventListener('beforeunload',flushPendingSave);
+window.addEventListener('pagehide',flushPendingSave);
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='hidden')flushPendingSave();
+});
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
   const sbNameEl=document.getElementById('sbName');if(sbNameEl)sbNameEl.textContent=n;
@@ -6964,13 +6983,28 @@ function panicSaveDraft(){
 
 function panicToCard(){
   var topic=document.getElementById('panicTopic').value.trim();
-  var out=document.getElementById('panicOut').textContent;
+  var plat=document.getElementById('panicPlat').value;
+  var fmt=document.getElementById('panicFormat').value;
+  var out=document.getElementById('panicOut').textContent.trim();
+  if(!out){toast('Nothing to save yet');return;}
   closeModal('panicModal');
   openIdeaModal('idea');
-  setTimeout(()=>{
-    var t=document.getElementById('cdTitle');if(t)t.value=topic;
-    var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
-  },100);
+  var t=document.getElementById('cdTitle');if(t)t.value=topic||'Creative Director Brief';
+  var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
+  var p=document.getElementById('cdPlat');if(p&&plat)p.value=plat;
+  var f=document.getElementById('cdFormat');if(f&&fmt)f.value=fmt;
+  // Save immediately so the card actually exists rather than sitting unsaved
+  // in an open form - this was previously just pre-filling fields and leaving
+  // it to the person to remember to click Add, which silently lost the brief
+  // if the modal got closed first.
+  saveIdea();
+  // Find the card we just created (saveIdea pushes it, so it's the most recent
+  // one with this title) and reopen it so the person lands somewhere real and
+  // can keep building - running Hooks, Carousel generation, etc on it.
+  var justSaved=S.ideas.slice().reverse().find(function(i){return i.title===(topic||'Creative Director Brief');});
+  if(justSaved){
+    requestAnimationFrame(function(){ cdOpen(justSaved.id); openModal('cardDetailModal'); });
+  }
 }
 /* ═══════════════ BRAIN DUMP SESSION ═══════════════ */
 function openBrainDump(){
