@@ -2629,6 +2629,12 @@ select.fi{cursor:pointer}
           JSON backup = full restore of everything. CSV = your drafts as a spreadsheet you can open in Excel or Google Sheets.
         </div>
       </div>
+      <div class="setting-sec">
+        <h3>Photo Storage Cleanup</h3>
+        <p class="setting-desc">Photos you uploaded before this update are stored directly inside your saved data, which is what can cause saves to silently fail once you have a few of them. This moves any old photos to proper file storage instead, where they belong, your cards will look exactly the same.</p>
+        <button class="btn btn-brass" onclick="migrateOldImages()" id="migrateImgBtn">Move Old Photos to Storage</button>
+        <div id="migrateImgStatus" style="font-size:12px;color:var(--t);margin-top:10px"></div>
+      </div>
       <div class="setting-sec" id="clearDataSection" style="border-color:#E0BDAA;display:none">
         <h3>Clear All Data</h3>
         <p class="setting-desc">Permanently deletes everything in this browser. Export first!</p>
@@ -6398,6 +6404,56 @@ function importData(e){
   };r.readAsText(f);
 }
 
+// Finds any card photo still stored as base64 (the old way) and uploads it
+// to the card-photos Storage bucket, replacing it in place with a short URL.
+// Already-migrated images (real URLs) are left untouched. Saves after each
+// card so a failure partway through doesn't lose progress on the ones that
+// already succeeded.
+async function migrateOldImages(){
+  if (!_currentUser) { toast('Sign in first'); return; }
+  var btn=document.getElementById('migrateImgBtn');
+  var status=document.getElementById('migrateImgStatus');
+  var cardsWithOldImages=(S.ideas||[]).filter(function(idea){
+    return (idea.images||[]).some(function(img){ return img.data && img.data.indexOf('data:') === 0; });
+  });
+  if (!cardsWithOldImages.length) {
+    if (status) status.textContent = 'Nothing to move - all your photos are already in proper storage.';
+    return;
+  }
+  if (btn) btn.disabled = true;
+  var totalImages = cardsWithOldImages.reduce(function(sum,c){ return sum + c.images.filter(function(i){return i.data && i.data.indexOf('data:')===0;}).length; }, 0);
+  var done = 0, failed = 0;
+  for (var ci = 0; ci < cardsWithOldImages.length; ci++) {
+    var card = cardsWithOldImages[ci];
+    for (var ii = 0; ii < card.images.length; ii++) {
+      var img = card.images[ii];
+      if (!img.data || img.data.indexOf('data:') !== 0) continue;
+      if (status) status.textContent = 'Moving photo ' + (done+failed+1) + ' of ' + totalImages + '...';
+      try {
+        var compressed = await compressImageDataUrl(img.data, 1600, 0.8);
+        var blob = await (await fetch(compressed)).blob();
+        var path = _currentUser.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.jpg';
+        var { error } = await sb.storage.from('card-photos').upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+        if (error) throw error;
+        var { data } = sb.storage.from('card-photos').getPublicUrl(path);
+        card.images[ii] = { name: img.name, data: data.publicUrl, storagePath: path };
+        done++;
+      } catch(e) {
+        console.warn('Migration failed for one image:', e);
+        failed++;
+      }
+    }
+    // Save after each card so progress survives even if a later card fails.
+    persist();
+  }
+  if (btn) btn.disabled = false;
+  if (status) status.textContent = failed
+    ? ('Moved ' + done + ' photo(s). ' + failed + ' could not be moved - check your connection and try again.')
+    : ('Moved ' + done + ' photo(s) to proper storage. Your saves are lighter now ✓');
+  renderKanban();
+  toast(failed ? 'Some photos could not be moved' : 'Photos moved successfully ✓');
+}
+
 
 /* ═══════════════════ BRAIN DUMP ═══════════════════ */
 function renderBrainDump(){
@@ -8088,26 +8144,61 @@ function compressImageDataUrl(dataUrl, maxDim, quality){
 function handleCdImages(input) {
   if (!input.files || !input.files.length) return;
   if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
+  if (!_currentUser) { toast('Sign in to upload images'); input.value=''; return; }
   var files = Array.from(input.files);
-  var promises = files.map(function(file) {
-    return new Promise(function(resolve) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        compressImageDataUrl(e.target.result, 1600, 0.8).then(function(compressed){
-          resolve({ name: file.name, data: compressed });
-        });
-      };
-      reader.readAsDataURL(file);
-    });
-  });
-  Promise.all(promises).then(function(imgObjs) {
-    var area = document.getElementById('cdImgArea');
-    imgObjs.forEach(function(imgObj) {
+  var area = document.getElementById('cdImgArea');
+  files.forEach(function(file) {
+    // Show a loading placeholder immediately so the upload feels responsive,
+    // then swap it for the real thumbnail once the file is actually stored.
+    var placeholderId = 'imgup_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+    cdRenderImageUploading(area, placeholderId);
+    uploadCardImage(file).then(function(imgObj){
+      var ph = document.getElementById(placeholderId);
+      if (ph) ph.remove();
+      if (!imgObj) {
+        toast('Image upload failed - check your connection and try again');
+        return;
+      }
       S._pendingIdeaImages.push(imgObj);
       cdRenderImageThumb(area, imgObj, S._pendingIdeaImages.length - 1);
     });
   });
   input.value = '';
+}
+
+// Compresses the file, uploads it to the card-photos bucket under this user's
+// own folder, and returns {name, data} where data is the real public URL -
+// same shape as before, so every other function that reads img.data keeps
+// working unchanged.
+async function uploadCardImage(file){
+  try{
+    var dataUrl = await new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){ resolve(e.target.result); };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    var compressed = await compressImageDataUrl(dataUrl, 1600, 0.8);
+    var blob = await (await fetch(compressed)).blob();
+    var ext = 'jpg';
+    var path = _currentUser.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.' + ext;
+    var { error } = await sb.storage.from('card-photos').upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+    if (error) { console.warn('Image upload failed:', error.message); return null; }
+    var { data } = sb.storage.from('card-photos').getPublicUrl(path);
+    return { name: file.name, data: data.publicUrl, storagePath: path };
+  }catch(e){
+    console.warn('Image upload error:', e);
+    return null;
+  }
+}
+
+function cdRenderImageUploading(area, id){
+  if (!area) return;
+  var wrap = document.createElement('div');
+  wrap.id = id;
+  wrap.style.cssText = 'position:relative;width:72px;height:72px;border-radius:6px;overflow:hidden;border:1px solid var(--bl);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--p);color:var(--tl);font-size:10px;flex-direction:column;gap:4px';
+  wrap.innerHTML = '<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div></div>';
+  area.appendChild(wrap);
 }
 
 function cdRenderImageThumb(area, img, idx) {
@@ -8149,8 +8240,14 @@ function openImgLightbox(src, name) {
 
 function cdRemoveImage(idx) {
   if (!S._pendingIdeaImages) return;
+  var removed = S._pendingIdeaImages[idx];
   S._pendingIdeaImages.splice(idx, 1);
   cdRefreshImageArea();
+  if (removed && removed.storagePath) {
+    sb.storage.from('card-photos').remove([removed.storagePath]).catch(function(e){
+      console.warn('Could not delete stored image (non-fatal):', e);
+    });
+  }
 }
 
 function cdRefreshImageArea() {
