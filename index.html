@@ -460,6 +460,11 @@ select.fi{cursor:pointer}
 /* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--e);color:var(--p);padding:10px 17px;border-radius:var(--rsm);font-size:13px;z-index:300;transform:translateY(70px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:310px;border:1px solid rgba(255,255,255,.08)}
 .toast.show{transform:translateY(0);opacity:1}
+.save-warn-banner{position:fixed;top:0;left:0;right:0;z-index:9500;background:#7a1f1f;color:#fff;padding:12px 20px;font-family:var(--fb);font-size:13px;display:none;align-items:center;justify-content:center;gap:14px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.save-warn-banner.show{display:flex}
+.save-warn-banner button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:var(--rsm);padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--fb);flex-shrink:0}
+.save-warn-banner button:hover{background:rgba(255,255,255,.25)}
+@media(max-width:768px){.save-warn-banner{flex-direction:column;gap:8px;padding:10px 14px}}
 
 /* EMPTY */
 .empty-state{text-align:center;padding:44px 20px;color:var(--t)}
@@ -1193,6 +1198,12 @@ select.fi{cursor:pointer}
 </style>
 </head>
 <body>
+
+<div class="save-warn-banner" id="saveWarnBanner">
+  <span id="saveWarnText">Your last change didn't save. Check your connection and try again.</span>
+  <button onclick="retryFailedSave()">Retry now</button>
+  <button onclick="dismissSaveWarn()">Dismiss</button>
+</div>
 
 <div id="loadingScreen">
   <div class="load-logo">Flow State Studio</div>
@@ -4622,16 +4633,17 @@ async function loadUserData(){
 }
 
 async function saveUserData(obj){
-  if(!_currentUser)return;
-  try{localStorage.setItem(lsKey(),JSON.stringify(obj));}catch(e){}
+  if(!_currentUser)return false;
+  try{localStorage.setItem(lsKey(),JSON.stringify(obj));}catch(e){ console.warn('localStorage save failed:', e); }
   try{
     await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
-  }catch(e){console.warn('Supabase save failed:',e.message);}
+    return true;
+  }catch(e){console.warn('Supabase save failed:',e.message); return false;}
 }
 
 async function bootApp(){
   _appBooted=true;
-  window._supabasePersist=function(obj){saveUserData(obj);};
+  window._supabasePersist=function(obj){return saveUserData(obj);};
   document.getElementById('loadingScreen').classList.remove('hidden');
   var saved=await loadUserData();
   // Load plan from Supabase profiles table
@@ -4873,6 +4885,7 @@ function lsKey(){
 }
 
 var _lastUnsavedSnapshot=null;
+var _localSaveFailed=false;
 function persist(){
   var dataToSave={
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
@@ -4883,19 +4896,64 @@ function persist(){
     favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null
   };
   // Save to localStorage immediately (instant, no network)
+  var localOk=false;
   try{
     var json = JSON.stringify(dataToSave);
-    // Warn if approaching localStorage limit (>3MB)
-    if(json.length > 3000000) console.warn('FSS: data approaching localStorage limit, consider reducing image storage');
     localStorage.setItem(lsKey(), json);
-  }catch(e){ console.warn('localStorage save failed:', e); }
+    localOk=true;
+    _localSaveFailed=false;
+  }catch(e){
+    console.warn('localStorage save failed:', e);
+    _localSaveFailed=true;
+    // This is the dangerous case: the in-memory change (new title, hook, image,
+    // status, etc) exists only in this tab's memory right now. If the person
+    // closes the tab before the Supabase save below succeeds, it's gone. Most
+    // common cause is a large uploaded image pushing the saved data over the
+    // browser's storage limit - the warning below names that directly so it's
+    // actionable instead of a generic error.
+    showSaveWarning('Your last change is too large to save (likely an uploaded photo). Try a smaller image, or remove one from this card.');
+  }
   // Debounce Supabase save - wait 1.5s of inactivity before hitting network
   _lastUnsavedSnapshot=dataToSave;
   clearTimeout(_persistTimer);
   _persistTimer = setTimeout(function(){
-    if(window._supabasePersist) window._supabasePersist(dataToSave);
-    _lastUnsavedSnapshot=null;
+    attemptCloudSave(dataToSave, localOk);
   }, 1500);
+}
+async function attemptCloudSave(dataToSave, localOk){
+  if(!window._supabasePersist){ _lastUnsavedSnapshot=null; return; }
+  var ok=await window._supabasePersist(dataToSave);
+  if(ok){
+    _lastUnsavedSnapshot=null;
+    if(localOk) hideSaveWarning();
+  } else if(!_localSaveFailed){
+    // Local copy is fine, but the cloud save failed (offline, network error,
+    // or the payload was rejected) - this is recoverable via Retry, and the
+    // person's local browser still has the correct data either way.
+    showSaveWarning('Your last change saved on this device but not to your account. Check your connection and retry.');
+  }
+}
+function showSaveWarning(msg){
+  var b=document.getElementById('saveWarnBanner');
+  var t=document.getElementById('saveWarnText');
+  if(t)t.textContent=msg;
+  if(b)b.classList.add('show');
+}
+function hideSaveWarning(){
+  var b=document.getElementById('saveWarnBanner');
+  if(b)b.classList.remove('show');
+}
+function dismissSaveWarn(){ hideSaveWarning(); }
+function retryFailedSave(){
+  if(_lastUnsavedSnapshot){
+    attemptCloudSave(_lastUnsavedSnapshot, !_localSaveFailed);
+    toast('Retrying...');
+  } else {
+    // Nothing pending from this session - re-run persist with current state
+    // in case the in-memory data still differs from what's saved.
+    persist();
+    toast('Retrying...');
+  }
 }
 // If the person closes the tab, refreshes, or switches away within the 1.5s
 // debounce window above, flush the pending Supabase save immediately instead
@@ -4904,8 +4962,8 @@ function persist(){
 function flushPendingSave(){
   if(_lastUnsavedSnapshot && window._supabasePersist){
     clearTimeout(_persistTimer);
-    window._supabasePersist(_lastUnsavedSnapshot);
-    _lastUnsavedSnapshot=null;
+    var snap=_lastUnsavedSnapshot;
+    window._supabasePersist(snap);
   }
 }
 window.addEventListener('beforeunload',flushPendingSave);
@@ -8004,6 +8062,29 @@ function handleIdeaImages(input) {
 }
 
 /* IMAGE UPLOAD FOR CARD DETAIL MODAL */
+// Resizes an image to a max dimension and re-encodes as compressed JPEG.
+// A typical phone photo (3-4MB, 4000px+ wide) comes out of this around
+// 100-400KB - small enough that a few images on a card won't push the
+// saved data past the browser's storage limit the way a raw photo would.
+function compressImageDataUrl(dataUrl, maxDim, quality){
+  return new Promise(function(resolve){
+    var img = new Image();
+    img.onload = function(){
+      var w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w >= h) { h = Math.round(h * (maxDim / w)); w = maxDim; }
+        else { w = Math.round(w * (maxDim / h)); h = maxDim; }
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = function(){ resolve(dataUrl); }; // fall back to original if it fails to load
+    img.src = dataUrl;
+  });
+}
 function handleCdImages(input) {
   if (!input.files || !input.files.length) return;
   if (!S._pendingIdeaImages) S._pendingIdeaImages = [];
@@ -8011,7 +8092,11 @@ function handleCdImages(input) {
   var promises = files.map(function(file) {
     return new Promise(function(resolve) {
       var reader = new FileReader();
-      reader.onload = function(e) { resolve({ name: file.name, data: e.target.result }); };
+      reader.onload = function(e) {
+        compressImageDataUrl(e.target.result, 1600, 0.8).then(function(compressed){
+          resolve({ name: file.name, data: compressed });
+        });
+      };
       reader.readAsDataURL(file);
     });
   });
