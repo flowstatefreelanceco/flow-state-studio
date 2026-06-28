@@ -52,7 +52,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 /* SIDEBAR */
 .sidebar{width:var(--sw);min-width:var(--sw);background:var(--sb);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;border-right:1px solid var(--b)}
 .sb-logo{padding:26px 20px 20px;border-bottom:1px solid var(--b)}
-.sb-wordmark{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);letter-spacing:.01em;line-height:1.2}
+.sb-wordmark{font-family:var(--fh);font-size:26px;font-weight:700;color:var(--e);letter-spacing:.01em;line-height:1.2}
 .sb-tagline{font-size:9px;color:var(--t);margin-top:4px;letter-spacing:.16em;text-transform:uppercase}
 .sb-line{width:22px;height:1.5px;background:var(--teal);border-radius:1px;margin-top:14px}
 .sb-nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -72,7 +72,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
-.main-hdr h1{font-family:var(--fh);font-size:26px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.1}
+.main-hdr h1{font-family:var(--fh);font-size:30px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.15}
 .main-hdr .sub{font-size:14px;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 36px 48px}
@@ -110,7 +110,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .gs-item.done .gs-item-lbl{color:var(--tl);text-decoration:line-through}
 
 /* SECTION TITLE */
-.sec-title{font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:13px;letter-spacing:.01em;display:flex;align-items:center;gap:10px}
+.sec-title{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e);margin-bottom:13px;letter-spacing:.01em;display:flex;align-items:center;gap:10px}
 .sec-title::after{content:'';flex:1;height:1px;background:var(--bl)}
 
 /* DRAFT CARDS */
@@ -194,7 +194,7 @@ select.fi{cursor:pointer}
 .chip.sel{background:var(--r);border-color:var(--r);color:white}
 .out-panel{display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);box-shadow:0 1px 4px var(--sh)}
 .out-tb{padding:14px 22px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
-.out-tit{font-family:var(--fd);font-size:18px;font-weight:500;color:var(--e)}
+.out-tit{font-family:var(--fd);font-size:21px;font-weight:500;color:var(--e)}
 .out-bdy{padding:22px;min-height:320px}
 .out-ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--t);gap:10px}
 .out-ph .sym{font-size:36px;opacity:.22}
@@ -218,7 +218,7 @@ select.fi{cursor:pointer}
 .dc-msg.assistant .dc-bubble .dc-copy{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--teal);background:none;border:1px solid var(--teal);border-radius:100px;padding:2px 9px;margin-top:9px;cursor:pointer;font-family:var(--fb)}
 .dc-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--t);gap:8px;padding:40px 20px}
 .dc-empty .sym{font-size:34px;opacity:.22}
-.dc-empty h3{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--t)}
+.dc-empty h3{font-family:var(--fd);font-size:23px;font-weight:400;color:var(--t)}
 .dc-empty p{font-size:12.5px;max-width:300px;line-height:1.65;color:var(--tl)}
 .dc-chip{font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:100px;padding:6px 13px;cursor:pointer;font-family:var(--fb);transition:opacity .15s}
 .dc-chip:hover{opacity:.75}
@@ -229,7 +229,7 @@ select.fi{cursor:pointer}
 .dc-hist-panel{position:fixed;top:0;left:0;height:100%;width:300px;max-width:85vw;background:var(--w);box-shadow:4px 0 20px var(--shm);z-index:9001;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .22s ease}
 .dc-hist-overlay.open .dc-hist-panel{transform:translateX(0)}
 .dc-hist-hdr{padding:18px 18px 14px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.dc-hist-title{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e)}
+.dc-hist-title{font-family:var(--fh);font-size:21px;font-weight:700;color:var(--e)}
 .dc-hist-close{background:none;border:none;font-size:18px;color:var(--t);cursor:pointer;padding:4px}
 .dc-hist-new{margin:14px 18px;padding:9px 14px;background:var(--teal);color:#fff;border:none;border-radius:var(--rsm);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb);text-align:center}
 .dc-hist-new:hover{background:var(--tealh)}
@@ -254,7 +254,7 @@ select.fi{cursor:pointer}
 .dc-pop-panel.open{display:flex}
 .dc-pop-hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--bl);background:var(--p)}
 .dc-pop-hdr-left{display:flex;align-items:center;gap:9px}
-.dc-pop-title{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e)}
+.dc-pop-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e)}
 .dc-pop-acts{display:flex;gap:6px;align-items:center}
 .dc-pop-icobtn{background:none;border:none;color:var(--t);cursor:pointer;padding:5px;display:flex;align-items:center;border-radius:var(--rsm)}
 .dc-pop-icobtn:hover{background:var(--bl);color:var(--e)}
@@ -468,7 +468,7 @@ select.fi{cursor:pointer}
 
 /* EMPTY */
 .empty-state{text-align:center;padding:44px 20px;color:var(--t)}
-.empty-state h3{font-family:var(--fd);font-size:22px;font-weight:400;margin-bottom:7px}
+.empty-state h3{font-family:var(--fd);font-size:24px;font-weight:400;margin-bottom:7px}
 .empty-state p{font-size:12.5px;max-width:270px;margin:0 auto;line-height:1.65;color:var(--tl)}
 
 
@@ -487,7 +487,7 @@ select.fi{cursor:pointer}
 .nb-card:hover .nb-del{opacity:1}
 .bd-right{display:flex;flex-direction:column;overflow:hidden}
 .bd-right-hdr{padding:14px 20px 12px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
-.bd-right-hdr h3{font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)}
+.bd-right-hdr h3{font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e)}
 .notes-list{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:0}
 .note-card{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s;box-shadow:0 1px 3px var(--sh)}
 .note-card:hover{box-shadow:0 4px 14px var(--shm)}
@@ -503,7 +503,7 @@ select.fi{cursor:pointer}
 .note-ta:focus{border-color:var(--r)}
 .bd-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--t);gap:10px;padding:40px}
 .bd-empty .sym{font-size:36px;opacity:.2}
-.bd-empty h3{font-family:var(--fd);font-size:22px;font-weight:400}
+.bd-empty h3{font-family:var(--fd);font-size:24px;font-weight:400}
 .bd-empty p{font-size:12.5px;color:var(--tl);max-width:240px;line-height:1.65}
 
 /* SECTION GUIDE */
@@ -666,7 +666,7 @@ select.fi{cursor:pointer}
 
   /* HEADER */
   .main-hdr{padding:14px 16px 12px;flex-wrap:wrap;gap:8px}
-  .main-hdr h1{font-size:20px}
+  .main-hdr h1{font-size:24px}
   .main-hdr .sub{font-size:12px}
   .hdr-acts{flex-wrap:wrap;gap:6px}
   .hdr-acts .btn{font-size:12px;padding:7px 12px}
@@ -794,7 +794,7 @@ select.fi{cursor:pointer}
 @media(max-width:420px){
   .wdc-grid{grid-template-columns:repeat(2,1fr)}
   .stats-row{grid-template-columns:1fr}
-  .main-hdr h1{font-size:18px}
+  .main-hdr h1{font-size:22px}
   .ai2-btn-grid{grid-template-columns:1fr}
   .cd-stages{gap:3px}
   .cd-stage{font-size:9px;padding:4px 6px}
@@ -965,7 +965,7 @@ select.fi{cursor:pointer}
 .gic-eyebrow.sage{color:var(--sage)}
 .gic-eyebrow.espresso{color:var(--em)}
 .gic-icon{font-size:32px;margin-bottom:12px;display:block}
-.gic-title{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:8px;line-height:1.2}
+.gic-title{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--e);margin-bottom:8px;line-height:1.2}
 .gic-desc{font-size:13px;color:var(--el);line-height:1.7;margin-bottom:16px}
 .gic-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .gic-tag{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:100px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.08);color:var(--e)}
@@ -1062,7 +1062,7 @@ select.fi{cursor:pointer}
 
 /* cal picker modal */
 .cal-picker-modal{background:var(--w);border-radius:var(--rad);padding:28px;max-width:360px;width:100%}
-.cal-picker-title{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--e);margin-bottom:6px}
+.cal-picker-title{font-family:var(--fh);font-size:24px;font-weight:700;color:var(--e);margin-bottom:6px}
 .cal-picker-sub{font-size:13px;color:var(--t);margin-bottom:20px}
 .cal-picker-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .cal-picker-opt{background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rad);padding:20px 18px;cursor:pointer;transition:all .18s;text-align:left}
@@ -1104,7 +1104,7 @@ select.fi{cursor:pointer}
 .swf-analysis.open{display:block}
 .swf-empty{text-align:center;padding:60px 20px;color:var(--t)}
 .swf-empty-icon{font-size:36px;opacity:.25;margin-bottom:14px}
-.swf-empty-title{font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:8px}
+.swf-empty-title{font-family:var(--fh);font-size:23px;font-weight:600;color:var(--e);margin-bottom:8px}
 .swf-empty-desc{font-size:13px;color:var(--tl);line-height:1.7;max-width:320px;margin:0 auto}
 
 /* WHAT'S NEW MODAL */
@@ -1133,7 +1133,7 @@ select.fi{cursor:pointer}
 /* WEEKLY FOCUS */
 .wf-wrap{background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
-.wf-title{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--e);line-height:1.2}
+.wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
 .wf-reset{font-size:11px;color:var(--tl);cursor:pointer;padding:4px 10px;border-radius:100px;border:1px solid var(--bl);background:none;font-family:var(--fb);white-space:nowrap;flex-shrink:0}
 .wf-reset:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
@@ -1186,7 +1186,7 @@ select.fi{cursor:pointer}
 .gc-carousel-card.sage{background:linear-gradient(135deg,var(--sagep),var(--w));border-color:#BFD4B2}
 .gc-carousel-card.espresso{background:linear-gradient(135deg,#F5EBE3,var(--w));border-color:#C9A893}
 .gc-c-icon{font-size:24px;margin-bottom:8px;display:block}
-.gc-c-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e);margin-bottom:5px;line-height:1.2}
+.gc-c-title{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e);margin-bottom:5px;line-height:1.25}
 .gc-c-desc{font-size:11.5px;color:var(--t);line-height:1.55;margin-bottom:10px}
 .gc-c-cta{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
 .gc-c-cta.rust{color:var(--r)}
@@ -1297,7 +1297,7 @@ select.fi{cursor:pointer}
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
           <div style="width:44px;height:44px;border-radius:10px;background:#e0f2f2;border:1px solid rgba(0,132,132,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✍️</div>
           <div>
-            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Writing Studio</div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e);margin-bottom:5px">Writing Studio</div>
             <div style="font-size:13.5px;color:var(--t);line-height:1.7">Write your own or generate with AI. Captions, carousels, reels, newsletters, Substack articles, and more. Every draft saves automatically so nothing gets lost. Go analog when you want to, use AI when you need a spark.</div>
           </div>
         </div>
@@ -1305,7 +1305,7 @@ select.fi{cursor:pointer}
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
           <div style="width:44px;height:44px;border-radius:10px;background:var(--rp);border:1px solid rgba(179,108,55,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📄</div>
           <div>
-            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Content Cards</div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e);margin-bottom:5px">Content Cards</div>
             <div style="font-size:13.5px;color:var(--t);line-height:1.7">Every piece of content gets its own card with a brief, hook, body, platform, format, date, and AI tools built in. Your Creative Director reads your brief and gives you a full strategic direction before you write a word.</div>
           </div>
         </div>
@@ -1313,7 +1313,7 @@ select.fi{cursor:pointer}
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
           <div style="width:44px;height:44px;border-radius:10px;background:#e0f2f2;border:1px solid rgba(0,132,132,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">💬</div>
           <div>
-            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Director Chat</div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e);margin-bottom:5px">Director Chat</div>
             <div style="font-size:13.5px;color:var(--t);line-height:1.7">An open chat with your Creative Director. Rework something you're already creating in the Studio, write in a different voice for another offer or business, or just think out loud before you start.</div>
           </div>
         </div>
@@ -1321,7 +1321,7 @@ select.fi{cursor:pointer}
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
           <div style="width:44px;height:44px;border-radius:10px;background:#d7e7fe;border:1px solid #b8ccf0;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🔗</div>
           <div>
-            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Prompt Library</div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e);margin-bottom:5px">Prompt Library</div>
             <div style="font-size:13.5px;color:var(--t);line-height:1.7">Hundreds of ready-to-use hooks, CTAs, story prompts, and writing prompts built for service-based businesses. Filter by category, save your own favourites, and never stare at a blank page again.</div>
           </div>
         </div>
@@ -1329,7 +1329,7 @@ select.fi{cursor:pointer}
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
           <div style="width:44px;height:44px;border-radius:10px;background:var(--sagep);border:1px solid #BFD4B2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📖</div>
           <div>
-            <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:5px">Strategy Guides</div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:700;color:var(--e);margin-bottom:5px">Strategy Guides</div>
             <div style="font-size:13.5px;color:var(--t);line-height:1.7">Real playbooks built into the Studio, not generic help docs. Overwhelm resets, content rhythm frameworks, creative block reframes, and a gentle plan for coming back after a quiet stretch.</div>
           </div>
         </div>
@@ -1773,7 +1773,7 @@ select.fi{cursor:pointer}
 
     <!-- INVITE CODE -->
     <div style="text-align:center;margin-bottom:32px;padding:24px;background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rad);max-width:420px;margin-left:auto;margin-right:auto">
-      <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:6px">Got an invite code?</div>
+      <div style="font-family:var(--fh);font-size:21px;font-weight:600;color:var(--e);margin-bottom:6px">Got an invite code?</div>
       <div style="font-size:13px;color:var(--t);margin-bottom:14px">Enter your code here for free access.</div>
       <div style="display:flex;gap:8px">
         <input id="inviteCodeInput" class="fi" placeholder="Enter invite code..." style="flex:1;text-transform:uppercase;letter-spacing:.08em;font-size:14px" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')redeemInviteCode()" />
@@ -1877,7 +1877,7 @@ select.fi{cursor:pointer}
       <!-- PANIC BUTTON -->
       <div class="panic-bar" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
         <div>
-          <div style="font-family:var(--fh);font-size:20px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
+          <div style="font-family:var(--fh);font-size:23px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
           <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
         </div>
         <button onclick="openPanicModal()" class="panic-btn" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
@@ -1887,7 +1887,7 @@ select.fi{cursor:pointer}
       <div class="wf-wrap" id="wfWrap">
         <div class="wf-header">
           <div>
-            <div class="wf-title" style="font-size:16px">This Week's Focus</div>
+            <div class="wf-title">This Week's Focus</div>
             <div class="wf-sub">1-3 things. No dates, no pressure.</div>
           </div>
           <button class="wf-reset" onclick="resetWeeklyFocus()">Reset</button>
@@ -2230,7 +2230,7 @@ select.fi{cursor:pointer}
             <span class="card-section-toggle-arrow" id="studioAnalogArrow">▾</span>
           </div>
           <div id="studioAnalogBody" style="padding:14px 16px 14px;border-bottom:1px solid var(--bl);flex-shrink:0">
-            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:15px;font-family:var(--fh);font-weight:600" />
+            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
             <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
             <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
             <div style="display:flex;gap:10px;margin-bottom:10px">
@@ -2528,14 +2528,14 @@ select.fi{cursor:pointer}
         </div>
         <div id="upgradeOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="border:2px solid var(--bl);border-radius:var(--rad);padding:20px;background:var(--w);transition:border-color .15s" onmouseover="this.style.borderColor='var(--r)'" onmouseout="this.style.borderColor='var(--bl)'">
-            <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
+            <div style="font-family:var(--fh);font-size:21px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$9.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
             <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:6px">100 AI credits/month. Locked in at founding price forever.</div><div style="font-size:11.5px;font-weight:600;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:5px 10px;margin-bottom:10px">Founding Member price available through August 31st</div>
             <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member</button>
           </div>
           <div style="border:2px solid var(--r);border-radius:var(--rad);padding:20px;background:var(--rp);position:relative">
             <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px">Most Popular</div>
-            <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited Founders Membership</div>
+            <div style="font-family:var(--fh);font-size:21px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$19.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
             <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:6px">Unlimited AI credits. Zero limits. Locked in at founding price forever.</div><div style="font-size:11.5px;font-weight:600;color:var(--teal);background:rgba(0,132,132,.08);border-radius:var(--rsm);padding:5px 10px;margin-bottom:10px">Founding Member price available through August 31st</div>
             <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member</button>
@@ -3553,7 +3553,7 @@ select.fi{cursor:pointer}
 <div class="modal-ov" id="ideaModal" style="padding:0;align-items:stretch">
   <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:auto;border-radius:0;padding:0;padding-bottom:60px;display:flex;flex-direction:column;overflow-y:scroll;-webkit-overflow-scrolling:touch">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
-      <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e)">Add to Content Planner</div>
+      <div style="font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e)">Add to Content Planner</div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('ideaModal')">Cancel</button>
         <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveIdea()">Add to Planner</button>
@@ -3561,7 +3561,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" style="font-size:15px;font-family:var(--fh)" /></div>
+        <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" style="font-size:21px;font-family:var(--fh)" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="ideaPlat">
@@ -3703,7 +3703,7 @@ select.fi{cursor:pointer}
     <div class="m-sub" style="margin-bottom:18px">Add something to your to-do list</div>
     <div id="taskCardLink" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.2);border-radius:var(--rsm);padding:10px 14px;margin-bottom:14px;cursor:pointer;font-size:13px;color:var(--teal);font-weight:500">↗ View linked Content Card</div>
 
-    <div class="fl"><label class="fl-lbl" style="font-size:13px">Task</label><input class="fi" id="taskTitle" style="font-size:16px;font-family:var(--fh);font-weight:600;padding:12px" placeholder="e.g. Write captions for this week" /></div>
+    <div class="fl"><label class="fl-lbl" style="font-size:13px">Task</label><input class="fi" id="taskTitle" style="font-size:19px;font-family:var(--fh);font-weight:600;padding:12px" placeholder="e.g. Write captions for this week" /></div>
 
     <div class="two-col">
       <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
@@ -3773,7 +3773,7 @@ select.fi{cursor:pointer}
       </div>
     </div>
     <div style="flex:1;padding:32px 48px;overflow-y:auto">
-      <input id="brainDumpTitle" class="fi" placeholder="Give it a title (optional)..." style="font-size:22px;font-family:var(--fh);font-weight:600;border:none;background:transparent;outline:none;margin-bottom:16px;padding:0;width:100%;color:var(--e)" />
+      <input id="brainDumpTitle" class="fi" placeholder="Give it a title (optional)..." style="font-size:24px;font-family:var(--fh);font-weight:600;border:none;background:transparent;outline:none;margin-bottom:16px;padding:0;width:100%;color:var(--e)" />
       <textarea id="brainDumpTA" style="width:100%;min-height:calc(100vh - 280px);background:transparent;border:none;outline:none;font-family:var(--fb);font-size:17px;line-height:2;color:var(--e);resize:none;caret-color:var(--r)" placeholder="Start anywhere. Write whatever is in your head. This is for you, not for anyone else. Let it out."></textarea>
     </div>
     <div style="padding:12px 24px;border-top:1px solid var(--bl);font-size:11px;color:var(--tl);display:flex;align-items:center;gap:16px;flex-shrink:0">
@@ -3788,7 +3788,7 @@ select.fi{cursor:pointer}
 <div class="modal-ov" id="draftModal" style="padding-bottom:80px">
   <div class="modal modal-xl">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-      <input class="fi" id="draftModalTitle" placeholder="Draft title..." style="font-size:18px;font-weight:700;font-family:var(--fh);border:none;background:transparent;padding:0;margin-bottom:4px;color:var(--e)" />
+      <input class="fi" id="draftModalTitle" placeholder="Draft title..." style="font-size:21px;font-weight:700;font-family:var(--fh);border:none;background:transparent;padding:0;margin-bottom:4px;color:var(--e)" />
       <button class="btn btn-danger" style="padding:6px 11px;font-size:12px;flex-shrink:0;margin-top:4px" onclick="deleteDraft()">Delete</button>
     </div>
     <div class="m-sub" id="draftModalMeta"></div>
@@ -3824,7 +3824,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px;font-family:var(--fh);font-weight:600;padding:12px" /></div>
+        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:24px;font-family:var(--fh);font-weight:600;padding:12px" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
