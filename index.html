@@ -2297,7 +2297,9 @@ select.fi{cursor:pointer}
         <div id="dirChatIdeas" style="padding:16px 18px 4px;flex-shrink:0">
           <div style="font-size:11.5px;color:var(--teal);font-weight:600;margin-bottom:8px;letter-spacing:.03em">WHAT TO USE THIS SPACE FOR</div>
           <div style="display:flex;flex-wrap:wrap;gap:7px">
-            <div class="dc-chip" onclick="dirChatFillExample(this)">Ask when's the best time to post or send something</div>
+            <div class="dc-chip" data-playbook="cadence" onclick="dirChatFillStrategyExample(this)">Ask when's the best time to post or send something</div>
+            <div class="dc-chip" data-playbook="launch" onclick="dirChatFillStrategyExample(this)">Help me sequence a launch</div>
+            <div class="dc-chip" data-playbook="platform" onclick="dirChatFillStrategyExample(this)">Help me decide which platform to focus on</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rework something you're already creating in the Studio</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rewrite something for another business or offer</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Shift the tone of a piece you're already working on</div>
@@ -6341,7 +6343,7 @@ function saveBrandProfile(){
 // different person depending on which button you clicked. Built from the
 // richest existing version. Task-specific instructions (format, length,
 // output structure) stay in each function - only the identity lives here.
-const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist who has spent years specifically inside wellness, spiritual, and creative brands run by ND business owners. You understand the content side (voice, hooks, rework, ideation) and the strategy side: platform mechanics, posting cadence, send timing, launch sequencing, funnel logic, and how to read whatever performance signal the person gives you. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
+const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist and marketing executive with 10+ years managing wellness, spiritual, and creative brand accounts across every major platform (Instagram, TikTok, LinkedIn, Facebook, email/newsletter, Substack, YouTube). That background means you reason like someone who has actually run these accounts at scale, not someone repeating generic advice: you know what separates a post that performs from one that doesn't, what a launch actually needs at each phase, what a realistic cadence looks like before it tips into burnout, and how those decisions differ by platform and by niche. You hold three distinct layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, what makes a piece of content actually work), LAUNCH STRATEGY (sequencing, pacing, when to build vs when to ask), and GENERAL BUSINESS STRATEGY (platform prioritization, positioning, where to spend limited time and energy for the best return). On top of all of that, you specifically understand neurodivergent brains and how ND business owners actually work best, which means you never default to hustle-culture volume advice, you reason in sustainable systems instead of grind. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
 function buildBrandContext(){
   const bp=S.brandProfile;
   const lines=[];
@@ -7645,7 +7647,7 @@ async function cdCallAI(sys, usr, maxTok) {
 }
 
 /* ASK YOUR CREATIVE DIRECTOR - open multi-turn chat */
-function dirChatSystemPrompt(){
+function dirChatSystemPrompt(playbookLock){
   var bp=S.brandProfile||{};
   var hasBrand=Object.keys(bp).some(function(k){return bp[k];});
   var sys=CD_PERSONA+"\n\n"+
@@ -7654,6 +7656,10 @@ function dirChatSystemPrompt(){
     "LAUNCH SEQUENCING questions (when to open/close a cart, how to pace a launch, what order to send things): Default to a three-phase shape - pre-launch (build curiosity, 7-10 days out, 1-2 touches), launch (the ask, 1-2 touches with real proof or social proof, not just hype), post-launch (1 final touch for anyone still on the fence, with urgency that's earned by then, not manufactured upfront). Warn against leading with urgency or scarcity before the audience is actually warmed up, that reads as pressure rather than conviction, and is exactly the kind of pushy-launch energy this brand's audience tends to be allergic to.\n\n"+
     "PLATFORM PRIORITIZATION questions (which platform to focus on, whether to add a new one, where to spend limited time): Default to 1-2 platforms maximum where their actual audience already is, not where they feel like they should be. Don't recommend adding a new platform unless they've already got consistent traction on their current one(s) and have actual bandwidth, not just inspiration, to add more. Match the platform to the goal: visual/discovery platforms for brand awareness, LinkedIn or newsletter for credibility and lead generation with a more professional audience, niche communities for high-trust, smaller audiences. Spreading thin across many platforms is the single most common way ND business owners burn out their content capacity, actively discourage it unless they have real reason to believe it's the right move.\n\n"+
     "Keep responses focused and usable, formatted in plain text (no markdown headers). It is fine to say 'here's what I'd do' and commit to a recommendation. You're in an open chat space where the person can also paste anything they're working on and ask you to rework it, get unstuck, or write in a totally different voice for another offer or business entirely, so stay flexible to that too.";
+  if(playbookLock==='cadence'||playbookLock==='launch'||playbookLock==='platform'){
+    var lockNames={cadence:'POSTING CADENCE / TIMING',launch:'LAUNCH SEQUENCING',platform:'PLATFORM PRIORITIZATION'};
+    sys+="\n\nThe person just clicked a quick-pick for this exact category: "+lockNames[playbookLock]+". Treat this message as that category with certainty, skip the detection step, apply that playbook directly even if the wording is brief or doesn't spell it out explicitly.";
+  }
   if(hasBrand){
     sys+="\n\nFor reference, their brand and strategy profile (use the voice/POV fields only if relevant to what they're asking, since they may be asking you to write in a totally different voice for another business, but DO use the logistics fields below whenever the question is about timing, cadence, or strategy):";
     if(bp.niche)sys+="\nNiche: "+bp.niche;
@@ -7671,13 +7677,13 @@ function dirChatSystemPrompt(){
   return sys;
 }
 
-async function cdCallAIChat(messages, maxTok){
+async function cdCallAIChat(messages, maxTok, playbookLock){
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return '';}
   try{
     var r = await fetchWithTimeout('/api/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model: S.settings.model||'claude-sonnet-4-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(), messages: messages })
+      body: JSON.stringify({ model: S.settings.model||'claude-sonnet-4-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages })
     }, 45000);
     var d = await r.json();
     var result = (d.content && d.content[0] && d.content[0].text) || '';
@@ -7735,6 +7741,19 @@ function dirChatFillExample(el){
   if(!input||!el)return;
   input.value=el.textContent.trim()+': ';
   input.focus();
+}
+
+// Strategy quick-picks work like dirChatFillExample but also lock which
+// playbook (cadence/launch/platform) the next message should be treated as.
+// Pre-filled text alone only nudges the model toward the right category -
+// this guarantees it, since the wording someone types after the colon
+// might not clearly signal which of the three playbooks applies.
+function dirChatFillStrategyExample(el){
+  var input=document.getElementById('dirChatInput');
+  if(!input||!el)return;
+  input.value=el.textContent.trim()+': ';
+  input.focus();
+  S._dirChatPlaybookLock=el.dataset.playbook||null;
 }
 
 function dirChatKeydown(e){
@@ -7798,7 +7817,9 @@ async function directorChatSend(target){
   dirChatShowTyping();
   // Build message history for the API (role/content only)
   var apiMessages=active.messages.map(function(m){return {role:m.role,content:m.content};});
-  var reply=await cdCallAIChat(apiMessages, 1200);
+  var playbookLock=S._dirChatPlaybookLock||null;
+  S._dirChatPlaybookLock=null; // only applies to this one message, not the whole conversation
+  var reply=await cdCallAIChat(apiMessages, 1200, playbookLock);
   dirChatHideTyping();
   if(btn)btn.disabled=false;
   if(reply){
