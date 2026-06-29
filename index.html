@@ -5828,8 +5828,8 @@ async function generate(){
   const bizCtx=buildBrandContext();
   const isArticle=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(S.studio.type)||S.studio.plat==='substack';
   const sys=isArticle
-    ?'You are a professional writer for wellness and service-based businesses.'+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article. No markdown, no em dashes, no asterisks.'+(instr?' IMPORTANT creator instruction: '+instr:'')
-    :'You are a professional copywriter for wellness and service-based businesses. Write compelling, authentic content that feels genuinely human.'+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels, no markdown, no em dashes - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
+    ?CD_PERSONA+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article.'+(instr?' IMPORTANT creator instruction: '+instr:'')
+    :CD_PERSONA+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
   const usr=ownDraft
@@ -6332,6 +6332,16 @@ function saveBrandProfile(){
   S.gs.bizSet=hasContent;
   persist();renderGS();toast('Brand profile saved ✓');
 }
+// SINGLE SOURCE OF TRUTH for who the Creative Director is, across every AI
+// tool in the Studio (content generation, SmartBrief, Autopsy, Repurpose,
+// the panic brief, and Director Chat). Previously this identity was retyped
+// slightly differently in 5+ places ("professional content writer for
+// wellness businesses" vs "expert content strategist" vs "world-class
+// creative director" etc), which meant the same tool could feel like a
+// different person depending on which button you clicked. Built from the
+// richest existing version. Task-specific instructions (format, length,
+// output structure) stay in each function - only the identity lives here.
+const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist who has spent years specifically inside wellness, spiritual, and creative brands run by ND business owners. You understand the content side (voice, hooks, rework, ideation) and the strategy side: platform mechanics, posting cadence, send timing, launch sequencing, funnel logic, and how to read whatever performance signal the person gives you. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
 function buildBrandContext(){
   const bp=S.brandProfile;
   const lines=[];
@@ -7061,8 +7071,8 @@ async function runPanic(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
-  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Talk like a creative director briefing a copywriter.';
-  var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nGive me:\n1. THE ANGLE - specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK - one specific opening line to lead with\n3. THE EMOTION - what feeling to create and why it matters for my niche\n4. THE WATCH OUT - one thing to avoid that would make it feel generic or off-brand\n\nBe direct. No fluff.';
+  var sys=CD_PERSONA+brand+' Be direct, specific, and zero-fluff.';
+  var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nRequired output, exactly these 4 labeled sections, nothing else:\n1. THE ANGLE - specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK - one specific opening line to lead with\n3. THE EMOTION - what feeling to create and why it matters for my niche\n4. THE WATCH OUT - one thing to avoid that would make it feel generic or off-brand\n\nBe direct. No fluff.';
   var result=await cdCallAI(sys,usr,600);
   document.getElementById('panicLoading').style.display='none';
   document.getElementById('panicBtn').disabled=false;
@@ -7080,8 +7090,8 @@ function runPanicRandom(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   document.getElementById('panicBtn').disabled=true;
-  var sys='You are a world-class creative director for wellness and service-based businesses.'+brand+' Be direct, specific, and zero-fluff. Never use em dashes, use commas instead. No markdown.';
-  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nGive me:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid\n\nBe direct. Make it specific.';
+  var sys=CD_PERSONA+brand+' Be direct, specific, and zero-fluff.';
+  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nRequired output, exactly these 5 labeled sections, nothing else:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid\n\nBe direct. Make it specific.';
   cdCallAI(sys,usr,700).then(function(result){
     document.getElementById('panicLoading').style.display='none';
     document.getElementById('panicBtn').disabled=false;
@@ -7288,19 +7298,19 @@ async function cdSmartBrief() {
   var out = document.getElementById('cd-smartBrief-out');
   load.classList.add('show'); out.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a world-class creative director and content strategist specialising in wellness and service-based businesses.' + brand +
-    ' You think like a creative director - you look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
+  var sys = CD_PERSONA + brand +
+    ' You look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
     'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
   var usr = 'I need your creative direction on this piece of content.\n\n' +
     'Brief: ' + b.brief + '\n' +
     'Platform: ' + b.plat + '\n' +
     'Format: ' + b.fmt + '\n\n' +
-    'Give me:\n' +
+    'Required output, exactly these 4 labeled sections, nothing else:\n' +
     '1. THE ANGLE - the specific perspective or framing that will make this land with my audience (1-2 sentences)\n' +
     '2. THE HOOK - one specific opening line or hook I should lead with\n' +
     '3. THE EMOTION - what feeling should this create in my reader and why that matters for my niche\n' +
     '4. THE WATCH OUT - one thing to avoid with this topic that would make it feel generic or off-brand\n\n' +
-    'Be direct and specific. No fluff. Talk to me like a creative director briefing a copywriter.';
+    'Be direct and specific. No fluff.';
   var result = await cdCallAI(sys, usr, 600);
   load.classList.remove('show');
   if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); }
@@ -7327,18 +7337,18 @@ async function cdGen2(type) {
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols (no asterisks, no pound signs, no em dashes). Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
+  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble, no explanation of what you did. Tone: ' + toneDesc + '.' + (cdInstr ? ' IMPORTANT - follow this creator instruction: ' + cdInstr : '');
   var prompts = {
-    caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Make it ' + toneDesc + '. Strong hook, value in the middle, natural CTA at the end.',
-    story: 'Write an Instagram Story script for: ' + b.brief + '. Format as numbered slides (1-6). Each slide: one short line of text. Slide 1: hook question or statement. Last slide: CTA.',
-    carousel: 'Write carousel slide copy for: ' + b.brief + '. Slide 1: scroll-stopping hook. Slides 2-6: one clear point each (short, punchy). Last slide: strong CTA. Label each slide.',
-    reel: 'Write a Reel/TikTok script for: ' + b.brief + '. Format: HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Make it conversational and energetic.',
-    newsletter: 'Write an engaging newsletter opening for: ' + b.brief + '. Tone: ' + toneDesc + '. Max 4 sentences. Should make the reader want to keep reading.',
-    email: 'Write a marketing email for: ' + b.brief + '. Include: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
-    substack: 'Write a full Substack article for: ' + b.brief + '. Format: Title (compelling, not clickbait), Subheadline (one sentence that earns the read), Opening hook (2-3 sentences that pull the reader in immediately), 3-4 body sections with clear but unpretentious headers, Closing paragraph that feels like a real person signing off, Optional: one sentence subscribe CTA at the end. Tone: ' + toneDesc + '. Write like a real human, not a content marketer. No bullet point overload.',
-    variations: 'Write 3 different caption variations for: ' + b.brief + '. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. Label each clearly. All for ' + b.plat + '.',
-    hooks: 'Generate 5 scroll-stopping opening hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Each hook should be different in style (question, bold statement, statistic, story opener, controversy). Number them 1-5. Just the hook line, nothing else.',
-    series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Each post should stand alone but connect to a bigger theme. For each: one sentence title + one sentence description. Number them 1-5.'
+    caption: 'Write a ' + b.plat + ' caption for: ' + b.brief + '. Required output: one finished caption only. Structure: strong hook line, value in the middle, natural CTA at the end. Tone: ' + toneDesc + '.',
+    story: 'Write an Instagram Story script for: ' + b.brief + '. Required output: numbered slides 1-6, one short line of text per slide, nothing else. Slide 1 must be a hook question or statement. Last slide must be a CTA.',
+    carousel: 'Write carousel slide copy for: ' + b.brief + '. Required output: labeled slides only. Slide 1: scroll-stopping hook. Slides 2-6: one clear point each, short and punchy. Last slide: strong CTA. Label every slide clearly (e.g. "Slide 1:").',
+    reel: 'Write a Reel/TikTok script for: ' + b.brief + '. Required output: three labeled sections only - HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Conversational and energetic.',
+    newsletter: 'Write an engaging newsletter opening for: ' + b.brief + '. Required output: max 4 sentences, nothing else. Tone: ' + toneDesc + '. Must make the reader want to keep reading.',
+    email: 'Write a marketing email for: ' + b.brief + '. Required output, in this exact order: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
+    substack: 'Write a full Substack article for: ' + b.brief + '. Required output, in this exact order: Title (compelling, not clickbait), Subheadline (one sentence that earns the read), Opening hook (2-3 sentences that pull the reader in immediately), 3-4 body sections with clear but unpretentious headers, Closing paragraph that feels like a real person signing off, optional one-sentence subscribe CTA at the end. Tone: ' + toneDesc + '. Write like a real human, not a content marketer. No bullet point overload.',
+    variations: 'Write 3 different caption variations for: ' + b.brief + '. Required output: exactly 3 labeled variations, nothing else. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. All for ' + b.plat + '.',
+    hooks: 'Generate 5 scroll-stopping opening hooks for: ' + b.brief + '. Platform: ' + b.plat + '. Required output: exactly 5 numbered lines (1-5), nothing else - just the hook line per number, no extra commentary. Each hook must use a different style: question, bold statement, statistic, story opener, controversy.',
+    series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Required output: exactly 5 numbered items (1-5). Each item: one sentence title + one sentence description, nothing else. Each post should stand alone but connect to a bigger theme.'
   };
   var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
   if (load) load.classList.remove('show');
@@ -7390,7 +7400,7 @@ async function cdBuildCaptionFromHook() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished caption. No preamble.';
+  var sys = CD_PERSONA + brand + ' Output ONLY the finished caption. No preamble.';
   var usr = 'Write a ' + b.plat + ' caption starting with this exact hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Tone: ' + (toneMap[tone]||'warm')+'. Keep hook exactly as written. 2-4 short paragraphs, end with a natural CTA. No hashtags.';
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -7408,7 +7418,7 @@ async function cdBuildFromHook() {
   if (!_cdHookSel) return;
   var b = cdGetBrief();
   var brand = buildBrandContext();
-  var sys = 'You are a professional content writer for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble.';
   var usr = 'Write a full ' + b.plat + ' caption starting with this hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Keep the hook exactly as written. Add value in the middle, end with a natural CTA.';
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -7465,8 +7475,8 @@ async function cdAutopsy() {
   if (load) load.classList.add('show');
   if (sbs) sbs.style.display = 'none';
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist.' + brand + ' Be direct and specific. No fluff.';
-  var usr = 'Run a Content Autopsy on this post. Break down exactly what makes it work (or not work):\n\n'
+  var sys = CD_PERSONA + brand + ' Be direct and specific. No fluff.';
+  var usr = 'Run a Content Autopsy on this post. Required output, exactly these 5 labeled sections:\n\n'
     + '1. HOOK: What type of hook is this and why does it stop the scroll?\n'
     + '2. STRUCTURE: How is it built? What is the flow?\n'
     + '3. EMOTIONAL ANGLE: What feeling does it create and why does that work?\n'
@@ -7497,7 +7507,7 @@ async function cdRebuildAfterAnalysis() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = 'You are an expert content writer.' + brand + ' Output ONLY the finished content. No preamble. No markdown symbols.';
+  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble.';
   var usr = 'I analysed this post and here is what makes it work:\n\n' + analysis
     + '\n\nNow rebuild it completely for my brand, niche, and voice. Do NOT copy the original wording. Take the structure and emotional angle that works, then make it 100% original for my audience.'
     + '\n\nFormat: ' + outFmt + ' for ' + b.plat + '.'
@@ -7524,7 +7534,7 @@ async function cdRepurpose2() {
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for wellness businesses.' + brand + ' Output ONLY the repurposed content. No preamble.';
+  var sys = CD_PERSONA + brand + ' Output ONLY the repurposed content. No preamble.';
   var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
   var result = await cdCallAI(sys, usr, 1000);
   if (load) load.classList.remove('show');
@@ -7638,9 +7648,9 @@ async function cdCallAI(sys, usr, maxTok) {
 function dirChatSystemPrompt(){
   var bp=S.brandProfile||{};
   var hasBrand=Object.keys(bp).some(function(k){return bp[k];});
-  var sys="You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist who has spent years specifically inside wellness, spiritual, and creative brands run by ND business owners. You understand the content side (voice, hooks, rework, ideation) and the strategy side: platform mechanics, posting cadence, send timing, launch sequencing, funnel logic, and how to read whatever performance signal the person gives you.\n\n"+
+  var sys=CD_PERSONA+"\n\n"+
     "When someone asks a strategy or logistics question (when to post, how often, what order to launch things, which platform to prioritize, how to pace a launch window), give a real, specific, opinionated answer. Do not hand the decision back to them with something like 'whenever works best for you' unless you genuinely have zero basis to go on, and even then, give your best default recommendation first and name the one or two factors that would change it. Reason from general platform and audience behavior (for example: newsletters for wellness/spiritual audiences tend to open better earlier in the week and mid-morning; weekday evenings often beat weekday mornings for IG engagement in personal-brand spaces; launch emails want runway before a cart-close reminder) AND from anything specific you know about this person's audience below. Treat their own notes about what's worked before as the strongest signal, stronger than general platform wisdom, whenever it's available.\n\n"+
-    "Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes. Keep responses focused and usable, formatted in plain text (no markdown headers). It is fine to say 'here's what I'd do' and commit to a recommendation. You're in an open chat space where the person can also paste anything they're working on and ask you to rework it, get unstuck, or write in a totally different voice for another offer or business entirely, so stay flexible to that too.";
+    "Keep responses focused and usable, formatted in plain text (no markdown headers). It is fine to say 'here's what I'd do' and commit to a recommendation. You're in an open chat space where the person can also paste anything they're working on and ask you to rework it, get unstuck, or write in a totally different voice for another offer or business entirely, so stay flexible to that too.";
   if(hasBrand){
     sys+="\n\nFor reference, their brand and strategy profile (use the voice/POV fields only if relevant to what they're asking, since they may be asking you to write in a totally different voice for another business, but DO use the logistics fields below whenever the question is about timing, cadence, or strategy):";
     if(bp.niche)sys+="\nNiche: "+bp.niche;
@@ -7978,7 +7988,7 @@ async function ideaGenerate(type) {
   var a = document.getElementById('ideaAIActs');
   o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are a professional copywriter for wellness businesses.' + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble.';
   var prompts = {
     caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
     hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
@@ -8007,7 +8017,7 @@ async function ideaRepurpose() {
   var a = document.getElementById('ideaAIActs');
   o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = 'You are an expert content strategist and copywriter for wellness and service-based businesses.' + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
+  var sys = CD_PERSONA + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
   var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work - the structure, the hook, the angle, the emotional pull - then rebuild it completely for my niche and voice.' +
     '\n\nYour job is NOT to reword it. Your job is to:\n' +
     '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
