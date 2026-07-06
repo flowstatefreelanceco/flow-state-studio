@@ -1711,9 +1711,9 @@ select.fi{cursor:pointer}
         <div class="gt-card">
           <div class="gt-when" style="color:var(--teal)">Month 1</div>
           <div class="gt-title">Your ideas have a place to land</div>
-          <div class="gt-desc">Content cards hold the brief, the hook, and the AI tools in one spot, so ideas have somewhere to go the moment they show up, instead of needing you to remember them later.</div>
+          <div class="gt-desc"><strong>Content cards</strong> <span style="font-size:13px;color:var(--tl)">(the Studio's way of holding one idea, its brief, hooks, and AI tools all in one place)</span> mean ideas have somewhere to land the moment they show up, instead of needing you to remember them later.</div>
           <div class="gt-tags">
-            <span class="gt-tag" style="background:var(--tealp);color:var(--teal)"><strong>Content Planner</strong> <span style="font-weight:400;opacity:.8">— visual board to move ideas from draft to published</span></span>
+            <span class="gt-tag" style="background:var(--tealp);color:var(--teal)"><strong>Content Planner</strong> <span style="font-weight:400;opacity:.8">visual board to move ideas from draft to published</span></span>
             <span class="gt-tag" style="background:var(--tealp);color:var(--teal)">Hook Builder</span>
             <span class="gt-tag" style="background:var(--tealp);color:var(--teal)">Go Analog or AI, your call</span>
           </div>
@@ -1724,9 +1724,9 @@ select.fi{cursor:pointer}
         <div class="gt-card">
           <div class="gt-when" style="color:#7A5C9C">Month 3</div>
           <div class="gt-title">A rhythm that's actually yours</div>
-          <div class="gt-desc">Director Chat reasons from your actual platforms and what's worked for you before, so the pace it suggests, usually 3 to 5 posts a week, is one built to fit your life, not push past it.</div>
+          <div class="gt-desc"><strong>Director Chat</strong> <span style="font-size:13px;color:var(--tl)">(your built-in creative director and strategist, available anywhere in the Studio)</span> reasons from your actual platforms and what's worked for you before, so the pace it suggests, usually 3 to 5 posts a week, is one built to fit your life, not push past it.</div>
           <div class="gt-tags">
-            <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C"><strong>Director Chat</strong> <span style="font-weight:400;opacity:.8">— open chat with your AI Creative Director</span></span>
+            <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C"><strong>Director Chat</strong> <span style="font-weight:400;opacity:.8">open chat with your AI Creative Director</span></span>
             <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C">Strategy and Logistics profile</span>
             <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C">Swipe File building up</span>
           </div>
@@ -3890,7 +3890,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><label class="fl-lbl">Title</label><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:30px;font-family:var(--fh);font-weight:600;padding:12px" /></div>
+        <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:34px !important;font-family:var(--fh);font-weight:600;padding:12px 12px 8px;border:none;background:transparent" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -3984,7 +3984,7 @@ select.fi{cursor:pointer}
 
         <!-- CAROUSEL SLIDES SECTION -->
         <div class="card-section-toggle">
-          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,#d7e7fe,#e8f0fe);border-bottom:2px solid #b8ccf0">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,var(--rp),#f0e2cc);border-bottom:2px solid rgba(179,108,55,.25)">
             <div class="card-section-toggle-title" style="color:#4d1e15">🗂 Carousel Slides</div>
             <span class="card-section-toggle-chev">+</span>
           </div>
@@ -4640,8 +4640,8 @@ async function loadUserData(){
   try{var raw=localStorage.getItem(lsKey());if(raw)localData=JSON.parse(raw);}catch(e){}
   if(!_currentUser)return localData;
   try{
-    var {data,error}=await sb.from('user_data').select('data').eq('user_id',_currentUser.id).maybeSingle();
-    if(!error&&data&&data.data){
+    var {data,error}=await sb.from('user_data').select('data,user_id').eq('user_id',_currentUser.id).maybeSingle();
+    if(!error&&data&&data.data&&data.user_id===_currentUser.id){
       var sbData=JSON.parse(data.data);
       // Smart merge: union arrays by ID, prefer whichever side was actually edited more recently.
       // Falls back to "local wins" only when neither side has an updatedAt to compare (older data
@@ -5159,8 +5159,11 @@ document.querySelectorAll('.nav-i').forEach(el=>el.addEventListener('click',()=>
 // Supports plain views (#dashboard, #notebooks) and guide sub-routes (#guides/strategy).
 function applyHashRoute(){
   var hash=(window.location.hash||'').replace(/^#/,'');
-  if(!hash){
-    // No hash present - always go to dashboard.
+  // Brand new users with no saved content always start on the dashboard,
+  // regardless of any hash in the URL (could be from a shared link or a
+  // previous session on a shared device).
+  var hasData=S.ideas.length||S.drafts.length||S.tasks.length||S.notebooks.length;
+  if(!hash||!hasData){
     navigate('dashboard');
     return;
   }
@@ -5577,7 +5580,7 @@ function renderTaskKanban(){
             <div style="font-family:var(--fb);font-size:13px;font-weight:700;line-height:1.3;color:var(--e);flex:1;letter-spacing:.01em">${esc(t.title)}</div>
             ${t.starred?'<span style="font-size:16px;color:var(--g);flex-shrink:0">★</span>':''}
           </div>
-          ${t.date?'<div style="font-size:12px;color:var(--teal);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+t.time:'')+'</div>':''}
+          ${t.date?'<div style="font-size:12px;color:var(--teal);margin-top:5px;font-weight:500">📅 '+fmtDate(t.date)+(t.time?' · '+fmtTime(t.time):'')+'</div>':''}
         </div>
         <!-- Tags section - white -->
         ${(t.taskType||t.energy||t.timeEst)?'<div style="padding:5px 12px;display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid rgba(0,0,0,.06);background:#FAFAF8">'+(t.taskType?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:2px 8px;color:var(--t)">'+(t.taskType==='writing'?'✍️':t.taskType==='admin'?'📋':t.taskType==='creative'?'🎨':t.taskType==='research'?'🔍':'📞')+' '+t.taskType+'</span>':'')+(t.energy?'<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp)')+';border-radius:100px;padding:2px 8px;color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥 High':t.energy==='medium'?'⚡ Med':'🌿 Low')+'</span>':'')+(t.timeEst?'<span style="font-size:10px;color:var(--tl);padding:2px 8px;background:var(--p);border:1px solid var(--bl);border-radius:100px">⏱ '+t.timeEst+'</span>':'')+'</div>':''}
@@ -7305,8 +7308,8 @@ function cdAddSlide(){
   var wrap=document.createElement('div');
   wrap.className='cd-slide-wrap';
   wrap.style.cssText='background:var(--p);border:1.5px solid var(--bl);border-radius:var(--rsm);overflow:hidden';
-  wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:#d7e7fe;border-bottom:1px solid #b8ccf0">'
-    +'<span style="font-size:10.5px;font-weight:700;color:#4d1e15;letter-spacing:.06em">Slide '+count+'</span>'
+  wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--rp);border-bottom:1px solid rgba(179,108,55,.2)">'
+    +'<span style="font-size:10.5px;font-weight:700;color:var(--e);letter-spacing:.06em">Slide '+count+'</span>'
     +'<button onclick="this.closest(\'.cd-slide-wrap\').remove();cdRenumberSlides()" style="background:none;border:none;color:var(--tl);cursor:pointer;font-size:12px;padding:0 2px">✕</button>'
     +'</div>'
     +'<textarea placeholder="Slide '+count+' copy..." style="width:100%;padding:10px;font-family:var(--fb);font-size:13px;line-height:1.7;border:none;background:var(--p);color:var(--e);resize:vertical;min-height:70px;outline:none;box-sizing:border-box"></textarea>';
@@ -7722,7 +7725,8 @@ function dirChatSystemPrompt(playbookLock){
     "LAUNCH SEQUENCING questions (when to open/close a cart, how to pace a launch, what order to send things): Default to a three-phase shape - pre-launch (build curiosity, 7-10 days out, 1-2 touches), launch (the ask, 1-2 touches with real proof or social proof, not just hype), post-launch (1 final touch for anyone still on the fence, with urgency that's earned by then, not manufactured upfront). Warn against leading with urgency or scarcity before the audience is actually warmed up, that reads as pressure rather than conviction, and is exactly the kind of pushy-launch energy this brand's audience tends to be allergic to.\n\n"+
     "PLATFORM PRIORITIZATION questions (which platform to focus on, whether to add a new one, where to spend limited time): Default to 1-2 platforms maximum where their actual audience already is, not where they feel like they should be. Don't recommend adding a new platform unless they've already got consistent traction on their current one(s) and have actual bandwidth, not just inspiration, to add more. Match the platform to the goal: visual/discovery platforms for brand awareness, LinkedIn or newsletter for credibility and lead generation with a more professional audience, niche communities for high-trust, smaller audiences. Spreading thin across many platforms is the single most common way ND business owners burn out their content capacity, actively discourage it unless they have real reason to believe it's the right move.\n\n"+
     "Keep responses focused and usable, formatted in plain text (no markdown headers). It is fine to say 'here's what I'd do' and commit to a recommendation. You're in an open chat space where the person can also paste anything they're working on and ask you to rework it, get unstuck, or write in a totally different voice for another offer or business entirely, so stay flexible to that too.\n\n"+
-    "CONTENT REWRITES AND FEEDBACK (highest priority when the person pastes copy): If someone pastes a piece of content (a hook, caption, email, draft, script, etc.), your first job is to give them the content help they need, a direct rewrite or clear feedback, not a strategy lecture. Lead with the rewrite or improved version. Keep rewrites close in length to what they gave you: if they gave you one hook, give them one improved hook (maybe two options if helpful), not a full paragraph of strategic framing before you touch their words. Do not unpack strategy context unless they ask for it, or unless you have already given the content help and they are asking why. Brief is better than thorough here. If their message contains content AND a strategy question, answer the strategy question concisely first, then give the rewrite, but do not pad either with unprompted context. If their message is just pasted content with no question, assume they want it improved or reworked and do that directly.";
+    "CONTENT REWRITES AND FEEDBACK (highest priority when the person pastes copy): If someone pastes a piece of content (a hook, caption, email, draft, script, etc.), your first job is to give them the content help they need, a direct rewrite or clear feedback, not a strategy lecture. Lead with the rewrite or improved version. CRITICAL FOR HOOKS AND SHORT-FORM: when rewriting a hook, match the original length closely. A one-line hook gets one improved hook back (two options max), not a paragraph. Do not expand short content into long content unless they specifically ask you to. Keep rewrites close in length to what they gave you. Do not unpack strategy context unless they ask for it, or unless you have already given the content help and they are asking why. Brief is better than thorough here. If their message contains content AND a strategy question, answer the strategy question concisely first, then give the rewrite, but do not pad either with unprompted context. If their message is just pasted content with no question, assume they want it improved or reworked and do that directly.\n\n"+
+    "INCOMPLETE MESSAGES (no content pasted, but they seem to be referring to something): If someone sends a message that refers to content they appear to have forgotten to include (e.g. 'can you rework this', 'what do you think of this', 'rewrite this for me' with nothing actually attached), do NOT default to giving strategy advice. Instead, respond warmly and briefly asking them to paste the content they meant to share. Something like 'paste it in and I will take a look' is enough. Do not fill the gap with unrequested strategy or generic advice.";
   if(playbookLock==='cadence'||playbookLock==='launch'||playbookLock==='platform'){
     var lockNames={cadence:'POSTING CADENCE / TIMING',launch:'LAUNCH SEQUENCING',platform:'PLATFORM PRIORITIZATION'};
     sys+="\n\nThe person just clicked a quick-pick for this exact category: "+lockNames[playbookLock]+". Treat this message as that category with certainty, skip the detection step, apply that playbook directly even if the wording is brief or doesn't spell it out explicitly.";
@@ -8478,7 +8482,7 @@ function calDayClick(ds){
     if(e.time){
       var timeTag=document.createElement('span');
       timeTag.style.cssText='font-size:10px;color:var(--tl)';
-      timeTag.textContent='⏰ '+e.time;
+      timeTag.textContent='⏰ '+fmtTime(e.time);
       tags.appendChild(timeTag);
     }
     if(e._fromIdea){
@@ -8572,6 +8576,16 @@ function calEditEntry(id) {
 
 /* ═══════════════════ UTILS ═══════════════════ */
 function fmtDate(ds){if(!ds)return '';try{var p=ds.split('-');var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}catch(e){return ds;}}
+function fmtTime(ts){
+  if(!ts)return '';
+  try{
+    var parts=ts.split(':');
+    var h=parseInt(parts[0]),m=parseInt(parts[1]);
+    var ampm=h>=12?'PM':'AM';
+    var h12=h%12||12;
+    return h12+':'+(m<10?'0'+m:m)+' '+ampm;
+  }catch(e){return ts;}
+}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
 let _tt;
