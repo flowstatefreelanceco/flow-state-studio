@@ -600,7 +600,7 @@ select.fi{cursor:pointer}
 /* CARD DETAIL REBUILT */
 .cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:calc(100vh - 120px)}
 .cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:visible;display:flex;flex-direction:column;gap:14px}
-.cd2-right{padding:20px 24px;overflow-y:visible;background:var(--bluep);display:flex;flex-direction:column;gap:12px}
+.cd2-right{padding:20px 24px;overflow-y:visible;background:var(--p);display:flex;flex-direction:column;gap:12px}
 .ai2-section{background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(122,158,194,.12)}
 .ai2-section-hdr{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
 .ai2-section-hdr:hover{filter:brightness(.97)}
@@ -756,7 +756,7 @@ select.fi{cursor:pointer}
   /* CARD DETAIL MODAL - single scroll context */
   .cd2-wrap{grid-template-columns:1fr !important;height:auto !important;min-height:unset !important}
   .cd2-left{border-right:none;border-bottom:1px solid var(--bl);padding:14px 16px}
-  .cd2-right{padding:14px 16px;background:var(--bluep)}
+  .cd2-right{padding:14px 16px;background:var(--p)}
   .cd-modal-panel{overflow-y:auto !important;-webkit-overflow-scrolling:touch;height:auto !important;min-height:100vh}
   .cd-stages{gap:4px;flex-wrap:wrap}
   .cd-stage{font-size:10px;padding:5px 8px}
@@ -2673,8 +2673,8 @@ select.fi{cursor:pointer}
         <h3>Beta Invite Code</h3>
         <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically , no SQL needed.</p>
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO</div>
-          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO').then(()=>toast('Code copied ✓'))">Copy</button>
+          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO2026</div>
+          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO2026').then(()=>toast('Code copied ✓'))">Copy</button>
         </div>
         <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
       </div>
@@ -3890,7 +3890,7 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:34px !important;font-family:var(--fh);font-weight:600;padding:12px 12px 8px;border:none;background:transparent" /></div>
+        <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:26px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -3942,29 +3942,36 @@ select.fi{cursor:pointer}
             <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
           </div>
         </div>
-        <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="cdPerfNote" style="min-height:32px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
-        </div>
-        <!-- IMAGE UPLOAD -->
-        <div class="fl">
-          <label class="fl-lbl">Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional, shows in Feed Preview)</span></label>
-          <div id="cdImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
-          <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
-            📸 Add images or slides
-            <input type="file" id="cdImgInput" multiple accept="image/*" style="display:none" onchange="handleCdImages(this)" />
-          </label>
-        </div>
-        <!-- TASK BREAKDOWN -->
-        <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
-            <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
+        <!-- MORE OPTIONS (collapsed by default) -->
+        <div style="border-top:1px solid var(--bl);padding-top:10px;margin-top:2px">
+          <button onclick="var b=document.getElementById('cdMoreBody');var open=b.style.display!=='none';b.style.display=open?'none':'flex';this.textContent=open?'+ More options (images, tasks, performance)':'− Less';" style="background:none;border:none;font-size:12px;color:var(--tl);cursor:pointer;font-family:var(--fb);font-weight:600;padding:0;letter-spacing:.02em">+ More options (images, tasks, performance)</button>
+          <div id="cdMoreBody" style="display:none;flex-direction:column;gap:14px;margin-top:12px">
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea class="fi" id="cdPerfNote" style="min-height:32px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
+            </div>
+            <!-- IMAGE UPLOAD -->
+            <div class="fl">
+              <label class="fl-lbl">Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional, shows in Feed Preview)</span></label>
+              <div id="cdImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+              <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
+                📸 Add images or slides
+                <input type="file" id="cdImgInput" multiple accept="image/*" style="display:none" onchange="handleCdImages(this)" />
+              </label>
+            </div>
+            <!-- TASK BREAKDOWN -->
+            <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
+                <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
+              </div>
+              <div id="cdTaskList2" style="display:flex;flex-direction:column;gap:6px"></div>
+              <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps added here sync to your Task board and Calendar.</div>
+            </div>
           </div>
-          <div id="cdTaskList2" style="display:flex;flex-direction:column;gap:6px"></div>
-          <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps added here sync to your Task board and Calendar.</div>
         </div>
       </div>
       <div class="cd2-right">
+        <div style="font-size:12px;color:var(--tl);padding:4px 2px 8px;line-height:1.55">Write it yourself in <strong style="color:var(--g)">Go Analog</strong>, use the tools in <strong style="color:var(--r)">Bridge the Gap</strong>, or do both. No wrong path.</div>
         <!-- GO ANALOG SECTION -->
         <div class="card-section-toggle">
           <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
@@ -4963,7 +4970,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
+    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null
   };
@@ -5428,10 +5435,12 @@ function renderIdeaListView(){
   var el=document.getElementById('ideaListView');
   if(!el)return;
   var sortBy=S.plannerSort||'date';
+  var hidePublished=S.plannerHidePublished||false;
   var statusColors={idea:'var(--tl)',inprogress:'var(--r)',ready:'var(--teal)',published:'#1A521A'};
   var statusBg={idea:'var(--bl)',inprogress:'var(--rp)',ready:'var(--tealp)',published:'#D0EAD0'};
   var statusLabel={idea:'Idea',inprogress:'In Progress',ready:'Ready',published:'Published'};
   var items=S.ideas.slice();
+  if(hidePublished) items=items.filter(function(i){return i.status!=='published';});
   if(sortBy==='date'){
     items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
   } else if(sortBy==='dateDesc'){
@@ -5442,12 +5451,17 @@ function renderIdeaListView(){
     var order={idea:0,inprogress:1,ready:2,published:3};
     items.sort(function(a,b){return (order[a.status]||0)-(order[b.status]||0);});
   }
-  var html='<div class="idea-list-sort">Sort by <select onchange="S.plannerSort=this.value;persist();renderIdeaListView()">'
+  var html='<div class="idea-list-sort" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">Sort by <select onchange="S.plannerSort=this.value;persist();renderIdeaListView()">'
     +'<option value="date"'+(sortBy==='date'?' selected':'')+'>Date (earliest first)</option>'
     +'<option value="dateDesc"'+(sortBy==='dateDesc'?' selected':'')+'>Date (latest first)</option>'
     +'<option value="title"'+(sortBy==='title'?' selected':'')+'>Title (A-Z)</option>'
     +'<option value="status"'+(sortBy==='status'?' selected':'')+'>Status</option>'
-    +'</select></div>';
+    +'</select>'
+    +'<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;color:var(--t);user-select:none;margin-left:auto">'
+    +'<input type="checkbox" '+(hidePublished?'checked':'')+' onchange="S.plannerHidePublished=this.checked;persist();renderIdeaListView()" style="accent-color:var(--teal);width:14px;height:14px" />'
+    +'Hide published'
+    +'</label>'
+    +'</div>';
   if(!items.length){
     html+='<div class="idea-list-empty">No content cards yet. Click + Add Content to get started.</div>';
   } else {
@@ -6094,6 +6108,8 @@ function openIdeaModal(status){
   var slidesContainer=document.getElementById('cdCarouselSlides');
   if(slidesContainer){slidesContainer.innerHTML='';cdAddSlide();cdAddSlide();cdAddSlide();}
   S._pendingIdeaImages=[];cdRenderTasks();cdRefreshImageArea();
+  var moreBodyNew=document.getElementById('cdMoreBody');
+  if(moreBodyNew){moreBodyNew.style.display='none';var mb=moreBodyNew.previousElementSibling;if(mb&&mb.tagName==='BUTTON')mb.textContent='+ More options (images, tasks, performance)';}
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
   var rc=document.getElementById('cdReminderOn');if(rc){rc.checked=false;cdToggleReminder(rc);}
   // Clear all fields
@@ -6705,6 +6721,18 @@ function cdOpen(id){
   // Render any existing images in the upload area
   setTimeout(function(){ cdRefreshImageArea(); }, 80);
 
+  // Auto-expand More options if this card already has content in that section
+  var hasMoreContent=(x.images&&x.images.length)||(x.cdTasks&&x.cdTasks.length)||(x.perfNote&&x.perfNote.trim());
+  var moreBody=document.getElementById('cdMoreBody');
+  var moreBtn=moreBody&&moreBody.previousElementSibling;
+  if(moreBody&&hasMoreContent){
+    moreBody.style.display='flex';
+    if(moreBtn&&moreBtn.tagName==='BUTTON')moreBtn.textContent='− Less';
+  } else if(moreBody){
+    moreBody.style.display='none';
+    if(moreBtn&&moreBtn.tagName==='BUTTON')moreBtn.textContent='+ More options (images, tasks, performance)';
+  }
+
   // Populate all fields
   document.getElementById('cdTitle').value=x.title||'';
   document.getElementById('cdPlat').value=x.platform||'instagram';
@@ -7042,7 +7070,7 @@ async function lockedUpgrade(plan){
   }catch(e){toast('Error: '+e.message);}
   btn.textContent=orig;btn.disabled=false;
 }
-const INVITE_CODE = 'FLOWBETASTUDIO';
+const INVITE_CODE = 'FLOWBETASTUDIO2026';
 
 async function redeemInviteCode(){
   var input = document.getElementById('inviteCodeInput');
@@ -9156,6 +9184,7 @@ function initFlowStateApp(savedData) {
     if (savedData.weeklyFocus) S.weeklyFocus = savedData.weeklyFocus;
     if (savedData.plannerView) S.plannerView = savedData.plannerView;
     if (savedData.plannerSort) S.plannerSort = savedData.plannerSort;
+    if (savedData.plannerHidePublished !== undefined) S.plannerHidePublished = savedData.plannerHidePublished;
     if (savedData.taskView) S.taskView = savedData.taskView;
     if (savedData.taskSort) S.taskSort = savedData.taskSort;
     if (savedData.calEntries) S.calEntries = savedData.calEntries;
