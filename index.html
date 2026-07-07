@@ -1695,7 +1695,7 @@ select.fi{cursor:pointer}
       </div>
       <div style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-radius:var(--rsm);padding:18px 22px;text-align:center">
         <div style="font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:6px;line-height:1.3">That is the problem this was built to solve.</div>
-        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">One place for all of it. Your ideas, your planning, your writing, your tools. Starting at $9.50 a month, for a brain that deserves a system that actually works with it.</div>
+        <div style="font-size:13px;color:var(--el);line-height:1.7;max-width:480px;margin:0 auto">One place for all of it. Your ideas, your planning, your writing, your tools. Starting at $9.50 a month, for a brain that deserves a system built for it.</div>
       </div>
     </div>
 
@@ -1723,7 +1723,7 @@ select.fi{cursor:pointer}
         <div class="gt-num" style="background:#EDE4F5;color:#7A5C9C">2</div>
         <div class="gt-card">
           <div class="gt-when" style="color:#7A5C9C">Month 3</div>
-          <div class="gt-title">A rhythm that's actually yours</div>
+          <div class="gt-title">A rhythm that's yours</div>
           <div class="gt-desc"><strong>Director Chat</strong> <span style="font-size:13px;color:var(--tl)">(your built-in creative director and strategist, available anywhere in the Studio)</span> reasons from your actual platforms and what's worked for you before, so the pace it suggests, usually 3 to 5 posts a week, is one built to fit your life, not push past it.</div>
           <div class="gt-tags">
             <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C"><strong>Director Chat</strong> <span style="font-weight:400;opacity:.8">open chat with your AI Creative Director</span></span>
@@ -2341,9 +2341,13 @@ select.fi{cursor:pointer}
     </div>
     <div class="main-body" style="padding:0">
       <div id="dirChatWrap" style="display:flex;flex-direction:column;height:100%;max-width:760px;margin:0 auto;width:100%">
-        <div id="dirChatIdeas" style="padding:16px 18px 4px;flex-shrink:0">
-          <div style="font-size:11.5px;color:var(--teal);font-weight:600;margin-bottom:8px;letter-spacing:.03em">WHAT TO USE THIS SPACE FOR</div>
-          <div style="display:flex;flex-wrap:wrap;gap:7px">
+        <div id="dirChatIdeas" style="padding:10px 18px 0;flex-shrink:0;border-bottom:1px solid var(--bl)">
+          <button onclick="var b=document.getElementById('dcChipsBody');var open=b.style.display!=='none';b.style.display=open?'none':'flex';this.querySelector('.dc-chips-arrow').textContent=open?'▾':'▴';this.querySelector('.dc-chips-label').textContent=open?'Prompts to get started':'Hide prompts';" style="display:flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;padding:6px 0 10px;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--teal);width:100%">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h12M3 9h8M3 13h5"/></svg>
+            <span class="dc-chips-label">Prompts to get started</span>
+            <span class="dc-chips-arrow" style="margin-left:auto;font-size:10px;color:var(--tl)">▾</span>
+          </button>
+          <div id="dcChipsBody" style="display:none;flex-wrap:wrap;gap:7px;padding-bottom:12px">
             <div class="dc-chip" data-playbook="cadence" onclick="dirChatFillStrategyExample(this)">Ask when's the best time to post or send something</div>
             <div class="dc-chip" data-playbook="launch" onclick="dirChatFillStrategyExample(this)">Help me sequence a launch</div>
             <div class="dc-chip" data-playbook="platform" onclick="dirChatFillStrategyExample(this)">Help me decide which platform to focus on</div>
@@ -3890,7 +3894,8 @@ select.fi{cursor:pointer}
     </div>
     <div class="cd2-wrap">
       <div class="cd2-left">
-        <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:26px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
+        <!-- GROUP: THE BRIEF -->
+        <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -3911,35 +3916,43 @@ select.fi{cursor:pointer}
             </select>
           </div>
         </div>
-        <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" onchange="cdDateChanged()" /></div>
-          <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><select class="fi" id="cdTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
-        </div>
-        <!-- REMINDER TOGGLE -->
-        <div id="cdReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;align-items:center;justify-content:space-between;gap:10px">
-          <div>
-            <div style="font-size:12px;font-weight:600;color:var(--teal)">📬 Email reminders</div>
-            <div style="font-size:11px;color:var(--tl);margin-top:1px">9am day before + 8am day of. Toggle before 8am on post day.</div>
+        <!-- GROUP: SCHEDULING -->
+        <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Scheduling</div>
+          <div class="two-col">
+            <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" onchange="cdDateChanged()" /></div>
+            <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><select class="fi" id="cdTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
           </div>
-          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none">
-            <div style="position:relative;width:36px;height:20px;flex-shrink:0">
-              <input type="checkbox" id="cdReminderOn" style="opacity:0;width:0;height:0;position:absolute" onchange="cdToggleReminder(this)" />
-              <div id="cdReminderTrack" style="position:absolute;inset:0;background:var(--bl);border-radius:100px;transition:background .2s"></div>
-              <div id="cdReminderThumb" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+          <!-- REMINDER TOGGLE -->
+          <div id="cdReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;align-items:center;justify-content:space-between;gap:10px">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:var(--teal)">📬 Email reminders</div>
+              <div style="font-size:11px;color:var(--tl);margin-top:1px">9am day before + 8am day of. Toggle before 8am on post day.</div>
             </div>
-            <span id="cdReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
-          </label>
+            <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none">
+              <div style="position:relative;width:36px;height:20px;flex-shrink:0">
+                <input type="checkbox" id="cdReminderOn" style="opacity:0;width:0;height:0;position:absolute" onchange="cdToggleReminder(this)" />
+                <div id="cdReminderTrack" style="position:absolute;inset:0;background:var(--bl);border-radius:100px;transition:background .2s"></div>
+                <div id="cdReminderThumb" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+              </div>
+              <span id="cdReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
+            </label>
+          </div>
         </div>
-        <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
-          <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
-        </div>
-        <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
-          <textarea class="fi" id="cdNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
-        </div>
-        <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <div style="display:flex;gap:8px;align-items:center">
-            <select class="fi" id="cdBucket" style="flex:1"></select>
-            <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
+        <!-- GROUP: YOUR CONTENT -->
+        <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Your content</div>
+          <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
+            <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
+          </div>
+          <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
+            <textarea class="fi" id="cdNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
+          </div>
+          <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select class="fi" id="cdBucket" style="flex:1"></select>
+              <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
+            </div>
           </div>
         </div>
         <!-- MORE OPTIONS (collapsed by default) -->
@@ -8077,12 +8090,27 @@ var DC_PROMPT_LIBRARY=[
   {cat:'Caption Writing',title:'Warm Instagram Caption',text:'Write an Instagram caption about [TOPIC] that feels like a real conversation, not a pitch. Under 150 words. No jargon. End with a soft CTA.'},
   {cat:'Caption Writing',title:'Carousel Caption Set',text:'Write carousel captions about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: soft CTA.'},
   {cat:'Caption Writing',title:'Newsletter Opening',text:'Write the opening paragraph for a weekly newsletter about [TOPIC]. Warm and personal, like writing to a trusted friend. Hook in the first sentence. 3-4 sentences max.'},
+  {cat:'Caption Writing',title:'Educational Post',text:'Write an educational Instagram post about [TOPIC] for [AUDIENCE]. Lead with a relatable problem or observation. Teach one clear thing. End with a question that invites response. Under 200 words.'},
   {cat:'Script Rewrite',title:'Brand Voice Rewrite',text:'Rewrite this content in a warm, clear brand voice. Remove corporate language. Make it sound like me. Here is the content: [PASTE CONTENT]'},
   {cat:'Script Rewrite',title:'60-Second Reel Script',text:'Turn this rough idea into a 60-second reel script: [PASTE IDEA]. Hook in the first 3 seconds. Build naturally. Clear CTA at the end. Warm and confident throughout.'},
+  {cat:'Script Rewrite',title:'Make It Less Salesy',text:'Rewrite this piece so it does not feel like a pitch. Keep the offer mention but lead with the value and the person, not the product. Here is what I have: [PASTE CONTENT]'},
   {cat:'Strategy',title:'Monthly Content Ideas',text:'Give me 10 content ideas for [PLATFORM] this month. Mix educational, personal/storytelling, and one promotional. Make each idea specific, not generic.'},
   {cat:'Strategy',title:'Content Audit',text:'Review this content plan and tell me what is missing. Where are the gaps? What would make it stronger? [PASTE PLAN]'},
-  {cat:'Strategy',title:'Posting Frequency',text:'How often should I be posting on [PLATFORM] right now given my current goal of [GOAL]? Give me a real answer I can actually stick to.'},
+  {cat:'Strategy',title:'Posting Frequency',text:'How often should I be posting on [PLATFORM] right now given my current goal of [GOAL]? Give me a real answer I can commit to.'},
   {cat:'Strategy',title:'What to Prioritize',text:'I have these things on my content to-do list: [LIST]. What should I do first this week and why?'},
+  {cat:'Strategy',title:'What to Kill',text:'Here is what I have been posting lately: [DESCRIBE OR PASTE]. What is not earning its place? What should I stop doing or do less of so I can do less better?'},
+  {cat:'Strategy',title:'Pillar Content Plan',text:'Help me map out 3-4 content pillars for my brand. My niche is [NICHE], my audience is [AUDIENCE], and my main offer is [OFFER]. Each pillar should have a clear theme and a reason it serves my business.'},
+  {cat:'Strategy',title:'Platform Prioritization',text:'I am currently on [LIST YOUR PLATFORMS]. Given my goal of [GOAL] and the time I have to create, where should I focus? What should I scale back?'},
+  {cat:'Launch',title:'Pre-Launch Warmup Plan',text:'I am launching [OFFER] in [TIMEFRAME]. Help me map out a pre-launch content plan that builds curiosity and warms up my audience without feeling pushy. I want to earn the ask before I make it.'},
+  {cat:'Launch',title:'Launch Week Sequence',text:'I am opening the cart for [OFFER] on [DATE] and closing it on [DATE]. Map out the email and social sequence for launch week. Include a cart-open email, a mid-launch value post, and a cart-close reminder. Tone: warm and confident, no fake urgency.'},
+  {cat:'Launch',title:'Objection Content',text:'What objections would my ideal client have about [OFFER]? Give me 3-5, then help me write a short piece of content that addresses the biggest one honestly and without being defensive.'},
+  {cat:'Launch',title:'Post-Launch Debrief',text:'My launch just ended. Here is what happened: [RESULTS]. Help me think through what worked, what did not, and what I would change for next time. Ask me questions if you need more context.'},
+  {cat:'Launch',title:'Beta or Soft Launch',text:'I want to test [OFFER] with a small group before a full launch. Help me plan a simple beta or soft launch that lets me validate the offer without a big campaign. What do I need? What should I skip?'},
+  {cat:'ND-Friendly Planning',title:'Low Energy Content Day',text:'I am having a low energy day and need to do something toward my content. What is the single smallest step I could take right now that would still move things forward? My current to-do list is: [LIST]'},
+  {cat:'ND-Friendly Planning',title:'Batch Day Planner',text:'I have [HOURS] to batch content today. Help me plan the session realistically. My energy is [HIGH / MEDIUM / LOW]. I want to create content for [PLATFORM]. Build in breaks and a clear stopping point.'},
+  {cat:'ND-Friendly Planning',title:'Sustainable Rhythm Check',text:'Here is my current posting schedule: [DESCRIBE]. Be honest with me. Is this sustainable long-term? What would a more realistic version look like that I could maintain on a hard week, not just my best week?'},
+  {cat:'ND-Friendly Planning',title:'Hyperfocus Capture',text:'I just had a burst of ideas or energy and wrote a lot of content. Help me sort through this: [PASTE EVERYTHING]. What is worth keeping? What needs more work? What can I post this week versus save for later?'},
+  {cat:'ND-Friendly Planning',title:'Getting Unstuck',text:'I have been avoiding creating content and I am not sure why. Can you ask me a few questions to help me figure out what the block actually is? I want to understand it, not just push through it.'},
   {cat:'Sales Copy',title:'Warm DM Script',text:'Write a DM script for reaching out to a potential client. Warm and non-salesy. Lead with curiosity. Mention [YOUR OFFER] naturally in the second or third message.'},
   {cat:'Sales Copy',title:'Short Sales Email',text:'Write a concise sales email for [OFFER]. Warm, clear, confident. What it is, who it is for, what they get, clear CTA. Under 200 words. No fake urgency.'},
   {cat:'Sales Copy',title:'Story Selling Post',text:'Write an Instagram caption that sells [OFFER] through a short personal story. Start with the before, show the shift, end with the offer. Keep it under 200 words.'},
@@ -8090,7 +8118,8 @@ var DC_PROMPT_LIBRARY=[
   {cat:'Hooks',title:'Rewrite My Hook',text:'Rewrite this hook so it stops the scroll faster: [PASTE HOOK]. Give me 3 options. Keep my tone.'},
   {cat:'Repurposing',title:'Caption to Email',text:'Turn this Instagram caption into a short email for my list. Keep the warmth and voice. Add a subject line. [PASTE CAPTION]'},
   {cat:'Repurposing',title:'Reel Script to Caption',text:'Turn this reel script into an Instagram caption. Keep the hook. Tighten it up for text. [PASTE SCRIPT]'},
-  {cat:'Repurposing',title:'Long to Short',text:'Condense this long-form content into a punchy 3-5 slide carousel. One idea per slide. [PASTE CONTENT]'}
+  {cat:'Repurposing',title:'Long to Short',text:'Condense this long-form content into a punchy 3-5 slide carousel. One idea per slide. [PASTE CONTENT]'},
+  {cat:'Repurposing',title:'One Idea, Many Formats',text:'I have this one piece of content or idea: [DESCRIBE]. Help me turn it into 3 different formats for 3 different platforms. Keep the core message, adapt the delivery.'}
 ];
 
 var _dcPlActiveCat='All';
