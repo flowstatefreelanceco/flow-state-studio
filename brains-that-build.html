@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brains That Build: A Networking Event for Neurodivergent Entrepreneurs</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -164,15 +165,16 @@
   /* ===== WHY THIS ROOM (mirror section, colored cards) ===== */
   .section{padding:80px 0}
   .section-label{
-    font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--rust);margin-bottom:16px;
+    font-family:var(--fh);font-size:clamp(26px,3.5vw,38px);font-weight:700;letter-spacing:0;text-transform:none;
+    color:var(--brown);margin-bottom:12px;line-height:1.2;
   }
   .section h2{
-    font-family:var(--fh);font-weight:700;
-    font-size:clamp(32px,4.5vw,48px);
-    color:var(--brown);
+    font-family:var(--fb);font-weight:500;
+    font-size:clamp(14px,1.8vw,17px);
+    color:var(--brown-light);
     margin-bottom:28px;
-    line-height:1.1;
+    line-height:1.5;
+    text-transform:uppercase;letter-spacing:.12em;
   }
   .mirror-stack{
     max-width:680px;margin:36px auto 0;
@@ -400,6 +402,11 @@
     </div>
   </section>
 
+  <!-- COLOR BREAK BANNER -->
+  <div style="background:var(--teal);padding:28px 24px;text-align:center">
+    <div style="font-family:var(--fh);font-size:clamp(20px,3vw,28px);font-weight:700;color:white;line-height:1.3">Free to attend. One hour. A room that actually gets it.<br><span style="font-family:var(--fb);font-size:15px;font-weight:400;opacity:.85;letter-spacing:.04em">Wednesday July 22nd · 10am PST / 1pm EST · Live on Zoom</span></div>
+  </div>
+
   <section class="hosts-strip">
     <div class="wrap hosts-inner">
       <div class="host-card">
@@ -422,8 +429,8 @@
 
   <section class="section center">
     <div class="wrap">
-      <div class="section-label center">Why this room exists</div>
-      <h2 class="center">You've masked your way<br>through enough rooms.</h2>
+      <div style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--rust);margin-bottom:20px">Why this room exists</div>
+      <h2 style="font-family:var(--fh);font-weight:700;font-size:clamp(32px,4.5vw,52px);color:var(--brown);margin-bottom:28px;line-height:1.1;text-transform:none;letter-spacing:0" class="center">You've masked your way<br>through enough rooms.</h2>
       <div class="mirror-stack">
         <div class="mirror-line">
           You've sat through networking events that wanted the polished version. The elevator pitch. The neat little box.
@@ -522,9 +529,15 @@
       <div class="speakers-grid">
         <div class="speaker-card">
           <div class="speaker-avatar">🎨</div>
-          <div class="speaker-role">Financial Art Therapist · CFT ATR-P</div>
-          <h3>Rachel Duncan, MA</h3>
-          <p>If money stuff makes your brain shut down, Rachel gets it. She uses creative and visual practices to help ND entrepreneurs actually stay grounded with their finances, not just white-knuckle through them. Reusable tools you'll leave with, not a lecture.</p>
+          <div class="speaker-role">Financial Art Therapist · MA CFT ATR-P</div>
+          <h3>Financial Art Therapy</h3>
+          <p>If money stuff makes your brain shut down, you're not alone. This speaker uses creative and visual practices to help ND entrepreneurs actually stay grounded with their finances, not just white-knuckle through them. Reusable tools you'll leave with, not a lecture.</p>
+        </div>
+        <div class="speaker-card">
+          <div class="speaker-avatar">📷</div>
+          <div class="speaker-role">Speaker</div>
+          <h3>Photographer</h3>
+          <p>Building a creative business around an ND brain's relationship with focus, light, and image.</p>
         </div>
         <div class="speaker-card">
           <div class="speaker-avatar">🎨</div>
@@ -537,11 +550,6 @@
           <div class="speaker-role">Speaker</div>
           <h3>Social Media Brand Manager</h3>
           <p>Running client accounts and a personal brand at once, without burning out trying to be "on" everywhere all the time.</p>
-        </div>
-        <div class="speaker-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px dashed var(--border);background:transparent">
-          <div class="speaker-avatar" style="background:rgba(255,255,255,.15);color:white">✦</div>
-          <h3 style="color:var(--brown)">This could be you</h3>
-          <p>Speaker spot open. Reach out if you want to share your story.</p>
         </div>
       </div>
 
