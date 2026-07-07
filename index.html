@@ -9223,6 +9223,15 @@ function initFlowStateApp(savedData) {
     if (savedData.ctas) S.ctas = savedData.ctas;
     if (savedData.stories) S.stories = savedData.stories;
     if (savedData.prompts) S.prompts = savedData.prompts;
+    // Seed the Prompt Library from DC_PROMPT_LIBRARY if it is empty or only
+    // contains seeded items (identified by id prefix 'dcpl_'). This keeps the
+    // Director Chat prompt library and the main Library view in sync automatically.
+    var hasUserPrompts = S.prompts.some(function(p){ return !p.id || !p.id.startsWith('dcpl_'); });
+    if(!hasUserPrompts){
+      S.prompts = DC_PROMPT_LIBRARY.map(function(p,i){
+        return {id:'dcpl_'+i,cat:p.cat,title:p.title,text:p.text};
+      });
+    }
     if (savedData.favs && typeof savedData.favs === 'object') { S.favs = {}; Object.keys(savedData.favs).forEach(function(k){ S.favs[k] = savedData.favs[k]; }); }
     if (savedData.notebooks) S.notebooks = savedData.notebooks;
     if (savedData.notes) S.notes = savedData.notes;
