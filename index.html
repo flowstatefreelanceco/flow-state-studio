@@ -3888,7 +3888,7 @@ select.fi{cursor:pointer}
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn btn-danger" style="font-size:12px;padding:6px 12px" onclick="cdDelete()">Delete</button>
-        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('cardDetailModal')">Close</button>
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd();closeModal('cardDetailModal')">Close</button>
         <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd()">Save</button>
       </div>
     </div>
@@ -4965,6 +4965,16 @@ function _appInit(){
   load(); applySettings(); setupChips();
   S.calWeekStart = S.calWeekStart || new Date().getDate();
   renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban(); renderWeeklyFocus(); setTimeout(renderTasksDue, 100);
+  // Restore Writing Studio output if there was one saved
+  if(S.studio&&S.studio.output){
+    var outBdy=document.getElementById('outBdy');
+    if(outBdy){
+      var rendered=S.studio.output.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>').replace(/^## (.+)$/gm,'<strong style="font-size:15px;color:var(--e);display:block;margin:16px 0 6px">$1</strong>');
+      outBdy.innerHTML='<div class="out-txt">'+rendered+'</div>';
+      var cpBtn=document.getElementById('cpBtn');var svBtn=document.getElementById('svBtn');
+      if(cpBtn)cpBtn.style.display='inline-flex';if(svBtn)svBtn.style.display='inline-flex';
+    }
+  }
   renderAllLibs(); setGreeting();
 }
 
@@ -4985,7 +4995,8 @@ function persist(){
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
     creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
-    favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null
+    favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null,
+    studio:S.studio||{}
   };
   // Save to localStorage immediately (instant, no network)
   var localOk=false;
@@ -5920,7 +5931,7 @@ async function generate(){
   const bizCtx=buildBrandContext();
   const isArticle=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(S.studio.type)||S.studio.plat==='substack';
   const sys=isArticle
-    ?CD_PERSONA+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence. Third line: BODY: followed by the full article.'+(instr?' IMPORTANT creator instruction: '+instr:'')
+    ?CD_PERSONA+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence subheadline. Third line: BODY: followed by the full article. Inside BODY, use ## before any section headers (e.g. ## My Section Header) so they are visually distinct. Write like a real human. No bullet point overload.'+(instr?' IMPORTANT creator instruction: '+instr:'')
     :CD_PERSONA+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
@@ -5935,8 +5946,14 @@ async function generate(){
     var titleM=rawOut.match(/^TITLE:\s*(.+)/m);
     var subM=rawOut.match(/^SUBTITLE:\s*(.+)/m);
     var bodyM=rawOut.match(/BODY:\s*([\s\S]+)$/m);
-    if(titleM&&subM&&bodyM){var tEl=document.getElementById('studioTitle');var sEl=document.getElementById('studioSubtitle');if(tEl)tEl.value=titleM[1].trim();if(sEl)sEl.value=subM[1].trim();S.studio.output=bodyM[1].trim();}else{S.studio.output=rawOut;}
-    document.getElementById('outBdy').innerHTML='<div class="out-txt">'+esc(S.studio.output)+'</div>';
+    if(titleM&&subM&&bodyM){
+      // Compose title + subtitle + body into one output instead of overwriting
+      // the card's own header fields. The card title/subtitle belong to the user.
+      S.studio.output=titleM[1].trim()+'\n'+subM[1].trim()+'\n\n'+bodyM[1].trim();
+    }else{S.studio.output=rawOut;}
+    // Render with ## headers as visually prominent lines
+    var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:15px;color:var(--e);display:block;margin:16px 0 6px">$1</strong>');
+    document.getElementById('outBdy').innerHTML='<div class="out-txt">'+rendered+'</div>';
     document.getElementById('cpBtn').style.display='inline-flex';document.getElementById('svBtn').style.display='inline-flex';
     openBridgeSection();
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
@@ -6719,6 +6736,18 @@ function toggleGuideSec(sec){
 var _cdSelTone = 'warm';
 var _cdHookSel = '';
 var _cdOutputs = {};
+
+// Auto-saves the current AI outputs into the active idea object immediately
+// after each generation, so closing the card without clicking Save never
+// loses AI results. Only runs if a card is already saved (S.cdId exists).
+function cdAutoSaveOutputs(){
+  if(!S.cdId)return;
+  var x=S.ideas.find(function(a){return a.id===S.cdId;});
+  if(!x)return;
+  x.aiOutputs=Object.assign({},_cdOutputs);
+  x.updatedAt=new Date().toISOString();
+  persist();
+}
 var _openNotes = new Set();
 
 function cdOpen(id){
@@ -7425,7 +7454,7 @@ async function cdSmartBrief() {
     'Be direct and specific. No fluff.';
   var result = await cdCallAI(sys, usr, 600);
   load.classList.remove('show');
-  if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); }
+  if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); cdAutoSaveOutputs(); }
 }
 
 async function cdGen2(type) {
@@ -7466,15 +7495,18 @@ async function cdGen2(type) {
   if (load) load.classList.remove('show');
   if (result && type === 'hooks') {
     _cdOutputs['hookList'] = result;
-    delete _cdOutputs['hookBuilt']; // clear any old built post
+    delete _cdOutputs['hookBuilt'];
     cdRenderHooks(result);
+    cdAutoSaveOutputs();
   } else if (result && type === 'series') {
     _cdOutputs['series'] = result;
     cdRenderSeries(result);
+    cdAutoSaveOutputs();
   } else if (result) {
     _cdOutputs[type] = result;
     if (out) { out.textContent = result; out.classList.add('show'); }
     if (acts) acts.classList.add('show');
+    cdAutoSaveOutputs();
   }
   S.aiCount = (S.aiCount || 0) + 1; persist();
 }
@@ -7523,6 +7555,7 @@ async function cdBuildCaptionFromHook() {
     _cdOutputs['hookBuilt'] = result;
     if (out) out.textContent = result;
     if (acts) acts.classList.add('show');
+    cdAutoSaveOutputs();
   }
 }
 
@@ -7541,6 +7574,7 @@ async function cdBuildFromHook() {
     _cdOutputs['hookBuilt'] = result;
     if (out) out.textContent = result;
     if (acts) acts.classList.add('show');
+    cdAutoSaveOutputs();
   }
 }
 
@@ -7599,6 +7633,7 @@ async function cdAutopsy() {
   if (load) load.classList.remove('show');
   if (result) {
     _cdOutputs['repurposeAnalysis'] = result;
+    cdAutoSaveOutputs();
     if (analysisOut) analysisOut.textContent = result;
     if (sbs) sbs.style.display = 'flex';
     if (rebuildBtn) rebuildBtn.style.display = 'block';
@@ -7631,6 +7666,7 @@ async function cdRebuildAfterAnalysis() {
   if (result) {
     _cdOutputs['repurpose'] = result;
     if (out) { out.textContent = result; out.classList.add('show'); }
+    cdAutoSaveOutputs();
   }
 }
 
@@ -7654,6 +7690,7 @@ async function cdRepurpose2() {
     _cdOutputs['repurpose'] = result;
     if (out) { out.textContent = result; out.classList.add('show'); }
     if (acts) acts.classList.add('show');
+    cdAutoSaveOutputs();
   }
 }
 
@@ -7975,9 +8012,21 @@ function dirChatClosePopup(){
   if(btn)btn.classList.remove('hide');
 }
 function dirChatPopupExpand(){
+  // Transfer any unsent typed text from the popup input to the main view
+  // input so the person doesn't lose what they were mid-typing when they
+  // expand to the full view. Without this, switching mid-message silently
+  // drops the draft and the person re-types and sends it again = 2 credits.
+  var popupInput=document.getElementById('dirChatPopupInput');
+  var mainInput=document.getElementById('dirChatInput');
+  if(popupInput&&mainInput&&popupInput.value.trim()){
+    mainInput.value=popupInput.value;
+    popupInput.value='';
+  }
   var panel=document.getElementById('dcPopPanel');
   if(panel)panel.classList.remove('open');
   navigate('directorchat');
+  // Focus the main input so they can keep typing/send immediately
+  if(mainInput)setTimeout(function(){mainInput.focus();mainInput.selectionStart=mainInput.value.length;},150);
 }
 document.addEventListener('click',function(e){
   var panel=document.getElementById('dcPopPanel');
@@ -9237,6 +9286,7 @@ function initFlowStateApp(savedData) {
     if (savedData.notes) S.notes = savedData.notes;
     if (savedData.settings) S.settings = Object.assign({}, S.settings, savedData.settings);
     if (savedData.feedImages) S.feedImages = savedData.feedImages;
+    if (savedData.studio) S.studio = Object.assign({}, S.studio, savedData.studio);
     if (savedData.gs) S.gs = savedData.gs;
     if (savedData.aiCount) S.aiCount = savedData.aiCount;
     if (savedData.brandProfile) S.brandProfile = Object.assign({}, S.brandProfile, savedData.brandProfile);
