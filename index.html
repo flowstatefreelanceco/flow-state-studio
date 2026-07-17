@@ -3711,8 +3711,11 @@ select.fi{cursor:pointer}
             <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
               <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening line. The thing that makes them stop..."></textarea>
             </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
-              <textarea id="cdOwnContentNew" class="fi" style="min-height:56px;font-size:14px;line-height:1.75;resize:vertical" placeholder="A rough draft, your angle, anything. Just you and the page."></textarea>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
+              <textarea class="fi" id="cdNotes" style="min-height:72px;font-size:14px;line-height:1.7" placeholder="What's this post about? Key points, angle, what you want them to feel..."></textarea>
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea id="cdOwnContent" class="fi" style="min-height:56px;font-size:14px;line-height:1.75;resize:vertical" placeholder="A rough draft, your angle, anything. Just you and the page."></textarea>
             </div>
           </div>
         </div>
@@ -3950,10 +3953,7 @@ select.fi{cursor:pointer}
         </div>
         <!-- GROUP: YOUR CONTENT BRIEF -->
         <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(AI tools read everything here)</span></div>
-          <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
-            <textarea class="fi" id="cdNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="What's this post about? Key points, angle, CTA, what you want them to feel..."></textarea>
-          </div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(AI tools on the right read everything here)</span></div>
           <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
             <div style="display:flex;gap:8px;align-items:center">
               <select class="fi" id="cdBucket" style="flex:1"></select>
