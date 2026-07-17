@@ -2197,6 +2197,10 @@ select.fi{cursor:pointer}
     <div class="main-hdr">
       <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
       <div class="hdr-acts">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--t);user-select:none" title="Hide published cards">
+          <input type="checkbox" id="kanbanHidePublished" onchange="S.plannerHidePublished=this.checked;persist();renderKanban();renderIdeaListView();" style="accent-color:var(--teal);width:13px;height:13px" />
+          Hide published
+        </label>
         <button class="btn btn-g" id="plannerViewToggle" onclick="togglePlannerView()" style="font-size:12.5px">☰ List View</button>
         <button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button>
       </div>
@@ -3696,15 +3700,20 @@ select.fi{cursor:pointer}
         </div>
       </div>
       <div class="cd2-right">
+        <div style="font-size:12px;color:var(--tl);padding:0 2px 10px;line-height:1.55">Write it yourself in <strong style="color:var(--e)">Go Analog</strong>, use the tools in <strong style="color:var(--r)">Bridge the Gap</strong>, or do both.</div>
         <!-- GO ANALOG -->
         <div class="card-section-toggle">
           <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
             <div class="card-section-toggle-title analog">✏️ Go Analog</div>
             <span class="card-section-toggle-chev">-</span>
           </div>
-          <div class="card-section-toggle-body open" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your own notes, hook, or rough draft here. Everything saves with the card.</div>
-            <textarea id="cdOwnContentNew" class="fi" style="min-height:64px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Your hook, your angle, your rough draft. Just you and the page."></textarea>
+          <div class="card-section-toggle-body open" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
+              <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening line. The thing that makes them stop..."></textarea>
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <textarea id="cdOwnContentNew" class="fi" style="min-height:56px;font-size:14px;line-height:1.75;resize:vertical" placeholder="A rough draft, your angle, anything. Just you and the page."></textarea>
+            </div>
           </div>
         </div>
         <!-- BRIDGE THE GAP -->
@@ -3713,50 +3722,50 @@ select.fi{cursor:pointer}
             <div class="card-section-toggle-title bridge">✦ Bridge the Gap</div>
             <span class="card-section-toggle-chev">+</span>
           </div>
-          <div class="card-section-toggle-body" style="padding:8px">
-        <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleIdeaAI()">
-            <div class="ai2-section-title">&#10022; Generate with AI</div>
-            <span id="ideaAIChev" style="color:var(--tl);font-size:16px">+</span>
-          </div>
-          <div class="ai2-section-body" id="ideaAIPanel">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Pick a tone then generate - or repurpose something you love.</div>
-            <div class="ai2-tone-row">
-              <div class="ai2-tone-chip sel" data-t="warm" onclick="ideaSelTone(this)">Warm</div>
-              <div class="ai2-tone-chip" data-t="direct" onclick="ideaSelTone(this)">Direct</div>
-              <div class="ai2-tone-chip" data-t="story" onclick="ideaSelTone(this)">Story-led</div>
-              <div class="ai2-tone-chip" data-t="educational" onclick="ideaSelTone(this)">Educational</div>
-              <div class="ai2-tone-chip" data-t="playful" onclick="ideaSelTone(this)">Playful</div>
+          <div class="card-section-toggle-body" style="padding:12px 14px;display:flex;flex-direction:column;gap:14px">
+            <!-- TONE -->
+            <div style="display:flex;align-items:center;gap:8px">
+              <label style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);white-space:nowrap;flex-shrink:0">Tone</label>
+              <select class="fi" id="cdToneSelect" style="font-size:12.5px;padding:6px 10px" onchange="_cdSelTone=this.value">
+                <option value="warm">Warm &amp; Personal</option>
+                <option value="direct">Direct &amp; Punchy</option>
+                <option value="story">Story-led</option>
+                <option value="educational">Educational</option>
+                <option value="playful">Playful</option>
+              </select>
             </div>
+            <!-- GENERATE BUTTONS -->
             <div class="ai2-btn-grid">
-              <button class="ai2-btn" onclick="ideaGenerate('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('hooks')"><span class="ai2-btn-label">5 Hooks</span><span class="ai2-btn-sub">Pick your favorite</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
-              <button class="ai2-btn" onclick="ideaGenerate('substack')" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack Article</span><span class="ai2-btn-sub">Full article with sections</span></button>
+              <button class="ai2-btn" id="cdBtn-caption" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
+              <button class="ai2-btn" id="cdBtn-hooks" onclick="cdGen2('hooks')"><span class="ai2-btn-label">5 Hooks</span><span class="ai2-btn-sub">Pick your favorite</span></button>
+              <button class="ai2-btn" id="cdBtn-carousel" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
+              <button class="ai2-btn" id="cdBtn-reel" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook + body + CTA</span></button>
+              <button class="ai2-btn" id="cdBtn-newsletter" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
+              <button class="ai2-btn" id="cdBtn-variations" onclick="cdGen2('variations')"><span class="ai2-btn-label">Variations</span><span class="ai2-btn-sub">3 angles on one idea</span></button>
+              <button class="ai2-btn" id="cdBtn-substack" onclick="cdGen2('substack')" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack Article</span><span class="ai2-btn-sub">Full article with sections</span></button>
             </div>
             <div class="ai2-out" id="ideaAIOut"></div>
             <div class="ai2-out-acts" id="ideaAIActs">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaAICopy()">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaAISave()">Save Draft</button>
             </div>
-            <div class="cd-rp-div" style="height:1px;background:var(--bl);margin:14px 0"></div>
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--t);margin-bottom:8px">Repurpose a Post</div>
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post - the Studio rebuilds it in your voice for your niche.</div>
-            <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
-              <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap">From</label>
-              <select class="fi" id="ideaRpOrigPlat" style="font-size:12px;padding:6px 10px">
-                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
-                <option value="LinkedIn">LinkedIn</option><option value="a blog or newsletter">Blog / Newsletter</option>
-                <option value="Facebook">Facebook</option><option value="somewhere online">Other</option>
-              </select>
+            <!-- REPURPOSE IN MY VOICE -->
+            <div style="border-top:1px solid var(--bl);padding-top:12px">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px">🔁 Repurpose in my voice</div>
+              <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. The Studio rewrites it in your voice for your audience.</div>
+              <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+                <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap;flex-shrink:0">From</label>
+                <select class="fi" id="ideaRpOrigPlat" style="font-size:12px;padding:6px 10px">
+                  <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                  <option value="LinkedIn">LinkedIn</option><option value="a blog or newsletter">Blog / Newsletter</option>
+                  <option value="Facebook">Facebook</option><option value="somewhere online">Other</option>
+                </select>
+              </div>
+              <textarea class="ai2-input" id="ideaRpText" placeholder="Paste the post here..." style="min-height:72px;margin-bottom:8px"></textarea>
+              <button class="ai2-btn full accent" id="cdBtn-repurpose" onclick="cdRepurpose2()">Repurpose in my voice</button>
             </div>
-            <textarea class="ai2-input" id="ideaRpText" placeholder="Paste the caption or post content here..." style="min-height:80px"></textarea>
-            <button class="ai2-btn full accent" onclick="ideaRepurpose()">Rebuild in My Voice</button>
           </div>
         </div>
-          </div><!-- end bridge body -->
-        </div><!-- end bridge toggle -->
       </div><!-- end cd2-right -->
     </div><!-- end cd2-wrap -->
   </div>
@@ -3939,14 +3948,11 @@ select.fi{cursor:pointer}
             </label>
           </div>
         </div>
-        <!-- GROUP: YOUR CONTENT -->
+        <!-- GROUP: YOUR CONTENT BRIEF -->
         <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Your content</div>
-          <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
-            <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening hook or subject line. The thing that makes them stop scrolling..."></textarea>
-          </div>
-          <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body</label>
-            <textarea class="fi" id="cdNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Key points, angle, CTA, what you want them to feel... (AI tools will use all of this)"></textarea>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(AI tools read everything here)</span></div>
+          <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
+            <textarea class="fi" id="cdNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="What's this post about? Key points, angle, CTA, what you want them to feel..."></textarea>
           </div>
           <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
             <div style="display:flex;gap:8px;align-items:center">
@@ -4028,12 +4034,12 @@ select.fi{cursor:pointer}
           <div class="card-section-toggle-body" style="padding:8px">
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA">
-            <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Strategy Session</div>
+            <div class="ai2-section-title" style="color:var(--r)">✦ Get Creative Direction</div>
             <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-smartBrief-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid - before you write a single word.</div>
-            <button class="ai2-btn full accent" onclick="cdSmartBrief()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Brief Me, Creative Director</button>
+            <button class="ai2-btn full accent" onclick="cdSmartBrief()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Get my creative direction</button>
             <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
             <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
           </div>
@@ -4126,7 +4132,7 @@ select.fi{cursor:pointer}
         </div>
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')" style="background:linear-gradient(135deg,#E8C4B4,#D4A090);border-bottom:2px solid #C4826A">
-            <div class="ai2-section-title" style="color:var(--r)">✦ Creative Director: Content Autopsy</div>
+            <div class="ai2-section-title" style="color:var(--r)">✦ Rebuild in my voice</div>
             <span id="ai2-repurpose-chev" style="color:#8C3518;font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
@@ -5126,6 +5132,7 @@ function navigate(v,opts){
   if(v==='calendar')renderCalendar();
   if(v==='ideas'){
     renderKanban();renderBucketInsights();
+    var cb=document.getElementById('kanbanHidePublished');if(cb)cb.checked=S.plannerHidePublished||false;
     var kanban=document.getElementById('ideaKanban');
     var list=document.getElementById('ideaListView');
     var btn=document.getElementById('plannerViewToggle');
@@ -5509,7 +5516,9 @@ function renderIdeaListView(){
 }
 function renderKanban(){
   const el=document.getElementById('ideaKanban');
-  el.innerHTML=IDEA_COLS.map(col=>{
+  var hidePublished=S.plannerHidePublished||false;
+  var colsToShow=hidePublished?IDEA_COLS.filter(function(c){return c.id!=='published';}):IDEA_COLS;
+  el.innerHTML=colsToShow.map(col=>{
     const cards=S.ideas.filter(i=>i.status===col.id);
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
@@ -7474,18 +7483,29 @@ async function cdSmartBrief() {
 }
 
 async function cdGen2(type) {
-  // Auto-open the generate section so output is visible
-  var genBody = document.getElementById('ai2-generate-body');
-  var genChev = document.getElementById('ai2-generate-chev');
-  if (genBody && !genBody.classList.contains('open')) {
-    genBody.classList.add('open');
-    if (genChev) genChev.textContent = '‹';
-  }
+  // Generation lock — prevent double-click credit burns
+  if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
+  window._cdGenerating = true;
+  // Lock all generate buttons visually
+  document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=true; b.style.opacity='.5'; });
+  // Sync tone from the new dropdown
+  var toneEl = document.getElementById('cdToneSelect');
+  if (toneEl) _cdSelTone = toneEl.value;
+  // Also pull hook from the right panel Go Analog textarea
+  var hookEl = document.getElementById('cdHook');
   var b = cdGetBrief();
-  if (!b.title && !b.notes && !b.ownContent) { toast('Add a title, brief, or write something first'); return; }
+  if (!b.title && !b.notes && !b.ownContent && !(hookEl&&hookEl.value.trim())) {
+    toast('Add a title or some content first');
+    window._cdGenerating = false;
+    document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=false; b.style.opacity=''; });
+    return;
+  }
+  // Show output in the new unified output area
+  var out = document.getElementById('ideaAIOut');
+  var acts = document.getElementById('ideaAIActs');
+  if (out) { out.textContent = 'Writing...'; out.classList.add('show'); }
+  if (acts) acts.classList.remove('show');
   var load = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
-  var out = document.getElementById('cd-out-'+type) || document.getElementById('cd-out-generate');
-  var acts = document.getElementById('cd-acts-'+type) || document.getElementById('cd-acts-generate');
   if (load) load.classList.add('show');
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
@@ -7525,6 +7545,9 @@ async function cdGen2(type) {
     cdAutoSaveOutputs();
   }
   S.aiCount = (S.aiCount || 0) + 1; persist();
+  // Unlock generation buttons
+  window._cdGenerating = false;
+  document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=false; b.style.opacity=''; });
 }
 
 function cdRenderHooks(text) {
@@ -8327,16 +8350,22 @@ function ideaSelTone(el) {
 }
 
 function ideaAICopy() {
-  if (S.ideaAIOut) navigator.clipboard.writeText(S.ideaAIOut).then(function() { toast('Copied'); });
+  var el = document.getElementById('ideaAIOut');
+  var txt = (el && el.textContent) || S.ideaAIOut || '';
+  if (txt) navigator.clipboard.writeText(txt).then(function() { toast('Copied ✓'); });
+  else toast('Nothing to copy yet');
 }
 function ideaAISave() {
-  if (!S.ideaAIOut) return;
-  var t = document.getElementById('ideaTitle').value.trim() || 'Untitled';
-  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: S.ideaAIOut,
-    platform: document.getElementById('ideaPlat').value,
-    contentType: document.getElementById('ideaFormat').value,
+  var el = document.getElementById('ideaAIOut');
+  var txt = (el && el.textContent) || S.ideaAIOut || '';
+  if (!txt) return;
+  var t = document.getElementById('cdTitle') ? document.getElementById('cdTitle').value.trim() : (document.getElementById('ideaTitle') ? document.getElementById('ideaTitle').value.trim() : '');
+  t = t || 'Untitled';
+  S.drafts.unshift({ id: Date.now().toString(), title: t.slice(0, 65), content: txt,
+    platform: document.getElementById('cdPlat') ? document.getElementById('cdPlat').value : 'instagram',
+    contentType: document.getElementById('cdFormat') ? document.getElementById('cdFormat').value : '',
     tone: 'Brand Voice', createdAt: new Date().toISOString() });
-  persist(); toast('Draft saved');
+  persist(); renderDashboard(); toast('Draft saved ✓');
 }
 
 
