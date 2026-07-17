@@ -5122,7 +5122,7 @@ function navigate(v,opts){
   const ni=document.querySelector(`[data-view="${v}"]`);
   if(ni)ni.classList.add('active');
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');S.gs.libVisited=true;persist();}
-  if(v==='dashboard'){renderDashboard();renderWeeklyFocus();}
+  if(v==='dashboard'){renderDashboard();renderWeeklyFocus();renderPickUp();}
   if(v==='calendar')renderCalendar();
   if(v==='ideas'){
     renderKanban();renderBucketInsights();
@@ -5351,7 +5351,7 @@ function renderPickUp(){
   const el=document.getElementById('pickUpWrap');
   if(!el)return;
   const lastDraft=S.drafts[0];
-  const lastIdea=(S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId))||S.ideas.find(i=>i.status==='inprogress')||S.ideas[0];
+  const lastIdea=(S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId&&i.status!=='published'))||S.ideas.find(i=>i.status==='inprogress')||S.ideas.find(i=>i.status==='idea')||S.ideas.find(i=>i.status!=='published');
   if(!lastDraft&&!lastIdea){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   el.innerHTML=`<div class="pickup-wrap">
