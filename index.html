@@ -543,6 +543,12 @@ select.fi{cursor:pointer}
 .wdc-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px var(--shm);border-color:var(--teal)}
 .wdc-card:active{transform:translateY(-1px)}
 .wdc-icon{font-size:22px;margin-bottom:8px;line-height:1}
+.wdc-card.c-rust{background:linear-gradient(135deg,var(--rp),var(--w) 65%);border-color:#E0BDAA}
+.wdc-card.c-teal{background:linear-gradient(135deg,#eef8f8,var(--w) 65%);border-color:var(--tealp)}
+.wdc-card.c-purple{background:linear-gradient(135deg,#F4F0FA,var(--w) 65%);border-color:#D4C8E2}
+.wdc-card.c-gold{background:linear-gradient(135deg,var(--gp),var(--w) 65%);border-color:#D4A843}
+.wdc-card.c-sage{background:linear-gradient(135deg,var(--sagep),var(--w) 65%);border-color:#BFD4B2}
+.wdc-card.c-espresso{background:linear-gradient(135deg,#F5EBE3,var(--w) 65%);border-color:#C9A893}
 .wdc-title{font-size:13px;font-weight:500;color:var(--e);margin-bottom:3px}
 .wdc-sub{font-size:10.5px;color:var(--tl)}
 
@@ -1911,12 +1917,12 @@ select.fi{cursor:pointer}
         <div class="gs-items" id="gsItems"></div>
       </div>
       <!-- PANIC BUTTON -->
-      <div class="panic-bar" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div class="panic-bar" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px">
         <div>
-          <div style="font-family:var(--fh);font-size:23px;font-weight:600;color:var(--e);margin-bottom:3px">🧠 Brain not cooperating?</div>
-          <div style="font-size:13px;color:var(--el);line-height:1.5">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
+          <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:2px">🧠 Brain not cooperating?</div>
+          <div style="font-size:12px;color:var(--el);line-height:1.45">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
         </div>
-        <button onclick="openPanicModal()" class="panic-btn" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:12px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
+        <button onclick="openPanicModal()" class="panic-btn" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:9px 16px;font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
       </div>
 
       <!-- WEEKLY FOCUS -->
@@ -1939,33 +1945,33 @@ select.fi{cursor:pointer}
       <div class="wdc-wrap">
         <div class="wdc-label">What do you want to create today?</div>
         <div class="wdc-grid">
-          <div class="wdc-card" onclick="quickCreate('Caption / Post','instagram')">
+          <div class="wdc-card c-teal" onclick="quickCreate('Caption / Post','instagram')">
             <div class="wdc-icon">✍️</div>
             <div class="wdc-title">Caption</div>
             <div class="wdc-sub">Instagram post</div>
           </div>
-          <div class="wdc-card" onclick="quickCreate('Email Newsletter','newsletter')">
+          <div class="wdc-card c-gold" onclick="quickCreate('Email Newsletter','newsletter')">
             <div class="wdc-icon">📧</div>
             <div class="wdc-title">Newsletter</div>
             <div class="wdc-sub">Email to your list</div>
           </div>
-          <div class="wdc-card" onclick="quickCreateCard('Carousel','Carousel Copy','instagram')">
+          <div class="wdc-card c-purple" onclick="quickCreateCard('Carousel','Carousel Copy','instagram')">
             <div class="wdc-icon">🎠</div>
             <div class="wdc-title">Carousel</div>
             <div class="wdc-sub">Plan it out</div>
           </div>
-          <div class="wdc-card" onclick="quickCreateCard('Story','Story Script','instagram')">
+          <div class="wdc-card c-rust" onclick="quickCreateCard('Story','Story Script','instagram')">
             <div class="wdc-icon">📱</div>
             <div class="wdc-title">Story</div>
             <div class="wdc-sub">Plan it out</div>
           </div>
 
-          <div class="wdc-card" onclick="quickCreate('Article','substack')">
+          <div class="wdc-card c-espresso" onclick="quickCreate('Article','substack')">
             <div class="wdc-icon">📝</div>
             <div class="wdc-title">Substack</div>
             <div class="wdc-sub">Write an article</div>
           </div>
-          <div class="wdc-card" onclick="openIdeaModal('idea')">
+          <div class="wdc-card c-sage" onclick="openIdeaModal('idea')">
             <div class="wdc-icon">✨</div>
             <div class="wdc-title">Something else</div>
             <div class="wdc-sub">Open content card</div>
@@ -5242,16 +5248,21 @@ function renderPickUp(){
   const lastIdea=(S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId&&i.status!=='published'))||S.ideas.find(i=>i.status==='inprogress')||S.ideas.find(i=>i.status==='idea')||S.ideas.find(i=>i.status!=='published');
   if(!lastDraft&&!lastIdea){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
-  el.innerHTML=`<div class="pickup-wrap">
-    <div class="pickup-label">Pick up where you left off</div>
+  el.innerHTML=`<div class="guide-wrap" id="pickUpToggleWrap" style="margin-bottom:18px">
+    <div class="guide-hdr" onclick="toggleGuide(this)">
+      <div class="guide-hdr-left"><span style="font-size:15px">👋</span><span class="guide-hdr-title">Pick up where you left off</span></div>
+      <span class="guide-chevron">▼</span>
+    </div>
+    <div class="guide-body">
+      <div style="padding:16px 20px 18px">
     <div class="pickup-grid">
       ${lastDraft?`<div class="pickup-card" style="border-top:3px solid var(--teal);background:linear-gradient(135deg,var(--tealp),var(--w) 60%)">
         <div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
         <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="openDraftModal('${lastDraft.id}')">Open →</button>
-          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
+          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
+          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--teal)"><div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
       ${lastIdea?`<div class="pickup-card" style="border-top:3px solid var(--r);background:linear-gradient(135deg,var(--rp),var(--w) 60%)">
@@ -5259,9 +5270,11 @@ function renderPickUp(){
         <div class="pickup-title">${esc(lastIdea.title)}</div>
         <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdOpen('${lastIdea.id}')">Open →</button>
+          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--r)"><div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+    </div>
+      </div>
     </div>
   </div>`;
 }
