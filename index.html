@@ -511,8 +511,9 @@ select.fi{cursor:pointer}
 
 /* SECTION GUIDE */
 .guide-wrap{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:22px;box-shadow:0 1px 4px var(--sh);overflow:hidden}
-#pickUpToggleWrap{background:var(--sb)}
-#pickUpToggleWrap .guide-body{background:var(--p)}
+#pickUpToggleWrap{background:#F6F2FA;border-color:#E6DCF0}
+#pickUpToggleWrap .guide-hdr-title{color:#6b5c8a}
+#pickUpToggleWrap .guide-body{background:#FBF8F2}
 .guide-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:border-color .15s}
 .guide-hdr.open{border-bottom-color:var(--bl)}
 .guide-hdr-left{display:flex;align-items:center;gap:10px}
@@ -1162,7 +1163,7 @@ select.fi{cursor:pointer}
 .wn-got-it:hover{background:var(--rh)}
 
 /* WEEKLY FOCUS */
-.wf-wrap{background:linear-gradient(135deg,var(--sb),var(--p));border:1.5px solid var(--b);border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
+.wf-wrap{background:#F0F8F6;border:1.5px solid #DCEEE9;border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
 .wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
@@ -1919,12 +1920,12 @@ select.fi{cursor:pointer}
         <div class="gs-items" id="gsItems"></div>
       </div>
       <!-- PANIC BUTTON -->
-      <div class="panic-bar" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px">
+      <div class="panic-bar" style="background:#FBF3EE;border:1.5px solid #F0DCCC;border-radius:var(--rad);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px">
         <div>
-          <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:2px">🧠 Brain not cooperating?</div>
-          <div style="font-size:12px;color:var(--el);line-height:1.45">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
+          <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:#a8724a;margin-bottom:2px">🧠 Brain not cooperating?</div>
+          <div style="font-size:12px;color:#8c6a52;line-height:1.45">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
         </div>
-        <button onclick="openPanicModal()" class="panic-btn" style="background:var(--r);color:white;border:none;border-radius:var(--rsm);padding:9px 16px;font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='var(--rh)'" onmouseout="this.style.background='var(--r)'">✦ Help me, Creative Director!</button>
+        <button onclick="openPanicModal()" class="panic-btn" style="background:#a8724a;color:white;border:none;border-radius:var(--rsm);padding:9px 16px;font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='#946139'" onmouseout="this.style.background='#a8724a'">✦ Help me, Creative Director!</button>
       </div>
 
       <!-- WEEKLY FOCUS -->
