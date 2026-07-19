@@ -511,9 +511,9 @@ select.fi{cursor:pointer}
 
 /* SECTION GUIDE */
 .guide-wrap{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:22px;box-shadow:0 1px 4px var(--sh);overflow:hidden}
-#pickUpToggleWrap{background:#F6F2FA;border-color:#E6DCF0}
-#pickUpToggleWrap .guide-hdr-title{color:#6b5c8a}
-#pickUpToggleWrap .guide-body{background:#FBF8F2}
+#pickUpToggleWrap{background:#fff;border-left:5px solid #7F77DD}
+#pickUpToggleWrap .guide-hdr-title{color:#534AB7}
+#pickUpToggleWrap .guide-body{background:#fff}
 .guide-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:border-color .15s}
 .guide-hdr.open{border-bottom-color:var(--bl)}
 .guide-hdr-left{display:flex;align-items:center;gap:10px}
@@ -546,12 +546,12 @@ select.fi{cursor:pointer}
 .wdc-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px var(--shm);border-color:var(--teal)}
 .wdc-card:active{transform:translateY(-1px)}
 .wdc-icon{font-size:22px;margin-bottom:8px;line-height:1}
-.wdc-card.c-rust{background:#FBF3EE;border-color:#F0DCCC}
-.wdc-card.c-teal{background:#F0F8F6;border-color:#DCEEE9}
-.wdc-card.c-purple{background:#F6F2FA;border-color:#E6DCF0}
-.wdc-card.c-gold{background:#FBF6EA;border-color:#F0E4C8}
-.wdc-card.c-sage{background:#F3F7F0;border-color:#DCEAD4}
-.wdc-card.c-espresso{background:#F7F0EA;border-color:#E8D8C8}
+.wdc-card.c-rust{background:#fff;border-color:var(--bl);border-top:3px solid #D85A30}
+.wdc-card.c-teal{background:#fff;border-color:var(--bl);border-top:3px solid #1D9E75}
+.wdc-card.c-purple{background:#fff;border-color:var(--bl);border-top:3px solid #7F77DD}
+.wdc-card.c-gold{background:#fff;border-color:var(--bl);border-top:3px solid #BA7517}
+.wdc-card.c-sage{background:#fff;border-color:var(--bl);border-top:3px solid #639922}
+.wdc-card.c-espresso{background:#fff;border-color:var(--bl);border-top:3px solid #8c6a4a}
 .wdc-title{font-size:13px;font-weight:500;color:var(--e);margin-bottom:3px}
 .wdc-sub{font-size:10.5px;color:var(--tl)}
 
@@ -1163,7 +1163,7 @@ select.fi{cursor:pointer}
 .wn-got-it:hover{background:var(--rh)}
 
 /* WEEKLY FOCUS */
-.wf-wrap{background:#F0F8F6;border:1.5px solid #DCEEE9;border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
+.wf-wrap{background:#fff;border:1px solid var(--bl);border-left:5px solid #1D9E75;border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
 .wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
@@ -1920,10 +1920,13 @@ select.fi{cursor:pointer}
         <div class="gs-items" id="gsItems"></div>
       </div>
       <!-- PANIC BUTTON -->
-      <div class="panic-bar" style="background:#FBF3EE;border:1.5px solid #F0DCCC;border-radius:var(--rad);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px">
-        <div>
-          <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:#a8724a;margin-bottom:2px">🧠 Brain not cooperating?</div>
-          <div style="font-size:12px;color:#8c6a52;line-height:1.45">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
+      <div class="panic-bar" style="background:#fff;border:1px solid var(--bl);border-left:5px solid #a8724a;border-radius:var(--rad);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 1px 4px var(--sh)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#FBF3EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🧠</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:2px">Brain not cooperating?</div>
+            <div style="font-size:12px;color:var(--t);line-height:1.45">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
+          </div>
         </div>
         <button onclick="openPanicModal()" class="panic-btn" style="background:#a8724a;color:white;border:none;border-radius:var(--rsm);padding:9px 16px;font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='#946139'" onmouseout="this.style.background='#a8724a'">✦ Help me, Creative Director!</button>
       </div>
@@ -5256,23 +5259,23 @@ function renderPickUp(){
   if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   var pickupBlock=(lastDraft||lastIdea)?`<div class="pickup-grid">
-      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid #5DCAA5;background:#F0F8F6">
-        <div class="pickup-tag" style="color:#3d8a7a">📝 Saved Draft</div>
+      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid #1D9E75;background:#fff">
+        <div class="pickup-tag" style="color:#0F6E56">📝 Saved Draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
         <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#3d8a7a;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
-          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid #3d8a7a;background:none;color:#3d8a7a;cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#1D9E75;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid #1D9E75;background:none;color:#0F6E56;cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid #5DCAA5"><div class="pickup-tag" style="color:#3d8a7a">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
-      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid #D4A882;background:#FBF3EE">
-        <div class="pickup-tag" style="color:#a8724a">🗂 Content Card</div>
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid #1D9E75"><div class="pickup-tag" style="color:#0F6E56">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
+      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid #D85A30;background:#fff">
+        <div class="pickup-tag" style="color:#993C1D">🗂 Content Card</div>
         <div class="pickup-title">${esc(lastIdea.title)}</div>
         <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#a8724a;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#D85A30;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid #D4A882"><div class="pickup-tag" style="color:#a8724a">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid #D85A30"><div class="pickup-tag" style="color:#993C1D">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
     </div>`:'';
   var plateBlock=(plate.hasToday||plate.hasTomorrow)?`<div style="margin-top:${pickupBlock?'16':'0'}px;border:1px solid var(--bl);border-radius:var(--rsm);overflow:hidden">
       <div style="padding:9px 14px;background:var(--blue);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">📅 On Your Plate</div>
