@@ -2233,6 +2233,7 @@ select.fi{cursor:pointer}
     <div class="main-hdr">
       <div><h1>Tasks</h1><div class="sub" id="taskSubDate"></div></div>
       <div class="hdr-acts">
+        <button class="btn btn-g" id="taskStarFilterBtn" onclick="toggleTaskStarFilter()" style="font-size:12.5px" title="Show only starred tasks">☆ Starred only</button>
         <button class="btn btn-g" id="taskViewToggle" onclick="toggleTaskView()" style="font-size:12.5px">☰ List View</button>
         <button class="btn btn-p" onclick="openTaskModal()">+ Add Task</button>
       </div>
@@ -5417,6 +5418,28 @@ function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=s
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
 const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'var(--blue)',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+function toggleTaskStarFilter(){
+  S.taskStarFilter=!S.taskStarFilter;
+  syncTaskStarFilterBtn();
+  persist();
+  renderTaskKanban();
+  if(S.taskView==='list')renderTaskListView();
+}
+function syncTaskStarFilterBtn(){
+  var btn=document.getElementById('taskStarFilterBtn');
+  if(!btn)return;
+  if(S.taskStarFilter){
+    btn.textContent='★ Starred only';
+    btn.style.background='var(--gp)';
+    btn.style.borderColor='var(--g)';
+    btn.style.color='var(--g)';
+  } else {
+    btn.textContent='☆ Starred only';
+    btn.style.background='';
+    btn.style.borderColor='';
+    btn.style.color='';
+  }
+}
 function toggleTaskView(){
   S.taskView=(S.taskView==='list')?'kanban':'list';
   var kanban=document.getElementById('taskKanban');
@@ -5442,6 +5465,7 @@ function renderTaskListView(){
   var statusBg={todo:'var(--bluep)',inprogress:'var(--rp)',done:'#D0EAD0'};
   var statusLabel={todo:'To Do',inprogress:'In Progress',done:'Done'};
   var items=S.tasks.slice();
+  if(S.taskStarFilter){items=items.filter(function(t){return t.starred;});}
   if(sortBy==='date'){
     items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
   } else if(sortBy==='dateDesc'){
@@ -5463,7 +5487,7 @@ function renderTaskListView(){
     +'<option value="energy"'+(sortBy==='energy'?' selected':'')+'>Energy level</option>'
     +'</select></div>';
   if(!items.length){
-    html+='<div class="idea-list-empty">No tasks yet. Click + Add Task to get started.</div>';
+    html+='<div class="idea-list-empty">'+(S.taskStarFilter?'No starred tasks yet. Tap the ☆ on a task to pin it here.':'No tasks yet. Click + Add Task to get started.')+'</div>';
   } else {
     items.forEach(function(t){
       var dt='';
@@ -5486,9 +5510,10 @@ function renderTaskListView(){
   el.innerHTML=html;
 }
 function renderTaskKanban(){
+  syncTaskStarFilterBtn();
   const el=document.getElementById('taskKanban');
   el.innerHTML=TASK_COLS.map(col=>{
-    const cards=S.tasks.filter(t=>t.status===col.id);
+    const cards=S.tasks.filter(t=>t.status===col.id).filter(t=>!S.taskStarFilter||t.starred);
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
@@ -5511,7 +5536,7 @@ function renderTaskKanban(){
           ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
           ${t._ideaId?`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">↗ Card</button>`:'<div style="flex:1"></div>'}
         </div>
-      </div>`).join(''):'<div class="empty-kc">Nothing here yet</div>'}</div>
+      </div>`).join(''):(S.taskStarFilter?'<div class="empty-kc">No starred tasks here</div>':'<div class="empty-kc">Nothing here yet</div>')}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
