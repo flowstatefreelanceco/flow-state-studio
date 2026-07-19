@@ -1979,48 +1979,55 @@ select.fi{cursor:pointer}
       <!-- TASKS DUE TODAY + TOMORROW -->
       <div id="tasksDueWrap"></div>
 
-      <!-- GUIDES CAROUSEL -->
-      <div style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t)">📖 Guides</div>
-          <span style="font-size:11px;color:var(--teal);cursor:pointer;font-weight:600" onclick="navigate('guides')">See all →</span>
+      <!-- GUIDES CAROUSEL - collapsible to keep the dashboard from feeling crowded -->
+      <div class="guide-wrap" id="guidesCarouselWrap">
+        <div class="guide-hdr" onclick="toggleGuide(this)">
+          <div class="guide-hdr-left"><span style="font-size:15px">📖</span><span class="guide-hdr-title">Guides - need a boost or a breather?</span></div>
+          <span class="guide-chevron">▼</span>
         </div>
-        <div class="gc-carousel">
-          <div class="gc-carousel-card rust" onclick="navigate('guides');setTimeout(()=>openGuideDetail('burnout'),100)">
-            <span class="gc-c-icon">❤️‍🩹</span>
-            <div class="gc-c-title">ND Rescue Kit</div>
-            <div class="gc-c-desc">What to do when you're overwhelmed and don't know where to start.</div>
-            <div class="gc-c-cta rust">Read →</div>
-          </div>
-          <div class="gc-carousel-card teal" onclick="navigate('guides');setTimeout(()=>openGuideDetail('cycle'),100)">
-            <span class="gc-c-icon">🌊</span>
-            <div class="gc-c-title">Content Cycle</div>
-            <div class="gc-c-desc">A four-phase content rhythm that grows your audience without burning you out.</div>
-            <div class="gc-c-cta teal">Read →</div>
-          </div>
-          <div class="gc-carousel-card purple" onclick="navigate('guides');setTimeout(()=>openGuideDetail('unstuck'),100)">
-            <span class="gc-c-icon">✨</span>
-            <div class="gc-c-title">The Unstuck Guide</div>
-            <div class="gc-c-desc">For when the inner critic says it's all been done before.</div>
-            <div class="gc-c-cta purple">Read →</div>
-          </div>
-          <div class="gc-carousel-card gold" onclick="navigate('guides');setTimeout(()=>openGuideDetail('analog'),100)">
-            <span class="gc-c-icon">✏️</span>
-            <div class="gc-c-title">The Analog Way</div>
-            <div class="gc-c-desc">No AI required. What analog means and how to use the Studio your way.</div>
-            <div class="gc-c-cta gold">Read →</div>
-          </div>
-          <div class="gc-carousel-card sage" onclick="navigate('guides');setTimeout(()=>openGuideDetail('igresurrection'),100)">
-            <span class="gc-c-icon">🌱</span>
-            <div class="gc-c-title">The IG Resurrection Guide</div>
-            <div class="gc-c-desc">Coming back to a quiet or ghosted account, without the overwhelm.</div>
-            <div class="gc-c-cta sage">Read →</div>
-          </div>
-          <div class="gc-carousel-card espresso" onclick="navigate('guides');setTimeout(()=>openGuideDetail('strategy'),100)">
-            <span class="gc-c-icon">🧠</span>
-            <div class="gc-c-title">Big Brain Energy (Strategy Edition)</div>
-            <div class="gc-c-desc">How to lean into strategy with Director Chat, timing, cadence, and what to ask.</div>
-            <div class="gc-c-cta espresso">Read →</div>
+        <div class="guide-body">
+          <div style="padding:16px 20px 18px">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+              <span style="font-size:11px;color:var(--teal);cursor:pointer;font-weight:600" onclick="event.stopPropagation();navigate('guides')">See all →</span>
+            </div>
+            <div class="gc-carousel">
+              <div class="gc-carousel-card rust" onclick="navigate('guides');setTimeout(()=>openGuideDetail('burnout'),100)">
+                <span class="gc-c-icon">❤️‍🩹</span>
+                <div class="gc-c-title">ND Rescue Kit</div>
+                <div class="gc-c-desc">What to do when you're overwhelmed and don't know where to start.</div>
+                <div class="gc-c-cta rust">Read →</div>
+              </div>
+              <div class="gc-carousel-card teal" onclick="navigate('guides');setTimeout(()=>openGuideDetail('cycle'),100)">
+                <span class="gc-c-icon">🌊</span>
+                <div class="gc-c-title">Content Cycle</div>
+                <div class="gc-c-desc">A four-phase content rhythm that grows your audience without burning you out.</div>
+                <div class="gc-c-cta teal">Read →</div>
+              </div>
+              <div class="gc-carousel-card purple" onclick="navigate('guides');setTimeout(()=>openGuideDetail('unstuck'),100)">
+                <span class="gc-c-icon">✨</span>
+                <div class="gc-c-title">The Unstuck Guide</div>
+                <div class="gc-c-desc">For when the inner critic says it's all been done before.</div>
+                <div class="gc-c-cta purple">Read →</div>
+              </div>
+              <div class="gc-carousel-card gold" onclick="navigate('guides');setTimeout(()=>openGuideDetail('analog'),100)">
+                <span class="gc-c-icon">✏️</span>
+                <div class="gc-c-title">The Analog Way</div>
+                <div class="gc-c-desc">No AI required. What analog means and how to use the Studio your way.</div>
+                <div class="gc-c-cta gold">Read →</div>
+              </div>
+              <div class="gc-carousel-card sage" onclick="navigate('guides');setTimeout(()=>openGuideDetail('igresurrection'),100)">
+                <span class="gc-c-icon">🌱</span>
+                <div class="gc-c-title">The IG Resurrection Guide</div>
+                <div class="gc-c-desc">Coming back to a quiet or ghosted account, without the overwhelm.</div>
+                <div class="gc-c-cta sage">Read →</div>
+              </div>
+              <div class="gc-carousel-card espresso" onclick="navigate('guides');setTimeout(()=>openGuideDetail('strategy'),100)">
+                <span class="gc-c-icon">🧠</span>
+                <div class="gc-c-title">Big Brain Energy (Strategy Edition)</div>
+                <div class="gc-c-desc">How to lean into strategy with Director Chat, timing, cadence, and what to ask.</div>
+                <div class="gc-c-cta espresso">Read →</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
