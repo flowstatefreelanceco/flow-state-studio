@@ -4873,6 +4873,7 @@ function _appInit(){
     }
   }
   renderAllLibs(); setGreeting();
+  setInterval(setGreeting,5*60*1000);
 }
 
 function load(){ /* data loaded via initFlowStateApp */ }
@@ -5019,7 +5020,7 @@ function navigate(v,opts){
   const ni=document.querySelector(`[data-view="${v}"]`);
   if(ni)ni.classList.add('active');
   if(['hooks','ctas','stories','prompts','swipefile'].includes(v)){const lp=document.querySelector('.nav-parent');if(lp)lp.classList.add('open');S.gs.libVisited=true;persist();}
-  if(v==='dashboard'){renderDashboard();renderWeeklyFocus();renderPickUp();}
+  if(v==='dashboard'){setGreeting();renderDashboard();renderWeeklyFocus();renderPickUp();}
   if(v==='calendar')renderCalendar();
   if(v==='ideas'){
     renderKanban();renderBucketInsights();
