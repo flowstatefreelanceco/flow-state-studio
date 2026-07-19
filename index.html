@@ -511,6 +511,8 @@ select.fi{cursor:pointer}
 
 /* SECTION GUIDE */
 .guide-wrap{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);margin-bottom:22px;box-shadow:0 1px 4px var(--sh);overflow:hidden}
+#pickUpToggleWrap{background:var(--sb)}
+#pickUpToggleWrap .guide-body{background:var(--p)}
 .guide-hdr{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:border-color .15s}
 .guide-hdr.open{border-bottom-color:var(--bl)}
 .guide-hdr-left{display:flex;align-items:center;gap:10px}
@@ -4270,11 +4272,11 @@ select.fi{cursor:pointer}
         </select>
       </div>
     </div>
-    <button class="ai2-btn" id="panicGenBtn" onclick="runPanicGenerate()" style="width:100%;background:var(--teal);border-color:var(--teal);color:#fff;margin-bottom:8px"><span class="ai2-btn-label">✍️ Write the full piece</span><span class="ai2-btn-sub" style="color:rgba(255,255,255,.85)">Generates the actual finished draft, ready to edit and post</span></button>
+    <button class="ai2-btn" id="panicGenBtn" onclick="runPanicGenerate()" style="width:100%;background:var(--w);border:2px solid var(--teal);color:var(--teal);margin-bottom:8px"><span class="ai2-btn-label" style="color:var(--teal)">✍️ Write the full piece</span><span class="ai2-btn-sub" style="color:var(--teal);opacity:.8">Generates the actual finished draft, ready to edit and post</span></button>
     <div style="font-size:10.5px;color:var(--tl);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin:2px 0 6px">Or just get direction first</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="ai2-btn" id="panicBtn" onclick="runPanic()" style="flex:2;min-width:150px"><span class="ai2-btn-label">✦ Brief Me</span><span class="ai2-btn-sub">Angle, hook idea, emotion, what to avoid, using the topic above</span></button>
-      <button class="ai2-btn" onclick="runPanicRandom()" style="flex:1;min-width:130px"><span class="ai2-btn-label">🎲 Surprise Me</span><span class="ai2-btn-sub">Same as Brief Me, plus a fresh idea, no topic needed</span></button>
+      <button class="ai2-btn" id="panicBtn" onclick="runPanic()" style="flex:2;min-width:150px;background:var(--r);border-color:var(--r);color:#fff"><span class="ai2-btn-label">✦ Brief Me</span><span class="ai2-btn-sub" style="color:rgba(255,255,255,.8)">Angle, hook idea, emotion, what to avoid, using the topic above</span></button>
+      <button class="ai2-btn" onclick="runPanicRandom()" style="flex:1;min-width:130px;background:#2d5fa0;border-color:#2d5fa0;color:#fff"><span class="ai2-btn-label">🎲 Surprise Me</span><span class="ai2-btn-sub" style="color:rgba(255,255,255,.8)">Same as Brief Me, plus a fresh idea, no topic needed</span></button>
       <button class="ai2-btn" onclick="runAnalogPrompt()" style="flex:1;min-width:130px;border-color:#D4A843;background:var(--gp)"><span class="ai2-btn-label" style="color:var(--g)">✏️ Analog Prompt</span><span class="ai2-btn-sub" style="color:var(--g);opacity:.8">A reflective writing question, no AI, no hook, just you</span></button>
     </div>
     <div id="panicLoading" style="display:none;text-align:center;padding:16px 0;color:var(--t);font-size:13px">Thinking like a creative director...</div>
@@ -5251,23 +5253,23 @@ function renderPickUp(){
   if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   var pickupBlock=(lastDraft||lastIdea)?`<div class="pickup-grid">
-      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid var(--teal);background:linear-gradient(135deg,var(--tealp),var(--w) 60%)">
-        <div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div>
+      ${lastDraft?`<div class="pickup-card" style="border-top:3px solid #5DCAA5;background:#F0F8F6">
+        <div class="pickup-tag" style="color:#3d8a7a">📝 Saved Draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
         <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
-          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid var(--teal);background:none;color:var(--teal);cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#3d8a7a;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid #3d8a7a;background:none;color:#3d8a7a;cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--teal)"><div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
-      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid var(--r);background:linear-gradient(135deg,var(--rp),var(--w) 60%)">
-        <div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div>
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid #5DCAA5"><div class="pickup-tag" style="color:#3d8a7a">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
+      ${lastIdea?`<div class="pickup-card" style="border-top:3px solid #D4A882;background:#FBF3EE">
+        <div class="pickup-tag" style="color:#a8724a">🗂 Content Card</div>
         <div class="pickup-title">${esc(lastIdea.title)}</div>
         <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:var(--r);color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#a8724a;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
         </div>
-      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--r)"><div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+      </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid #D4A882"><div class="pickup-tag" style="color:#a8724a">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
     </div>`:'';
   var plateBlock=(plate.hasToday||plate.hasTomorrow)?`<div style="margin-top:${pickupBlock?'16':'0'}px;border:1px solid var(--bl);border-radius:var(--rsm);overflow:hidden">
       <div style="padding:9px 14px;background:var(--blue);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">📅 On Your Plate</div>
