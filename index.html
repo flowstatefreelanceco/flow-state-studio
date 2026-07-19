@@ -582,12 +582,11 @@ select.fi{cursor:pointer}
 .pickup-label{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:12px}
 .pickup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .pickup-card{background:var(--w);border:1px solid var(--bl);border-radius:6px;padding:18px 20px;box-shadow:2px 3px 8px rgba(77,30,21,.1);display:flex;flex-direction:column}
-.pickup-card.sticky-teal{background:#008484;border-color:#008484}
 .pickup-card.sticky-cream{background:#fcf6dc;border-color:#e8dfc0}
 .plate-ruled{background:repeating-linear-gradient(180deg,#fff,#fff 38px,#F0E9D8 38px,#F0E9D8 39px)}
 .pickup-card:nth-child(1){transform:rotate(-.6deg)}
 .pickup-card:nth-child(2){transform:rotate(.6deg)}
-.pickup-tag{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:8px}
+.pickup-tag{display:inline-flex;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;padding:4px 10px;border-radius:100px;margin-bottom:10px}
 .pickup-title{font-size:18px;font-weight:500;color:var(--e);line-height:1.35;margin-bottom:4px;font-family:var(--fd)}
 .pickup-sub{font-size:11px;color:var(--tl);margin-top:auto;padding-top:10px}
 
@@ -5278,23 +5277,23 @@ function renderPickUp(){
   if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   var pickupBlock=(lastDraft||lastIdea)?`<div class="pickup-grid">
-      ${lastDraft?`<div class="pickup-card sticky-teal">
-        <div class="pickup-tag" style="color:#fff;opacity:.85">📝 Saved Draft</div>
-        <div class="pickup-title" style="color:#fff">${esc(lastDraft.title||'Untitled draft')}</div>
-        <div class="pickup-sub" style="color:rgba(255,255,255,.75)">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
+      ${lastDraft?`<div class="pickup-card sticky-cream">
+        <div class="pickup-tag" style="background:#008484;color:#fff">📝 Saved Draft</div>
+        <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
+        <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#fff;color:#008484;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
-          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid rgba(255,255,255,.6);background:none;color:#fff;cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#008484;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid #008484;background:none;color:#008484;cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
-      </div>`:'<div class="pickup-card sticky-teal" style="opacity:.4;pointer-events:none"><div class="pickup-tag" style="color:#fff;opacity:.85">📝 Saved Draft</div><div class="pickup-title" style="color:#fff">No drafts yet</div><div class="pickup-sub" style="color:rgba(255,255,255,.75)">Generate one in Writing Studio</div></div>'}
+      </div>`:'<div class="pickup-card sticky-cream" style="opacity:.4;pointer-events:none"><div class="pickup-tag" style="background:#008484;color:#fff">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
       ${lastIdea?`<div class="pickup-card sticky-cream">
-        <div class="pickup-tag" style="color:#b36c37">🗂 Content Card</div>
+        <div class="pickup-tag" style="background:#b36c37;color:#fff">🗂 Content Card</div>
         <div class="pickup-title">${esc(lastIdea.title)}</div>
         <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
           <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:#b36c37;color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
         </div>
-      </div>`:'<div class="pickup-card sticky-cream" style="opacity:.4;pointer-events:none"><div class="pickup-tag" style="color:#b36c37">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+      </div>`:'<div class="pickup-card sticky-cream" style="opacity:.4;pointer-events:none"><div class="pickup-tag" style="background:#b36c37;color:#fff">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
     </div>`:'';
   var plateBlock=(plate.hasToday||plate.hasTomorrow)?`<div style="margin-top:${pickupBlock?'18':'0'}px;border:1px solid var(--bl);border-radius:6px;overflow:hidden;box-shadow:2px 3px 8px rgba(77,30,21,.08)">
       <div style="padding:9px 14px;background:var(--blue);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">📅 On Your Plate</div>
