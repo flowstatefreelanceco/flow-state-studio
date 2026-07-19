@@ -1160,7 +1160,7 @@ select.fi{cursor:pointer}
 .wn-got-it:hover{background:var(--rh)}
 
 /* WEEKLY FOCUS */
-.wf-wrap{background:linear-gradient(135deg,var(--rp),#EDD5C8);border:1.5px solid #E0BDAA;border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
+.wf-wrap{background:linear-gradient(135deg,var(--sb),var(--p));border:1.5px solid var(--b);border-radius:var(--rad);padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
 .wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
@@ -1982,8 +1982,6 @@ select.fi{cursor:pointer}
       <!-- PICK UP WHERE YOU LEFT OFF -->
       <div id="pickUpWrap"></div>
 
-      <!-- TASKS DUE TODAY + TOMORROW -->
-      <div id="tasksDueWrap"></div>
 
       <!-- GUIDES CAROUSEL - collapsible to keep the dashboard from feeling crowded -->
       <div class="guide-wrap" id="guidesCarouselWrap">
@@ -5246,23 +5244,17 @@ function renderPickUp(){
   if(!el)return;
   const lastDraft=S.drafts[0];
   const lastIdea=(S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId&&i.status!=='published'))||S.ideas.find(i=>i.status==='inprogress')||S.ideas.find(i=>i.status==='idea')||S.ideas.find(i=>i.status!=='published');
-  if(!lastDraft&&!lastIdea){el.innerHTML='';return;}
+  const plate=getOnYourPlateData();
+  if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
-  el.innerHTML=`<div class="guide-wrap" id="pickUpToggleWrap" style="margin-bottom:18px">
-    <div class="guide-hdr" onclick="toggleGuide(this)">
-      <div class="guide-hdr-left"><span style="font-size:15px">👋</span><span class="guide-hdr-title">Pick up where you left off</span></div>
-      <span class="guide-chevron">▼</span>
-    </div>
-    <div class="guide-body">
-      <div style="padding:16px 20px 18px">
-    <div class="pickup-grid">
+  var pickupBlock=(lastDraft||lastIdea)?`<div class="pickup-grid">
       ${lastDraft?`<div class="pickup-card" style="border-top:3px solid var(--teal);background:linear-gradient(135deg,var(--tealp),var(--w) 60%)">
         <div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div>
         <div class="pickup-title">${esc(lastDraft.title||'Untitled draft')}</div>
         <div class="pickup-sub">${dt(lastDraft.createdAt)}${lastDraft.platform?' &middot; '+cap(lastDraft.platform):''}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
-          <button class="btn btn-g" style="font-size:12px;padding:6px 12px" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();openDraftModal('${lastDraft.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 12px;border-radius:100px;border:1px solid var(--teal);background:none;color:var(--teal);cursor:pointer;font-family:var(--fb)" onclick="event.stopPropagation();navigator.clipboard.writeText(S.drafts.find(d=>d.id==='${lastDraft.id}')?.content||'').then(()=>toast('Copied ✓'))">Copy</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--teal)"><div class="pickup-tag" style="color:var(--teal)">📝 Saved Draft</div><div class="pickup-title" style="color:var(--tl)">No drafts yet</div><div class="pickup-sub">Generate one in Writing Studio</div></div>'}
       ${lastIdea?`<div class="pickup-card" style="border-top:3px solid var(--r);background:linear-gradient(135deg,var(--rp),var(--w) 60%)">
@@ -5270,10 +5262,22 @@ function renderPickUp(){
         <div class="pickup-title">${esc(lastIdea.title)}</div>
         <div class="pickup-sub">${esc(lastIdea.format||'')}${lastIdea.platform?' &middot; '+cap(lastIdea.platform):''} &middot; ${lastIdea.status==='inprogress'?'In Progress':lastIdea.status==='idea'?'Idea':cap(lastIdea.status||'')}</div>
         <div style="margin-top:12px;display:flex;gap:6px">
-          <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
+          <button style="font-size:12px;padding:6px 14px;border-radius:100px;border:none;background:var(--r);color:#fff;cursor:pointer;font-family:var(--fb);font-weight:600" onclick="event.stopPropagation();cdOpen('${lastIdea.id}')">Open →</button>
         </div>
       </div>`:'<div class="pickup-card" style="opacity:.4;pointer-events:none;border-top:3px solid var(--r)"><div class="pickup-tag" style="color:var(--r)">🗂 Content Card</div><div class="pickup-title" style="color:var(--tl)">Nothing yet</div><div class="pickup-sub">Add ideas in Content Planner</div></div>'}
+    </div>`:'';
+  var plateBlock=(plate.hasToday||plate.hasTomorrow)?`<div style="margin-top:${pickupBlock?'16':'0'}px;border:1px solid var(--bl);border-radius:var(--rsm);overflow:hidden">
+      <div style="padding:9px 14px;background:var(--blue);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--e)">📅 On Your Plate</div>
+      ${plate.html}
+    </div>`:'';
+  el.innerHTML=`<div class="guide-wrap" id="pickUpToggleWrap" style="margin-bottom:18px">
+    <div class="guide-hdr" onclick="toggleGuide(this)">
+      <div class="guide-hdr-left"><span style="font-size:15px">👋</span><span class="guide-hdr-title">Pick up where you left off</span></div>
+      <span class="guide-chevron">▼</span>
     </div>
+    <div class="guide-body">
+      <div style="padding:16px 20px 18px">
+        ${pickupBlock}${plateBlock}
       </div>
     </div>
   </div>`;
@@ -5285,12 +5289,9 @@ function copyLastDraft(id){
 function renderDashboard(){
   renderGS();
   renderPickUp();
-  renderTasksDue();
 }
 
-function renderTasksDue(){
-  var el=document.getElementById('tasksDueWrap');
-  if(!el)return;
+function getOnYourPlateData(){
   var today=new Date();today.setHours(0,0,0,0);
   var tomorrow=new Date(today);tomorrow.setDate(tomorrow.getDate()+1);
   var fmt=function(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
@@ -5304,11 +5305,10 @@ function renderTasksDue(){
 
   var hasToday=dueTodayT.length||dueTodayC.length;
   var hasTomorrow=dueTomorrowT.length||dueTomorrowC.length;
-  if(!hasToday&&!hasTomorrow){el.innerHTML='';return;}
 
   function taskRow(t,isContent){
     var icon=isContent?'📝':'☑';
-    var onclick=isContent?'cdOpen(\''+t.id+'\')':'openTaskEditModal(\''+t.id+'\')';
+    var onclick=isContent?'event.stopPropagation();cdOpen(\''+t.id+'\')':'event.stopPropagation();openTaskEditModal(\''+t.id+'\')';
     var energy=!isContent&&t.energy?'<span style="font-size:9px;padding:2px 7px;border-radius:100px;background:'+(t.energy==='high'?'var(--rp)':t.energy==='medium'?'var(--gp)':'var(--tealp')+');color:'+(t.energy==='high'?'var(--r)':t.energy==='medium'?'var(--g)':'var(--teal)')+'">'+( t.energy==='high'?'🔥':t.energy==='medium'?'⚡':'🌿')+' '+t.energy+'</span>':'';
     return'<div onclick="'+onclick+'" style="display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--bl);cursor:pointer;transition:background .12s" onmouseover="this.style.background=\'var(--p)\'" onmouseout="this.style.background=\'\'">'+
       '<span style="font-size:14px;flex-shrink:0">'+icon+'</span>'+
@@ -5318,11 +5318,7 @@ function renderTasksDue(){
     '</div>';
   }
 
-  var html='<div style="background:var(--w);border:1.5px solid #b9d2f5;border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 4px var(--sh);margin-bottom:22px">';
-  html+='<div style="padding:12px 16px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;background:var(--blue)">';
-  html+='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--e)">📅 On Your Plate</div>';
-  html+='</div>';
-
+  var html='';
   if(hasToday){
     html+='<div style="padding:6px 14px 2px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);background:var(--rp)">Today</div>';
     dueTodayT.forEach(function(t){html+=taskRow(t,false);});
@@ -5333,8 +5329,7 @@ function renderTasksDue(){
     dueTomorrowT.forEach(function(t){html+=taskRow(t,false);});
     dueTomorrowC.forEach(function(t){html+=taskRow(t,true);});
   }
-  html+='</div>';
-  el.innerHTML=html;
+  return{hasToday:hasToday,hasTomorrow:hasTomorrow,html:html};
 }
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
@@ -5437,7 +5432,7 @@ function deleteIdea(id){
 function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;i.updatedAt=new Date().toISOString();persist();renderKanban();}}
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
-const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'var(--blue)',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'#2d5fa0',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
 function toggleTaskStarFilter(){
   S.taskStarFilter=!S.taskStarFilter;
   syncTaskStarFilterBtn();
@@ -5481,7 +5476,7 @@ function renderTaskListView(){
   var el=document.getElementById('taskListView');
   if(!el)return;
   var sortBy=S.taskSort||'date';
-  var statusColors={todo:'var(--blue)',inprogress:'var(--r)',done:'#1A521A'};
+  var statusColors={todo:'#2d5fa0',inprogress:'var(--r)',done:'#1A521A'};
   var statusBg={todo:'var(--bluep)',inprogress:'var(--rp)',done:'#D0EAD0'};
   var statusLabel={todo:'To Do',inprogress:'In Progress',done:'Done'};
   var items=S.tasks.slice();
