@@ -4266,11 +4266,14 @@ select.fi{cursor:pointer}
           <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
           <option value="Reel Script">Reel</option><option value="Newsletter">Newsletter</option>
           <option value="Blog Post">Blog Post</option><option value="Story">Story</option>
+          <option value="Article">Article (Substack)</option>
         </select>
       </div>
     </div>
+    <button class="ai2-btn" id="panicGenBtn" onclick="runPanicGenerate()" style="width:100%;background:var(--teal);border-color:var(--teal);color:#fff;margin-bottom:8px"><span class="ai2-btn-label">✍️ Write the full piece</span><span class="ai2-btn-sub" style="color:rgba(255,255,255,.85)">Generates the actual finished draft, ready to edit and post</span></button>
+    <div style="font-size:10.5px;color:var(--tl);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin:2px 0 6px">Or just get direction first</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="ai2-btn" id="panicBtn" onclick="runPanic()" style="flex:2;min-width:150px;background:var(--r);border-color:var(--r);color:#fff"><span class="ai2-btn-label">✦ Brief Me</span><span class="ai2-btn-sub" style="color:rgba(255,255,255,.8)">Angle, hook idea, emotion, what to avoid, using the topic above</span></button>
+      <button class="ai2-btn" id="panicBtn" onclick="runPanic()" style="flex:2;min-width:150px"><span class="ai2-btn-label">✦ Brief Me</span><span class="ai2-btn-sub">Angle, hook idea, emotion, what to avoid, using the topic above</span></button>
       <button class="ai2-btn" onclick="runPanicRandom()" style="flex:1;min-width:130px"><span class="ai2-btn-label">🎲 Surprise Me</span><span class="ai2-btn-sub">Same as Brief Me, plus a fresh idea, no topic needed</span></button>
       <button class="ai2-btn" onclick="runAnalogPrompt()" style="flex:1;min-width:130px;border-color:#D4A843;background:var(--gp)"><span class="ai2-btn-label" style="color:var(--g)">✏️ Analog Prompt</span><span class="ai2-btn-sub" style="color:var(--g);opacity:.8">A reflective writing question, no AI, no hook, just you</span></button>
     </div>
@@ -7120,6 +7123,7 @@ function openPanicModal(){
   document.getElementById('panicOut').textContent='';
   document.getElementById('panicLoading').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
+  S._panicLastType='';
   // Randomize platform and format every time - takes pressure off choosing
   var plats=['Instagram','Newsletter','Email','LinkedIn','TikTok','Blog','Substack'];
   var fmts=['Caption','Carousel','Reel','Newsletter','Blog Post','Story'];
@@ -7161,6 +7165,40 @@ async function runPanic(){
     var out=document.getElementById('panicOut');
     out.textContent=stripMD(result);out.style.display='block';
     if(actsEl)actsEl.style.display='flex';
+    S._panicLastType='brief';
+  }
+}
+async function runPanicGenerate(){
+  var topic=document.getElementById('panicTopic').value.trim();
+  if(!topic){toast('Add a topic first');return;}
+  var plat=document.getElementById('panicPlat').value;
+  var fmt=document.getElementById('panicFormat').value;
+  var brand=buildBrandContext();
+  document.getElementById('panicLoading').style.display='block';
+  document.getElementById('panicOut').style.display='none';
+  var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
+  var genBtn=document.getElementById('panicGenBtn');if(genBtn)genBtn.disabled=true;
+  var isLong=(fmt==='Article'||fmt==='Blog Post');
+  var prompts={
+    'Caption':'Write a finished '+plat+' caption for this idea: '+topic+'. Structure: a strong hook line, value in the middle, natural CTA at the end. Output ONLY the finished caption, no preamble.',
+    'Carousel':'Write finished carousel slide copy for this idea: '+topic+'. Platform: '+plat+'. Required output: labeled slides only. Slide 1: scroll-stopping hook. Middle slides: one clear point each, short and punchy. Last slide: strong CTA. Label every slide (e.g. "Slide 1:"). Output ONLY the slides, no preamble.',
+    'Reel Script':'Write a finished Reel/TikTok script for this idea: '+topic+'. Required output: three labeled sections only, HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Output ONLY the script, no preamble.',
+    'Story':'Write a finished Instagram Story script for this idea: '+topic+'. Required output: numbered slides 1-6, one short line of text per slide. Slide 1 must be a hook. Last slide must be a CTA. Output ONLY the slides, no preamble.',
+    'Newsletter':'Write a finished newsletter opening for this idea: '+topic+'. Max 4 sentences, warm and conversational, must make the reader want to keep reading. Output ONLY the opening, no preamble.',
+    'Blog Post':'Write a finished blog post for this idea: '+topic+'. Required output, in this exact order: a compelling title, a one-sentence subheadline, an opening hook, 3-4 body sections with clear headers, a closing paragraph. Write like a real human, not a content marketer. No bullet point overload. Output ONLY the article, no preamble.',
+    'Article':'Write a finished Substack article for this idea: '+topic+'. Required output, in this exact order: a compelling title, a one-sentence subheadline, an opening hook that pulls the reader in, 3-4 body sections with simple headers, a warm closing paragraph, an optional one-sentence subscribe CTA. Write like a real human, not a content marketer. No bullet point overload. Output ONLY the article, no preamble.'
+  };
+  var sys=CD_PERSONA+brand+' Be direct, specific, warm and human. Output ONLY the finished content, no preamble, no labels like "Here is your caption:".';
+  var usr=prompts[fmt]||prompts['Caption'];
+  var result=await cdCallAI(sys,usr,isLong?1400:900);
+  document.getElementById('panicLoading').style.display='none';
+  if(genBtn)genBtn.disabled=false;
+  if(result){
+    var out=document.getElementById('panicOut');
+    out.textContent=stripMD(result);out.style.display='block';
+    if(actsEl)actsEl.style.display='flex';
+    S.gs.draftGenerated=true;persist();renderGS();
+    S._panicLastType='generate';
   }
 }
 function runPanicRandom(){
@@ -7180,6 +7218,7 @@ function runPanicRandom(){
       var out=document.getElementById('panicOut');
       out.textContent=stripMD(result);out.style.display='block';
       if(actsEl)actsEl.style.display='flex';
+      S._panicLastType='brief';
     }
   });
 }
@@ -7188,7 +7227,8 @@ function panicSaveDraft(){
   var out=document.getElementById('panicOut').textContent.trim();
   if(!out){toast('Nothing to save');return;}
   var topic=document.getElementById('panicTopic').value.trim();
-  S.drafts.unshift({id:Date.now().toString(),title:topic?topic.slice(0,65):'Creative Director Brief',content:out,platform:'dashboard',contentType:'Creative Direction',tone:'',createdAt:new Date().toISOString()});
+  var isGenerated=S._panicLastType==='generate';
+  S.drafts.unshift({id:Date.now().toString(),title:topic?topic.slice(0,65):(isGenerated?'Creative Director draft':'Creative Director Brief'),content:out,platform:'dashboard',contentType:isGenerated?(document.getElementById('panicFormat').value||'Draft'):'Creative Direction',tone:'',createdAt:new Date().toISOString()});
   S.gs.draftGenerated=true;
   persist();renderGS();
   toast('Saved to Drafts ✓');
@@ -7200,10 +7240,15 @@ function panicToCard(){
   var fmt=document.getElementById('panicFormat').value;
   var out=document.getElementById('panicOut').textContent.trim();
   if(!out){toast('Nothing to save yet');return;}
+  var isGenerated=S._panicLastType==='generate';
   closeModal('panicModal');
   openIdeaModal('idea');
-  var t=document.getElementById('cdTitle');if(t)t.value=topic||'Creative Director Brief';
-  var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
+  var t=document.getElementById('cdTitle');if(t)t.value=topic||(isGenerated?'Creative Director draft':'Creative Director Brief');
+  if(isGenerated){
+    var d=document.getElementById('cdOwnContent');if(d)d.value=out;
+  } else {
+    var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
+  }
   var p=document.getElementById('cdPlat');if(p&&plat)p.value=plat;
   var f=document.getElementById('cdFormat');if(f&&fmt)f.value=fmt;
   // Save immediately so the card actually exists rather than sitting unsaved
@@ -7214,7 +7259,7 @@ function panicToCard(){
   // Find the card we just created (saveIdea pushes it, so it's the most recent
   // one with this title) and reopen it so the person lands somewhere real and
   // can keep building - running Hooks, Carousel generation, etc on it.
-  var justSaved=S.ideas.slice().reverse().find(function(i){return i.title===(topic||'Creative Director Brief');});
+  var justSaved=S.ideas.slice().reverse().find(function(i){return i.title===(topic||(isGenerated?'Creative Director draft':'Creative Director Brief'));});
   if(justSaved){
     requestAnimationFrame(function(){ cdOpen(justSaved.id); openModal('cardDetailModal'); });
   }
@@ -9491,6 +9536,7 @@ function runAnalogPrompt(){
   out.textContent='✏️ Your analog writing prompt:\n\n'+prompt+'\n\nNo AI. Just you and the page. Open your Notebooks or write directly in the field above.';
   out.style.display='block';
   if(acts)acts.style.display='flex';
+  S._panicLastType='analog';
 }
 </script>
 </body>
