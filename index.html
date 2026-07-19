@@ -4251,7 +4251,7 @@ select.fi{cursor:pointer}
 <div class="modal-ov" id="panicModal">
   <div class="modal modal-xl">
     <div class="m-title">✦ Creative Director Mode</div>
-    <div class="m-sub">Tell me what you're trying to create and I'll give you the angle, hook, emotion, and what to avoid - before you write a word.</div>
+    <div class="m-sub">This gives you direction to write from, not a finished draft: your angle, a hook idea, the emotion to aim for, and what to avoid.</div>
     <div class="fl"><label class="fl-lbl">What are you working on?</label>
       <textarea class="fi" id="panicTopic" style="min-height:80px;font-size:14px" placeholder="e.g. A carousel about why ADHD brains struggle with consistency - for my VA/OBM audience..."></textarea>
     </div>
@@ -4272,9 +4272,9 @@ select.fi{cursor:pointer}
       </div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-p" id="panicBtn" onclick="runPanic()" style="font-size:14px;padding:12px;flex:2;min-width:120px">✦ Brief Me</button>
-      <button class="btn btn-g" onclick="runPanicRandom()" style="font-size:13px;padding:12px;flex:1;min-width:100px" title="Generate a random content idea and direction">🎲 Surprise Me</button>
-      <button class="btn btn-g" onclick="runAnalogPrompt()" style="font-size:13px;padding:12px;flex:1;min-width:100px;border-color:#D4A843;color:var(--g);background:var(--gp)" title="Get a writing prompt with no AI - just a spark">✏️ Analog Prompt</button>
+      <button class="ai2-btn" id="panicBtn" onclick="runPanic()" style="flex:2;min-width:150px;background:var(--r);border-color:var(--r);color:#fff"><span class="ai2-btn-label">✦ Brief Me</span><span class="ai2-btn-sub" style="color:rgba(255,255,255,.8)">Angle, hook idea, emotion, what to avoid, using the topic above</span></button>
+      <button class="ai2-btn" onclick="runPanicRandom()" style="flex:1;min-width:130px"><span class="ai2-btn-label">🎲 Surprise Me</span><span class="ai2-btn-sub">Same as Brief Me, plus a fresh idea, no topic needed</span></button>
+      <button class="ai2-btn" onclick="runAnalogPrompt()" style="flex:1;min-width:130px;border-color:#D4A843;background:var(--gp)"><span class="ai2-btn-label" style="color:var(--g)">✏️ Analog Prompt</span><span class="ai2-btn-sub" style="color:var(--g);opacity:.8">A reflective writing question, no AI, no hook, just you</span></button>
     </div>
     <div id="panicLoading" style="display:none;text-align:center;padding:16px 0;color:var(--t);font-size:13px">Thinking like a creative director...</div>
     <div id="panicOut" style="display:none;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:18px;margin-top:14px;font-size:14px;line-height:1.85;white-space:pre-wrap;color:var(--e)"></div>
