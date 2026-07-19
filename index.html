@@ -339,6 +339,9 @@ select.fi{cursor:pointer}
 .modal-ov{position:fixed;inset:0;background:rgba(42,28,16,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
 .modal-ov.open{display:flex}
 .modal{background:var(--w);border-radius:14px;padding:30px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(42,28,14,.25);max-height:90vh;overflow-y:auto;border:1px solid var(--bl)}
+.modal-task{max-width:620px}
+.task-grp{border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.task-grp-lbl{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px}
 
 /* CARD MODAL PANEL - standalone, ignores .modal */
 .cd-modal-panel{background:var(--w);border-radius:14px;padding:28px;width:95vw;max-height:92vh;overflow-y:auto;border:1px solid var(--bl);box-shadow:0 24px 64px rgba(42,26,14,.25);position:relative}
@@ -2282,7 +2285,12 @@ select.fi{cursor:pointer}
           <div id="studioAnalogBody" style="padding:14px 16px 14px;border-bottom:1px solid var(--bl);flex-shrink:0">
             <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
             <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
-            <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
+            <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
+            </div>
+            <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
+              <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
+            </div>
             <div style="display:flex;gap:10px;margin-bottom:10px">
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
               <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
@@ -3623,163 +3631,13 @@ select.fi{cursor:pointer}
   </div>
 </div>
 
-<!-- Idea -->
-<div class="modal-ov" id="ideaModal" style="padding:0;align-items:stretch">
-  <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:auto;border-radius:0;padding:0;padding-bottom:60px;display:flex;flex-direction:column;overflow-y:scroll;-webkit-overflow-scrolling:touch">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
-      <div style="font-family:var(--fh);font-size:24px;font-weight:600;color:var(--e)">Add to Content Planner</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="closeModal('ideaModal')">Cancel</button>
-        <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="saveIdea()">Add to Planner</button>
-      </div>
-    </div>
-    <div class="cd2-wrap">
-      <div class="cd2-left">
-        <div class="fl"><label class="fl-lbl">Title / Idea</label><input class="fi" id="ideaTitle" placeholder="e.g. Carousel about 3 signs you need a VA" style="font-size:21px;font-family:var(--fh)" /></div>
-        <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Platform</label>
-            <select class="fi" id="ideaPlat">
-              <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
-              <option value="email">Email</option><option value="substack">Substack</option>
-              <option value="linkedin">LinkedIn</option><option value="blog">Blog</option>
-              <option value="tiktok">TikTok</option><option value="facebook">Facebook</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div class="fl"><label class="fl-lbl">Format</label>
-            <select class="fi" id="ideaFormat">
-              <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
-              <option value="Reel / Video">Reel</option><option value="Story">Story</option>
-              <option value="Newsletter">Newsletter</option><option value="Substack / Article">Article</option>
-              <option value="Freebie">Freebie</option><option value="Event">Event</option>
-              <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Date <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" type="date" id="ideaDate" onchange="ideaDateChanged()" /></div>
-          <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><select class="fi" id="ideaTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
-        </div>
-        <div class="fl"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="ideaHook" style="min-height:54px;font-size:14px" placeholder="Opening hook or subject line..."></textarea>
-        </div>
-        <div class="fl"><label class="fl-lbl">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="ideaNotes" style="min-height:90px;font-size:14px" placeholder="Key points, angle, CTA, deadline...">
-        </div>
-        <div class="fl">
-          <label class="fl-lbl">Upload Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <div id="ideaImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
-          <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
-            Add images or slides
-            <input type="file" id="ideaImgInput" multiple accept="image/*" style="display:none" onchange="handleIdeaImages(this)" />
-          </label>
-        </div>
-        <!-- REMINDER TOGGLE -->
-        <div id="ideaReminderWrap" style="display:none;background:var(--tealp);border:1px solid rgba(58,140,140,.25);border-radius:var(--rsm);padding:10px 14px;align-items:center;justify-content:space-between;gap:10px">
-          <div>
-            <div style="font-size:12px;font-weight:600;color:var(--teal)">📬 Email reminders</div>
-            <div style="font-size:11px;color:var(--tl);margin-top:1px">9am day before + 8am day of. Toggle before 8am on post day.</div>
-          </div>
-          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none">
-            <div style="position:relative;width:36px;height:20px;flex-shrink:0">
-              <input type="checkbox" id="ideaReminderOn" style="opacity:0;width:0;height:0;position:absolute" onchange="ideaToggleReminder(this)" />
-              <div id="ideaReminderTrack" style="position:absolute;inset:0;background:var(--bl);border-radius:100px;transition:background .2s"></div>
-              <div id="ideaReminderThumb" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
-            </div>
-            <span id="ideaReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
-          </label>
-        </div>
-        <!-- TASK BREAKDOWN -->
-        <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
-            <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
-          </div>
-          <div id="cdTaskList" style="display:flex;flex-direction:column;gap:6px"></div>
-          <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps sync to your Task board and Calendar.</div>
-        </div>
-      </div>
-      <div class="cd2-right">
-        <div style="font-size:12px;color:var(--tl);padding:0 2px 10px;line-height:1.55">Write it yourself in <strong style="color:var(--e)">Go Analog</strong>, use the tools in <strong style="color:var(--r)">Bridge the Gap</strong>, or do both.</div>
-        <!-- GO ANALOG -->
-        <div class="card-section-toggle">
-          <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
-            <div class="card-section-toggle-title analog">✏️ Go Analog</div>
-            <span class="card-section-toggle-chev">-</span>
-          </div>
-          <div class="card-section-toggle-body open" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject Line</label>
-              <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6" placeholder="Your opening line. The thing that makes them stop..."></textarea>
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
-              <textarea class="fi" id="cdNotes" style="min-height:72px;font-size:14px;line-height:1.7" placeholder="What's this post about? Key points, angle, what you want them to feel..."></textarea>
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <textarea id="cdOwnContent" class="fi" style="min-height:56px;font-size:14px;line-height:1.75;resize:vertical" placeholder="A rough draft, your angle, anything. Just you and the page."></textarea>
-            </div>
-          </div>
-        </div>
-        <!-- BRIDGE THE GAP -->
-        <div class="card-section-toggle">
-          <div class="card-section-toggle-hdr bridge" onclick="toggleCardSection(this)">
-            <div class="card-section-toggle-title bridge">✦ Bridge the Gap</div>
-            <span class="card-section-toggle-chev">+</span>
-          </div>
-          <div class="card-section-toggle-body" style="padding:12px 14px;display:flex;flex-direction:column;gap:14px">
-            <!-- TONE -->
-            <div style="display:flex;align-items:center;gap:8px">
-              <label style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);white-space:nowrap;flex-shrink:0">Tone</label>
-              <select class="fi" id="cdToneSelect" style="font-size:12.5px;padding:6px 10px" onchange="_cdSelTone=this.value">
-                <option value="warm">Warm &amp; Personal</option>
-                <option value="direct">Direct &amp; Punchy</option>
-                <option value="story">Story-led</option>
-                <option value="educational">Educational</option>
-                <option value="playful">Playful</option>
-              </select>
-            </div>
-            <!-- GENERATE BUTTONS -->
-            <div class="ai2-btn-grid">
-              <button class="ai2-btn" id="cdBtn-caption" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
-              <button class="ai2-btn" id="cdBtn-hooks" onclick="cdGen2('hooks')"><span class="ai2-btn-label">5 Hooks</span><span class="ai2-btn-sub">Pick your favorite</span></button>
-              <button class="ai2-btn" id="cdBtn-carousel" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
-              <button class="ai2-btn" id="cdBtn-reel" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook + body + CTA</span></button>
-              <button class="ai2-btn" id="cdBtn-newsletter" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter Intro</span><span class="ai2-btn-sub">Opening paragraph</span></button>
-              <button class="ai2-btn" id="cdBtn-variations" onclick="cdGen2('variations')"><span class="ai2-btn-label">Variations</span><span class="ai2-btn-sub">3 angles on one idea</span></button>
-              <button class="ai2-btn" id="cdBtn-substack" onclick="cdGen2('substack')" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack Article</span><span class="ai2-btn-sub">Full article with sections</span></button>
-            </div>
-            <div class="ai2-out" id="ideaAIOut"></div>
-            <div class="ai2-out-acts" id="ideaAIActs">
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="ideaAICopy()">Copy</button>
-              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="ideaAISave()">Save Draft</button>
-            </div>
-            <!-- REPURPOSE IN MY VOICE -->
-            <div style="border-top:1px solid var(--bl);padding-top:12px">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:6px">🔁 Repurpose in my voice</div>
-              <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">Paste any post. The Studio rewrites it in your voice for your audience.</div>
-              <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
-                <label style="font-size:9.5px;font-weight:600;text-transform:uppercase;color:var(--t);white-space:nowrap;flex-shrink:0">From</label>
-                <select class="fi" id="ideaRpOrigPlat" style="font-size:12px;padding:6px 10px">
-                  <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
-                  <option value="LinkedIn">LinkedIn</option><option value="a blog or newsletter">Blog / Newsletter</option>
-                  <option value="Facebook">Facebook</option><option value="somewhere online">Other</option>
-                </select>
-              </div>
-              <textarea class="ai2-input" id="ideaRpText" placeholder="Paste the post here..." style="min-height:72px;margin-bottom:8px"></textarea>
-              <button class="ai2-btn full accent" id="cdBtn-repurpose" onclick="cdRepurpose2()">Repurpose in my voice</button>
-            </div>
-          </div>
-        </div>
-      </div><!-- end cd2-right -->
-    </div><!-- end cd2-wrap -->
-  </div>
-</div>
 
 
 <!-- Task -->
 <div class="modal-ov" id="taskModal">
   <div class="modal modal-task">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <div class="m-title" id="taskModalTitle" style="margin:0">Add Task</div>
+      <div class="m-title" id="taskModalTitle" style="margin:0">✅ Add Task</div>
       <button id="taskStarBtn" onclick="toggleTaskStar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--bl);transition:color .15s;padding:4px" title="Mark as priority">☆</button>
     </div>
     <div class="m-sub" style="margin-bottom:18px">Add something to your to-do list</div>
@@ -3787,57 +3645,64 @@ select.fi{cursor:pointer}
 
     <div class="fl"><label class="fl-lbl" style="font-size:13px">Task</label><input class="fi" id="taskTitle" style="font-size:19px;font-family:var(--fh);font-weight:600;padding:12px" placeholder="e.g. Write captions for this week" /></div>
 
-    <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
-      <div class="fl"><label class="fl-lbl">Type</label>
-        <select class="fi" id="taskType">
-          <option value="">No type</option>
-          <option value="writing">✍️ Writing</option>
-          <option value="admin">📋 Admin</option>
-          <option value="creative">🎨 Creative</option>
-          <option value="research">🔍 Research</option>
-          <option value="calls">📞 Calls / Meetings</option>
-        </select>
+    <div class="task-grp" style="background:var(--p);border:1px solid var(--bl)">
+      <div class="task-grp-lbl" style="color:var(--t)">📋 The basics</div>
+      <div class="two-col">
+        <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
+        <div class="fl"><label class="fl-lbl">Type</label>
+          <select class="fi" id="taskType">
+            <option value="">No type</option>
+            <option value="writing">✍️ Writing</option>
+            <option value="admin">📋 Admin</option>
+            <option value="creative">🎨 Creative</option>
+            <option value="research">🔍 Research</option>
+            <option value="calls">📞 Calls / Meetings</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Due Date</label><input class="fi" type="date" id="taskDate" /></div>
-      <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><select class="fi" id="taskTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
+    <div class="task-grp" style="background:var(--rp);border:1px solid #E0BDAA">
+      <div class="task-grp-lbl" style="color:var(--r)">📅 When + energy</div>
+      <div class="two-col" style="margin-bottom:10px">
+        <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Due Date</label><input class="fi" type="date" id="taskDate" /></div>
+        <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><select class="fi" id="taskTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
+      </div>
+      <div class="two-col" style="margin-bottom:0">
+        <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Energy needed</label>
+          <select class="fi" id="taskEnergy">
+            <option value="">Any energy</option>
+            <option value="high">🔥 High focus</option>
+            <option value="medium">⚡ Medium focus</option>
+            <option value="low">🌿 Low energy</option>
+          </select>
+        </div>
+        <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Time estimate</label>
+          <select class="fi" id="taskTime2">
+            <option value="">Unknown</option>
+            <option value="15min">15 minutes</option>
+            <option value="30min">30 minutes</option>
+            <option value="1hr">1 hour</option>
+            <option value="2hr">2 hours</option>
+            <option value="halfday">Half day</option>
+            <option value="fullday">Full day</option>
+          </select>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--r);opacity:.8;margin-top:10px">📅 If you set a date, this task will also appear on your calendar.</div>
     </div>
 
-    <div class="two-col">
-      <div class="fl"><label class="fl-lbl">Energy needed</label>
-        <select class="fi" id="taskEnergy">
-          <option value="">Any energy</option>
-          <option value="high">🔥 High focus</option>
-          <option value="medium">⚡ Medium focus</option>
-          <option value="low">🌿 Low energy</option>
-        </select>
-      </div>
-      <div class="fl"><label class="fl-lbl">Time estimate</label>
-        <select class="fi" id="taskTime2">
-          <option value="">Unknown</option>
-          <option value="15min">15 minutes</option>
-          <option value="30min">30 minutes</option>
-          <option value="1hr">1 hour</option>
-          <option value="2hr">2 hours</option>
-          <option value="halfday">Half day</option>
-          <option value="fullday">Full day</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="fl"><label class="fl-lbl">Sub-steps <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">: break it into tiny actions</span></label>
+    <div class="task-grp" style="background:var(--sagep);border:1px solid #C3D6B8">
+      <div class="task-grp-lbl" style="color:var(--sage)">🪜 Sub-steps <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10.5px;opacity:.85">break it into tiny actions</span></div>
       <div id="taskSubsteps" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px"></div>
-      <button onclick="addTaskSubstep()" style="font-size:11px;padding:5px 12px;background:none;border:1.5px dashed var(--b);border-radius:var(--rsm);color:var(--tl);cursor:pointer;text-align:left;font-family:var(--fb)">+ Add a step</button>
+      <button onclick="addTaskSubstep()" style="font-size:11px;padding:5px 12px;background:none;border:1.5px dashed var(--sage);border-radius:var(--rsm);color:var(--sage);cursor:pointer;text-align:left;font-family:var(--fb)">+ Add a step</button>
     </div>
 
-    <div class="fl"><label class="fl-lbl">Brain dump <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">: messy thinking welcome</span></label>
+    <div class="task-grp" style="background:var(--tealp);border:1px solid rgba(58,140,140,.25);margin-bottom:16px">
+      <div class="task-grp-lbl" style="color:var(--teal)">🧠 Brain dump <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10.5px;opacity:.85">messy thinking welcome</span></div>
       <textarea class="fi" id="taskNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Context, links, random thoughts, blockers, anything..."></textarea>
     </div>
 
-    <div style="font-size:11px;color:var(--tl);margin-bottom:14px">📅 If you set a date, this task will also appear on your calendar.</div>
     <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button></div>
   </div>
 </div>
@@ -3998,8 +3863,16 @@ select.fi{cursor:pointer}
             <span class="card-section-toggle-chev">-</span>
           </div>
           <div class="card-section-toggle-body open" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your own draft, hook, or rough notes here. If you want the AI to build on it, check the box in Bridge the Gap below.</div>
-            <textarea id="cdOwnContent" class="fi" style="min-height:110px;margin-bottom:8px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="Your hook, your angle, your rough draft. Just you and the page."></textarea>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your own hook, notes, or full draft here. If you want the AI to build on it, check the box in Bridge the Gap below.</div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6;margin-bottom:8px" placeholder="Your opening line. The thing that makes them stop..."></textarea>
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
+              <textarea class="fi" id="cdNotes" style="min-height:72px;font-size:14px;line-height:1.7;margin-bottom:8px" placeholder="What's this post about? Key points, angle, what you want them to feel..."></textarea>
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea id="cdOwnContent" class="fi" style="min-height:90px;margin-bottom:8px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="A rough draft, your angle, anything. Just you and the page."></textarea>
+            </div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
               <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
@@ -5944,7 +5817,7 @@ async function generate(){
   if(false){toast('Add your API key in Settings first');navigate('settings');return;}
   const topic=document.getElementById('topicIn').value.trim();
   const ownDraftCbCheck=document.getElementById('useOwnDraft');
-  const hasDraft=ownDraftCbCheck&&ownDraftCbCheck.checked&&document.getElementById('studioOwnTA').value.trim();
+  const hasDraft=ownDraftCbCheck&&ownDraftCbCheck.checked&&(document.getElementById('studioOwnTA').value.trim()||document.getElementById('studioOwnHook').value.trim());
   const hasInstr=document.getElementById('instrIn')&&document.getElementById('instrIn').value.trim();
   if(!topic&&!hasDraft&&!hasInstr){toast('Add a topic, instruction, or check use my draft');return;}
   S.studio.topic=topic;
@@ -5959,7 +5832,9 @@ async function generate(){
     ?CD_PERSONA+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence subheadline. Third line: BODY: followed by the full article. Inside BODY, use ## before any section headers (e.g. ## My Section Header) so they are visually distinct. Write like a real human. No bullet point overload.'+(instr?' IMPORTANT creator instruction: '+instr:'')
     :CD_PERSONA+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use '+S.studio.type+'.'+(instr?' IMPORTANT creator instruction: '+instr:'');
   const ownDraftCb=document.getElementById('useOwnDraft');
-  const ownDraft=ownDraftCb&&ownDraftCb.checked?document.getElementById('studioOwnTA').value.trim():'';
+  const ownHookVal=document.getElementById('studioOwnHook')?document.getElementById('studioOwnHook').value.trim():'';
+  const ownBodyVal=document.getElementById('studioOwnTA').value.trim();
+  const ownDraft=ownDraftCb&&ownDraftCb.checked?(ownHookVal?'Hook/Subject: '+ownHookVal+'\n\n':'')+ownBodyVal:'';
   const usr=ownDraft
     ?`You have a draft to work from. ${instr?'Instruction: '+instr+'. ':''}Rewrite or refine this into a polished ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone. Keep the voice and ideas, improve the structure, hook, and flow.\n\nDraft:\n${ownDraft}`
     :`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}`;
@@ -6213,7 +6088,7 @@ function saveIdea(){
   var ownContent=ownEl?ownEl.value:'';
   var stageEl=document.querySelector('.cd-stage.active');
   var status=stageEl?stageEl.dataset.s:'idea';
-  var reminderCb = document.getElementById('ideaReminderOn');
+  var reminderCb = document.getElementById('cdReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
   var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
   var slidesContainerNew=document.getElementById('cdCarouselSlides');
@@ -6225,8 +6100,8 @@ function saveIdea(){
   S.gs.ideaAdded=true;
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
   S._pendingIdeaImages=[];
-  if(reminderCb){reminderCb.checked=false;ideaToggleReminder(reminderCb);}
-  var rw=document.getElementById('ideaReminderWrap');if(rw)rw.style.display='none';
+  if(reminderCb){reminderCb.checked=false;cdToggleReminder(reminderCb);}
+  var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
   persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
@@ -6253,7 +6128,7 @@ function openTaskEditModal(id){
   const sb=document.getElementById('taskStarBtn');if(sb){sb.textContent=_taskStarred?'★':'☆';sb.style.color=_taskStarred?'var(--g)':'var(--bl)';}
   renderTaskSubsteps();
   const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Save Changes';
-  const mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Edit Task';
+  const mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='✅ Edit Task';
   const cardLink=document.getElementById('taskCardLink');
   if(cardLink){
     if(t._ideaId){cardLink.style.display='block';cardLink.onclick=function(){closeModal('taskModal');cdOpen(t._ideaId);};}
@@ -6307,7 +6182,7 @@ function openTaskModal(status){
   var cl=document.getElementById('taskCardLink');if(cl)cl.style.display='none';
   renderTaskSubsteps();
   var btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Add Task';
-  var mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='Add Task';
+  var mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='✅ Add Task';
   openModal('taskModal');
 }
 function saveTask(){
@@ -7354,8 +7229,12 @@ function brainDumpSaveNotebook(){
 
 function studioOwnCopy(){
   var el=document.getElementById('studioOwnTA');
-  if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
-  else toast('Nothing to copy yet');
+  var hookEl=document.getElementById('studioOwnHook');
+  var hookVal=hookEl?hookEl.value.trim():'';
+  var bodyVal=el?el.value.trim():'';
+  if(!bodyVal&&!hookVal){toast('Nothing to copy yet');return;}
+  var combined=hookVal?hookVal+'\n\n'+bodyVal:bodyVal;
+  navigator.clipboard.writeText(combined.trim()).then(()=>toast('Copied ✓'));
 }
 function toggleStudioSection(section){
   if(section==='analog'){
@@ -7382,7 +7261,9 @@ function openBridgeSection(){
 }
 function studioOwnSave(){
   var el=document.getElementById('studioOwnTA');
-  if(!el||!el.value.trim()){toast('Write something first');return;}
+  var hookEl=document.getElementById('studioOwnHook');
+  var hookVal=hookEl?hookEl.value.trim():'';
+  if((!el||!el.value.trim())&&!hookVal){toast('Write something first');return;}
   var plat=document.getElementById('platChips');
   var selPlat='other';
   if(plat){var selChip=plat.querySelector('.chip.sel');if(selChip)selPlat=selChip.dataset.val;}
@@ -7392,7 +7273,8 @@ function studioOwnSave(){
   var ownLinks=document.getElementById('studioLinks')?document.getElementById('studioLinks').value.trim():'';
   var ownTags=document.getElementById('studioTags')?document.getElementById('studioTags').value.trim():'';
   var titleVal=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
-  var draft={id:Date.now().toString(),title:titleVal||selType+' - own draft',content:el.value.trim(),platform:selPlat,format:selType,links:ownLinks,tags:ownTags,analog:true,createdAt:new Date().toISOString()};
+  var bodyVal=el?el.value.trim():'';
+  var draft={id:Date.now().toString(),title:titleVal||selType+' - own draft',hook:hookVal,content:bodyVal,platform:selPlat,format:selType,links:ownLinks,tags:ownTags,analog:true,createdAt:new Date().toISOString()};
   S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
   toast('Saved to drafts ✓');
 }
@@ -7500,9 +7382,11 @@ async function cdGen2(type) {
     document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=false; b.style.opacity=''; });
     return;
   }
-  // Show output in the new unified output area
-  var out = document.getElementById('ideaAIOut');
-  var acts = document.getElementById('ideaAIActs');
+  // Show output in the correct section's output area (variations has its own; everything else shares Generate Content)
+  var outId = type === 'variations' ? 'cd-out-variations' : 'cd-out-generate';
+  var actsId = type === 'variations' ? 'cd-acts-variations' : 'cd-acts-generate';
+  var out = document.getElementById(outId);
+  var acts = document.getElementById(actsId);
   if (out) { out.textContent = 'Writing...'; out.classList.add('show'); }
   if (acts) acts.classList.remove('show');
   var load = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
