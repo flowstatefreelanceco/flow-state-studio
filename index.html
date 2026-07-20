@@ -969,13 +969,13 @@ select.fi{cursor:pointer}
 #appWrap{display:none;height:100vh}
 #appWrap.show{display:block}
 /* USER MENU */
-.user-area{padding:8px 10px 14px;border-top:1px solid var(--b)}
+.user-area{padding:0 10px 12px}
 .user-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;border:1px solid var(--b);background:var(--w);width:100%;transition:background .15s}
 .user-btn:hover{background:var(--p)}
 .user-btn:hover{background:rgba(255,255,255,.12)}
 .user-av{width:26px;height:26px;border-radius:50%;background:var(--r);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
 .user-em{font-size:11px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;flex:1}
-.u-popup{position:absolute;bottom:64px;left:10px;right:10px;background:var(--w);border:1px solid var(--bl);border-radius:10px;box-shadow:0 8px 30px var(--sh);display:none;z-index:200}
+.u-popup{position:absolute;top:52px;left:10px;right:10px;background:var(--w);border:1px solid var(--bl);border-radius:10px;box-shadow:0 8px 30px var(--sh);display:none;z-index:200}
 .u-popup.open{display:block}
 .u-item{padding:11px 16px;font-size:13px;color:var(--e);cursor:pointer;transition:background .15s}
 .u-item:hover{background:var(--p)}
@@ -4698,7 +4698,8 @@ async function bootApp(){
 
 function addUserMenu(){
   var sb2=document.querySelector('.sidebar');
-  if(!sb2||document.getElementById('userArea'))return;
+  var nav=document.querySelector('.sb-nav');
+  if(!sb2||!nav||document.getElementById('userArea'))return;
   var em=_currentUser.email||'';
   var av=em[0].toUpperCase();
   var el=document.createElement('div');
@@ -4709,7 +4710,11 @@ function addUserMenu(){
       '<div class="u-sep"></div>'+
       '<div class="u-item danger" onclick="doSignOut()">Sign Out</div>'+
     '</div>';
-  sb2.appendChild(el);
+  // Insert above the scrollable nav, not appended at the end of the sidebar -
+  // the bottom of the sidebar (credit bar + footer links) can already fill
+  // the available height, and the sidebar clips overflow, so anything
+  // appended after that was getting cut off and invisible no matter its color.
+  sb2.insertBefore(el,nav);
 }
 function toggleUMenu(){var p=document.getElementById('uPop');if(p)p.classList.toggle('open');}
 function closeUMenu(){var p=document.getElementById('uPop');if(p)p.classList.remove('open');}
