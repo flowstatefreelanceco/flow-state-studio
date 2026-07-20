@@ -1273,7 +1273,7 @@ select.fi{cursor:pointer}
     <section class="lp-hero">
       <h1 class="lp-headline">Built different, for brains<br>that <em>work different</em></h1>
       <p style="font-size:16px;color:var(--r);font-weight:600;margin-bottom:12px;margin-top:-8px">Consistent content, without burning out. That is what this is for.</p>
-      <p class="lp-sub">Flow State Studio is a web-based studio for ND entrepreneurs. It is one place for your ideas, your planning, your writing, and the strategy behind all of it. No more switching tabs to think, another to plan, another to write, another to figure out when to actually post the thing. Go analog when you just want to write. Use AI when you want a spark. Whatever you need, it is already in here.</p>
+      <p class="lp-sub">Flow State Studio is a web-based studio for ND entrepreneurs. If you've built a system before and abandoned it by week three, that's not a discipline problem, it's a design problem. This is one place for your ideas, your planning, your writing, and the strategy behind all of it, so there's less tab-switching between thinking, planning, writing, and figuring out when to post the thing. Go analog when you just want to write. Use AI when you want a spark. Whatever you need, it is already in here.</p>
       <div class="lp-ctas">
         <button class="lp-btn-primary" onclick="openLoginCard()">Sign In</button>
         <button class="lp-btn-secondary" onclick="goToPricing(true)">Learn More</button>
@@ -7487,6 +7487,12 @@ async function cdSmartBrief() {
   if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); cdAutoSaveOutputs(); }
 }
 
+function cdFreshnessNote(type){
+  var prev=_cdOutputs&&_cdOutputs[type];
+  if(!prev)return '';
+  var excerpt=prev.length>220?prev.slice(0,220)+'...':prev;
+  return 'IMPORTANT: You already wrote this once and the person hit generate again because they want something meaningfully different this time, not a reworded copy. Do not reuse the same opening line, structure, or angle as before. Here is what you wrote last time so you can deliberately avoid repeating it:\n"'+excerpt+'"\n\nNew request, take a different angle:\n\n';
+}
 async function cdGen2(type) {
   // Generation lock — prevent double-click credit burns
   if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
@@ -7534,7 +7540,7 @@ async function cdGen2(type) {
     hooks: 'Generate 5 scroll-stopping opening hooks SPECIFICALLY for this idea: ' + b.brief + '. Platform: ' + b.plat + '. The hooks must be directly about this specific idea, angle, or topic. Do not generate generic hooks about the broader brand or niche. Required output: exactly 5 numbered lines (1-5), nothing else. Each hook must use a different style: question, bold statement, statistic, story opener, controversy.',
     series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Required output: exactly 5 numbered items (1-5). Each item: one sentence title + one sentence description, nothing else. Each post should stand alone but connect to a bigger theme.'
   };
-  var result = await cdCallAI(sys, prompts[type] || prompts.caption, type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
+  var result = await cdCallAI(sys, cdFreshnessNote(type)+(prompts[type] || prompts.caption), type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
   if (load) load.classList.remove('show');
   if (result && type === 'hooks') {
     _cdOutputs['hookList'] = result;
