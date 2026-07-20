@@ -4559,7 +4559,7 @@ async function initAuth(){
       // any field the new (often newer/smaller) account hasn't touched yet would
       // silently keep showing the previous person's content. A reload guarantees
       // a completely clean slate for whoever signs in next.
-      window.location.href=window.location.origin+window.location.pathname;
+      window.location.href=window.location.origin+'/home';
     }
   });
 }
@@ -4914,7 +4914,7 @@ const S = {
 function _appInit(){
   load(); applySettings(); setupChips();
   S.calWeekStart = S.calWeekStart || new Date().getDate();
-  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban(); renderWeeklyFocus(); setTimeout(renderTasksDue, 100);
+  renderDashboard(); renderPickUp(); renderCalendar(); renderKanban(); renderTaskKanban(); renderWeeklyFocus();
   // Restore Writing Studio output if there was one saved
   if(S.studio&&S.studio.output){
     var outBdy=document.getElementById('outBdy');
