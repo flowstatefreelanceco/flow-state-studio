@@ -2759,6 +2759,11 @@ select.fi{cursor:pointer}
         <p class="setting-desc">Permanently deletes everything in this browser. Export first!</p>
         <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
       </div>
+      <div class="setting-sec">
+        <h3>Account</h3>
+        <p class="setting-desc" id="settingsAccountEmail">Signed in as loading...</p>
+        <button class="btn btn-g" onclick="doSignOut()" style="border-color:var(--r);color:var(--r)">Sign Out</button>
+      </div>
     </div>
   </div>
 
@@ -5025,6 +5030,7 @@ document.addEventListener('visibilitychange',function(){
 function applySettings(){
   const n=S.settings.name||'Flow State Studio';
   const sbNameEl=document.getElementById('sbName');if(sbNameEl)sbNameEl.textContent=n;
+  const acctEl=document.getElementById('settingsAccountEmail');if(acctEl)acctEl.textContent='Signed in as '+(_currentUser&&_currentUser.email?_currentUser.email:'unknown');
   const modelEl=document.getElementById('modelIn');if(modelEl)modelEl.value=S.settings.model||'claude-sonnet-4-5';
   // Brand profile
   const bp=S.brandProfile||{};
