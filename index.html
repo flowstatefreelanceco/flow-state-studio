@@ -4498,7 +4498,15 @@ async function initAuth(){
     if(!_appBooted) await bootApp();
   } else {
     document.getElementById('loadingScreen').classList.add('hidden');
-    document.getElementById('authScreen').classList.remove('hidden');
+    // /home is the landing page (default), /getting-started opens straight to
+    // the membership/pricing screen so that link can be shared or used in ads
+    // without someone having to click through the landing page first.
+    if(window.location.pathname.replace(/\/$/,'')==='/getting-started'){
+      document.getElementById('authScreen').classList.add('hidden');
+      goToPricing(true);
+    } else {
+      document.getElementById('authScreen').classList.remove('hidden');
+    }
   }
   sb.auth.onAuthStateChange(async function(event,session){
     if(event==='SIGNED_IN'&&session&&!_appBooted){
@@ -4714,13 +4722,19 @@ function goToPricing(fromLanding){
   if(authEl) authEl.classList.add('hidden');
   if(lockedEl){ lockedEl.classList.add('show'); lockedEl.scrollTop = 0; }
   if(backBtn) backBtn.style.display = fromLanding ? 'block' : 'none';
-  
+  if(fromLanding && window.location.pathname.replace(/\/$/,'')!=='/getting-started'){
+    window.history.pushState({},'','/getting-started');
+  }
 }
 function backToLanding(){
   var lockedEl = document.getElementById('lockedScreen');
   var authEl = document.getElementById('authScreen');
   if(lockedEl) lockedEl.classList.remove('show');
   if(authEl){ authEl.classList.remove('hidden'); authEl.scrollTop = 0; }
+  var p=window.location.pathname.replace(/\/$/,'');
+  if(p==='/getting-started'){
+    window.history.pushState({},'','/home');
+  }
 }
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='signup'));});
