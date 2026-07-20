@@ -4621,6 +4621,12 @@ async function loadUserData(){
       merged.brandProfile=localData.brandProfile&&Object.keys(localData.brandProfile).some(function(k){return localData.brandProfile[k];})
         ?localData.brandProfile:(sbData.brandProfile||{});
       merged.settings=Object.assign({},sbData.settings||{},localData.settings||{});
+      // Buckets specifically: union rather than "local wins," since a fresh
+      // device's settings object (even one just missing this field) should
+      // never be able to silently drop a bucket that was added elsewhere.
+      var sbBuckets=(sbData.settings&&sbData.settings.buckets)||[];
+      var locBuckets=(localData.settings&&localData.settings.buckets)||[];
+      merged.settings.buckets=Array.from(new Set([].concat(sbBuckets,locBuckets)));
       merged.favs=Object.assign({},sbData.favs||{},localData.favs||{});
       merged.gs=Object.assign({},sbData.gs||{},localData.gs||{});
       merged.aiCount=Math.max(localData.aiCount||0,sbData.aiCount||0);
@@ -4936,12 +4942,14 @@ function persist(){
     // actionable instead of a generic error.
     showSaveWarning('Your last change is too large to save (likely an uploaded photo). Try a smaller image, or remove one from this card.');
   }
-  // Debounce Supabase save - wait 1.5s of inactivity before hitting network
+  // Debounce Supabase save - wait for a short pause in typing before hitting
+  // network, short enough that a quick tab-close still has a good chance of
+  // either completing normally or being caught by flushPendingSave below.
   _lastUnsavedSnapshot=dataToSave;
   clearTimeout(_persistTimer);
   _persistTimer = setTimeout(function(){
     attemptCloudSave(dataToSave, localOk);
-  }, 1500);
+  }, 600);
 }
 async function attemptCloudSave(dataToSave, localOk){
   if(!window._supabasePersist){ _lastUnsavedSnapshot=null; return; }
