@@ -1,5 +1,53 @@
-{"version":"3.9","date":"2026-06-27","entries":[
-  {"type":"feature","text":"Director Chat is now available everywhere as a floating popup, not just its own page."},
-  {"type":"feature","text":"Browser back and forward buttons now work throughout the Studio, including inside guides."},
-  {"type":"improvement","text":"Mobile layout reviewed across the whole app."}
-]}
+{
+  "version": "4.0",
+  "changelog": [
+    {
+      "type": "fix",
+      "date": "Jul 22, 2026",
+      "title": "Hook and Caption/Body fields now actually save",
+      "desc": "In the content card's Go Analog section, your Hook and Caption/Body text were being written to the wrong place behind the scenes and never showing up again. Fixed, they now save and reload correctly every time."
+    },
+    {
+      "type": "fix",
+      "date": "Jul 22, 2026",
+      "title": "Generated content no longer disappears after clicking Generate",
+      "desc": "Captions, carousels, reels, newsletters, and more were being generated successfully but rendering invisibly until you closed and reopened the card. Fixed, results now show up immediately."
+    },
+    {
+      "type": "improvement",
+      "date": "Jul 22, 2026",
+      "title": "Regenerating content now gives you something different",
+      "desc": "Hitting Generate twice in a row on the same card used to risk landing close to your first result. It now knows what it wrote last time and is told to take a different angle."
+    },
+    {
+      "type": "new",
+      "date": "Jul 22, 2026",
+      "title": "Star and filter your tasks",
+      "desc": "Mark any task as a priority and filter your board down to just starred tasks with one click."
+    },
+    {
+      "type": "improvement",
+      "date": "Jul 22, 2026",
+      "title": "Dashboard redesign",
+      "desc": "This Week's Focus, Pick Up Where You Left Off, and On Your Plate now share one consistent, calmer visual style. Pick Up Where You Left Off is no longer a toggle, it's always visible."
+    },
+    {
+      "type": "improvement",
+      "date": "Jul 22, 2026",
+      "title": "Creative Director Mode can now write the full piece",
+      "desc": "Beyond Brief Me, Surprise Me, and the Analog Prompt, there's now a direct option to generate the finished draft itself, in any format including Substack articles."
+    },
+    {
+      "type": "fix",
+      "date": "Jul 22, 2026",
+      "title": "Sign Out is easier to find and safer",
+      "desc": "Sign Out now also lives in Settings, and signing out fully resets the app so the next person signing in on the same device never sees your content."
+    },
+    {
+      "type": "improvement",
+      "date": "Jul 22, 2026",
+      "title": "Swipe File renamed to Repurposed File",
+      "desc": "Same feature, clearer name."
+    }
+  ]
+}
