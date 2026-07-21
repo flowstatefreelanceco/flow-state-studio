@@ -1300,6 +1300,15 @@ select.fi{cursor:pointer}
       <div class="lp-bridge-bottom">However you create, it's already built in.</div>
     </div>
 
+    <!-- BUILT-IN GUIDE REASSURANCE -->
+    <div class="lp-bridge" style="max-width:640px">
+      <div style="background:var(--tealp);border:1.5px solid rgba(58,140,140,.3);border-radius:var(--rad);padding:22px 26px;text-align:center">
+        <div style="font-size:26px;margin-bottom:8px">📚</div>
+        <div style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e);margin-bottom:6px">You don't have to figure this out alone, or all at once.</div>
+        <div style="font-size:13.5px;color:var(--t);line-height:1.65">Every account comes with a built-in, in-depth guide covering the whole Studio, every tool, every section, explained plainly. It includes a slow, no-pressure 3 month plan for anyone who'd rather ease in one piece at a time than take it all on day one. Go at whatever pace actually works for you.</div>
+      </div>
+    </div>
+
     <!-- PREVIEW VIDEO -->
     <div class="lp-preview">
       <div class="lp-section-lbl">A peek inside</div>
@@ -1671,6 +1680,10 @@ select.fi{cursor:pointer}
           <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">📚 The Complete Studio Guide</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Every tool, every section, explained plainly in one place. Includes a slow, no-pressure 3 month plan for anyone who'd rather ease in one piece at a time than take it all on day one.</div>
+            </div>
+            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Big Brain Energy (Strategy Edition)</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">How to actually use Director Chat as your strategist, what to ask, how to set up your logistics profile, and how to start leaning into strategy without it feeling intimidating.</div>
             </div>
@@ -1827,6 +1840,13 @@ select.fi{cursor:pointer}
         </ul>
         <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member, $19.50/mo</button>
       </div>
+    </div>
+
+    <!-- OVERWHELM REASSURANCE NEAR PRICING -->
+    <div style="text-align:center;margin:8px auto 32px;max-width:520px;padding:18px 24px;background:var(--tealp);border:1.5px solid rgba(58,140,140,.3);border-radius:var(--rad)">
+      <div style="font-size:22px;margin-bottom:6px">📚</div>
+      <div style="font-family:var(--fh);font-size:16px;font-weight:700;color:var(--e);margin-bottom:6px">Feeling a little overwhelmed looking at all of this?</div>
+      <div style="font-size:13px;color:var(--t);line-height:1.7">That's normal, and it's already handled. Every account includes a built-in Complete Studio Guide covering every tool in plain language, plus a slow, no-pressure 3 month plan for anyone who'd rather ease in one piece at a time. You don't have to use everything on day one. You don't even have to use everything, ever.</div>
     </div>
 
     <!-- CREDITS EXPLAINER -->
@@ -2020,6 +2040,12 @@ select.fi{cursor:pointer}
               <span style="font-size:11px;color:var(--teal);cursor:pointer;font-weight:600" onclick="event.stopPropagation();navigate('guides')">See all →</span>
             </div>
             <div class="gc-carousel">
+              <div class="gc-carousel-card teal" onclick="navigate('guides');setTimeout(()=>openGuideDetail('everything'),100)">
+                <span class="gc-c-icon">📚</span>
+                <div class="gc-c-title">Complete Studio Guide</div>
+                <div class="gc-c-desc">Every tool, every section, in one place. Start here, includes a slow 3 month plan.</div>
+                <div class="gc-c-cta teal">Read →</div>
+              </div>
               <div class="gc-carousel-card rust" onclick="navigate('guides');setTimeout(()=>openGuideDetail('burnout'),100)">
                 <span class="gc-c-icon">❤️‍🩹</span>
                 <div class="gc-c-title">ND Rescue Kit</div>
@@ -2067,6 +2093,7 @@ select.fi{cursor:pointer}
           <span class="guide-chevron">▼</span>
         </div>
         <div class="guide-body">
+          <div style="padding:14px 20px 4px;font-size:12.5px;color:var(--t);line-height:1.6">Prefer one long read instead of clicking through each section below? The <span style="color:var(--teal);text-decoration:underline;cursor:pointer;font-weight:600" onclick="event.stopPropagation();navigate('guides');setTimeout(()=>openGuideDetail('everything'),100)">Complete Studio Guide</span> covers everything here in one place, including a slow, no-pressure 3 month plan if you'd rather ease in than dive in all at once.</div>
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">🏠</span>Dashboard</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
