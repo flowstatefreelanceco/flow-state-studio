@@ -1,53 +1,29 @@
 {
-  "version": "4.0",
+  "version": "4.1",
   "changelog": [
-    {
-      "type": "fix",
-      "date": "Jul 22, 2026",
-      "title": "Hook and Caption/Body fields now actually save",
-      "desc": "In the content card's Go Analog section, your Hook and Caption/Body text were being written to the wrong place behind the scenes and never showing up again. Fixed, they now save and reload correctly every time."
-    },
-    {
-      "type": "fix",
-      "date": "Jul 22, 2026",
-      "title": "Generated content no longer disappears after clicking Generate",
-      "desc": "Captions, carousels, reels, newsletters, and more were being generated successfully but rendering invisibly until you closed and reopened the card. Fixed, results now show up immediately."
-    },
-    {
-      "type": "improvement",
-      "date": "Jul 22, 2026",
-      "title": "Regenerating content now gives you something different",
-      "desc": "Hitting Generate twice in a row on the same card used to risk landing close to your first result. It now knows what it wrote last time and is told to take a different angle."
-    },
     {
       "type": "new",
       "date": "Jul 22, 2026",
-      "title": "Star and filter your tasks",
-      "desc": "Mark any task as a priority and filter your board down to just starred tasks with one click."
+      "title": "The Complete Studio Guide",
+      "desc": "A brand new guide covering every section, every AI tool, every output, in one place. Find it first in your Guides library, or from the dashboard's Guides carousel."
     },
     {
       "type": "improvement",
       "date": "Jul 22, 2026",
-      "title": "Dashboard redesign",
-      "desc": "This Week's Focus, Pick Up Where You Left Off, and On Your Plate now share one consistent, calmer visual style. Pick Up Where You Left Off is no longer a toggle, it's always visible."
+      "title": "A slower way in, if you want one",
+      "desc": "The Complete Studio Guide includes an optional, no-pressure 3 month plan for anyone who'd rather ease into the Studio one piece at a time instead of all at once."
     },
     {
       "type": "improvement",
       "date": "Jul 22, 2026",
-      "title": "Creative Director Mode can now write the full piece",
-      "desc": "Beyond Brief Me, Surprise Me, and the Analog Prompt, there's now a direct option to generate the finished draft itself, in any format including Substack articles."
-    },
-    {
-      "type": "fix",
-      "date": "Jul 22, 2026",
-      "title": "Sign Out is easier to find and safer",
-      "desc": "Sign Out now also lives in Settings, and signing out fully resets the app so the next person signing in on the same device never sees your content."
+      "title": "Credits and Strategy & Logistics, explained clearly",
+      "desc": "The new guide spells out exactly what uses a credit and what never does, plus what your Strategy & Logistics profile actually does for Director Chat."
     },
     {
       "type": "improvement",
       "date": "Jul 22, 2026",
-      "title": "Swipe File renamed to Repurposed File",
-      "desc": "Same feature, clearer name."
+      "title": "Landing and pricing page updates",
+      "desc": "Tightened the homepage intro copy, and added reminders on both the homepage and the pricing page that the built-in guide is there if the Studio ever feels like a lot at first."
     }
   ]
 }
