@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/brains", "destination": "/brains-that-build.html" },
+    { "source": "/((?!brains).*)", "destination": "/index.html" }
   ]
 }
