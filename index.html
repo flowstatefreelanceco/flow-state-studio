@@ -2875,6 +2875,20 @@ select.fi{cursor:pointer}
             </div>
 
             <!-- Big Brain Energy (Strategy Edition) -->
+            <!-- The Complete Studio Guide -->
+            <div class="guide-index-card teal" onclick="openGuideDetail('everything')">
+              <div class="gic-deco">📚</div>
+              <span class="gic-icon">📚</span>
+              <div class="gic-title">The Complete Studio Guide</div>
+              <div class="gic-desc">Every section, every AI tool, every output, explained in one place. Start here if you want the full picture, or keep it bookmarked and come back whenever you need it. Includes a slow, no-pressure 3 month plan if you'd rather ease in.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Start here</span>
+                <span class="gic-tag">All tools</span>
+                <span class="gic-tag">Self-paced</span>
+              </div>
+              <div class="gic-cta teal">Read the guide →</div>
+            </div>
+
             <div class="guide-index-card espresso" onclick="openGuideDetail('strategy')">
               <div class="gic-deco" style="color:var(--em)">🧠</div>
               <span class="gic-icon">🧠</span>
@@ -2890,6 +2904,213 @@ select.fi{cursor:pointer}
             </div>
 
           </div>
+        </div>
+      </div>
+
+      <!-- DETAIL: The Complete Studio Guide -->
+      <div id="guide-detail-everything" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero teal">
+            <div class="guide-detail-hero-deco">📚</div>
+            <div class="gdh-eyebrow teal">Start Here</div>
+            <div class="gdh-title">Everything in the Studio, in one place, at whatever pace works for you.</div>
+            <div class="gdh-desc">You do not need to read this in one sitting, or even in order. Bookmark it, skim it, come back to one section at a time. This covers every part of the Studio, what it does, what it's for, and how to actually use it, so you always have somewhere to check instead of guessing.</div>
+          </div>
+
+          <div class="gd-section-lbl">How the Studio is laid out</div>
+          <div class="gd-cards">
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🏠</span>
+              <div class="gd-card-title">Dashboard</div>
+              <div class="gd-card-desc">Your home base. Brain not cooperating, This Week's Focus, quick-create buttons, Pick Up Where You Left Off, and On Your Plate. If the rest of the Studio ever feels like too much on a given day, this page alone is enough to work from.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🗂</span>
+              <div class="gd-card-title">Content Planner</div>
+              <div class="gd-card-desc">A simple board: Idea, In Progress, Done. Every content card lives here, with Go Analog and Bridge the Gap both built in.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🖼</span>
+              <div class="gd-card-title">Feed Preview</div>
+              <div class="gd-card-desc">See your Instagram grid before you post to it. Move things around while it still costs nothing to change your mind.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">☑</span>
+              <div class="gd-card-title">Tasks</div>
+              <div class="gd-card-desc">A to-do list that knows the difference between a high-focus task and a five-minute one. Star your priorities, filter down to just those.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">📅</span>
+              <div class="gd-card-title">Calendar</div>
+              <div class="gd-card-desc">Everything with a date on it, content and tasks both, in one calendar view.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">✍️</span>
+              <div class="gd-card-title">Writing Studio</div>
+              <div class="gd-card-desc">A quiet, dedicated writing space, separate from the Content Planner. Write your own or use AI, both save to your drafts.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">💬</span>
+              <div class="gd-card-title">Director Chat</div>
+              <div class="gd-card-desc">A full conversation with your Creative Director about strategy, not just single pieces of content. Ask it anything.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">📝</span>
+              <div class="gd-card-title">Saved Drafts</div>
+              <div class="gd-card-desc">Everything you've generated or written that isn't tied to a specific content card, all in one library.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🔁</span>
+              <div class="gd-card-title">Repurposed File</div>
+              <div class="gd-card-desc">Your saved "Rebuild in My Voice" rebuilds. The place your swipe file goes to actually become useful.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">Notebooks</div>
+              <div class="gd-card-desc">A no-structure, no-AI brain dump space. Catch the idea before it disappears, sort it later or don't.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Go Analog, the short version</div>
+          <div class="gd-card full teal" style="margin-bottom:12px">
+            <div class="gd-card-desc" style="font-size:13.5px">Every content card has two halves: Go Analog and Bridge the Gap. Go Analog is where you write it yourself, no AI required, a Hook/Subject field, a Caption/Body field, and a place for your own draft. It's open by default every time, because this Studio was built to default to you, not to AI.</div>
+          </div>
+          <div class="gd-callout" style="background:var(--gp);border-color:#D4A843">
+            <div class="gd-callout-icon">✏️</div>
+            <div>
+              <div class="gd-callout-eyebrow" style="color:var(--g)">Want the full picture?</div>
+              <div class="gd-callout-text">This is the short version. For what analog actually means, why it's having a moment, and how to use every corner of the Studio without touching AI at all, read <span style="text-decoration:underline;cursor:pointer" onclick="event.stopPropagation();openGuideDetail('analog')">The Analog Way</span> guide.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Every AI tool, and what it actually gives you</div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">✦</span>
+              <div class="gd-card-title">Get Creative Direction</div>
+              <div class="gd-card-desc">This does not write your post. It gives you the angle, the hook idea, the emotion to aim for, and what to avoid, based on your brief. Direction, not a finished draft. Use it when you know your topic but not your approach.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">✍️</span>
+              <div class="gd-card-title">Generate Content</div>
+              <div class="gd-card-desc">This is the one that writes the finished piece. Pick a format, Caption, Story, Carousel, Reel Script, Newsletter, Email, or Substack Article, and it builds the whole thing, shaped correctly for that format, not just a generic paragraph stretched to fit.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🪝</span>
+              <div class="gd-card-title">Hook Builder</div>
+              <div class="gd-card-desc">Gives you 5 real hook options built from your brief. Pick the one that sounds like you, then build the full post out from it in one more click.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">⇕</span>
+              <div class="gd-card-title">Caption Variations</div>
+              <div class="gd-card-desc">Same idea, 3 different angles. Useful when you're not sure which direction fits best, or when you want options instead of committing to the first draft.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">☆</span>
+              <div class="gd-card-title">Content Series</div>
+              <div class="gd-card-desc">A real, connected 5-part series built from your voice and niche, not five random unrelated posts. Good for batching without everything sounding like it came from a stranger.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🔁</span>
+              <div class="gd-card-title">Rebuild in My Voice</div>
+              <div class="gd-card-desc">Paste in a post you admire. This breaks down why it works, the hook type, the structure, the emotional angle, then rebuilds something 100% original in your own voice. Not a rewrite, a completely new piece that learned from good bones.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">The dashboard tools</div>
+          <div class="gd-cards">
+            <div class="gd-card gold">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">Creative Director Mode (Brain Not Cooperating)</div>
+              <div class="gd-card-desc">Three ways out of a blank brain. Brief Me gives you direction using a topic you already have. Surprise Me does the same but also hands you a fresh idea, no topic needed. Analog Prompt is a no-AI writing prompt, zero credits used. There's also a Write the Full Piece option if you want the finished draft directly from here instead of a content card.</div>
+            </div>
+            <div class="gd-card gold">
+              <span class="gd-card-icon">💬</span>
+              <div class="gd-card-title">Director Chat</div>
+              <div class="gd-card-desc">A real ongoing conversation about strategy, posting cadence, launch sequencing, what to prioritize next, based on your actual brand, not generic advice. Ask it anything, keep multiple conversations going, come back to any of them later.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">The organizing tools</div>
+          <div class="gd-cards">
+            <div class="gd-card purple">
+              <span class="gd-card-icon">🗂</span>
+              <div class="gd-card-title">Content Planner</div>
+              <div class="gd-card-desc">Idea, In Progress, Done. Every card holds the hook, notes, draft, and platform in one place. Drag it forward when you're ready, nothing happens until you decide it does.</div>
+            </div>
+            <div class="gd-card purple">
+              <span class="gd-card-icon">☑</span>
+              <div class="gd-card-title">Tasks, tagged by energy</div>
+              <div class="gd-card-desc">Every task gets tagged high focus, medium, or low energy. Pull up whichever list matches how you're actually showing up today. Star anything urgent and filter down to just that.</div>
+            </div>
+            <div class="gd-card purple">
+              <span class="gd-card-icon">📅</span>
+              <div class="gd-card-title">Calendar and Feed Preview</div>
+              <div class="gd-card-desc">Calendar shows everything with a date, content and tasks together. Feed Preview shows what your Instagram grid will actually look like before anything goes live, for the brains that need to see it, not imagine it.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">The quiet tools</div>
+          <div class="gd-cards">
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🎯</span>
+              <div class="gd-card-title">This Week's Focus</div>
+              <div class="gd-card-desc">1 to 3 things you want to make progress on this week. No dates attached, no streak to lose. Right on your dashboard so it's the first thing you see.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">👋</span>
+              <div class="gd-card-title">Pick Up Where You Left Off</div>
+              <div class="gd-card-desc">Your most recent saved draft and your most recent content card, right there so you never have to go hunting for what you were working on.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">📅</span>
+              <div class="gd-card-title">On Your Plate</div>
+              <div class="gd-card-desc">Anything, content or tasks, due today or tomorrow. Disappears completely when there's nothing due, so it never adds clutter for the sake of it.</div>
+            </div>
+            <div class="gd-card sage">
+              <span class="gd-card-icon">🧠</span>
+              <div class="gd-card-title">Notebooks</div>
+              <div class="gd-card-desc">No structure, no AI, no pressure to organize as you go. Dump it messy. Sort it later, or don't, it still counts as caught.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">Your Brand Profile matters more than it seems</div>
+          <div class="gd-callout" style="background:var(--tealp);border-color:rgba(58,140,140,.3)">
+            <div class="gd-callout-icon">🎨</div>
+            <div>
+              <div class="gd-callout-eyebrow" style="color:var(--teal)">Settings → Brand Profile</div>
+              <div class="gd-callout-text">Every AI tool in this Studio pulls from your Brand Profile, your niche, your ideal client, your voice, your offers, what's worked before. An empty profile means the AI is working with almost nothing to go on, and the output will feel more generic because of it. Five minutes filling this out is the single biggest thing you can do to make every tool in here sound more like you.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">If you'd rather take this slow, a 3 month plan</div>
+          <div class="gd-card full teal" style="margin-bottom:12px">
+            <div class="gd-card-desc" style="font-size:13.5px">This is optional. You can use the whole Studio on day one if that feels good to you. But if a brand new tool with this many parts feels like a lot right now, here's a slower way in. No deadlines, no falling behind, just a rough shape to lean on if you want one. Go slower than this if you need to. That's still doing it right.</div>
+          </div>
+
+          <div class="gd-cards">
+            <div class="gd-card gold">
+              <div class="gd-card-title">Month 1: Just the Dashboard</div>
+              <div class="gd-card-desc">Log in. Look at This Week's Focus. Pick 1 to 3 things, no dates. If you write anything, use Go Analog, no AI needed yet. When you're stuck, try the Analog Prompt button, still no AI. That's genuinely enough for a whole month. You're building the habit of opening the Studio, not mastering every feature.</div>
+            </div>
+            <div class="gd-card gold">
+              <div class="gd-card-title">Month 2: One AI tool at a time</div>
+              <div class="gd-card-desc">Fill out your Brand Profile whenever you have ten quiet minutes, this makes everything after it better. Then try one AI tool a week, in whatever order sounds good to you. Maybe Hook Builder one week, Get Creative Direction the next. You don't need to use all of them. You're finding out which ones actually help you, not checking a box.</div>
+            </div>
+            <div class="gd-card gold">
+              <div class="gd-card-title">Month 3: Build your own rhythm</div>
+              <div class="gd-card-desc">By now you probably know which tools you reach for and which ones you don't, and that's the point, there's no wrong combination. Maybe you live in the Content Planner. Maybe Director Chat became your favorite. Start using whatever that rhythm is for real content, on your actual schedule, at your actual pace.</div>
+            </div>
+          </div>
+          <div class="gd-callout" style="background:var(--gp);border-color:#D4A843">
+            <div class="gd-callout-icon">💛</div>
+            <div>
+              <div class="gd-callout-eyebrow" style="color:var(--g)">One last thing</div>
+              <div class="gd-callout-text">There is no version of this where you're doing it wrong. Use one tool or use all of them. Go fast some weeks and slow on others. This Studio was built to bend around you, not the other way around.</div>
+            </div>
+          </div>
+
         </div>
       </div>
 
