@@ -1184,7 +1184,7 @@ select.fi{cursor:pointer}
 /* WEEKLY FOCUS */
 .wf-wrap{background:repeating-linear-gradient(180deg,#fff,#fff 27px,#F0E9D8 27px,#F0E9D8 28px);border:1px solid var(--bl);border-left:11px solid #008484;border-radius:6px;padding:18px 20px;margin-bottom:16px;box-shadow:2px 3px 8px rgba(77,30,21,.1);transform:rotate(-.3deg)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
-.wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2}
+.wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2;display:inline-block;background:var(--sb);padding:4px 12px;border-radius:100px}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
 .wf-reset{font-size:11px;color:var(--tl);cursor:pointer;padding:4px 10px;border-radius:100px;border:1px solid var(--bl);background:none;font-family:var(--fb);white-space:nowrap;flex-shrink:0}
 .wf-reset:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
@@ -5310,7 +5310,7 @@ function renderPickUp(){
   const plate=getOnYourPlateData();
   if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
-  var pickupBlock=(lastDraft||lastIdea)?`<div class="wf-wrap" style="border-left-color:#534AB7">
+  var pickupBlock=(lastDraft||lastIdea)?`<div class="wf-wrap" style="border-left-color:#b36c37">
     <div class="wf-title" style="font-size:17px;margin-bottom:10px">👋 Pick up where you left off</div>
     ${lastDraft?`<div class="wf-item" style="justify-content:space-between;margin-bottom:8px">
       <div style="min-width:0;flex:1">
