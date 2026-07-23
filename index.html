@@ -4707,7 +4707,7 @@ function showPaymentSuccess(plan){
   var planName = plan === 'unlimited' ? 'Unlimited Founders Membership' : plan === 'starter' ? 'Starter Founders Membership' : null;
   var el = document.createElement('div');
   el.id = 'paymentSuccess';
-  el.style.cssText = 'position:fixed;inset:0;background:var(--p);z-index:9995;display:flex;align-items:center;justify-content:center;padding:24px';
+  el.style.cssText = 'position:fixed;inset:0;background:var(--p);z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px';
   var btn = document.createElement('button');
   btn.textContent = 'Create My Account';
   btn.style.cssText = 'width:100%;padding:14px;background:var(--r);color:white;border:none;border-radius:var(--rsm);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;display:block';
