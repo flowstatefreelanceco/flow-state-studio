@@ -1432,6 +1432,19 @@ select.fi{cursor:pointer}
 
 </div><!-- /authScreen -->
 
+<!-- NEW PASSWORD SCREEN (shown after clicking the reset-password email link) -->
+<div id="newPasswordScreen" class="hidden" style="position:fixed;inset:0;background:var(--p);z-index:10001;display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="max-width:380px;width:100%;background:var(--w);border-radius:var(--rad);padding:36px 32px;box-shadow:0 8px 40px rgba(0,0,0,.12);text-align:center">
+    <div style="font-size:32px;margin-bottom:10px">🔑</div>
+    <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:6px">Set a new password</div>
+    <div style="font-size:13px;color:var(--t);margin-bottom:22px">Choose a new password for your account, at least 6 characters.</div>
+    <div class="auth-field" style="text-align:left"><label>New Password</label><input class="auth-input" type="password" id="npPass" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')submitNewPassword()" /></div>
+    <div class="auth-field" style="text-align:left"><label>Confirm New Password</label><input class="auth-input" type="password" id="npPass2" placeholder="Type it again" onkeydown="if(event.key==='Enter')submitNewPassword()" /></div>
+    <button class="auth-btn" id="npBtn" onclick="submitNewPassword()" style="width:100%;margin-top:6px">Set New Password</button>
+    <div class="auth-err" id="npErr" style="margin-top:8px"></div>
+  </div>
+</div>
+
 <!-- LOCKED / PRICING SCREEN -->
 <div id="lockedScreen">
   <div class="pricing-wrap">
@@ -4822,6 +4835,16 @@ async function initAuth(){
 
       document.getElementById('authScreen').classList.add('hidden');
       await bootApp();
+    } else if(event==='PASSWORD_RECOVERY'){
+      // Someone clicked the reset-password link in their email. Supabase has
+      // already verified the token and given them a valid session, they just
+      // need a place to actually type a new password. This event does not
+      // also fire SIGNED_IN, so _currentUser needs to be set here directly
+      // or bootApp() would have nothing to load data for afterward.
+      _currentUser=session.user;
+      document.getElementById('loadingScreen')?.classList.add('hidden');
+      document.getElementById('authScreen')?.classList.add('hidden');
+      document.getElementById('newPasswordScreen')?.classList.remove('hidden');
     } else if(event==='SIGNED_OUT'){
       // Force a full reload rather than just clearing _currentUser. Without this,
       // if a second person signs in on the same tab/device, S still holds the
@@ -5079,6 +5102,24 @@ async function doReset(){
   await sb.auth.resetPasswordForEmail(em,{redirectTo:window.location.origin});
   document.getElementById('liErr').style.color='var(--teal)';
   document.getElementById('liErr').textContent='Password reset email sent!';
+}
+async function submitNewPassword(){
+  var pw=document.getElementById('npPass').value;
+  var pw2=document.getElementById('npPass2').value;
+  var err=document.getElementById('npErr');
+  var btn=document.getElementById('npBtn');
+  err.textContent='';
+  if(!pw||pw.length<6){err.textContent='Password must be at least 6 characters';return;}
+  if(pw!==pw2){err.textContent='Passwords do not match';return;}
+  btn.disabled=true;btn.textContent='Saving...';
+  var {error}=await sb.auth.updateUser({password:pw});
+  btn.disabled=false;btn.textContent='Set New Password';
+  if(error){err.textContent=error.message;return;}
+  document.getElementById('newPasswordScreen').classList.add('hidden');
+  toast('Password updated ✓');
+  // Send them into the app normally - they already have a valid session
+  // from the recovery link, no need to make them log in again.
+  if(!_appBooted) await bootApp();
 }
 
 
