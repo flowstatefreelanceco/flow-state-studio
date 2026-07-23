@@ -1823,7 +1823,7 @@ select.fi{cursor:pointer}
           <li>100 AI generations per month</li>
           <li>Founding Member price through August 31st</li>
         </ul>
-        <button class="pc-btn pc-btn-secondary" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member, $9.50/mo</button>
+        <button class="pc-btn pc-btn-secondary" onclick="window.location.href='https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00'">Join as a Founding Member, $9.50/mo</button>
       </div>
       <div class="pc featured">
         <div class="pc-badge">Most Popular</div>
@@ -1838,7 +1838,7 @@ select.fi{cursor:pointer}
           <li>Zero limits, zero anxiety about running out mid-flow</li>
           <li>Founding Member price through August 31st</li>
         </ul>
-        <button class="pc-btn pc-btn-primary" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member, $19.50/mo</button>
+        <button class="pc-btn pc-btn-primary" onclick="window.location.href='https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01'">Join as a Founding Member, $19.50/mo</button>
       </div>
     </div>
 
@@ -2677,14 +2677,14 @@ select.fi{cursor:pointer}
             <div style="font-family:var(--fh);font-size:21px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$9.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
             <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:6px">100 AI credits/month. Locked in at founding price forever.</div><div style="font-size:11.5px;font-weight:600;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:5px 10px;margin-bottom:10px">Founding Member price available through August 31st</div>
-            <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00','_blank')">Join as a Founding Member</button>
+            <button class="btn btn-p" style="width:100%" onclick="window.location.href='https://buy.stripe.com/5kQ8wP7bH3G17k92GT4Rq00'">Join as a Founding Member</button>
           </div>
           <div style="border:2px solid var(--r);border-radius:var(--rad);padding:20px;background:var(--rp);position:relative">
             <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--r);color:white;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px">Most Popular</div>
             <div style="font-family:var(--fh);font-size:21px;font-weight:600;color:var(--e);margin-bottom:4px">Unlimited Founders Membership</div>
             <div style="font-size:24px;font-weight:700;color:var(--r);margin-bottom:8px">$19.50<span style="font-size:13px;font-weight:400;color:var(--t)">/mo</span></div>
             <div style="font-size:12.5px;color:var(--t);line-height:1.7;margin-bottom:6px">Unlimited AI credits. Zero limits. Locked in at founding price forever.</div><div style="font-size:11.5px;font-weight:600;color:var(--teal);background:rgba(0,132,132,.08);border-radius:var(--rsm);padding:5px 10px;margin-bottom:10px">Founding Member price available through August 31st</div>
-            <button class="btn btn-p" style="width:100%" onclick="window.open('https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01','_blank')">Join as a Founding Member</button>
+            <button class="btn btn-p" style="width:100%" onclick="window.location.href='https://buy.stripe.com/9B68wP9jPb8t9sh4P14Rq01'">Join as a Founding Member</button>
           </div>
         </div>
         <div id="alreadyUnlimited" style="display:none;text-align:center;padding:14px;background:var(--tealp);border-radius:var(--rsm);color:var(--teal);font-size:13px;font-weight:500">
@@ -4690,18 +4690,21 @@ function checkPaymentSuccess(){
   var params = new URLSearchParams(window.location.search);
   var payment = params.get('payment');
   var plan = params.get('plan');
-  if(payment === 'success' && plan){
-    // Clean URL
+  // Accept payment=success even without a plan param, rather than staying silent.
+  // The actual plan gets applied correctly later via the pending_plans table lookup
+  // once they sign up (matched by email, see initAuth) - this URL param is only
+  // used to decide whether to SHOW the welcome screen and what to call the plan
+  // in it, not to grant access, so a missing/wrong plan value here is low-risk
+  // and should never cause someone to silently land nowhere after paying.
+  if(payment === 'success'){
     window.history.replaceState({}, '', window.location.pathname);
-    // Store the plan
-    sessionStorage.setItem('paidPlan', plan);
-    // Show success screen
-    showPaymentSuccess(plan);
+    if(plan) sessionStorage.setItem('paidPlan', plan);
+    showPaymentSuccess(plan || null);
   }
 }
 
 function showPaymentSuccess(plan){
-  var planName = plan === 'unlimited' ? 'Unlimited Founders Membership' : 'Starter Founders Membership';
+  var planName = plan === 'unlimited' ? 'Unlimited Founders Membership' : plan === 'starter' ? 'Starter Founders Membership' : null;
   var el = document.createElement('div');
   el.id = 'paymentSuccess';
   el.style.cssText = 'position:fixed;inset:0;background:var(--p);z-index:9995;display:flex;align-items:center;justify-content:center;padding:24px';
@@ -4713,7 +4716,9 @@ function showPaymentSuccess(plan){
   inner.style.cssText = 'max-width:480px;text-align:center;background:var(--w);border-radius:var(--rad);padding:40px;box-shadow:0 8px 40px rgba(0,0,0,.12)';
   inner.innerHTML = '<div style="font-size:48px;margin-bottom:16px">🎉</div>'
     + '<div style="font-family:var(--fh);font-size:28px;font-weight:600;color:var(--e);margin-bottom:8px">Welcome to Flow State Studio!</div>'
-    + '<div style="font-size:14px;color:var(--t);line-height:1.7;margin-bottom:24px">Your <strong>'+planName+'</strong> is confirmed. Now create your account and you will be straight in with full access.</div>';
+    + (planName
+        ? '<div style="font-size:14px;color:var(--t);line-height:1.7;margin-bottom:24px">Your <strong>'+planName+'</strong> is confirmed. Now create your account and you will be straight in with full access.</div>'
+        : '<div style="font-size:14px;color:var(--t);line-height:1.7;margin-bottom:24px">Your payment went through. Create your account below using <strong>the same email you paid with</strong> and your membership will be applied automatically.</div>');
   inner.appendChild(btn);
   var hint = document.createElement('div');
   hint.style.cssText = 'font-size:12px;color:var(--tl)';
@@ -4746,7 +4751,7 @@ function playLpVideo(){
 }
 
 function proceedToSignup(plan){
-  sessionStorage.setItem('paidPlan', plan);
+  if(plan) sessionStorage.setItem('paidPlan', plan);
   var el = document.getElementById('paymentSuccess');
   if(el) el.remove();
   document.getElementById('authScreen').classList.remove('hidden');
