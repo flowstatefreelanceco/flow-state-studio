@@ -4784,44 +4784,16 @@ function proceedToLogin(){
 }
 
 async function initAuth(){
-  // Check for a password-recovery link BEFORE treating this as a normal
-  // session. Supabase establishes a real session as part of the recovery
-  // flow itself, so without this check, the code below sees "valid session"
-  // and boots straight into the app or homepage, skipping the new-password
-  // screen entirely and never giving the person a chance to actually reset
-  // anything.
-  if(window.location.hash.indexOf('type=recovery')!==-1){
-    document.getElementById('loadingScreen').classList.add('hidden');
-    document.getElementById('authScreen').classList.add('hidden');
-    document.getElementById('newPasswordScreen').classList.remove('hidden');
-    var {data:{session:recoverySession}}=await sb.auth.getSession();
-    if(recoverySession&&recoverySession.user) _currentUser=recoverySession.user;
-    sb.auth.onAuthStateChange(async function(event,session){
-      if(event==='SIGNED_OUT'){
-        window.location.href=window.location.origin+'/home';
-      }
-    });
-    return;
-  }
-  var {data:{session}}=await sb.auth.getSession();
-  if(session&&session.user){
-    _currentUser=session.user;
-    document.getElementById('loadingScreen').classList.add('hidden');
-    if(!_appBooted) await bootApp();
-  } else {
-    document.getElementById('loadingScreen').classList.add('hidden');
-    // /home is the landing page (default), /getting-started opens straight to
-    // the membership/pricing screen so that link can be shared or used in ads
-    // without someone having to click through the landing page first.
-    if(window.location.pathname.replace(/\/$/,'')==='/getting-started'){
-      document.getElementById('authScreen').classList.add('hidden');
-      goToPricing(true);
-    } else {
-      document.getElementById('authScreen').classList.remove('hidden');
-    }
-  }
+  var isRecoveryLink=window.location.hash.indexOf('type=recovery')!==-1;
+
+  // Register the listener BEFORE calling getSession() at all, and before
+  // deciding anything about a recovery link. PASSWORD_RECOVERY only fires
+  // once Supabase has actually finished establishing that session - calling
+  // getSession() ourselves immediately can race ahead of that and come back
+  // with nothing yet, which is what caused "Auth session missing" when
+  // trying to actually set the new password a moment later.
   sb.auth.onAuthStateChange(async function(event,session){
-    if(event==='SIGNED_IN'&&session&&!_appBooted){
+    if(event==='SIGNED_IN'&&session&&!_appBooted&&!isRecoveryLink){
       _currentUser=session.user;
 
       // 1. Check for invite code — set plan to beta
@@ -4859,10 +4831,8 @@ async function initAuth(){
       await bootApp();
     } else if(event==='PASSWORD_RECOVERY'){
       // Someone clicked the reset-password link in their email. Supabase has
-      // already verified the token and given them a valid session, they just
-      // need a place to actually type a new password. This event does not
-      // also fire SIGNED_IN, so _currentUser needs to be set here directly
-      // or bootApp() would have nothing to load data for afterward.
+      // now actually finished verifying the token and establishing a valid
+      // session, so it's safe to grab the user and show the form.
       _currentUser=session.user;
       document.getElementById('loadingScreen')?.classList.add('hidden');
       document.getElementById('authScreen')?.classList.add('hidden');
@@ -4878,6 +4848,31 @@ async function initAuth(){
       window.location.href=window.location.origin+'/home';
     }
   });
+
+  if(isRecoveryLink){
+    // Don't run the normal session check below at all for a recovery link -
+    // wait for the PASSWORD_RECOVERY event above once Supabase is actually
+    // ready, rather than racing ahead and treating it as a normal login.
+    return;
+  }
+
+  var {data:{session}}=await sb.auth.getSession();
+  if(session&&session.user){
+    _currentUser=session.user;
+    document.getElementById('loadingScreen').classList.add('hidden');
+    if(!_appBooted) await bootApp();
+  } else {
+    document.getElementById('loadingScreen').classList.add('hidden');
+    // /home is the landing page (default), /getting-started opens straight to
+    // the membership/pricing screen so that link can be shared or used in ads
+    // without someone having to click through the landing page first.
+    if(window.location.pathname.replace(/\/$/,'')==='/getting-started'){
+      document.getElementById('authScreen').classList.add('hidden');
+      goToPricing(true);
+    } else {
+      document.getElementById('authScreen').classList.remove('hidden');
+    }
+  }
 }
 
 
