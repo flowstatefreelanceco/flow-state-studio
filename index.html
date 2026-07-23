@@ -835,6 +835,8 @@ select.fi{cursor:pointer}
 /* ── AUTH / LANDING ─────────────────────────────────────────── */
 #authScreen{position:fixed;inset:0;background:var(--p);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch}
 #authScreen.hidden{display:none}
+#newPasswordScreen{position:fixed;inset:0;background:var(--p);z-index:10001;align-items:center;justify-content:center;padding:24px;display:flex}
+#newPasswordScreen.hidden{display:none}
 
 /* Landing page */
 .lp-wrap{min-height:100%;display:flex;flex-direction:column}
@@ -1434,7 +1436,7 @@ select.fi{cursor:pointer}
 </div><!-- /authScreen -->
 
 <!-- NEW PASSWORD SCREEN (shown after clicking the reset-password email link) -->
-<div id="newPasswordScreen" class="hidden" style="position:fixed;inset:0;background:var(--p);z-index:10001;display:flex;align-items:center;justify-content:center;padding:24px">
+<div id="newPasswordScreen" class="hidden">
   <div style="max-width:380px;width:100%;background:var(--w);border-radius:var(--rad);padding:36px 32px;box-shadow:0 8px 40px rgba(0,0,0,.12);text-align:center">
     <div style="font-size:32px;margin-bottom:10px">🔑</div>
     <div style="font-family:var(--fh);font-size:22px;font-weight:600;color:var(--e);margin-bottom:6px">Set a new password</div>
