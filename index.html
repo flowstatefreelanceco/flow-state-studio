@@ -4784,6 +4784,25 @@ function proceedToLogin(){
 }
 
 async function initAuth(){
+  // Check for a password-recovery link BEFORE treating this as a normal
+  // session. Supabase establishes a real session as part of the recovery
+  // flow itself, so without this check, the code below sees "valid session"
+  // and boots straight into the app or homepage, skipping the new-password
+  // screen entirely and never giving the person a chance to actually reset
+  // anything.
+  if(window.location.hash.indexOf('type=recovery')!==-1){
+    document.getElementById('loadingScreen').classList.add('hidden');
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('newPasswordScreen').classList.remove('hidden');
+    var {data:{session:recoverySession}}=await sb.auth.getSession();
+    if(recoverySession&&recoverySession.user) _currentUser=recoverySession.user;
+    sb.auth.onAuthStateChange(async function(event,session){
+      if(event==='SIGNED_OUT'){
+        window.location.href=window.location.origin+'/home';
+      }
+    });
+    return;
+  }
   var {data:{session}}=await sb.auth.getSession();
   if(session&&session.user){
     _currentUser=session.user;
@@ -5056,8 +5075,20 @@ async function doLogin(){
   var btn=document.getElementById('liBtn');
   if(!em||!pw){err.textContent='Please enter your email and password';return;}
   btn.disabled=true;btn.textContent='Signing in...';err.textContent='';
-  var {error}=await sb.auth.signInWithPassword({email:em,password:pw});
-  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Sign In';}
+  var {data,error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  if(error){err.textContent=error.message;btn.disabled=false;btn.textContent='Sign In';return;}
+  // Also check for an unclaimed pending plan on login, not just signup - someone
+  // who already had an account before paying would otherwise never get their
+  // paid plan applied, since they never go through doSignup() at all.
+  if(data.user){
+    try{
+      var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',em.toLowerCase()).maybeSingle();
+      if(pending && pending.plan){
+        await sb.from('profiles').upsert({id:data.user.id,plan:pending.plan});
+        await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
+      }
+    }catch(e){ /* not fatal - they still get signed in either way */ }
+  }
 }
 async function doSignup(){
   var em=document.getElementById('suEmail').value.trim();
@@ -5120,6 +5151,18 @@ async function submitNewPassword(){
   if(error){err.textContent=error.message;return;}
   document.getElementById('newPasswordScreen').classList.add('hidden');
   toast('Password updated ✓');
+  // Same pending-plan safety net as login/signup, in case this account had
+  // an unclaimed paid plan sitting and this happens to be their first
+  // successful sign-in since paying.
+  if(_currentUser){
+    try{
+      var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',_currentUser.email.toLowerCase()).maybeSingle();
+      if(pending && pending.plan){
+        await sb.from('profiles').upsert({id:_currentUser.id,plan:pending.plan});
+        await sb.from('pending_plans').delete().eq('email',_currentUser.email.toLowerCase());
+      }
+    }catch(e){ /* not fatal */ }
+  }
   // Send them into the app normally - they already have a valid session
   // from the recovery link, no need to make them log in again.
   if(!_appBooted) await bootApp();
