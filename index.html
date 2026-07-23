@@ -4855,11 +4855,35 @@ async function initAuth(){
   });
 
   if(isHashRecovery){
-    // Older-style implicit flow: Supabase puts access_token/refresh_token
-    // directly in the URL hash and processes it automatically as part of
-    // client init. Nothing to do here ourselves - just wait for the
-    // PASSWORD_RECOVERY event above to fire once that's actually finished,
-    // and don't fall through to treating this as a normal visit meanwhile.
+    // detectSessionInUrl is set to false on this client (see createClient
+    // above), which means Supabase will NEVER automatically process this
+    // hash or fire PASSWORD_RECOVERY on its own, no matter how long we wait.
+    // That setting exists for other reasons elsewhere in the app, but as a
+    // side effect it silently breaks the automatic recovery flow, so this
+    // has to be done by hand: parse the tokens out of the hash ourselves
+    // and explicitly establish the session with setSession().
+    var hashParams=new URLSearchParams(window.location.hash.slice(1));
+    var accessToken=hashParams.get('access_token');
+    var refreshToken=hashParams.get('refresh_token');
+    window.history.replaceState({},'',window.location.pathname);
+    if(!accessToken||!refreshToken){
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('authScreen').classList.remove('hidden');
+      return;
+    }
+    var {data,error}=await sb.auth.setSession({access_token:accessToken,refresh_token:refreshToken});
+    document.getElementById('loadingScreen').classList.add('hidden');
+    if(error||!data.session){
+      document.getElementById('authScreen').classList.remove('hidden');
+      openLoginCard();
+      switchAuthTab('login');
+      var liErr2=document.getElementById('liErr');
+      if(liErr2){liErr2.textContent='That reset link has expired or already been used. Please request a new one below.';}
+      return;
+    }
+    _currentUser=data.session.user;
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('newPasswordScreen').classList.remove('hidden');
     return;
   }
 
