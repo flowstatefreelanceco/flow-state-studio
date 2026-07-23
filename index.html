@@ -4784,7 +4784,12 @@ function proceedToLogin(){
 }
 
 async function initAuth(){
-  var isRecoveryLink=window.location.hash.indexOf('type=recovery')!==-1;
+  var searchParams=new URLSearchParams(window.location.search);
+  var tokenHash=searchParams.get('token_hash');
+  var queryType=searchParams.get('type');
+  var isHashRecovery=window.location.hash.indexOf('type=recovery')!==-1;
+  var isQueryRecovery=!!tokenHash&&queryType==='recovery';
+  var isRecoveryLink=isHashRecovery||isQueryRecovery;
 
   // Register the listener BEFORE calling getSession() at all, and before
   // deciding anything about a recovery link. PASSWORD_RECOVERY only fires
@@ -4849,10 +4854,36 @@ async function initAuth(){
     }
   });
 
-  if(isRecoveryLink){
-    // Don't run the normal session check below at all for a recovery link -
-    // wait for the PASSWORD_RECOVERY event above once Supabase is actually
-    // ready, rather than racing ahead and treating it as a normal login.
+  if(isHashRecovery){
+    // Older-style implicit flow: Supabase puts access_token/refresh_token
+    // directly in the URL hash and processes it automatically as part of
+    // client init. Nothing to do here ourselves - just wait for the
+    // PASSWORD_RECOVERY event above to fire once that's actually finished,
+    // and don't fall through to treating this as a normal visit meanwhile.
+    return;
+  }
+
+  if(isQueryRecovery){
+    // Current Supabase default template: ?token_hash=...&type=recovery in
+    // the query string. This does NOT establish a session automatically -
+    // it has to be explicitly exchanged with verifyOtp, or there is simply
+    // no session ever, which is why this was hanging/failing silently before.
+    window.history.replaceState({},'',window.location.pathname);
+    var {data,error}=await sb.auth.verifyOtp({token_hash:tokenHash,type:'recovery'});
+    document.getElementById('loadingScreen').classList.add('hidden');
+    if(error||!data.session){
+      // Link expired, already used, or invalid - send them to a normal
+      // sign-in screen with a clear explanation rather than a silent failure.
+      document.getElementById('authScreen').classList.remove('hidden');
+      openLoginCard();
+      switchAuthTab('login');
+      var liErr=document.getElementById('liErr');
+      if(liErr){liErr.textContent='That reset link has expired or already been used. Please request a new one below.';}
+      return;
+    }
+    _currentUser=data.session.user;
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('newPasswordScreen').classList.remove('hidden');
     return;
   }
 
@@ -9722,6 +9753,22 @@ function renderBucketInsights(){
 // ── END CONTENT BUCKETS ──────────────────────────────────────
 
 initAuth();
+// Safety net: no matter what goes wrong above, never leave someone staring
+// at the loading dots forever. If something in the auth flow hangs or an
+// edge case wasn't anticipated, fall back to the normal sign-in screen
+// after a few seconds instead of a silent stuck state.
+setTimeout(function(){
+  var ls=document.getElementById('loadingScreen');
+  if(ls&&!ls.classList.contains('hidden')){
+    ls.classList.add('hidden');
+    if(!_currentUser){
+      var np=document.getElementById('newPasswordScreen');
+      if(!np||getComputedStyle(np).display==='none'){
+        document.getElementById('authScreen').classList.remove('hidden');
+      }
+    }
+  }
+},8000);
 
 // ESC to close login card
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLoginCard();});
