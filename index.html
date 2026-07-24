@@ -2689,6 +2689,7 @@ select.fi{cursor:pointer}
           </div>
           <div id="planBadge" style="padding:6px 14px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--tealp);color:var(--teal)">Active</div>
         </div>
+        <div id="cancelledNotice" style="display:none;background:var(--gp);border:1.5px solid #D4A843;border-radius:var(--rsm);padding:12px 16px;margin-bottom:18px;font-size:12.5px;color:var(--e);line-height:1.6"></div>
         <div id="upgradeOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="border:2px solid var(--bl);border-radius:var(--rad);padding:20px;background:var(--w);transition:border-color .15s" onmouseover="this.style.borderColor='var(--r)'" onmouseout="this.style.borderColor='var(--bl)'">
             <div style="font-family:var(--fh);font-size:21px;font-weight:600;color:var(--e);margin-bottom:4px">Starter Founders Membership</div>
@@ -5067,8 +5068,18 @@ async function bootApp(){
   var saved=await loadUserData();
   // Load plan from Supabase profiles table
   try{
-    var {data:profile}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
+    var {data:profile}=await sb.from('profiles').select('plan,access_until').eq('id',_currentUser.id).maybeSingle();
     if(profile&&profile.plan) S.plan=profile.plan;
+    // Someone who cancels should keep full access through what they already
+    // paid for, not get cut off immediately - the webhook should set
+    // access_until to their current billing period's end and leave `plan`
+    // alone until then. This is the client-side half of that: once that
+    // date actually passes, lock them out here even if nothing server-side
+    // has gotten around to flipping `plan` to 'locked' yet.
+    if(profile&&profile.access_until){
+      S.accessUntil=profile.access_until;
+      if(new Date(profile.access_until)<new Date()) S.plan='locked';
+    }
   }catch(e){ /* profiles table may not exist yet - defaults to beta */ }
   document.getElementById('loadingScreen').classList.add('hidden');
   // Check if user is locked
@@ -5922,7 +5933,7 @@ function deleteIdea(id){
   if(S.lastCardId===id)S.lastCardId='';
   persist();renderKanban();renderCalendar();renderDashboard();renderBucketInsights();
 }
-function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;i.updatedAt=new Date().toISOString();persist();renderKanban();}}
+function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;i.updatedAt=new Date().toISOString();persist();renderKanban();renderDashboard();}}
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
 const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'#2d5fa0',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
@@ -6059,9 +6070,9 @@ function deleteTask(id){
   S.calEntries=S.calEntries.filter(function(e){
     return e.id!=='cal_task_'+id && e._taskId!==id && e.id!=='cal_'+id;
   });
-  persist();renderTaskKanban();renderCalendar();
+  persist();renderTaskKanban();renderCalendar();renderDashboard();
 }
-function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;t.updatedAt=new Date().toISOString();persist();renderTaskKanban();}}
+function moveTask(id,status){const t=S.tasks.find(x=>x.id===id);if(t){t.status=status;t.updatedAt=new Date().toISOString();persist();renderTaskKanban();renderDashboard();}}
 
 /* ═══════════════════ CALENDAR ═══════════════════ */
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -6797,6 +6808,16 @@ function renderMembershipSection(){
   var limit=creditLimit();
   var planLabels={owner:'Owner',unlimited:'Unlimited Founders',starter:'Starter Founders',beta:'Beta'};
   planNameEl.textContent=planLabels[plan]||'Beta';
+  var cancelNotice=document.getElementById('cancelledNotice');
+  if(cancelNotice){
+    if(S.accessUntil&&plan!=='locked'){
+      var untilDate=new Date(S.accessUntil).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      cancelNotice.style.display='block';
+      cancelNotice.textContent='Your subscription is cancelled, but you keep full access through '+untilDate+', the end of what you already paid for. No action needed.';
+    } else {
+      cancelNotice.style.display='none';
+    }
+  }
   var invSec=document.getElementById('inviteCodeSection');
   if(invSec)invSec.style.display=S.plan==='owner'?'block':'none';
   var clearSec=document.getElementById('clearDataSection');
