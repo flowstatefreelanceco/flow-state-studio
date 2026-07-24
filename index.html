@@ -5015,8 +5015,11 @@ async function loadUserData(){
       merged.weeklyFocus=sbData.weeklyFocus||localData.weeklyFocus||[];
       merged.lastCardId=sbData.lastCardId||localData.lastCardId||'';
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
-      merged.creditMonth=localData.creditMonth||sbData.creditMonth||'';
-      merged.creditsUsed=localData.creditsUsed||sbData.creditsUsed||0;
+      merged.creditCycleStart=localData.creditCycleStart||sbData.creditCycleStart||'';
+      // creditsUsed only ever goes up within a billing cycle - always take
+      // the higher of the two values, never let a stale copy on either side
+      // silently undercount someone's real usage.
+      merged.creditsUsed=Math.max(localData.creditsUsed||0,sbData.creditsUsed||0);
       // directorChats - prefer whichever side has more conversations (most complete history)
       var locChats=dirChatMigrate(localData.directorChats,localData.directorChat);
       var sbChats=dirChatMigrate(sbData.directorChats,sbData.directorChat);
@@ -5305,7 +5308,7 @@ const S = {
   swipeFile:[],weeklyFocus:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
   creditsUsed:0, // this month
-  creditMonth:'', // YYYY-MM of current credit window
+  creditCycleStart:'', // ISO date this billing cycle's credits started counting from
   gs:{bizSet:false,guideReviewed:false,libVisited:false,calAdded:false,ideaAdded:false,draftGenerated:false},
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
@@ -5353,7 +5356,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditMonth:S.creditMonth,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
+    creditsUsed:S.creditsUsed,creditCycleStart:S.creditCycleStart,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null,
     studio:S.studio||{}
@@ -8203,18 +8206,41 @@ function creditLimit(){
   if(S.plan==='starter') return 100;
   return 50; // beta default
 }
+function getEnrollmentDate(){
+  // The Supabase account creation timestamp is the closest reliable proxy
+  // we have for "when they enrolled through Stripe" - the account gets
+  // created immediately after payment as part of signup.
+  if(_currentUser&&_currentUser.created_at) return new Date(_currentUser.created_at);
+  return new Date();
+}
 function checkCreditReset(){
+  if(!S.creditCycleStart){
+    S.creditCycleStart=getEnrollmentDate().toISOString();
+    persist();
+    return;
+  }
+  var cycleStart=new Date(S.creditCycleStart);
   var now=new Date();
-  var ym=now.getFullYear()+'-'+(now.getMonth()+1);
-  if(S.creditMonth!==ym){
-    S.creditMonth=ym;
-    S.creditsUsed=0; // always reset to zero, no rollover
+  var nextReset=new Date(cycleStart);
+  nextReset.setMonth(nextReset.getMonth()+1);
+  if(now>=nextReset){
+    // Advance forward by however many full cycles have actually passed,
+    // so this stays anchored to their real enrollment day even after a
+    // gap in usage, instead of snapping the anchor to today.
+    while(now>=nextReset){
+      cycleStart=nextReset;
+      nextReset=new Date(cycleStart);
+      nextReset.setMonth(nextReset.getMonth()+1);
+    }
+    S.creditCycleStart=cycleStart.toISOString();
+    S.creditsUsed=0; // never rolls over
     persist();
   }
 }
 function creditResetDate(){
-  var now=new Date();
-  var next=new Date(now.getFullYear(),now.getMonth()+1,1);
+  var cycleStart=S.creditCycleStart?new Date(S.creditCycleStart):getEnrollmentDate();
+  var next=new Date(cycleStart);
+  next.setMonth(next.getMonth()+1);
   return next.toLocaleDateString('en-US',{month:'long',day:'numeric'});
 }
 function canUseAI(){
