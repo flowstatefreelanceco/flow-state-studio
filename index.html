@@ -6782,7 +6782,7 @@ function renderMembershipSection(){
     if(alreadyUnlimited)alreadyUnlimited.style.display='block';
     if(planBadge){planBadge.textContent='Unlimited';planBadge.style.background='var(--rp)';planBadge.style.color='var(--r)';}
   } else {
-    planCreditsEl.textContent=used+' of '+limit+' credits used this month';
+    planCreditsEl.textContent=used+' of '+limit+' credits used this month, resets '+creditResetDate();
     if(upgradeOpts)upgradeOpts.style.display='grid';
     if(alreadyUnlimited)alreadyUnlimited.style.display='none';
     // Hide upgrade button for current plan
