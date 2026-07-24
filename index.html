@@ -4816,11 +4816,16 @@ async function initAuth(){
       // regardless of whether sessionStorage survived the redirect
       try{
         var {data:pending}=await sb.from('pending_plans')
-          .select('plan').eq('email',session.user.email.toLowerCase()).maybeSingle();
+          .select('plan,created_at').eq('email',session.user.email.toLowerCase()).maybeSingle();
         if(pending?.plan){
           await sb.from('profiles').upsert({id:session.user.id,plan:pending.plan});
           await sb.from('pending_plans').delete().eq('email',session.user.email.toLowerCase());
           S.plan=pending.plan;
+          // Anchor their credit cycle to when they actually paid (the Stripe
+          // webhook's timestamp), not whenever their Supabase account
+          // happened to get created - those two dates are frequently
+          // different for anyone whose account was set up after the fact.
+          if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
         } else {
           // Fall back to sessionStorage if webhook hasn't fired yet
           var paidPlan=sessionStorage.getItem('paidPlan');
@@ -5136,10 +5141,11 @@ async function doLogin(){
   // paid plan applied, since they never go through doSignup() at all.
   if(data.user){
     try{
-      var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',em.toLowerCase()).maybeSingle();
+      var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',em.toLowerCase()).maybeSingle();
       if(pending && pending.plan){
         await sb.from('profiles').upsert({id:data.user.id,plan:pending.plan});
         await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
+        if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
       }
     }catch(e){ /* not fatal - they still get signed in either way */ }
   }
@@ -5162,12 +5168,13 @@ async function doSignup(){
     // Always check pending_plans by email (webhook may have already written it)
     if(data.user){
       try{
-        var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',em.toLowerCase()).maybeSingle();
+        var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',em.toLowerCase()).maybeSingle();
         var paidPlan=sessionStorage.getItem('paidPlan')||sessionStorage.getItem('intendedPlan');
         var planToApply=pending?.plan||paidPlan||null;
         if(planToApply){
           await sb.from('profiles').upsert({id:data.user.id,plan:planToApply});
           await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
+          if(pending?.created_at) S.creditCycleStart=pending.created_at;
           sessionStorage.removeItem('paidPlan');
           sessionStorage.removeItem('intendedPlan');
           msg.style.color='var(--teal)';
@@ -5210,10 +5217,11 @@ async function submitNewPassword(){
   // successful sign-in since paying.
   if(_currentUser){
     try{
-      var {data:pending}=await sb.from('pending_plans').select('plan').eq('email',_currentUser.email.toLowerCase()).maybeSingle();
+      var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',_currentUser.email.toLowerCase()).maybeSingle();
       if(pending && pending.plan){
         await sb.from('profiles').upsert({id:_currentUser.id,plan:pending.plan});
         await sb.from('pending_plans').delete().eq('email',_currentUser.email.toLowerCase());
+        if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
       }
     }catch(e){ /* not fatal */ }
   }
