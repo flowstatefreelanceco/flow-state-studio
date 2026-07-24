@@ -8763,65 +8763,6 @@ function toggleIdeaAI() {
   panel.classList.toggle('open');
   if (chev) chev.textContent = panel.classList.contains('open') ? '-' : '+';
 }
-async function ideaGenerate(type) {
-  var title = document.getElementById('ideaTitle').value.trim();
-  var notes = document.getElementById('ideaNotes').value.trim();
-  var plat = document.getElementById('ideaPlat').value;
-  var fmt = document.getElementById('ideaFormat').value;
-  if (!title && !notes) { toast('Add a title or idea first'); return; }
-  var brief = title + (notes ? '. Notes: ' + notes : '');
-  var o = document.getElementById('ideaAIOut');
-  var a = document.getElementById('ideaAIActs');
-  o.classList.add('show'); o.textContent = 'Writing...'; a.classList.remove('show');
-  var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble.';
-  var prompts = {
-    caption: 'Write an Instagram caption for: ' + brief + '. Platform: ' + plat + '. Warm human tone. Natural CTA.',
-    hooks: 'Generate 5 scroll-stopping hooks for: ' + brief + '. Numbered list, one punchy opening line each.',
-    carousel: 'Write carousel slides for: ' + brief + '. Slide 1: hook. Slides 2-5: one idea each. Last: CTA.',
-    newsletter: 'Opening paragraph for newsletter about: ' + brief + '. Warm, conversational, max 4 sentences.',
-    substack: 'Write a full Substack article for: ' + brief + '. Include: a compelling title, one-sentence subheadline, strong opening hook, 3-4 body sections with simple headers, and a warm closing. Write like a real human, not a content marketer. No bullet overload.'
-  };
-  var maxTok = type === 'substack' ? 1400 : 800;
-  try {
-    var r = await fetchWithTimeout('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: maxTok, system: sys, messages: [{ role: 'user', content: prompts[type] || prompts.caption }] })
-    });
-    var d = await r.json();
-    S.ideaAIOut = stripMD((d.content && d.content[0] && d.content[0].text) || '');
-    o.textContent = S.ideaAIOut; a.classList.add('show');
-    S.aiCount = (S.aiCount || 0) + 1; persist();
-  } catch(e) { o.textContent = 'Error: ' + e.message; }
-}
-async function ideaRepurpose() {
-  var text = document.getElementById('ideaRpText').value.trim();
-  if (!text) { toast('Paste the post content first'); return; }
-  var plat = document.getElementById('ideaPlat').value;
-  var fmt = document.getElementById('ideaFormat').value;
-  var origPlat = document.getElementById('ideaRpOrigPlat').value;
-  var o = document.getElementById('ideaAIOut');
-  var a = document.getElementById('ideaAIActs');
-  o.classList.add('show'); o.textContent = 'Repurposing...'; a.classList.remove('show');
-  var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand + ' Output ONLY the finished repurposed content. No preamble, no explanation.';
-  var usr = 'I found a ' + origPlat + ' post I want to repurpose for my audience. Study what makes it work - the structure, the hook, the angle, the emotional pull - then rebuild it completely for my niche and voice.' +
-    '\n\nYour job is NOT to reword it. Your job is to:\n' +
-    '1. Identify WHY this post works (hook style, structure, emotional angle)\n' +
-    '2. Take that same winning framework\n' +
-    '3. Rebuild it with MY niche (wellness entrepreneurs, VAs, OBMs), MY voice, and MY audience\n' +
-    '4. Make it feel 100% original - someone who saw both posts should not recognize the connection\n\n' +
-    'Output format: ' + fmt + ' for ' + plat + '\n\n' +
-    'Original post to repurpose:\n' + text;
-  try {
-    var r = await fetchWithTimeout('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: S.settings.model || 'claude-sonnet-4-5', max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] })
-    });
-    var d = await r.json();
-    S.ideaAIOut = (d.content && d.content[0] && d.content[0].text) || '';
-    o.textContent = S.ideaAIOut; a.classList.add('show');
-    S.aiCount = (S.aiCount || 0) + 1; persist();
-  } catch(e) { o.textContent = 'Error: ' + e.message; }
-}
 
 function ideaSelTone(el) {
   el.closest('.ai2-tone-row').querySelectorAll('.ai2-tone-chip').forEach(function(c) { c.classList.remove('sel'); });
