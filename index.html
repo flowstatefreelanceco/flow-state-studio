@@ -4972,6 +4972,13 @@ async function loadUserData(){
       // Falls back to "local wins" only when neither side has an updatedAt to compare (older data
       // saved before this fix existed) - this is what previously caused a stale local copy to
       // silently overwrite a newer Supabase edit any time two tabs/sessions were open.
+      var merged={};
+      // Deletion tombstones - union both sides. A deletion recorded on
+      // either device is permanent and must be able to override a stale
+      // copy that still exists on the other side.
+      var deletedIds=Object.assign({},sbData.deletedIds||{},localData.deletedIds||{});
+      merged.deletedIds=deletedIds;
+
       function mergeArrays(loc,sb_){
         var map={};
         function ts(item){
@@ -4992,16 +4999,22 @@ async function loadUserData(){
             map[x.id]=x;
           }
         });
+        // Never let a tombstoned ID resurrect just because one side still
+        // has a stale copy of it - this is the actual fix for deleted
+        // content cards (and drafts/tasks/notes/etc) reappearing on login.
+        Object.keys(deletedIds).forEach(function(id){ delete map[id]; });
         return Object.values(map);
       }
-      var merged={};
       ['drafts','ideas','calEntries','tasks','notebooks','notes'].forEach(function(k){
         merged[k]=mergeArrays(localData[k],sbData[k]);
       });
-      // For library - take whichever has more (user may have added items)
+      // For library - take whichever has more, then still strip anything
+      // that was explicitly deleted, since "more items" isn't the same
+      // as "the correct items" once a tombstone exists for one of them.
       ['hooks','ctas','stories','prompts'].forEach(function(k){
         var loc=localData[k]||[];var sb_=sbData[k]||[];
-        merged[k]=loc.length>=sb_.length?loc:sb_;
+        var winner=loc.length>=sb_.length?loc:sb_;
+        merged[k]=winner.filter(function(x){return !(x&&x.id&&deletedIds[x.id]);});
       });
       // Settings - localStorage wins (most recent user edits)
       merged.brandProfile=localData.brandProfile&&Object.keys(localData.brandProfile).some(function(k){return localData.brandProfile[k];})
@@ -5317,6 +5330,7 @@ const S = {
   monthlyCredits:50, // limit for beta plan
   creditsUsed:0, // this month
   creditCycleStart:'', // ISO date this billing cycle's credits started counting from
+  deletedIds:{}, // {id: deletedAt ISO date} - tombstones so a sync merge never resurrects something deleted on another device
   gs:{bizSet:false,guideReviewed:false,libVisited:false,calAdded:false,ideaAdded:false,draftGenerated:false},
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
@@ -5364,7 +5378,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditCycleStart:S.creditCycleStart,swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
+    creditsUsed:S.creditsUsed,creditCycleStart:S.creditCycleStart,deletedIds:S.deletedIds||{},swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null,
     studio:S.studio||{}
@@ -5901,6 +5915,8 @@ function renderKanban(){
 }
 function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
 function deleteIdea(id){
+  markDeleted(id);
+  S.calEntries.filter(e=>e.id==='cal_'+id||e._ideaId===id).forEach(e=>markDeleted(e.id));
   S.ideas=S.ideas.filter(i=>i.id!==id);
   S.calEntries=S.calEntries.filter(e=>e.id!=='cal_'+id&&e._ideaId!==id);
   if(S.lastCardId===id)S.lastCardId='';
@@ -6036,6 +6052,8 @@ function renderTaskKanban(){
 }
 function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
 function deleteTask(id){
+  markDeleted(id);
+  S.calEntries.filter(function(e){return e.id==='cal_task_'+id||e._taskId===id||e.id==='cal_'+id;}).forEach(e=>markDeleted(e.id));
   S.tasks=S.tasks.filter(t=>t.id!==id);
   // Remove all calendar entries linked to this task
   S.calEntries=S.calEntries.filter(function(e){
@@ -6300,6 +6318,7 @@ function renderLib(section,silent){
 }
 function deleteLib(id,section){
   if(!confirm('Remove this from your library?'))return;
+  markDeleted(id);
   S[section]=S[section].filter(function(x){return x.id!==id;});
   if(S.favs&&S.favs[section])S.favs[section]=S.favs[section].filter(function(x){return x!==id;});
   persist();renderLib(section);toast('Removed ✓');
@@ -6468,6 +6487,7 @@ function saveDraftToNotebook(){
 }
 function deleteDraft(){
   if(!S.viewingDraftId||!confirm('Delete this draft permanently?'))return;
+  markDeleted(S.viewingDraftId);
   S.drafts=S.drafts.filter(d=>d.id!==S.viewingDraftId);
   persist();closeModal('draftModal');renderDraftsGrid();renderDashboard();toast('Draft deleted');
 }
@@ -7098,6 +7118,8 @@ function newNotebook(){
 function deleteNotebook(id){
   const nb=S.notebooks.find(x=>x.id===id);
   if(!confirm(`Delete "${nb?.name}" and all its notes?`))return;
+  markDeleted(id);
+  S.notes.filter(x=>x.notebookId===id).forEach(x=>markDeleted(x.id));
   S.notebooks=S.notebooks.filter(x=>x.id!==id);
   S.notes=S.notes.filter(x=>x.notebookId!==id);
   if(S.activeNotebook===id){
@@ -7128,6 +7150,7 @@ function updateNoteContent(id,val){
 function deleteNote(id){
   const n=S.notes.find(x=>x.id===id);
   if(!confirm('Delete this note?'))return;
+  markDeleted(id);
   const nbId=n?.notebookId;
   S.notes=S.notes.filter(x=>x.id!==id);
   persist();if(nbId)renderNotes(nbId);toast('Note deleted');
@@ -8213,6 +8236,15 @@ function creditLimit(){
   if(S.plan==='owner'||S.plan==='unlimited') return Infinity;
   if(S.plan==='starter') return 100;
   return 50; // beta default
+}
+function markDeleted(id){
+  // Records a tombstone for this ID so that a future sync merge, on this
+  // device or any other, knows this item was deliberately deleted rather
+  // than just "missing," which is otherwise indistinguishable from "never
+  // existed here" to a union-based merge and lets stale copies resurrect it.
+  if(!id)return;
+  S.deletedIds=S.deletedIds||{};
+  S.deletedIds[id]=new Date().toISOString();
 }
 function getEnrollmentDate(){
   // The Supabase account creation timestamp is the closest reliable proxy
