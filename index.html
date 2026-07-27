@@ -6214,7 +6214,7 @@ function renderDots(es,max,fs){
     var dot=e._fromTask?'var(--r)':dotColors[e.status]||'var(--teal)';
     var tc=e._fromTask?'var(--r)':textColors[e.status]||'var(--teal)';
     var label=e._fromTask?'TASK':'';
-    return `<div class="cal-pill" style="background:${bg}" onclick="event.stopPropagation();${e._fromTask?`openTaskModal('${e.id.replace('task_','')}')`:e._fromIdea?`openIdeaModal('${e.id.replace('idea_','')}')`:''}">`
+    return `<div class="cal-pill" style="background:${bg}" onclick="event.stopPropagation();${e._fromTask?`openTaskEditModal('${e.id.replace('task_','')}')`:e._fromIdea?`cdOpen('${e.id.replace('idea_','')}')`:''}">`
       +`<span class="cal-pill-dot" style="background:${dot}"></span>`
       +(label?`<span style="font-size:8px;font-weight:700;color:${tc};letter-spacing:.04em;flex-shrink:0">${label}</span>`:'')
       +`<span class="cal-pill-txt" style="color:${tc};font-size:${fs-0.5}px">${esc(e.title)}</span>`
@@ -7456,9 +7456,12 @@ function cdSave(){
 
 function cdDelete() {
   if (!confirm('Delete this card?')) return;
+  markDeleted(S.cdId);
+  S.calEntries.filter(function(e){return e.id==='cal_'+S.cdId||e._ideaId===S.cdId;}).forEach(function(e){markDeleted(e.id);});
   S.ideas = S.ideas.filter(function(a) { return a.id !== S.cdId; });
+  S.calEntries = S.calEntries.filter(function(e){return e.id!=='cal_'+S.cdId&&e._ideaId!==S.cdId;});
   if(S.lastCardId===S.cdId)S.lastCardId='';
-  persist(); closeModal('cardDetailModal'); renderKanban(); renderDashboard(); renderBucketInsights(); toast('Deleted');
+  persist(); closeModal('cardDetailModal'); renderKanban(); renderCalendar(); renderDashboard(); renderBucketInsights(); toast('Deleted');
 }
 
 var _cdTasks=[];
@@ -9178,6 +9181,7 @@ function calDayAddNew() {
   openCalModal(_calDayDate);
 }
 function calDeleteEntry(id) {
+  markDeleted(id);
   S.calEntries = S.calEntries.filter(function(e) { return e.id !== id; });
   persist(); closeModal('calDayModal'); renderCalendar(); toast('Entry deleted');
 }
@@ -9202,19 +9206,24 @@ function calEntryDelete(id,fromIdea,fromTask){
   if(fromTask){
     var realId=id.replace('task_','');
     if(!confirm('Delete this task?'))return;
+    markDeleted(realId);
+    S.calEntries.filter(function(e){return e.id==='task_'+realId||e._taskId===realId;}).forEach(function(e){markDeleted(e.id);});
     S.tasks=S.tasks.filter(function(t){return t.id!==realId;});
     S.calEntries=S.calEntries.filter(function(e){return e.id!=='task_'+realId&&e._taskId!==realId;});
-    persist();closeModal('calDayModal');renderCalendar();renderTaskKanban();toast('Task deleted');return;
+    persist();closeModal('calDayModal');renderCalendar();renderTaskKanban();renderDashboard();toast('Task deleted');return;
   }
   if(fromIdea){
     var realId=id.replace('idea_','');
     if(!confirm('Delete this content card? This also removes it from the planner.'))return;
+    markDeleted(realId);
+    S.calEntries.filter(function(e){return e.id==='cal_'+realId||e._ideaId===realId;}).forEach(function(e){markDeleted(e.id);});
     S.ideas=S.ideas.filter(function(i){return i.id!==realId;});
     S.calEntries=S.calEntries.filter(function(e){return e.id!=='cal_'+realId&&e._ideaId!==realId;});
     if(S.lastCardId===realId)S.lastCardId='';
     persist();closeModal('calDayModal');renderCalendar();renderKanban();renderDashboard();renderBucketInsights();toast('Content card deleted');return;
   }
   if(!confirm('Delete this entry?'))return;
+  markDeleted(id);
   S.calEntries=S.calEntries.filter(function(e){return e.id!==id;});
   persist();closeModal('calDayModal');renderCalendar();toast('Entry deleted');
 }
