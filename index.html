@@ -8818,8 +8818,13 @@ function closeDCPromptLibrary(){
 }
 
 function renderDCPL(){
+  // This used to read from the hardcoded DC_PROMPT_LIBRARY constant, a
+  // frozen snapshot that never changed, so anything added or removed on
+  // the real Prompt Bank page never showed up here. S.prompts is the
+  // actual, live, editable data, this popup should always reflect it.
+  var source=(S.prompts&&S.prompts.length)?S.prompts:DC_PROMPT_LIBRARY;
   var cats=['All'];
-  DC_PROMPT_LIBRARY.forEach(function(p){if(!cats.includes(p.cat))cats.push(p.cat);});
+  source.forEach(function(p){if(!cats.includes(p.cat))cats.push(p.cat);});
   var cf=document.getElementById('dcPlCatFilters');
   if(cf){
     cf.innerHTML=cats.map(function(c){
@@ -8829,7 +8834,7 @@ function renderDCPL(){
   }
   var list=document.getElementById('dcPlList');
   if(!list)return;
-  var filtered=_dcPlActiveCat==='All'?DC_PROMPT_LIBRARY:DC_PROMPT_LIBRARY.filter(function(p){return p.cat===_dcPlActiveCat;});
+  var filtered=_dcPlActiveCat==='All'?source:source.filter(function(p){return p.cat===_dcPlActiveCat;});
   list.innerHTML=filtered.map(function(p){
     var safeText=p.text.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
     return '<div onclick="dcPlSend(this)" data-text="'+safeText+'" style="padding:12px 14px;border:1px solid var(--bl);border-radius:10px;cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'var(--tealp)\'" onmouseout="this.style.background=\'\'"><div style="font-size:12px;font-weight:700;color:var(--e);margin-bottom:4px">'+p.title+'</div><div style="font-size:11.5px;color:var(--t);line-height:1.5">'+p.text+'</div><div style="font-size:10px;color:var(--tl);margin-top:6px">'+p.cat+'</div></div>';
