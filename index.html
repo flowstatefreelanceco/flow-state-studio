@@ -2718,6 +2718,7 @@ select.fi{cursor:pointer}
         <h3>Brand Profile</h3>
         <p class="setting-desc">These fields are automatically woven into every AI generation. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
         <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Your Name</label><input class="fi" id="bpName" placeholder="e.g. Jess" /></div>
           <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. business coaching for creative entrepreneurs" /></div>
           <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Business Coach and Brand Strategist" /></div>
         </div>
@@ -5346,7 +5347,7 @@ const S = {
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
   editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
-  brandProfile:{niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:'',platforms:'',frequency:'',timezone:'',phase:'',whatWorked:''},
+  brandProfile:{name:'',niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:'',platforms:'',frequency:'',timezone:'',phase:'',whatWorked:''},
   offerProfile:{name:'',price:'',whoFor:'',transformation:'',objections:'',keyMsg:'',callToAction:''},
   longformProfile:{title:'',format:'book',premise:'',targetReader:'',coreArgument:'',tone:'',themes:''},
   activeProfile:'brand',
@@ -5480,6 +5481,17 @@ function applySettings(){
   // Brand profile
   const bp=S.brandProfile||{};
   const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
+  // "Your Name" pulls from the saved profile first, and if that's never been
+  // set, auto-fills a sensible guess from the account's own email rather
+  // than leaving it blank - this is what actually gets fed to every AI tool
+  // as who is writing, so it should never default to empty or a guess at
+  // someone else's name.
+  var defaultName=bp.name;
+  if(!defaultName&&_currentUser&&_currentUser.email){
+    var localPart=_currentUser.email.split('@')[0].split(/[._-]/)[0];
+    defaultName=localPart.charAt(0).toUpperCase()+localPart.slice(1);
+  }
+  setVal('bpName',defaultName);
   setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
   setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
   setVal('bpPlatforms',bp.platforms);setVal('bpFrequency',bp.frequency);setVal('bpTimezone',bp.timezone);
@@ -6899,7 +6911,7 @@ async function getAnonKey(){
 
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
-  S.brandProfile={niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra'),platforms:g('bpPlatforms'),frequency:g('bpFrequency'),timezone:g('bpTimezone'),phase:g('bpPhase'),whatWorked:g('bpWhatWorked')};
+  S.brandProfile={name:g('bpName'),niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra'),platforms:g('bpPlatforms'),frequency:g('bpFrequency'),timezone:g('bpTimezone'),phase:g('bpPhase'),whatWorked:g('bpWhatWorked')};
   const hasContent=Object.values(S.brandProfile).some(v=>v.length>0);
   S.gs.bizSet=hasContent;
   persist();renderGS();toast('Brand profile saved ✓');
@@ -6917,6 +6929,17 @@ const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a co
 function buildBrandContext(){
   const bp=S.brandProfile;
   const lines=[];
+  // This goes first and is explicit on purpose: without it, a brief or
+  // pasted reference material that mentions a client's name (very common
+  // for freelancers writing content for multiple people) has nothing to
+  // stop the model from adopting that name as if it were the author's own,
+  // which is exactly what caused generated content to come out signed as a
+  // client instead of the actual account holder.
+  var authorName=(bp&&bp.name)||((_currentUser&&_currentUser.email)?_currentUser.email.split('@')[0].split(/[._-]/)[0]:'');
+  if(authorName){
+    authorName=authorName.charAt(0).toUpperCase()+authorName.slice(1);
+    lines.push(`You are writing as ${authorName}, the account holder. If the brief, notes, or any pasted reference material mentions someone else's name (such as a client), do not write as that person or sign the content with their name, you are always writing in ${authorName}'s voice as the author, even when the content is about or for someone else.`);
+  }
   if(bp.role||bp.niche) lines.push(`Role: ${[bp.role,bp.niche].filter(Boolean).join(' - ')}`);
   if(bp.client)  lines.push(`Ideal client: ${bp.client}`);
   if(bp.offers)  lines.push(`Offers: ${bp.offers}`);
