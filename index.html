@@ -4367,18 +4367,18 @@ select.fi{cursor:pointer}
 
             <!-- Action buttons -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-              <button onclick="cdAutopsy()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Run Rebuild in my voice</button>
+              <button onclick="cdAutopsy()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Analyze Only</button>
               <button onclick="cdRepurpose2()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Autopsy + Rebuild</button>
             </div>
 
-            <div class="ai2-loading" id="cd-load-repurpose">Running Rebuild in my voice...</div>
+            <div class="ai2-loading" id="cd-load-repurpose">Working...</div>
 
             <!-- Side by side: analysis + rebuild -->
             <div id="cd-repurpose-sidebyside" style="display:none;gap:12px;margin-bottom:10px">
               <!-- Left: Autopsy -->
               <div style="flex:1;min-width:0">
                 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
-                  Rebuild in my voice
+                  Content Autopsy
                   <button onclick="cdSaveToSwipeFile()" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--r);border-radius:100px;color:var(--r);cursor:pointer;font-family:var(--fb)">+ Repurposed File</button>
                 </div>
                 <div id="cd-analysis-out" style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto"></div>
