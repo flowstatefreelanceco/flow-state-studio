@@ -2558,7 +2558,7 @@ select.fi{cursor:pointer}
 
   <!-- PROMPTS -->
   <div id="view-prompts" class="view">
-    <div class="main-hdr"><div><h1>Prompt Bank</h1><div class="sub">Ready-to-use AI writing prompts for your niche</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('prompts')">+ Add Prompt</button></div></div>
+    <div class="main-hdr"><div><h1>Prompt Bank</h1><div class="sub">Ready-to-use AI writing prompts for your niche</div></div><div class="hdr-acts"><button class="btn btn-g" onclick="restoreRecommendedPrompts()" style="margin-right:8px">↻ Restore Recommended Prompts</button><button class="btn btn-p" onclick="openAddLibModal('prompts')">+ Add Prompt</button></div></div>
     <div class="main-body">
       <div class="lib-toolbar">
         <div class="lib-search"><span class="s-ico">⌕</span><input id="promptsSearch" placeholder="Search prompts..." oninput="renderLib('prompts')" /></div>
@@ -5316,17 +5316,6 @@ const STORIES_DEFAULT = [
   {id:'s14',cat:'Storytelling',text:"Real talk: here's what a hard week in this business actually looks like."},
   {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my business."},
   {id:'s16',cat:'Storytelling',text:"How I went from overwhelmed and scattered to actually loving what I do - the real story."}
-];
-const PROMPTS_DEFAULT = [
-  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
-  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
-  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
-  {id:'p4',cat:'Script Rewrite',title:'Brand Voice Rewriter',text:"Rewrite this content in a warm, grounded, clear brand voice. Remove any corporate language. Make it sound like I'm talking to a trusted colleague. Here is the content: [PASTE CONTENT]"},
-  {id:'p5',cat:'Script Rewrite',title:'60-Second Reel Script',text:"Turn this rough idea into a polished 60-second reel script: [PASTE IDEA]. Hook in the first 3 seconds - short and punchy. Build naturally. End with a clear CTA. Warm, confident tone throughout."},
-  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
-  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting your ideal client? Where are the gaps? [PASTE PLAN]"},
-  {id:'p8',cat:'Sales Copy',title:'Warm DM Script',text:"Write a DM script for reaching out to a potential client. Keep it warm and non-salesy - lead with curiosity, not a pitch. Mention [YOUR OFFER] naturally in the second or third message."},
-  {id:'p9',cat:'Sales Copy',title:'Short Sales Email',text:"Write a concise sales email for [OFFER]. Tone: warm, clear, confident. Include: what it is, who it's for, what they get, and a clear CTA. Under 200 words. No fake urgency or hype."}
 ];
 
 /* ═══════════════════ STATE ═══════════════════ */
@@ -8822,6 +8811,23 @@ function closeDCPromptLibrary(){
   if(ov)ov.style.display='none';
 }
 
+function restoreRecommendedPrompts(){
+  var existingTitles=(S.prompts||[]).map(function(p){return (p.title||'').toLowerCase().trim();});
+  var toAdd=DC_PROMPT_LIBRARY.filter(function(p){return !existingTitles.includes(p.title.toLowerCase().trim());});
+  if(!toAdd.length){
+    toast('You already have the full recommended set ✓');
+    return;
+  }
+  if(!confirm('Add '+toAdd.length+' recommended prompts you don\'t already have? This won\'t touch or remove any of your own prompts.'))return;
+  var startIdx=(S.prompts||[]).length;
+  var newOnes=toAdd.map(function(p,i){
+    return {id:'rec_'+Date.now()+'_'+i,cat:p.cat,title:p.title,text:p.text};
+  });
+  S.prompts=(S.prompts||[]).concat(newOnes);
+  persist();
+  renderLib('prompts');
+  toast('Added '+newOnes.length+' recommended prompts ✓');
+}
 function renderDCPL(){
   // This used to read from the hardcoded DC_PROMPT_LIBRARY constant, a
   // frozen snapshot that never changed, so anything added or removed on
