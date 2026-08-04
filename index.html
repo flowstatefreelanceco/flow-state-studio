@@ -8434,6 +8434,11 @@ function dirChatSystemPrompt(playbookLock){
   }
   if(hasBrand){
     sys+="\n\nFor reference, their brand and strategy profile (use the voice/POV fields only if relevant to what they're asking, since they may be asking you to write in a totally different voice for another business, but DO use the logistics fields below whenever the question is about timing, cadence, or strategy):";
+    var authorName=bp.name||((_currentUser&&_currentUser.email)?_currentUser.email.split('@')[0].split(/[._-]/)[0]:'');
+    if(authorName){
+      authorName=authorName.charAt(0).toUpperCase()+authorName.slice(1);
+      sys+="\nThe account holder's name is "+authorName+". If a message or brief mentions someone else's name (such as a client), do not write as that person or address them by the client's name, you are always talking to and writing for "+authorName+".";
+    }
     if(bp.niche)sys+="\nNiche: "+bp.niche;
     if(bp.role)sys+="\nRole: "+bp.role;
     if(bp.voice)sys+="\nVoice: "+bp.voice;
