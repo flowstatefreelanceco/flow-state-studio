@@ -1,11 +1,17 @@
 {
-  "version": "4.2",
+  "version": "4.3",
   "changelog": [
     {
       "type": "fix",
-      "date": "Jul 24, 2026",
-      "title": "Calendar sync bug fixed",
-      "desc": "Deleted tasks and content cards could sometimes still show up on the Calendar, and clicking on a task from the Calendar could open a blank one instead of the real one. Both are fixed, deletions and updates now sync correctly and show up right away."
+      "date": "Aug 6, 2026",
+      "title": "Your Hooks, Story Ideas, CTAs, and Prompt Bank now come pre-built",
+      "desc": "We found and fixed a real gap, these four libraries were supposed to come with a starter set for everyone from day one, but the connection that seeds them was never actually wired up. If yours looked empty, that's exactly what happened, and it's fixed now. You'll see a starter library waiting for you immediately, and once your Brand Profile is filled in, hit \"Generate My Personalized Library\" on any of those pages to upgrade it to content written specifically for your niche."
+    },
+    {
+      "type": "fix",
+      "date": "Aug 6, 2026",
+      "title": "AI tools no longer default toward one specific industry",
+      "desc": "We found a few spots where the AI's underlying instructions leaned toward wellness and service-based businesses by default, left over from early development. That's fixed across every AI tool in the Studio, hooks, captions, Director Chat, all of it. It now adapts fully to whatever niche is in your own Brand Profile, whatever business you're in."
     }
   ]
 }

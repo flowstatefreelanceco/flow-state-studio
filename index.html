@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="4.2">
+<html lang="en" data-version="4.3">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -1670,7 +1670,7 @@ select.fi{cursor:pointer}
         <div class="pf-icon-wrap">🔗</div>
         <div>
           <div class="pf-title">Hook, CTA, Story + Prompt Library</div>
-          <div class="pf-desc">Hundreds of pre-written hooks, CTAs, story prompts, and writing prompts built for wellness and service businesses. Filter by category, toggle between grid and list view, and save your own when you write something worth keeping.</div>
+          <div class="pf-desc">A starter set of pre-written hooks, CTAs, story prompts, and writing prompts, personalized to your own niche from your Brand Profile. Filter by category, toggle between grid and list view, and save your own when you write something worth keeping.</div>
         </div>
       </div>
 
@@ -2533,7 +2533,7 @@ select.fi{cursor:pointer}
 
   <!-- HOOKS -->
   <div id="view-hooks" class="view">
-    <div class="main-hdr"><div><h1>Hooks</h1><div class="sub">Scroll-stopping opening lines for your content</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('hooks')">+ Add Hook</button></div></div>
+    <div class="main-hdr"><div><h1>Hooks</h1><div class="sub">Scroll-stopping opening lines for your content</div></div><div class="hdr-acts"><button class="btn btn-g genLibraryBtnClass" onclick="generateStarterLibrary()" style="margin-right:8px">✦ Generate My Personalized Library</button><button class="btn btn-p" onclick="openAddLibModal('hooks')">+ Add Hook</button></div></div>
     <div class="main-body">
       <div class="lib-toolbar">
         <div class="lib-search"><span class="s-ico">⌕</span><input id="hooksSearch" placeholder="Search hooks..." oninput="renderLib('hooks')" /></div>
@@ -2558,7 +2558,7 @@ select.fi{cursor:pointer}
 
   <!-- PROMPTS -->
   <div id="view-prompts" class="view">
-    <div class="main-hdr"><div><h1>Prompt Bank</h1><div class="sub">Ready-to-use AI writing prompts for your niche</div></div><div class="hdr-acts"><button class="btn btn-g" onclick="restoreRecommendedPrompts()" style="margin-right:8px">↻ Restore Recommended Prompts</button><button class="btn btn-p" onclick="openAddLibModal('prompts')">+ Add Prompt</button></div></div>
+    <div class="main-hdr"><div><h1>Prompt Bank</h1><div class="sub">Ready-to-use AI writing prompts for your niche</div></div><div class="hdr-acts"><button class="btn btn-g genLibraryBtnClass" onclick="generateStarterLibrary()" style="margin-right:8px">✦ Generate My Personalized Library</button><button class="btn btn-p" onclick="openAddLibModal('prompts')">+ Add Prompt</button></div></div>
     <div class="main-body">
       <div class="lib-toolbar">
         <div class="lib-search"><span class="s-ico">⌕</span><input id="promptsSearch" placeholder="Search prompts..." oninput="renderLib('prompts')" /></div>
@@ -2583,7 +2583,7 @@ select.fi{cursor:pointer}
 
   <!-- CTAs -->
   <div id="view-ctas" class="view">
-    <div class="main-hdr"><div><h1>CTA Ideas</h1><div class="sub">Ready-to-use calls to action, organized by goal</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('ctas')">+ Add CTA</button></div></div>
+    <div class="main-hdr"><div><h1>CTA Ideas</h1><div class="sub">Ready-to-use calls to action, organized by goal</div></div><div class="hdr-acts"><button class="btn btn-g genLibraryBtnClass" onclick="generateStarterLibrary()" style="margin-right:8px">✦ Generate My Personalized Library</button><button class="btn btn-p" onclick="openAddLibModal('ctas')">+ Add CTA</button></div></div>
     <div class="main-body">
       <div class="lib-toolbar">
         <div class="lib-search"><span class="s-ico">⌕</span><input id="ctasSearch" placeholder="Search CTAs..." oninput="renderLib('ctas')" /></div>
@@ -2608,7 +2608,7 @@ select.fi{cursor:pointer}
 
   <!-- STORIES -->
   <div id="view-stories" class="view">
-    <div class="main-hdr"><div><h1>Story Ideas</h1><div class="sub">Ready-to-use Instagram Story prompts by goal</div></div><div class="hdr-acts"><button class="btn btn-p" onclick="openAddLibModal('stories')">+ Add Story Idea</button></div></div>
+    <div class="main-hdr"><div><h1>Story Ideas</h1><div class="sub">Ready-to-use Instagram Story prompts by goal</div></div><div class="hdr-acts"><button class="btn btn-g genLibraryBtnClass" onclick="generateStarterLibrary()" style="margin-right:8px">✦ Generate My Personalized Library</button><button class="btn btn-p" onclick="openAddLibModal('stories')">+ Add Story Idea</button></div></div>
     <div class="main-body">
       <div class="lib-toolbar">
         <div class="lib-search"><span class="s-ico">⌕</span><input id="storiesSearch" placeholder="Search story ideas..." oninput="renderLib('stories')" /></div>
@@ -5069,7 +5069,7 @@ async function bootApp(){
   var saved=await loadUserData();
   // Load plan from Supabase profiles table
   try{
-    var {data:profile}=await sb.from('profiles').select('plan,access_until').eq('id',_currentUser.id).maybeSingle();
+    var {data:profile}=await sb.from('profiles').select('plan,access_until,scheduled_plan,scheduled_plan_date').eq('id',_currentUser.id).maybeSingle();
     if(profile&&profile.plan) S.plan=profile.plan;
     // Someone who cancels should keep full access through what they already
     // paid for, not get cut off immediately - the webhook should set
@@ -5080,6 +5080,18 @@ async function bootApp(){
     if(profile&&profile.access_until){
       S.accessUntil=profile.access_until;
       if(new Date(profile.access_until)<new Date()) S.plan='locked';
+    }
+    // A manual downgrade set today should be able to take effect on a
+    // future date (the end of what's already been paid for), not the
+    // moment it's saved in Supabase. If that date has actually arrived,
+    // apply it now and clear the schedule so it only fires once.
+    if(profile&&profile.scheduled_plan&&profile.scheduled_plan_date){
+      if(new Date(profile.scheduled_plan_date)<=new Date()){
+        S.plan=profile.scheduled_plan;
+        try{
+          await sb.from('profiles').update({plan:profile.scheduled_plan,scheduled_plan:null,scheduled_plan_date:null}).eq('id',_currentUser.id);
+        }catch(e){}
+      }
     }
   }catch(e){ /* profiles table may not exist yet - defaults to beta */ }
   document.getElementById('loadingScreen').classList.add('hidden');
@@ -5258,7 +5270,7 @@ async function submitNewPassword(){
 
 /* ═══════════════════ DATA ═══════════════════ */
 const HOOKS_DEFAULT = [
-  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a wellness business..."},
+  {id:'h1',cat:'Educational',text:"Here's what no one tells you about running a [NICHE] business..."},
   {id:'h2',cat:'Educational',text:"The one system that saved me 10+ hours a week (and you can steal it)."},
   {id:'h3',cat:'Educational',text:"3 signs your business is ready for the next level - and you might not even see it yet."},
   {id:'h4',cat:'Educational',text:"What [X result] actually takes. Hint: it's simpler than you think."},
@@ -5270,7 +5282,7 @@ const HOOKS_DEFAULT = [
   {id:'h10',cat:'Engagement',text:"This or that: batch all your content at once, or create as you go?"},
   {id:'h11',cat:'Storytelling',text:"I almost walked away from my business three months in. Here's what changed everything."},
   {id:'h12',cat:'Storytelling',text:"When I first started my business, I thought I had to do everything myself. I was so wrong."},
-  {id:'h13',cat:'Storytelling',text:"Nobody warned me what running a service business in the wellness space would actually feel like."},
+  {id:'h13',cat:'Storytelling',text:"Nobody warned me what running a [NICHE] business would actually feel like."},
   {id:'h14',cat:'Storytelling',text:"The moment I stopped doing things the 'right' way was the moment my business changed."},
   {id:'h15',cat:'Comparison',text:"Before vs. after having a content system: what my week actually looks like now."},
   {id:'h16',cat:'Comparison',text:"DIY everything vs. delegating: the honest truth about what each one costs you."},
@@ -5284,7 +5296,7 @@ const CTAS_DEFAULT = [
   {id:'c2',cat:'Engagement',text:"Drop your questions in the comments - I read every single one."},
   {id:'c3',cat:'Engagement',text:"Double tap if this is exactly what you needed today."},
   {id:'c4',cat:'Engagement',text:"Tell me: does this resonate? Comment below."},
-  {id:'c5',cat:'Share & Tag',text:"Tag a fellow wellness business owner who needs to see this."},
+  {id:'c5',cat:'Share & Tag',text:"Tag a fellow [NICHE] business owner who needs to see this."},
   {id:'c6',cat:'Share & Tag',text:"Share this with someone who's been thinking about hiring support."},
   {id:'c7',cat:'Share & Tag',text:"Send this to a business owner friend who needs to hear it. 🤍"},
   {id:'c8',cat:'Lead Generation',text:"DM me the word READY to learn more about working together."},
@@ -5317,13 +5329,32 @@ const STORIES_DEFAULT = [
   {id:'s15',cat:'Storytelling',text:"The pivot that changed everything for how I run my business."},
   {id:'s16',cat:'Storytelling',text:"How I went from overwhelmed and scattered to actually loving what I do - the real story."}
 ];
+const PROMPTS_DEFAULT = [
+  {id:'p1',cat:'Caption Writing',title:'Warm Instagram Caption',text:"Act as a warm, human copywriter. Write an Instagram caption about [TOPIC] that feels like a genuine conversation, not a pitch. Keep it under 150 words. No corporate jargon. End with a soft, natural CTA."},
+  {id:'p2',cat:'Caption Writing',title:'Carousel Caption Set',text:"Write carousel captions about [TOPIC]. Slide 1: scroll-stopping hook. Slides 2-5: one clear idea each, short sentences. Last slide: warm CTA. Keep the tone conversational and grounded."},
+  {id:'p3',cat:'Caption Writing',title:'Newsletter Opening',text:"Write the opening paragraph for a weekly newsletter. Topic: [TOPIC]. Tone: warm, personal, like writing to a trusted friend. Hook them in the first sentence. Keep it to 3-4 sentences max."},
+  {id:'p4',cat:'Script Rewrite',title:'Brand Voice Rewriter',text:"Rewrite this content in a warm, grounded, clear brand voice. Remove any corporate language. Make it sound like I'm talking to a trusted colleague. Here is the content: [PASTE CONTENT]"},
+  {id:'p5',cat:'Script Rewrite',title:'60-Second Reel Script',text:"Turn this rough idea into a polished 60-second reel script: [PASTE IDEA]. Hook in the first 3 seconds - short and punchy. Build naturally. End with a clear CTA. Warm, confident tone throughout."},
+  {id:'p6',cat:'Strategy',title:'Monthly Content Ideas',text:"Act as a content strategist for [NICHE]. Give me 10 content ideas for [PLATFORM] this month. Mix: educational, personal/storytelling, and one promotional. Make each idea specific, not generic."},
+  {id:'p7',cat:'Strategy',title:'Content Audit',text:"Review this content plan and identify what's missing. What would make it more strategic for attracting your ideal client? Where are the gaps? [PASTE PLAN]"},
+  {id:'p8',cat:'Sales Copy',title:'Warm DM Script',text:"Write a DM script for reaching out to a potential client. Keep it warm and non-salesy - lead with curiosity, not a pitch. Mention [YOUR OFFER] naturally in the second or third message."},
+  {id:'p9',cat:'Sales Copy',title:'Short Sales Email',text:"Write a concise sales email for [OFFER]. Tone: warm, clear, confident. Include: what it is, who it's for, what they get, and a clear CTA. Under 200 words. No fake urgency or hype."}
+];
+function seedDefaultLibrary(){
+  return {
+    hooks:HOOKS_DEFAULT.slice(),
+    ctas:CTAS_DEFAULT.slice(),
+    stories:STORIES_DEFAULT.slice(),
+    prompts:PROMPTS_DEFAULT.slice()
+  };
+}
 
 /* ═══════════════════ STATE ═══════════════════ */
 const S = {
   view:'dashboard',
   calMonth:new Date().getMonth(), calYear:new Date().getFullYear(),
   drafts:[], calEntries:[], ideas:[], tasks:[],
-  hooks:[], ctas:[], stories:[], prompts:[],
+  hooks:HOOKS_DEFAULT.slice(), ctas:CTAS_DEFAULT.slice(), stories:STORIES_DEFAULT.slice(), prompts:PROMPTS_DEFAULT.slice(),
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
   settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5',buckets:[]},
   plan:'beta',
@@ -6250,6 +6281,48 @@ function catStyle(cat){const c=catInfo(cat);return 'background:'+c.bg+';color:'+
 const _libView={hooks:'grid',ctas:'grid',stories:'grid',prompts:'grid'};
 function renderAllLibs(){['hooks','ctas','stories','prompts'].forEach(k=>renderLib(k,true));}
 function setLibView(section,view){_libView[section]=view;renderLib(section);}
+async function generateStarterLibrary(silent){
+  // Upgrades the generic bracket-placeholder starter library (Hooks, Story
+  // Ideas, CTAs, Prompts, which every account has from day one) into
+  // something genuinely tailored to THIS account's own Brand Profile.
+  if(!S.brandProfile||(!S.brandProfile.niche&&!S.brandProfile.role)){
+    toast('Fill in your Brand Profile first for a personalized library, until then you have a generic starter set to work from.');
+    return;
+  }
+  if(!canUseAI()){showCreditBlocked();return;}
+  if(!silent&&!confirm('Generate a personalized library of hooks, story ideas, CTAs, and prompts based on your Brand Profile? This replaces the generic starter set and uses 1 credit.'))return;
+
+  var btns=document.querySelectorAll('.genLibraryBtnClass');
+  btns.forEach(function(b){b.disabled=true;b.textContent='Building your library...';});
+
+  var brand=buildBrandContext();
+  var sys=CD_PERSONA+brand+' Output ONLY valid JSON, no preamble, no markdown code fences, matching exactly this structure: {"hooks":[{"cat":"Comparison|Curiosity|Educational|Engagement|Storytelling","text":"..."}] (8 items, spread across those 5 categories),"stories":[{"cat":"Connect & Inspire|Engagement|Social Proof|Storytelling","text":"..."}] (6 items),"ctas":[{"cat":"Direct Sales|Engagement|Follow & Subscribe|Lead Generation|Link & Click|Share & Tag","text":"..."}] (6 items),"prompts":[{"cat":"Caption Writing|Strategy|Sales Copy|Script Rewrite","title":"...","text":"..."}] (6 items)}. Every single item must be genuinely specific to their actual niche and audience from the brand profile above, not generic filler that could apply to any business.';
+  var usr='Generate my starter library now, based on my brand profile.';
+
+  try{
+    var result=await cdCallAI(sys,usr,3000);
+    var cleaned=result.replace(/```json|```/g,'').trim();
+    var parsed=JSON.parse(cleaned);
+    var now=Date.now();
+    // Drop the generic bracket-placeholder defaults (anything not already
+    // personalized) rather than piling new content on top of them.
+    S.hooks=S.hooks.filter(function(h){return (h.id||'').indexOf('gen_')===0;});
+    S.stories=S.stories.filter(function(s){return (s.id||'').indexOf('gen_')===0;});
+    S.ctas=S.ctas.filter(function(c){return (c.id||'').indexOf('gen_')===0;});
+    S.prompts=S.prompts.filter(function(p){return (p.id||'').indexOf('gen_')===0;});
+    (parsed.hooks||[]).forEach(function(h,i){S.hooks.push({id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text});});
+    (parsed.stories||[]).forEach(function(s,i){S.stories.push({id:'gen_s_'+now+'_'+i,cat:s.cat,text:s.text});});
+    (parsed.ctas||[]).forEach(function(c,i){S.ctas.push({id:'gen_c_'+now+'_'+i,cat:c.cat,text:c.text});});
+    (parsed.prompts||[]).forEach(function(p,i){S.prompts.push({id:'gen_p_'+now+'_'+i,cat:p.cat,title:p.title,text:p.text});});
+    persist();
+    ['hooks','stories','ctas','prompts'].forEach(function(s){renderLib(s,true);});
+    toast('Your personalized library is ready ✓');
+  }catch(e){
+    toast('Something went wrong building your library, try again in a moment.');
+    console.warn('generateStarterLibrary failed:',e.message);
+  }
+  btns.forEach(function(b){b.disabled=false;b.textContent='✦ Generate My Personalized Library';});
+}
 function renderLib(section,silent){
   const data=S[section];
   const query=(document.getElementById(section+'Search')?.value||'').toLowerCase();
@@ -6900,10 +6973,23 @@ async function getAnonKey(){
 
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
+  const wasEmpty=!S.brandProfile||(!S.brandProfile.niche&&!S.brandProfile.role);
   S.brandProfile={name:g('bpName'),niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra'),platforms:g('bpPlatforms'),frequency:g('bpFrequency'),timezone:g('bpTimezone'),phase:g('bpPhase'),whatWorked:g('bpWhatWorked')};
   const hasContent=Object.values(S.brandProfile).some(v=>v.length>0);
   S.gs.bizSet=hasContent;
   persist();renderGS();toast('Brand profile saved ✓');
+  // First time filling this in - upgrade their library from the generic
+  // bracket-placeholder defaults to something actually personalized, no
+  // extra step required. Checks whether anything has already been
+  // personalized (an id starting with gen_) rather than whether the
+  // library is empty, since it's never empty by default anymore.
+  var stillOnDefaults=!S.hooks.some(function(h){return (h.id||'').indexOf('gen_')===0;})
+    &&!S.stories.some(function(s){return (s.id||'').indexOf('gen_')===0;})
+    &&!S.ctas.some(function(c){return (c.id||'').indexOf('gen_')===0;})
+    &&!S.prompts.some(function(p){return (p.id||'').indexOf('gen_')===0;});
+  if(wasEmpty&&hasContent&&stillOnDefaults&&(S.brandProfile.niche||S.brandProfile.role)){
+    generateStarterLibrary(true);
+  }
 }
 // SINGLE SOURCE OF TRUTH for who the Creative Director is, across every AI
 // tool in the Studio (content generation, SmartBrief, Autopsy, Repurpose,
@@ -6914,7 +7000,7 @@ function saveBrandProfile(){
 // different person depending on which button you clicked. Built from the
 // richest existing version. Task-specific instructions (format, length,
 // output structure) stay in each function - only the identity lives here.
-const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist and marketing executive with 10+ years managing wellness, spiritual, and creative brand accounts across every major platform (Instagram, TikTok, LinkedIn, Facebook, email/newsletter, Substack, YouTube). That background means you reason like someone who has actually run these accounts at scale, not someone repeating generic advice: you know what separates a post that performs from one that doesn't, what a launch actually needs at each phase, what a realistic cadence looks like before it tips into burnout, and how those decisions differ by platform and by niche. You hold three distinct layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, what makes a piece of content actually work), LAUNCH STRATEGY (sequencing, pacing, when to build vs when to ask), and GENERAL BUSINESS STRATEGY (platform prioritization, positioning, where to spend limited time and energy for the best return). On top of all of that, you specifically understand neurodivergent brains and how ND business owners actually work best, which means you never default to hustle-culture volume advice, you reason in sustainable systems instead of grind. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
+const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist and marketing executive with 10+ years managing brand accounts across every kind of business and every major platform (Instagram, TikTok, LinkedIn, Facebook, email/newsletter, Substack, YouTube). That background means you reason like someone who has actually run these accounts at scale, not someone repeating generic advice: you know what separates a post that performs from one that doesn't, what a launch actually needs at each phase, what a realistic cadence looks like before it tips into burnout, and how those decisions differ by platform and by niche. You hold three distinct layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, what makes a piece of content actually work), LAUNCH STRATEGY (sequencing, pacing, when to build vs when to ask), and GENERAL BUSINESS STRATEGY (platform prioritization, positioning, where to spend limited time and energy for the best return). On top of all of that, you specifically understand neurodivergent brains and how ND business owners actually work best, which means you never default to hustle-culture volume advice, you reason in sustainable systems instead of grind. Whatever niche or industry the person's brand profile describes, that is the only niche you write for, adapt fully to it rather than defaulting to any one industry. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
 function buildBrandContext(){
   const bp=S.brandProfile;
   const lines=[];
@@ -8412,7 +8498,7 @@ function dirChatSystemPrompt(playbookLock){
     "DEFAULT MODE, CONTENT HELP: Most messages you receive are about content: reworking a hook, rewriting a caption, improving a draft, brainstorming ideas, shifting tone. This is your primary job. Lead with content help every time, even when there's a small strategy element in the message. If someone pastes copy, your first response is to improve or rewrite it, not to frame it strategically. Keep rewrites close in length to what they gave you. A one-line hook gets one improved hook back (two options at most), not a paragraph. Do not add strategic context unless they ask for it. If their message is just pasted content with no question, assume they want it improved and do that directly.\n\n"+
     "WHEN STRATEGY COMES UP: It is fine and expected that strategy questions come up in conversation, and when they do you should answer them well. But even then, if the message also contains content to work on, do the content work first and keep the strategy brief. A sentence or two of strategic framing alongside a rewrite is great. A full strategy breakdown instead of the rewrite is not what they came for. The exception is when they explicitly ask a strategy-only question with nothing to rewrite, in which case apply the right playbook below.\n\n"+
     "STRATEGY PLAYBOOKS (apply only when the question is explicitly about strategy, not content creation):\n\n"+
-    "POSTING CADENCE / TIMING questions (how often to post, when to send, best day/time): Default to 3-5 posts a week on the person's primary visual platform (Instagram, TikTok) as a sustainable floor, 2-5 a week for LinkedIn, 1-2 a day for Facebook if they use it heavily. Consistency at a sustainable pace beats high volume that burns them out, this matters especially here since ND business owners are the ones most likely to be pushed into hustle-pace advice that doesn't fit how they work. For newsletters/email to wellness or spiritual audiences, earlier in the week and mid-morning tends to open better. For Instagram engagement in personal-brand spaces, weekday evenings often beat weekday mornings. Always frame the number as a floor they can sustain, not a ceiling to max out.\n\n"+
+    "POSTING CADENCE / TIMING questions (how often to post, when to send, best day/time): Default to 3-5 posts a week on the person's primary visual platform (Instagram, TikTok) as a sustainable floor, 2-5 a week for LinkedIn, 1-2 a day for Facebook if they use it heavily. Consistency at a sustainable pace beats high volume that burns them out, this matters especially here since ND business owners are the ones most likely to be pushed into hustle-pace advice that doesn't fit how they work. For newsletters/email, earlier in the week and mid-morning tends to open better across most niches, adjust if their brand profile or past results say otherwise. For Instagram engagement in personal-brand spaces, weekday evenings often beat weekday mornings. Always frame the number as a floor they can sustain, not a ceiling to max out.\n\n"+
     "LAUNCH SEQUENCING questions (when to open/close a cart, how to pace a launch, what order to send things): Default to a three-phase shape - pre-launch (build curiosity, 7-10 days out, 1-2 touches), launch (the ask, 1-2 touches with real proof or social proof, not just hype), post-launch (1 final touch for anyone still on the fence, with urgency that's earned by then, not manufactured upfront). Warn against leading with urgency or scarcity before the audience is warmed up, that reads as pressure rather than conviction.\n\n"+
     "PLATFORM PRIORITIZATION questions (which platform to focus on, whether to add a new one, where to spend limited time): Default to 1-2 platforms maximum where their actual audience already is. Match the platform to the goal: visual platforms for brand awareness, LinkedIn or newsletter for credibility and lead generation. Actively discourage spreading thin across many platforms unless there is a real reason.\n\n"+
     "INCOMPLETE MESSAGES: If someone refers to content they appear to have forgotten to paste (e.g. 'can you rework this' with nothing attached), respond briefly asking them to share it. Something like 'paste it in and I will take a look' is enough. Do not fill the gap with strategy.\n\n"+
@@ -8833,7 +8919,17 @@ function renderDCPL(){
   // frozen snapshot that never changed, so anything added or removed on
   // the real Prompt Bank page never showed up here. S.prompts is the
   // actual, live, editable data, this popup should always reflect it.
-  var source=(S.prompts&&S.prompts.length)?S.prompts:DC_PROMPT_LIBRARY;
+  // No more falling back to DC_PROMPT_LIBRARY when empty - that was
+  // written for one specific business's niche and would show completely
+  // wrong content to anyone else. An honest empty state is correct here.
+  var source=S.prompts||[];
+  if(!source.length){
+    var cf0=document.getElementById('dcPlCatFilters');
+    if(cf0)cf0.innerHTML='';
+    var list0=document.getElementById('dcPlList');
+    if(list0)list0.innerHTML='<div style="padding:24px;text-align:center;color:var(--t);font-size:12.5px">Your Prompt Bank is empty. <span onclick="closeDCPromptLibrary();generateStarterLibrary();" style="color:var(--teal);text-decoration:underline;cursor:pointer">Generate your personalized library</span> to get started.</div>';
+    return;
+  }
   var cats=['All'];
   source.forEach(function(p){if(!cats.includes(p.cat))cats.push(p.cat);});
   var cf=document.getElementById('dcPlCatFilters');
@@ -9887,10 +9983,10 @@ function initFlowStateApp(savedData) {
     if (savedData.calEntries) S.calEntries = savedData.calEntries;
     if (savedData.ideas) S.ideas = savedData.ideas;
     if (savedData.tasks) S.tasks = savedData.tasks;
-    if (savedData.hooks) S.hooks = savedData.hooks;
-    if (savedData.ctas) S.ctas = savedData.ctas;
-    if (savedData.stories) S.stories = savedData.stories;
-    if (savedData.prompts) S.prompts = savedData.prompts;
+    if (savedData.hooks && savedData.hooks.length) S.hooks = savedData.hooks;
+    if (savedData.ctas && savedData.ctas.length) S.ctas = savedData.ctas;
+    if (savedData.stories && savedData.stories.length) S.stories = savedData.stories;
+    if (savedData.prompts && savedData.prompts.length) S.prompts = savedData.prompts;
     // Seed the Prompt Library from DC_PROMPT_LIBRARY if it is empty or only
     // contains seeded items (identified by id prefix 'dcpl_'). This keeps the
     // Director Chat prompt library and the main Library view in sync automatically.
