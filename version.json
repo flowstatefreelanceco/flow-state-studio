@@ -1,11 +1,11 @@
 {
-  "version": "4.5",
+  "version": "4.6",
   "changelog": [
     {
       "type": "fix",
       "date": "Aug 7, 2026",
-      "title": "Generate My Personalized Library, fixed for real this time",
-      "desc": "Found the actual cause of it sometimes doing nothing at all when clicked: a browser confirmation popup was quietly gating the whole action, and if it got dismissed for any reason, nothing else would happen, no message, no error, nothing. That popup is gone now, clicking the button just builds your library directly."
+      "title": "Notification popups now always show",
+      "desc": "Those small confirmation messages that appear in the corner (like \"Saved\" or \"Your library is ready\") were sometimes rendering behind other screens instead of on top, so they'd be invisible depending on what else was open at the time. They now always appear above everything else in the app, every time."
     }
   ]
 }
