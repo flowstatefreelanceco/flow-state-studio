@@ -1,11 +1,11 @@
 {
-  "version": "4.4",
+  "version": "4.5",
   "changelog": [
     {
       "type": "fix",
       "date": "Aug 7, 2026",
-      "title": "Generate My Personalized Library is now much more reliable",
-      "desc": "For some people this button wasn't completing, especially when the personalized content included apostrophes or quotation marks. It now automatically retries if that happens, and if it still doesn't come through, you're not charged a credit for it, your existing library also stays exactly as it was rather than being cleared out on a failed attempt."
+      "title": "Generate My Personalized Library, fixed for real this time",
+      "desc": "Found the actual cause of it sometimes doing nothing at all when clicked: a browser confirmation popup was quietly gating the whole action, and if it got dismissed for any reason, nothing else would happen, no message, no error, nothing. That popup is gone now, clicking the button just builds your library directly."
     }
   ]
 }
