@@ -1,11 +1,4 @@
 {
-  "version": "4.7",
-  "changelog": [
-    {
-      "type": "fix",
-      "date": "Aug 7, 2026",
-      "title": "Internal accounts protected from billing changes",
-      "desc": "Fixed a real issue where an owner-level account could get silently downgraded by billing activity that was never meant to touch it. Owner accounts are now fully protected from any plan changes, cancellations, or scheduled downgrades, only real customer accounts are affected by billing events."
-    }
-  ]
+  "version": "4.9",
+  "changelog": []
 }
