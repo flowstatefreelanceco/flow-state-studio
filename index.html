@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="4.8">
+<html lang="en" data-version="4.9">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -4804,18 +4804,37 @@ async function initAuth(){
     if(event==='SIGNED_IN'&&session&&!_appBooted&&!isRecoveryLink){
       _currentUser=session.user;
 
+      // Checks the database directly rather than in-memory S.plan, since
+      // this handler can run before S.plan has even been loaded yet -
+      // relying on S.plan's current value here would create exactly the
+      // kind of timing gap that let an owner account get silently
+      // overwritten by an unrelated pending_plans or invite-code check.
+      var _ownerGuard=false;
+      try{
+        var {data:_existingProfile}=await sb.from('profiles').select('plan').eq('id',session.user.id).maybeSingle();
+        _ownerGuard=_existingProfile&&_existingProfile.plan==='owner';
+      }catch(e){}
+
       // 1. Check for invite code — set plan to beta
       var pendingCode=sessionStorage.getItem('pendingInviteCode');
-      if(pendingCode===INVITE_CODE){
+      if(pendingCode===INVITE_CODE&&!_ownerGuard){
         try{
           await sb.from('profiles').upsert({id:session.user.id,plan:'beta'});
           S.plan='beta';
         }catch(e){}
         sessionStorage.removeItem('pendingInviteCode');
+      } else if(pendingCode===INVITE_CODE){
+        sessionStorage.removeItem('pendingInviteCode');
       }
 
       // 2. ALWAYS check pending_plans table for paid plan — webhook writes here
       // regardless of whether sessionStorage survived the redirect
+      if(_ownerGuard){
+        // Never let a stale or leftover pending_plans row touch an owner
+        // account - clean it up if present, but don't apply it.
+        try{ await sb.from('pending_plans').delete().eq('email',session.user.email.toLowerCase()); }catch(e){}
+        S.plan='owner';
+      } else {
       try{
         var {data:pending}=await sb.from('pending_plans')
           .select('plan,created_at').eq('email',session.user.email.toLowerCase()).maybeSingle();
@@ -4837,6 +4856,7 @@ async function initAuth(){
           }
         }
       }catch(e){}
+      }
       sessionStorage.removeItem('paidPlan');
       sessionStorage.removeItem('intendedPlan');
 
@@ -5183,11 +5203,18 @@ async function doLogin(){
   // paid plan applied, since they never go through doSignup() at all.
   if(data.user){
     try{
-      var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',em.toLowerCase()).maybeSingle();
-      if(pending && pending.plan){
-        await sb.from('profiles').upsert({id:data.user.id,plan:pending.plan});
+      var {data:existingProfile}=await sb.from('profiles').select('plan').eq('id',data.user.id).maybeSingle();
+      if(existingProfile&&existingProfile.plan==='owner'){
+        // Never let a stale pending_plans row touch an owner account -
+        // clean it up if present, but don't write anything from it.
         await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
-        if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
+      } else {
+        var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',em.toLowerCase()).maybeSingle();
+        if(pending && pending.plan){
+          await sb.from('profiles').upsert({id:data.user.id,plan:pending.plan});
+          await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
+          if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
+        }
       }
     }catch(e){ /* not fatal - they still get signed in either way */ }
   }
@@ -5259,11 +5286,16 @@ async function submitNewPassword(){
   // successful sign-in since paying.
   if(_currentUser){
     try{
-      var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',_currentUser.email.toLowerCase()).maybeSingle();
-      if(pending && pending.plan){
-        await sb.from('profiles').upsert({id:_currentUser.id,plan:pending.plan});
+      var {data:existingProfile2}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
+      if(existingProfile2&&existingProfile2.plan==='owner'){
         await sb.from('pending_plans').delete().eq('email',_currentUser.email.toLowerCase());
-        if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
+      } else {
+        var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',_currentUser.email.toLowerCase()).maybeSingle();
+        if(pending && pending.plan){
+          await sb.from('profiles').upsert({id:_currentUser.id,plan:pending.plan});
+          await sb.from('pending_plans').delete().eq('email',_currentUser.email.toLowerCase());
+          if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
+        }
       }
     }catch(e){ /* not fatal */ }
   }
