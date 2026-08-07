@@ -1,11 +1,11 @@
 {
-  "version": "4.6",
+  "version": "4.7",
   "changelog": [
     {
       "type": "fix",
       "date": "Aug 7, 2026",
-      "title": "Notification popups now always show",
-      "desc": "Those small confirmation messages that appear in the corner (like \"Saved\" or \"Your library is ready\") were sometimes rendering behind other screens instead of on top, so they'd be invisible depending on what else was open at the time. They now always appear above everything else in the app, every time."
+      "title": "Internal accounts protected from billing changes",
+      "desc": "Fixed a real issue where an owner-level account could get silently downgraded by billing activity that was never meant to touch it. Owner accounts are now fully protected from any plan changes, cancellations, or scheduled downgrades, only real customer accounts are affected by billing events."
     }
   ]
 }
