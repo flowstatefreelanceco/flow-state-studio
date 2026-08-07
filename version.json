@@ -1,17 +1,11 @@
 {
-  "version": "4.3",
+  "version": "4.4",
   "changelog": [
     {
       "type": "fix",
-      "date": "Aug 6, 2026",
-      "title": "Your Hooks, Story Ideas, CTAs, and Prompt Bank now come pre-built",
-      "desc": "We found and fixed a real gap, these four libraries were supposed to come with a starter set for everyone from day one, but the connection that seeds them was never actually wired up. If yours looked empty, that's exactly what happened, and it's fixed now. You'll see a starter library waiting for you immediately, and once your Brand Profile is filled in, hit \"Generate My Personalized Library\" on any of those pages to upgrade it to content written specifically for your niche."
-    },
-    {
-      "type": "fix",
-      "date": "Aug 6, 2026",
-      "title": "AI tools no longer default toward one specific industry",
-      "desc": "We found a few spots where the AI's underlying instructions leaned toward wellness and service-based businesses by default, left over from early development. That's fixed across every AI tool in the Studio, hooks, captions, Director Chat, all of it. It now adapts fully to whatever niche is in your own Brand Profile, whatever business you're in."
+      "date": "Aug 7, 2026",
+      "title": "Generate My Personalized Library is now much more reliable",
+      "desc": "For some people this button wasn't completing, especially when the personalized content included apostrophes or quotation marks. It now automatically retries if that happens, and if it still doesn't come through, you're not charged a credit for it, your existing library also stays exactly as it was rather than being cleared out on a failed attempt."
     }
   ]
 }
