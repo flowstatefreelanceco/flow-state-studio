@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="4.9">
+<html lang="en" data-version="5.0">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -6360,8 +6360,12 @@ async function generateStarterLibrary(silent){
   // "credit spent, nothing to show for it" failure this app has otherwise
   // been careful to prevent everywhere else.
   async function rawAttempt(){
+    // 3000 was cutting off responses mid-generation for some brand profiles
+    // that produce longer, more detailed writing, which looked identical
+    // to a JSON-parsing failure from the outside. Bumped well above what
+    // 26 total items with real written content should ever need.
     var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:3000,system:sys,messages:[{role:'user',content:usr}]})
+      body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:6000,system:sys,messages:[{role:'user',content:usr}]})
     },45000);
     if(!r.ok){
       var errBody=await r.json().catch(function(){return {};});
@@ -6374,7 +6378,7 @@ async function generateStarterLibrary(silent){
   }
 
   var parsed=null, lastErr=null;
-  for(var attempt=0;attempt<2&&!parsed;attempt++){
+  for(var attempt=0;attempt<3&&!parsed;attempt++){
     try{ parsed=await rawAttempt(); }
     catch(e){ lastErr=e; }
   }
