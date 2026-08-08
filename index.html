@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.1">
+<html lang="en" data-version="5.2">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -6398,26 +6398,22 @@ async function generateStarterLibrary(silent){
   var failedTypes=[];
 
   if(hooksResult.items){
-    S.hooks=S.hooks.filter(function(h){return (h.id||'').indexOf('gen_')===0;});
-    hooksResult.items.forEach(function(h,i){S.hooks.push({id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text});});
+    S.hooks=hooksResult.items.map(function(h,i){return {id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text};});
     succeededAny=true;
   } else failedTypes.push('Hooks');
 
   if(storiesResult.items){
-    S.stories=S.stories.filter(function(s){return (s.id||'').indexOf('gen_')===0;});
-    storiesResult.items.forEach(function(s,i){S.stories.push({id:'gen_s_'+now+'_'+i,cat:s.cat,text:s.text});});
+    S.stories=storiesResult.items.map(function(s,i){return {id:'gen_s_'+now+'_'+i,cat:s.cat,text:s.text};});
     succeededAny=true;
   } else failedTypes.push('Story Ideas');
 
   if(ctasResult.items){
-    S.ctas=S.ctas.filter(function(c){return (c.id||'').indexOf('gen_')===0;});
-    ctasResult.items.forEach(function(c,i){S.ctas.push({id:'gen_c_'+now+'_'+i,cat:c.cat,text:c.text});});
+    S.ctas=ctasResult.items.map(function(c,i){return {id:'gen_c_'+now+'_'+i,cat:c.cat,text:c.text};});
     succeededAny=true;
   } else failedTypes.push('CTAs');
 
   if(promptsResult.items){
-    S.prompts=S.prompts.filter(function(p){return (p.id||'').indexOf('gen_')===0;});
-    promptsResult.items.forEach(function(p,i){S.prompts.push({id:'gen_p_'+now+'_'+i,cat:p.cat,title:p.title,text:p.text});});
+    S.prompts=promptsResult.items.map(function(p,i){return {id:'gen_p_'+now+'_'+i,cat:p.cat,title:p.title,text:p.text};});
     succeededAny=true;
   } else failedTypes.push('Prompts');
 
