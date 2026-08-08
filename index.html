@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.0">
+<html lang="en" data-version="5.1">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -6322,6 +6322,17 @@ async function generateStarterLibrary(silent){
   // Upgrades the generic bracket-placeholder starter library (Hooks, Story
   // Ideas, CTAs, Prompts, which every account has from day one) into
   // something genuinely tailored to THIS account's own Brand Profile.
+  //
+  // This used to be one single API call asking the model to simultaneously
+  // hold a detailed persona, a full brand profile, generate 26 different
+  // pieces of genuinely niche-specific writing, sort them into exact
+  // categories, and output all of it as one large, perfectly-escaped JSON
+  // object. Every additional requirement stacked into that one completion
+  // increased the odds that something in the pile got slightly violated,
+  // and when it did, the whole thing failed together. Splitting it into
+  // four smaller, independent calls means each one only has to get a
+  // single, simple thing right, and if one of the four has a problem, it
+  // doesn't take the other three down with it.
   if(!S.brandProfile||(!S.brandProfile.niche&&!S.brandProfile.role)){
     toast('Fill in your Brand Profile first for a personalized library, until then you have a generic starter set to work from.');
     return;
@@ -6336,71 +6347,93 @@ async function generateStarterLibrary(silent){
   btns.forEach(function(b){b.disabled=true;b.textContent='Building your library...';});
 
   var brand=buildBrandContext();
-  var sys=CD_PERSONA+brand+' Output ONLY valid JSON, no preamble, no markdown code fences, matching exactly this structure: {"hooks":[{"cat":"Comparison|Curiosity|Educational|Engagement|Storytelling","text":"..."}] (8 items, spread across those 5 categories),"stories":[{"cat":"Connect & Inspire|Engagement|Social Proof|Storytelling","text":"..."}] (6 items),"ctas":[{"cat":"Direct Sales|Engagement|Follow & Subscribe|Lead Generation|Link & Click|Share & Tag","text":"..."}] (6 items),"prompts":[{"cat":"Caption Writing|Strategy|Sales Copy|Script Rewrite","title":"...","text":"..."}] (6 items)}. Every single item must be genuinely specific to their actual niche and audience from the brand profile above, not generic filler that could apply to any business. This is critical: within every text and title value, any apostrophe or quotation mark MUST be properly escaped (\\\' and \\") so the JSON stays valid, this matters more than anything else in this response since a single unescaped quote breaks the entire output.';
-  var usr='Generate my starter library now, based on my brand profile.';
 
-  // Extracts and parses the JSON object from a response even if the model
-  // added any preamble, trailing commentary, or markdown fences around it,
-  // rather than requiring a perfectly clean response on the first try.
-  function extractLibraryJSON(raw){
+  function extractItemsJSON(raw){
     var start=raw.indexOf('{');
     var end=raw.lastIndexOf('}');
     if(start===-1||end===-1||end<start)throw new Error('No JSON object found in response');
     var parsed=JSON.parse(raw.slice(start,end+1));
-    var hasAny=(parsed.hooks&&parsed.hooks.length)||(parsed.stories&&parsed.stories.length)||(parsed.ctas&&parsed.ctas.length)||(parsed.prompts&&parsed.prompts.length);
-    if(!hasAny)throw new Error('Response parsed but had no usable content');
-    return parsed;
+    if(!parsed.items||!parsed.items.length)throw new Error('Response parsed but had no usable content');
+    return parsed.items;
   }
 
-  // Makes the raw API call directly rather than through cdCallAI, since
-  // cdCallAI consumes a credit the moment it gets any text back at all,
-  // which is right for normal generations but wrong here specifically -
-  // getting text back that fails to parse as valid JSON is not a real
-  // deliverable, and charging for it would repeat exactly the kind of
-  // "credit spent, nothing to show for it" failure this app has otherwise
-  // been careful to prevent everywhere else.
-  async function rawAttempt(){
-    // 3000 was cutting off responses mid-generation for some brand profiles
-    // that produce longer, more detailed writing, which looked identical
-    // to a JSON-parsing failure from the outside. Bumped well above what
-    // 26 total items with real written content should ever need.
-    var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:6000,system:sys,messages:[{role:'user',content:usr}]})
-    },45000);
-    if(!r.ok){
-      var errBody=await r.json().catch(function(){return {};});
-      throw new Error((errBody.error&&errBody.error.message)||('HTTP '+r.status));
+  async function generateOneType(typeLabel,categories,count,fields){
+    var fieldDesc=fields.includes('title')?'{"cat":"...","title":"...","text":"..."}':'{"cat":"...","text":"..."}';
+    var sys=CD_PERSONA+brand+' Output ONLY valid JSON, no preamble, no markdown code fences, matching exactly this structure: {"items":['+fieldDesc+', ...]}, with exactly '+count+' items, spread across these categories: '+categories.join(', ')+'. Every item must be genuinely specific to the niche and audience in the brand profile above, not generic filler. Any apostrophe or quotation mark inside a text or title value must be properly escaped (\\\' and \\") so the JSON stays valid.';
+    var usr='Generate '+count+' '+typeLabel+' for my brand now.';
+    var attemptDiag=[];
+    for(var attempt=0;attempt<3;attempt++){
+      try{
+        var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:usr}]})
+        },30000);
+        if(!r.ok){
+          var errBody=await r.json().catch(function(){return {};});
+          throw new Error((errBody.error&&errBody.error.message)||('HTTP '+r.status));
+        }
+        var d=await r.json();
+        var text=(d.content&&d.content[0]&&d.content[0].text)||'';
+        attemptDiag.push({length:text.length,start:text.slice(0,100)});
+        if(!text)throw new Error('Empty response');
+        return {items:extractItemsJSON(text),diag:attemptDiag};
+      }catch(e){
+        attemptDiag.push({error:e.message});
+      }
     }
-    var d=await r.json();
-    var text=(d.content&&d.content[0]&&d.content[0].text)||'';
-    if(!text)throw new Error('Empty response');
-    return extractLibraryJSON(text);
+    return {items:null,diag:attemptDiag};
   }
 
-  var parsed=null, lastErr=null;
-  for(var attempt=0;attempt<3&&!parsed;attempt++){
-    try{ parsed=await rawAttempt(); }
-    catch(e){ lastErr=e; }
-  }
+  window._lastLibraryGenDiagnostics={};
+  var results=await Promise.all([
+    generateOneType('hooks',['Comparison','Curiosity','Educational','Engagement','Storytelling'],8,['cat','text']),
+    generateOneType('story ideas',['Connect & Inspire','Engagement','Social Proof','Storytelling'],6,['cat','text']),
+    generateOneType('CTAs',['Direct Sales','Engagement','Follow & Subscribe','Lead Generation','Link & Click','Share & Tag'],6,['cat','text']),
+    generateOneType('prompts',['Caption Writing','Strategy','Sales Copy','Script Rewrite'],6,['cat','title','text'])
+  ]);
+  var hooksResult=results[0], storiesResult=results[1], ctasResult=results[2], promptsResult=results[3];
+  window._lastLibraryGenDiagnostics={hooks:hooksResult.diag,stories:storiesResult.diag,ctas:ctasResult.diag,prompts:promptsResult.diag};
 
-  if(parsed){
-    consumeCredit(); // only ever charged once, only on genuine success
-    var now=Date.now();
+  var now=Date.now();
+  var succeededAny=false;
+  var failedTypes=[];
+
+  if(hooksResult.items){
     S.hooks=S.hooks.filter(function(h){return (h.id||'').indexOf('gen_')===0;});
+    hooksResult.items.forEach(function(h,i){S.hooks.push({id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text});});
+    succeededAny=true;
+  } else failedTypes.push('Hooks');
+
+  if(storiesResult.items){
     S.stories=S.stories.filter(function(s){return (s.id||'').indexOf('gen_')===0;});
+    storiesResult.items.forEach(function(s,i){S.stories.push({id:'gen_s_'+now+'_'+i,cat:s.cat,text:s.text});});
+    succeededAny=true;
+  } else failedTypes.push('Story Ideas');
+
+  if(ctasResult.items){
     S.ctas=S.ctas.filter(function(c){return (c.id||'').indexOf('gen_')===0;});
+    ctasResult.items.forEach(function(c,i){S.ctas.push({id:'gen_c_'+now+'_'+i,cat:c.cat,text:c.text});});
+    succeededAny=true;
+  } else failedTypes.push('CTAs');
+
+  if(promptsResult.items){
     S.prompts=S.prompts.filter(function(p){return (p.id||'').indexOf('gen_')===0;});
-    (parsed.hooks||[]).forEach(function(h,i){S.hooks.push({id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text});});
-    (parsed.stories||[]).forEach(function(s,i){S.stories.push({id:'gen_s_'+now+'_'+i,cat:s.cat,text:s.text});});
-    (parsed.ctas||[]).forEach(function(c,i){S.ctas.push({id:'gen_c_'+now+'_'+i,cat:c.cat,text:c.text});});
-    (parsed.prompts||[]).forEach(function(p,i){S.prompts.push({id:'gen_p_'+now+'_'+i,cat:p.cat,title:p.title,text:p.text});});
+    promptsResult.items.forEach(function(p,i){S.prompts.push({id:'gen_p_'+now+'_'+i,cat:p.cat,title:p.title,text:p.text});});
+    succeededAny=true;
+  } else failedTypes.push('Prompts');
+
+  if(succeededAny){
+    consumeCredit(); // charged once if ANY real content was delivered, never for total failure
     persist();
     ['hooks','stories','ctas','prompts'].forEach(function(s){renderLib(s,true);});
-    toast('Your personalized library is ready ✓');
+    if(failedTypes.length){
+      toast('Personalized most of your library, but '+failedTypes.join(' and ')+' didn\'t come through, those are still on the generic starter set. Try the button again to fill in the rest.');
+    } else {
+      toast('Your personalized library is ready ✓');
+    }
   } else {
-    toast('Your library generation didn\'t come through cleanly after two tries, and nothing was charged. Try again in a moment, if it keeps happening let Jess know.');
-    console.warn('generateStarterLibrary failed after retry:',lastErr&&lastErr.message);
+    toast('Your library generation didn\'t come through cleanly, and nothing was charged. Try again in a moment, if it keeps happening let Jess know, check the browser console (F12) for exact details.');
   }
+  console.warn('generateStarterLibrary diagnostics (per type, per attempt):',window._lastLibraryGenDiagnostics);
   window._libGenerating=false;
   btns.forEach(function(b){b.disabled=false;b.textContent='✦ Generate My Personalized Library';});
 }
