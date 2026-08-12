@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.3">
+<html lang="en" data-version="5.4">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -7526,6 +7526,21 @@ function cdOpen(id){
         if(acts)acts.classList.add('show');
       }
     });
+
+    // Repurpose Analysis (the "Content Autopsy" step) - this has its own
+    // two-panel layout separate from the simple text sections above, and
+    // was never being restored at all, so the analysis silently vanished
+    // every time the card was reopened even though it was saved correctly.
+    if(_cdOutputs['repurposeAnalysis']){
+      var rpBody=document.getElementById('ai2-repurpose-body');
+      if(rpBody){rpBody.classList.add('open');var rpChev=document.getElementById('ai2-repurpose-chev');if(rpChev)rpChev.textContent='-';}
+      var analysisOutRestore=document.getElementById('cd-analysis-out');
+      if(analysisOutRestore)analysisOutRestore.textContent=_cdOutputs['repurposeAnalysis'];
+      var sbsRestore=document.getElementById('cd-repurpose-sidebyside');
+      if(sbsRestore)sbsRestore.style.display='flex';
+      var rebuildBtnRestore=document.getElementById('cd-rebuild-btn');
+      if(rebuildBtnRestore)rebuildBtnRestore.style.display='block';
+    }
 
     // Hook section - restore hook list AND built post
     if(_cdOutputs['hookList']||_cdOutputs['hookBuilt']){
