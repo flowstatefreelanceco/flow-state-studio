@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.6">
+<html lang="en" data-version="5.7">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -5519,10 +5519,36 @@ function retryFailedSave(){
 // of losing it - localStorage already has it instantly, but without this the
 // Supabase copy (what other devices/tabs load) could miss the latest change.
 function flushPendingSave(){
-  if(_lastUnsavedSnapshot && window._supabasePersist){
+  if(_lastUnsavedSnapshot && _currentUser){
     clearTimeout(_persistTimer);
     var snap=_lastUnsavedSnapshot;
-    window._supabasePersist(snap);
+    _lastUnsavedSnapshot=null;
+    // Regular fetch calls made from a pagehide/visibilitychange/beforeunload
+    // handler are NOT guaranteed to actually finish - the browser is free
+    // to suspend the tab's JS and network activity the instant the handler
+    // returns, which happens especially aggressively on mobile the moment
+    // someone locks their phone or switches apps right after typing
+    // something, exactly the scenario that was silently losing data.
+    // fetch's keepalive option exists specifically so the browser itself
+    // takes over finishing the request in the background, independent of
+    // whether the page is still alive to see it complete. The Supabase
+    // client's own save call doesn't set this, so this bypasses it for
+    // just this one critical moment and talks to the same REST endpoint
+    // directly, with keepalive on.
+    sb.auth.getSession().then(function(res){
+      var token=(res&&res.data&&res.data.session&&res.data.session.access_token)||SKEY;
+      fetch(SURL+'/rest/v1/user_data?on_conflict=user_id',{
+        method:'POST',
+        keepalive:true,
+        headers:{
+          'Content-Type':'application/json',
+          'apikey':SKEY,
+          'Authorization':'Bearer '+token,
+          'Prefer':'resolution=merge-duplicates'
+        },
+        body:JSON.stringify({user_id:_currentUser.id,data:JSON.stringify(snap),updated_at:new Date().toISOString()})
+      }).catch(function(){ /* best effort - localStorage already has this snapshot regardless */ });
+    }).catch(function(){});
   }
 }
 window.addEventListener('beforeunload',flushPendingSave);
