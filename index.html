@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.9">
+<html lang="en" data-version="5.10">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -8318,7 +8318,8 @@ async function cdGen2(type) {
     series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Required output: exactly 5 numbered items (1-5). Each item: one sentence title + one sentence description, nothing else. Each post should stand alone but connect to a bigger theme.'
   };
   var result = await cdCallAI(sys, cdFreshnessNote(type)+(prompts[type] || prompts.caption), type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
-  if (load) load.classList.remove('show');
+  var loadNow0 = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
+  if (loadNow0) loadNow0.classList.remove('show');
   if (result) {
     // Save directly to the card this belongs to, by ID, regardless of
     // whether the person is still looking at it - a generation that takes
@@ -8338,7 +8339,10 @@ async function cdGen2(type) {
       targetCard.updatedAt = new Date().toISOString();
       persist();
     }
-    // Only touch the visible screen if still on this same card
+    // Only touch the visible screen if still on this same card. Re-finding
+    // the output elements fresh here rather than trusting the references
+    // captured before the wait, in case anything re-rendered this part of
+    // the page in the meantime.
     if (S.cdId === targetCardId) {
       if (type === 'hooks') {
         _cdOutputs['hookList'] = result;
@@ -8349,8 +8353,10 @@ async function cdGen2(type) {
         cdRenderSeries(result);
       } else {
         _cdOutputs[type] = result;
-        if (out) { out.textContent = result; out.classList.add('show'); }
-        if (acts) acts.classList.add('show');
+        var outNow = document.getElementById(outId);
+        var actsNow = document.getElementById(actsId);
+        if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
+        if (actsNow) actsNow.classList.add('show');
       }
     }
   }
@@ -8485,7 +8491,8 @@ async function cdAutopsy() {
     + '5. WHAT TO AVOID: If I were to rebuild this, what would I not copy?\n\n'
     + 'Post to analyse:\n' + text;
   var result = await cdCallAI(sys, usr, 800);
-  if (load) load.classList.remove('show');
+  var loadNow = document.getElementById('cd-load-repurpose');
+  if (loadNow) loadNow.classList.remove('show');
   window._cdGenerating = false;
   if (result) {
     var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
@@ -8497,9 +8504,12 @@ async function cdAutopsy() {
     }
     if (S.cdId === targetCardId) {
       _cdOutputs['repurposeAnalysis'] = result;
-      if (analysisOut) analysisOut.textContent = result;
-      if (sbs) sbs.style.display = 'flex';
-      if (rebuildBtn) rebuildBtn.style.display = 'block';
+      var analysisOutNow = document.getElementById('cd-analysis-out');
+      var sbsNow = document.getElementById('cd-repurpose-sidebyside');
+      var rebuildBtnNow = document.getElementById('cd-rebuild-btn');
+      if (analysisOutNow) analysisOutNow.textContent = result;
+      if (sbsNow) sbsNow.style.display = 'flex';
+      if (rebuildBtnNow) rebuildBtnNow.style.display = 'block';
     }
   }
 }
@@ -8528,8 +8538,10 @@ async function cdRebuildAfterAnalysis() {
     + '\nTone: ' + (toneMap[tone] || 'warm and authentic') + '.'
     + (b.brief ? '\nMy topic/angle: ' + b.brief : '');
   var result = await cdCallAI(sys, usr, 1000);
-  if (load) load.classList.remove('show');
-  if (rebuildBtn) rebuildBtn.disabled = false;
+  var loadNow = document.getElementById('cd-load-repurpose');
+  var rebuildBtnNow = document.getElementById('cd-rebuild-btn');
+  if (loadNow) loadNow.classList.remove('show');
+  if (rebuildBtnNow) rebuildBtnNow.disabled = false;
   window._cdGenerating = false;
   if (result) {
     var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
@@ -8541,7 +8553,8 @@ async function cdRebuildAfterAnalysis() {
     }
     if (S.cdId === targetCardId) {
       _cdOutputs['repurpose'] = result;
-      if (out) { out.textContent = result; out.classList.add('show'); }
+      var outNow = document.getElementById('cd-out-repurpose');
+      if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
     }
   }
 }
@@ -8572,7 +8585,8 @@ async function cdRepurpose2() {
   var sys = CD_PERSONA + brand + ' Output ONLY the repurposed content. No preamble.';
   var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
   var result = await cdCallAI(sys, usr, 1000);
-  if (load) load.classList.remove('show');
+  var loadNow = document.getElementById('cd-load-repurpose');
+  if (loadNow) loadNow.classList.remove('show');
   window._cdGenerating = false;
   if (result) {
     // Save directly to the card this actually belongs to, by ID, rather
@@ -8587,11 +8601,18 @@ async function cdRepurpose2() {
     }
     // Only touch the visible screen if the person is still actually
     // looking at this same card - otherwise this would incorrectly paint
-    // the result onto whatever card happens to be open now.
+    // the result onto whatever card happens to be open now. Re-finding
+    // these elements fresh here, rather than trusting the references
+    // captured 10+ seconds ago before the wait, since anything that
+    // re-rendered this part of the page in the meantime would leave those
+    // old references pointing at detached nodes that no longer show on
+    // screen even though writing to them wouldn't throw any error.
     if (S.cdId === targetCardId) {
       _cdOutputs['repurpose'] = result;
-      if (out) { out.textContent = result; out.classList.add('show'); }
-      if (acts) acts.classList.add('show');
+      var outNow = document.getElementById('cd-out-repurpose');
+      var actsNow = document.getElementById('cd-acts-repurpose');
+      if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
+      if (actsNow) actsNow.classList.add('show');
     }
   }
 }
