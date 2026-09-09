@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.10">
+<html lang="en" data-version="5.11">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -7577,6 +7577,10 @@ function cdOpen(id){
       if(_cdOutputs[sec]){
         var body=document.getElementById('ai2-'+sec+'-body');
         if(body){body.classList.add('open');var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';}
+        if(sec==='repurpose'){
+          var sbsForRepurpose=document.getElementById('cd-repurpose-sidebyside');
+          if(sbsForRepurpose)sbsForRepurpose.style.display='flex';
+        }
         var out=document.getElementById('cd-out-'+sec);
         if(out){out.textContent=_cdOutputs[sec];out.classList.add('show');}
         var acts=document.getElementById('cd-acts-'+sec);
@@ -8554,6 +8558,8 @@ async function cdRebuildAfterAnalysis() {
     if (S.cdId === targetCardId) {
       _cdOutputs['repurpose'] = result;
       var outNow = document.getElementById('cd-out-repurpose');
+      var sbsNow2 = document.getElementById('cd-repurpose-sidebyside');
+      if (sbsNow2) sbsNow2.style.display = 'flex';
       if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
     }
   }
@@ -8611,6 +8617,8 @@ async function cdRepurpose2() {
       _cdOutputs['repurpose'] = result;
       var outNow = document.getElementById('cd-out-repurpose');
       var actsNow = document.getElementById('cd-acts-repurpose');
+      var sbsNow3 = document.getElementById('cd-repurpose-sidebyside');
+      if (sbsNow3) sbsNow3.style.display = 'flex';
       if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
       if (actsNow) actsNow.classList.add('show');
     }
