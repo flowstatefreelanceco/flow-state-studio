@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.8">
+<html lang="en" data-version="5.9">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -8273,6 +8273,7 @@ async function cdGen2(type) {
   // Generation lock — prevent double-click credit burns
   if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
   window._cdGenerating = true;
+  var targetCardId = S.cdId;
   // Lock all generate buttons visually
   document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=true; b.style.opacity='.5'; });
   // Sync tone from the new dropdown
@@ -8318,20 +8319,40 @@ async function cdGen2(type) {
   };
   var result = await cdCallAI(sys, cdFreshnessNote(type)+(prompts[type] || prompts.caption), type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
   if (load) load.classList.remove('show');
-  if (result && type === 'hooks') {
-    _cdOutputs['hookList'] = result;
-    delete _cdOutputs['hookBuilt'];
-    cdRenderHooks(result);
-    cdAutoSaveOutputs();
-  } else if (result && type === 'series') {
-    _cdOutputs['series'] = result;
-    cdRenderSeries(result);
-    cdAutoSaveOutputs();
-  } else if (result) {
-    _cdOutputs[type] = result;
-    if (out) { out.textContent = result; out.classList.add('show'); }
-    if (acts) acts.classList.add('show');
-    cdAutoSaveOutputs();
+  if (result) {
+    // Save directly to the card this belongs to, by ID, regardless of
+    // whether the person is still looking at it - a generation that takes
+    // several seconds gives plenty of time to switch cards or close out,
+    // and the result should still land in the right place when it's done.
+    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
+    if (targetCard) {
+      targetCard.aiOutputs = targetCard.aiOutputs || {};
+      if (type === 'hooks') {
+        targetCard.aiOutputs['hookList'] = result;
+        delete targetCard.aiOutputs['hookBuilt'];
+      } else if (type === 'series') {
+        targetCard.aiOutputs['series'] = result;
+      } else {
+        targetCard.aiOutputs[type] = result;
+      }
+      targetCard.updatedAt = new Date().toISOString();
+      persist();
+    }
+    // Only touch the visible screen if still on this same card
+    if (S.cdId === targetCardId) {
+      if (type === 'hooks') {
+        _cdOutputs['hookList'] = result;
+        delete _cdOutputs['hookBuilt'];
+        cdRenderHooks(result);
+      } else if (type === 'series') {
+        _cdOutputs['series'] = result;
+        cdRenderSeries(result);
+      } else {
+        _cdOutputs[type] = result;
+        if (out) { out.textContent = result; out.classList.add('show'); }
+        if (acts) acts.classList.add('show');
+      }
+    }
   }
   S.aiCount = (S.aiCount || 0) + 1; persist();
   // Unlock generation buttons
@@ -8447,6 +8468,7 @@ async function cdAutopsy() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!text) { toast('Paste some content to analyse first'); return; }
   window._cdGenerating = true;
+  var targetCardId = S.cdId;
   var load = document.getElementById('cd-load-repurpose');
   var sbs = document.getElementById('cd-repurpose-sidebyside');
   var analysisOut = document.getElementById('cd-analysis-out');
@@ -8466,11 +8488,19 @@ async function cdAutopsy() {
   if (load) load.classList.remove('show');
   window._cdGenerating = false;
   if (result) {
-    _cdOutputs['repurposeAnalysis'] = result;
-    cdAutoSaveOutputs();
-    if (analysisOut) analysisOut.textContent = result;
-    if (sbs) sbs.style.display = 'flex';
-    if (rebuildBtn) rebuildBtn.style.display = 'block';
+    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
+    if (targetCard) {
+      targetCard.aiOutputs = targetCard.aiOutputs || {};
+      targetCard.aiOutputs['repurposeAnalysis'] = result;
+      targetCard.updatedAt = new Date().toISOString();
+      persist();
+    }
+    if (S.cdId === targetCardId) {
+      _cdOutputs['repurposeAnalysis'] = result;
+      if (analysisOut) analysisOut.textContent = result;
+      if (sbs) sbs.style.display = 'flex';
+      if (rebuildBtn) rebuildBtn.style.display = 'block';
+    }
   }
 }
 
@@ -8480,6 +8510,7 @@ async function cdRebuildAfterAnalysis() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!analysis) { toast('Run Rebuild in my voice first'); return; }
   window._cdGenerating = true;
+  var targetCardId = S.cdId;
   var b = cdGetBrief();
   var outFmt = document.getElementById('cdRpOutFmt') ? document.getElementById('cdRpOutFmt').value : b.fmt;
   var load = document.getElementById('cd-load-repurpose');
@@ -8501,9 +8532,17 @@ async function cdRebuildAfterAnalysis() {
   if (rebuildBtn) rebuildBtn.disabled = false;
   window._cdGenerating = false;
   if (result) {
-    _cdOutputs['repurpose'] = result;
-    if (out) { out.textContent = result; out.classList.add('show'); }
-    cdAutoSaveOutputs();
+    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
+    if (targetCard) {
+      targetCard.aiOutputs = targetCard.aiOutputs || {};
+      targetCard.aiOutputs['repurpose'] = result;
+      targetCard.updatedAt = new Date().toISOString();
+      persist();
+    }
+    if (S.cdId === targetCardId) {
+      _cdOutputs['repurpose'] = result;
+      if (out) { out.textContent = result; out.classList.add('show'); }
+    }
   }
 }
 
@@ -8512,6 +8551,15 @@ async function cdRepurpose2() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!text) { toast('Paste some content first'); return; }
   window._cdGenerating = true;
+  // Capture which card this result belongs to right now, before the long
+  // wait for a response. Relying on S.cdId still matching by the time the
+  // response arrives was the actual bug here - if the card gets closed,
+  // reopened, or a different card gets opened while this is in flight
+  // (which a 10+ second wait makes very easy to do without realizing),
+  // the result could get silently written to the wrong place, or nowhere
+  // at all, and permanently lost the next time any card's own cdOpen()
+  // resets the shared working state.
+  var targetCardId = S.cdId;
   var b = cdGetBrief();
   var plat = document.getElementById('cdRpPlat').value;
   var load = document.getElementById('cd-load-repurpose');
@@ -8527,10 +8575,24 @@ async function cdRepurpose2() {
   if (load) load.classList.remove('show');
   window._cdGenerating = false;
   if (result) {
-    _cdOutputs['repurpose'] = result;
-    if (out) { out.textContent = result; out.classList.add('show'); }
-    if (acts) acts.classList.add('show');
-    cdAutoSaveOutputs();
+    // Save directly to the card this actually belongs to, by ID, rather
+    // than assuming S.cdId (and the shared _cdOutputs object) still
+    // correctly refer to it - they may not, if time has passed.
+    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
+    if (targetCard) {
+      targetCard.aiOutputs = targetCard.aiOutputs || {};
+      targetCard.aiOutputs['repurpose'] = result;
+      targetCard.updatedAt = new Date().toISOString();
+      persist();
+    }
+    // Only touch the visible screen if the person is still actually
+    // looking at this same card - otherwise this would incorrectly paint
+    // the result onto whatever card happens to be open now.
+    if (S.cdId === targetCardId) {
+      _cdOutputs['repurpose'] = result;
+      if (out) { out.textContent = result; out.classList.add('show'); }
+      if (acts) acts.classList.add('show');
+    }
   }
 }
 
