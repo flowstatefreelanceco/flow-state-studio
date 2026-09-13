@@ -892,24 +892,14 @@ select.fi{cursor:pointer}
 <style>
 /* AUTH */
 /* ── AUTH / LANDING ─────────────────────────────────────────── */
-#authScreen{position:fixed;inset:0;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  background-color:#C9A876;
-  background-image:
-    radial-gradient(circle at 15% 20%,rgba(94,62,30,.14) 0,rgba(94,62,30,.14) 1px,transparent 1px),
-    radial-gradient(circle at 65% 45%,rgba(94,62,30,.11) 0,rgba(94,62,30,.11) 1.2px,transparent 1.2px),
-    radial-gradient(circle at 35% 75%,rgba(94,62,30,.13) 0,rgba(94,62,30,.13) 1px,transparent 1px),
-    radial-gradient(circle at 85% 85%,rgba(150,110,60,.15) 0,rgba(150,110,60,.15) 1.4px,transparent 1.4px),
-    radial-gradient(circle at 50% 10%,rgba(150,110,60,.12) 0,rgba(150,110,60,.12) 1px,transparent 1px);
-  background-size:37px 37px,53px 53px,41px 41px,67px 67px,29px 29px;
-  background-repeat:repeat;
-}
+#authScreen{position:fixed;inset:0;background:var(--p);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch}
 /* Hand-drawn doodle + pin accents for the cork-y landing/sales redesign */
-.doodle-underline{display:block;margin:2px auto 0;pointer-events:none}
+.doodle-underline{display:block;margin:6px auto 14px;pointer-events:none}
 .doodle-star{display:inline-block;color:var(--r);font-size:.7em;transform:rotate(-8deg);margin:0 2px}
-.pin{position:absolute;top:-11px;left:24px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e08a5a,#b3562a 70%);box-shadow:0 2px 4px rgba(0,0,0,.25),inset 0 1px 1px rgba(255,255,255,.4);z-index:2}
+.pin{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e08a5a,#b3562a 70%);box-shadow:0 2px 4px rgba(0,0,0,.25),inset 0 1px 1px rgba(255,255,255,.4);z-index:3}
 .pin.teal{background:radial-gradient(circle at 35% 30%,#3aa8a8,#00696e 70%)}
 .pin.blue{background:radial-gradient(circle at 35% 30%,#8fb3ea,#3a5ea3 70%)}
-.pin-card{position:relative;margin-top:14px}
+.pin-card{position:relative}
 #authScreen.hidden{display:none}
 #newPasswordScreen{position:fixed;inset:0;background:var(--p);z-index:10001;align-items:center;justify-content:center;padding:24px;display:flex}
 #newPasswordScreen.hidden{display:none}
@@ -1351,7 +1341,7 @@ select.fi{cursor:pointer}
     <!-- HERO -->
     <section class="lp-hero">
       <h1 class="lp-headline">Built different, for brains<br>that <em>work different</em></h1>
-      <svg class="doodle-underline" width="140" height="14" viewBox="0 0 140 14" fill="none"><path d="M3 8c15-8 28-8 40-2s25 8 40 2 28-8 40-2" stroke="#008484" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg class="doodle-underline" width="140" height="14" viewBox="0 0 140 14" fill="none"><path d="M3 8c15-8 28-8 40-2s25 8 40 2 28-8 40-2" stroke="#a8845a" stroke-width="2" stroke-linecap="round" opacity=".55"/></svg>
       <p style="font-size:16px;color:var(--r);font-weight:600;margin-bottom:12px;margin-top:-8px">Consistent content, without burning out. That is what this is for.</p>
       <p class="lp-sub">A web-based studio for ND entrepreneurs. If you've abandoned a system by week three before, that's a design problem, not a discipline one. One place for your ideas, planning, and writing, whether you go analog or bring in AI.</p>
       <div class="lp-ctas">
