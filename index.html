@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.11">
+<html lang="en" data-version="5.12">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -76,6 +76,22 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .main-hdr .sub{font-size:14px;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 36px 48px}
+
+/* Corkboard texture for the dashboard specifically, giving the whole page
+   a sense of being pinned to a physical board rather than a flat screen.
+   Warm tan base with layered subtle speckling, in the same spirit as the
+   lined-paper effect already used on the On Your Plate section. */
+#view-dashboard.active .main-body{
+  background-color:#C9A876;
+  background-image:
+    radial-gradient(circle at 15% 20%,rgba(94,62,30,.14) 0,rgba(94,62,30,.14) 1px,transparent 1px),
+    radial-gradient(circle at 65% 45%,rgba(94,62,30,.11) 0,rgba(94,62,30,.11) 1.2px,transparent 1.2px),
+    radial-gradient(circle at 35% 75%,rgba(94,62,30,.13) 0,rgba(94,62,30,.13) 1px,transparent 1px),
+    radial-gradient(circle at 85% 85%,rgba(150,110,60,.15) 0,rgba(150,110,60,.15) 1.4px,transparent 1.4px),
+    radial-gradient(circle at 50% 10%,rgba(150,110,60,.12) 0,rgba(150,110,60,.12) 1px,transparent 1px);
+  background-size:37px 37px,53px 53px,41px 41px,67px 67px,29px 29px;
+  background-repeat:repeat;
+}
 
 /* VIEWS */
 .view{display:none;flex-direction:column;height:100%}
@@ -5875,8 +5891,20 @@ function quickCreate(type, plat){
 function renderPickUp(){
   const el=document.getElementById('pickUpWrap');
   if(!el)return;
-  const lastDraft=S.drafts[0];
-  const lastIdea=(S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId&&i.status!=='published'))||S.ideas.find(i=>i.status==='inprogress')||S.ideas.find(i=>i.status==='idea')||S.ideas.find(i=>i.status!=='published');
+  // Picks the draft actually most recently touched, not just whichever
+  // one happens to sit first in the array - creating a new draft moves it
+  // to the front, but editing an older one never did, so this used to show
+  // a stale draft from a while ago instead of whatever was just worked on.
+  const draftTime=d=>new Date(d.updatedAt||d.createdAt||0).getTime();
+  const lastDraft=S.drafts.length?S.drafts.reduce((a,b)=>draftTime(b)>draftTime(a)?b:a):null;
+  // Same fix for the card fallback chain - when there's no specific
+  // lastCardId to go on, pick whichever open card was most recently
+  // touched rather than just the first one in array order matching a
+  // status, which could easily be something untouched in months.
+  var explicitLast=S.lastCardId&&S.ideas.find(i=>i.id===S.lastCardId&&i.status!=='published');
+  var openCards=S.ideas.filter(i=>i.status!=='published');
+  var mostRecentOpen=openCards.length?openCards.reduce((a,b)=>draftTime(b)>draftTime(a)?b:a):null;
+  const lastIdea=explicitLast||mostRecentOpen;
   const plate=getOnYourPlateData();
   if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
@@ -5907,7 +5935,7 @@ function renderPickUp(){
     <div class="wf-title" style="font-size:17px;margin-bottom:10px">📅 On Your Plate</div>
     ${plate.html}
   </div>`:'';
-  el.innerHTML=`${pickupBlock}${plateBlock}`;
+  el.innerHTML=`${plateBlock}${pickupBlock}`;
 }
 function copyLastDraft(id){
   const d=S.drafts.find(x=>x.id===id);
