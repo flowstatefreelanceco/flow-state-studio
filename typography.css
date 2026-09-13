@@ -1,0 +1,53 @@
+/* Typography System for Flow State Studio */
+
+/* Headings - Brakle Bold */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Brakle', sans-serif;
+  font-weight: 700;
+}
+
+/* Body Text - Figtree Regular */
+p,
+body,
+main {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 400;
+}
+
+/* UI Elements - Marker Bold */
+button,
+.button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+a.btn {
+  font-family: 'Marker', sans-serif;
+  font-weight: 700;
+}
+
+/* Small Accent Text - Agrandir Bold at 16px */
+.accent-text,
+.label,
+.tag,
+[data-accent="true"] {
+  font-family: 'Agrandir', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Navigation - Marker Bold */
+nav,
+[role="navigation"] {
+  font-family: 'Marker', sans-serif;
+  font-weight: 700;
+}
+
+/* Fallbacks */
+html {
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
