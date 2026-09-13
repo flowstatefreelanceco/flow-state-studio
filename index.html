@@ -12,40 +12,40 @@
 <title>Flow State Studio</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-ThinItalic.otf') format('opentype');font-weight:100;font-style:italic}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-GrandLight.otf') format('opentype');font-weight:300;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-WideLight.otf') format('opentype');font-weight:300;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-Regular.otf') format('opentype');font-weight:400;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-Narrow.otf') format('opentype');font-weight:400;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-Tight.otf') format('opentype');font-weight:400;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-TextBold.otf') format('opentype');font-weight:700;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-GrandHeavy.otf') format('opentype');font-weight:900;font-style:normal}
-@font-face{font-family:'Agrandir';src:url('fonts/Agrandir-WideBlackItalic.otf') format('opentype');font-weight:900;font-style:italic}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-Light.ttf') format('truetype');font-weight:300;font-style:normal}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-LightItalic.ttf') format('truetype');font-weight:300;font-style:italic}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-Regular.ttf') format('truetype');font-weight:400;font-style:normal}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-Italic.ttf') format('truetype');font-weight:400;font-style:italic}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-Medium.ttf') format('truetype');font-weight:500;font-style:normal}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-MediumItalic.ttf') format('truetype');font-weight:500;font-style:italic}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-SemiBoldItalic.ttf') format('truetype');font-weight:600;font-style:italic}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-Bold.ttf') format('truetype');font-weight:700;font-style:normal}
-@font-face{font-family:'Brakle';src:url('fonts/Brakle-BoldItalic.ttf') format('truetype');font-weight:700;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-Light.ttf') format('truetype');font-weight:300;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-LightItalic.ttf') format('truetype');font-weight:300;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-Regular.ttf') format('truetype');font-weight:400;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-Italic.ttf') format('truetype');font-weight:400;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-Medium.ttf') format('truetype');font-weight:500;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-MediumItalic.ttf') format('truetype');font-weight:500;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-SemiBoldItalic.ttf') format('truetype');font-weight:600;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-Bold.ttf') format('truetype');font-weight:700;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-BoldItalic.ttf') format('truetype');font-weight:700;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-ExtraBold.ttf') format('truetype');font-weight:800;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-ExtraBoldItalic.ttf') format('truetype');font-weight:800;font-style:italic}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-Black.ttf') format('truetype');font-weight:900;font-style:normal}
-@font-face{font-family:'Figtree';src:url('fonts/Figtree-BlackItalic.ttf') format('truetype');font-weight:900;font-style:italic}
-@font-face{font-family:'Marker';src:url('fonts/Marker Bold.otf') format('opentype');font-weight:700;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-ThinItalic.otf') format('opentype');font-weight:100;font-style:italic}
+@font-face{font-family:'Agrandir';src:url('Agrandir-GrandLight.otf') format('opentype');font-weight:300;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-WideLight.otf') format('opentype');font-weight:300;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-Regular.otf') format('opentype');font-weight:400;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-Narrow.otf') format('opentype');font-weight:400;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-Tight.otf') format('opentype');font-weight:400;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-TextBold.otf') format('opentype');font-weight:700;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-GrandHeavy.otf') format('opentype');font-weight:900;font-style:normal}
+@font-face{font-family:'Agrandir';src:url('Agrandir-WideBlackItalic.otf') format('opentype');font-weight:900;font-style:italic}
+@font-face{font-family:'Brakle';src:url('Brakle-Light.ttf') format('truetype');font-weight:300;font-style:normal}
+@font-face{font-family:'Brakle';src:url('Brakle-LightItalic.ttf') format('truetype');font-weight:300;font-style:italic}
+@font-face{font-family:'Brakle';src:url('Brakle-Regular.ttf') format('truetype');font-weight:400;font-style:normal}
+@font-face{font-family:'Brakle';src:url('Brakle-Italic.ttf') format('truetype');font-weight:400;font-style:italic}
+@font-face{font-family:'Brakle';src:url('Brakle-Medium.ttf') format('truetype');font-weight:500;font-style:normal}
+@font-face{font-family:'Brakle';src:url('Brakle-MediumItalic.ttf') format('truetype');font-weight:500;font-style:italic}
+@font-face{font-family:'Brakle';src:url('Brakle-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal}
+@font-face{font-family:'Brakle';src:url('Brakle-SemiBoldItalic.ttf') format('truetype');font-weight:600;font-style:italic}
+@font-face{font-family:'Brakle';src:url('Brakle-Bold.ttf') format('truetype');font-weight:700;font-style:normal}
+@font-face{font-family:'Brakle';src:url('Brakle-BoldItalic.ttf') format('truetype');font-weight:700;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-Light.ttf') format('truetype');font-weight:300;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-LightItalic.ttf') format('truetype');font-weight:300;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-Regular.ttf') format('truetype');font-weight:400;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-Italic.ttf') format('truetype');font-weight:400;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-Medium.ttf') format('truetype');font-weight:500;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-MediumItalic.ttf') format('truetype');font-weight:500;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-SemiBoldItalic.ttf') format('truetype');font-weight:600;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-Bold.ttf') format('truetype');font-weight:700;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-BoldItalic.ttf') format('truetype');font-weight:700;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-ExtraBold.ttf') format('truetype');font-weight:800;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-ExtraBoldItalic.ttf') format('truetype');font-weight:800;font-style:italic}
+@font-face{font-family:'Figtree';src:url('Figtree-Black.ttf') format('truetype');font-weight:900;font-style:normal}
+@font-face{font-family:'Figtree';src:url('Figtree-BlackItalic.ttf') format('truetype');font-weight:900;font-style:italic}
+@font-face{font-family:'Marker';src:url('Marker Bold.otf') format('opentype');font-weight:700;font-style:normal}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   /* Brand palette - Flow State Studio official hex codes */
