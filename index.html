@@ -105,7 +105,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 /* MAIN */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
-.main-hdr h1{font-family:var(--fh);font-size:30px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.15}
+.main-hdr h1{font-family:var(--fh);font-size:23px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.15}
 .main-hdr .sub{font-size:14px;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 36px 48px}
@@ -143,7 +143,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .gs-strip{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:16px 20px;margin-bottom:22px;box-shadow:0 1px 4px var(--sh);cursor:pointer;user-select:none}
 .gs-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .gs-left{display:flex;align-items:center;gap:10px}
-.gs-title{font-family:var(--fh);font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t)}
+.gs-title{font-family:var(--fh);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t)}
 .gs-badge{font-size:11px;color:var(--tl)}
 .gs-chevron{font-size:14px;color:var(--tl);transition:transform .2s}
 .gs-strip.open .gs-chevron{transform:rotate(180deg)}
@@ -1235,7 +1235,7 @@ select.fi{cursor:pointer}
 /* WEEKLY FOCUS */
 .wf-wrap{background:repeating-linear-gradient(180deg,#fff,#fff 27px,#F0E9D8 27px,#F0E9D8 28px);border:1px solid var(--bl);border-left:11px solid #008484;border-radius:6px;padding:18px 20px;margin-bottom:16px;box-shadow:2px 3px 8px rgba(77,30,21,.1);transform:rotate(-.3deg)}
 .wf-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:10px}
-.wf-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);line-height:1.2;display:inline-block;background:var(--sb);padding:4px 12px;border-radius:100px}
+.wf-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e);line-height:1.2;display:inline-block;background:var(--sb);padding:4px 12px;border-radius:100px}
 .wf-sub{font-size:11.5px;color:var(--t);margin-top:3px}
 .wf-reset{font-size:11px;color:var(--tl);cursor:pointer;padding:4px 10px;border-radius:100px;border:1px solid var(--bl);background:none;font-family:var(--fb);white-space:nowrap;flex-shrink:0}
 .wf-reset:hover{color:var(--r);border-color:var(--r);background:var(--rp)}
@@ -2029,7 +2029,7 @@ select.fi{cursor:pointer}
         <div style="display:flex;align-items:center;gap:12px">
           <div style="width:34px;height:34px;border-radius:50%;background:#fcf6dc;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🧠</div>
           <div>
-            <div style="font-family:var(--fh);font-size:18px;font-weight:600;color:var(--e);margin-bottom:2px">Brain not cooperating?</div>
+            <div style="font-family:var(--fh);font-size:14px;font-weight:600;color:var(--e);margin-bottom:2px">Brain not cooperating?</div>
             <div style="font-size:12px;color:var(--t);line-height:1.45">Get instant creative direction, angle, hook, emotion, what to avoid, before you write a single word.</div>
           </div>
         </div>
@@ -5942,7 +5942,7 @@ function renderPickUp(){
   if(!lastDraft&&!lastIdea&&!plate.hasToday&&!plate.hasTomorrow){el.innerHTML='';return;}
   const dt=d=>{try{return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return '';}};
   var pickupBlock=(lastDraft||lastIdea)?`<div class="wf-wrap" style="border-left-color:#b36c37">
-    <div class="wf-title" style="font-size:17px;margin-bottom:10px">👋 Pick up where you left off</div>
+    <div class="wf-title" style="font-size:14px;margin-bottom:10px">👋 Pick up where you left off</div>
     ${lastDraft?`<div class="wf-item" style="justify-content:space-between;margin-bottom:8px">
       <div style="min-width:0;flex:1">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#008484;margin-bottom:3px">📝 Saved Draft</div>
@@ -5965,7 +5965,7 @@ function renderPickUp(){
     </div>`:''}
   </div>`:'';
   var plateBlock=(plate.hasToday||plate.hasTomorrow)?`<div class="wf-wrap" style="border-left-color:var(--blue);background:repeating-linear-gradient(180deg,#fff,#fff 27px,#F0E9D8 27px,#F0E9D8 28px)">
-    <div class="wf-title" style="font-size:17px;margin-bottom:10px">📅 On Your Plate</div>
+    <div class="wf-title" style="font-size:14px;margin-bottom:10px">📅 On Your Plate</div>
     ${plate.html}
   </div>`:'';
   el.innerHTML=`${plateBlock}${pickupBlock}`;
