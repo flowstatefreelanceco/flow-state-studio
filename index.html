@@ -423,7 +423,17 @@ select.fi{cursor:pointer}
 .info-b code{background:rgba(42,28,16,.08);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11.5px;color:var(--e)}
 
 /* LOCKED / PRICING SCREEN */
-#lockedScreen{position:fixed;inset:0;background:var(--p);z-index:10000;overflow-y:auto;display:none}
+#lockedScreen{position:fixed;inset:0;z-index:10000;overflow-y:auto;display:none;
+  background-color:#C9A876;
+  background-image:
+    radial-gradient(circle at 15% 20%,rgba(94,62,30,.14) 0,rgba(94,62,30,.14) 1px,transparent 1px),
+    radial-gradient(circle at 65% 45%,rgba(94,62,30,.11) 0,rgba(94,62,30,.11) 1.2px,transparent 1.2px),
+    radial-gradient(circle at 35% 75%,rgba(94,62,30,.13) 0,rgba(94,62,30,.13) 1px,transparent 1px),
+    radial-gradient(circle at 85% 85%,rgba(150,110,60,.15) 0,rgba(150,110,60,.15) 1.4px,transparent 1.4px),
+    radial-gradient(circle at 50% 10%,rgba(150,110,60,.12) 0,rgba(150,110,60,.12) 1px,transparent 1px);
+  background-size:37px 37px,53px 53px,41px 41px,67px 67px,29px 29px;
+  background-repeat:repeat;
+}
 #lockedScreen.show{display:block}
 /* SECTION TOGGLE TABS */
 .pricing-section-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
@@ -882,14 +892,31 @@ select.fi{cursor:pointer}
 <style>
 /* AUTH */
 /* ── AUTH / LANDING ─────────────────────────────────────────── */
-#authScreen{position:fixed;inset:0;background:var(--p);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#authScreen{position:fixed;inset:0;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background-color:#C9A876;
+  background-image:
+    radial-gradient(circle at 15% 20%,rgba(94,62,30,.14) 0,rgba(94,62,30,.14) 1px,transparent 1px),
+    radial-gradient(circle at 65% 45%,rgba(94,62,30,.11) 0,rgba(94,62,30,.11) 1.2px,transparent 1.2px),
+    radial-gradient(circle at 35% 75%,rgba(94,62,30,.13) 0,rgba(94,62,30,.13) 1px,transparent 1px),
+    radial-gradient(circle at 85% 85%,rgba(150,110,60,.15) 0,rgba(150,110,60,.15) 1.4px,transparent 1.4px),
+    radial-gradient(circle at 50% 10%,rgba(150,110,60,.12) 0,rgba(150,110,60,.12) 1px,transparent 1px);
+  background-size:37px 37px,53px 53px,41px 41px,67px 67px,29px 29px;
+  background-repeat:repeat;
+}
+/* Hand-drawn doodle + pin accents for the cork-y landing/sales redesign */
+.doodle-underline{display:block;margin:2px auto 0;pointer-events:none}
+.doodle-star{display:inline-block;color:var(--r);font-size:.7em;transform:rotate(-8deg);margin:0 2px}
+.pin{position:absolute;top:-11px;left:24px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e08a5a,#b3562a 70%);box-shadow:0 2px 4px rgba(0,0,0,.25),inset 0 1px 1px rgba(255,255,255,.4);z-index:2}
+.pin.teal{background:radial-gradient(circle at 35% 30%,#3aa8a8,#00696e 70%)}
+.pin.blue{background:radial-gradient(circle at 35% 30%,#8fb3ea,#3a5ea3 70%)}
+.pin-card{position:relative;margin-top:14px}
 #authScreen.hidden{display:none}
 #newPasswordScreen{position:fixed;inset:0;background:var(--p);z-index:10001;align-items:center;justify-content:center;padding:24px;display:flex}
 #newPasswordScreen.hidden{display:none}
 
 /* Landing page */
 .lp-wrap{min-height:100%;display:flex;flex-direction:column}
-.lp-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--bl);background:var(--p);position:sticky;top:0;z-index:10}
+.lp-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--bl);background:var(--w);position:sticky;top:0;z-index:10;box-shadow:0 1px 4px var(--sh)}
 .lp-wordmark{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);letter-spacing:.01em}
 .lp-nav-signin{font-family:var(--fb);font-size:13px;font-weight:500;color:var(--t);background:none;border:1px solid var(--b);border-radius:100px;padding:7px 18px;cursor:pointer;transition:all .15s}
 .lp-nav-signin:hover{border-color:var(--teal);color:var(--teal)}
@@ -1324,8 +1351,9 @@ select.fi{cursor:pointer}
     <!-- HERO -->
     <section class="lp-hero">
       <h1 class="lp-headline">Built different, for brains<br>that <em>work different</em></h1>
+      <svg class="doodle-underline" width="140" height="14" viewBox="0 0 140 14" fill="none"><path d="M3 8c15-8 28-8 40-2s25 8 40 2 28-8 40-2" stroke="#008484" stroke-width="2.5" stroke-linecap="round"/></svg>
       <p style="font-size:16px;color:var(--r);font-weight:600;margin-bottom:12px;margin-top:-8px">Consistent content, without burning out. That is what this is for.</p>
-      <p class="lp-sub">Flow State Studio is a web-based studio for ND entrepreneurs. If you've abandoned a system by week three before, that's not a discipline problem, it's a design problem. One place for your ideas, planning, writing, and strategy, less tab-switching, more actually getting it done. Go analog when you want to write it yourself. Use AI when you want a spark. Whatever you need, it's already in here.</p>
+      <p class="lp-sub">A web-based studio for ND entrepreneurs. If you've abandoned a system by week three before, that's a design problem, not a discipline one. One place for your ideas, planning, and writing, whether you go analog or bring in AI.</p>
       <div class="lp-ctas">
         <button class="lp-btn-primary" onclick="openLoginCard()">Sign In</button>
         <button class="lp-btn-secondary" onclick="goToPricing(true)">Learn More</button>
@@ -1334,8 +1362,8 @@ select.fi{cursor:pointer}
 
     <!-- ANALOG + AI BRIDGE -->
     <div class="lp-bridge">
-      <div class="lp-section-lbl" style="margin-bottom:16px">How it works</div>
-      <div class="lp-bridge-card">
+      <div class="lp-section-lbl" style="margin-bottom:16px"><span class="doodle-star">✦</span> How it works <span class="doodle-star">✦</span></div>
+      <div class="lp-bridge-card pin-card"><div class="pin rust"></div>
         <div class="lp-bridge-half analog">
           <div class="lp-bridge-icon">✏️</div>
           <div class="lp-bridge-label">Go Analog</div>
@@ -1351,18 +1379,9 @@ select.fi{cursor:pointer}
       <div class="lp-bridge-bottom">However you create, it's already built in.</div>
     </div>
 
-    <!-- BUILT-IN GUIDE REASSURANCE -->
-    <div class="lp-bridge" style="max-width:640px">
-      <div style="background:var(--tealp);border:1.5px solid rgba(58,140,140,.3);border-radius:var(--rad);padding:22px 26px;text-align:center">
-        <div style="font-size:26px;margin-bottom:8px">📚</div>
-        <div style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--e);margin-bottom:6px">You don't have to figure this out alone, or all at once.</div>
-        <div style="font-size:13.5px;color:var(--t);line-height:1.65">Every account comes with a built-in, in-depth guide covering the whole Studio, every tool, every section, explained plainly. It includes a slow, no-pressure 3 month plan for anyone who'd rather ease in one piece at a time than take it all on day one. Go at whatever pace actually works for you.</div>
-      </div>
-    </div>
-
     <!-- PREVIEW VIDEO -->
     <div class="lp-preview">
-      <div class="lp-section-lbl">A peek inside</div>
+      <div class="lp-section-lbl">A peek inside <span class="doodle-star">✦</span></div>
       <div class="lp-video-wrap" id="lpVideoWrap">
         <div class="lp-video-placeholder" id="lpVideoPlaceholder" onclick="playLpVideo()" style="display:none">
           <button class="lp-play-btn">
@@ -1377,7 +1396,7 @@ select.fi{cursor:pointer}
 
     <!-- THREE KEY FEATURES -->
     <div class="lp-preview">
-      <div class="lp-section-lbl">What's inside</div>
+      <div class="lp-section-lbl"><span class="doodle-star">✦</span> What's inside</div>
       <div style="display:flex;flex-direction:column;gap:12px">
 
         <div style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
@@ -1545,40 +1564,30 @@ select.fi{cursor:pointer}
         <div class="pricing-features" style="margin-bottom:0">
 
       <!-- CREATIVE DIRECTOR: full-width hero card -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
+      <div class="pf-card pin-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><div class="pin rust"></div>
         <div class="pf-icon">✦</div>
         <div>
           <div class="pf-title" style="color:var(--r);font-size:15px">Your Creative Director</div>
           <div class="pf-desc" style="color:var(--el);margin-bottom:12px">A creative system built into the Studio. Not one button, every part of it works together to get you from idea to done.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px" class="cd-sales-grid">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Blank Page? Hit the Button</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Hit the button on your dashboard and get a direction before you write anything. Angle, hook, emotion, what to avoid.</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Get a direction, angle, hook, and what to avoid, before you write a word.</div>
             </div>
             <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ Get Creative Direction</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Fill out a content card brief and the Creative Director gives you the angle, the hook, and exactly what to avoid before you write a word.</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🔁 Rebuild in My Voice</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste a post you liked. It breaks down why it worked and rebuilds it in your voice.</div>
             </div>
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🔁 Rebuild in my voice</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste a post you saw and liked. It breaks down why it worked and rebuilds it in your voice.</div>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✍️ Generate a Full Draft</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Brief it, generate it, edit it, post it. Caption, carousel, reel, newsletter, email, whatever you need.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">📌 Save What Works</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Save outputs you love to your Repurposed File so nothing good gets buried in a chat window.</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Brief it, generate it, edit it, post it. Any format, whenever you need it.</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- DIRECTOR CHAT -->
-      <div class="pf-card teal" style="grid-column:1/-1">
+      <div class="pf-card teal pin-card" style="grid-column:1/-1"><div class="pin teal"></div>
         <div class="pf-icon-wrap">💬</div>
         <div style="width:100%">
           <div class="pf-title" style="font-size:15px">Director Chat</div>
@@ -1591,29 +1600,25 @@ select.fi{cursor:pointer}
             <div class="dc-msg assistant" style="margin-bottom:4px"><div class="dc-bubble" style="font-size:13px">3 to 5 times a week is a real, sustainable floor, not daily. Daily is a ceiling some accounts chase, not a baseline you owe anyone. Consistency at a pace you can actually keep beats a streak that burns you out in three weeks and then goes quiet for a month, which is worse for the algorithm and for you than just posting 4 times a week forever.</div></div>
           </div>
 
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px" class="cd-sales-grid">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid rgba(0,132,132,.2)">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">📊 Ask the strategy questions</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">When to post, how often, what to do first this week. It gives you an actual answer based on your setup in Settings.</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">When to post, how often, what to do first, a real answer, not "it depends."</div>
             </div>
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid rgba(0,132,132,.2)">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">✍️ Rework something you already wrote</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste a draft and ask for it warmer, shorter, more direct, or totally different.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid rgba(0,132,132,.2)">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">🔁 Write for a different offer</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Different service, side project, one-off offer? Paste your copy and tell it what voice to write in.</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">✍️ Rework what you wrote</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste a draft and ask for it warmer, shorter, or totally different.</div>
             </div>
             <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid rgba(0,132,132,.2)">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px">💭 Think out loud</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Talk through an idea before you write anything. The chat saves automatically and is always there when you come back.</div>
+              <div style="font-size:12.5px;color:var(--el);line-height:1.6">It saves automatically and is always there when you come back.</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- SUBSTACK HIGHLIGHT -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--bluep),#c2dafc);border-color:#b8ccf0">
+      <div class="pf-card pin-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--bluep),#c2dafc);border-color:#b8ccf0"><div class="pin blue"></div>
         <div class="pf-icon">📝</div>
         <div style="width:100%">
           <div class="pf-title" style="color:#2d5fa0;font-size:15px">Built for Substack creators</div>
@@ -1739,40 +1744,19 @@ select.fi{cursor:pointer}
         <div class="pricing-features" style="margin-bottom:0">
 
       <!-- GUIDES: new full-width card -->
-      <div class="pf-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA">
+      <div class="pf-card pin-card" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><div class="pin rust"></div>
         <div class="pf-icon" style="color:var(--r)">📖</div>
         <div>
           <div class="pf-title" style="color:var(--r);font-size:15px">Built-in Guides: Strategy You Can Actually Use</div>
-          <div class="pf-desc" style="color:var(--el);margin-bottom:12px">Not a help doc. Not a tutorial. Real strategic playbooks written specifically for neurodivergent creative entrepreneurs, built right into the Studio so they're always one click away.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" class="cd-sales-grid">
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">📚 The Complete Studio Guide</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">Every tool, every section, explained plainly in one place. Includes a slow, no-pressure 3 month plan for anyone who'd rather ease in one piece at a time than take it all on day one.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 Big Brain Energy (Strategy Edition)</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">How to actually use Director Chat as your strategist, what to ask, how to set up your logistics profile, and how to start leaning into strategy without it feeling intimidating.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🧠 ND Rescue Kit</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What to do when you're overwhelmed and don't know where to start. The four-step reset, ND-friendly batching, launch planning without the spiral, and how to use every Studio tool to reduce content stress.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🌊 Content Cycle Framework</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A four-phase content rhythm that grows your audience, nurtures your community, converts the right people, and gives you space to breathe. With a full four-week example calendar and ND-specific tips.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✦ The Unstuck Guide</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">For when the inner critic says it's all been done before. Reframes for perfectionism, starting paralysis, and creative drought, paired with specific Studio workflows to get you moving again.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">✏️ The Analog Way</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">What analog actually means, why it's having a moment, and how to use the Studio as a fully analog creator, no AI required. For the days you just want a blank page and a pencil.</div>
-            </div>
-            <div style="background:rgba(255,255,255,.65);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🌱 The IG Resurrection Guide</div>
-              <div style="font-size:12.5px;color:var(--el);line-height:1.6">A gentle, practical plan for posting again after a ghosted or quiet account. Content and posting, engagement and the algorithm, SEO over hashtags, and why community matters more than reach.</div>
-            </div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Not a help doc. Real playbooks for ND creative entrepreneurs, always one click away: a Complete Studio Guide, a Strategy Edition, an ND Rescue Kit for overwhelm, a Content Cycle Framework, an Unstuck Guide for creative blocks, an Analog Way for no-AI days, and a gentle IG Resurrection Guide for quiet accounts.</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">📚 Complete Studio Guide</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🧠 Big Brain Energy</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🧠 ND Rescue Kit</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🌊 Content Cycle Framework</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">✦ The Unstuck Guide</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">✏️ The Analog Way</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🌱 IG Resurrection Guide</span>
           </div>
         </div>
       </div>
@@ -1821,7 +1805,7 @@ select.fi{cursor:pointer}
         <div class="gt-card">
           <div class="gt-when" style="color:var(--teal)">Month 1</div>
           <div class="gt-title">Your ideas have a place to land</div>
-          <div class="gt-desc"><strong>Content cards</strong> <span style="font-size:13px;color:var(--tl)">(the Studio's way of holding one idea, its brief, hooks, and AI tools all in one place)</span> mean ideas have somewhere to land the moment they show up, instead of needing you to remember them later.</div>
+          <div class="gt-desc"><strong>Content cards</strong> <span style="font-size:13px;color:var(--tl)">(one idea, its brief, hooks, and AI tools, all in one place)</span> give ideas somewhere to land the moment they show up.</div>
           <div class="gt-tags">
             <span class="gt-tag" style="background:var(--tealp);color:var(--teal)"><strong>Content Planner</strong> <span style="font-weight:400;opacity:.8">visual board to move ideas from draft to published</span></span>
             <span class="gt-tag" style="background:var(--tealp);color:var(--teal)">Hook Builder</span>
@@ -1834,7 +1818,7 @@ select.fi{cursor:pointer}
         <div class="gt-card">
           <div class="gt-when" style="color:#7A5C9C">Month 3</div>
           <div class="gt-title">A rhythm that's yours</div>
-          <div class="gt-desc"><strong>Director Chat</strong> <span style="font-size:13px;color:var(--tl)">(your built-in creative director and strategist, available anywhere in the Studio)</span> reasons from your actual platforms and what's worked for you before, so the pace it suggests, usually 3 to 5 posts a week, is one built to fit your life, not push past it.</div>
+          <div class="gt-desc"><strong>Director Chat</strong> <span style="font-size:13px;color:var(--tl)">(your built-in strategist)</span> learns your platforms, so the pace it suggests fits your life, not the other way around.</div>
           <div class="gt-tags">
             <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C"><strong>Director Chat</strong> <span style="font-weight:400;opacity:.8">open chat with your AI Creative Director</span></span>
             <span class="gt-tag" style="background:#EDE4F5;color:#7A5C9C">Strategy and Logistics profile</span>
@@ -1869,29 +1853,22 @@ select.fi{cursor:pointer}
       Your price is locked in for as long as you stay subscribed, no surprise increases down the line.
     </div>
     <div class="pricing-cards">
-      <div class="pc">
+      <div class="pc"><div class="pin rust"></div>
         <div class="pc-name">Starter</div>
         <div class="pc-price">$11.50<span>/month</span></div>
         <div class="pc-credits">100 AI credits / month</div>
         <ul class="pc-features">
-          <li>Write your own (Go Analog) or generate with AI (Bridge the Gap)</li>
-          <li>Director Chat: your Creative Director, and your Strategist</li>
-          <li>Real answers on cadence, launch timing, and platform priorities, not "it depends"</li>
-          <li>Six built-in strategy guides, including a full Strategy Edition</li>
-          <li>All 12+ AI tools available when you want them</li>
-          <li>Content Planner, Calendar, Task Board</li>
-          <li>Feed Preview (Instagram grid)</li>
-          <li>Writing Studio: all 7 content formats</li>
-          <li>Hook, CTA, Story + Prompt Library</li>
-          <li>Unlimited Notebooks + Brain Dump</li>
-          <li>Saved Drafts library + CSV export</li>
-          <li>Repurposed File for your best AI outputs</li>
-          <li>100 AI generations per month</li>
-          <li>Price locked in for as long as you stay subscribed</li>
+          <li>Go Analog and write it yourself, or Bridge the Gap with AI, your call</li>
+          <li>Director Chat: your Creative Director and Strategist, real answers, not "it depends"</li>
+          <li>Content Planner, Calendar, Task Board, Feed Preview</li>
+          <li>Writing Studio (7 formats) + Hook, CTA, Story &amp; Prompt Library</li>
+          <li>Unlimited Notebooks, Brain Dump, and Saved Drafts</li>
+          <li>Six built-in strategy guides</li>
+          <li>100 AI generations a month, price locked in for as long as you stay subscribed</li>
         </ul>
         <button class="pc-btn pc-btn-secondary" onclick="window.location.href='https://buy.stripe.com/fZu5kD3Zv90l8odftF4Rq02'">Get Started, $11.50/mo</button>
       </div>
-      <div class="pc featured">
+      <div class="pc featured"><div class="pin teal"></div>
         <div class="pc-badge">Most Popular</div>
         <div class="pc-name">Unlimited</div>
         <div class="pc-price">$21.50<span>/month</span></div>
@@ -1912,13 +1889,13 @@ select.fi{cursor:pointer}
     <div style="text-align:center;margin:8px auto 32px;max-width:640px;padding:20px 28px;background:var(--tealp);border:1.5px solid rgba(58,140,140,.3);border-radius:var(--rad)">
       <div style="font-size:22px;margin-bottom:6px">📚</div>
       <div style="font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e);margin-bottom:6px">Feeling a little overwhelmed looking at all of this?</div>
-      <div style="font-size:13px;color:var(--t);line-height:1.7">That's normal, and it's already handled. Every account includes a built-in Complete Studio Guide covering every tool in plain language, plus a slow, no-pressure 3 month plan for anyone who'd rather ease in one piece at a time. You don't have to use everything on day one. You don't even have to use everything, ever.</div>
+      <div style="font-size:13px;color:var(--t);line-height:1.7">That's normal, and it's handled. A built-in guide covers every tool in plain language, with a slow, no-pressure pace if you'd rather ease in. You never have to use it all.</div>
     </div>
 
     <!-- CREDITS EXPLAINER -->
     <div style="text-align:center;margin:8px auto 32px;max-width:640px;padding:20px 28px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rad)">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tl);margin-bottom:8px">How credits work</div>
-      <div style="font-size:13px;color:var(--t);line-height:1.7">Every time you click a tool to generate something, or send a message in Director Chat, that uses one credit. Nothing else does, browsing, planning, and writing on your own never cost a credit. Inside the Studio you'll always have a running tally so you can see exactly how many you've used and how many are left for the month.</div>
+      <div style="font-size:13px;color:var(--t);line-height:1.7">Generating with a tool or messaging Director Chat uses one credit. Browsing, planning, and writing on your own never cost a thing. Your running tally is always visible.</div>
     </div>
 
     <!-- INVITE CODE -->
