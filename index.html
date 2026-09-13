@@ -444,11 +444,14 @@ select.fi{cursor:pointer}
 }
 #lockedScreen.show{display:block}
 /* SECTION TOGGLE TABS */
-.pricing-section-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
-.pst{border-radius:12px;padding:12px 10px;cursor:pointer;border:2px solid transparent;transition:all .18s;text-align:center;user-select:none;-webkit-tap-highlight-color:transparent}
-.pst-icon{font-size:20px;margin-bottom:4px}
-.pst-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;line-height:1.3}
-.pst-sub{font-size:10px;font-weight:400;opacity:.75;margin-top:2px;letter-spacing:0;text-transform:none}
+.pricing-section-tabs{display:flex;flex-direction:column;gap:10px;margin-bottom:0}
+.pst{display:flex;align-items:center;gap:14px;border-radius:12px;padding:14px 18px;cursor:pointer;border:2px solid transparent;transition:all .18s;text-align:left;user-select:none;-webkit-tap-highlight-color:transparent}
+.pst-icon{font-size:22px;flex-shrink:0}
+.pst-label-wrap{flex:1;min-width:0}
+.pst-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;line-height:1.3}
+.pst-sub{font-size:11.5px;font-weight:400;opacity:.75;margin-top:2px;letter-spacing:0;text-transform:none}
+.pst-chev{font-size:14px;flex-shrink:0;transition:transform .2s}
+.pst.active .pst-chev{transform:rotate(180deg)}
 /* inactive state */
 .pst.create{background:var(--rp);border-color:rgba(179,108,55,.2);color:var(--r)}
 .pst.plan{background:#e0f2f2;border-color:rgba(0,132,132,.15);color:var(--teal)}
@@ -847,11 +850,10 @@ select.fi{cursor:pointer}
   .cd-sales-grid{grid-template-columns:1fr !important}
   .pricing-wrap{padding:24px 16px 60px}
   .pricing-features,.pricing-cards{grid-template-columns:1fr}
-  .pricing-section-tabs{grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .pst{padding:9px 4px}
-  .pst-icon{font-size:16px}
-  .pst-label{font-size:11px}
-  .pst-sub{font-size:9px}
+  .pst{padding:11px 14px;gap:10px}
+  .pst-icon{font-size:18px}
+  .pst-label{font-size:12px}
+  .pst-sub{font-size:10px}
   .pf-card{padding:16px}
   .pin-card::before{width:40px;height:16px;top:-6px;left:12px}
   .pin{left:30px;top:2px}
@@ -1441,7 +1443,7 @@ select.fi{cursor:pointer}
           <div style="width:44px;height:44px;border-radius:10px;background:#e0f2f2;border:1px solid rgba(0,132,132,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✍️</div>
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Writing Studio</div>
-            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Write your own or generate with AI. Captions, carousels, reels, newsletters, Substack articles, and more. Every draft saves automatically so nothing gets lost. Go analog when you want to, use AI when you need a spark.</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Write your own or generate with AI. Captions, carousels, reels, newsletters, Substack articles, and more. Every draft saves automatically so nothing gets lost. Go analog when you want to, use AI when you need a spark.</div>
           </div>
         </div>
 
@@ -1449,7 +1451,7 @@ select.fi{cursor:pointer}
           <div style="width:44px;height:44px;border-radius:10px;background:var(--rp);border:1px solid rgba(179,108,55,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📄</div>
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Content Cards</div>
-            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Every piece of content gets its own card with a brief, hook, body, platform, format, date, and AI tools built in. Your Creative Director reads your brief and gives you a direction before you write a word.</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Every piece of content gets its own card with a brief, hook, body, platform, format, date, and AI tools built in. Your Creative Director reads your brief and gives you a direction before you write a word.</div>
           </div>
         </div>
 
@@ -1457,7 +1459,7 @@ select.fi{cursor:pointer}
           <div style="width:44px;height:44px;border-radius:10px;background:#e0f2f2;border:1px solid rgba(0,132,132,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">💬</div>
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Director Chat</div>
-            <div style="font-size:13.5px;color:var(--t);line-height:1.7">An open chat with your Creative Director. Rework something you're already creating in the Studio, write in a different voice for another offer or business, or just think out loud before you start.</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">An open chat with your Creative Director. Rework something you're already creating in the Studio, write in a different voice for another offer or business, or just think out loud before you start.</div>
           </div>
         </div>
 
@@ -1465,7 +1467,7 @@ select.fi{cursor:pointer}
           <div style="width:44px;height:44px;border-radius:10px;background:#d7e7fe;border:1px solid #b8ccf0;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🔗</div>
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Prompt Library</div>
-            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Hundreds of ready-to-use hooks, CTAs, story prompts, and writing prompts built for service-based businesses. Filter by category, save your own favourites, and never stare at a blank page again.</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Hundreds of ready-to-use hooks, CTAs, story prompts, and writing prompts built for service-based businesses. Filter by category, save your own favourites, and never stare at a blank page again.</div>
           </div>
         </div>
 
@@ -1473,7 +1475,7 @@ select.fi{cursor:pointer}
           <div style="width:44px;height:44px;border-radius:10px;background:var(--sagep);border:1px solid #BFD4B2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📖</div>
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Guides for the Hard Moments</div>
-            <div style="font-size:13.5px;color:var(--t);line-height:1.7">Real playbooks built into the Studio, not generic help docs. Overwhelm resets, content rhythm frameworks, creative block reframes, a gentle plan for coming back after a quiet stretch, and yes, strategy too.</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Real playbooks built into the Studio, not generic help docs. Overwhelm resets, content rhythm frameworks, creative block reframes, a gentle plan for coming back after a quiet stretch, and yes, strategy too.</div>
           </div>
         </div>
 
@@ -1576,30 +1578,19 @@ select.fi{cursor:pointer}
     <!-- FEATURE GRID -->
     <div class="pricing-features">
 
-      <!-- SECTION TOGGLE TABS -->
+      <!-- SECTION TOGGLE: CREATE & WRITE -->
       <div style="grid-column:1/-1">
         <div class="pricing-section-tabs">
           <div class="pst create active" onclick="showPricingSection('create',this)">
             <div class="pst-icon">✍️</div>
-            <div class="pst-label">Create</div>
-            <div class="pst-sub">Write &amp; generate</div>
-          </div>
-          <div class="pst plan" onclick="showPricingSection('plan',this)">
-            <div class="pst-icon">🗂</div>
-            <div class="pst-label">Plan</div>
-            <div class="pst-sub">Organise &amp; schedule</div>
-          </div>
-          <div class="pst strategy" onclick="showPricingSection('strategy',this)">
-            <div class="pst-icon">📖</div>
-            <div class="pst-label">Strategy</div>
-            <div class="pst-sub">Guides &amp; playbooks</div>
+            <div class="pst-label-wrap"><div class="pst-label">Create</div><div class="pst-sub">Write &amp; generate</div></div>
+            <div class="pst-chev">▾</div>
           </div>
         </div>
       </div>
 
       <!-- SECTION: CREATE & WRITE -->
       <div id="panel-create" style="grid-column:1/-1;display:block">
-        <div style="margin-bottom:16px"><div class="pf-section-label">✍️ Create and write</div></div>
         <div class="pricing-features" style="margin-bottom:0">
 
       <!-- CREATIVE DIRECTOR: full-width hero card -->
@@ -1718,8 +1709,19 @@ select.fi{cursor:pointer}
 
       <!-- SECTION: PLAN & ORGANISE -->
       </div></div><!-- /panel-create inner grid + panel -->
+
+      <!-- SECTION TOGGLE: PLAN & ORGANISE -->
+      <div style="grid-column:1/-1">
+        <div class="pricing-section-tabs">
+          <div class="pst plan" onclick="showPricingSection('plan',this)">
+            <div class="pst-icon">🗂</div>
+            <div class="pst-label-wrap"><div class="pst-label">Plan</div><div class="pst-sub">Organise &amp; schedule</div></div>
+            <div class="pst-chev">▾</div>
+          </div>
+        </div>
+      </div>
+
       <div id="panel-plan" style="grid-column:1/-1;display:none">
-        <div style="margin-bottom:16px"><div class="pf-section-label">🗂 Plan and organise</div></div>
         <div class="pricing-features" style="margin-bottom:0">
 
       <!-- CONTENT PLANNER -->
@@ -1778,8 +1780,19 @@ select.fi{cursor:pointer}
 
       <!-- SECTION: STRATEGY & GUIDES -->
       </div></div><!-- /panel-plan inner grid + panel -->
+
+      <!-- SECTION TOGGLE: STRATEGY & GUIDES -->
+      <div style="grid-column:1/-1">
+        <div class="pricing-section-tabs">
+          <div class="pst strategy" onclick="showPricingSection('strategy',this)">
+            <div class="pst-icon">📖</div>
+            <div class="pst-label-wrap"><div class="pst-label">Strategy</div><div class="pst-sub">Guides &amp; playbooks</div></div>
+            <div class="pst-chev">▾</div>
+          </div>
+        </div>
+      </div>
+
       <div id="panel-strategy" style="grid-column:1/-1;display:none">
-        <div style="margin-bottom:16px"><div class="pf-section-label">📖 Strategy and guides</div></div>
         <div class="pricing-features" style="margin-bottom:0">
 
       <!-- GUIDES: new full-width card -->
@@ -10079,23 +10092,24 @@ function dismissWhatsNew(){
 
 // ── PRICING SECTION TOGGLE ───────────────────────────────────
 function showPricingSection(section, clickedTab){
+  // Accordion behavior: clicking an already-open section closes it.
+  var wasOpen = clickedTab && clickedTab.classList.contains('active');
   // Hide the three feature panels only - panel-pricing always stays visible,
   // it sits below the tabs and should never be toggled by tab switching.
   ['create','plan','strategy'].forEach(function(s){
     var panel = document.getElementById('panel-'+s);
     if(panel) panel.style.display = 'none';
   });
-  // Show selected panel
-  var active = document.getElementById('panel-'+section);
-  if(active) active.style.display = 'block';
-  // Update tab active states
   document.querySelectorAll('.pst').forEach(function(tab){
     tab.classList.remove('active');
   });
+  if(wasOpen) return; // just close it, nothing else to open
+  // Show selected panel
+  var active = document.getElementById('panel-'+section);
+  if(active) active.style.display = 'block';
   if(clickedTab) clickedTab.classList.add('active');
-  // Scroll locked screen to top of feature area
-  var locked = document.getElementById('lockedScreen');
-  if(locked) locked.scrollTo({top: 0, behavior: 'smooth'});
+  // Bring the newly opened section's header into view without jumping the whole page
+  if(clickedTab && clickedTab.scrollIntoView) clickedTab.scrollIntoView({behavior:'smooth',block:'start'});
 }
 // ── END PRICING SECTION TOGGLE ───────────────────────────────
 
