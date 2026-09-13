@@ -819,8 +819,10 @@ select.fi{cursor:pointer}
   /* CALENDAR */
   .cal-nav h2{font-size:18px !important;min-width:unset !important}
   .cal-nav{gap:8px;margin-bottom:12px}
-  /* Calendar gets its own scroll context separate from main-body */
-  .cal-main-body{overflow:visible !important;padding:14px 0 80px !important}
+  /* Calendar's main-body: vertical scroll must stay enabled so content below
+     the grid (like Coming Up) is reachable; horizontal stays visible so the
+     grid's own horizontal scroll wrapper can bleed full-width. */
+  .cal-main-body{overflow-y:auto !important;overflow-x:visible !important;padding:14px 0 80px !important}
   #calGridWrap{overflow-x:scroll !important;overflow-y:visible !important;-webkit-overflow-scrolling:touch;width:100vw;margin-left:-16px;padding:0 16px;box-sizing:border-box}
   .cal-grid{min-width:560px !important;font-size:10px}
   .cal-hd{padding:6px 3px !important;font-size:8.5px !important}
