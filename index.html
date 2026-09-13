@@ -207,6 +207,14 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .cal-cell.today{background:#FDF4EC;box-shadow:0 1px 4px rgba(179,108,55,.18),inset 0 0 0 1.5px rgba(179,108,55,.3)}
 .day-n{font-size:12px;font-weight:600;color:var(--t);width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;flex-shrink:0;border-radius:50%;font-family:var(--fb)}
 .cal-cell.today .day-n{background:var(--r);color:white;font-size:11px}
+.cal-upcoming{margin-top:32px;padding-top:24px;border-top:1px solid var(--bl)}
+.cal-gap-notice{background:var(--tealp);color:var(--tealh);font-size:12.5px;font-weight:500;padding:10px 14px;border-radius:var(--rsm);margin-bottom:12px;line-height:1.5}
+.cal-up-row{display:flex;align-items:center;gap:12px;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 14px;cursor:pointer;transition:box-shadow .15s,transform .15s}
+.cal-up-row:hover{box-shadow:0 3px 10px var(--shm);transform:translateY(-1px)}
+.cal-up-date{font-size:11px;font-weight:700;color:var(--t);min-width:66px;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em}
+.cal-up-title{flex:1;font-size:13px;font-weight:600;color:var(--e);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cal-up-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+@media(max-width:480px){.cal-up-title{white-space:normal}.cal-up-date{min-width:52px;font-size:10px}}
 .day-dots{display:flex;flex-direction:column;gap:3px;min-width:0}.cal-pill{display:flex;align-items:center;gap:3px;border-radius:4px;padding:2px 5px;font-size:9.5px;overflow:hidden;white-space:nowrap;cursor:pointer;transition:opacity .12s}.cal-pill:hover{opacity:.8}.cal-pill-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}.cal-pill-txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-weight:500}
 .day-row{display:flex;align-items:center;gap:3px;font-size:9.5px;color:var(--e);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.4}
 .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
@@ -2427,6 +2435,15 @@ select.fi{cursor:pointer}
         </div>
       </div>
       <div id="calGridWrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%"><div class="cal-grid" id="calGrid"></div></div>
+
+      <!-- COMING UP -->
+      <div class="cal-upcoming">
+        <div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:2px">📋 Coming Up</div>
+        <div style="font-size:12px;color:var(--t);margin-bottom:14px">Your next scheduled items, at a glance</div>
+        <div id="calGapNotice" class="cal-gap-notice" style="display:none"></div>
+        <div id="calUpcomingList" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div id="calUpcomingEmpty" style="display:none;text-align:center;padding:24px 16px;color:var(--t);font-size:13px;background:var(--w);border:1px dashed var(--b);border-radius:var(--rad)">Nothing scheduled yet. Add a content card or task to see it show up here.</div>
+      </div>
     </div>
   </div>
 
@@ -6357,8 +6374,9 @@ function renderCalendar(){
     wb.style.background=S.calView==='week'?'var(--r)':'transparent';
     wb.style.color=S.calView==='week'?'white':'var(--t)';
   }
-  if(S.calView==='week'){renderCalWeek();return;}
+  if(S.calView==='week'){renderCalWeek();renderCalUpcoming();return;}
   renderCalMonth();
+  renderCalUpcoming();
 }
 
 function renderCalMonth(){
@@ -6419,6 +6437,57 @@ function getCalEntries(ds){
   var taskEnts=S.tasks.filter(t=>t.date===ds).map(t=>({id:'task_'+t.id,title:t.title,platform:'other',status:t.status,_fromTask:true}));
   var calOnly=S.calEntries.filter(e=>e.date===ds&&!ideaEnts.find(ie=>ie.title===e.title)&&!taskEnts.find(te=>te.title===e.title));
   return [...ideaEnts,...taskEnts,...calOnly];
+}
+
+function renderCalUpcoming(){
+  var listEl=document.getElementById('calUpcomingList');
+  var emptyEl=document.getElementById('calUpcomingEmpty');
+  var gapEl=document.getElementById('calGapNotice');
+  if(!listEl) return;
+  var today=new Date();today.setHours(0,0,0,0);
+  var SCAN_DAYS=21,MAX_ITEMS=6;
+  var items=[];
+  var emptyStreak=0,gapStart=null,gapFound=null;
+  for(var i=0;i<SCAN_DAYS;i++){
+    var d=new Date(today);d.setDate(today.getDate()+i);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    var es=getCalEntries(ds);
+    if(es.length===0){
+      if(emptyStreak===0)gapStart=d;
+      emptyStreak++;
+    }else{
+      if(!gapFound&&emptyStreak>=3)gapFound={start:gapStart,end:new Date(d.getTime()-86400000)};
+      emptyStreak=0;
+      es.forEach(function(e){e._dateObj=new Date(d);items.push(e);});
+    }
+    if(items.length>=MAX_ITEMS)break;
+  }
+  if(!gapFound&&emptyStreak>=3){
+    var lastScanned=new Date(today);lastScanned.setDate(today.getDate()+Math.min(SCAN_DAYS,i)-1);
+    gapFound={start:gapStart,end:lastScanned};
+  }
+  items=items.slice(0,MAX_ITEMS);
+  var fmt=function(dt){return dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});};
+  if(gapFound){
+    gapEl.style.display='block';
+    gapEl.innerHTML='🌱 Nothing planned '+fmt(gapFound.start)+' – '+fmt(gapFound.end)+'. No pressure, just a heads up.';
+  }else{
+    gapEl.style.display='none';
+  }
+  if(items.length===0){
+    listEl.innerHTML='';
+    emptyEl.style.display='block';
+    return;
+  }
+  emptyEl.style.display='none';
+  listEl.innerHTML=items.map(function(e){
+    var isToday=e._dateObj.toDateString()===today.toDateString();
+    var dateLabel=isToday?'Today':fmt(e._dateObj);
+    var accent=e._fromTask?'var(--r)':e._fromIdea?'var(--teal)':'var(--t)';
+    var typeTag=e._fromTask?'☑ Task':e._fromIdea?'✦ '+(e.platform||'Content'):'📅 Entry';
+    var clickFn=e._fromTask?"openTaskEditModal('"+e.id.replace('task_','')+"')":e._fromIdea?"cdOpen('"+e.id.replace('idea_','')+"')":"calEditEntry('"+e.id+"')";
+    return '<div class="cal-up-row" onclick="'+clickFn+'"><div class="cal-up-date">'+dateLabel+'</div><div class="cal-up-title">'+esc(e.title)+'</div><div class="cal-up-tag" style="color:'+accent+'">'+typeTag+'</div></div>';
+  }).join('');
 }
 
 function renderDots(es,max,fs){
