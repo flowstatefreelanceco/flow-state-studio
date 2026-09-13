@@ -106,7 +106,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--p)}
 .main-hdr{padding:26px 36px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-shrink:0;border-bottom:1px solid var(--bl);padding-bottom:18px}
 .main-hdr h1{font-family:var(--fh);font-size:23px;font-weight:600;color:var(--e);letter-spacing:.01em;line-height:1.15}
-.main-hdr .sub{font-family:'Agrandir',sans-serif;font-size:14px;font-weight:700;color:var(--t);margin-top:4px;letter-spacing:.01em}
+.main-hdr .sub{font-family:'Agrandir',sans-serif;font-style:italic;font-size:14px;font-weight:400;color:var(--t);margin-top:4px;letter-spacing:.01em}
 .hdr-acts{display:flex;gap:8px;align-items:center}
 .main-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 36px 48px}
 
@@ -199,7 +199,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .cal-hd:nth-child(5){background:var(--sagep);color:var(--sage)}
 .cal-hd:nth-child(6){background:#fdf3e0;color:#9c6b1f}
 .cal-hd:nth-child(7){background:#eaf5f5;color:#00696e}
-.cal-nav h2{color:var(--teal)}
+.cal-nav h2{color:var(--p)}
 .cal-cell{background:var(--w);min-height:90px;padding:7px 6px 5px;cursor:pointer;transition:background .12s;vertical-align:top;min-width:0;overflow:hidden;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .cal-cell:hover{background:#FBF5EB}
 .cal-cell.other{background:rgba(245,239,227,.55)}
@@ -4502,7 +4502,7 @@ select.fi{cursor:pointer}
     <div class="cal-picker-title">Add to Calendar</div>
     <div class="cal-picker-sub">What do you want to add?</div>
     <div class="cal-picker-opts">
-      <div class="cal-picker-opt rust" onclick="closeModal('calPickerModal');openCalModal()">
+      <div class="cal-picker-opt rust" onclick="closeModal('calPickerModal');openIdeaModal()">
         <span class="cal-picker-opt-icon">📅</span>
         <div class="cal-picker-opt-title">Content Entry</div>
         <div class="cal-picker-opt-desc">Schedule a post, campaign, or content idea with platform and status</div>
