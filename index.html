@@ -6126,6 +6126,22 @@ function getOnYourPlateData(){
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
 const IDEA_COLS=[{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+// Color coding by content FORMAT (not platform) so cards in the planner are
+// recognizable at a glance - a Reel and a Carousel should never look the
+// same just because they're both Instagram. Keys match the <option> values
+// in the #cdFormat select exactly (case-sensitive); anything else (custom
+// typed formats, blank) falls back to a neutral gray.
+const FORMAT_COLORS={
+  'Post':{bg:'#DCE8D4',fg:'#3A5228'},
+  'Carousel':{bg:'#F5E4CC',fg:'#8C3518'},
+  'Reel':{bg:'#F5D4E4',fg:'#8C1A54'},
+  'Story':{bg:'#E4D4EE',fg:'#5C1A46'},
+  'Newsletter':{bg:'#D0EFE8',fg:'#1E5C5C'},
+  'Article':{bg:'#D4D8EE',fg:'#2A4A70'},
+  'Freebie':{bg:'#FBE8B8',fg:'#6A4E18'},
+  'Blog Post':{bg:'#C9CEE8',fg:'#1A2860'}
+};
+function formatColor(fmt){return FORMAT_COLORS[fmt]||{bg:'var(--bl)',fg:'var(--t)'};}
 function togglePlannerView(){
   S.plannerView=(S.plannerView==='list')?'kanban':'list';
   var kanban=document.getElementById('ideaKanban');
@@ -6183,11 +6199,13 @@ function renderIdeaListView(){
       var color=statusColors[idea.status]||'var(--tl)';
       var bg=statusBg[idea.status]||'var(--bl)';
       var label=statusLabel[idea.status]||cap(idea.status||'');
-      html+='<div class="idea-list-row" onclick="cdOpen(\''+idea.id+'\')">'
+      var fc=formatColor(idea.format);
+      html+='<div class="idea-list-row" onclick="cdOpen(\''+idea.id+'\')" style="border-left:3px solid '+fc.fg+'">'
         +'<span class="idea-list-dot" style="background:'+color+'"></span>'
         +'<span class="idea-list-title">'+esc(idea.title||'Untitled')+'</span>'
         +'<div class="idea-list-meta">'
         +(idea.platform?'<span style="font-size:11px;color:var(--tl)">'+cap(idea.platform)+'</span>':'')
+        +(idea.format?'<span class="tag" style="background:'+fc.bg+';color:'+fc.fg+';font-size:10px;padding:3px 9px;font-weight:700">'+esc(idea.format)+'</span>':'')
         +'<span class="idea-list-badge" style="background:'+bg+';color:'+color+'">'+label+'</span>'
         +'<span class="idea-list-date">'+(dt||'No date')+'</span>'
         +'</div></div>';
@@ -6203,12 +6221,12 @@ function renderKanban(){
     const cards=S.ideas.filter(i=>i.status===col.id);
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(i=>`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
+      <div class="kc-body">${cards.length?cards.map(i=>{var fc=formatColor(i.format);return`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer;border-left:4px solid ${fc.fg}"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}<span class="tag" style="background:var(--bl);color:var(--t);font-size:10px;padding:3px 9px">${esc(i.format||'')}</span>${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
-      </div></div>`).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
+      </div></div>`;}).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
