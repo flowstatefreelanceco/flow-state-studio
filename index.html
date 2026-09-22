@@ -6134,15 +6134,21 @@ const IDEA_COLS=[{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',
 // very pale and text soft/muted (not near-black) to match the rest of the
 // app's gentle pastel tag style, rather than the punchier saturated set
 // used the first time around.
+// IMPORTANT: these keys must match the <option value="..."> strings in
+// #cdFormat exactly (that's what actually gets saved on the idea, not the
+// shorter label shown in the dropdown) - a mismatch here means the color
+// silently falls back to plain gray for that format, which is what made
+// the first version of this look like it wasn't doing anything. Event and
+// Other are deliberately left out of this map so they stay neutral gray.
 const FORMAT_COLORS={
-  'Post':{bg:'#E8F0E3',fg:'#6E8560'},
-  'Carousel':{bg:'#F7ECD9',fg:'#B08355'},
-  'Reel':{bg:'#FBE9F0',fg:'#B5527A'},
-  'Story':{bg:'#F1E9F7',fg:'#8C6BA8'},
-  'Newsletter':{bg:'#E1F3F0',fg:'#3A9A96'},
-  'Article':{bg:'#E9EDF7',fg:'#6C86AD'},
-  'Freebie':{bg:'#FCF1D6',fg:'#B0923F'},
-  'Blog Post':{bg:'#EAEBF5',fg:'#7A80B0'}
+  'Caption / Post':{bg:'#CFE3C4',fg:'#3D6B2C'},
+  'Carousel':{bg:'#F0CFA0',fg:'#8C5A1A'},
+  'Reel / Video':{bg:'#F5B8CE',fg:'#A31B5C'},
+  'Story':{bg:'#DCC0EE',fg:'#6B3A96'},
+  'Newsletter':{bg:'#A8E0D8',fg:'#0F6B64'},
+  'Substack / Article':{bg:'#B9C6EE',fg:'#2E4B8C'},
+  'Freebie':{bg:'#F7D978',fg:'#8C6A0F'},
+  'Blog Post':{bg:'#B4BBE8',fg:'#3A3F8C'}
 };
 function formatColor(fmt){return FORMAT_COLORS[fmt]||{bg:'var(--bl)',fg:'var(--t)'};}
 function togglePlannerView(){
@@ -6208,7 +6214,7 @@ function renderIdeaListView(){
         +'<span class="idea-list-title">'+esc(idea.title||'Untitled')+'</span>'
         +'<div class="idea-list-meta">'
         +(idea.platform?'<span style="font-size:11px;color:var(--tl)">'+cap(idea.platform)+'</span>':'')
-        +(idea.format?'<span class="tag" style="background:'+fc.bg+';color:'+fc.fg+';font-size:10px;padding:3px 9px;font-weight:600">'+esc(idea.format)+'</span>':'')
+        +(idea.format?'<span class="tag" style="background:'+fc.bg+';color:'+fc.fg+';font-size:10px;padding:3px 9px;font-weight:700">'+esc(idea.format)+'</span>':'')
         +'<span class="idea-list-badge" style="background:'+bg+';color:'+color+'">'+label+'</span>'
         +'<span class="idea-list-date">'+(dt||'No date')+'</span>'
         +'</div></div>';
@@ -6227,7 +6233,7 @@ function renderKanban(){
       <div class="kc-body">${cards.length?cards.map(i=>{var fc=formatColor(i.format);return`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:600">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div></div>`;}).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
