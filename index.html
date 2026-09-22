@@ -6993,7 +6993,7 @@ function saveDraftEdit(){
   if(titleEl&&titleEl.value.trim())d.title=titleEl.value.trim();
   if(contentEl)d.content=contentEl.value;
   d.updatedAt=new Date().toISOString();
-  persist();renderDraftsGrid();toast('Draft saved ✓');
+  persist();renderDraftsGrid();renderDashboard();toast('Draft saved ✓');
 }
 function copyDraftModal(){const d=S.drafts.find(x=>x.id===S.viewingDraftId);if(d)navigator.clipboard.writeText(d.content).then(()=>toast('Copied ✓'));}
 
@@ -7134,7 +7134,7 @@ function saveIdea(){
   S._pendingIdeaImages=[];
   if(reminderCb){reminderCb.checked=false;cdToggleReminder(reminderCb);}
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
-  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();
+  persist();closeModal('cardDetailModal');renderKanban();renderCalendar();renderBucketInsights();renderDashboard();
   if(reminder && _currentUser){
     var uName=(_currentUser.user_metadata&&_currentUser.user_metadata.first_name)||'';
     scheduleBrevoReminders(idea,_currentUser.email,uName).then(function(result){
@@ -7248,13 +7248,13 @@ function saveTask(){
     }
     S._editingTaskId=null;
     if(btn)btn.textContent='Add Task';
-    persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task saved ✓');return;
+    persist();closeModal('taskModal');renderTaskKanban();renderCalendar();renderDashboard();toast('Task saved ✓');return;
   }
   // New task
   const task={id:Date.now().toString(),title,status,date,time,notes,taskType,energy,timeEst,starred,updatedAt:new Date().toISOString()};
   S.tasks.push(task);
   if(date){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status,date,time,notes});}
-  persist();closeModal('taskModal');renderTaskKanban();renderCalendar();toast('Task added ✓');
+  persist();closeModal('taskModal');renderTaskKanban();renderCalendar();renderDashboard();toast('Task added ✓');
 }
 function openAddLibModal(section){
   S.addLibSection=section;
@@ -7989,7 +7989,7 @@ function cdSave(){
   }
   S.cdId=null;
   persist();closeModal('cardDetailModal');
-  renderKanban();renderCalendar();renderBucketInsights();
+  renderKanban();renderCalendar();renderBucketInsights();renderDashboard();
   // Schedule Brevo reminders if toggled on
   if(shouldSchedule && _currentUser){
     var uName = (_currentUser.user_metadata&&_currentUser.user_metadata.first_name) || '';
@@ -8436,7 +8436,7 @@ function studioOwnSave(){
   var titleVal=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
   var bodyVal=el?el.value.trim():'';
   var draft={id:Date.now().toString(),title:titleVal||selType+' - own draft',hook:hookVal,content:bodyVal,platform:selPlat,format:selType,links:ownLinks,tags:ownTags,analog:true,createdAt:new Date().toISOString()};
-  S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
+  S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();renderDashboard();
   toast('Saved to drafts ✓');
 }
 function cdAddSlide(){
@@ -8484,7 +8484,7 @@ function cdSaveSlides(){
   if(!txt){toast('Add some slide content first');return;}
   var title=document.getElementById('cdTitle')?document.getElementById('cdTitle').value.trim():'';
   S.drafts.unshift({id:Date.now().toString(),title:(title||'Carousel').slice(0,65),content:txt,platform:'instagram',contentType:'Carousel',analog:true,createdAt:new Date().toISOString()});
-  persist();toast('Carousel saved to drafts ✓');
+  persist();renderDashboard();toast('Carousel saved to drafts ✓');
 }
 function cdCopyOwn(){
   var el=document.getElementById('cdOwnContent');
@@ -8495,7 +8495,7 @@ function cdSaveOwnDraft(){
   if(!el||!el.value.trim()){toast('Nothing to save yet');return;}
   var b=cdGetBrief();
   var draft={id:Date.now().toString(),title:b.title||'Untitled draft',content:el.value.trim(),platform:b.plat,format:b.format,analog:true,createdAt:new Date().toISOString()};
-  S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();
+  S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();renderDashboard();
   var saved=document.getElementById('cdOwnSaved');if(saved){saved.style.opacity='1';setTimeout(()=>saved.style.opacity='0',2000);}
   toast('Draft saved ✓');
 }
