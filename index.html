@@ -7901,6 +7901,14 @@ function cdSaveOrAdd(){
 function cdSave(){
   var x=S.ideas.find(function(a){return a.id===S.cdId;});
   if(!x)return;
+  // Capture the date/time this card had BEFORE this save, so we can tell
+  // below whether the post got rescheduled. Without this, changing a post's
+  // date while its reminder was already on silently left the reminder
+  // pointed at the old date - the emails Brevo already had queued would
+  // fire for a post that no longer happens then, and the new date would
+  // never get a reminder at all, since "reminder on" never flips to
+  // "just turned on" in that case.
+  var previousDate=x.date, previousTime=x.time;
   x.title=document.getElementById('cdTitle').value.trim()||x.title;
   x.platform=document.getElementById('cdPlat').value||x.platform;
   x.format=document.getElementById('cdFormat').value||x.format;
@@ -7916,8 +7924,11 @@ function cdSave(){
   var reminderNowOn = reminderCb ? reminderCb.checked : false;
   var reminderWasPreviouslyOn = x.reminder || false;
   x.reminder = reminderNowOn;
-  // Only schedule if reminder was just turned ON (not already on from a previous save)
-  var shouldSchedule = reminderNowOn && !reminderWasPreviouslyOn;
+  // Schedule (or re-schedule) if the reminder was just turned ON, or if it
+  // was already on but the post's date/time changed - a reschedule needs a
+  // fresh reminder pointed at the new date just as much as a brand new one does.
+  var dateOrTimeChanged = (x.date!==previousDate) || (x.time!==previousTime);
+  var shouldSchedule = reminderNowOn && (!reminderWasPreviouslyOn || dateOrTimeChanged);
   // Persist AI outputs and own content so they survive close/reopen
   var ownEl=document.getElementById('cdOwnContent');
   x.ownContent=ownEl?ownEl.value:'';
