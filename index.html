@@ -2519,6 +2519,7 @@ select.fi{cursor:pointer}
             <div style="display:flex;gap:10px">
               <button class="btn btn-g" onclick="studioOwnCopy()">Copy</button>
               <button class="btn btn-brass" style="flex:1" onclick="studioOwnSave()">Save to Drafts</button>
+              <button class="btn btn-p" style="flex:1" onclick="studioOwnCreateCard()">🗂 Create Content Card</button>
             </div>
           </div>
 
@@ -2604,10 +2605,11 @@ select.fi{cursor:pointer}
                 <div class="studio-panel-sub" id="studioReviewSub">Here's what's about to be saved to your drafts library.</div>
               </div>
               <div class="studio-review-box" id="studioReviewBox"><div class="studio-review-empty">Nothing here yet, go back and generate something first.</div></div>
-              <div style="display:flex;gap:10px">
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
                 <button class="btn btn-g" onclick="goStudioStep(2)">← Back</button>
                 <button class="btn btn-g" onclick="studioReviewCopy()">Copy</button>
                 <button class="btn btn-brass" style="flex:1" onclick="studioReviewSave()">Save to Drafts</button>
+                <button class="btn btn-p" style="flex:1" onclick="studioCreateCardFromAI()">🗂 Create Content Card</button>
               </div>
             </div>
 
@@ -7012,6 +7014,66 @@ function studioReviewCopy(){copyOut();}
 function studioReviewSave(){
   if(!S.studio.output){toast('Nothing to save yet');return;}
   saveDraft();
+}
+// Studio's Content Type values (typeSel) are worded for humans ("Reel
+// Script", "Email Newsletter") and don't line up 1:1 with #cdFormat's own
+// option values on the content card - the exact mismatch that made the
+// Story/Carousel dashboard shortcuts silently go blank earlier. This maps
+// every Studio type to a real cdFormat value so a card created from here
+// always lands with its format actually set, never blank.
+function studioFormatToCdFormat(type){
+  var map={
+    'Caption / Post':'Caption / Post','Email Newsletter':'Newsletter',
+    'Story Script':'Story','Carousel Copy':'Carousel','Reel Script':'Reel / Video',
+    'Video Script':'Reel / Video','Blog Post':'Blog Post','Article':'Substack / Article',
+    'Bio / About':'Other','Book Chapter':'Other'
+  };
+  return map[type]||'Other';
+}
+// Builds a content card idea from whatever's on the page right now, saves
+// it to the planner, then opens it in the full card editor so platform,
+// date, and anything else can be filled in - same pattern as Save to
+// Drafts, just landing in the Content Planner instead of the drafts library.
+function studioMakeCard(fields){
+  var idea=Object.assign({
+    id:Date.now().toString(),title:'Untitled card',platform:'other',format:'Other',
+    notes:'',hook:'',date:'',time:'',images:[],status:'idea',ownContent:'',
+    reminder:false,bucket:'',perfNote:'',aiOutputs:{},aiHookSel:'',cdTasks:[],
+    updatedAt:new Date().toISOString()
+  },fields);
+  S.ideas.push(idea);
+  S.gs.ideaAdded=true;
+  persist();
+  renderKanban();renderCalendar();renderBucketInsights();renderDashboard();
+  toast('Added as content card ✓');
+  cdOpen(idea.id);
+}
+function studioOwnCreateCard(){
+  var titleEl=document.getElementById('studioTitle');
+  var hookEl=document.getElementById('studioOwnHook');
+  var bodyEl=document.getElementById('studioOwnTA');
+  var title=titleEl?titleEl.value.trim():'';
+  var hook=hookEl?hookEl.value.trim():'';
+  var body=bodyEl?bodyEl.value.trim():'';
+  if(!title&&!hook&&!body){toast('Write something first');return;}
+  var tagsEl=document.getElementById('studioTags');
+  var linksEl=document.getElementById('studioLinks');
+  var extraNotes=[];
+  if(tagsEl&&tagsEl.value.trim())extraNotes.push('Tags: '+tagsEl.value.trim());
+  if(linksEl&&linksEl.value.trim())extraNotes.push('Links: '+linksEl.value.trim());
+  studioMakeCard({
+    title:title||(hook?hook.slice(0,60):(body.split('\n')[0]||'Untitled card').slice(0,60)),
+    hook:hook,ownContent:body,notes:extraNotes.join('\n')
+  });
+}
+function studioCreateCardFromAI(){
+  if(!S.studio.output){toast('Nothing to save yet');return;}
+  studioMakeCard({
+    title:(S.studio.topic||S.studio.type||'AI draft').slice(0,65),
+    platform:S.studio.plat||'other',
+    format:studioFormatToCdFormat(S.studio.type),
+    ownContent:S.studio.output
+  });
 }
 async function generate(){
   if(false){toast('Add your API key in Settings first');navigate('settings');return;}
