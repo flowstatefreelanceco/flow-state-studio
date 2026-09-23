@@ -2493,116 +2493,124 @@ select.fi{cursor:pointer}
       <div class="studio-wrap">
         <div class="sp out-panel" style="max-width:640px;width:100%">
 
-          <!-- STEP PROGRESS -->
-          <div class="studio-steps" id="studioSteps">
-            <div class="studio-step active" data-step="1" onclick="goStudioStep(1)"><div class="studio-step-dot">1</div><div class="studio-step-lbl">Set Up</div></div>
-            <div class="studio-step-line" id="studioLine1"></div>
-            <div class="studio-step" data-step="2" onclick="goStudioStep(2)"><div class="studio-step-dot">2</div><div class="studio-step-lbl">Write</div></div>
-            <div class="studio-step-line" id="studioLine2"></div>
-            <div class="studio-step" data-step="3" onclick="goStudioStep(3)"><div class="studio-step-dot">3</div><div class="studio-step-lbl">Review &amp; Save</div></div>
-          </div>
-
-          <!-- STEP 1: SET UP -->
-          <div class="studio-panel" id="studioStep1" style="padding:0 20px 22px">
-            <div class="studio-panel-hdr">
-              <div class="studio-panel-title">What are you making?</div>
-              <div class="studio-panel-sub">Pick a type and platform, then tell us what it's about. You'll choose to write it yourself or let AI draft it in the next step.</div>
-            </div>
-            <div class="fl"><label class="fl-lbl">Content Type</label>
-              <select class="fi" id="typeSel" onchange="studioTypeChanged()">
-                <option value="Caption / Post">Caption / Post</option>
-                <option value="Email Newsletter">Newsletter</option>
-                <option value="Story Script">Story</option>
-                <option value="Carousel Copy">Carousel</option>
-                <option value="Reel Script">Reel</option>
-                <option value="Bio / About">Bio / About</option>
-                <option value="Video Script">Video Script</option>
-                <option value="Blog Post">Blog Post</option>
-                <option value="Article">Article</option>
-                <option value="Book Chapter">Book Chapter</option>
-              </select>
-            </div>
-            <div class="fl"><label class="fl-lbl">Platform</label>
-              <select class="fi" id="platSel" onchange="S.studio.plat=this.value">
-                <option value="instagram">Instagram</option>
-                <option value="newsletter">Newsletter</option>
-                <option value="email">Email</option>
-                <option value="substack">Substack</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="blog">Blog</option>
-                <option value="facebook">Facebook</option>
-                <option value="tiktok">TikTok</option>
-              </select>
-            </div>
-            <div class="fl"><label class="fl-lbl">Tone</label>
-              <select class="fi" id="toneSel" onchange="S.studio.tone=this.value">
-                <option value="Warm & Personal">Warm &amp; Personal</option>
-                <option value="Professional & Clear">Professional &amp; Clear</option>
-                <option value="Educational & Helpful">Educational &amp; Helpful</option>
-                <option value="Inspiring & Motivating">Inspiring &amp; Motivating</option>
-                <option value="Playful & Light">Playful &amp; Light</option>
-              </select>
-            </div>
-            <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI generates a title and subtitle automatically.</div>
-            <div class="fl"><label class="fl-lbl">Topic / Brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(only needed if you want AI to draft it)</span></label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:44px;font-size:12.5px"></textarea></div>
-            <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
-            <button class="btn btn-p full" onclick="goStudioStep(2)">Continue →</button>
-          </div>
-
-          <!-- STEP 2: WRITE -->
-          <div class="studio-panel" id="studioStep2" style="display:none;padding:0 20px 22px">
+          <!-- TOP-LEVEL: Go Analog vs AI Draft, a real fork, not a step -->
+          <div style="padding:20px 20px 0">
             <div class="studio-mode-toggle">
-              <button class="studio-mode-btn own sel" id="modeBtnOwn" onclick="setStudioMode('own')">✏️ Write it myself</button>
-              <button class="studio-mode-btn ai" id="modeBtnAi" onclick="setStudioMode('ai')">✦ Let AI draft it</button>
+              <button class="studio-mode-btn own sel" id="studioTabAnalog" onclick="switchStudioTab('analog')">✏️ Go Analog</button>
+              <button class="studio-mode-btn ai" id="studioTabAi" onclick="switchStudioTab('ai')">✦ AI Draft</button>
+            </div>
+          </div>
+
+          <!-- GO ANALOG: one flat page, no steps needed -->
+          <div class="studio-panel" id="studioAnalogPanel" style="padding:0 20px 22px">
+            <div class="studio-mode-banner analog"><span class="studio-mode-banner-title">✏️ Go Analog</span><span class="studio-mode-banner-sub">write your own, no AI required</span></div>
+            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
+            <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
+            <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
+            </div>
+            <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
+              <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:10px">
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-g" onclick="studioOwnCopy()">Copy</button>
+              <button class="btn btn-brass" style="flex:1" onclick="studioOwnSave()">Save to Drafts</button>
+            </div>
+          </div>
+
+          <!-- AI DRAFT: the 3-step wizard, only used by this path now -->
+          <div id="studioAiPanel" style="display:none">
+
+            <!-- STEP PROGRESS -->
+            <div class="studio-steps" id="studioSteps">
+              <div class="studio-step active" data-step="1" onclick="goStudioStep(1)"><div class="studio-step-dot">1</div><div class="studio-step-lbl">Set Up</div></div>
+              <div class="studio-step-line" id="studioLine1"></div>
+              <div class="studio-step" data-step="2" onclick="goStudioStep(2)"><div class="studio-step-dot">2</div><div class="studio-step-lbl">Generate</div></div>
+              <div class="studio-step-line" id="studioLine2"></div>
+              <div class="studio-step" data-step="3" onclick="goStudioStep(3)"><div class="studio-step-dot">3</div><div class="studio-step-lbl">Review &amp; Save</div></div>
             </div>
 
-            <!-- WRITE IT MYSELF -->
-            <div id="studioOwnMode">
-              <div class="studio-mode-banner analog"><span class="studio-mode-banner-title">✏️ Go Analog</span><span class="studio-mode-banner-sub">write your own, no AI required</span></div>
-              <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
-              <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
-              <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-                <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
+            <!-- STEP 1: SET UP -->
+            <div class="studio-panel" id="studioStep1" style="padding:0 20px 22px">
+              <div class="studio-panel-hdr">
+                <div class="studio-panel-title">What are you making?</div>
+                <div class="studio-panel-sub">Pick a type and platform, then tell us what it's about.</div>
               </div>
-              <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
-                <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
+              <div class="fl"><label class="fl-lbl">Content Type</label>
+                <select class="fi" id="typeSel" onchange="studioTypeChanged()">
+                  <option value="Caption / Post">Caption / Post</option>
+                  <option value="Email Newsletter">Newsletter</option>
+                  <option value="Story Script">Story</option>
+                  <option value="Carousel Copy">Carousel</option>
+                  <option value="Reel Script">Reel</option>
+                  <option value="Bio / About">Bio / About</option>
+                  <option value="Video Script">Video Script</option>
+                  <option value="Blog Post">Blog Post</option>
+                  <option value="Article">Article</option>
+                  <option value="Book Chapter">Book Chapter</option>
+                </select>
               </div>
-              <div style="display:flex;gap:10px;margin-bottom:6px">
-                <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
-                <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
+              <div class="fl"><label class="fl-lbl">Platform</label>
+                <select class="fi" id="platSel" onchange="S.studio.plat=this.value">
+                  <option value="instagram">Instagram</option>
+                  <option value="newsletter">Newsletter</option>
+                  <option value="email">Email</option>
+                  <option value="substack">Substack</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="blog">Blog</option>
+                  <option value="facebook">Facebook</option>
+                  <option value="tiktok">TikTok</option>
+                </select>
               </div>
+              <div class="fl"><label class="fl-lbl">Tone</label>
+                <select class="fi" id="toneSel" onchange="S.studio.tone=this.value">
+                  <option value="Warm & Personal">Warm &amp; Personal</option>
+                  <option value="Professional & Clear">Professional &amp; Clear</option>
+                  <option value="Educational & Helpful">Educational &amp; Helpful</option>
+                  <option value="Inspiring & Motivating">Inspiring &amp; Motivating</option>
+                  <option value="Playful & Light">Playful &amp; Light</option>
+                </select>
+              </div>
+              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI generates a title and subtitle automatically.</div>
+              <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:44px;font-size:12.5px"></textarea></div>
+              <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
+              <button class="btn btn-p full" onclick="goStudioStep(2)">Continue →</button>
             </div>
 
-            <!-- LET AI DRAFT IT -->
-            <div id="studioAiMode" style="display:none">
+            <!-- STEP 2: GENERATE -->
+            <div class="studio-panel" id="studioStep2" style="display:none;padding:0 20px 22px">
               <div class="studio-mode-banner bridge"><span class="studio-mode-banner-title">✦ Bridge the Gap</span><span class="studio-mode-banner-sub">AI tools + draft output</span></div>
-              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:2px 0 12px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use what I wrote in "Write it myself" as the AI's starting point</span></label>
+              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:2px 0 12px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use what I wrote in the Go Analog tab as the AI's starting point</span></label>
               <button class="btn btn-p full" id="genBtn" onclick="generate()" style="margin-bottom:14px">✦ Generate Draft</button>
               <div class="out-tb" style="border-top:none;border-radius:var(--rad) var(--rad) 0 0">
                 <div style="display:flex;align-items:center;gap:10px"><span class="sv-badge" id="svBadge">✓ Saved</span></div>
                 <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button></div>
               </div>
               <div class="out-bdy" id="outBdy" style="padding-bottom:24px;border-radius:0 0 var(--rad) var(--rad)"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Hit Generate to write from your step 1 brief.</p></div></div>
+              <div style="display:flex;gap:10px;margin-top:18px">
+                <button class="btn btn-g" onclick="goStudioStep(1)">← Back</button>
+                <button class="btn btn-p" style="flex:1" onclick="goStudioStep(3)">Continue to Review →</button>
+              </div>
             </div>
 
-            <div style="display:flex;gap:10px;margin-top:18px">
-              <button class="btn btn-g" onclick="goStudioStep(1)">← Back</button>
-              <button class="btn btn-p" style="flex:1" onclick="goStudioStep(3)">Continue to Review →</button>
+            <!-- STEP 3: REVIEW & SAVE -->
+            <div class="studio-panel" id="studioStep3" style="display:none;padding:0 20px 22px">
+              <div class="studio-panel-hdr">
+                <div class="studio-panel-title">Review &amp; save</div>
+                <div class="studio-panel-sub" id="studioReviewSub">Here's what's about to be saved to your drafts library.</div>
+              </div>
+              <div class="studio-review-box" id="studioReviewBox"><div class="studio-review-empty">Nothing here yet, go back and generate something first.</div></div>
+              <div style="display:flex;gap:10px">
+                <button class="btn btn-g" onclick="goStudioStep(2)">← Back</button>
+                <button class="btn btn-g" onclick="studioReviewCopy()">Copy</button>
+                <button class="btn btn-brass" style="flex:1" onclick="studioReviewSave()">Save to Drafts</button>
+              </div>
             </div>
-          </div>
 
-          <!-- STEP 3: REVIEW & SAVE -->
-          <div class="studio-panel" id="studioStep3" style="display:none;padding:0 20px 22px">
-            <div class="studio-panel-hdr">
-              <div class="studio-panel-title">Review &amp; save</div>
-              <div class="studio-panel-sub" id="studioReviewSub">Here's what's about to be saved to your drafts library.</div>
-            </div>
-            <div class="studio-review-box" id="studioReviewBox"><div class="studio-review-empty">Nothing here yet, go back and write or generate something first.</div></div>
-            <div style="display:flex;gap:10px">
-              <button class="btn btn-g" onclick="goStudioStep(2)">← Back</button>
-              <button class="btn btn-g" onclick="studioReviewCopy()">Copy</button>
-              <button class="btn btn-brass" style="flex:1" onclick="studioReviewSave()">Save to Drafts</button>
-            </div>
           </div>
 
         </div>
@@ -6113,6 +6121,7 @@ function quickCreate(type, plat){
   S.studio.type=type; S.studio.plat=plat;
   navigate('studio');
   setTimeout(()=>{
+    switchStudioTab('ai');
     goStudioStep(1);
     var typeSel=document.getElementById('typeSel');if(typeSel){typeSel.value=type;studioTypeChanged();}
     var platSel=document.getElementById('platSel');if(platSel)platSel.value=plat;
@@ -6951,8 +6960,26 @@ function studioTypeChanged(){
   var tip=document.getElementById('studioArticleTip');
   if(tip)tip.style.display=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(sel.value)?'block':'none';
 }
-/* ── Step wizard: Set Up -> Write -> Review & Save ── */
-var _studioStep=1, _studioMode='own';
+/* ── Go Analog vs AI Draft: a real fork at the top, not a step in a
+   wizard. Go Analog is one flat page (no setup needed to just write).
+   AI Draft keeps the 3-step wizard, since picking type/platform/tone
+   before generating is the part that actually benefits from steps. ── */
+var _studioTab='analog';
+function switchStudioTab(tab){
+  _studioTab=tab;
+  var analogPanel=document.getElementById('studioAnalogPanel');
+  var aiPanel=document.getElementById('studioAiPanel');
+  var tabAnalog=document.getElementById('studioTabAnalog');
+  var tabAi=document.getElementById('studioTabAi');
+  if(analogPanel)analogPanel.style.display=(tab==='analog')?'block':'none';
+  if(aiPanel)aiPanel.style.display=(tab==='ai')?'block':'none';
+  if(tabAnalog)tabAnalog.classList.toggle('sel',tab==='analog');
+  if(tabAi)tabAi.classList.toggle('sel',tab==='ai');
+  var scroller=document.querySelector('#view-studio .sp.out-panel');
+  if(scroller)scroller.scrollTop=0;
+}
+/* ── AI Draft's own step wizard: Set Up -> Generate -> Review & Save ── */
+var _studioStep=1;
 function goStudioStep(n){
   if(n<1||n>3)return;
   _studioStep=n;
@@ -6968,57 +6995,23 @@ function goStudioStep(n){
   var scroller=document.querySelector('#view-studio .sp.out-panel');
   if(scroller)scroller.scrollTop=0;
 }
-function setStudioMode(mode){
-  _studioMode=mode;
-  var ownMode=document.getElementById('studioOwnMode');
-  var aiMode=document.getElementById('studioAiMode');
-  var btnOwn=document.getElementById('modeBtnOwn');
-  var btnAi=document.getElementById('modeBtnAi');
-  if(ownMode)ownMode.style.display=(mode==='own')?'block':'none';
-  if(aiMode)aiMode.style.display=(mode==='ai')?'block':'none';
-  if(btnOwn)btnOwn.classList.toggle('sel',mode==='own');
-  if(btnAi)btnAi.classList.toggle('sel',mode==='ai');
-}
 function renderStudioReview(){
   var box=document.getElementById('studioReviewBox');
   var sub=document.getElementById('studioReviewSub');
   if(!box)return;
-  if(_studioMode==='ai'){
-    if(!S.studio.output){
-      box.innerHTML='<div class="studio-review-empty">No AI draft yet, go back to Write and hit Generate.</div>';
-      if(sub)sub.textContent="You're in AI mode but haven't generated anything yet.";
-      return;
-    }
-    if(sub)sub.textContent='This is the AI draft that will be saved to your library.';
-    var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:14px;color:var(--e);display:block;margin:12px 0 4px">$1</strong>').replace(/\n/g,'<br>');
-    box.innerHTML='<div style="font-size:13.5px;line-height:1.75;color:var(--e)">'+rendered+'</div>';
-  } else {
-    var title=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
-    var subtitle=document.getElementById('studioSubtitle')?document.getElementById('studioSubtitle').value.trim():'';
-    var hook=document.getElementById('studioOwnHook')?document.getElementById('studioOwnHook').value.trim():'';
-    var body=document.getElementById('studioOwnTA')?document.getElementById('studioOwnTA').value.trim():'';
-    if(!title&&!hook&&!body){
-      box.innerHTML='<div class="studio-review-empty">Nothing written yet, go back to Write and add your title or content.</div>';
-      if(sub)sub.textContent="You're in write-it-yourself mode but the page is still empty.";
-      return;
-    }
-    if(sub)sub.textContent='This is what you wrote, it will be saved to your library.';
-    box.innerHTML=(title?'<div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:4px">'+esc(title)+'</div>':'')
-      +(subtitle?'<div style="font-size:12.5px;color:var(--t);margin-bottom:8px">'+esc(subtitle)+'</div>':'')
-      +(hook?'<div style="font-size:13px;color:var(--r);font-weight:600;margin-bottom:8px">'+esc(hook)+'</div>':'')
-      +(body?'<div style="font-size:13.5px;line-height:1.75;color:var(--e);white-space:pre-wrap">'+esc(body)+'</div>':'');
+  if(!S.studio.output){
+    box.innerHTML='<div class="studio-review-empty">No AI draft yet, go back to Generate and hit Generate Draft.</div>';
+    if(sub)sub.textContent="You haven't generated anything yet.";
+    return;
   }
+  if(sub)sub.textContent='This is the AI draft that will be saved to your library.';
+  var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:14px;color:var(--e);display:block;margin:12px 0 4px">$1</strong>').replace(/\n/g,'<br>');
+  box.innerHTML='<div style="font-size:13.5px;line-height:1.75;color:var(--e)">'+rendered+'</div>';
 }
-function studioReviewCopy(){
-  if(_studioMode==='ai'){copyOut();}else{studioOwnCopy();}
-}
+function studioReviewCopy(){copyOut();}
 function studioReviewSave(){
-  if(_studioMode==='ai'){
-    if(!S.studio.output){toast('Nothing to save yet');return;}
-    saveDraft();
-  } else {
-    studioOwnSave();
-  }
+  if(!S.studio.output){toast('Nothing to save yet');return;}
+  saveDraft();
 }
 async function generate(){
   if(false){toast('Add your API key in Settings first');navigate('settings');return;}
