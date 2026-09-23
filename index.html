@@ -2113,12 +2113,12 @@ select.fi{cursor:pointer}
             <div class="wdc-title">Newsletter</div>
             <div class="wdc-sub">Email to your list</div>
           </div>
-          <div class="wdc-card c-purple" onclick="quickCreateCard('Carousel','Carousel Copy','instagram')">
+          <div class="wdc-card c-purple" onclick="quickCreateCard('Carousel','Carousel','instagram')">
             <div class="wdc-icon">🎠</div>
             <div class="wdc-title">Carousel</div>
             <div class="wdc-sub">Plan it out</div>
           </div>
-          <div class="wdc-card c-rust" onclick="quickCreateCard('Story','Story Script','instagram')">
+          <div class="wdc-card c-rust" onclick="quickCreateCard('Story','Story','instagram')">
             <div class="wdc-icon">📱</div>
             <div class="wdc-title">Story</div>
             <div class="wdc-sub">Plan it out</div>
@@ -2498,11 +2498,17 @@ select.fi{cursor:pointer}
           <div id="studioBridgeBody" style="display:none;flex-direction:column">
 
             <!-- AI TOOLS -->
-            <div style="padding:14px 16px 12px;border-bottom:1px solid var(--bl)">
-              <div class="fl"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Article">Article</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
-              <div class="fl"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
-              <div class="fl"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
-              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:10px;line-height:1.55">✦ For Article and Blog Post formats, the AI generates a title and subtitle automatically.</div>
+            <div style="padding:16px 16px 14px;border-bottom:1px solid var(--bl)">
+              <!-- Grouped into one soft card so the three chip rows read as
+                   "pick your setup" at a glance, instead of blending into
+                   the topic/instructions fields below it. -->
+              <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 14px 16px;margin-bottom:16px">
+                <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tl);margin-bottom:13px">Set up your draft</div>
+                <div class="fl" style="margin-bottom:14px"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips" style="gap:7px"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Reel Script">Reel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Article">Article</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
+                <div class="fl" style="margin-bottom:14px"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips" style="gap:7px"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
+                <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips" style="gap:7px"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
+              </div>
+              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55">✦ For Article and Blog Post formats, the AI generates a title and subtitle automatically.</div>
               <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:36px;font-size:12.5px"></textarea></div>
               <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
               <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:6px 0 10px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use my Go Analog draft above as the AI starting point</span></label>
@@ -6006,6 +6012,11 @@ function dismissGS(){
 
 /* ═══════════════════ DASHBOARD ═══════════════════ */
 function quickCreateCard(title, format, plat){
+  // format must be one of #cdFormat's real <option value="..."> strings
+  // (e.g. "Story", "Carousel") - not a friendlier label like "Story Script".
+  // Setting a <select>'s .value to something that isn't one of its options
+  // just silently leaves it blank, which is exactly what made the Story
+  // and Carousel dashboard shortcuts open with an empty format field.
   // Open a content card pre-filled with format and platform
   openIdeaModal('idea');
   setTimeout(function(){
