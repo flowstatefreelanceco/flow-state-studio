@@ -1,17 +1,17 @@
 {
-  "version": "5.14",
+  "version": "5.15",
   "changelog": [
     {
       "type": "feature",
       "date": "Sep 2026",
-      "title": "Coming Up on your calendar",
-      "desc": "See your next scheduled content and tasks at a glance below the calendar grid, plus a gentle heads-up if there are a few empty days coming up."
+      "title": "Color coded content types",
+      "desc": "Each content format now gets its own color on your planner cards, so a Reel, a Carousel, and a Post are easy to tell apart at a glance."
     },
     {
       "type": "improvement",
       "date": "Sep 2026",
-      "title": "A warmer, more cohesive look",
-      "desc": "Refreshed colors, textures, and typography across the dashboard, calendar, and getting-started pages for a more polished, cork-and-cream feel throughout the Studio."
+      "title": "A better Writing Studio",
+      "desc": "Choose Go Analog to write it yourself, or AI Draft for a guided, step by step flow. Either way, you can now send what you wrote straight into a content card with one click."
     }
   ]
 }
