@@ -241,8 +241,29 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .empty-kc{text-align:center;padding:12px;color:var(--tl);font-size:12px}
 
 /* AI STUDIO */
-.studio-wrap{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.studio-wrap{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;align-items:center;padding:20px 16px}
 .sp{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 4px var(--sh)}
+/* Writing Studio step wizard - three panels shown one at a time, replacing
+   the old stacked accordion so writing your own vs. generating with AI
+   read as distinct steps instead of two panels crammed into one page. */
+.studio-steps{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 16px 22px;flex-shrink:0}
+.studio-step{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;user-select:none;flex-shrink:0}
+.studio-step-dot{width:30px;height:30px;border-radius:50%;background:var(--bl);color:var(--t);display:flex;align-items:center;justify-content:center;font-family:var(--fb);font-size:13px;font-weight:700;transition:all .18s}
+.studio-step-lbl{font-size:10.5px;font-weight:600;color:var(--t);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.studio-step.done .studio-step-dot{background:var(--sage);color:#fff}
+.studio-step.done .studio-step-lbl{color:var(--sage)}
+.studio-step.active .studio-step-dot{background:var(--r);color:#fff;box-shadow:0 0 0 4px var(--rp)}
+.studio-step.active .studio-step-lbl{color:var(--r)}
+.studio-step-line{width:38px;height:2px;background:var(--bl);margin:0 6px 22px;flex-shrink:0;transition:background .18s}
+.studio-step-line.done{background:var(--sage)}
+.studio-panel-hdr{margin-bottom:18px}
+.studio-panel-title{font-family:var(--fh);font-size:19px;font-weight:700;color:var(--e);margin-bottom:5px}
+.studio-panel-sub{font-size:12.5px;color:var(--t);line-height:1.55}
+.studio-mode-toggle{display:flex;gap:8px;margin-bottom:18px;background:var(--p);border:1px solid var(--bl);border-radius:100px;padding:4px}
+.studio-mode-btn{flex:1;border:none;background:none;padding:9px 14px;border-radius:100px;font-family:var(--fb);font-size:12.5px;font-weight:700;color:var(--t);cursor:pointer;transition:all .15s}
+.studio-mode-btn.sel{background:var(--r);color:#fff;box-shadow:0 1px 4px var(--sh)}
+.studio-review-box{background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);padding:16px;margin-bottom:16px;max-height:340px;overflow-y:auto}
+.studio-review-empty{text-align:center;padding:20px;color:var(--tl);font-size:12.5px}
 .sp-in{padding:22px}
 .fl{margin-bottom:16px}
 .fl-lbl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);margin-bottom:7px;display:block}
@@ -837,7 +858,9 @@ select.fi{cursor:pointer}
   .out-panel{overflow:visible !important;min-height:unset !important;border-radius:var(--rad)}
   .sp-in{padding:14px !important}
   .out-bdy{min-height:200px}
-  #studioAnalogBody,#studioBridgeBody{overflow:visible !important}
+  .studio-steps{padding:14px 8px 18px;gap:0}
+  .studio-step-line{width:20px;margin:0 2px 20px}
+  .studio-step-lbl{font-size:9px}
 
   /* DRAFTS */
   .drafts-grid{grid-template-columns:1fr}
@@ -2456,72 +2479,116 @@ select.fi{cursor:pointer}
     </div>
     <div class="main-body">
       <div class="studio-wrap">
+        <div class="sp out-panel" style="max-width:640px;width:100%">
 
-        <!-- SINGLE COLUMN: WRITE + AI OUTPUT -->
-        <div class="sp out-panel">
-
-          <!-- GO ANALOG - open by default -->
-          <div class="card-section-toggle-hdr analog" onclick="toggleStudioSection('analog')" id="studioAnalogHdr" style="border-radius:var(--rad) var(--rad) 0 0;flex-shrink:0">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span class="card-section-toggle-title analog">✏️ Go Analog</span>
-              <span style="font-size:10px;color:var(--g);opacity:.75">write your own</span>
-            </div>
-            <span class="card-section-toggle-arrow" id="studioAnalogArrow">▾</span>
-          </div>
-          <div id="studioAnalogBody" style="padding:14px 16px 14px;border-bottom:1px solid var(--bl);flex-shrink:0">
-            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
-            <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
-            <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
-            </div>
-            <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
-              <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
-            </div>
-            <div style="display:flex;gap:10px;margin-bottom:10px">
-              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
-              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
-            </div>
-            <div style="display:flex;gap:6px">
-              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="studioOwnCopy()">Copy</button>
-              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="studioOwnSave()">Save to Drafts</button>
-            </div>
+          <!-- STEP PROGRESS -->
+          <div class="studio-steps" id="studioSteps">
+            <div class="studio-step active" data-step="1" onclick="goStudioStep(1)"><div class="studio-step-dot">1</div><div class="studio-step-lbl">Set Up</div></div>
+            <div class="studio-step-line" id="studioLine1"></div>
+            <div class="studio-step" data-step="2" onclick="goStudioStep(2)"><div class="studio-step-dot">2</div><div class="studio-step-lbl">Write</div></div>
+            <div class="studio-step-line" id="studioLine2"></div>
+            <div class="studio-step" data-step="3" onclick="goStudioStep(3)"><div class="studio-step-dot">3</div><div class="studio-step-lbl">Review &amp; Save</div></div>
           </div>
 
-          <!-- BRIDGE THE GAP - collapsed by default -->
-          <div class="card-section-toggle-hdr bridge" onclick="toggleStudioSection('bridge')" id="studioBridgeHdr" style="flex-shrink:0">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span class="card-section-toggle-title bridge">✦ Bridge the Gap</span>
-              <span style="font-size:10px;color:var(--r);opacity:.75">AI tools + draft output</span>
+          <!-- STEP 1: SET UP -->
+          <div class="studio-panel" id="studioStep1" style="padding:0 20px 22px">
+            <div class="studio-panel-hdr">
+              <div class="studio-panel-title">What are you making?</div>
+              <div class="studio-panel-sub">Pick a type and platform, then tell us what it's about. You'll choose to write it yourself or let AI draft it in the next step.</div>
             </div>
-            <span class="card-section-toggle-arrow" id="studioBridgeArrow">›</span>
+            <div class="fl"><label class="fl-lbl">Content Type</label>
+              <select class="fi" id="typeSel" onchange="studioTypeChanged()">
+                <option value="Caption / Post">Caption / Post</option>
+                <option value="Email Newsletter">Newsletter</option>
+                <option value="Story Script">Story</option>
+                <option value="Carousel Copy">Carousel</option>
+                <option value="Reel Script">Reel</option>
+                <option value="Bio / About">Bio / About</option>
+                <option value="Video Script">Video Script</option>
+                <option value="Blog Post">Blog Post</option>
+                <option value="Article">Article</option>
+                <option value="Book Chapter">Book Chapter</option>
+              </select>
+            </div>
+            <div class="fl"><label class="fl-lbl">Platform</label>
+              <select class="fi" id="platSel" onchange="S.studio.plat=this.value">
+                <option value="instagram">Instagram</option>
+                <option value="newsletter">Newsletter</option>
+                <option value="email">Email</option>
+                <option value="substack">Substack</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="blog">Blog</option>
+                <option value="facebook">Facebook</option>
+                <option value="tiktok">TikTok</option>
+              </select>
+            </div>
+            <div class="fl"><label class="fl-lbl">Tone</label>
+              <select class="fi" id="toneSel" onchange="S.studio.tone=this.value">
+                <option value="Warm & Personal">Warm &amp; Personal</option>
+                <option value="Professional & Clear">Professional &amp; Clear</option>
+                <option value="Educational & Helpful">Educational &amp; Helpful</option>
+                <option value="Inspiring & Motivating">Inspiring &amp; Motivating</option>
+                <option value="Playful & Light">Playful &amp; Light</option>
+              </select>
+            </div>
+            <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI generates a title and subtitle automatically.</div>
+            <div class="fl"><label class="fl-lbl">Topic / Brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(only needed if you want AI to draft it)</span></label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:44px;font-size:12.5px"></textarea></div>
+            <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
+            <button class="btn btn-p full" onclick="goStudioStep(2)">Continue →</button>
           </div>
-          <div id="studioBridgeBody" style="display:none;flex-direction:column">
 
-            <!-- AI TOOLS -->
-            <div style="padding:16px 16px 14px;border-bottom:1px solid var(--bl)">
-              <!-- Grouped into one soft card so the three chip rows read as
-                   "pick your setup" at a glance, instead of blending into
-                   the topic/instructions fields below it. -->
-              <div style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 14px 16px;margin-bottom:16px">
-                <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tl);margin-bottom:13px">Set up your draft</div>
-                <div class="fl" style="margin-bottom:14px"><label class="fl-lbl">Content Type</label><div class="chip-g" id="typeChips" style="gap:7px"><div class="chip sel" data-val="Caption / Post">Caption</div><div class="chip" data-val="Email Newsletter">Newsletter</div><div class="chip" data-val="Story Script">Story</div><div class="chip" data-val="Carousel Copy">Carousel</div><div class="chip" data-val="Reel Script">Reel</div><div class="chip" data-val="Bio / About">Bio</div><div class="chip" data-val="Video Script">Video Script</div><div class="chip" data-val="Blog Post">Blog Post</div><div class="chip" data-val="Article">Article</div><div class="chip" data-val="Book Chapter">Book Chapter</div></div></div>
-                <div class="fl" style="margin-bottom:14px"><label class="fl-lbl">Platform</label><div class="chip-g" id="platChips" style="gap:7px"><div class="chip sel" data-val="instagram">Instagram</div><div class="chip" data-val="newsletter">Newsletter</div><div class="chip" data-val="email">Email</div><div class="chip" data-val="substack">Substack</div><div class="chip" data-val="linkedin">LinkedIn</div><div class="chip" data-val="blog">Blog</div><div class="chip" data-val="facebook">Facebook</div><div class="chip" data-val="tiktok">TikTok</div></div></div>
-                <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Tone</label><div class="chip-g" id="toneChips" style="gap:7px"><div class="chip sel" data-val="Warm & Personal">Warm</div><div class="chip" data-val="Professional & Clear">Professional</div><div class="chip" data-val="Educational & Helpful">Educational</div><div class="chip" data-val="Inspiring & Motivating">Inspiring</div><div class="chip" data-val="Playful & Light">Playful</div></div></div>
+          <!-- STEP 2: WRITE -->
+          <div class="studio-panel" id="studioStep2" style="display:none;padding:0 20px 22px">
+            <div class="studio-mode-toggle">
+              <button class="studio-mode-btn sel" id="modeBtnOwn" onclick="setStudioMode('own')">✏️ Write it myself</button>
+              <button class="studio-mode-btn" id="modeBtnAi" onclick="setStudioMode('ai')">✦ Let AI draft it</button>
+            </div>
+
+            <!-- WRITE IT MYSELF -->
+            <div id="studioOwnMode">
+              <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
+              <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
+              <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+                <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
               </div>
-              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55">✦ For Article and Blog Post formats, the AI generates a title and subtitle automatically.</div>
-              <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:36px;font-size:12.5px"></textarea></div>
-              <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
-              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:6px 0 10px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use my Go Analog draft above as the AI starting point</span></label>
-              <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
+              <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
+                <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
+              </div>
+              <div style="display:flex;gap:10px;margin-bottom:6px">
+                <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
+                <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
+              </div>
             </div>
 
-            <!-- AI OUTPUT -->
-            <div class="out-tb" style="border-top:none;flex-shrink:0">
-              <div style="display:flex;align-items:center;gap:10px"><span class="sv-badge" id="svBadge">✓ Saved</span></div>
-              <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button><button class="btn btn-brass" id="svBtn" onclick="saveDraft()" style="display:none">Save Draft</button></div>
+            <!-- LET AI DRAFT IT -->
+            <div id="studioAiMode" style="display:none">
+              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:2px 0 12px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use what I wrote in "Write it myself" as the AI's starting point</span></label>
+              <button class="btn btn-p full" id="genBtn" onclick="generate()" style="margin-bottom:14px">✦ Generate Draft</button>
+              <div class="out-tb" style="border-top:none;border-radius:var(--rad) var(--rad) 0 0">
+                <div style="display:flex;align-items:center;gap:10px"><span class="sv-badge" id="svBadge">✓ Saved</span></div>
+                <div style="display:flex;gap:8px"><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button></div>
+              </div>
+              <div class="out-bdy" id="outBdy" style="padding-bottom:24px;border-radius:0 0 var(--rad) var(--rad)"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Hit Generate to write from your step 1 brief.</p></div></div>
             </div>
-            <div class="out-bdy" id="outBdy" style="padding-bottom:40px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Fill in your brief above and hit Generate.</p></div></div>
 
+            <div style="display:flex;gap:10px;margin-top:18px">
+              <button class="btn btn-g" onclick="goStudioStep(1)">← Back</button>
+              <button class="btn btn-p" style="flex:1" onclick="goStudioStep(3)">Continue to Review →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: REVIEW & SAVE -->
+          <div class="studio-panel" id="studioStep3" style="display:none;padding:0 20px 22px">
+            <div class="studio-panel-hdr">
+              <div class="studio-panel-title">Review &amp; save</div>
+              <div class="studio-panel-sub" id="studioReviewSub">Here's what's about to be saved to your drafts library.</div>
+            </div>
+            <div class="studio-review-box" id="studioReviewBox"><div class="studio-review-empty">Nothing here yet, go back and write or generate something first.</div></div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-g" onclick="goStudioStep(2)">← Back</button>
+              <button class="btn btn-g" onclick="studioReviewCopy()">Copy</button>
+              <button class="btn btn-brass" style="flex:1" onclick="studioReviewSave()">Save to Drafts</button>
+            </div>
           </div>
 
         </div>
@@ -6032,8 +6099,10 @@ function quickCreate(type, plat){
   S.studio.type=type; S.studio.plat=plat;
   navigate('studio');
   setTimeout(()=>{
-    const setChip=(gid,val)=>document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.toggle('sel',c.dataset.val===val));
-    setChip('typeChips',type); setChip('platChips',plat);
+    goStudioStep(1);
+    var typeSel=document.getElementById('typeSel');if(typeSel){typeSel.value=type;studioTypeChanged();}
+    var platSel=document.getElementById('platSel');if(platSel)platSel.value=plat;
+    var topicEl=document.getElementById('topicIn');if(topicEl)topicEl.focus();
   },60);
 }
 function renderPickUp(){
@@ -6845,15 +6914,97 @@ function copyLib(id,section){
 }
 
 /* ═══════════════════ AI STUDIO ═══════════════════ */
+// Content Type / Platform / Tone used to be rows of pill "chips" you had to
+// click; they're plain <select> dropdowns now (Jess asked for this
+// specifically - the chip rows felt too busy). This just restores whatever
+// was last picked (S.studio.*) into the selects at boot, since a <select>
+// needs its value set in code - there's no "sel" class to look for anymore.
 function setupChips(){
-  setupCG('typeChips',v=>S.studio.type=v);
-  setupCG('platChips',v=>S.studio.plat=v);
-  setupCG('toneChips',v=>S.studio.tone=v);
+  var typeSel=document.getElementById('typeSel');
+  var platSel=document.getElementById('platSel');
+  var toneSel=document.getElementById('toneSel');
+  if(typeSel)typeSel.value=S.studio.type||'Caption / Post';
+  if(platSel)platSel.value=S.studio.plat||'instagram';
+  if(toneSel)toneSel.value=S.studio.tone||'Warm & Personal';
+  studioTypeChanged();
 }
-function setupCG(id,cb){
-  const g=document.getElementById(id);
-  if(!g)return;
-  g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{g.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');cb(c.dataset.val);}));
+function studioTypeChanged(){
+  var sel=document.getElementById('typeSel');
+  if(!sel)return;
+  S.studio.type=sel.value;
+  // Mirrors generate()'s own isArticle check, so the tip only shows for
+  // formats that actually get the auto title/subtitle treatment.
+  var tip=document.getElementById('studioArticleTip');
+  if(tip)tip.style.display=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(sel.value)?'block':'none';
+}
+/* ── Step wizard: Set Up -> Write -> Review & Save ── */
+var _studioStep=1, _studioMode='own';
+function goStudioStep(n){
+  if(n<1||n>3)return;
+  _studioStep=n;
+  [1,2,3].forEach(function(i){
+    var panel=document.getElementById('studioStep'+i);
+    if(panel)panel.style.display=(i===n)?'block':'none';
+    var stepEl=document.querySelector('.studio-step[data-step="'+i+'"]');
+    if(stepEl){stepEl.classList.toggle('active',i===n);stepEl.classList.toggle('done',i<n);}
+  });
+  var line1=document.getElementById('studioLine1');if(line1)line1.classList.toggle('done',n>1);
+  var line2=document.getElementById('studioLine2');if(line2)line2.classList.toggle('done',n>2);
+  if(n===3)renderStudioReview();
+  var scroller=document.querySelector('#view-studio .sp.out-panel');
+  if(scroller)scroller.scrollTop=0;
+}
+function setStudioMode(mode){
+  _studioMode=mode;
+  var ownMode=document.getElementById('studioOwnMode');
+  var aiMode=document.getElementById('studioAiMode');
+  var btnOwn=document.getElementById('modeBtnOwn');
+  var btnAi=document.getElementById('modeBtnAi');
+  if(ownMode)ownMode.style.display=(mode==='own')?'block':'none';
+  if(aiMode)aiMode.style.display=(mode==='ai')?'block':'none';
+  if(btnOwn)btnOwn.classList.toggle('sel',mode==='own');
+  if(btnAi)btnAi.classList.toggle('sel',mode==='ai');
+}
+function renderStudioReview(){
+  var box=document.getElementById('studioReviewBox');
+  var sub=document.getElementById('studioReviewSub');
+  if(!box)return;
+  if(_studioMode==='ai'){
+    if(!S.studio.output){
+      box.innerHTML='<div class="studio-review-empty">No AI draft yet, go back to Write and hit Generate.</div>';
+      if(sub)sub.textContent="You're in AI mode but haven't generated anything yet.";
+      return;
+    }
+    if(sub)sub.textContent='This is the AI draft that will be saved to your library.';
+    var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:14px;color:var(--e);display:block;margin:12px 0 4px">$1</strong>').replace(/\n/g,'<br>');
+    box.innerHTML='<div style="font-size:13.5px;line-height:1.75;color:var(--e)">'+rendered+'</div>';
+  } else {
+    var title=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
+    var subtitle=document.getElementById('studioSubtitle')?document.getElementById('studioSubtitle').value.trim():'';
+    var hook=document.getElementById('studioOwnHook')?document.getElementById('studioOwnHook').value.trim():'';
+    var body=document.getElementById('studioOwnTA')?document.getElementById('studioOwnTA').value.trim():'';
+    if(!title&&!hook&&!body){
+      box.innerHTML='<div class="studio-review-empty">Nothing written yet, go back to Write and add your title or content.</div>';
+      if(sub)sub.textContent="You're in write-it-yourself mode but the page is still empty.";
+      return;
+    }
+    if(sub)sub.textContent='This is what you wrote, it will be saved to your library.';
+    box.innerHTML=(title?'<div style="font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:4px">'+esc(title)+'</div>':'')
+      +(subtitle?'<div style="font-size:12.5px;color:var(--t);margin-bottom:8px">'+esc(subtitle)+'</div>':'')
+      +(hook?'<div style="font-size:13px;color:var(--r);font-weight:600;margin-bottom:8px">'+esc(hook)+'</div>':'')
+      +(body?'<div style="font-size:13.5px;line-height:1.75;color:var(--e);white-space:pre-wrap">'+esc(body)+'</div>':'');
+  }
+}
+function studioReviewCopy(){
+  if(_studioMode==='ai'){copyOut();}else{studioOwnCopy();}
+}
+function studioReviewSave(){
+  if(_studioMode==='ai'){
+    if(!S.studio.output){toast('Nothing to save yet');return;}
+    saveDraft();
+  } else {
+    studioOwnSave();
+  }
 }
 async function generate(){
   if(false){toast('Add your API key in Settings first');navigate('settings');return;}
@@ -6865,7 +7016,8 @@ async function generate(){
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
   btn.disabled=true;btn.textContent='...Generating';
-  document.getElementById('cpBtn').style.display='none';document.getElementById('svBtn').style.display='none';
+  var cpBtnStart=document.getElementById('cpBtn');if(cpBtnStart)cpBtnStart.style.display='none';
+  var svBtnStart=document.getElementById('svBtn');if(svBtnStart)svBtnStart.style.display='none';
   document.getElementById('outBdy').innerHTML='<div class="ld-wrap"><div class="ldots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>Writing your draft...</div>';
   const instr=document.getElementById('instrIn')?document.getElementById('instrIn').value.trim():'';
   const bizCtx=buildBrandContext();
@@ -6896,8 +7048,8 @@ async function generate(){
     // Render with ## headers as visually prominent lines
     var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:15px;color:var(--e);display:block;margin:16px 0 6px">$1</strong>');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+rendered+'</div>';
-    document.getElementById('cpBtn').style.display='inline-flex';document.getElementById('svBtn').style.display='inline-flex';
-    openBridgeSection();
+    var cpBtnEl=document.getElementById('cpBtn');if(cpBtnEl)cpBtnEl.style.display='inline-flex';
+    var svBtnEl=document.getElementById('svBtn');if(svBtnEl)svBtnEl.style.display='inline-flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
@@ -8408,40 +8560,15 @@ function studioOwnCopy(){
   var combined=hookVal?hookVal+'\n\n'+bodyVal:bodyVal;
   navigator.clipboard.writeText(combined.trim()).then(()=>toast('Copied ✓'));
 }
-function toggleStudioSection(section){
-  if(section==='analog'){
-    var body=document.getElementById('studioAnalogBody');
-    var arrow=document.getElementById('studioAnalogArrow');
-    var open=body.style.display!=='none';
-    body.style.display=open?'none':'block';
-    if(arrow)arrow.textContent=open?'›':'▾';
-  } else {
-    var body2=document.getElementById('studioBridgeBody');
-    var arrow2=document.getElementById('studioBridgeArrow');
-    var open2=body2.style.display!=='none';
-    body2.style.display=open2?'none':'flex';
-    if(arrow2)arrow2.textContent=open2?'›':'▾';
-  }
-}
-function openBridgeSection(){
-  var body=document.getElementById('studioBridgeBody');
-  var arrow=document.getElementById('studioBridgeArrow');
-  if(body&&body.style.display==='none'){
-    body.style.display='flex';
-    if(arrow)arrow.textContent='▾';
-  }
-}
 function studioOwnSave(){
   var el=document.getElementById('studioOwnTA');
   var hookEl=document.getElementById('studioOwnHook');
   var hookVal=hookEl?hookEl.value.trim():'';
   if((!el||!el.value.trim())&&!hookVal){toast('Write something first');return;}
-  var plat=document.getElementById('platChips');
-  var selPlat='other';
-  if(plat){var selChip=plat.querySelector('.chip.sel');if(selChip)selPlat=selChip.dataset.val;}
-  var typeEl=document.getElementById('typeChips');
-  var selType='Draft';
-  if(typeEl){var selT=typeEl.querySelector('.chip.sel');if(selT)selType=selT.dataset.val;}
+  var platEl=document.getElementById('platSel');
+  var selPlat=platEl?platEl.value:'other';
+  var typeEl=document.getElementById('typeSel');
+  var selType=typeEl?typeEl.value:'Draft';
   var ownLinks=document.getElementById('studioLinks')?document.getElementById('studioLinks').value.trim():'';
   var ownTags=document.getElementById('studioTags')?document.getElementById('studioTags').value.trim():'';
   var titleVal=document.getElementById('studioTitle')?document.getElementById('studioTitle').value.trim():'';
