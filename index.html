@@ -350,6 +350,9 @@ select.fi{cursor:pointer}
 .dc-pop-btn.hide{display:none !important}
 .dc-pop-panel{position:fixed;bottom:24px;right:20px;z-index:9050;width:380px;max-width:92vw;height:520px;max-height:75vh;background:var(--w);border-radius:16px;box-shadow:0 8px 32px var(--shm);display:none;flex-direction:column;overflow:hidden;border:1px solid var(--bl)}
 .dc-pop-panel.open{display:flex}
+/* Lift the bubble + panel above the content card modal (.modal-ov is z 10500), but only when the card is the only modal open */
+body:has(#cardDetailModal.open):not(:has(.modal-ov.open:not(#cardDetailModal))) .dc-pop-btn{z-index:10550}
+body:has(#cardDetailModal.open):not(:has(.modal-ov.open:not(#cardDetailModal))) .dc-pop-panel{z-index:10600}
 .dc-pop-hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--bl);background:var(--p)}
 .dc-pop-hdr-left{display:flex;align-items:center;gap:9px}
 .dc-pop-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e)}
