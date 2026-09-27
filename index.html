@@ -5262,10 +5262,13 @@ async function loadUserData(){
       // the higher of the two values, never let a stale copy on either side
       // silently undercount someone's real usage.
       merged.creditsUsed=Math.max(localData.creditsUsed||0,sbData.creditsUsed||0);
-      // directorChats - prefer whichever side has more conversations (most complete history)
+      // directorChats - union by id, keeping whichever side was actually edited more
+      // recently (same rule as drafts/ideas/tasks/notes above). A raw count comparison
+      // used to live here and could drop a real conversation from one device just
+      // because the other device's list happened to be longer, even if stale.
       var locChats=dirChatMigrate(localData.directorChats,localData.directorChat);
       var sbChats=dirChatMigrate(sbData.directorChats,sbData.directorChat);
-      merged.directorChats=locChats.length>=sbChats.length?locChats:sbChats;
+      merged.directorChats=mergeArrays(locChats,sbChats);
       merged.activeDirectorChatId=localData.activeDirectorChatId||sbData.activeDirectorChatId||(merged.directorChats[0]&&merged.directorChats[0].id)||null;
       // Save merged back so next load is fast
       try{localStorage.setItem(lsKey(),JSON.stringify(merged));}catch(e){}
