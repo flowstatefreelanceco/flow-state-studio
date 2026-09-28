@@ -350,9 +350,9 @@ select.fi{cursor:pointer}
 .dc-pop-btn.hide{display:none !important}
 .dc-pop-panel{position:fixed;bottom:24px;right:20px;z-index:9050;width:380px;max-width:92vw;height:520px;max-height:75vh;background:var(--w);border-radius:16px;box-shadow:0 8px 32px var(--shm);display:none;flex-direction:column;overflow:hidden;border:1px solid var(--bl)}
 .dc-pop-panel.open{display:flex}
-/* Lift the bubble + panel above the content card modal (.modal-ov is z 10500), but only when the card is the only modal open */
-body:has(#cardDetailModal.open):not(:has(.modal-ov.open:not(#cardDetailModal))) .dc-pop-btn{z-index:10550}
-body:has(#cardDetailModal.open):not(:has(.modal-ov.open:not(#cardDetailModal))) .dc-pop-panel{z-index:10600}
+/* Content card modal (.modal-ov, z 10500) was covering the bubble (499) and panel (9050). JS toggles body.dc-over-card while the card is the only modal open. */
+body.dc-over-card .dc-pop-btn{z-index:10550}
+body.dc-over-card .dc-pop-panel{z-index:10600}
 .dc-pop-hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--bl);background:var(--p)}
 .dc-pop-hdr-left{display:flex;align-items:center;gap:9px}
 .dc-pop-title{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--e)}
@@ -9491,6 +9491,29 @@ document.addEventListener('click',function(e){
   if(e.target.closest('#dcPopPanel')||e.target.closest('#dcPopBtn'))return;
   dirChatClosePopup();
 });
+// Keep the Director Chat bubble reachable inside a content card.
+// Modals open and close from several places (openModal, closeModal, overlay
+// click, navigate), so watch the class on every .modal-ov instead of patching
+// each path. Only lift the bubble when the card is the sole open modal, so
+// confirm/support/etc modals stacked on top still cover it.
+function dcSyncBubbleLayer(){
+  var cd=document.getElementById('cardDetailModal');
+  var cdIsOpen=!!(cd&&cd.classList.contains('open'));
+  var otherOpen=!!document.querySelector('.modal-ov.open:not(#cardDetailModal)');
+  var lift=cdIsOpen&&!otherOpen;
+  document.body.classList.toggle('dc-over-card',lift);
+  var btn=document.getElementById('dcPopBtn');
+  if(lift&&btn)btn.classList.add('show');
+  if(!cdIsOpen){
+    var panel=document.getElementById('dcPopPanel');
+    if(panel&&panel.classList.contains('open')&&otherOpen)dirChatClosePopup();
+  }
+}
+(function(){
+  var obs=new MutationObserver(dcSyncBubbleLayer);
+  document.querySelectorAll('.modal-ov').forEach(function(m){obs.observe(m,{attributes:true,attributeFilter:['class']});});
+  dcSyncBubbleLayer();
+})();
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){
     var panel=document.getElementById('dcPopPanel');
