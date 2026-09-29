@@ -2484,17 +2484,17 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch">
       <!-- CONTENT INSIGHTS STRIP -->
       <div id="bucketInsightsWrap" style="flex-shrink:0;margin-bottom:14px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleBucketInsights()">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tl);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span>Content by Bucket</span>
-            <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;color:var(--tl)">what you've made so far</span>
+        <div id="bucketInsightsHdr" role="button" tabindex="0" aria-expanded="false" aria-controls="bucketInsightsBody" style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent" onclick="toggleBucketInsights()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleBucketInsights();}">
+          <div style="display:inline-flex;align-items:baseline;gap:8px;flex-wrap:wrap;background:var(--tealp);border:1px solid rgba(0,132,132,.25);border-radius:100px;padding:6px 14px">
+            <span style="font-size:13px;font-weight:700;color:var(--teal)">Content by bucket</span>
+            <span style="font-size:12px;font-weight:500;color:var(--e)">what you've made so far</span>
           </div>
           <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
             <button class="btn btn-g" style="font-size:10px;padding:3px 10px" onclick="event.stopPropagation();openBucketManager()">Manage</button>
-            <span id="bucketInsightsChevron" style="font-size:12px;color:var(--tl);transition:transform .2s">▾</span>
+            <span id="bucketInsightsChevron" style="font-size:14px;color:var(--teal);transition:transform .2s;transform:rotate(-90deg)">▾</span>
           </div>
         </div>
-        <div id="bucketInsightsBody" style="max-height:400px;overflow:hidden;transition:max-height .3s ease"></div>
+        <div id="bucketInsightsBody" style="max-height:0px;overflow:hidden;transition:max-height .3s ease"></div>
       </div>
       <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
       <div id="ideaListView" style="display:none;flex-shrink:0"></div>
@@ -10916,7 +10916,10 @@ function showPricingSection(section, clickedTab){
 // ── END PRICING SECTION TOGGLE ───────────────────────────────
 
 // ── CONTENT BUCKETS ──────────────────────────────────────────
-var _bucketInsightsOpen = true;
+// Closed by default. Opens only when the person taps it, and remembers
+// their choice on this device.
+var _bucketInsightsOpen = false;
+try{ _bucketInsightsOpen = localStorage.getItem('fssBucketInsightsOpen') === '1'; }catch(e){}
 
 function getBuckets(){
   if(!S.settings.buckets) S.settings.buckets = [];
@@ -11056,12 +11059,18 @@ function addSettingsBucket(){
   if(inp) inp.value='';
 }
 
-function toggleBucketInsights(){
-  _bucketInsightsOpen = !_bucketInsightsOpen;
+function applyBucketInsightsState(){
   var body = document.getElementById('bucketInsightsBody');
   var chev = document.getElementById('bucketInsightsChevron');
+  var hdr = document.getElementById('bucketInsightsHdr');
   if(body) body.style.maxHeight = _bucketInsightsOpen ? '400px' : '0px';
   if(chev) chev.style.transform = _bucketInsightsOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+  if(hdr) hdr.setAttribute('aria-expanded', _bucketInsightsOpen ? 'true' : 'false');
+}
+function toggleBucketInsights(){
+  _bucketInsightsOpen = !_bucketInsightsOpen;
+  try{ localStorage.setItem('fssBucketInsightsOpen', _bucketInsightsOpen ? '1' : '0'); }catch(e){}
+  applyBucketInsightsState();
 }
 
 function renderBucketInsights(){
@@ -11087,7 +11096,7 @@ function renderBucketInsights(){
         ? 'Add buckets in <strong style="cursor:pointer;color:var(--r)" onclick="navigate(\'settings\')">Settings</strong> to start tracking content patterns.'
         : 'Tag content cards with a bucket to start seeing patterns here.')
       +'</div>';
-    if(_bucketInsightsOpen) body.style.maxHeight='400px';
+    applyBucketInsightsState();
     return;
   }
   var rows = buckets.filter(function(b){return totalByBucket[b]>0;}).map(function(b){
@@ -11110,7 +11119,7 @@ function renderBucketInsights(){
       +'</div>';
   }).join('');
   body.innerHTML='<div style="background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 18px">'+rows+'</div>';
-  if(_bucketInsightsOpen) body.style.maxHeight='400px';
+  applyBucketInsightsState();
 }
 // ── END CONTENT BUCKETS ──────────────────────────────────────
 
