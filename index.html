@@ -5465,6 +5465,9 @@ async function bootApp(){
     if(typeof renderCalendar==='function')renderCalendar();
     if(typeof renderKanban==='function')renderKanban();
   }, 200);
+  // Runs last, after routing: navigate() closes every open modal, so if this
+  // fired first the announcement could be shut before anyone saw it.
+  setTimeout(checkForUpdate, 700);
 }
 
 function addUserMenu(){
@@ -5782,7 +5785,6 @@ function _appInit(){
   }
   renderAllLibs(); setGreeting();
   setInterval(setGreeting,5*60*1000);
-  checkForUpdate();
 }
 
 function load(){ /* data loaded via initFlowStateApp */ }
@@ -5987,7 +5989,7 @@ function navigate(v,opts){
     try{ saveDraftEdit(); }catch(e){}
   }
   // Close any open modals when navigating
-  document.querySelectorAll('.modal-ov.open').forEach(function(m){m.classList.remove('open');});
+  document.querySelectorAll('.modal-ov.open').forEach(function(m){if(m.id!=='whatsNewModal')m.classList.remove('open');});
   document.body.style.overflow="";
   document.body.style.position="";
   document.body.style.top="";
@@ -10851,9 +10853,11 @@ function checkForUpdate() {
         var wnKey = (_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + latest;
         var dismissed = localStorage.getItem(wnKey);
         // Brand new accounts have nothing to compare "what changed" against,
-        // so mark it seen quietly instead of greeting them with update notes.
+        // so skip it for them. Never store this as dismissed: if the account
+        // only looked empty because data was still loading, the popup must
+        // still get its chance on the next load.
         var isBrandNew = !(S.ideas&&S.ideas.length) && !(S.drafts&&S.drafts.length) && !(S.tasks&&S.tasks.length);
-        if (!dismissed && isBrandNew) { try{ localStorage.setItem(wnKey,'1'); }catch(e){} return; }
+        if (isBrandNew) return;
         if (!dismissed) {
           _whatsNewChangelog = changelog;
           _whatsNewVersion = latest;
