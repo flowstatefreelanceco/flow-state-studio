@@ -1,17 +1,29 @@
 {
-  "version": "5.15",
+  "version": "5.14",
   "changelog": [
     {
+      "type": "improvement",
+      "date": "Sep 29, 2026",
+      "title": "Your content card, reorganized",
+      "desc": "Cards now have three tabs across the top. Details is the basics, Go Analog is your words, and Bridge the Gap is AI help. Saved cards open straight to writing, and a Next button at the bottom of each tab walks you through if you're not sure where to go."
+    },
+    {
       "type": "feature",
-      "date": "Sep 2026",
-      "title": "Color coded content types",
-      "desc": "Each content format now gets its own color on your planner cards, so a Reel, a Carousel, and a Post are easy to tell apart at a glance."
+      "date": "Sep 29, 2026",
+      "title": "More room to write",
+      "desc": "Text boxes start bigger and grow as you type. Tap Expand on any box to write full screen with nothing else on the page. Everything you type there saves right back to your card."
     },
     {
       "type": "improvement",
-      "date": "Sep 2026",
-      "title": "A better Writing Studio",
-      "desc": "Choose Go Analog to write it yourself, or AI Draft for a guided, step by step flow. Either way, you can now send what you wrote straight into a content card with one click."
+      "date": "Sep 29, 2026",
+      "title": "Smarter AI writing",
+      "desc": "Every writing tool got rebuilt with a sharper strategist brain. Scripts land their endings, your instructions come first, and long pieces don't get cut off mid sentence anymore. There's also a new Length option under the tone picker: short, standard, or long."
+    },
+    {
+      "type": "fix",
+      "date": "Sep 29, 2026",
+      "title": "A few fixes",
+      "desc": "The Director Chat bubble is back inside your content cards. And if you close a card without giving it a title, your writing stays put and your first line becomes the title."
     }
   ]
 }
