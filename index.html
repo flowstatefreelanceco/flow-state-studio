@@ -6781,7 +6781,7 @@ async function generateStarterLibrary(silent){
     var attemptDiag=[];
     for(var attempt=0;attempt<3;attempt++){
       try{
-        var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},
+        var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:await aiAuthHeaders(),
           body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:usr}]})
         },30000);
         if(!r.ok){
@@ -9312,15 +9312,27 @@ function stripMD(t){
 // model to keep going from exactly where it stopped (up to 2 more passes).
 // Before this, a cut-off reply was shown as finished and still cost a credit,
 // which is how scripts ended mid-thought with no closeout.
+// Every AI call carries the person's Supabase login so /api/generate can
+// refuse anyone who isn't signed in to the Studio.
+async function aiAuthHeaders(){
+  var h = { 'Content-Type': 'application/json' };
+  try{
+    var res = await sb.auth.getSession();
+    var t = res && res.data && res.data.session && res.data.session.access_token;
+    if (t) h['Authorization'] = 'Bearer ' + t;
+  }catch(e){}
+  return h;
+}
 async function aiGenerateFull(payload, ms){
   var base = payload.messages.slice();
   var messages = base;
   var text = '', stop = '';
   for (var pass = 0; pass < 3; pass++){
     var body = Object.assign({}, payload, { messages: messages });
-    var r = await fetchWithTimeout('/api/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }, ms || 45000);
+    var r = await fetchWithTimeout('/api/generate', { method:'POST', headers: await aiAuthHeaders(), body: JSON.stringify(body) }, ms || 45000);
     if(!r.ok){
       var eb = await r.json().catch(function(){return {};});
+      if (r.status === 401) throw new Error('Your session expired. Refresh the page and log back in');
       throw new Error((eb.error && eb.error.message) || ('HTTP ' + r.status));
     }
     var d = await r.json();
