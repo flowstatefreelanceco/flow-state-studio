@@ -740,7 +740,55 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-rp-note{font-size:10.5px;color:var(--tl);line-height:1.6;margin-bottom:8px}
 
 /* CARD DETAIL REBUILT */
-.cd2-wrap{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:calc(100vh - 120px)}
+.cd2-wrap{display:block;min-height:calc(100vh - 150px)}
+/* CARD TABS */
+.cd-sticky{position:sticky;top:0;z-index:5;background:var(--w);flex-shrink:0}
+.cd-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--bl);background:var(--w)}
+.cd-tab{position:relative;background:none;border:none;border-bottom:3px solid transparent;padding:10px 8px 9px;cursor:pointer;font-family:var(--fb);text-align:center;color:var(--tl);transition:color .15s,border-color .15s,background .15s}
+.cd-tab:hover{color:var(--e);background:var(--p)}
+.cd-tab:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+.cd-tab-name{display:block;font-size:13.5px;font-weight:700;line-height:1.25}
+.cd-tab-sub{display:block;font-size:11px;font-weight:500;margin-top:2px;line-height:1.3}
+.cd-tab.active{color:var(--e);border-bottom-color:var(--teal);background:var(--p)}
+.cd-tab.active .cd-tab-sub{color:var(--t)}
+.cd-tab-dot{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--r);display:none}
+.cd-tab.has-new .cd-tab-dot{display:block}
+.cd2-wrap[data-tab="details"] .cd2-right{display:none}
+.cd2-wrap:not([data-tab="details"]) .cd2-left{display:none}
+.cd2-wrap[data-tab="write"] .cd-pane-ai,.cd2-wrap[data-tab="ai"] .cd-pane-write{display:none}
+.cd2-wrap .cd2-left{max-width:760px;margin:0 auto;width:100%;border-right:none !important}
+.cd2-wrap .cd2-right{min-height:calc(100vh - 150px)}
+.cd-pane-write,.cd-pane-ai{max-width:760px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
+.cd-pane-write>.cd-analog-sec>.card-section-toggle-hdr,.cd-pane-ai>.cd-bridge-sec>.card-section-toggle-hdr{display:none}
+.cd-pane-write>.cd-analog-sec>.card-section-toggle-body,.cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body{display:block}
+.cd-next{display:flex;justify-content:flex-end;padding:8px 0 4px}
+.cd-next .btn{font-size:13px;padding:10px 18px}
+.cd-empty-note{background:var(--w);border:1.5px dashed var(--b);border-radius:var(--rad);padding:14px 16px;font-size:13px;color:var(--t);line-height:1.6;display:none}
+.cd-empty-note.show{display:block}
+.cd-empty-note .cd-empty-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.cd-field{position:relative}
+.cd-expand{position:absolute;top:-2px;right:0;background:var(--w);border:1px solid var(--bl);border-radius:100px;font-family:var(--fb);font-size:11px;font-weight:600;color:var(--teal);padding:3px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.cd-expand:hover{border-color:var(--teal);background:var(--tealp)}
+.cd-expand:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.cd-grow{overflow-y:auto;resize:vertical}
+.cd-hl{box-shadow:0 0 0 3px rgba(0,132,132,.35) !important;transition:box-shadow .3s}
+.cd-tip{position:relative;background:var(--e);color:var(--p);font-size:12.5px;line-height:1.5;border-radius:var(--rsm);padding:10px 12px;margin:0 0 10px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.cd-tip button{background:none;border:1px solid rgba(255,255,255,.4);color:var(--p);border-radius:100px;font-family:var(--fb);font-size:11.5px;padding:4px 10px;cursor:pointer;flex-shrink:0}
+/* FOCUS MODE */
+.cd-focus{position:fixed;inset:0;z-index:10700;background:var(--p);display:none;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.cd-focus.open{display:flex}
+.cd-focus-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid var(--bl);background:var(--w)}
+.cd-focus-title{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e)}
+.cd-focus-body{flex:1;overflow:hidden;display:flex;justify-content:center;padding:20px}
+.cd-focus-ta{width:100%;max-width:720px;height:100%;border:none;outline:none;background:transparent;resize:none;font-family:var(--fb);font-size:17px;line-height:1.8;color:var(--e);padding:0}
+@media(max-width:600px){
+  .cd-tab{padding:9px 4px 8px}
+  .cd-tab-name{font-size:12.5px}
+  .cd-tab-sub{font-size:10.5px}
+  .cd-next .btn{width:100%}
+  .cd-focus-body{padding:16px}
+  .cd-focus-ta{font-size:16px}
+}
 .cd2-left{padding:20px 24px;border-right:1px solid var(--bl);overflow-y:visible;display:flex;flex-direction:column;gap:14px}
 .cd2-right{padding:20px 24px;overflow-y:visible;background:var(--p);display:flex;flex-direction:column;gap:12px}
 .ai2-section{background:white;border:1.5px solid rgba(122,158,194,.25);border-radius:var(--rad);overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(122,158,194,.12)}
@@ -4288,6 +4336,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 <!-- CARD DETAIL MODAL -->
 <div class="modal-ov" id="cardDetailModal" style="padding:0;align-items:stretch">
   <div class="cd-modal-panel" style="width:100vw;max-width:100vw;height:auto;border-radius:0;padding:0;padding-bottom:60px;display:flex;flex-direction:column;overflow-y:scroll;-webkit-overflow-scrolling:touch">
+    <div class="cd-sticky">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
       <div class="cd-stages" style="margin-bottom:0">
         <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
@@ -4297,11 +4346,17 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       </div>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn btn-danger" style="font-size:12px;padding:6px 12px" onclick="cdDelete()">Delete</button>
-        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd();closeModal('cardDetailModal')">Close</button>
+        <button class="btn btn-g" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd({quiet:true});closeModal('cardDetailModal')">Close</button>
         <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd()">Save</button>
       </div>
     </div>
-    <div class="cd2-wrap">
+    <div class="cd-tabs" role="tablist" aria-label="Card sections">
+      <button type="button" class="cd-tab" role="tab" data-tab="details" onclick="cdShowTab('details')"><span class="cd-tab-name">Details</span><span class="cd-tab-sub">The basics</span></button>
+      <button type="button" class="cd-tab" role="tab" data-tab="write" onclick="cdShowTab('write')"><span class="cd-tab-name">Go Analog</span><span class="cd-tab-sub">Your words</span></button>
+      <button type="button" class="cd-tab" role="tab" data-tab="ai" onclick="cdShowTab('ai')"><span class="cd-tab-name">Bridge the Gap</span><span class="cd-tab-sub">AI help</span><span class="cd-tab-dot" aria-hidden="true"></span></button>
+    </div>
+    </div><!-- end cd-sticky -->
+    <div class="cd2-wrap" id="cdWrap" data-tab="write">
       <div class="cd2-left">
         <!-- GROUP: THE BRIEF -->
         <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
@@ -4350,7 +4405,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </div>
         <!-- GROUP: YOUR CONTENT BRIEF -->
         <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(AI tools on the right read everything here)</span></div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(the AI tools in Bridge the Gap read everything on this card)</span></div>
           <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
             <div style="display:flex;gap:8px;align-items:center">
               <select class="fi" id="cdBucket" style="flex:1"></select>
@@ -4385,25 +4440,30 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             </div>
           </div>
         </div>
+        <div class="cd-next"><button type="button" class="btn btn-p" onclick="cdShowTab('write')">Next: start writing</button></div>
       </div>
       <div class="cd2-right">
-        <div style="font-size:12px;color:var(--tl);padding:4px 2px 8px;line-height:1.55">Write it yourself in <strong style="color:var(--g)">Go Analog</strong>, use the tools in <strong style="color:var(--r)">Bridge the Gap</strong>, or do both. No wrong path.</div>
+      <div class="cd-pane-write">
+        <div style="font-size:12.5px;color:var(--t);padding:4px 2px 2px;line-height:1.55">Write it yourself here, get help in <strong style="color:var(--r)">Bridge the Gap</strong>, or do both. No wrong path.</div>
         <!-- GO ANALOG SECTION -->
-        <div class="card-section-toggle">
+        <div class="card-section-toggle cd-analog-sec">
           <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
             <div class="card-section-toggle-title analog">✏️ Go Analog</div>
             <span class="card-section-toggle-chev">-</span>
           </div>
           <div class="card-section-toggle-body open" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your own hook, notes, or full draft here. If you want the AI to build on it, check the box in Bridge the Gap below.</div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <textarea class="fi" id="cdHook" style="min-height:44px;font-size:14px;line-height:1.6;margin-bottom:8px" placeholder="Your opening line. The thing that makes them stop..."></textarea>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Whatever you write here is also what the AI tools in Bridge the Gap work from.</div>
+            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdHook','Hook / Subject')" aria-label="Expand hook to full screen">Expand</button>
+              <textarea class="fi cd-grow" id="cdHook" data-min="64" style="min-height:64px;font-size:14px;line-height:1.6;margin-bottom:8px" placeholder="Your first line. The thing that makes them stop scrolling."></textarea>
             </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
-              <textarea class="fi" id="cdNotes" style="min-height:72px;font-size:14px;line-height:1.7;margin-bottom:8px" placeholder="What's this post about? Key points, angle, what you want them to feel..."></textarea>
+            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
+              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdNotes','Caption / Body')" aria-label="Expand caption to full screen">Expand</button>
+              <textarea class="fi cd-grow" id="cdNotes" data-min="140" style="min-height:140px;font-size:14px;line-height:1.7;margin-bottom:8px" placeholder="What's this about? Your key points, the angle, and what you want them to feel or do."></textarea>
             </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <textarea id="cdOwnContent" class="fi" style="min-height:90px;margin-bottom:8px;font-size:14px;line-height:1.75;resize:vertical;background:var(--p) !important" placeholder="A rough draft, your angle, anything. Just you and the page."></textarea>
+            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdOwnContent','Your draft')" aria-label="Expand draft to full screen">Expand</button>
+              <textarea id="cdOwnContent" class="fi cd-grow" data-min="180" style="min-height:180px;margin-bottom:8px;font-size:14px;line-height:1.75;background:var(--p) !important" placeholder="Your rough draft, in your words. Post it as is, or let Bridge the Gap polish it."></textarea>
             </div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
@@ -4414,7 +4474,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </div>
 
         <!-- CAROUSEL SLIDES SECTION -->
-        <div class="card-section-toggle">
+        <div class="card-section-toggle" id="cdCarouselSec">
           <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,var(--rp),#f0e2cc);border-bottom:2px solid rgba(179,108,55,.25)">
             <div class="card-section-toggle-title" style="color:#4d1e15">🗂 Carousel Slides</div>
             <span class="card-section-toggle-chev">+</span>
@@ -4430,8 +4490,18 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
         </div>
 
+        <div class="cd-next"><button type="button" class="btn btn-p" onclick="cdShowTab('ai')">Next: get AI help</button></div>
+      </div><!-- end cd-pane-write -->
+      <div class="cd-pane-ai">
+        <div class="cd-empty-note" id="cdAiEmpty">
+          Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
+          <div class="cd-empty-acts">
+            <button type="button" class="btn btn-g" style="font-size:12px;padding:7px 14px" onclick="cdShowTab('details',{focus:'cdTitle'})">Add a title</button>
+            <button type="button" class="btn btn-g" style="font-size:12px;padding:7px 14px" onclick="cdShowTab('write',{focus:'cdNotes'})">Write some notes</button>
+          </div>
+        </div>
         <!-- BRIDGE THE GAP SECTION -->
-        <div class="card-section-toggle">
+        <div class="card-section-toggle cd-bridge-sec">
           <div class="card-section-toggle-hdr bridge" onclick="toggleCardSection(this)">
             <div class="card-section-toggle-title bridge">✦ Bridge the Gap</div>
             <span class="card-section-toggle-chev">+</span>
@@ -4618,6 +4688,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </div>
           </div><!-- end bridge body -->
         </div><!-- end bridge toggle -->
+      </div><!-- end cd-pane-ai -->
       </div><!-- end cd2-right -->
     </div><!-- end cd2-wrap -->
   </div><!-- end modal -->
@@ -4769,6 +4840,15 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
     </div>
     <div class="m-acts"><button class="btn btn-p" onclick="closeModal('privacyModal')">Got it</button></div>
   </div>
+</div>
+
+<!-- CARD FOCUS MODE -->
+<div class="cd-focus" id="cdFocus" role="dialog" aria-modal="true" aria-labelledby="cdFocusTitle">
+  <div class="cd-focus-bar">
+    <div class="cd-focus-title" id="cdFocusTitle">Writing</div>
+    <button type="button" class="btn btn-p" style="font-size:13px;padding:8px 18px" onclick="cdFocusClose()">Done</button>
+  </div>
+  <div class="cd-focus-body"><textarea class="cd-focus-ta" id="cdFocusTA"></textarea></div>
 </div>
 
 <!-- PANIC / CREATIVE DIRECTOR MODAL -->
@@ -7352,9 +7432,17 @@ function openIdeaModal(status){
   var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
   openModal('cardDetailModal');
 }
-function saveIdea(){
+function saveIdea(opts){
+  opts=opts||{};
   var title=document.getElementById('cdTitle').value.trim();
-  if(!title){toast('Please enter an idea');return;}
+  if(!title){
+    // No title yet: borrow the first line of whatever they wrote so nothing
+    // typed in the card is lost. Only nudge when the card is truly empty.
+    var firstLine=['cdHook','cdNotes','cdOwnContent'].map(function(id){var el=document.getElementById(id);return el?el.value.trim():'';}).filter(Boolean)[0]||'';
+    firstLine=firstLine.split('\n')[0].slice(0,65).trim();
+    if(firstLine){title=firstLine;var tEl=document.getElementById('cdTitle');if(tEl)tEl.value=title;}
+    else{ if(!opts.quiet) cdNudgeEmpty('Add a title so you can find this card later.'); return; }
+  }
   var date=document.getElementById('cdDate').value;
   var ct=document.getElementById('cdTime');var time=ct?ct.value:'';
   var platform=document.getElementById('cdPlat').value;
@@ -8281,8 +8369,8 @@ function cdSelTone(el) {
 function cdUpdatePlatDot() {}
 
 
-function cdSaveOrAdd(){
-  if(S.cdId){ cdSave(); } else { saveIdea(); }
+function cdSaveOrAdd(opts){
+  if(S.cdId){ cdSave(); } else { saveIdea(opts); }
 }
 function cdSave(){
   var x=S.ideas.find(function(a){return a.id===S.cdId;});
@@ -8828,7 +8916,7 @@ function cdSaveOwnDraft(){
 async function cdSmartBrief() {
   if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
   var b = cdGetBrief();
-  if (!b.title && !b.notes) { toast('Add a title or notes first'); return; }
+  if (!b.title && !b.notes) { cdNudgeEmpty(); return; }
   window._cdGenerating = true;
   var load = document.getElementById('cd-load-smartBrief');
   var out = document.getElementById('cd-smartBrief-out');
@@ -8873,7 +8961,7 @@ async function cdGen2(type) {
   var hookEl = document.getElementById('cdHook');
   var b = cdGetBrief();
   if (!b.title && !b.notes && !b.ownContent && !(hookEl&&hookEl.value.trim())) {
-    toast('Add a title or some content first');
+    cdNudgeEmpty();
     window._cdGenerating = false;
     document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=false; b.style.opacity=''; });
     return;
@@ -9369,6 +9457,7 @@ async function cdCallAI(sys, usr, maxTok) {
     }
     if(full.truncated) toast('This one ran really long and may be cut off at the end.');
     consumeCredit(); // only consume if we got a real response
+    cdMarkAiNew();
     return result;
   } catch(e) {
     var msg = e && e.name === 'AbortError' ? 'That took too long and timed out. Nothing was used or saved, try again.' : 'Error: ' + (e && e.message ? e.message : 'something went wrong') + '. Nothing was used or saved.';
@@ -9630,6 +9719,161 @@ document.addEventListener('click',function(e){
 // click, navigate), so watch the class on every .modal-ov instead of patching
 // each path. Only lift the bubble when the card is the sole open modal, so
 // confirm/support/etc modals stacked on top still cover it.
+
+/* ═══════════════════ CARD TABS, AUTO-GROW, FOCUS MODE ═══════════════════ */
+var _cdTab='write';
+function cdShowTab(tab,opts){
+  opts=opts||{};
+  if(['details','write','ai'].indexOf(tab)===-1)tab='write';
+  _cdTab=tab;
+  var wrap=document.getElementById('cdWrap');
+  if(wrap)wrap.setAttribute('data-tab',tab);
+  document.querySelectorAll('#cardDetailModal .cd-tab').forEach(function(t){
+    var on=t.dataset.tab===tab;
+    t.classList.toggle('active',on);
+    t.setAttribute('aria-selected',on?'true':'false');
+    if(on&&tab==='ai')t.classList.remove('has-new');
+  });
+  var panel=document.querySelector('#cardDetailModal .cd-modal-panel');
+  if(panel&&!opts.keepScroll)panel.scrollTop=0;
+  if(tab==='write'){
+    // Carousel cards open the slides section so it isn't hidden behind a toggle
+    var fmt=document.getElementById('cdFormat');
+    var sec=document.getElementById('cdCarouselSec');
+    if(fmt&&sec&&fmt.value==='Carousel'){
+      var body=sec.querySelector('.card-section-toggle-body');var chev=sec.querySelector('.card-section-toggle-chev');
+      if(body&&!body.classList.contains('open')){body.classList.add('open');if(chev)chev.textContent='-';}
+    }
+    cdGrowAll();
+    cdMaybeShowExpandTip();
+  }
+  if(tab==='ai')cdUpdateAiEmpty();
+  if(opts.focus){
+    var el=document.getElementById(opts.focus);
+    if(el)setTimeout(function(){el.focus();el.classList.add('cd-hl');setTimeout(function(){el.classList.remove('cd-hl');},1600);},60);
+  }
+}
+function cdCardHasContent(){
+  return ['cdTitle','cdHook','cdNotes','cdOwnContent'].some(function(id){var el=document.getElementById(id);return el&&el.value.trim();});
+}
+function cdUpdateAiEmpty(){
+  var n=document.getElementById('cdAiEmpty');
+  if(n)n.classList.toggle('show',!cdCardHasContent());
+}
+// Used when a tool or Save needs something the card doesn't have yet:
+// take the person to the right spot instead of just flashing an error.
+function cdNudgeEmpty(msg){
+  var title=document.getElementById('cdTitle');
+  cdShowTab('details',{focus:'cdTitle'});
+  toast(msg||'Add a title or a few notes first. The AI works from what is on the card.');
+}
+function cdMarkAiNew(){
+  var m=document.getElementById('cardDetailModal');
+  if(!m||!m.classList.contains('open')||_cdTab==='ai')return;
+  var t=document.querySelector('#cardDetailModal .cd-tab[data-tab="ai"]');
+  if(t)t.classList.add('has-new');
+}
+
+// Auto-grow: boxes grow with the text up to about half the screen, then
+// scroll inside so the page never turns into an endless scroll.
+function cdGrow(el){
+  if(!el||!el.offsetParent)return;
+  var min=parseInt(el.getAttribute('data-min')||'0',10)||0;
+  var max=Math.max(200,Math.round(window.innerHeight*0.5));
+  el.style.height='auto';
+  var h=Math.max(min,Math.min(el.scrollHeight+2,max));
+  el.style.height=h+'px';
+}
+function cdGrowAll(){
+  document.querySelectorAll('#cardDetailModal textarea.cd-grow, #cdCarouselSlides textarea').forEach(cdGrow);
+}
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(!t||t.tagName!=='TEXTAREA')return;
+  if(t.classList.contains('cd-grow')||t.closest('#cdCarouselSlides'))cdGrow(t);
+  if(t.closest&&t.closest('#cardDetailModal'))cdUpdateAiEmpty();
+});
+document.addEventListener('input',function(e){
+  if(e.target&&e.target.id==='cdTitle')cdUpdateAiEmpty();
+});
+window.addEventListener('resize',function(){
+  var m=document.getElementById('cardDetailModal');
+  if(m&&m.classList.contains('open'))cdGrowAll();
+});
+
+// Focus mode: one box, full screen. Edits sync straight back to the card.
+var _cdFocusSrc=null;
+function cdFocusOpen(id,label){
+  var src=document.getElementById(id);
+  if(!src)return;
+  _cdFocusSrc=src;
+  var ov=document.getElementById('cdFocus');
+  var ta=document.getElementById('cdFocusTA');
+  document.getElementById('cdFocusTitle').textContent=label||'Writing';
+  ta.value=src.value;
+  ta.placeholder=src.placeholder||'';
+  ov.classList.add('open');
+  setTimeout(function(){ta.focus();ta.selectionStart=ta.selectionEnd=ta.value.length;},50);
+  try{localStorage.setItem('fssExpandTipSeen','1');}catch(e){}
+  var tip=document.getElementById('cdExpandTip');if(tip)tip.remove();
+}
+function cdFocusClose(){
+  var ov=document.getElementById('cdFocus');
+  if(!ov||!ov.classList.contains('open'))return;
+  ov.classList.remove('open');
+  if(_cdFocusSrc){
+    cdGrow(_cdFocusSrc);
+    var src=_cdFocusSrc;_cdFocusSrc=null;
+    setTimeout(function(){src.focus();},30);
+  }
+}
+document.getElementById('cdFocusTA').addEventListener('input',function(){
+  if(!_cdFocusSrc)return;
+  _cdFocusSrc.value=this.value;
+  _cdFocusSrc.dispatchEvent(new Event('input',{bubbles:true}));
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    var ov=document.getElementById('cdFocus');
+    if(ov&&ov.classList.contains('open')){e.stopPropagation();cdFocusClose();}
+  }
+},true);
+
+// One-time tip pointing at Expand, shown the first time someone writes in a card
+function cdMaybeShowExpandTip(){
+  var seen=false;
+  try{seen=localStorage.getItem('fssExpandTipSeen')==='1';}catch(e){}
+  if(seen||document.getElementById('cdExpandTip'))return;
+  var body=document.querySelector('#cardDetailModal .cd-analog-sec .card-section-toggle-body');
+  if(!body)return;
+  var tip=document.createElement('div');
+  tip.className='cd-tip';tip.id='cdExpandTip';
+  tip.innerHTML='<span>Tip: tap Expand on any box to write full screen, no distractions.</span><button type="button">Got it</button>';
+  tip.querySelector('button').addEventListener('click',function(){
+    try{localStorage.setItem('fssExpandTipSeen','1');}catch(e){}
+    tip.remove();
+  });
+  body.insertBefore(tip,body.firstChild);
+}
+
+// Pick the starting tab whenever the card opens: new cards start on Details
+// so the basics get filled in, existing cards open straight to writing.
+(function(){
+  var m=document.getElementById('cardDetailModal');
+  if(!m)return;
+  var wasOpen=false;
+  new MutationObserver(function(){
+    var isOpen=m.classList.contains('open');
+    if(isOpen&&!wasOpen){
+      document.querySelectorAll('#cardDetailModal .cd-tab').forEach(function(t){t.classList.remove('has-new');});
+      cdShowTab(S.cdId?'write':'details');
+      setTimeout(cdGrowAll,120);
+    }
+    if(!isOpen&&wasOpen)cdFocusClose();
+    wasOpen=isOpen;
+  }).observe(m,{attributes:true,attributeFilter:['class']});
+})();
+
 function dcSyncBubbleLayer(){
   var cd=document.getElementById('cardDetailModal');
   var cdIsOpen=!!(cd&&cd.classList.contains('open'));
