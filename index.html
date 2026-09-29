@@ -4462,6 +4462,12 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
               <div class="ai2-tone-chip" data-t="educational" onclick="cdSelTone(this)">Educational</div>
               <div class="ai2-tone-chip" data-t="playful" onclick="cdSelTone(this)">Playful</div>
             </div>
+            <div style="display:flex;align-items:center;gap:8px;margin:0 0 10px">
+              <label for="cdLength" style="font-size:12px;font-weight:600;color:var(--t)">Length</label>
+              <select class="fi" id="cdLength" style="width:auto;font-size:12.5px;padding:6px 10px">
+                <option value="short">Short</option><option value="standard" selected>Standard</option><option value="long">Long</option>
+              </select>
+            </div>
             <div class="ai2-btn-grid">
               <div style="margin-bottom:10px">
                 <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:28px;font-size:12.5px;resize:vertical"></textarea>
@@ -7098,8 +7104,8 @@ async function generate(){
   const bizCtx=buildBrandContext();
   const isArticle=['Article','Blog Post','Book Chapter','Email Newsletter'].includes(S.studio.type)||S.studio.plat==='substack';
   const sys=isArticle
-    ?CD_PERSONA+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence subheadline. Third line: BODY: followed by the full article. Inside BODY, use ## before any section headers (e.g. ## My Section Header) so they are visually distinct. Write like a real human. No bullet point overload.'
-    :CD_PERSONA+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use '+S.studio.type+'.';
+    ?CD_PERSONA+bizCtx+' Output your response in EXACTLY this format, no exceptions. First line: TITLE: followed by the title. Second line: SUBTITLE: followed by one sentence subheadline. Third line: BODY: followed by the full article. Inside BODY, put each section header on its own line with a blank line before it, plain text, no symbols. Write like a real human. No bullet point overload.'+SKILL_CORE
+    :CD_PERSONA+bizCtx+'\nOutput ONLY the finished content. No preamble, no labels - just the ready-to-use '+S.studio.type+'.'+SKILL_CORE;
   const ownDraftCb=document.getElementById('useOwnDraft');
   const ownHookVal=document.getElementById('studioOwnHook')?document.getElementById('studioOwnHook').value.trim():'';
   const ownBodyVal=document.getElementById('studioOwnTA').value.trim();
@@ -7316,6 +7322,7 @@ function openIdeaModal(status){
   document.getElementById('cdTitle').value='';
   document.getElementById('cdPlat').value='instagram';
   document.getElementById('cdFormat').value='Caption / Post';
+  var cdLenClr=document.getElementById('cdLength');if(cdLenClr)cdLenClr.value='standard';
   document.getElementById('cdDate').value='';
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
@@ -7360,7 +7367,7 @@ function saveIdea(){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('cdReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
+  var idea={id:Date.now().toString(),title,platform,format,genLength:cdGetLength(),notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
   var slidesContainerNew=document.getElementById('cdCarouselSlides');
   if(slidesContainerNew){
     idea.carouselSlides=Array.from(slidesContainerNew.querySelectorAll('.cd-slide-wrap textarea')).map(function(ta){return ta.value;});
@@ -7649,6 +7656,119 @@ function saveBrandProfile(){
 // richest existing version. Task-specific instructions (format, length,
 // output structure) stay in each function - only the identity lives here.
 const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist and marketing executive with 10+ years managing brand accounts across every kind of business and every major platform (Instagram, TikTok, LinkedIn, Facebook, email/newsletter, Substack, YouTube). That background means you reason like someone who has actually run these accounts at scale, not someone repeating generic advice: you know what separates a post that performs from one that doesn't, what a launch actually needs at each phase, what a realistic cadence looks like before it tips into burnout, and how those decisions differ by platform and by niche. You hold three distinct layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, what makes a piece of content actually work), LAUNCH STRATEGY (sequencing, pacing, when to build vs when to ask), and GENERAL BUSINESS STRATEGY (platform prioritization, positioning, where to spend limited time and energy for the best return). On top of all of that, you specifically understand neurodivergent brains and how ND business owners actually work best, which means you never default to hustle-culture volume advice, you reason in sustainable systems instead of grind. Whatever niche or industry the person's brand profile describes, that is the only niche you write for, adapt fully to it rather than defaulting to any one industry. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
+
+/* ═══════════════════ SKILL SPECS ═══════════════════
+   Single source of truth for every "write me a piece of content" tool.
+   Card tools (cdGen2, build from hook) and Creative Director Mode
+   (runPanicGenerate) both build their requests from here, so a skill only
+   ever gets improved in one place. The Studio page uses SKILL_CORE too. */
+const SKILL_CORE = [
+  " HOW YOU WORK ON EVERY PIECE:",
+  "You write like a brand and social media executive with more than a decade of running real accounts, not like a content template. That means every piece carries at least one thing the audience can actually use today: a specific step, a named tool or resource, a mini framework, a script they can steal, or a concrete example from the niche in the brand profile. Vague encouragement is never the value.",
+  "Specific beats clever. Name the real situation, the real feeling, the real moment. Cut any sentence that could appear in anyone else's post.",
+  "Never invent statistics, studies, quotes, testimonials, or client results. If a number or proof point would help, write it as a clearly marked placeholder in square brackets, like [your client result here], so the creator fills in the real one.",
+  "Use everything the creator gave you: title, notes, hook, their own draft, and any slides already written. If they wrote a hook, keep it word for word unless their instructions say otherwise. If they wrote a draft, build from their words and voice instead of replacing them.",
+  "Land the ending. The last beat before the call to action must resolve the idea: a takeaway, a reframe, or the one line you want them to remember. The call to action then reads as the natural next step, never a hard cut. Never stop mid-thought.",
+  "One call to action per piece, matched to the goal: save or share for value, comment or DM for conversation, link for an offer. Never stack asks.",
+  "Plain text only. Labels like HOOK: or Slide 1: are fine. No asterisks, no pound signs, no em dashes, no emoji unless the creator's voice uses them.",
+  "Length targets are defaults. A complete piece that runs slightly long always beats one that gets cut short."
+].join(" ");
+
+const SKILL_PLATFORM = {
+  instagram: "Instagram: only the first line or so shows before more, so the hook has to carry the keyword and the tension on its own. Instagram search reads captions, so the main keyword belongs in the first sentence. Saves, shares, and sends matter more for reach than likes.",
+  tiktok: "TikTok: written for the ear and for speed. The first line has to work with the sound off as on-screen text. Say the main keyword out loud early, TikTok search reads the transcript.",
+  linkedin: "LinkedIn: the first two lines show before see more, so they must earn the click. Short paragraphs, one or two sentences each. No external links in the body, point to the comments or profile instead. Professional but still human, no corporate filler.",
+  facebook: "Facebook: conversational and community first. Questions and personal stories travel further than polished promo.",
+  newsletter: "Newsletter: written to one person, not a crowd. The subject and first two lines do the heavy lifting in the inbox preview.",
+  email: "Email: written to one person. Plain text feel, short paragraphs, no spam trigger phrasing, no all caps. Subject line around 30 to 50 characters. The P.S. gets read, use it.",
+  substack: "Substack: the title makes the promise, the subtitle sharpens it, and the first three lines show in the email preview. Readers came for a real voice and a real point of view.",
+  blog: "Blog: search matters. The main keyword belongs in the title, the first paragraph, and at least one section header. Scannable sections, but still written like a person.",
+  other: ""
+};
+
+const SKILL_LENGTH_LABEL = { short: "short", standard: "standard", long: "long" };
+
+const SKILL_SPECS = {
+  caption: {
+    lengths: { short: "60 to 100 words", standard: "100 to 200 words (up to 250 on LinkedIn)", long: "200 to 350 words, a mini story or mini lesson" },
+    tokens: { short: 700, standard: 1000, long: 1400 },
+    spec: "Write one finished caption. Structure: a hook line that stands alone above the fold, then a line break, then two to four short paragraphs that deliver the value or the story with at least one concrete, usable takeaway, then a one-sentence landing line that states the takeaway, then one call to action that follows from it. No hashtags unless the creator asks."
+  },
+  reel: {
+    lengths: { short: "15 to 25 seconds, about 40 to 65 spoken words", standard: "30 to 45 seconds, about 90 to 130 spoken words", long: "60 to 90 seconds, about 150 to 220 spoken words" },
+    tokens: { short: 800, standard: 1100, long: 1500 },
+    spec: "Write a finished talking-head Reel or TikTok script, written for the ear at a natural speaking pace. Use exactly these labeled sections in this order. HOOK: the first 1 to 3 seconds, one spoken line, plus ON SCREEN: the text overlay (short, can differ from the spoken line). SETUP: one or two lines on why this matters to the viewer right now. BODY: two or three points, one idea per line, each one concrete enough to act on. LANDING: one line that resolves the whole idea, the thing they walk away with. CTA: one line that flows naturally out of the landing. Add short delivery or b-roll notes in square brackets where a cut, a visual change, or a pause would hold attention, roughly every few seconds. Say the main keyword out loud in the HOOK or SETUP. If it fits, make the last line loop back to the hook so the video replays cleanly."
+  },
+  carousel: {
+    lengths: { short: "5 to 6 slides", standard: "7 to 9 slides", long: "10 slides" },
+    tokens: { short: 900, standard: 1200, long: 1500 },
+    spec: "Write finished carousel copy, every slide labeled (Slide 1:, Slide 2:, and so on). Slide 1 is the hook: a clear promise or tension, about 10 words. Slide 2 hooks again on its own, because Instagram often re-serves a carousel starting from slide 2. The middle slides each carry one point: a short headline line plus one or two supporting lines, max 25 words per slide, and at least one slide should be something worth saving (a step list, a script, a named tool, a before and after). The second to last slide is the landing: a summary or reframe. The last slide is the call to action, usually save or share for a value carousel. If the creator already wrote some slides, keep them and build the carousel around them."
+  },
+  story: {
+    lengths: { short: "4 frames", standard: "5 to 7 frames", long: "8 to 10 frames" },
+    tokens: { short: 600, standard: 800, long: 1000 },
+    spec: "Write a finished Instagram Story sequence. Number every frame (Frame 1:, Frame 2:, and so on), one short line of on-screen text per frame, readable in about three seconds. Frame 1 is a hook question or statement. Put an interactive sticker early (a poll or quiz) to warm people up, and note it in square brackets like [Poll: option A / option B]. The middle frames build the idea with one beat each. The second to last frame is the landing. The last frame is the call to action with the right sticker in square brackets: link, question box, or DM prompt."
+  },
+  email: {
+    lengths: { short: "100 to 150 words", standard: "150 to 300 words", long: "300 to 500 words" },
+    tokens: { short: 800, standard: 1100, long: 1500 },
+    spec: "Write a finished marketing email. Output in this order with these labels. SUBJECT: the best subject line, then ALT SUBJECTS: two alternates in different styles. PREVIEW: preview text that extends the subject instead of repeating it. Then the email body: an opening that gets to the point within two sentences, two or three short paragraphs with one concrete, usable insight, a landing paragraph that ties it together, one clear call to action, and a sign-off in the creator's voice (no stiff template closings). Add a one-line P.S. that either restates the call to action or adds a small human detail."
+  },
+  newsletter: {
+    lengths: { short: "2 to 3 sentences", standard: "3 to 5 sentences", long: "5 to 7 sentences" },
+    tokens: { short: 500, standard: 600, long: 800 },
+    spec: "Write the opening of a newsletter issue. Start inside a specific moment, observation, or tension, not with a greeting or throat clearing. The final sentence must open a loop that makes them keep reading into the rest of the issue. Output only the opening."
+  },
+  substack: {
+    lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
+    tokens: { short: 1600, standard: 2400, long: 3200 },
+    spec: "Write a finished Substack article. Output in this order: the title on its own line, the subtitle on its own line (one sentence that sharpens the promise), then an opening hook of two or three short paragraphs that pulls the reader in from the first line, then three or four sections, each starting with a short plain-text header on its own line with a blank line before it (no symbols), then a closing that circles back to the opening image or idea and lands the point, then an optional one-line subscribe or share invitation. Write like a real person with a real point of view, not a content marketer. Minimal bullet points, and each section must give the reader something concrete: an example, a tool, a step, or a reframe."
+  },
+  blog: {
+    lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
+    tokens: { short: 1600, standard: 2400, long: 3200 },
+    spec: "Write a finished blog post built to be found in search and actually read. Output in this order: the title on its own line (main keyword included, sentence case), a one-sentence subheadline, an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
+  },
+  hooks: {
+    lengths: { short: "5 hooks", standard: "5 hooks", long: "5 hooks" },
+    tokens: { short: 500, standard: 500, long: 500 },
+    spec: "Write exactly 5 opening hooks for this specific idea, not for the niche in general. Each one in a different style: a question, a bold claim, a specific number or detail, a story opener, a contrarian take. Each hook is one line, specific enough that it could only belong to this piece, and creates tension or curiosity without clickbait. Output exactly 5 numbered lines (1. to 5.) with the hook only, nothing else on the line."
+  },
+  variations: {
+    lengths: { short: "60 to 100 words each", standard: "100 to 180 words each", long: "180 to 280 words each" },
+    tokens: { short: 1200, standard: 1800, long: 2400 },
+    spec: "Write 3 complete, different captions for this idea, labeled Variation 1: Warm and personal, Variation 2: Direct and punchy, Variation 3: Story-led. Each one is a full caption with its own hook line, its own value, its own landing line, and one call to action. They should differ in angle and structure, not just wording."
+  },
+  series: {
+    lengths: { short: "5 posts", standard: "5 posts", long: "5 posts" },
+    tokens: { short: 700, standard: 700, long: 700 },
+    spec: "Plan a 5-part content series from this idea. First line: SERIES: a short recurring series name people can recognize. Then exactly 5 numbered items (1. to 5.), one line each, in this pattern: post title, a colon, the one-sentence angle, then the best format in parentheses (Reel, Carousel, Caption, Story, or Email). Each post must stand alone, but they build in order: the early posts create awareness and trust, and part 5 is the payoff or the ask that the first four earn."
+  }
+};
+
+function skillLengthKey(v){ return (v === 'short' || v === 'long') ? v : 'standard'; }
+
+// o: {brief, plat, format, tone, length, instr, freshness, extra}
+function buildSkillRequest(type, o){
+  o = o || {};
+  var spec = SKILL_SPECS[type] || SKILL_SPECS.caption;
+  var len = skillLengthKey(o.length);
+  var plat = (o.plat || 'instagram').toLowerCase();
+  var platNote = SKILL_PLATFORM[plat] || '';
+  var sys = CD_PERSONA + buildBrandContext() + SKILL_CORE + (platNote ? ' PLATFORM NOTES: ' + platNote : '') + ' Output ONLY the finished content. No preamble, no explanation of what you did.';
+  var usr = cdInstrLead(o.instr) + (o.freshness || '') +
+    'Platform: ' + plat + '\n' +
+    (o.format ? 'Card format: ' + o.format + '\n' : '') +
+    'Tone: ' + (o.tone || 'warm, personal, and human') + '\n' +
+    'Target length: ' + spec.lengths[len] + '\n\n' +
+    'What this piece is about (everything the creator has written on this card):\n' + (o.brief || '') + '\n\n' +
+    (o.extra ? o.extra + '\n\n' : '') +
+    'The job: ' + spec.spec +
+    cdInstrTail(o.instr);
+  return { sys: sys, usr: usr, maxTok: spec.tokens[len] };
+}
+function cdGetLength(){ var el = document.getElementById('cdLength'); return skillLengthKey(el ? el.value : ''); }
+
 function buildBrandContext(){
   const bp=S.brandProfile;
   const lines=[];
@@ -7992,6 +8112,7 @@ function cdOpen(id){
   document.getElementById('cdTitle').value=x.title||'';
   document.getElementById('cdPlat').value=x.platform||'instagram';
   document.getElementById('cdFormat').value=x.format||'Caption / Post';
+  var cdLenEl=document.getElementById('cdLength');if(cdLenEl)cdLenEl.value=skillLengthKey(x.genLength);
   document.getElementById('cdDate').value=x.date||'';
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
@@ -8177,6 +8298,7 @@ function cdSave(){
   x.title=document.getElementById('cdTitle').value.trim()||x.title;
   x.platform=document.getElementById('cdPlat').value||x.platform;
   x.format=document.getElementById('cdFormat').value||x.format;
+  x.genLength=cdGetLength();
   x.date=document.getElementById('cdDate').value;
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
@@ -8491,19 +8613,9 @@ async function runPanicGenerate(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   panicLockButtons(true);
-  var isLong=(fmt==='Article'||fmt==='Blog Post');
-  var prompts={
-    'Caption':'Write a finished '+plat+' caption for this idea: '+topic+'. Structure: a strong hook line, value in the middle, natural CTA at the end. Output ONLY the finished caption, no preamble.',
-    'Carousel':'Write finished carousel slide copy for this idea: '+topic+'. Platform: '+plat+'. Required output: labeled slides only. Slide 1: scroll-stopping hook. Middle slides: one clear point each, short and punchy. Last slide: strong CTA. Label every slide (e.g. "Slide 1:"). Output ONLY the slides, no preamble.',
-    'Reel Script':'Write a finished Reel/TikTok script for this idea: '+topic+'. Required output: three labeled sections only, HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Output ONLY the script, no preamble.',
-    'Story':'Write a finished Instagram Story script for this idea: '+topic+'. Required output: numbered slides 1-6, one short line of text per slide. Slide 1 must be a hook. Last slide must be a CTA. Output ONLY the slides, no preamble.',
-    'Newsletter':'Write a finished newsletter opening for this idea: '+topic+'. Max 4 sentences, warm and conversational, must make the reader want to keep reading. Output ONLY the opening, no preamble.',
-    'Blog Post':'Write a finished blog post for this idea: '+topic+'. Required output, in this exact order: a compelling title, a one-sentence subheadline, an opening hook, 3-4 body sections with clear headers, a closing paragraph. Write like a real human, not a content marketer. No bullet point overload. Output ONLY the article, no preamble.',
-    'Article':'Write a finished Substack article for this idea: '+topic+'. Required output, in this exact order: a compelling title, a one-sentence subheadline, an opening hook that pulls the reader in, 3-4 body sections with simple headers, a warm closing paragraph, an optional one-sentence subscribe CTA. Write like a real human, not a content marketer. No bullet point overload. Output ONLY the article, no preamble.'
-  };
-  var sys=CD_PERSONA+brand+' Be direct, specific, warm and human. Output ONLY the finished content, no preamble, no labels like "Here is your caption:".';
-  var usr=prompts[fmt]||prompts['Caption'];
-  var result=await cdCallAI(sys,usr,isLong?1400:900);
+  var panicMap={'Caption':'caption','Carousel':'carousel','Reel Script':'reel','Story':'story','Newsletter':'newsletter','Blog Post':'blog','Article':'substack'};
+  var req=buildSkillRequest(panicMap[fmt]||'caption',{brief:topic,plat:plat,format:fmt,tone:'warm, direct, and human',length:'standard'});
+  var result=await cdCallAI(req.sys,req.usr,req.maxTok);
   document.getElementById('panicLoading').style.display='none';
   panicLockButtons(false);
   if(result){
@@ -8782,20 +8894,8 @@ async function cdGen2(type) {
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
-  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble, no explanation of what you did. Tone: ' + toneDesc + '.';
-  var prompts = {
-    caption: 'Write a ' + b.plat + ' caption SPECIFICALLY for this idea: ' + b.brief + '. Required output: one finished caption only. This caption must be about this specific topic/idea, not a general brand post. Structure: strong hook line, value in the middle, natural CTA at the end. Tone: ' + toneDesc + '.',
-    story: 'Write an Instagram Story script SPECIFICALLY for this idea: ' + b.brief + '. Required output: numbered slides 1-6, one short line of text per slide, nothing else. Slide 1 must be a hook question or statement. Last slide must be a CTA.',
-    carousel: 'Write carousel slide copy SPECIFICALLY for this idea: ' + b.brief + '. Required output: labeled slides only. Slide 1: scroll-stopping hook. Slides 2-6: one clear point each, short and punchy. Last slide: strong CTA. Label every slide clearly (e.g. "Slide 1:").',
-    reel: 'Write a Reel/TikTok script SPECIFICALLY for this idea: ' + b.brief + '. Required output: three labeled sections only - HOOK (first 3 seconds), BODY (main content, punchy sentences), CTA (last 5 seconds). Conversational and energetic.',
-    newsletter: 'Write an engaging newsletter opening SPECIFICALLY for this idea: ' + b.brief + '. Required output: max 4 sentences, nothing else. Tone: ' + toneDesc + '. Must make the reader want to keep reading.',
-    email: 'Write a marketing email SPECIFICALLY for this idea: ' + b.brief + '. Required output, in this exact order: Subject line (punchy, no emojis), Preview text, Opening paragraph, 2-3 body paragraphs, Clear CTA. Tone: ' + toneDesc + '.',
-    substack: 'Write a full Substack article SPECIFICALLY for this idea: ' + b.brief + '. Required output, in this exact order: Title (compelling, not clickbait), Subheadline (one sentence that earns the read), Opening hook (2-3 sentences that pull the reader in immediately), 3-4 body sections with clear but unpretentious headers, Closing paragraph that feels like a real person signing off, optional one-sentence subscribe CTA at the end. Tone: ' + toneDesc + '. Write like a real human, not a content marketer. No bullet point overload.',
-    variations: 'Write 3 different caption variations SPECIFICALLY for this idea: ' + b.brief + '. Required output: exactly 3 labeled variations, nothing else. Variation 1: Warm and personal. Variation 2: Direct and punchy. Variation 3: Story-led. All for ' + b.plat + '.',
-    hooks: 'Generate 5 scroll-stopping opening hooks SPECIFICALLY for this idea: ' + b.brief + '. Platform: ' + b.plat + '. The hooks must be directly about this specific idea, angle, or topic. Do not generate generic hooks about the broader brand or niche. Required output: exactly 5 numbered lines (1-5), nothing else. Each hook must use a different style: question, bold statement, statistic, story opener, controversy.',
-    series: 'Generate a 5-part content series from this idea: ' + b.brief + '. Required output: exactly 5 numbered items (1-5). Each item: one sentence title + one sentence description, nothing else. Each post should stand alone but connect to a bigger theme.'
-  };
-  var result = await cdCallAI(sys, cdInstrLead(cdInstr)+cdFreshnessNote(type)+(prompts[type] || prompts.caption)+cdInstrTail(cdInstr), type === 'series' ? 600 : type === 'substack' ? 1400 : 900);
+  var req = buildSkillRequest(SKILL_SPECS[type] ? type : 'caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneDesc, length: cdGetLength(), instr: cdInstr, freshness: cdFreshnessNote(type) });
+  var result = await cdCallAI(req.sys, req.usr, req.maxTok);
   var loadNow0 = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
   if (loadNow0) loadNow0.classList.remove('show');
   if (result) {
@@ -8877,13 +8977,13 @@ async function cdBuildCaptionFromHook() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = CD_PERSONA + brand + ' Output ONLY the finished caption. No preamble.';
-  var usr = 'Write a ' + b.plat + ' caption starting with this exact hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Tone: ' + (toneMap[tone]||'warm')+'. Keep hook exactly as written. 2-4 short paragraphs, end with a natural CTA. No hashtags.';
+  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap[tone] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' });
+  var sys = req.sys, usr = req.usr;
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
   if (out) { out.textContent = 'Writing caption...'; out.classList.add('show'); }
   if (acts) acts.classList.remove('show');
-  var result = await cdCallAI(sys, usr, 500);
+  var result = await cdCallAI(sys, usr, req.maxTok);
   if (result) {
     _cdOutputs['hookBuilt'] = result;
     if (out) out.textContent = result;
@@ -8898,13 +8998,15 @@ async function cdBuildFromHook() {
   window._cdGenerating = true;
   var b = cdGetBrief();
   var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble.';
-  var usr = 'Write a full ' + b.plat + ' caption starting with this hook: "' + _cdHookSel + '". Topic: ' + b.brief + '. Keep the hook exactly as written. Add value in the middle, end with a natural CTA.';
+  var tone2 = _cdSelTone || 'warm';
+  var toneMap2 = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
+  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap2[tone2] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' });
+  var sys = req.sys, usr = req.usr;
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
   if (out) { out.textContent = 'Building...'; out.classList.add('show'); }
   if (acts) acts.classList.remove('show');
-  var result = await cdCallAI(sys, usr, 700);
+  var result = await cdCallAI(sys, usr, req.maxTok);
   window._cdGenerating = false;
   if (result) {
     _cdOutputs['hookBuilt'] = result;
@@ -9246,7 +9348,8 @@ async function cdCallAI(sys, usr, maxTok) {
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return '';}
   try {
-    var full = await aiGenerateFull({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, 45000);
+    // Longer skills (articles, long scripts) need more time than the 45s default
+    var full = await aiGenerateFull({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30));
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was used or saved, try again.');
