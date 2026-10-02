@@ -5111,54 +5111,16 @@ async function initAuth(){
       // relying on S.plan's current value here would create exactly the
       // kind of timing gap that let an owner account get silently
       // overwritten by an unrelated pending_plans or invite-code check.
-      var _ownerGuard=false;
+      // Plans are only ever set on the server now. fss_claim_my_plan applies
+      // a paid plan the Stripe webhook left in pending_plans, or beta from a
+      // valid invite code, for this signed-in account only, and never
+      // touches an owner account. The browser can no longer write a plan.
       try{
-        var {data:_existingProfile}=await sb.from('profiles').select('plan').eq('id',session.user.id).maybeSingle();
-        _ownerGuard=_existingProfile&&_existingProfile.plan==='owner';
+        var _pendingCode=sessionStorage.getItem('pendingInviteCode');
+        var _claim=await sb.rpc('fss_claim_my_plan',{p_invite:_pendingCode||null});
+        if(_claim&&_claim.data)S.plan=_claim.data;
       }catch(e){}
-
-      // 1. Check for invite code — set plan to beta
-      var pendingCode=sessionStorage.getItem('pendingInviteCode');
-      if(pendingCode===INVITE_CODE&&!_ownerGuard){
-        try{
-          await sb.from('profiles').upsert({id:session.user.id,plan:'beta'});
-          S.plan='beta';
-        }catch(e){}
-        sessionStorage.removeItem('pendingInviteCode');
-      } else if(pendingCode===INVITE_CODE){
-        sessionStorage.removeItem('pendingInviteCode');
-      }
-
-      // 2. ALWAYS check pending_plans table for paid plan — webhook writes here
-      // regardless of whether sessionStorage survived the redirect
-      if(_ownerGuard){
-        // Never let a stale or leftover pending_plans row touch an owner
-        // account - clean it up if present, but don't apply it.
-        try{ await sb.from('pending_plans').delete().eq('email',session.user.email.toLowerCase()); }catch(e){}
-        S.plan='owner';
-      } else {
-      try{
-        var {data:pending}=await sb.from('pending_plans')
-          .select('plan,created_at').eq('email',session.user.email.toLowerCase()).maybeSingle();
-        if(pending?.plan){
-          await sb.from('profiles').upsert({id:session.user.id,plan:pending.plan});
-          await sb.from('pending_plans').delete().eq('email',session.user.email.toLowerCase());
-          S.plan=pending.plan;
-          // Anchor their credit cycle to when they actually paid (the Stripe
-          // webhook's timestamp), not whenever their Supabase account
-          // happened to get created - those two dates are frequently
-          // different for anyone whose account was set up after the fact.
-          if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
-        } else {
-          // Fall back to sessionStorage if webhook hasn't fired yet
-          var paidPlan=sessionStorage.getItem('paidPlan');
-          if(paidPlan){
-            await sb.from('profiles').upsert({id:session.user.id,plan:paidPlan});
-            S.plan=paidPlan;
-          }
-        }
-      }catch(e){}
-      }
+      sessionStorage.removeItem('pendingInviteCode');
       sessionStorage.removeItem('paidPlan');
       sessionStorage.removeItem('intendedPlan');
 
@@ -5421,37 +5383,32 @@ async function bootApp(){
   document.getElementById('loadingScreen').classList.remove('hidden');
   var saved=await loadUserData();
   // Load plan from Supabase profiles table
+  // Plan and credits come from the server (fss_my_status), which also
+  // applies any scheduled downgrade and access_until lock there, never in
+  // the browser, and never to an owner account.
   try{
-    var {data:profile}=await sb.from('profiles').select('plan,access_until,scheduled_plan,scheduled_plan_date').eq('id',_currentUser.id).maybeSingle();
-    if(profile&&profile.plan) S.plan=profile.plan;
-    // Someone who cancels should keep full access through what they already
-    // paid for, not get cut off immediately - the webhook should set
-    // access_until to their current billing period's end and leave `plan`
-    // alone until then. This is the client-side half of that: once that
-    // date actually passes, lock them out here even if nothing server-side
-    // has gotten around to flipping `plan` to 'locked' yet.
-    // Neither of these two checks below should ever apply to an owner
-    // account - owner is an internal designation, not a real subscription,
-    // and should never be locked out or downgraded by billing-adjacent
-    // logic, even if one of these fields ends up set on it (from testing,
-    // for instance).
-    if(profile&&profile.plan!=='owner'&&profile.access_until){
-      S.accessUntil=profile.access_until;
-      if(new Date(profile.access_until)<new Date()) S.plan='locked';
-    }
-    // A manual downgrade set today should be able to take effect on a
-    // future date (the end of what's already been paid for), not the
-    // moment it's saved in Supabase. If that date has actually arrived,
-    // apply it now and clear the schedule so it only fires once.
-    if(profile&&profile.plan!=='owner'&&profile.scheduled_plan&&profile.scheduled_plan_date){
-      if(new Date(profile.scheduled_plan_date)<=new Date()){
-        S.plan=profile.scheduled_plan;
-        try{
-          await sb.from('profiles').update({plan:profile.scheduled_plan,scheduled_plan:null,scheduled_plan_date:null}).eq('id',_currentUser.id);
-        }catch(e){}
+    // Picks up a plan paid for in another tab since they last loaded
+    try{ await sb.rpc('fss_claim_my_plan',{p_invite:null}); }catch(e){}
+    var st=await sb.rpc('fss_my_status');
+    var row=st&&st.data&&(Array.isArray(st.data)?st.data[0]:st.data);
+    if(row&&row.plan){
+      S.plan=row.plan;
+      if(row.access_until)S.accessUntil=row.access_until;
+      if(row.credit_limit!==null&&row.credit_limit!==undefined){
+        S.creditsUsed=row.used||0;
+        if(row.cycle_start)S.creditCycleStart=row.cycle_start;
+      }
+      _serverCreditsActive=true;
+    } else {
+      // Fallback (server functions not installed yet): read only, no writes
+      var {data:profile}=await sb.from('profiles').select('plan,access_until').eq('id',_currentUser.id).maybeSingle();
+      if(profile&&profile.plan) S.plan=profile.plan;
+      if(profile&&profile.plan!=='owner'&&profile.access_until){
+        S.accessUntil=profile.access_until;
+        if(new Date(profile.access_until)<new Date()) S.plan='locked';
       }
     }
-  }catch(e){ /* profiles table may not exist yet - defaults to beta */ }
+  }catch(e){ /* defaults to beta */ }
   document.getElementById('loadingScreen').classList.add('hidden');
   // Check if user is locked
   if(S.plan==='locked'){
@@ -5561,21 +5518,8 @@ async function doLogin(){
   // who already had an account before paying would otherwise never get their
   // paid plan applied, since they never go through doSignup() at all.
   if(data.user){
-    try{
-      var {data:existingProfile}=await sb.from('profiles').select('plan').eq('id',data.user.id).maybeSingle();
-      if(existingProfile&&existingProfile.plan==='owner'){
-        // Never let a stale pending_plans row touch an owner account -
-        // clean it up if present, but don't write anything from it.
-        await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
-      } else {
-        var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',em.toLowerCase()).maybeSingle();
-        if(pending && pending.plan){
-          await sb.from('profiles').upsert({id:data.user.id,plan:pending.plan});
-          await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
-          if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
-        }
-      }
-    }catch(e){ /* not fatal - they still get signed in either way */ }
+    try{ await sb.rpc('fss_claim_my_plan',{p_invite:null}); }
+    catch(e){ /* not fatal - they still get signed in either way */ }
   }
 }
 async function doSignup(){
@@ -5596,17 +5540,12 @@ async function doSignup(){
     // Always check pending_plans by email (webhook may have already written it)
     if(data.user){
       try{
-        var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',em.toLowerCase()).maybeSingle();
+        // The paid plan is applied on the server the first time they sign
+        // in (fss_claim_my_plan), matched to the email the Stripe webhook saved.
         var paidPlan=sessionStorage.getItem('paidPlan')||sessionStorage.getItem('intendedPlan');
-        var planToApply=pending?.plan||paidPlan||null;
-        if(planToApply){
-          await sb.from('profiles').upsert({id:data.user.id,plan:planToApply});
-          await sb.from('pending_plans').delete().eq('email',em.toLowerCase());
-          if(pending?.created_at) S.creditCycleStart=pending.created_at;
-          sessionStorage.removeItem('paidPlan');
-          sessionStorage.removeItem('intendedPlan');
+        if(paidPlan){
           msg.style.color='var(--teal)';
-          msg.textContent='Account created with '+planToApply+' access! Check your email to confirm, then sign in.';
+          msg.textContent='Account created! Check your email to confirm, then sign in. Your plan will be there when you do.';
         } else {
           msg.textContent='Account created! Check your email to confirm, then sign in.';
         }
@@ -5644,19 +5583,7 @@ async function submitNewPassword(){
   // an unclaimed paid plan sitting and this happens to be their first
   // successful sign-in since paying.
   if(_currentUser){
-    try{
-      var {data:existingProfile2}=await sb.from('profiles').select('plan').eq('id',_currentUser.id).maybeSingle();
-      if(existingProfile2&&existingProfile2.plan==='owner'){
-        await sb.from('pending_plans').delete().eq('email',_currentUser.email.toLowerCase());
-      } else {
-        var {data:pending}=await sb.from('pending_plans').select('plan,created_at').eq('email',_currentUser.email.toLowerCase()).maybeSingle();
-        if(pending && pending.plan){
-          await sb.from('profiles').upsert({id:_currentUser.id,plan:pending.plan});
-          await sb.from('pending_plans').delete().eq('email',_currentUser.email.toLowerCase());
-          if(pending.created_at&&!S.creditCycleStart) S.creditCycleStart=pending.created_at;
-        }
-      }
-    }catch(e){ /* not fatal */ }
+    try{ await sb.rpc('fss_claim_my_plan',{p_invite:null}); }catch(e){ /* not fatal */ }
   }
   // Send them into the app normally - they already have a valid session
   // from the recovery link, no need to make them log in again.
@@ -6879,22 +6806,29 @@ async function generateStarterLibrary(silent){
     return parsed.items;
   }
 
+  var libGrant=null, libOutOfCredits=false;
   async function generateOneType(typeLabel,categories,count,fields){
     var fieldDesc=fields.includes('title')?'{"cat":"...","title":"...","text":"..."}':'{"cat":"...","text":"..."}';
     var sys=CD_PERSONA+brand+' Output ONLY valid JSON, no preamble, no markdown code fences, matching exactly this structure: {"items":['+fieldDesc+', ...]}, with exactly '+count+' items, spread across these categories: '+categories.join(', ')+'. Every item must be genuinely specific to the niche and audience in the brand profile above, not generic filler. Any apostrophe or quotation mark inside a text or title value must be properly escaped (\\\' and \\") so the JSON stays valid.';
     var usr='Generate '+count+' '+typeLabel+' for my brand now.';
     var attemptDiag=[];
     for(var attempt=0;attempt<3;attempt++){
+      if(libOutOfCredits)break;
       try{
+        var libBody={model:S.settings.model||'claude-sonnet-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:usr}]};
+        if(libGrant)libBody.fss_grant=libGrant; else libBody.fss_want_grant='library';
         var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:await aiAuthHeaders(),
-          body:JSON.stringify({model:S.settings.model||'claude-sonnet-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:usr}]})
+          body:JSON.stringify(libBody)
         },30000);
         if(!r.ok){
           var errBody=await r.json().catch(function(){return {};});
+          if(errBody.fss)aiSyncCredits(errBody.fss);
+          if(r.status===402||errBody.code==='out_of_credits'){libOutOfCredits=true;break;}
           throw new Error((errBody.error&&errBody.error.message)||('HTTP '+r.status));
         }
         var d=await r.json();
-        var text=(d.content&&d.content[0]&&d.content[0].text)||'';
+        if(d.fss){aiSyncCredits(d.fss);if(d.fss.grant)libGrant=d.fss.grant;}
+        var text=(d.content||[]).filter(function(c){return c&&c.type==='text';}).map(function(c){return c.text;}).join('');
         attemptDiag.push({length:text.length,start:text.slice(0,100)});
         if(!text)throw new Error('Empty response');
         return {items:extractItemsJSON(text),diag:attemptDiag};
@@ -6906,12 +6840,19 @@ async function generateStarterLibrary(silent){
   }
 
   window._lastLibraryGenDiagnostics={};
-  var results=await Promise.all([
-    generateOneType('hooks',['Comparison','Curiosity','Educational','Engagement','Storytelling'],8,['cat','text']),
+  // Hooks go first on their own so the server can hand back the pass the
+  // other three ride on. Otherwise all four would be charged separately.
+  var firstResult=await generateOneType('hooks',['Comparison','Curiosity','Educational','Engagement','Storytelling'],8,['cat','text']);
+  if(libOutOfCredits){
+    window._libGenerating=false;_aiInFlight=Math.max(0,_aiInFlight-1);
+    btns.forEach(function(b){b.disabled=false;b.textContent='✦ Generate My Personalized Library';});
+    showCreditBlocked();return;
+  }
+  var results=[firstResult].concat(await Promise.all([
     generateOneType('story ideas',['Connect & Inspire','Engagement','Social Proof','Storytelling'],6,['cat','text']),
     generateOneType('CTAs',['Direct Sales','Engagement','Follow & Subscribe','Lead Generation','Link & Click','Share & Tag'],6,['cat','text']),
     generateOneType('prompts',['Caption Writing','Strategy','Sales Copy','Script Rewrite'],6,['cat','title','text'])
-  ]);
+  ]));
   var hooksResult=results[0], storiesResult=results[1], ctasResult=results[2], promptsResult=results[3];
   window._lastLibraryGenDiagnostics={hooks:hooksResult.diag,stories:storiesResult.diag,ctas:ctasResult.diag,prompts:promptsResult.diag};
 
@@ -6949,7 +6890,7 @@ async function generateStarterLibrary(silent){
       toast('Your personalized library is ready ✓');
     }
   } else {
-    toast('Your library generation didn\'t come through cleanly, and nothing was charged. Try again in a moment, if it keeps happening let Jess know, check the browser console (F12) for exact details.');
+    toast('Your library generation didn\'t come through cleanly. Try again in a moment. If it keeps happening let Jess know, check the browser console (F12) for exact details.');
   }
   console.warn('generateStarterLibrary diagnostics (per type, per attempt):',window._lastLibraryGenDiagnostics);
   window._libGenerating=false;_aiInFlight=Math.max(0,_aiInFlight-1);
@@ -7244,8 +7185,11 @@ async function generate(){
     var svBtnEl=document.getElementById('svBtn');if(svBtnEl)svBtnEl.style.display='inline-flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
   }catch(e){
+    if(aiHandleCreditError(e)){document.getElementById('outBdy').innerHTML='';}
+    else{
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
     toast('Error: '+e.message);
+    }
   }
   window._studioGenerating=false;_aiInFlight=Math.max(0,_aiInFlight-1);
   btn.disabled=false;btn.textContent='✦ Generate Draft';
@@ -8669,12 +8613,9 @@ async function redeemInviteCode(){
   msg.textContent='Activating your beta access...';
   msg.style.color='var(--teal)';
   try{
-    var res=await fetch('https://cucxwgmsatzlsgzhwghy.supabase.co/functions/v1/apply-plan',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+await getAnonKey()},
-      body:JSON.stringify({userId:_currentUser.id,plan:'beta'})
-    });
-    S.plan='beta';
+    var claim=await sb.rpc('fss_claim_my_plan',{p_invite:code});
+    if(claim.error)throw claim.error;
+    S.plan=claim.data||'beta';
     msg.textContent='✦ Beta access activated! Welcome to Flow State Studio.';
     setTimeout(function(){
       document.getElementById('lockedScreen').classList.remove('show');
@@ -8683,15 +8624,10 @@ async function redeemInviteCode(){
       navigate('dashboard');
     }, 1200);
   }catch(e){
-    // Fallback: store locally and reload
-    S.plan='beta';
-    persist();
-    msg.textContent='✦ Beta access activated! Welcome to Flow State Studio.';
-    setTimeout(function(){
-      document.getElementById('lockedScreen').classList.remove('show');
-      document.getElementById('appWrap').classList.add('show');
-      renderCreditBar();
-    }, 1200);
+    // Access is granted on the server only, so a failure here can't be
+    // papered over locally. Tell them plainly and let them retry.
+    msg.textContent='That didn\'t go through. Check your connection and try again.';
+    msg.style.color='var(--r)';
   }
 }
 
@@ -9429,6 +9365,9 @@ function canUseAI(){
 }
 function consumeCredit(){
   if(isUnlimited()) return;
+  // Once the server is answering with real counts, it already charged this
+  // and aiSyncCredits already updated the bar. Counting here too would double it.
+  if(_serverCreditsActive){ renderCreditBar(); return; }
   S.creditsUsed=(S.creditsUsed||0)+1;
   persist();
   renderCreditBar();
@@ -9490,19 +9429,46 @@ async function aiAuthHeaders(){
   }catch(e){}
   return h;
 }
-async function aiGenerateFull(payload, ms){
+// The server is the source of truth for credits. Every response from
+// /api/generate carries the person's real count, so the bar always shows
+// what the server charged, never a guess made in the browser.
+var _serverCreditsActive=false;
+function aiSyncCredits(fss){
+  if(!fss||typeof fss!=='object')return;
+  _serverCreditsActive=true;
+  if(fss.unlimited===false&&typeof fss.used==='number'){
+    S.creditsUsed=fss.used;
+    if(fss.cycle_start)S.creditCycleStart=fss.cycle_start;
+    persist();renderCreditBar();
+  }
+}
+function aiCreditError(code,msg){var e=new Error(msg);e.code=code;return e;}
+// Calls /api/generate and, if the reply was cut off at max_tokens, asks the
+// model to keep going from exactly where it stopped (up to 2 more passes).
+// The server hands back a pass for those extra calls, so the whole reply
+// costs one credit.
+async function aiGenerateFull(payload, ms, opts){
+  opts = opts || {};
   var base = payload.messages.slice();
   var messages = base;
-  var text = '', stop = '';
+  var text = '', stop = '', grant = opts.grant || null, lastFss = null;
   for (var pass = 0; pass < 3; pass++){
     var body = Object.assign({}, payload, { messages: messages });
+    if (grant) body.fss_grant = grant;
+    else if (opts.wantGrant) body.fss_want_grant = opts.wantGrant;
     var r = await fetchWithTimeout('/api/generate', { method:'POST', headers: await aiAuthHeaders(), body: JSON.stringify(body) }, ms || 45000);
     if(!r.ok){
       var eb = await r.json().catch(function(){return {};});
+      if (eb && eb.fss) aiSyncCredits(eb.fss);
       if (r.status === 401) throw new Error('Your session expired. Refresh the page and log back in');
+      if (r.status === 402 || eb.code === 'out_of_credits') throw aiCreditError('out_of_credits', 'Out of credits');
+      if (r.status === 403 && eb.code === 'locked') throw aiCreditError('locked', (eb.error && eb.error.message) || 'Your plan is not active right now');
+      // A continuation that fails keeps what was already written
+      if (pass > 0 && text) break;
       throw new Error((eb.error && eb.error.message) || ('HTTP ' + r.status));
     }
     var d = await r.json();
+    if (d.fss) { aiSyncCredits(d.fss); lastFss = d.fss; if (d.fss.grant) grant = d.fss.grant; }
     var chunk = (d.content || []).filter(function(c){ return c && c.type === 'text'; }).map(function(c){ return c.text; }).join('');
     text += chunk;
     stop = d.stop_reason || '';
@@ -9510,7 +9476,13 @@ async function aiGenerateFull(payload, ms){
     text = text.replace(/\s+$/, '');
     messages = base.concat([{ role:'assistant', content: text }]);
   }
-  return { text: text, truncated: stop === 'max_tokens' };
+  return { text: text, truncated: stop === 'max_tokens', fss: lastFss, grant: grant };
+}
+// Shared handling for the two credit errors the server can send back
+function aiHandleCreditError(e){
+  if(e&&e.code==='out_of_credits'){showCreditBlocked();return true;}
+  if(e&&e.code==='locked'){toast(e.message);return true;}
+  return false;
 }
 // Creator instructions go at the top of the user message, not the bottom of a
 // long system prompt, and explicitly win over the default format rules.
@@ -9540,6 +9512,7 @@ async function cdCallAI(sys, usr, maxTok) {
     cdMarkAiNew();
     return result;
   } catch(e) {
+    if (aiHandleCreditError(e)) return '';
     var msg = e && e.name === 'AbortError' ? 'That took too long and timed out. Nothing was used or saved, try again.' : 'Error: ' + (e && e.message ? e.message : 'something went wrong') + '. Nothing was used or saved.';
     toast(msg);
     return '';
@@ -9602,6 +9575,7 @@ async function cdCallAIChat(messages, maxTok, playbookLock){
     consumeCredit();
     return result;
   }catch(e){
+    if (aiHandleCreditError(e)) return '';
     var msg = e && e.name === 'AbortError' ? 'That took too long and timed out. Nothing was sent, try again.' : 'Error: ' + (e && e.message ? e.message : 'something went wrong') + '. Nothing was sent.';
     toast(msg);
     return '';
