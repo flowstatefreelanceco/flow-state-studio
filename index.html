@@ -5357,11 +5357,15 @@ async function loadUserData(){
       merged.weeklyFocus=sbData.weeklyFocus||localData.weeklyFocus||[];
       merged.lastCardId=sbData.lastCardId||localData.lastCardId||'';
       merged.swipeFile=localData.swipeFile||sbData.swipeFile||[];
-      merged.creditCycleStart=localData.creditCycleStart||sbData.creditCycleStart||'';
-      // creditsUsed only ever goes up within a billing cycle - always take
-      // the higher of the two values, never let a stale copy on either side
-      // silently undercount someone's real usage.
-      merged.creditsUsed=Math.max(localData.creditsUsed||0,sbData.creditsUsed||0);
+      // Credits: the side with the newer billing cycle wins outright, so a
+      // stale copy from last month can't drag its old count into a cycle
+      // that already reset. Within the same cycle, usage only goes up, so
+      // take the higher count.
+      var lcs=localData.creditCycleStart||'', scs=sbData.creditCycleStart||'';
+      var lt=lcs?new Date(lcs).getTime():0, st=scs?new Date(scs).getTime():0;
+      if(lt>st){ merged.creditCycleStart=lcs; merged.creditsUsed=localData.creditsUsed||0; }
+      else if(st>lt){ merged.creditCycleStart=scs; merged.creditsUsed=sbData.creditsUsed||0; }
+      else { merged.creditCycleStart=lcs||scs; merged.creditsUsed=Math.max(localData.creditsUsed||0,sbData.creditsUsed||0); }
       // directorChats - union by id, keeping whichever side was actually edited more
       // recently (same rule as drafts/ideas/tasks/notes above). A raw count comparison
       // used to live here and could drop a real conversation from one device just
@@ -5873,7 +5877,16 @@ function retryFailedSave(){
 // debounce window above, flush the pending Supabase save immediately instead
 // of losing it - localStorage already has it instantly, but without this the
 // Supabase copy (what other devices/tabs load) could miss the latest change.
+function cdSaveOpenCardSilently(){
+  try{
+    var m=document.getElementById('cardDetailModal');
+    if(!m||!m.classList.contains('open'))return;
+    if(S.cdId) cdSave({keepOpen:true});
+    else if(cdCardHasContent()) saveIdea({quiet:true,keepOpen:true});
+  }catch(e){}
+}
 function flushPendingSave(){
+  cdSaveOpenCardSilently();
   if(_lastUnsavedSnapshot && _currentUser){
     clearTimeout(_persistTimer);
     var snap=_lastUnsavedSnapshot;
@@ -5972,11 +5985,10 @@ function navigate(v,opts){
       // there's no risk of an unwanted validation error here, and other
       // fields (notes, hook, etc.) still deserve to be preserved.
       try{ cdSaveOrAdd(); }catch(e){}
-    } else if(cdTitleEl&&cdTitleEl.value.trim()){
-      // Creating a brand new card - only save if there's actually a title,
-      // otherwise this is an empty form someone opened and is just
-      // clicking away from, nothing to save and no error worth showing.
-      try{ cdSaveOrAdd(); }catch(e){}
+    } else if(cdCardHasContent()){
+      // Brand new card: save if anything at all was written (saveIdea
+      // borrows the first line as a title if needed). Empty forms just close.
+      try{ cdSaveOrAdd({quiet:true}); }catch(e){}
     }
   }
   if(document.getElementById('taskModal')&&document.getElementById('taskModal').classList.contains('open')){
@@ -6850,7 +6862,7 @@ async function generateStarterLibrary(silent){
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return;}
   if(window._libGenerating)return;
-  window._libGenerating=true;
+  window._libGenerating=true;_aiInFlight++;
   if(!silent)toast('Building your personalized library, this uses 1 credit...');
 
   var btns=document.querySelectorAll('.genLibraryBtnClass');
@@ -6940,7 +6952,7 @@ async function generateStarterLibrary(silent){
     toast('Your library generation didn\'t come through cleanly, and nothing was charged. Try again in a moment, if it keeps happening let Jess know, check the browser console (F12) for exact details.');
   }
   console.warn('generateStarterLibrary diagnostics (per type, per attempt):',window._lastLibraryGenDiagnostics);
-  window._libGenerating=false;
+  window._libGenerating=false;_aiInFlight=Math.max(0,_aiInFlight-1);
   btns.forEach(function(b){b.disabled=false;b.textContent='✦ Generate My Personalized Library';});
 }
 function renderLib(section,silent){
@@ -7187,6 +7199,12 @@ async function generate(){
   const hasDraft=ownDraftCbCheck&&ownDraftCbCheck.checked&&(document.getElementById('studioOwnTA').value.trim()||document.getElementById('studioOwnHook').value.trim());
   const hasInstr=document.getElementById('instrIn')&&document.getElementById('instrIn').value.trim();
   if(!topic&&!hasDraft&&!hasInstr){toast('Add a topic, instruction, or check use my draft');return;}
+  // This page called the AI without checking credits first, so anyone at
+  // their limit could keep generating here.
+  checkCreditReset();
+  if(!canUseAI()){showCreditBlocked();return;}
+  if(window._studioGenerating)return;
+  window._studioGenerating=true;_aiInFlight++;
   S.studio.topic=topic;
   const btn=document.getElementById('genBtn');
   btn.disabled=true;btn.textContent='...Generating';
@@ -7229,6 +7247,7 @@ async function generate(){
     document.getElementById('outBdy').innerHTML=`<div class="out-ph"><div class="sym">⚠</div><h3>Something went wrong</h3><p>${esc(e.message)}</p></div>`;
     toast('Error: '+e.message);
   }
+  window._studioGenerating=false;_aiInFlight=Math.max(0,_aiInFlight-1);
   btn.disabled=false;btn.textContent='✦ Generate Draft';
 }
 function copyOut(){if(S.studio.output)navigator.clipboard.writeText(S.studio.output).then(()=>toast('Copied ✓'));}
@@ -7364,7 +7383,7 @@ function closeModal(id){
     window.scrollTo(0, _scrollY);
   }
 }
-document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+document.querySelectorAll('.modal-ov').forEach(el=>el.addEventListener('click',e=>{if(e.target!==el)return;if(el.id==='cardDetailModal'){try{cdSaveOrAdd({quiet:true});}catch(err){}}el.classList.remove('open');}));
 function openCalModal(ds){
   S.editingCalId=null;
   document.getElementById('calModalTitle').textContent='Add Calendar Entry';
@@ -7477,6 +7496,15 @@ function saveIdea(opts){
   S.ideas.push(idea);
   S.gs.ideaAdded=true;
   if(date){S.calEntries.push({id:'cal_'+idea.id,title,platform,status:'idea',date,time,notes});}
+  if(opts.keepOpen){
+    // Saved in place: the card stays open and every later save goes
+    // through cdSave. Reminders are left off here so the normal save
+    // still sees them as "just turned on" and schedules them.
+    idea.reminder=false;
+    S.cdId=idea.id;
+    persist();renderKanban();renderCalendar();renderBucketInsights();renderDashboard();
+    return;
+  }
   S._pendingIdeaImages=[];
   if(reminderCb){reminderCb.checked=false;cdToggleReminder(reminderCb);}
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
@@ -7764,16 +7792,24 @@ const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a co
    (runPanicGenerate) both build their requests from here, so a skill only
    ever gets improved in one place. The Studio page uses SKILL_CORE too. */
 const SKILL_CORE = [
-  " HOW YOU WORK ON EVERY PIECE:",
-  "You write like a brand and social media executive with more than a decade of running real accounts, not like a content template. That means every piece carries at least one thing the audience can actually use today: a specific step, a named tool or resource, a mini framework, a script they can steal, or a concrete example from the niche in the brand profile. Vague encouragement is never the value.",
+  " HOW YOU WRITE EVERY PIECE:",
+  "You write like a brand and social media executive with more than a decade of running real accounts. You are not filling in a template. You are writing one complete piece that a real person will read from top to bottom.",
+  "Every piece has a real beginning, middle, and end. The beginning grabs attention and then, in the next line or two, tells the reader why this matters to them right now, so the middle has somewhere to land. The middle delivers the substance in an order that builds, where each point leads naturally into the next one with a connecting thought, never a jump. The end lands the idea: it pulls the whole thing together into one clear takeaway or reframe, and only then hands off to the call to action, which should read as the obvious next step rather than a sudden pivot.",
+  "Section labels, slide numbers, and frame numbers are only there to organize the piece for the creator. The words underneath them must still read as one continuous thought. If you removed every label and read it out loud, it should flow like a person talking, not like a list of separate parts.",
+  "Every piece carries at least one thing the audience can actually use: a specific step, a named tool or resource, a mini framework, a script they can borrow, or a concrete example from the niche in the brand profile. Vague encouragement is never the value.",
   "Specific beats clever. Name the real situation, the real feeling, the real moment. Cut any sentence that could appear in anyone else's post.",
   "Never invent statistics, studies, quotes, testimonials, or client results. If a number or proof point would help, write it as a clearly marked placeholder in square brackets, like [your client result here], so the creator fills in the real one.",
   "Use everything the creator gave you: title, notes, hook, their own draft, and any slides already written. If they wrote a hook, keep it word for word unless their instructions say otherwise. If they wrote a draft, build from their words and voice instead of replacing them.",
-  "Land the ending. The last beat before the call to action must resolve the idea: a takeaway, a reframe, or the one line you want them to remember. The call to action then reads as the natural next step, never a hard cut. Never stop mid-thought.",
   "One call to action per piece, matched to the goal: save or share for value, comment or DM for conversation, link for an offer. Never stack asks.",
   "Plain text only. Labels like HOOK: or Slide 1: are fine. No asterisks, no pound signs, no em dashes, no emoji unless the creator's voice uses them.",
-  "Length targets are defaults. A complete piece that runs slightly long always beats one that gets cut short."
+  "Length targets are defaults. A complete piece that flows always beats one that hits a word count."
 ].join(" ");
+// How every piece of advice (Smart Brief, Brief Me, Surprise Me, Rebuild
+// analysis) is shaped. These used to say "exactly these sections, nothing
+// else, no fluff", which produced choppy fragments with no lead-in or close.
+const ADVICE_SHAPE = "\n\nHOW TO SHAPE THIS: Talk to them like a strategist sitting across the table, not a form being filled in. Open with one or two sentences that react to their specific idea: what is strong about it, or the real opportunity in it, so they know you understood it. Then work through the sections below in order. Keep each label, and under it write in full, connected sentences that explain the why, not just the what, and let each section build on the one before. Close with two or three sentences that pull it together and name the very next thing to do. Warm, direct, and specific, with no filler, but never clipped or written as fragments. Plain text, no asterisks or pound signs, no em dashes.";
+// Added to the end of every content request: a last read-through for flow.
+const SKILL_FLOW_CHECK = "\n\nBefore you answer, read your piece top to bottom as the audience would. Check three things and fix them silently: it opens by meeting the reader where they are and saying why this matters, every part hands off to the next without a jump, and the ending pulls it together into a clear takeaway before the call to action. If any spot feels abrupt, choppy, or like a list of separate parts, rewrite that spot. Then output only the finished piece.";
 
 const SKILL_PLATFORM = {
   instagram: "Instagram: only the first line or so shows before more, so the hook has to carry the keyword and the tension on its own. Instagram search reads captions, so the main keyword belongs in the first sentence. Saves, shares, and sends matter more for reach than likes.",
@@ -7793,27 +7829,27 @@ const SKILL_SPECS = {
   caption: {
     lengths: { short: "60 to 100 words", standard: "100 to 200 words (up to 250 on LinkedIn)", long: "200 to 350 words, a mini story or mini lesson" },
     tokens: { short: 700, standard: 1000, long: 1400 },
-    spec: "Write one finished caption. Structure: a hook line that stands alone above the fold, then a line break, then two to four short paragraphs that deliver the value or the story with at least one concrete, usable takeaway, then a one-sentence landing line that states the takeaway, then one call to action that follows from it. No hashtags unless the creator asks."
+    spec: "Write one finished caption. Open with a hook line that stands alone above the fold. After a line break, write an intro of one or two sentences that tells the reader why this matters to them and sets up what is coming. Then two or three short paragraphs that build the value or the story in order, each one picking up where the last left off, with at least one concrete, usable takeaway. Then a closing line that pulls it together into the one thing you want them to remember. Then one call to action that follows naturally from that close. No hashtags unless the creator asks."
   },
   reel: {
     lengths: { short: "15 to 25 seconds, about 40 to 65 spoken words", standard: "30 to 45 seconds, about 90 to 130 spoken words", long: "60 to 90 seconds, about 150 to 220 spoken words" },
     tokens: { short: 800, standard: 1100, long: 1500 },
-    spec: "Write a finished talking-head Reel or TikTok script, written for the ear at a natural speaking pace. Use exactly these labeled sections in this order. HOOK: the first 1 to 3 seconds, one spoken line, plus ON SCREEN: the text overlay (short, can differ from the spoken line). SETUP: one or two lines on why this matters to the viewer right now. BODY: two or three points, one idea per line, each one concrete enough to act on. LANDING: one line that resolves the whole idea, the thing they walk away with. CTA: one line that flows naturally out of the landing. Add short delivery or b-roll notes in square brackets where a cut, a visual change, or a pause would hold attention, roughly every few seconds. Say the main keyword out loud in the HOOK or SETUP. If it fits, make the last line loop back to the hook so the video replays cleanly."
+    spec: "Write a finished talking-head Reel or TikTok script, written for the ear at a natural speaking pace. Organize it with these labels in this order. HOOK: the first 1 to 3 seconds, one spoken line, followed by ON SCREEN: the short text overlay. SETUP: the intro, one or two lines that tell the viewer why this matters to them right now and what they are about to get. BODY: two or three points that build on each other, each one concrete enough to act on, with a short spoken transition into each point so it sounds like one train of thought, not a list. LANDING: the conclusion, one or two lines that tie the points together into the one thing they walk away with. CTA: one line that flows naturally out of the landing. The spoken lines across all labels must read as one continuous, natural monologue. Add short delivery or b-roll notes in square brackets where a cut, a visual change, or a pause would hold attention. Say the main keyword out loud in the HOOK or SETUP. If it fits, make the last line loop back to the hook so the video replays cleanly."
   },
   carousel: {
     lengths: { short: "5 to 6 slides", standard: "7 to 9 slides", long: "10 slides" },
     tokens: { short: 900, standard: 1200, long: 1500 },
-    spec: "Write finished carousel copy, every slide labeled (Slide 1:, Slide 2:, and so on). Slide 1 is the hook: a clear promise or tension, about 10 words. Slide 2 hooks again on its own, because Instagram often re-serves a carousel starting from slide 2. The middle slides each carry one point: a short headline line plus one or two supporting lines, max 25 words per slide, and at least one slide should be something worth saving (a step list, a script, a named tool, a before and after). The second to last slide is the landing: a summary or reframe. The last slide is the call to action, usually save or share for a value carousel. If the creator already wrote some slides, keep them and build the carousel around them."
+    spec: "Write finished carousel copy, every slide labeled (Slide 1:, Slide 2:, and so on). Slide 1 is the hook: a clear promise or tension, about 10 words. Slide 2 is the intro: it hooks again on its own, because Instagram often re-serves a carousel starting from slide 2, and it sets up why this matters and what the reader is about to get. The middle slides each carry one point, a short headline line plus one or two supporting lines, max 25 words per slide, and they build in order so each slide gives a reason to swipe to the next. At least one slide should be worth saving (a step list, a script, a named tool, a before and after). The second to last slide is the conclusion: it pulls the points together into one summary or reframe. The last slide is the call to action, usually save or share for a value carousel. Read slide to slide, the whole carousel should feel like one story, not a stack of separate facts. If the creator already wrote some slides, keep them and build the carousel around them."
   },
   story: {
     lengths: { short: "4 frames", standard: "5 to 7 frames", long: "8 to 10 frames" },
     tokens: { short: 600, standard: 800, long: 1000 },
-    spec: "Write a finished Instagram Story sequence. Number every frame (Frame 1:, Frame 2:, and so on), one short line of on-screen text per frame, readable in about three seconds. Frame 1 is a hook question or statement. Put an interactive sticker early (a poll or quiz) to warm people up, and note it in square brackets like [Poll: option A / option B]. The middle frames build the idea with one beat each. The second to last frame is the landing. The last frame is the call to action with the right sticker in square brackets: link, question box, or DM prompt."
+    spec: "Write a finished Instagram Story sequence. Number every frame (Frame 1:, Frame 2:, and so on), one short line of on-screen text per frame, readable in about three seconds. Frame 1 is a hook question or statement. Put an interactive sticker early (a poll or quiz) to warm people up, and note it in square brackets like [Poll: option A / option B]. The middle frames build the idea with one beat each, and each frame leads into the next so tapping forward feels like a conversation. The second to last frame is the landing that ties it together. The last frame is the call to action with the right sticker in square brackets: link, question box, or DM prompt."
   },
   email: {
     lengths: { short: "100 to 150 words", standard: "150 to 300 words", long: "300 to 500 words" },
     tokens: { short: 800, standard: 1100, long: 1500 },
-    spec: "Write a finished marketing email. Output in this order with these labels. SUBJECT: the best subject line, then ALT SUBJECTS: two alternates in different styles. PREVIEW: preview text that extends the subject instead of repeating it. Then the email body: an opening that gets to the point within two sentences, two or three short paragraphs with one concrete, usable insight, a landing paragraph that ties it together, one clear call to action, and a sign-off in the creator's voice (no stiff template closings). Add a one-line P.S. that either restates the call to action or adds a small human detail."
+    spec: "Write a finished marketing email. Output in this order with these labels. SUBJECT: the best subject line, then ALT SUBJECTS: two alternates in different styles. PREVIEW: preview text that extends the subject instead of repeating it. Then the email body: an opening that connects with the reader and gets to the point within two sentences, two or three short paragraphs that build on each other with one concrete, usable insight, a closing paragraph that ties it together, one clear call to action, and a sign-off in the creator's voice (no stiff template closings). Add a one-line P.S. that either restates the call to action or adds a small human detail."
   },
   newsletter: {
     lengths: { short: "2 to 3 sentences", standard: "3 to 5 sentences", long: "5 to 7 sentences" },
@@ -7838,7 +7874,7 @@ const SKILL_SPECS = {
   variations: {
     lengths: { short: "60 to 100 words each", standard: "100 to 180 words each", long: "180 to 280 words each" },
     tokens: { short: 1200, standard: 1800, long: 2400 },
-    spec: "Write 3 complete, different captions for this idea, labeled Variation 1: Warm and personal, Variation 2: Direct and punchy, Variation 3: Story-led. Each one is a full caption with its own hook line, its own value, its own landing line, and one call to action. They should differ in angle and structure, not just wording."
+    spec: "Write 3 complete, different captions for this idea, labeled Variation 1: Warm and personal, Variation 2: Direct and punchy, Variation 3: Story-led. Each one is a full caption with its own hook line, its own value, its own landing line, and one call to action. Each one needs a real intro after its hook and a real close before its call to action. They should differ in angle and structure, not just wording."
   },
   series: {
     lengths: { short: "5 posts", standard: "5 posts", long: "5 posts" },
@@ -7865,7 +7901,7 @@ function buildSkillRequest(type, o){
     'What this piece is about (everything the creator has written on this card):\n' + (o.brief || '') + '\n\n' +
     (o.extra ? o.extra + '\n\n' : '') +
     'The job: ' + spec.spec +
-    cdInstrTail(o.instr);
+    cdInstrTail(o.instr) + ((type === 'hooks' || type === 'series') ? '' : SKILL_FLOW_CHECK);
   return { sys: sys, usr: usr, maxTok: spec.tokens[len] };
 }
 function cdGetLength(){ var el = document.getElementById('cdLength'); return skillLengthKey(el ? el.value : ''); }
@@ -8175,7 +8211,13 @@ var _cdOutputs = {};
 // after each generation, so closing the card without clicking Save never
 // loses AI results. Only runs if a card is already saved (S.cdId exists).
 function cdAutoSaveOutputs(){
-  if(!S.cdId)return;
+  if(!S.cdId){
+    // A brand new card that just got AI output: create it now, keep it open,
+    // so closing, swiping away, or the phone killing the tab can't lose it.
+    var m=document.getElementById('cardDetailModal');
+    if(m&&m.classList.contains('open')&&cdCardHasContent()) saveIdea({quiet:true,keepOpen:true});
+    return;
+  }
   var x=S.ideas.find(function(a){return a.id===S.cdId;});
   if(!x)return;
   x.aiOutputs=Object.assign({},_cdOutputs);
@@ -8282,6 +8324,12 @@ function cdOpen(id){
       if(sb2){sb2.classList.add('open');var sc2=document.getElementById('ai2-smartBrief-chev');if(sc2)sc2.textContent='-';}
     }
 
+    // Older cards saved generated content only under its type (caption,
+    // carousel, ...), so map the most likely one into the Generate box.
+    if(!_cdOutputs['generate']){
+      var legacyType=['carousel','reel','caption','story','email','newsletter','substack','blog'].filter(function(t){return _cdOutputs[t];})[0];
+      if(legacyType){_cdOutputs['generate']=_cdOutputs[legacyType];_cdOutputs['generateType']=legacyType;}
+    }
     // Simple text output sections
     ['generate','variations','repurpose'].forEach(function(sec){
       if(_cdOutputs[sec]){
@@ -8383,9 +8431,11 @@ function cdUpdatePlatDot() {}
 
 
 function cdSaveOrAdd(opts){
-  if(S.cdId){ cdSave(); } else { saveIdea(opts); }
+  opts=opts||{};
+  if(S.cdId){ cdSave(opts); } else { saveIdea(opts); }
 }
-function cdSave(){
+function cdSave(opts){
+  opts=opts||{};
   var x=S.ideas.find(function(a){return a.id===S.cdId;});
   if(!x)return;
   // Capture the date/time this card had BEFORE this save, so we can tell
@@ -8411,7 +8461,7 @@ function cdSave(){
   var reminderCb = document.getElementById('cdReminderOn');
   var reminderNowOn = reminderCb ? reminderCb.checked : false;
   var reminderWasPreviouslyOn = x.reminder || false;
-  x.reminder = reminderNowOn;
+  if(!opts.keepOpen) x.reminder = reminderNowOn;
   // Schedule (or re-schedule) if the reminder was just turned ON, or if it
   // was already on but the post's date/time changed - a reschedule needs a
   // fresh reminder pointed at the new date just as much as a brand new one does.
@@ -8447,6 +8497,12 @@ function cdSave(){
     else{S.calEntries.push({id:calId,title:x.title,platform:x.platform,status:x.status,date:x.date,time:x.time,notes:x.notes});}
   } else {
     S.calEntries=S.calEntries.filter(function(e){return e.id!==calId;});
+  }
+  if(opts.keepOpen){
+    // Background save (app hidden, phone switching apps): keep the card
+    // open and leave reminder scheduling to the normal Save/Close.
+    persist();renderKanban();
+    return;
   }
   S.cdId=null;
   persist();closeModal('cardDetailModal');
@@ -8691,9 +8747,9 @@ async function runPanic(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   panicLockButtons(true);
-  var sys=CD_PERSONA+brand+' Be direct, specific, and zero-fluff.';
-  var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nRequired output, exactly these 4 labeled sections, nothing else:\n1. THE ANGLE - specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK - one specific opening line to lead with\n3. THE EMOTION - what feeling to create and why it matters for my niche\n4. THE WATCH OUT - one thing to avoid that would make it feel generic or off-brand\n\nBe direct. No fluff.';
-  var result=await cdCallAI(sys,usr,600);
+  var sys=CD_PERSONA+brand;
+  var usr='Give me creative direction for this piece of content.\n\nTopic: '+topic+'\nPlatform: '+plat+'\nFormat: '+fmt+'\n\nCover these 4 labeled sections:\n1. THE ANGLE - specific framing that will land with my audience (1-2 sentences)\n2. THE HOOK - one specific opening line to lead with\n3. THE EMOTION - what feeling to create and why it matters for my niche\n4. THE WATCH OUT - one thing to avoid that would make it feel generic or off-brand'+ADVICE_SHAPE;
+  var result=await cdCallAI(sys,usr,900);
   document.getElementById('panicLoading').style.display='none';
   panicLockButtons(false);
   if(result){
@@ -8736,9 +8792,9 @@ function runPanicRandom(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   panicLockButtons(true);
-  var sys=CD_PERSONA+brand+' Be direct, specific, and zero-fluff.';
-  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nRequired output, exactly these 5 labeled sections, nothing else:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid\n\nBe direct. Make it specific.';
-  cdCallAI(sys,usr,700).then(function(result){
+  var sys=CD_PERSONA+brand;
+  var usr='Generate a fresh, specific content idea AND full creative direction for a '+plat+' '+fmt+' that would resonate with my ideal audience.\n\nCover these 5 labeled sections:\n1. THE IDEA - a specific ready-to-use content topic\n2. THE ANGLE - specific framing that will land\n3. THE HOOK - one specific opening line\n4. THE EMOTION - what feeling to create and why\n5. THE WATCH OUT - one thing to avoid'+ADVICE_SHAPE;
+  cdCallAI(sys,usr,1000).then(function(result){
     document.getElementById('panicLoading').style.display='none';
     panicLockButtons(false);
     if(result){
@@ -8942,13 +8998,13 @@ async function cdSmartBrief() {
     'Brief: ' + b.brief + '\n' +
     'Platform: ' + b.plat + '\n' +
     'Format: ' + b.fmt + '\n\n' +
-    'Required output, exactly these 4 labeled sections, nothing else:\n' +
+    'Cover these 4 labeled sections:\n' +
     '1. THE ANGLE - the specific perspective or framing that will make this land with my audience (1-2 sentences)\n' +
     '2. THE HOOK - one specific opening line or hook I should lead with\n' +
     '3. THE EMOTION - what feeling should this create in my reader and why that matters for my niche\n' +
     '4. THE WATCH OUT - one thing to avoid with this topic that would make it feel generic or off-brand\n\n' +
-    'Be direct and specific. No fluff.';
-  var result = await cdCallAI(sys, usr, 600);
+    ADVICE_SHAPE.trim();
+  var result = await cdCallAI(sys, usr, 900);
   load.classList.remove('show');
   window._cdGenerating = false;
   if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); cdAutoSaveOutputs(); }
@@ -9014,6 +9070,11 @@ async function cdGen2(type) {
         targetCard.aiOutputs['series'] = result;
       } else {
         targetCard.aiOutputs[type] = result;
+        // Everything except variations shows in the shared Generate box, and
+        // that box (plus its Copy and Save Draft buttons, and the restore on
+        // reopen) reads the 'generate' slot. Without this, a generated
+        // caption/reel/carousel/etc was saved but never shown again.
+        if (type !== 'variations') { targetCard.aiOutputs['generate'] = result; targetCard.aiOutputs['generateType'] = type; }
       }
       targetCard.updatedAt = new Date().toISOString();
       persist();
@@ -9032,6 +9093,7 @@ async function cdGen2(type) {
         cdRenderSeries(result);
       } else {
         _cdOutputs[type] = result;
+        if (type !== 'variations') { _cdOutputs['generate'] = result; _cdOutputs['generateType'] = type; }
         var outNow = document.getElementById(outId);
         var actsNow = document.getElementById(actsId);
         if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
@@ -9039,6 +9101,7 @@ async function cdGen2(type) {
       }
     }
   }
+  if (result && S.cdId === targetCardId) cdAutoSaveOutputs();
   S.aiCount = (S.aiCount || 0) + 1; persist();
   // Unlock generation buttons
   window._cdGenerating = false;
@@ -9163,15 +9226,15 @@ async function cdAutopsy() {
   if (load) load.classList.add('show');
   if (sbs) sbs.style.display = 'none';
   var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand + ' Be direct and specific. No fluff.';
-  var usr = 'Run a Rebuild in my voice on this post. Required output, exactly these 5 labeled sections:\n\n'
+  var sys = CD_PERSONA + brand;
+  var usr = 'Run a Rebuild in my voice on this post. Cover these 5 labeled sections:\n\n'
     + '1. HOOK: What type of hook is this and why does it stop the scroll?\n'
     + '2. STRUCTURE: How is it built? What is the flow?\n'
     + '3. EMOTIONAL ANGLE: What feeling does it create and why does that work?\n'
     + '4. WHAT WORKS: The 2-3 things that make this effective.\n'
     + '5. WHAT TO AVOID: If I were to rebuild this, what would I not copy?\n\n'
-    + 'Post to analyse:\n' + text;
-  var result = await cdCallAI(sys, usr, 800);
+    + 'Post to analyse:\n' + text + ADVICE_SHAPE;
+  var result = await cdCallAI(sys, usr, 1100);
   var loadNow = document.getElementById('cd-load-repurpose');
   if (loadNow) loadNow.classList.remove('show');
   window._cdGenerating = false;
@@ -9212,13 +9275,13 @@ async function cdRebuildAfterAnalysis() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = CD_PERSONA + brand + ' Output ONLY the finished content. No preamble.';
+  var sys = CD_PERSONA + brand + SKILL_CORE + ' Output ONLY the finished content. No preamble.';
   var usr = 'I analysed this post and here is what makes it work:\n\n' + analysis
     + '\n\nNow rebuild it completely for my brand, niche, and voice. Do NOT copy the original wording. Take the structure and emotional angle that works, then make it 100% original for my audience.'
     + '\n\nFormat: ' + outFmt + ' for ' + b.plat + '.'
     + '\nTone: ' + (toneMap[tone] || 'warm and authentic') + '.'
-    + (b.brief ? '\nMy topic/angle: ' + b.brief : '');
-  var result = await cdCallAI(sys, usr, 1000);
+    + (b.brief ? '\nMy topic/angle: ' + b.brief : '') + SKILL_FLOW_CHECK;
+  var result = await cdCallAI(sys, usr, 1200);
   var loadNow = document.getElementById('cd-load-repurpose');
   var rebuildBtnNow = document.getElementById('cd-rebuild-btn');
   if (loadNow) loadNow.classList.remove('show');
@@ -9265,9 +9328,9 @@ async function cdRepurpose2() {
   if (out) { out.textContent = ''; out.classList.remove('show'); }
   if (acts) acts.classList.remove('show');
   var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand + ' Output ONLY the repurposed content. No preamble.';
-  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text;
-  var result = await cdCallAI(sys, usr, 1000);
+  var sys = CD_PERSONA + brand + SKILL_CORE + ' Output ONLY the repurposed content. No preamble.';
+  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text + SKILL_FLOW_CHECK;
+  var result = await cdCallAI(sys, usr, 1200);
   var loadNow = document.getElementById('cd-load-repurpose');
   if (loadNow) loadNow.classList.remove('show');
   window._cdGenerating = false;
@@ -9357,9 +9420,12 @@ function creditResetDate(){
   next.setMonth(next.getMonth()+1);
   return next.toLocaleDateString('en-US',{month:'long',day:'numeric'});
 }
+// Requests already sent but not yet charged. Counting them stops someone on
+// their last credit from firing several tools at once and going over.
+var _aiInFlight=0;
 function canUseAI(){
   if(isUnlimited()) return true;
-  return (S.creditsUsed||0)<creditLimit();
+  return (S.creditsUsed||0)+_aiInFlight<creditLimit();
 }
 function consumeCredit(){
   if(isUnlimited()) return;
@@ -9460,6 +9526,7 @@ async function cdCallAI(sys, usr, maxTok) {
   // Credit check
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return '';}
+  _aiInFlight++;
   try {
     // Longer skills (articles, long scripts) need more time than the 45s default
     var full = await aiGenerateFull({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30));
@@ -9476,6 +9543,8 @@ async function cdCallAI(sys, usr, maxTok) {
     var msg = e && e.name === 'AbortError' ? 'That took too long and timed out. Nothing was used or saved, try again.' : 'Error: ' + (e && e.message ? e.message : 'something went wrong') + '. Nothing was used or saved.';
     toast(msg);
     return '';
+  } finally {
+    _aiInFlight = Math.max(0, _aiInFlight - 1);
   }
 }
 
@@ -9491,6 +9560,7 @@ function dirChatSystemPrompt(playbookLock){
     "LAUNCH SEQUENCING questions (when to open/close a cart, how to pace a launch, what order to send things): Default to a three-phase shape - pre-launch (build curiosity, 7-10 days out, 1-2 touches), launch (the ask, 1-2 touches with real proof or social proof, not just hype), post-launch (1 final touch for anyone still on the fence, with urgency that's earned by then, not manufactured upfront). Warn against leading with urgency or scarcity before the audience is warmed up, that reads as pressure rather than conviction.\n\n"+
     "PLATFORM PRIORITIZATION questions (which platform to focus on, whether to add a new one, where to spend limited time): Default to 1-2 platforms maximum where their actual audience already is. Match the platform to the goal: visual platforms for brand awareness, LinkedIn or newsletter for credibility and lead generation. Actively discourage spreading thin across many platforms unless there is a real reason.\n\n"+
     "INCOMPLETE MESSAGES: If someone refers to content they appear to have forgotten to paste (e.g. 'can you rework this' with nothing attached), respond briefly asking them to share it. Something like 'paste it in and I will take a look' is enough. Do not fill the gap with strategy.\n\n"+
+    "RESPONSE SHAPE: Every reply should read like a person talking, not a list of parts. Open with a line that responds directly to what they said. Then do the work. When you give advice, say why in a sentence so it lands as judgment, not a rule. When you rewrite something, give the rewrite first, then one short line on what you changed and why, unless they asked for just the copy. End with a natural close: the next step, or one short question if you genuinely need more from them. Never stop abruptly after a list.\n\n"+
     "Keep responses focused and in plain text (no markdown headers).";
   if(playbookLock==='cadence'||playbookLock==='launch'||playbookLock==='platform'){
     var lockNames={cadence:'POSTING CADENCE / TIMING',launch:'LAUNCH SEQUENCING',platform:'PLATFORM PRIORITIZATION'};
@@ -9521,6 +9591,7 @@ function dirChatSystemPrompt(playbookLock){
 async function cdCallAIChat(messages, maxTok, playbookLock){
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return '';}
+  _aiInFlight++;
   try{
     var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-4-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 45000);
     var result = full.text || '';
@@ -9534,6 +9605,8 @@ async function cdCallAIChat(messages, maxTok, playbookLock){
     var msg = e && e.name === 'AbortError' ? 'That took too long and timed out. Nothing was sent, try again.' : 'Error: ' + (e && e.message ? e.message : 'something went wrong') + '. Nothing was sent.';
     toast(msg);
     return '';
+  }finally{
+    _aiInFlight=Math.max(0,_aiInFlight-1);
   }
 }
 
@@ -10122,7 +10195,8 @@ function cdSaveDraft2(type){
   var platEl=document.getElementById('ideaPlat')||document.getElementById('cdPlat');
   var t=titleEl?titleEl.value.trim():'Untitled';
   var p=platEl?platEl.value:'instagram';
-  S.drafts.unshift({id:Date.now().toString(),title:t.slice(0,65),content:txt,platform:p,contentType:type,tone:'Brand Voice',createdAt:new Date().toISOString()});
+  var realType=(type==='generate'&&_cdOutputs['generateType'])?_cdOutputs['generateType']:type;
+  S.drafts.unshift({id:Date.now().toString(),title:t.slice(0,65),content:txt,platform:p,contentType:realType,tone:'Brand Voice',createdAt:new Date().toISOString()});
   persist();toast('Draft saved ✓');
 }
 
