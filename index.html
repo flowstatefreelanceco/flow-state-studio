@@ -779,8 +779,17 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-tab[data-tab="write"].active{border-bottom-color:var(--teal);background:var(--tealp)}
 .cd-tab[data-tab="ai"].active{border-bottom-color:var(--el);background:#F3DDD2}
 .cd-guide{display:flex;gap:12px;align-items:flex-start;border-radius:var(--rad);padding:12px 14px;border:1px solid transparent;border-left-width:4px}
+.cd-guide{position:relative}
+.cd-guide-title{padding-right:84px}
+.cd-guide-hide{position:absolute;top:9px;right:10px;background:var(--w);border:1px solid var(--b);border-radius:100px;padding:3px 10px;font-family:var(--fb);font-size:11px;font-weight:600;color:var(--t);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cd-guide-hide:hover{border-color:var(--el);color:var(--e)}
+.cd-guide.guide-hidden{display:none !important}
+.cd-guide-show{display:none;align-self:flex-start;background:var(--w);border:1px solid var(--b);border-radius:100px;padding:4px 12px;font-family:var(--fb);font-size:11.5px;font-weight:600;color:var(--t);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cd-guide-show:hover{border-color:var(--el);color:var(--e)}
+.cd-guide.guide-hidden + .cd-guide-show{display:inline-block}
+#view-settings .cd-guide-show{margin-bottom:6px}
 .cd-guide-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:var(--w)}
-.cd-guide-title{font-family:var(--fh);font-size:15px;font-weight:600;color:var(--e);line-height:1.3}
+.cd-guide-title{font-family:var(--fb);font-size:14.5px;font-weight:700;color:var(--e);line-height:1.3}
 .cd-guide-text{font-size:12.5px;color:var(--em);line-height:1.55;margin-top:2px}
 .cd-guide.details{background:var(--rp);border-color:rgba(179,108,55,.25);border-left-color:var(--r)}
 .cd-guide.write{background:var(--tealp);border-color:rgba(0,132,132,.2);border-left-color:var(--teal)}
@@ -3025,7 +3034,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   <div id="view-settings" class="view">
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
-      <div class="cd-guide details" style="margin-bottom:18px">
+      <div class="cd-guide details" data-guide="settings" style="margin-bottom:18px"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
         <div class="cd-guide-ico">🧭</div>
         <div><div class="cd-guide-title">Start here: fill in your Brand Profile</div>
         <ol class="cd-guide-steps">
@@ -3035,9 +3044,10 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </ol>
         <div class="cd-guide-text">The AI reads these answers every time it writes, so your posts sound like you. Tap any other row below to open it.</div></div>
       </div>
+      <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
       <div class="ss-group">Make it sound like you</div>
-      <div class="setting-sec ss-brand open">
-        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="true"><span class="ss-ico">🎨</span><span class="ss-hdr-txt"><span class="ss-title">Brand Profile</span><span class="ss-sub">Tell the AI your name, your niche, your clients and how you sound</span></span><span class="ss-chev">-</span></button>
+      <div class="setting-sec ss-brand">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">🎨</span><span class="ss-hdr-txt"><span class="ss-title">Brand Profile</span><span class="ss-sub">Tell the AI your name, your niche, your clients and how you sound</span></span><span class="ss-chev">+</span></button>
         <div class="ss-body">
 
         <p class="setting-desc">Type your answers in each box, then tap <strong>Save Brand Profile</strong> at the bottom. The AI reads this every time it writes, so your posts sound like <em>you</em>. There are 3 steps. You can do one now and come back for the rest.</p>
@@ -4506,7 +4516,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
     </div><!-- end cd-sticky -->
     <div class="cd2-wrap" id="cdWrap" data-tab="write">
       <div class="cd2-left">
-        <div class="cd-guide details">
+        <div class="cd-guide details" data-guide="card-details"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
           <div class="cd-guide-ico">📌</div>
           <div><div class="cd-guide-title">Step 1: set up this post</div>
           <ol class="cd-guide-steps">
@@ -4516,6 +4526,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </ol>
           <div class="cd-guide-text">Selling something with this post? Tap <strong>What is this piece selling?</strong> and fill it in. Then tap the <strong>Go Analog</strong> tab to write.</div></div>
         </div>
+        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
         <!-- GROUP: THE BRIEF -->
         <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
         <div class="two-col">
@@ -4633,7 +4644,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       </div>
       <div class="cd2-right">
       <div class="cd-pane-write">
-        <div class="cd-guide write">
+        <div class="cd-guide write" data-guide="card-write"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
           <div class="cd-guide-ico">✍️</div>
           <div><div class="cd-guide-title">Step 2: write it in your own words</div>
           <ol class="cd-guide-steps">
@@ -4643,6 +4654,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </ol>
           <div class="cd-guide-text">No AI on this tab. Tap <strong>Expand</strong> on any box to write full screen. Tap <strong>Save</strong> at the top when you are done. Want help writing it? Tap the <strong>Bridge the Gap</strong> tab.</div></div>
         </div>
+        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
         <!-- GO ANALOG SECTION -->
         <div class="card-section-toggle cd-analog-sec">
           <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
@@ -4691,7 +4703,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div class="cd-next"><button type="button" class="btn btn-p" onclick="cdShowTab('ai')">Next: get AI help</button></div>
       </div><!-- end cd-pane-write -->
       <div class="cd-pane-ai">
-        <div class="cd-guide ai">
+        <div class="cd-guide ai" data-guide="card-ai"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
           <div class="cd-guide-ico">✦</div>
           <div style="flex:1;min-width:0"><div class="cd-guide-title">Step 3 (optional): get AI help</div>
           <div class="cd-guide-text">The AI reads what you typed in Details and Go Analog. Tap one tool below to jump to it. Each use takes 1 AI credit.</div>
@@ -4706,6 +4718,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
           <div class="cd-guide-text" style="margin-top:8px">When the result shows up, tap <strong>Copy</strong> or <strong>Save Draft</strong> under it.</div></div>
         </div>
+        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
         <div class="cd-empty-note" id="cdAiEmpty">
           Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
           <div class="cd-empty-acts">
@@ -6123,6 +6136,7 @@ function applySettings(){
   setVal('bpPhase',bp.phase);setVal('bpWhatWorked',bp.whatWorked);
   updateBrandSteps();
   restoreSettingSecs();
+  restoreGuides();
 }
 function setGreeting(){
   const h=new Date().getHours();
@@ -11267,6 +11281,25 @@ async function submitFeedback() {
 
 
 /* ═══ BRAND PROFILE COPY ═══ */
+/* ═══ GUIDES: hide / show, remembered on this device ═══ */
+function guideHiddenList(){
+  try{var v=JSON.parse(localStorage.getItem('fssGuidesHidden')||'[]');return Array.isArray(v)?v:[];}catch(e){return [];}
+}
+function guideSetHidden(g,hidden){
+  if(!g)return;
+  g.classList.toggle('guide-hidden',hidden);
+  var list=guideHiddenList().filter(function(k){return k!==g.dataset.guide;});
+  if(hidden)list.push(g.dataset.guide);
+  try{localStorage.setItem('fssGuidesHidden',JSON.stringify(list));}catch(e){}
+}
+function guideHide(btn){guideSetHidden(btn.closest('.cd-guide'),true);}
+function guideShow(btn){guideSetHidden(btn.previousElementSibling,false);}
+function restoreGuides(){
+  var list=guideHiddenList();
+  document.querySelectorAll('.cd-guide[data-guide]').forEach(function(g){
+    g.classList.toggle('guide-hidden',list.indexOf(g.dataset.guide)>-1);
+  });
+}
 /* ═══ SETTINGS SECTIONS ═══ */
 function toggleSettingSec(btn){
   var sec=btn&&btn.closest('.setting-sec');
@@ -11289,7 +11322,7 @@ function saveSettingSecs(){
 function restoreSettingSecs(){
   var saved=null;
   try{saved=JSON.parse(localStorage.getItem('fssSettingsOpen')||'null');}catch(e){}
-  if(!Array.isArray(saved))return; // first visit: keep the default, Brand Profile open
+  if(!Array.isArray(saved))return; // first visit: keep the default, every row closed
   document.querySelectorAll('#view-settings .setting-sec').forEach(function(sec){
     var btn=sec.querySelector('.ss-hdr');if(!btn)return;
     var open=saved.indexOf(settingSecKey(sec))>-1;
