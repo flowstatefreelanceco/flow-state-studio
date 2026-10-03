@@ -794,7 +794,8 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-guide.details{background:var(--rp);border-color:rgba(179,108,55,.25);border-left-color:var(--r)}
 .cd-guide.write{background:var(--tealp);border-color:rgba(0,132,132,.2);border-left-color:var(--teal)}
 .cd-guide.ai{background:linear-gradient(135deg,#F7E6DC,#F3DDD2);border-color:rgba(140,58,38,.2);border-left-color:var(--el)}
-.cd-rp-fetch{background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:11px 12px;margin-bottom:12px}
+.cd-rp-fetch{background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:11px 12px;margin-bottom:4px}
+#ai2-repurpose-body .ss-step{margin:16px 0 10px}
 .cd-rp-fetch-row{display:flex;gap:6px;align-items:stretch}
 .cd-rp-fetch-row .fi{flex:1;min-width:0;font-size:13px}
 .cd-rp-fetch-row .btn{flex-shrink:0;font-size:12.5px;padding:8px 14px;white-space:nowrap}
@@ -839,6 +840,44 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-pane-write,.cd-pane-ai{max-width:760px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
 .cd-pane-write>.cd-analog-sec>.card-section-toggle-hdr,.cd-pane-ai>.cd-bridge-sec>.card-section-toggle-hdr{display:none}
 .cd-pane-write>.cd-analog-sec>.card-section-toggle-body,.cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body{display:block}
+.cd-d-main,.cd-d-sidecol{display:flex;flex-direction:column;gap:14px;min-width:0}
+/* ═══ CONTENT CARD ON A WIDE SCREEN ═══
+   The card used to be one 760px column in the middle of a full width
+   window. On a desktop it now uses the width: two columns per tab, with
+   the things that belong together side by side. Phones and tablets keep
+   the single column. */
+@media(min-width:1100px){
+  .cd2-wrap .cd2-left,.cd-pane-write,.cd-pane-ai{max-width:1180px}
+  /* Details: what the post is on the left, when and where it is filed on the right */
+  .cd2-wrap[data-tab="details"] .cd2-left{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px 28px;align-items:start}
+  .cd2-wrap[data-tab="details"] .cd2-left>*{grid-column:1/-1}
+  .cd2-wrap[data-tab="details"] .cd2-left>.cd-d-main{grid-column:1}
+  .cd2-wrap[data-tab="details"] .cd2-left>.cd-d-sidecol{grid-column:2}
+  .cd-d-sidecol>.cd-d-side{border:1px solid var(--bl) !important;background:var(--p);border-radius:var(--rad);padding:16px 18px 6px !important;margin-top:0 !important}
+  .cd-d-main>#cdOfferSec{margin-bottom:0}
+  /* Go Analog: hook and notes on the left, the full draft on the right */
+  .cd-pane-write>.cd-analog-sec>.card-section-toggle-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 28px;align-items:start}
+  .cd-pane-write>.cd-analog-sec>.card-section-toggle-body>*{grid-column:1}
+  .cd-pane-write>.cd-analog-sec>.card-section-toggle-body>:first-child{grid-column:1/-1}
+  .cd-pane-write>.cd-analog-sec>.card-section-toggle-body>.cd-field:nth-child(4){grid-column:2;grid-row:2/span 2}
+  .cd-pane-write>.cd-analog-sec>.card-section-toggle-body>.cd-field:nth-child(4) textarea{min-height:330px}
+  .cd-pane-write>.cd-analog-sec>.card-section-toggle-body>:nth-child(5){grid-column:2}
+  /* Carousel slides sit side by side like the real thing */
+  #cdCarouselSlides{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px !important}
+  /* Bridge the Gap: direction and the small tools on the left, the main generator on the right */
+  .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-flow:row dense;gap:14px 20px;align-items:start}
+  .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section{grid-column:1;margin:0}
+  .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section:nth-child(2){grid-column:2;grid-row:1/span 2}
+  .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section:nth-child(n+4){grid-column:1/-1}
+  .cd-guide-rows{grid-template-columns:repeat(4,minmax(0,1fr))}
+  /* Rebuild in my voice: get the words on the left, choose and go on the right */
+  #ai2-repurpose-body.open{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-auto-flow:row dense;gap:0 28px;align-items:start}
+  #ai2-repurpose-body.open>*{grid-column:2}
+  #ai2-repurpose-body.open>:nth-child(1){grid-column:1/-1}
+  #ai2-repurpose-body.open>:nth-child(2),#ai2-repurpose-body.open>.cd-rp-fetch{grid-column:1}
+  #ai2-repurpose-body.open>.cd-rp-fetch{grid-row:3/span 12}
+  #ai2-repurpose-body.open>#cd-load-repurpose,#ai2-repurpose-body.open>#cd-load-repurpose~*{grid-column:1/-1}
+}
 .cd-next{display:flex;justify-content:flex-end;padding:8px 0 4px}
 .cd-next .btn{font-size:13px;padding:10px 18px}
 .cd-empty-note{background:var(--w);border:1.5px dashed var(--b);border-radius:var(--rad);padding:14px 16px;font-size:13px;color:var(--t);line-height:1.6;display:none}
@@ -936,6 +975,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .promo-q{font-family:var(--fh);font-size:19px;font-weight:600;color:var(--e);margin-bottom:6px;line-height:1.3}
 .promo-hint{font-size:12.5px;color:var(--t);line-height:1.55;margin-bottom:14px}
 .promo-step-count{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px}
+#promoPreview{max-height:46vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .promo-row{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:11px 13px;margin-bottom:8px}
 .promo-row-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--t);margin-bottom:5px}
 .promo-row-date{font-weight:700;color:var(--e)}
@@ -3065,13 +3105,13 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </ol>
         <div class="cd-guide-text">The AI reads these answers every time it writes, so your posts sound like you. Tap any other row below to open it.</div></div>
       </div>
-      <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
+      <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
       <div class="ss-group">Make it sound like you</div>
       <div class="setting-sec ss-brand">
         <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">🎨</span><span class="ss-hdr-txt"><span class="ss-title">Brand Profile</span><span class="ss-sub">Tell the AI your name, your niche, your clients and how you sound</span></span><span class="ss-chev">+</span></button>
         <div class="ss-body">
 
-        <p class="setting-desc">Type your answers in each box, then tap <strong>Save Brand Profile</strong> at the bottom. The AI reads this every time it writes, so your posts sound like <em>you</em>. There are 3 steps. You can do one now and come back for the rest.</p>
+        <p class="setting-desc">There are 3 steps. You can do one now and come back for the rest. Tap <strong>Save Brand Profile</strong> at the bottom when you are done.</p>
         <div class="ss-step" id="bpStep1"><span class="ss-step-n">1</span><span class="ss-step-t">You</span><span class="ss-step-h">Your name, what you do, your title</span><span class="ss-step-ok">✓</span></div>
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Your Name</label><input class="fi" id="bpName" placeholder="e.g. Jess" /></div>
@@ -3402,7 +3442,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">🗂</span>
               <div class="gd-card-title">Content Planner</div>
-              <div class="gd-card-desc">A simple board: Idea, In Progress, Done. Every content card lives here, with Go Analog and Bridge the Gap both built in.</div>
+              <div class="gd-card-desc">A simple board: Ideas, In Progress, Ready, Published. Every content card lives here. Tap <strong>Create a promo plan</strong> at the top when you have something to sell and want a short run of posts that lead to it.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">🖼</span>
@@ -3417,7 +3457,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">📅</span>
               <div class="gd-card-title">Calendar</div>
-              <div class="gd-card-desc">Everything with a date on it, content and tasks both, in one calendar view.</div>
+              <div class="gd-card-desc">Everything with a date on it, content and tasks both, in one calendar view. <strong>Create a promo plan</strong> is at the top here too.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">✍️</span>
@@ -3427,7 +3467,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">💬</span>
               <div class="gd-card-title">Director Chat</div>
-              <div class="gd-card-desc">A full conversation with your Creative Director about strategy, not just single pieces of content. Ask it anything.</div>
+              <div class="gd-card-desc">A full conversation with your Creative Director about strategy, not just single pieces of content. Ask it anything. Tap <strong>Check my first line</strong> under "Prompts to get started", paste any first line, and it tells you if the line is specific enough and gives you 3 better ways in.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">📝</span>
@@ -3448,7 +3488,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 
           <div class="gd-section-lbl">Go Analog, the short version</div>
           <div class="gd-card full teal" style="margin-bottom:12px">
-            <div class="gd-card-desc" style="font-size:13.5px">Every content card has two halves: Go Analog and Bridge the Gap. Go Analog is where you write it yourself, no AI required, a Hook/Subject field, a Caption/Body field, and a place for your own draft. It's open by default every time, because this Studio was built to default to you, not to AI.</div>
+            <div class="gd-card-desc" style="font-size:13.5px">Every content card has three tabs. <strong>Details</strong> is where you name the post, pick the platform and format, and give it a date. <strong>Go Analog</strong> is where you write it yourself, no AI required: a Hook/Subject box, a Caption/Body box, and a place for your own draft. <strong>Bridge the Gap</strong> is the AI help, and it is always optional. A saved card opens on Go Analog every time, because this Studio was built to default to you, not to AI. Each tab has a short how-to at the top. Tap <strong>Hide guide</strong> to tuck it away, and tap <strong>? How to use this</strong> to bring it back. On a phone the how-to starts tucked away.</div>
           </div>
           <div class="gd-callout" style="background:var(--gp);border-color:#D4A843">
             <div class="gd-callout-icon">✏️</div>
@@ -3463,7 +3503,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">✦</span>
               <div class="gd-card-title">Get Creative Direction</div>
-              <div class="gd-card-desc">This does not write your post. It gives you the angle, the hook idea, the emotion to aim for, and what to avoid, based on your brief. Direction, not a finished draft.<br><br><strong>Try this:</strong> you know you want to post about a client win but not how to frame it. Type "client win, went from posting randomly to having a real content system" into the brief, hit Get Creative Direction, and use what comes back as your outline before you write a word.</div>
+              <div class="gd-card-desc">This does not write your post. It gives you the angle, a first line, the emotion to aim for, what to avoid, and which offer or next step the post should lead to. Direction, not a finished draft. If you filled in "What is this piece selling?" on the Details tab, it builds the direction around that offer.<br><br><strong>Try this:</strong> you know you want to post about a client win but not how to frame it. Type "client win, went from posting randomly to having a real content system" into the card, tap Get my creative direction, and use what comes back as your outline before you write a word.</div>
             </div>
             <div class="gd-card rust">
               <span class="gd-card-icon">✍️</span>
@@ -3473,12 +3513,22 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">🪝</span>
               <div class="gd-card-title">Hook Builder</div>
-              <div class="gd-card-desc">Gives you 5 real hook options built from your brief. Pick the one that sounds like you, then build the full post out from it in one more click.<br><br><strong>Try this:</strong> you've written a full caption but the first line feels flat. Open Hook Builder on that same card, get 5 options, swap in whichever one actually stops a scroll, keep the rest of your caption as is.</div>
+              <div class="gd-card-desc">This is the <strong>Hooks</strong> button on a content card. It gives you 3 first lines for your post, each a different way in: one in your clients' own words, one that opens in a specific moment, and one that leads with what they want. Tap the one you like, then tap Build Full Post from This Hook. If you already typed your own hook in Go Analog, you also get one line of feedback on it.<br><br><strong>Try this:</strong> you've written a full caption but the first line feels flat. Open Hooks on that same card, get 3 options, swap in whichever one stops a scroll, and keep the rest of your caption as is.</div>
             </div>
             <div class="gd-card rust">
               <span class="gd-card-icon">⇕</span>
               <div class="gd-card-title">Caption Variations</div>
               <div class="gd-card-desc">Same idea, 3 different angles. Useful when you're not sure which direction fits best.<br><br><strong>Try this:</strong> a launch caption is high stakes and you don't want to commit to the first draft. Generate variations, read all 3 out loud, post whichever one actually sounds like you'd say it to a friend.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🤏</span>
+              <div class="gd-card-title">Shrink</div>
+              <div class="gd-card-desc">For low energy days. It turns the post on your card into a tiny version you can make in about 10 minutes on your phone. You get three lines back: which format to use, the exact words to post, and how to make it. Your full version stays on the card.<br><br><strong>Try this:</strong> you planned a carousel for today and you have nothing left in the tank. Open the card, tap Bridge the Gap, tap Shrink, then tap Shrink this post. Post the small version and call it done.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🗓️</span>
+              <div class="gd-card-title">Create a promo plan</div>
+              <div class="gd-card-desc">For when you have one thing to sell. You find it at the top of the Calendar and the Content Planner. It asks 3 questions: what are you selling, when do people need to decide by, and how many posts feels doable (3, 5 or 7). You get a list of posts with dates, and each post has one job: name the problem, show it works, answer the doubt, or make the ask. You see the list first. Nothing is added until you tap Add to my calendar. Each post becomes a content card with a label showing the promo name. Tap that label in the Content Planner to see only that promo. If you close the window before adding, your plan is kept for you.<br><br><strong>Try this:</strong> your workshop is in three weeks. Tap Create a promo plan, type the workshop name, pick the date, tap 3 posts. Add them, then open the first card and write it in Go Analog.</div>
             </div>
             <div class="gd-card rust">
               <span class="gd-card-icon">☆</span>
@@ -3488,7 +3538,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">🔁</span>
               <div class="gd-card-title">Rebuild in My Voice</div>
-              <div class="gd-card-desc">Paste in a post you admire. This breaks down why it works, then rebuilds something 100% original in your own voice. Not a rewrite, a completely new piece that learned from good bones.<br><br><strong>Try this:</strong> you screenshotted a post months ago and never touched it because you didn't want to copy it. Paste the text into Rebuild in My Voice, get an analysis of why it worked, then a brand new version built for your niche.</div>
+              <div class="gd-card-desc">Found a post you admire? Paste its link, tap <strong>Get post</strong>, and the Studio pulls in the words for you, including the words on every carousel slide. You see a preview of the post, and the words land in a box you can edit. Then pick your platform and format and tap Analyze Only (why it works) or Autopsy + Rebuild (your own 100% original version). It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Paste the words into the box yourself. The words stay saved on the card. The slide pictures are only shown right after you fetch.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Rebuild in My Voice, tap Get post, then tap Autopsy + Rebuild for a brand new version built for your niche.</div>
             </div>
           </div>
 
@@ -3520,7 +3570,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card purple">
               <span class="gd-card-icon">🗂</span>
               <div class="gd-card-title">Content Planner</div>
-              <div class="gd-card-desc">Idea, In Progress, Done. Every card holds the hook, notes, draft, and platform in one place. Drag it forward when you're ready, nothing happens until you decide it does.</div>
+              <div class="gd-card-desc">Ideas, In Progress, Ready, Published. Every card holds the hook, notes, draft, and platform in one place. Move it forward when you're ready, nothing happens until you decide it does. Cards made by Create a promo plan carry a label with the promo name. Tap the label to see only that promo, then tap Show everything to go back.</div>
             </div>
             <div class="gd-card purple">
               <span class="gd-card-icon">☑</span>
@@ -3563,7 +3613,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-callout-icon">🎨</div>
             <div>
               <div class="gd-callout-eyebrow" style="color:var(--teal)">Settings → Brand Profile</div>
-              <div class="gd-callout-text">Every AI tool in this Studio pulls from your Brand Profile, your niche, your ideal client, your voice, your offers, what's worked before. An empty profile means the AI is working with almost nothing to go on, and the output will feel more generic because of it. Five minutes filling this out is the single biggest thing you can do to make every tool in here sound more like you.</div>
+              <div class="gd-callout-text">Every AI tool in this Studio pulls from your Brand Profile, your niche, your ideal client, your voice, your offers, what's worked before. An empty profile means the AI is working with almost nothing to go on, and the output will feel more generic because of it. Five minutes filling this out is the single biggest thing you can do to make every tool in here sound more like you.<br><br><strong>How to fill it in:</strong> open Settings and tap the Brand Profile row. It has 3 short steps: You, Who you help, and How you sound. Type your answers and tap Save Brand Profile at the bottom. Each step gets a small tick once its main boxes are filled.<br><br><strong>The two boxes worth the extra minute:</strong> "What clients say when they're stuck" and "What clients say they wish for". Type a sentence a real client has said to you, word for word. The Studio uses those words to write first lines and promises that sound like your clients, not like marketing.<br><br>Every other section in Settings is a row you tap to open, and Settings remembers which rows you left open.</div>
             </div>
           </div>
 
@@ -3572,7 +3622,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-callout-icon">✦</div>
             <div>
               <div class="gd-callout-eyebrow" style="color:var(--g)">One credit per AI generation, nothing else costs anything</div>
-              <div class="gd-callout-text">Every time you click a button that generates something with AI, Get Creative Direction, Generate Content, Hook Builder, Caption Variations, Content Series, Rebuild in My Voice, Brief Me, Surprise Me, Write the Full Piece, or sending a message in Director Chat, that's one credit. That's the whole list. Browsing the Studio, planning in the Content Planner, writing your own content in Go Analog, using Notebooks, moving tasks around, none of it touches your credits, ever. Analog Prompt on the dashboard also does not use a credit, since it's not AI at all.<br><br>Starter includes 100 credits a month, Unlimited means exactly that, no cap. Either way, credits reset at the start of each new month, they don't roll over, and you can see exactly how many you've used and how many are left any time from the "Studio in Session" bar in your sidebar.</div>
+              <div class="gd-callout-text">Every time you click a button that generates something with AI, Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, Rebuild in My Voice (Get post is one credit, and Analyze Only or Autopsy + Rebuild is one more), Create a promo plan, Brief Me, Surprise Me, Write the Full Piece, or sending a message in Director Chat, that's one credit. That's the whole list. Browsing the Studio, planning in the Content Planner, writing your own content in Go Analog, using Notebooks, moving tasks around, none of it touches your credits, ever. If something goes wrong and nothing comes back, no credit is used. Analog Prompt on the dashboard also does not use a credit, since it's not AI at all.<br><br>Starter includes 100 credits a month, Unlimited means exactly that, no cap. Either way, credits reset at the start of each new month, they don't roll over, and you can see exactly how many you've used and how many are left any time from the "Studio in Session" bar in your sidebar.</div>
             </div>
           </div>
 
@@ -3680,7 +3730,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
           <div class="gd-cards">
             <div class="gd-card"><span class="gd-card-icon">💡</span><div class="gd-card-title">Batch 1: Idea capture (15 min)</div><div class="gd-card-desc">Open the Content Planner. Set a 15-minute timer. Brain dump every content idea you have, no judging, no developing. Just capture. You're filling the pipeline, not building content yet.</div></div>
-            <div class="gd-card"><span class="gd-card-icon">🪝</span><div class="gd-card-title">Batch 2: Hook generation (20 min)</div><div class="gd-card-desc">Pick your top 5 ideas from the Planner. Open each card and run the Hook Builder. Choose your favourite hook for each. Now you have 5 posts with strong openings ready to develop.</div></div>
+            <div class="gd-card"><span class="gd-card-icon">🪝</span><div class="gd-card-title">Batch 2: Hook generation (20 min)</div><div class="gd-card-desc">Pick your top 5 ideas from the Planner. Open each card, tap Bridge the Gap, then Hooks. You get 3 first lines per card. Choose your favourite for each. Now you have 5 posts with strong openings ready to develop.</div></div>
             <div class="gd-card"><span class="gd-card-icon">✍️</span><div class="gd-card-title">Batch 3: Draft generation (30 min)</div><div class="gd-card-desc">Take your hooked ideas into the Writing Studio. Generate drafts for each one. Edit, adjust tone, make it yours. Move each card to Draft in the Planner when it's done.</div></div>
             <div class="gd-card"><span class="gd-card-icon">📅</span><div class="gd-card-title">Batch 4: Map it out (10 min)</div><div class="gd-card-desc">Add your drafts to the Calendar with target publish dates. Move cards to Scheduled in the Planner. You're done. A week of content mapped out without a single marathon session.</div></div>
           </div>
@@ -3751,7 +3801,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           <div class="gd-section-lbl">Phase 01: Grow</div>
           <div class="gd-cards">
             <div class="gd-card teal"><div class="gd-card-eyebrow teal">What to create</div><div class="gd-card-title">Content that travels beyond your current followers</div><div class="gd-card-desc">Shareable takes on common problems in your niche. Educational posts that answer a question your ideal client is searching. Relatable observations that make people tag a friend. Opinion posts that spark conversation and shares. Your goal: be found by people who don't know you yet.</div></div>
-            <div class="gd-card teal"><div class="gd-card-eyebrow teal">Studio tools to use</div><div class="gd-card-title">Hook Builder + Content Series</div><div class="gd-card-desc">Run the Hook Builder on your grow-phase ideas to find the most shareable angles. Use the Content Series Builder to turn one strong concept into five posts that cover it from multiple entry points, each one a door for a new follower to find you.</div></div>
+            <div class="gd-card teal"><div class="gd-card-eyebrow teal">Studio tools to use</div><div class="gd-card-title">Hook Builder + Content Series</div><div class="gd-card-desc">Tap Hooks on your grow-phase cards to find the most shareable first lines. Use the Content Series Builder to turn one strong concept into five posts that cover it from multiple entry points, each one a door for a new follower to find you.</div></div>
           </div>
 
           <div class="gd-section-lbl">Phase 02: Nurture</div>
@@ -3763,7 +3813,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           <div class="gd-section-lbl">Phase 03: Convert</div>
           <div class="gd-cards">
             <div class="gd-card rust"><div class="gd-card-eyebrow rust">What to create</div><div class="gd-card-title">Content that creates clarity around your offer and moves people to act</div><div class="gd-card-desc">Posts that name the specific problem your offer solves. Addressing common objections directly and honestly. What's included, what it costs, and who it's for. Testimonials and results, real ones. A clear and direct call to action on every post. Your goal: make it easy for the right people to say yes.</div></div>
-            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Rebuild in my voice + CTA Library</div><div class="gd-card-desc">Paste top-performing sales content from others into the Rebuild in my voice to understand why it worked, then rebuild it in your voice. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Get Creative Direction on your offer to get a directional angle before you write.</div></div>
+            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Rebuild in my voice + CTA Library</div><div class="gd-card-desc">Paste the link to a top-performing sales post into Rebuild in my voice and tap Get post. It pulls in the words, shows you why the post worked, then rebuilds it in your voice. When you are ready to sell, tap Create a promo plan on the Calendar for a short run of posts that lead to your offer. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Get Creative Direction on your offer to get a directional angle before you write.</div></div>
           </div>
 
           <div class="gd-section-lbl">Phase 04: Reflect</div>
@@ -3871,7 +3921,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">🔍</span>
               <div class="gd-card-title">Learn from what already works</div>
-              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche, and paste it into the Rebuild in my voice. Let the Creative Director break down why it worked, then rebuild the structure in your voice with your topic. You're not copying. You're learning from signal and applying it honestly.</div>
+              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche. Copy its link, paste it into Rebuild in my voice, and tap Get post. Let the Creative Director break down why it worked, then rebuild the structure in your voice with your topic. You're not copying. You're learning from signal and applying it honestly.</div>
             </div>
           </div>
 
@@ -4547,9 +4597,10 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </ol>
           <div class="cd-guide-text">Selling something with this post? Tap <strong>What is this piece selling?</strong> and fill it in. Then tap the <strong>Go Analog</strong> tab to write.</div></div>
         </div>
-        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
+        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
         <!-- GROUP: THE BRIEF -->
         <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
+        <div class="cd-d-main">
         <div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
@@ -4601,8 +4652,10 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             </div>
           </div>
         </div>
+        </div>
+        <div class="cd-d-sidecol">
         <!-- GROUP: SCHEDULING -->
-        <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
+        <div class="cd-d-side" style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Scheduling</div>
           <div class="two-col">
             <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" onchange="cdDateChanged()" /></div>
@@ -4625,7 +4678,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
         </div>
         <!-- GROUP: YOUR CONTENT BRIEF -->
-        <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
+        <div class="cd-d-side" style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(the AI tools in Bridge the Gap read everything on this card)</span></div>
           <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
             <div style="display:flex;gap:8px;align-items:center">
@@ -4633,6 +4686,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
               <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
             </div>
           </div>
+        </div>
         </div>
         <!-- MORE OPTIONS (collapsed by default) -->
         <div style="border-top:1px solid var(--bl);padding-top:10px;margin-top:2px">
@@ -4673,9 +4727,9 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <li><strong>Caption / Body:</strong> type your main points. Rough notes are fine.</li>
             <li><strong>Your Draft:</strong> type the whole post here if you want to write it all yourself.</li>
           </ol>
-          <div class="cd-guide-text">No AI on this tab. Tap <strong>Expand</strong> on any box to write full screen. Tap <strong>Save</strong> at the top when you are done. Want help writing it? Tap the <strong>Bridge the Gap</strong> tab.</div></div>
+          <div class="cd-guide-text">Tap <strong>Expand</strong> on any box to write full screen. Tap <strong>Save</strong> at the top when you are done. Want help writing it? Tap the <strong>Bridge the Gap</strong> tab.</div></div>
         </div>
-        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
+        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
         <!-- GO ANALOG SECTION -->
         <div class="card-section-toggle cd-analog-sec">
           <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
@@ -4739,7 +4793,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
           <div class="cd-guide-text" style="margin-top:8px">When the result shows up, tap <strong>Copy</strong> or <strong>Save Draft</strong> under it.</div></div>
         </div>
-        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? Show guide</button>
+        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
         <div class="cd-empty-note" id="cdAiEmpty">
           Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
           <div class="cd-empty-acts">
@@ -4760,7 +4814,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <span id="ai2-smartBrief-chev" style="color:var(--tl);font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-smartBrief-body">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Your creative director in your back pocket. Get the angle, the hook, the emotion, and what to avoid - before you write a single word.</div>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Tap the button before you write. You get the angle, a first line, the feeling to aim for, what to avoid, and which offer or next step this post should lead to.</div>
             <button class="ai2-btn full accent" onclick="cdSmartBrief()" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Get my creative direction</button>
             <div class="ai2-loading" id="cd-load-smartBrief">Thinking...</div>
             <div class="ai2-smart-brief" id="cd-smartBrief-out"></div>
@@ -4872,53 +4926,58 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <span id="ai2-repurpose-chev" style="color:#8C3518;font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
-            <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:14px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
-              Found a post you like? Paste its link below and tap <strong>Get post</strong>, or paste the words yourself. The Creative Director rebuilds it in your voice for your niche. Different topic, same energy.
+            <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:4px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
+              Found a post you like? This writes your own version of it, on your topic, in your voice. 3 steps.
             </div>
 
-            <!-- Fetch from a link -->
+            <!-- STEP 1: get the words -->
+            <div class="ss-step"><span class="ss-step-n">1</span><span class="ss-step-t">Get the words from the post</span></div>
             <div class="cd-rp-fetch">
               <label class="fl-lbl" for="cdRpUrl" style="font-size:11px">Paste the link to the post</label>
               <div class="cd-rp-fetch-row">
                 <input class="fi" id="cdRpUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://www.instagram.com/p/..." onkeydown="if(event.key==='Enter'){event.preventDefault();cdFetchPost();}" />
                 <button type="button" class="btn btn-p" id="cdRpFetchBtn" onclick="cdFetchPost()">Get post</button>
               </div>
+              <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. Uses 1 AI credit. On Instagram: open the post, tap the three dots, tap Copy link.</div>
               <div class="cd-rp-fetch-status" id="cdRpFetchStatus"></div>
               <div class="cd-rp-preview" id="cdRpPreview"></div>
-              <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. You see a preview of the post, and its words land in the box below, so you never type out slides. Uses 1 AI credit. On Instagram: open the post, tap the three dots, tap Copy link.</div>
-            </div>
-
-            <!-- Input -->
-            <div style="margin-bottom:12px">
-              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px;margin-bottom:8px">
-                <option value="Instagram">From Instagram</option><option value="TikTok">From TikTok</option>
-                <option value="LinkedIn">From LinkedIn</option><option value="a blog">From a blog</option>
-                <option value="a newsletter">From a newsletter</option><option value="somewhere">From somewhere</option>
+              <label class="fl-lbl" for="cdRpText" style="font-size:11px;margin-top:12px">Words from the post</label>
+              <textarea class="ai2-input" id="cdRpText" placeholder="After you tap Get post, the words from the post show up here. No link? Skip Get post and paste the words here yourself. For carousels, put each slide on a new line." style="min-height:90px;margin-bottom:0"></textarea>
+              <div class="cd-rp-fetch-hint">This box is what the AI reads. Fix anything that looks wrong before you go on.</div>
+              <label class="fl-lbl" for="cdRpPlat" style="font-size:11px;margin-top:12px">Where is the post from?</label>
+              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
+                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                <option value="LinkedIn">LinkedIn</option><option value="a blog">A blog</option>
+                <option value="a newsletter">A newsletter</option><option value="somewhere">Somewhere else</option>
               </select>
-              <textarea class="ai2-input" id="cdRpText" placeholder="The words from the post show up here after you tap Get post. No link? Paste the post, caption, or article here. For carousels, paste each slide on a new line..." style="min-height:70px"></textarea>
             </div>
 
-            <!-- Output target -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+            <!-- STEP 2: what you want back -->
+            <div class="ss-step"><span class="ss-step-n">2</span><span class="ss-step-t">Pick what you want back</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px">
+              <div><label class="fl-lbl" for="cdRpOutPlat" style="font-size:11px">Your platform</label>
               <select class="fi" id="cdRpOutPlat" style="font-size:12px;padding:6px 10px">
                 <option value="Instagram">Instagram</option><option value="LinkedIn">LinkedIn</option>
                 <option value="TikTok">TikTok</option><option value="Newsletter">Newsletter</option>
                 <option value="Email">Email</option><option value="Substack">Substack</option>
                 <option value="Blog">Blog Post</option>
-              </select>
+              </select></div>
+              <div><label class="fl-lbl" for="cdRpOutFmt" style="font-size:11px">Your format</label>
               <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
                 <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
                 <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
                 <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
                 <option value="Blog Post">Blog Post</option>
-              </select>
+              </select></div>
             </div>
 
-            <!-- Action buttons -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+            <!-- STEP 3: go -->
+            <div class="ss-step"><span class="ss-step-n">3</span><span class="ss-step-t">Tap one</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
               <button onclick="cdAutopsy()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Analyze Only</button>
               <button onclick="cdRepurpose2()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Autopsy + Rebuild</button>
             </div>
+            <div class="cd-rp-fetch-hint" style="margin:0 0 12px"><strong>Analyze Only</strong> tells you why the post works. <strong>Autopsy + Rebuild</strong> writes your own version of it. Each one uses 1 AI credit. Your result shows up below and stays on this card.</div>
 
             <div class="ai2-loading" id="cd-load-repurpose">Working...</div>
 
@@ -7735,7 +7794,7 @@ function saveIdea(opts){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('cdReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,genLength:cdGetLength(),offerName:document.getElementById('cdOfferName').value.trim(),offerPerson:document.getElementById('cdOfferPerson').value.trim(),offerSituation:document.getElementById('cdOfferSituation').value.trim(),offerChange:document.getElementById('cdOfferChange').value.trim(),offerAngle:document.getElementById('cdOfferAngle').value,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
+  var idea={id:Date.now().toString(),title,platform,format,genLength:cdGetLength(),offerName:document.getElementById('cdOfferName').value.trim(),offerPerson:document.getElementById('cdOfferPerson').value.trim(),offerSituation:document.getElementById('cdOfferSituation').value.trim(),offerChange:document.getElementById('cdOfferChange').value.trim(),offerAngle:document.getElementById('cdOfferAngle').value,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),repurposeSourceText:(document.getElementById('cdRpText')||{}).value||'',updatedAt:new Date().toISOString()};
   var slidesContainerNew=document.getElementById('cdCarouselSlides');
   if(slidesContainerNew){
     idea.carouselSlides=Array.from(slidesContainerNew.querySelectorAll('.cd-slide-wrap textarea')).map(function(ta){return ta.value;});
@@ -8518,6 +8577,33 @@ var _cdOutputs = {};
 // Auto-saves the current AI outputs into the active idea object immediately
 // after each generation, so closing the card without clicking Save never
 // loses AI results. Only runs if a card is already saved (S.cdId exists).
+// Every AI tool calls this before it spends a credit. A brand new card has
+// no id yet, so a result that arrives after the card was closed, or after a
+// different card was opened, had nowhere to go and was lost along with the
+// credit. Saving the card first gives every result a home.
+function cdEnsureCardSaved(fallbackTitle){
+  if(S.cdId)return S.cdId;
+  var m=document.getElementById('cardDetailModal');
+  if(!m||!m.classList.contains('open'))return S.cdId;
+  var t=document.getElementById('cdTitle');
+  if(t&&fallbackTitle&&!cdCardHasContent())t.value=fallbackTitle;
+  try{saveIdea({quiet:true,keepOpen:true});}catch(e){}
+  return S.cdId;
+}
+// Write one result onto the card it belongs to. Returns true only when the
+// person is still looking at that card, so the caller knows whether it is
+// safe to paint the screen.
+function cdStoreOutput(cardId,key,value){
+  var c=S.ideas.find(function(a){return a.id===cardId;});
+  if(c){
+    c.aiOutputs=c.aiOutputs||{};
+    c.aiOutputs[key]=value;
+    c.updatedAt=new Date().toISOString();
+    persist();
+  }
+  var m=document.getElementById('cardDetailModal');
+  return !!(cardId&&S.cdId===cardId&&m&&m.classList.contains('open'));
+}
 function cdAutoSaveOutputs(){
   if(!S.cdId){
     // A brand new card that just got AI output: create it now, keep it open,
@@ -8611,6 +8697,7 @@ function cdOpen(id){
   // Restore own content
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
   var rpTextRestore=document.getElementById('cdRpText');if(rpTextRestore)rpTextRestore.value=x.repurposeSourceText||'';
+  cdPreviewRestore(x.repurposeSource);
 
   // Restore carousel slides
   var slidesContainer=document.getElementById('cdCarouselSlides');
@@ -8941,14 +9028,8 @@ function cdPreviewShow(post){
   if(!box)return;
   var run=++_cdPreviewRun;
   var urls=(post.preview||[]).slice(0,20);
-  var num=function(v){return (typeof v==='number')?v.toLocaleString('en-US'):'';};
-  var bits=[];
-  if(post.author)bits.push('@'+post.author);
-  bits.push(post.isVideo?'Video':(urls.length>1?'Carousel, '+urls.length+' slides':'Single image'));
-  if(num(post.likes))bits.push(num(post.likes)+' likes');
-  if(num(post.comments))bits.push(num(post.comments)+' comments');
   box.innerHTML='<div class="cd-rp-preview-meta"></div><div class="cd-rp-preview-note"></div><div class="cd-rp-big" title="Tap to close"></div><div class="cd-rp-strip"></div>';
-  box.querySelector('.cd-rp-preview-meta').textContent=bits.join(' · ');
+  box.querySelector('.cd-rp-preview-meta').textContent=cdPreviewSummary(post);
   box.querySelector('.cd-rp-preview-note').textContent=urls.length?(post.isVideo?'This is the cover image of the video. Tap it to see it bigger. This preview is not saved to your card.':'These are the slides from the post. Tap one to see it bigger. This preview is not saved to your card.'):'';
   var big=box.querySelector('.cd-rp-big');
   var strip=box.querySelector('.cd-rp-strip');
@@ -8982,6 +9063,29 @@ function cdPreviewShow(post){
   };
   for(var w=0;w<Math.min(3,urls.length);w++)worker();
 }
+function cdPreviewSummary(post){
+  var num=function(v){return (typeof v==='number')?v.toLocaleString('en-US'):'';};
+  var n=(post.preview||[]).length;
+  var bits=[];
+  if(post.author)bits.push('@'+post.author);
+  bits.push(post.isVideo?'Video':(n>1?'Carousel, '+n+' slides':'Single image'));
+  if(num(post.likes))bits.push(num(post.likes)+' likes');
+  if(num(post.comments))bits.push(num(post.comments)+' comments');
+  return bits.join(' · ');
+}
+// When a card is reopened: put the link back and show the one line summary.
+// The slide pictures are not kept, only the words.
+function cdPreviewRestore(src){
+  var input=document.getElementById('cdRpUrl');
+  if(input)input.value=(src&&src.url)||'';
+  if(!src||!src.summary)return;
+  var box=document.getElementById('cdRpPreview');
+  if(!box)return;
+  box.innerHTML='<div class="cd-rp-preview-meta"></div><div class="cd-rp-preview-note"></div>';
+  box.querySelector('.cd-rp-preview-meta').textContent=src.summary;
+  box.querySelector('.cd-rp-preview-note').textContent='You fetched this post earlier. Its words are saved in the box below. The slide pictures are not kept.';
+  box.classList.add('show');
+}
 async function cdFetchPost(){
   if(_cdFetching)return;
   var input=document.getElementById('cdRpUrl');
@@ -8991,17 +9095,25 @@ async function cdFetchPost(){
   if(!/^https?:\/\//i.test(url))url='https://'+url;
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return;}
-  var targetCardId=S.cdId;
+  // Give the result a saved card to land on before spending the credit.
+  var FALLBACK_TITLE='Post to rebuild';
+  var targetCardId=cdEnsureCardSaved(FALLBACK_TITLE);
   _cdFetching=true;
   if(btn){btn.disabled=true;btn.textContent='Getting it...';}
   cdPreviewClear();
   cdFetchStatus('Getting the post. This can take up to a minute.');
-  var out='',note='',fromPlat='';
+  var stillHere=function(){
+    var m=document.getElementById('cardDetailModal');
+    return S.cdId===targetCardId&&m&&m.classList.contains('open');
+  };
+  var out='',note='',fromPlat='',summary='',betterTitle='';
   try{
     var post=await cdFetchCall({url:url});
     if(post.kind==='instagram'){
       fromPlat='Instagram';
-      if(S.cdId===targetCardId)cdPreviewShow(post);
+      summary=cdPreviewSummary(post);
+      if(post.author)betterTitle='Rebuild: @'+post.author+' post';
+      if(stillHere())cdPreviewShow(post);
       var slideText='';
       if(post.slides&&post.slides.length){
         var n=post.slides.length;
@@ -9019,25 +9131,36 @@ async function cdFetchPost(){
       out=[slideText,cap?'Caption:\n'+cap:''].filter(Boolean).join('\n\n');
     } else {
       fromPlat='a blog';
+      if(post.title)betterTitle=('Rebuild: '+post.title).slice(0,65);
       out=[(post.title||'').trim(),(post.text||'').trim()].filter(Boolean).join('\n\n');
     }
     if(!out)throw new Error('There were no words to read in that post. Paste the words in the box below instead.');
     consumeCredit();
     S.aiCount=(S.aiCount||0)+1;
-    // Only fill the box if the person is still on the card they started from.
-    if(S.cdId===targetCardId){
+    // Save onto the card first, by id, so the words are kept even if the
+    // card was closed or another one was opened while this was running.
+    var card=S.ideas.find(function(a){return a.id===targetCardId;});
+    if(card){
+      card.repurposeSourceText=out;
+      card.repurposeSource={url:url,summary:summary};
+      if(card.title===FALLBACK_TITLE&&betterTitle)card.title=betterTitle;
+      card.updatedAt=new Date().toISOString();
+    }
+    if(stillHere()){
       var ta=document.getElementById('cdRpText');
       if(ta){ta.value=out;ta.dispatchEvent(new Event('input',{bubbles:true}));}
       var sel=document.getElementById('cdRpPlat');
       if(sel&&fromPlat)sel.value=fromPlat;
-      cdFetchStatus('Done. The words from the post are in the box below.'+note+' Next: tap Analyze Only or Autopsy + Rebuild.');
+      var tEl=document.getElementById('cdTitle');
+      if(tEl&&card&&tEl.value.trim()===FALLBACK_TITLE)tEl.value=card.title;
+      cdFetchStatus('Done. The words from the post are in the box below and saved to this card.'+note+' Next: go to step 2.');
+    } else if(card){
+      toast('The post you fetched is saved on the card "'+card.title+'"');
     }
-    var card=S.ideas.find(function(a){return a.id===targetCardId;});
-    if(card){card.repurposeSourceText=out;card.updatedAt=new Date().toISOString();}
-    persist();
+    persist();renderKanban();
   }catch(e){
-    var m=e&&e.name==='AbortError'?'That took too long. Try again, or paste the words in the box below instead.':((e&&e.message)||'That link could not be read. Paste the words in the box below instead.');
-    cdFetchStatus(m,true);
+    var m=e&&e.name==='AbortError'?'That took too long. No credit was used. Try again, or paste the words in the box below instead.':((e&&e.message)||'That link could not be read. Paste the words in the box below instead.');
+    if(stillHere())cdFetchStatus(m,true); else toast(m);
   }finally{
     _cdFetching=false;
     if(btn){btn.disabled=false;btn.textContent='Get post';}
@@ -9442,6 +9565,7 @@ async function cdSmartBrief() {
   var b = cdGetBrief();
   if (!b.title && !b.notes) { cdNudgeEmpty(); return; }
   window._cdGenerating = true;
+  var targetCardId = cdEnsureCardSaved();
   var load = document.getElementById('cd-load-smartBrief');
   var out = document.getElementById('cd-smartBrief-out');
   load.classList.add('show'); out.classList.remove('show');
@@ -9464,11 +9588,16 @@ async function cdSmartBrief() {
   var result = await cdCallAI(sys, usr, 1100);
   load.classList.remove('show');
   window._cdGenerating = false;
-  if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); cdAutoSaveOutputs(); }
+  if (result && cdStoreOutput(targetCardId,'smartBrief',result)) {
+    _cdOutputs['smartBrief']=result;
+    var outNow=document.getElementById('cd-smartBrief-out');
+    if(outNow){ outNow.textContent=result; outNow.classList.add('show'); }
+  }
 }
 
 function cdFreshnessNote(type){
-  var prev=_cdOutputs&&_cdOutputs[type];
+  // Hooks are stored under hookList, not under their tool name.
+  var prev=_cdOutputs&&_cdOutputs[type==='hooks'?'hookList':type];
   if(!prev)return '';
   var excerpt=prev.length>220?prev.slice(0,220)+'...':prev;
   return 'IMPORTANT: You already wrote this once and the person hit generate again because they want something meaningfully different this time, not a reworded copy. Do not reuse the same opening line, structure, or angle as before. Here is what you wrote last time so you can deliberately avoid repeating it:\n"'+excerpt+'"\n\nNew request, take a different angle:\n\n';
@@ -9492,6 +9621,7 @@ async function cdGen2(type) {
     document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=false; b.style.opacity=''; });
     return;
   }
+  targetCardId = cdEnsureCardSaved();
   // Show output in the correct section's output area (variations and shrink have their own; everything else shares Generate Content)
   var ownOut = (type === 'variations' || type === 'shrink');
   var outId = ownOut ? 'cd-out-' + type : 'cd-out-generate';
@@ -9560,6 +9690,16 @@ async function cdGen2(type) {
     }
   }
   if (result && S.cdId === targetCardId) cdAutoSaveOutputs();
+  if (!result && S.cdId === targetCardId) {
+    // Nothing came back. Put the last saved result back on screen instead
+    // of leaving an empty box that looks like it was lost.
+    var prevKey = ownOut ? type : 'generate';
+    var prevOut = document.getElementById(outId), prevActs = document.getElementById(actsId);
+    if (type !== 'hooks' && type !== 'series' && _cdOutputs[prevKey] && prevOut) {
+      prevOut.textContent = _cdOutputs[prevKey]; prevOut.classList.add('show');
+      if (prevActs) prevActs.classList.add('show');
+    }
+  }
   S.aiCount = (S.aiCount || 0) + 1; persist();
   // Unlock generation buttons
   window._cdGenerating = false;
@@ -9628,23 +9768,34 @@ async function cdBuildFromHook() {
   if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
   if (!_cdHookSel) return;
   window._cdGenerating = true;
+  var targetCardId = cdEnsureCardSaved();
+  var hookUsed = _cdHookSel;
   var b = cdGetBrief();
-  var brand = buildBrandContext();
   var tone2 = _cdSelTone || 'warm';
   var toneMap2 = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap2[tone2] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' , offer: cdGetOfferFields() });
-  var sys = req.sys, usr = req.usr;
+  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap2[tone2] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + hookUsed + '"' , offer: cdGetOfferFields() });
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
   if (out) { out.textContent = 'Building...'; out.classList.add('show'); }
   if (acts) acts.classList.remove('show');
-  var result = await cdCallAI(sys, usr, req.maxTok);
+  var result = await cdCallAI(req.sys, req.usr, req.maxTok);
   window._cdGenerating = false;
-  if (result) {
-    _cdOutputs['hookBuilt'] = result;
-    if (out) out.textContent = result;
-    if (acts) acts.classList.add('show');
-    cdAutoSaveOutputs();
+  var card = S.ideas.find(function(a){return a.id===targetCardId;});
+  if (result && card) card.aiHookSel = hookUsed;
+  var stillHere = result ? cdStoreOutput(targetCardId,'hookBuilt',result) : (S.cdId===targetCardId);
+  if (stillHere) {
+    var outNow = document.getElementById('cd-out-hooks');
+    var actsNow = document.getElementById('cd-acts-hooks');
+    if (result) {
+      _cdOutputs['hookBuilt'] = result;
+      if (outNow) outNow.textContent = result;
+      if (actsNow) actsNow.classList.add('show');
+    } else if (outNow) {
+      // Nothing came back: clear the "Building..." line so it does not sit there forever.
+      outNow.textContent = _cdOutputs['hookBuilt'] || '';
+      outNow.classList.toggle('show', !!_cdOutputs['hookBuilt']);
+      if (actsNow) actsNow.classList.toggle('show', !!_cdOutputs['hookBuilt']);
+    }
   }
 }
 
@@ -9686,7 +9837,7 @@ async function cdAutopsy() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!text) { toast('Paste some content to analyse first'); return; }
   window._cdGenerating = true;
-  var targetCardId = S.cdId;
+  var targetCardId = cdEnsureCardSaved('Post to rebuild');
   var load = document.getElementById('cd-load-repurpose');
   var sbs = document.getElementById('cd-repurpose-sidebyside');
   var analysisOut = document.getElementById('cd-analysis-out');
@@ -9732,7 +9883,7 @@ async function cdRebuildAfterAnalysis() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!analysis) { toast('Run Rebuild in my voice first'); return; }
   window._cdGenerating = true;
-  var targetCardId = S.cdId;
+  var targetCardId = cdEnsureCardSaved('Post to rebuild');
   var b = cdGetBrief();
   var outFmt = document.getElementById('cdRpOutFmt') ? document.getElementById('cdRpOutFmt').value : b.fmt;
   var load = document.getElementById('cd-load-repurpose');
@@ -9786,7 +9937,7 @@ async function cdRepurpose2() {
   // the result could get silently written to the wrong place, or nowhere
   // at all, and permanently lost the next time any card's own cdOpen()
   // resets the shared working state.
-  var targetCardId = S.cdId;
+  var targetCardId = cdEnsureCardSaved('Post to rebuild');
   var b = cdGetBrief();
   var plat = document.getElementById('cdRpPlat').value;
   var load = document.getElementById('cd-load-repurpose');
@@ -10345,7 +10496,6 @@ function cdShowTab(tab,opts){
       if(body&&!body.classList.contains('open')){body.classList.add('open');if(chev)chev.textContent='-';}
     }
     cdGrowAll();
-    cdMaybeShowExpandTip();
   }
   if(tab==='ai'){cdUpdateAiEmpty();cdUpdatePrimaryBtn();}
   if(opts.focus){
@@ -10511,22 +10661,6 @@ document.addEventListener('keydown',function(e){
   }
 },true);
 
-// One-time tip pointing at Expand, shown the first time someone writes in a card
-function cdMaybeShowExpandTip(){
-  var seen=false;
-  try{seen=localStorage.getItem('fssExpandTipSeen')==='1';}catch(e){}
-  if(seen||document.getElementById('cdExpandTip'))return;
-  var body=document.querySelector('#cardDetailModal .cd-analog-sec .card-section-toggle-body');
-  if(!body)return;
-  var tip=document.createElement('div');
-  tip.className='cd-tip';tip.id='cdExpandTip';
-  tip.innerHTML='<span>Tip: tap Expand on any box to write full screen, no distractions.</span><button type="button">Got it</button>';
-  tip.querySelector('button').addEventListener('click',function(){
-    try{localStorage.setItem('fssExpandTipSeen','1');}catch(e){}
-    tip.remove();
-  });
-  body.insertBefore(tip,body.firstChild);
-}
 
 // Pick the starting tab whenever the card opens: new cards start on Details
 // so the basics get filled in, existing cards open straight to writing.
@@ -10698,8 +10832,7 @@ var DC_PROMPT_LIBRARY=[
   {cat:'Repurposing',title:'Caption to Email',text:'Turn this Instagram caption into a short email for my list. Keep the warmth and voice. Add a subject line. [PASTE CAPTION]'},
   {cat:'Repurposing',title:'Reel Script to Caption',text:'Turn this reel script into an Instagram caption. Keep the hook. Tighten it up for text. [PASTE SCRIPT]'},
   {cat:'Repurposing',title:'Long to Short',text:'Condense this long-form content into a punchy 3-5 slide carousel. One idea per slide. [PASTE CONTENT]'},
-  {cat:'Repurposing',title:'One Idea, Many Formats',text:'I have this one piece of content or idea: [DESCRIBE]. Help me turn it into 3 different formats for 3 different platforms. Keep the core message, adapt the delivery.'},
-  {cat:'Hooks',title:'Check My First Line',text:'Check this first line: [PASTE YOUR FIRST LINE]. Tell me in one sentence if it is specific to this post or could sit on anyone\'s post. Then give me 3 other ways in: one in my clients\' own words, one that opens in a specific moment, and one that leads with what they want. Tell me which one you would pick and why.'}
+  {cat:'Repurposing',title:'One Idea, Many Formats',text:'I have this one piece of content or idea: [DESCRIBE]. Help me turn it into 3 different formats for 3 different platforms. Keep the core message, adapt the delivery.'}
 ];
 
 var _dcPlActiveCat='All';
@@ -10775,7 +10908,7 @@ function cdSaveDraft2(type){
   var platEl=document.getElementById('ideaPlat')||document.getElementById('cdPlat');
   var t=titleEl?titleEl.value.trim():'Untitled';
   var p=platEl?platEl.value:'instagram';
-  var realType=(type==='generate'&&_cdOutputs['generateType'])?_cdOutputs['generateType']:type;
+  var realType=(type==='generate'&&_cdOutputs['generateType'])?_cdOutputs['generateType']:(type==='shrink'?'Shrunk version':type);
   S.drafts.unshift({id:Date.now().toString(),title:t.slice(0,65),content:txt,platform:p,contentType:realType,tone:'Brand Voice',createdAt:new Date().toISOString()});
   persist();toast('Draft saved ✓');
 }
@@ -11461,22 +11594,40 @@ async function submitFeedback() {
 
 /* ═══ BRAND PROFILE COPY ═══ */
 /* ═══ GUIDES: hide / show, remembered on this device ═══ */
-function guideHiddenList(){
-  try{var v=JSON.parse(localStorage.getItem('fssGuidesHidden')||'[]');return Array.isArray(v)?v:[];}catch(e){return [];}
+function guideStates(){
+  var st={};
+  try{
+    // Older saves were a plain list of hidden guides.
+    var old=JSON.parse(localStorage.getItem('fssGuidesHidden')||'[]');
+    if(Array.isArray(old))old.forEach(function(k){st[k]='hidden';});
+    var cur=JSON.parse(localStorage.getItem('fssGuideState')||'{}');
+    if(cur&&typeof cur==='object')Object.keys(cur).forEach(function(k){st[k]=cur[k];});
+  }catch(e){}
+  return st;
+}
+// On a phone the content card guides start tucked away so the boxes people
+// came to use are at the top of the screen. One tap opens them. Whatever the
+// person chooses is remembered and always wins over this default.
+function guideDefaultHidden(key){
+  var phone=false;
+  try{phone=window.matchMedia('(max-width:600px)').matches;}catch(e){}
+  return phone&&String(key).indexOf('card-')===0;
 }
 function guideSetHidden(g,hidden){
   if(!g)return;
   g.classList.toggle('guide-hidden',hidden);
-  var list=guideHiddenList().filter(function(k){return k!==g.dataset.guide;});
-  if(hidden)list.push(g.dataset.guide);
-  try{localStorage.setItem('fssGuidesHidden',JSON.stringify(list));}catch(e){}
+  var st=guideStates();
+  st[g.dataset.guide]=hidden?'hidden':'shown';
+  try{localStorage.setItem('fssGuideState',JSON.stringify(st));localStorage.removeItem('fssGuidesHidden');}catch(e){}
 }
 function guideHide(btn){guideSetHidden(btn.closest('.cd-guide'),true);}
 function guideShow(btn){guideSetHidden(btn.previousElementSibling,false);}
 function restoreGuides(){
-  var list=guideHiddenList();
+  var st=guideStates();
   document.querySelectorAll('.cd-guide[data-guide]').forEach(function(g){
-    g.classList.toggle('guide-hidden',list.indexOf(g.dataset.guide)>-1);
+    var k=g.dataset.guide;
+    var hidden=st[k]?st[k]==='hidden':guideDefaultHidden(k);
+    g.classList.toggle('guide-hidden',hidden);
   });
 }
 /* ═══ SETTINGS SECTIONS ═══ */
@@ -11989,8 +12140,40 @@ function promoPlatform(){
   var hit=known.map(function(k){return {k:k,i:p.indexOf(k)};}).filter(function(x){return x.i>-1;}).sort(function(a,b){return a.i-b.i;})[0];
   return hit?hit.k:'instagram';
 }
+// A built plan costs a credit, so it is kept until the person adds it or
+// taps Start over. It survives closing the window and refreshing the page.
+function promoSaveDraft(){
+  try{
+    if(_promo.plan)localStorage.setItem('fssPromoDraft',JSON.stringify({offer:_promo.offer,date:_promo.date,count:_promo.count,slots:_promo.slots,plan:_promo.plan}));
+    else localStorage.removeItem('fssPromoDraft');
+  }catch(e){}
+}
+function promoLoadDraft(){
+  try{
+    var d=JSON.parse(localStorage.getItem('fssPromoDraft')||'null');
+    if(!d||!d.plan||!Array.isArray(d.plan.posts)||!Array.isArray(d.slots)||d.slots.length!==d.plan.posts.length)return null;
+    // A plan whose first date has already passed is no use any more.
+    if(!d.slots.length||d.slots[0].date<promoYMD(promoToday()))return null;
+    return d;
+  }catch(e){return null;}
+}
 function openPromoPlanner(){
   if(_promo.busy){openModal('promoModal');return;}
+  if(!_promo.plan){
+    var draft=promoLoadDraft();
+    if(draft)_promo={step:4,offer:draft.offer,date:draft.date,count:draft.count,slots:draft.slots,plan:draft.plan,busy:false};
+  }
+  if(_promo.plan){
+    // Pick up the plan they already paid a credit for.
+    promoRenderPreview();
+    promoShowStep(4);
+    openModal('promoModal');
+    return;
+  }
+  promoReset();
+  openModal('promoModal');
+}
+function promoReset(){
   _promo={step:1,offer:'',date:'',count:3,plan:null,busy:false};
   document.getElementById('promoOffer').value='';
   var d=promoToday();d.setDate(d.getDate()+21);
@@ -12014,7 +12197,6 @@ function openPromoPlanner(){
   document.getElementById('promoPreview').innerHTML='';
   promoPickCount(3);
   promoShowStep(1);
-  openModal('promoModal');
 }
 function promoShowStep(n){
   _promo.step=n;
@@ -12038,7 +12220,7 @@ function promoPickCount(n){
 function promoBack(){
   if(_promo.busy)return;
   if(_promo.step===1){closeModal('promoModal');return;}
-  if(_promo.step===4){_promo.plan=null;document.getElementById('promoPreview').innerHTML='';promoShowStep(1);return;}
+  if(_promo.step===4){_promo.plan=null;promoSaveDraft();promoReset();return;}
   promoShowStep(_promo.step-1);
 }
 function promoNext(){
@@ -12116,6 +12298,7 @@ async function promoBuild(){
   var plan=promoParsePlan(result,slots);
   if(!plan){plan=promoFallbackPlan(slots);toast('The titles came back scrambled, so these are plain ones. The dates and jobs are right.');}
   _promo.plan=plan;
+  promoSaveDraft();
   persist();
   promoRenderPreview();
   promoShowStep(4);
@@ -12135,7 +12318,7 @@ function promoRenderPreview(){
       '<div class="promo-row-title">'+esc(p.title)+'</div>'+
       (p.hook?'<div class="promo-row-hook">'+esc(p.hook)+'</div>':'')+'</div>';
   }).join('');
-  html+='<div class="promo-hint" style="margin:12px 0 0">Tap Add to my calendar and each post becomes a content card in your Content Planner (Ideas column) and on your Calendar. The posts are not written yet. Open a card, then write it in Go Analog or get help in Bridge the Gap.</div>';
+  html+='<div class="promo-hint" style="margin:12px 0 0">This plan is kept until you add it or tap Start over, so you can close this and come back. Tap Add to my calendar and each post becomes a content card in your Content Planner (Ideas column) and on your Calendar. The posts are not written yet. Open a card, then write it in Go Analog or get help in Bridge the Gap.</div>';
   preview.innerHTML=html;
 }
 function promoAddToCalendar(){
@@ -12157,6 +12340,7 @@ function promoAddToCalendar(){
   S.gs.ideaAdded=true;
   var n=plan.posts.length;
   _promo.plan=null;
+  promoSaveDraft();
   persist();renderKanban();renderCalendar();renderBucketInsights();renderDashboard();
   closeModal('promoModal');
   toast(n+' post'+(n===1?'':'s')+' added to your planner and calendar ✓');
