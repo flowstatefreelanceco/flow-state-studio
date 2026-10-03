@@ -12,6 +12,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cucxwgmsatzlsgzhwghy.s
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+export const config = { maxDuration: 60 };
+
 const ALLOWED_MODELS = ['claude-sonnet-5'];
 const DEFAULT_MODEL = 'claude-sonnet-5';
 const MAX_TOKENS_CAP = 3200;      // longest skill (long article)
@@ -133,25 +135,47 @@ export default async function handler(req, res) {
   // 4. Forward to Anthropic and pass the full response back (keeps
   //    stop_reason so the Studio can auto-continue cut-off replies)
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify(clean)
-    });
-    const data = await response.json();
-    const text = Array.isArray(data.content)
-      ? data.content.filter(c => c && c.type === 'text').map(c => c.text).join('')
-      : '';
+    // The model can "think" before it writes, and that thinking is paid for
+    // out of max_tokens. On a long prompt it could spend the whole budget
+    // thinking and hand back no words at all. So: ask for thinking off. If
+    // the API will not take that setting, or a reply still comes back with
+    // no words because it ran out of room, try once more with extra room.
+    const THINK_ROOM = 6000;
+    async function callModel(payload) {
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json().catch(() => ({}));
+      const t = Array.isArray(d.content)
+        ? d.content.filter(c => c && c.type === 'text').map(c => c.text).join('')
+        : '';
+      return { r, d, t };
+    }
+    let attempt = await callModel(Object.assign({}, clean, { thinking: { type: 'disabled' } }));
+    const errMsg = String((attempt.d && attempt.d.error && attempt.d.error.message) || '');
+    const rejectedSetting = attempt.r.status === 400 && /thinking/i.test(errMsg);
+    const ranOutThinking = attempt.r.ok && !attempt.t && attempt.d.stop_reason === 'max_tokens';
+    if (rejectedSetting || ranOutThinking) {
+      attempt = await callModel(Object.assign({}, clean, { max_tokens: max_tokens + THINK_ROOM }));
+    }
+    const response = attempt.r;
+    const data = attempt.d;
+    const text = attempt.t;
+    // Only the words go back to the browser, never the thinking.
+    if (Array.isArray(data.content)) data.content = data.content.filter(c => c && c.type === 'text');
 
     if (!response.ok || !text) {
       const after = await refund();
       if (data && typeof data === 'object' && credit && !credit.unlimited && after !== null) {
         data.fss = { used: after, limit: credit.credit_limit, cycle_start: credit.cycle_start, unlimited: false };
       }
+      if (response.ok && !data.error) data.error = { message: 'The AI came back with no words. Nothing was used, try again' };
       return res.status(response.ok ? 502 : response.status).json(data);
     }
 

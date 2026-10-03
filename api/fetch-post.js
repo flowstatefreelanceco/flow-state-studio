@@ -228,17 +228,31 @@ async function readSlides(images) {
   });
   if (!n) return { status: 502, code: 'blocked', message: 'The slide images would not load.' };
   content.push({ type: 'text', text: 'Copy out the words written on each slide, exactly as they are written. One line per slide, in order, in this shape: "Slide 1: the words". Join the words on a slide into one line. If a slide has no words, write "Slide N: (no words)". Do not describe the pictures. Do not add anything of your own.' });
-  let r;
-  try {
-    r = await timedFetch('https://api.anthropic.com/v1/messages', {
+  // Thinking is paid for out of max_tokens, so ask for it off. If the API will
+  // not take that setting, or the reply ran out of room before any words came
+  // back, try once more with extra room.
+  async function ask(extra, ms) {
+    const resp = await timedFetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({ model: VISION_MODEL, max_tokens: 3000, messages: [{ role: 'user', content: content }] })
-    }, 50000);
+      body: JSON.stringify(Object.assign({ model: VISION_MODEL, max_tokens: 3000, messages: [{ role: 'user', content: content }] }, extra))
+    }, ms);
+    const d = await resp.json().catch(() => ({}));
+    const t = (d.content || []).filter(c => c && c.type === 'text').map(c => c.text).join('').trim();
+    return { resp, d, t };
+  }
+  let r, data;
+  const started = Date.now();
+  try {
+    let a = await ask({ thinking: { type: 'disabled' } }, 50000);
+    const msg = String((a.d && a.d.error && a.d.error.message) || '');
+    if ((a.resp.status === 400 && /thinking/i.test(msg)) || (a.resp.ok && !a.t && a.d.stop_reason === 'max_tokens')) {
+      a = await ask({ max_tokens: 9000 }, Math.max(8000, 52000 - (Date.now() - started)));
+    }
+    r = a.resp; data = a.d;
   } catch (e) {
     return { status: 504, code: 'slow', message: 'Reading the slides took too long.' };
   }
-  const data = await r.json().catch(() => ({}));
   if (!r.ok) return { status: 502, code: 'ai_error', message: (data && data.error && data.error.message) || 'The slides could not be read.' };
   const text = (data.content || []).filter(c => c && c.type === 'text').map(c => c.text).join('').trim();
   if (!text) return { status: 502, code: 'ai_error', message: 'The slides could not be read.' };
