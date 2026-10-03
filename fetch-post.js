@@ -6,6 +6,9 @@
 //   { url }                      -> finds the post. Instagram links go to
 //                                   Apify, every other link is read directly.
 //   { action:'read', images:[] } -> reads the words off Instagram slide images.
+//   { action:'image', image }    -> hands back one slide image for the preview.
+//                                   Instagram blocks its images from loading
+//                                   on other sites, so they come through here.
 //
 // Keys live in Vercel environment variables, never in index.html:
 //   APIFY_TOKEN        (new, from apify.com)
@@ -20,6 +23,7 @@ const MAX_SLIDES = 20;
 const MAX_PAGE_BYTES = 1500000;
 const MAX_TEXT_CHARS = 12000;
 const MAX_IMAGE_BYTES = 4500000;
+const MAX_PREVIEW_BYTES = 3000000;
 
 const IG_HOST = /(^|\.)instagram\.com$/i;
 const IG_CDN = /(^|\.)(cdninstagram\.com|fbcdn\.net)$/i;
@@ -100,7 +104,11 @@ async function fetchInstagram(u) {
     else if (Array.isArray(post.images) && post.images.length) slides = post.images.slice();
     else if (post.displayUrl) slides = [post.displayUrl];
   }
-  slides = slides.filter(s => { const su = parsePublicUrl(s); return su && su.protocol === 'https:' && IG_CDN.test(su.hostname); }).slice(0, MAX_SLIDES);
+  const okCdn = s => { const su = parsePublicUrl(s); return !!(su && su.protocol === 'https:' && IG_CDN.test(su.hostname)); };
+  slides = slides.filter(okCdn).slice(0, MAX_SLIDES);
+  // What to show in the preview: the slides, or the cover image for a video.
+  const preview = slides.length ? slides : (okCdn(post.displayUrl) ? [post.displayUrl] : []);
+  const count = v => (typeof v === 'number' && v >= 0) ? v : null;
   return {
     status: 200,
     body: {
@@ -108,7 +116,11 @@ async function fetchInstagram(u) {
       author: post.ownerUsername || '',
       caption: String(post.caption || '').slice(0, MAX_TEXT_CHARS),
       isVideo: isVideo,
-      slides: slides
+      slides: slides,
+      preview: preview,
+      likes: count(post.likesCount),
+      comments: count(post.commentsCount),
+      postedAt: typeof post.timestamp === 'string' ? post.timestamp : ''
     }
   };
 }
@@ -211,6 +223,21 @@ async function readSlides(images) {
   return { status: 200, body: { kind: 'slides', text: text.slice(0, MAX_TEXT_CHARS), read: n, total: urls.length } };
 }
 
+/* ---------- One slide image, for the preview ---------- */
+async function loadImage(image) {
+  const su = parsePublicUrl(image);
+  if (!su || su.protocol !== 'https:' || !IG_CDN.test(su.hostname)) return { status: 400, code: 'bad_image', message: 'That image cannot be shown.' };
+  let r;
+  try { r = await timedFetch(su.toString(), {}, 12000); }
+  catch (e) { return { status: 504, code: 'slow', message: 'That image took too long to load.' }; }
+  if (!r.ok) return { status: 502, code: 'blocked', message: 'That image would not load.' };
+  const type = (r.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  if (['image/jpeg', 'image/png', 'image/webp', 'image/gif'].indexOf(type) === -1) return { status: 415, code: 'bad_image', message: 'That image cannot be shown.' };
+  const buf = Buffer.from(await r.arrayBuffer());
+  if (!buf.length || buf.length > MAX_PREVIEW_BYTES) return { status: 413, code: 'too_big', message: 'That image is too large to preview.' };
+  return { status: 200, body: { kind: 'image', type: type, data: buf.toString('base64') } };
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -223,6 +250,8 @@ export default async function handler(req, res) {
     let out;
     if (body.action === 'read') {
       out = await readSlides(body.images);
+    } else if (body.action === 'image') {
+      out = await loadImage(body.image);
     } else {
       const u = parsePublicUrl(body.url);
       if (!u) return fail(res, 400, 'bad_link', 'That does not look like a link. It should start with https://');

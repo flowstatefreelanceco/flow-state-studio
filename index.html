@@ -801,6 +801,18 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-rp-fetch-status{display:none;font-size:12px;line-height:1.5;margin-top:8px;padding:8px 10px;border-radius:var(--rsm);background:var(--tealp);color:var(--teal)}
 .cd-rp-fetch-status.show{display:block}
 .cd-rp-fetch-status.err{background:var(--rp);color:var(--el)}
+.cd-rp-preview{display:none;margin-top:10px}
+.cd-rp-preview.show{display:block}
+.cd-rp-preview-meta{font-size:12px;color:var(--e);font-weight:600;line-height:1.5}
+.cd-rp-preview-note{font-size:11px;color:var(--tl);line-height:1.5;margin:2px 0 8px}
+.cd-rp-strip{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+.cd-rp-thumb{position:relative;flex:0 0 84px;height:105px;border-radius:var(--rsm);background:var(--bl);border:2px solid transparent;overflow:hidden;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+.cd-rp-thumb.sel{border-color:var(--teal)}
+.cd-rp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.cd-rp-thumb-n{position:absolute;top:4px;left:4px;background:rgba(77,30,21,.78);color:white;font-size:10px;font-weight:700;border-radius:100px;padding:1px 7px;font-family:var(--fb)}
+.cd-rp-big{display:none;margin-bottom:8px;text-align:center;background:var(--p);border-radius:var(--rsm);padding:6px;cursor:pointer}
+.cd-rp-big.show{display:block}
+.cd-rp-big img{max-width:100%;max-height:440px;border-radius:4px;display:block;margin:0 auto}
 .cd-rp-fetch-hint{font-size:11.5px;color:var(--tl);line-height:1.5;margin-top:8px}
 @media(max-width:600px){.cd-rp-fetch-row{flex-direction:column}}
 .cd-guide-steps{margin:5px 0 6px 18px;padding:0;font-size:12.5px;color:var(--em);line-height:1.55}
@@ -4872,7 +4884,8 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                 <button type="button" class="btn btn-p" id="cdRpFetchBtn" onclick="cdFetchPost()">Get post</button>
               </div>
               <div class="cd-rp-fetch-status" id="cdRpFetchStatus"></div>
-              <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. The words from the post land in the box below, so you never type out slides. Uses 1 AI credit. On Instagram: open the post, tap the three dots, tap Copy link.</div>
+              <div class="cd-rp-preview" id="cdRpPreview"></div>
+              <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. You see a preview of the post, and its words land in the box below, so you never type out slides. Uses 1 AI credit. On Instagram: open the post, tap the three dots, tap Copy link.</div>
             </div>
 
             <!-- Input -->
@@ -7691,7 +7704,7 @@ function openIdeaModal(status){
   document.querySelectorAll('#cardDetailModal .ai2-tone-chip').forEach(function(c){c.classList.toggle('sel',c.dataset.t==='warm');});
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
   var rpUrl=document.getElementById('cdRpUrl');if(rpUrl)rpUrl.value='';
-  cdFetchStatus('');
+  cdFetchStatus('');cdPreviewClear();
   var sbs=document.getElementById('cd-repurpose-sidebyside');if(sbs)sbs.classList.remove('show');
   var rebuildBtn=document.getElementById('cd-rebuild-btn');if(rebuildBtn)rebuildBtn.style.display='none';
   var analysisOut=document.getElementById('cd-analysis-out');if(analysisOut)analysisOut.textContent='';
@@ -8593,7 +8606,7 @@ function cdOpen(id){
   var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
   var rpUrl=document.getElementById('cdRpUrl');if(rpUrl)rpUrl.value='';
-  cdFetchStatus('');
+  cdFetchStatus('');cdPreviewClear();
 
   // Restore own content
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
@@ -8914,6 +8927,61 @@ async function cdFetchCall(body){
   }
   throw new Error(msg);
 }
+// Preview of the post that was just fetched: who posted it, how it did,
+// and the slides. Shown right after a fetch only. Nothing here is saved to
+// the card, the slide images are another person's work.
+var _cdPreviewRun=0;
+function cdPreviewClear(){
+  _cdPreviewRun++;
+  var box=document.getElementById('cdRpPreview');
+  if(box){box.innerHTML='';box.classList.remove('show');}
+}
+function cdPreviewShow(post){
+  var box=document.getElementById('cdRpPreview');
+  if(!box)return;
+  var run=++_cdPreviewRun;
+  var urls=(post.preview||[]).slice(0,20);
+  var num=function(v){return (typeof v==='number')?v.toLocaleString('en-US'):'';};
+  var bits=[];
+  if(post.author)bits.push('@'+post.author);
+  bits.push(post.isVideo?'Video':(urls.length>1?'Carousel, '+urls.length+' slides':'Single image'));
+  if(num(post.likes))bits.push(num(post.likes)+' likes');
+  if(num(post.comments))bits.push(num(post.comments)+' comments');
+  box.innerHTML='<div class="cd-rp-preview-meta"></div><div class="cd-rp-preview-note"></div><div class="cd-rp-big" title="Tap to close"></div><div class="cd-rp-strip"></div>';
+  box.querySelector('.cd-rp-preview-meta').textContent=bits.join(' · ');
+  box.querySelector('.cd-rp-preview-note').textContent=urls.length?(post.isVideo?'This is the cover image of the video. Tap it to see it bigger. This preview is not saved to your card.':'These are the slides from the post. Tap one to see it bigger. This preview is not saved to your card.'):'';
+  var big=box.querySelector('.cd-rp-big');
+  var strip=box.querySelector('.cd-rp-strip');
+  big.addEventListener('click',function(){big.classList.remove('show');big.innerHTML='';strip.querySelectorAll('.cd-rp-thumb').forEach(function(t){t.classList.remove('sel');});});
+  var thumbs=urls.map(function(u,i){
+    var b=document.createElement('button');
+    b.type='button';b.className='cd-rp-thumb';b.title='Slide '+(i+1);
+    b.innerHTML='<span class="cd-rp-thumb-n">'+(i+1)+'</span>';
+    b.addEventListener('click',function(){
+      var img=b.querySelector('img');if(!img)return;
+      strip.querySelectorAll('.cd-rp-thumb').forEach(function(t){t.classList.toggle('sel',t===b);});
+      big.innerHTML='';var bigImg=document.createElement('img');bigImg.src=img.src;bigImg.alt='Slide '+(i+1);big.appendChild(bigImg);big.classList.add('show');
+    });
+    strip.appendChild(b);
+    return b;
+  });
+  box.classList.add('show');
+  // Load a few at a time so a 20 slide carousel does not fire 20 requests at once.
+  var next=0;
+  var worker=async function(){
+    while(next<urls.length){
+      var i=next++;
+      try{
+        var d=await cdFetchCall({action:'image',image:urls[i]});
+        if(run!==_cdPreviewRun)return;
+        var img=document.createElement('img');
+        img.alt='Slide '+(i+1);img.src='data:'+d.type+';base64,'+d.data;
+        thumbs[i].insertBefore(img,thumbs[i].firstChild);
+      }catch(e){ /* that slide just keeps its number */ }
+    }
+  };
+  for(var w=0;w<Math.min(3,urls.length);w++)worker();
+}
 async function cdFetchPost(){
   if(_cdFetching)return;
   var input=document.getElementById('cdRpUrl');
@@ -8926,12 +8994,14 @@ async function cdFetchPost(){
   var targetCardId=S.cdId;
   _cdFetching=true;
   if(btn){btn.disabled=true;btn.textContent='Getting it...';}
+  cdPreviewClear();
   cdFetchStatus('Getting the post. This can take up to a minute.');
   var out='',note='',fromPlat='';
   try{
     var post=await cdFetchCall({url:url});
     if(post.kind==='instagram'){
       fromPlat='Instagram';
+      if(S.cdId===targetCardId)cdPreviewShow(post);
       var slideText='';
       if(post.slides&&post.slides.length){
         var n=post.slides.length;
