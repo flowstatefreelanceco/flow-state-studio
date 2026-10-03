@@ -810,6 +810,26 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .ai2-section-body{padding:14px 16px;display:none}
 .ai2-section-body.open{display:block}
 .ai2-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+/* Guided Bridge the Gap: one primary button matched to the card's Format,
+   alt formats tucked under a link, and hooks/variations/series as pills
+   instead of three full accordion cards. */
+.cd-primary-gen{width:100%;padding:15px 14px;border:none;border-radius:var(--rad);background:var(--teal);color:#fff;font-family:var(--fb);font-weight:700;font-size:14.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 2px 8px rgba(0,132,132,.25);transition:filter .15s}
+.cd-primary-gen:hover{filter:brightness(1.05)}
+.cd-primary-gen-sub{font-weight:500;font-size:11.5px;opacity:.85}
+.cd-alt-toggle{background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:9px 2px 4px;display:flex;align-items:center;gap:4px;font-family:var(--fb);width:100%}
+.cd-alt-toggle:hover{text-decoration:underline}
+.cd-alt-chev{font-size:10px;transition:transform .15s}
+.cd-alt-chev.open{transform:rotate(180deg)}
+.cd-alt-formats{display:none;margin:4px 0 2px;padding-top:4px;border-top:1px dashed var(--bl)}
+.cd-alt-formats.open{display:block}
+.cd-tools-row{display:flex;gap:7px;margin:14px 0 2px}
+.cd-tool-pill{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px;background:var(--w);border:1.5px solid var(--bl);border-radius:var(--rsm);cursor:pointer;font-family:var(--fb);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.cd-tool-pill:hover{border-color:var(--g)}
+.cd-tool-pill.open{border-color:var(--g);background:var(--gp)}
+.cd-tool-pill-ico{font-size:15px;line-height:1}
+.cd-tool-pill-lbl{font-size:10px;font-weight:700;color:var(--t)}
+.cd-tool-body{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bl)}
+.cd-tool-body.open{display:block}
 .ai2-btn{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-family:var(--fb);font-size:12px;color:var(--e);cursor:pointer;transition:all .15s;text-align:left;line-height:1.4;width:100%}
 .ai2-btn:hover{border-color:var(--teal);background:var(--tealp);color:var(--teal)}
 .ai2-btn.full{grid-column:1/-1}
@@ -4580,17 +4600,24 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                 <option value="short">Short</option><option value="standard" selected>Standard</option><option value="long">Long</option>
               </select>
             </div>
-            <div class="ai2-btn-grid">
-              <div style="margin-bottom:10px">
-                <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:28px;font-size:12.5px;resize:vertical"></textarea>
+            <div style="margin-bottom:10px">
+              <textarea class="fi" id="cdInstrIn" placeholder="Instructions for the AI (optional), e.g. keep my voice exactly, punch up the hook, make it shorter..." style="min-height:28px;font-size:12.5px;resize:vertical"></textarea>
+            </div>
+            <button class="cd-primary-gen" id="cdPrimaryGenBtn" onclick="cdGenPrimary()">
+              <span id="cdPrimaryGenIcon">✍️</span><span id="cdPrimaryGenLabel">Generate Caption</span>
+            </button>
+            <button type="button" class="cd-alt-toggle" onclick="cdToggleAltFormats()">Want a different format for this? <span class="cd-alt-chev" id="cdAltChev">▾</span></button>
+            <div class="cd-alt-formats" id="cdAltFormats">
+              <div class="ai2-btn-grid" style="margin-bottom:0">
+                <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
+                <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
+                <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
+                <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
+                <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
+                <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
+                <button class="ai2-btn" onclick="cdGen2('blog')"><span class="ai2-btn-label">Blog Post</span><span class="ai2-btn-sub">With headers</span></button>
+                <button class="ai2-btn" onclick="cdGen2('substack')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack</span><span class="ai2-btn-sub">Full article</span></button>
               </div>
-              <button class="ai2-btn" onclick="cdGen2('caption')"><span class="ai2-btn-label">Caption</span><span class="ai2-btn-sub">Full post + CTA</span></button>
-              <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
-              <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
-              <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
-              <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
-              <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
-              <button class="ai2-btn" onclick="cdGen2('substack')" style="grid-column:1/-1;background:linear-gradient(135deg,var(--rp),#EDD5C8);border-color:#E0BDAA"><span class="ai2-btn-label" style="color:var(--r)">📝 Substack Article</span><span class="ai2-btn-sub">Full article with sections</span></button>
             </div>
             <div class="ai2-loading" id="cd-load-generate">Writing...</div>
             <div class="ai2-out" id="cd-out-generate"></div>
@@ -4600,12 +4627,14 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             </div>
           </div>
         </div>
-        <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('hooks')" style="background:linear-gradient(135deg,var(--gp),#EDE0C4);border-bottom:2px solid #D4A843">
-            <div class="ai2-section-title" style="color:var(--g)">🪝 Hook Builder</div>
-            <span id="ai2-hooks-chev" style="color:var(--tl);font-size:16px">+</span>
+        <div class="ai2-section" style="padding:12px 16px 14px">
+          <div style="font-size:11px;font-weight:700;color:var(--tl);margin-bottom:2px">More ways to work this idea</div>
+          <div class="cd-tools-row">
+            <div class="cd-tool-pill" id="cd-pill-hooks" onclick="cdToggleTool('hooks',this)"><span class="cd-tool-pill-ico">🪝</span><span class="cd-tool-pill-lbl">Hooks</span></div>
+            <div class="cd-tool-pill" id="cd-pill-variations" onclick="cdToggleTool('variations',this)"><span class="cd-tool-pill-ico">⇕</span><span class="cd-tool-pill-lbl">Variations</span></div>
+            <div class="cd-tool-pill" id="cd-pill-series" onclick="cdToggleTool('series',this)"><span class="cd-tool-pill-ico">☆</span><span class="cd-tool-pill-lbl">Series</span></div>
           </div>
-          <div class="ai2-section-body" id="ai2-hooks-body">
+          <div class="cd-tool-body" id="ai2-hooks-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
             <button class="ai2-btn full" onclick="cdGen2('hooks')" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Generate 5 Hooks</button>
             <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
@@ -4624,13 +4653,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
             </div>
           </div>
-        </div>
-        <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('variations')" style="background:linear-gradient(135deg,var(--gp),#EDE0C4);border-bottom:2px solid #D4A843">
-            <div class="ai2-section-title" style="color:var(--g)">⇕ Caption Variations</div>
-            <span id="ai2-variations-chev" style="color:var(--tl);font-size:16px">+</span>
-          </div>
-          <div class="ai2-section-body" id="ai2-variations-body">
+          <div class="cd-tool-body" id="ai2-variations-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Same idea, 3 different angles. Pick what feels right today.</div>
             <button class="ai2-btn full accent" onclick="cdGen2('variations')" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:13px;padding:12px">⇕ Generate 3 Variations</button>
             <div class="ai2-loading" id="cd-load-variations">Writing variations...</div>
@@ -4640,13 +4663,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('variations')">Save Draft</button>
             </div>
           </div>
-        </div>
-        <div class="ai2-section">
-          <div class="ai2-section-hdr" onclick="toggleAI2('series')" style="background:linear-gradient(135deg,var(--sagep),#D4E8D0);border-bottom:2px solid rgba(90,110,80,.3)">
-            <div class="ai2-section-title" style="color:#3A5228">☆ Content Series</div>
-            <span id="ai2-series-chev" style="color:var(--tl);font-size:16px">+</span>
-          </div>
-          <div class="ai2-section-body" id="ai2-series-body">
+          <div class="cd-tool-body" id="ai2-series-body">
             <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">One idea becomes 5 posts. Click any to add to your planner.</div>
             <button class="ai2-btn full accent" onclick="cdGen2('series')" style="background:var(--g);color:white;border:none;font-weight:600;font-size:13px;padding:12px">☆ Generate Content Series</button>
             <div class="ai2-loading" id="cd-load-series">Spinning out ideas...</div>
@@ -9879,7 +9896,7 @@ function cdShowTab(tab,opts){
     cdGrowAll();
     cdMaybeShowExpandTip();
   }
-  if(tab==='ai')cdUpdateAiEmpty();
+  if(tab==='ai'){cdUpdateAiEmpty();cdUpdatePrimaryBtn();}
   if(opts.focus){
     var el=document.getElementById(opts.focus);
     if(el)setTimeout(function(){el.focus();el.classList.add('cd-hl');setTimeout(function(){el.classList.remove('cd-hl');},1600);},60);
@@ -9890,6 +9907,53 @@ function cdPinTabs(){
   if(!sticky)return;
   var hdr=sticky.firstElementChild;
   sticky.style.top=(window.innerWidth<=768&&hdr)?(-hdr.offsetHeight)+'px':'0px';
+}
+// Maps the card's own Format field to the AI tool it means, so Bridge the
+// Gap can lead with one obvious button instead of a wall of choices. The
+// person already made this decision in Details; this just acts on it.
+const CD_FORMAT_TO_TYPE = {
+  'Caption / Post':'caption','Carousel':'carousel','Reel / Video':'reel','Story':'story',
+  'Newsletter':'newsletter','Substack / Article':'substack','Blog Post':'blog',
+  'Freebie':'caption','Event':'caption','Other':'caption'
+};
+const CD_TYPE_META = {
+  caption:{label:'Generate Caption',icon:'✍️'}, carousel:{label:'Generate Carousel',icon:'🗂'},
+  reel:{label:'Generate Reel Script',icon:'🎬'}, story:{label:'Generate Story',icon:'📲'},
+  newsletter:{label:'Generate Newsletter',icon:'✉️'}, email:{label:'Generate Email',icon:'✉️'},
+  substack:{label:'Generate Article',icon:'📝'}, blog:{label:'Generate Blog Post',icon:'📝'}
+};
+function cdPrimaryType(){
+  var fmt=(document.getElementById('cdFormat')||{}).value||'';
+  return CD_FORMAT_TO_TYPE[fmt]||'caption';
+}
+function cdUpdatePrimaryBtn(){
+  var type=cdPrimaryType();
+  var meta=CD_TYPE_META[type]||CD_TYPE_META.caption;
+  var lbl=document.getElementById('cdPrimaryGenLabel');
+  var ico=document.getElementById('cdPrimaryGenIcon');
+  if(lbl)lbl.textContent=meta.label;
+  if(ico)ico.textContent=meta.icon;
+}
+function cdGenPrimary(){ return cdGen2(cdPrimaryType()); }
+function cdToggleAltFormats(){
+  var panel=document.getElementById('cdAltFormats');
+  var chev=document.getElementById('cdAltChev');
+  if(!panel)return;
+  var open=panel.classList.toggle('open');
+  if(chev)chev.classList.toggle('open',open);
+}
+// Hooks / Variations / Series as a small pill row: tapping one opens just
+// that tool and closes the others, so only one thing is expanded at a time.
+function cdToggleTool(sec,pillEl){
+  var opening = !document.getElementById('ai2-'+sec+'-body').classList.contains('open');
+  ['hooks','variations','series'].forEach(function(s){
+    var body=document.getElementById('ai2-'+s+'-body');
+    var pill=document.getElementById('cd-pill-'+s);
+    var isTarget = s===sec;
+    var open = isTarget ? opening : false;
+    if(body)body.classList.toggle('open',open);
+    if(pill)pill.classList.toggle('open',open);
+  });
 }
 function cdCardHasContent(){
   return ['cdTitle','cdHook','cdNotes','cdOwnContent'].some(function(id){var el=document.getElementById(id);return el&&el.value.trim();});
@@ -9933,6 +9997,9 @@ document.addEventListener('input',function(e){
 });
 document.addEventListener('input',function(e){
   if(e.target&&e.target.id==='cdTitle')cdUpdateAiEmpty();
+});
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='cdFormat')cdUpdatePrimaryBtn();
 });
 window.addEventListener('resize',function(){
   var m=document.getElementById('cardDetailModal');
