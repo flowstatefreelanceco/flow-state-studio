@@ -849,6 +849,21 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .ai2-hook-item{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;font-size:12.5px;color:var(--e);display:flex;align-items:flex-start;justify-content:space-between;gap:8px;cursor:pointer;transition:all .15s}
 .ai2-hook-item:hover{border-color:var(--teal);background:var(--tealp)}
 .ai2-hook-text{flex:1;line-height:1.55}
+.promo-filter-bar{flex-shrink:0;align-items:center;gap:10px;flex-wrap:wrap;background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:9px 14px;margin-bottom:12px;font-size:13px;color:var(--el)}
+.promo-tag{background:var(--gp);color:var(--el);border:1px solid #DDD0A8;font-size:10px;padding:3px 9px;cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.promo-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.promo-chip{background:var(--p);border:1.5px solid var(--bl);border-radius:100px;padding:8px 14px;font-family:var(--fb);font-size:13px;color:var(--e);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.promo-chip:hover{border-color:var(--g)}
+.promo-chip.sel{border-color:var(--teal);background:var(--tealp);color:var(--teal);font-weight:600}
+.promo-q{font-family:var(--fh);font-size:19px;font-weight:600;color:var(--e);margin-bottom:6px;line-height:1.3}
+.promo-hint{font-size:12.5px;color:var(--t);line-height:1.55;margin-bottom:14px}
+.promo-step-count{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px}
+.promo-row{background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:11px 13px;margin-bottom:8px}
+.promo-row-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--t);margin-bottom:5px}
+.promo-row-date{font-weight:700;color:var(--e)}
+.promo-row-title{font-size:13.5px;font-weight:600;color:var(--e);line-height:1.4}
+.promo-row-hook{font-size:12.5px;color:var(--el);line-height:1.5;margin-top:4px;font-style:italic}
+.ai2-hook-check{background:var(--gp);border:1px solid #DDD0A8;border-radius:var(--rsm);padding:10px 12px;font-size:12px;line-height:1.55;color:var(--el)}
 .ai2-hook-use{font-size:10px;color:var(--tl);flex-shrink:0;margin-top:2px;white-space:nowrap}
 .ai2-tone-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .ai2-tone-chip{padding:5px 11px;border-radius:100px;border:1px solid var(--bl);font-size:11px;cursor:pointer;transition:all .15s;background:var(--p);color:var(--t);user-select:none}
@@ -1808,7 +1823,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div class="pf-icon-wrap">🪝</div>
         <div>
           <div class="pf-title">Hook Builder</div>
-          <div class="pf-desc">Generate 5 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
+          <div class="pf-desc">Generate 3 scroll-stopping hooks for any idea, pick your favourite, then build a full post from it in one click. No more losing the thread between your idea and your caption.</div>
         </div>
       </div>
 
@@ -2498,6 +2513,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           Hide published
         </label>
         <button class="btn btn-g" id="plannerViewToggle" onclick="togglePlannerView()" style="font-size:12.5px">☰ List View</button>
+        <button class="btn btn-g" onclick="openPromoPlanner()" style="font-size:12.5px">✦ Create a promo plan</button>
         <button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button>
       </div>
     </div>
@@ -2516,6 +2532,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </div>
         <div id="bucketInsightsBody" style="max-height:0px;overflow:hidden;transition:max-height .3s ease"></div>
       </div>
+      <div id="promoFilterBar" class="promo-filter-bar" style="display:none"></div>
       <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
       <div id="ideaListView" style="display:none;flex-shrink:0"></div>
     </div>
@@ -2541,7 +2558,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   <div id="view-calendar" class="view">
     <div class="main-hdr">
       <div><h1>Content Calendar</h1><div class="sub">Map out your content and see everything at a glance</div></div>
-      <div class="hdr-acts"><button class="btn btn-p" onclick="openCalPicker()">+ Add Entry</button></div>
+      <div class="hdr-acts"><button class="btn btn-g" onclick="openPromoPlanner()" style="font-size:12.5px">✦ Create a promo plan</button><button class="btn btn-p" onclick="openCalPicker()">+ Add Entry</button></div>
     </div>
     <div class="main-body cal-main-body">
       <div class="cal-nav" id="calNav">
@@ -3008,6 +3025,10 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </div>
         <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. service-based entrepreneurs ready to scale without burning out" /></div>
         <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital courses" /></div>
+        <div class="fl"><label class="fl-lbl">What clients say when they're stuck <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientKeep" placeholder="e.g. I keep starting over every Monday" /></div>
+        <div class="fl"><label class="fl-lbl">What clients say they wish for <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientWish" placeholder="e.g. I wish I had one place for everything" />
+          <div style="font-size:11.5px;color:var(--tl);margin-top:6px;line-height:1.5">Use their real words, the way they'd say it in a DM. The Studio builds your hooks and openings from these.</div>
+        </div>
         <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
         <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
         <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
@@ -3519,7 +3540,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">🪝</span>
               <div class="gd-card-title">Start with a hook, not a caption</div>
-              <div class="gd-card-desc">The Hook Builder is your secret weapon for starting. When you don't know how to open a post, generate five hooks for your idea, pick the one that clicks, and write from there. The hook is the hardest part. Once that's done, the rest comes easier.</div>
+              <div class="gd-card-desc">The Hook Builder is your secret weapon for starting. When you don't know how to open a post, generate three hooks for your idea, pick the one that clicks, and write from there. The hook is the hardest part. Once that's done, the rest comes easier.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">📅</span>
@@ -4636,11 +4657,12 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           <div class="cd-tools-row">
             <div class="cd-tool-pill" id="cd-pill-hooks" onclick="cdToggleTool('hooks',this)"><span class="cd-tool-pill-ico">🪝</span><span class="cd-tool-pill-lbl">Hooks</span></div>
             <div class="cd-tool-pill" id="cd-pill-variations" onclick="cdToggleTool('variations',this)"><span class="cd-tool-pill-ico">⇕</span><span class="cd-tool-pill-lbl">Variations</span></div>
+            <div class="cd-tool-pill" id="cd-pill-shrink" onclick="cdToggleTool('shrink',this)"><span class="cd-tool-pill-ico">🤏</span><span class="cd-tool-pill-lbl">Shrink</span></div>
             <div class="cd-tool-pill" id="cd-pill-series" onclick="cdToggleTool('series',this)"><span class="cd-tool-pill-ico">☆</span><span class="cd-tool-pill-lbl">Series</span></div>
           </div>
           <div class="cd-tool-body" id="ai2-hooks-body">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Generate hooks, pick your favorite, build the full post from it.</div>
-            <button class="ai2-btn full" onclick="cdGen2('hooks')" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Generate 5 Hooks</button>
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">3 ways into the same idea. Pick one, build the full post from it. Wrote your own hook? You get a quick check on it too.</div>
+            <button class="ai2-btn full" onclick="cdGen2('hooks')" style="background:var(--r);color:white;border:none;font-weight:600;font-size:13px;padding:12px">✦ Generate 3 Hooks</button>
             <div class="ai2-loading" id="cd-load-hooks">Generating hooks...</div>
             <div class="ai2-hook-list" id="cd-hook-list"></div>
             <div id="cd-hook-build-area" style="display:none;margin-top:10px">
@@ -4665,6 +4687,16 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="ai2-out-acts" id="cd-acts-variations">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('variations')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('variations')">Save Draft</button>
+            </div>
+          </div>
+          <div class="cd-tool-body" id="ai2-shrink-body">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Low energy day? Same idea, way less to make. Ten minutes and a phone.</div>
+            <button class="ai2-btn full accent" onclick="cdGen2('shrink')" style="background:var(--teal);color:white;border:none;font-weight:600;font-size:13px;padding:12px">🤏 Shrink this post</button>
+            <div class="ai2-loading" id="cd-load-shrink">Making it smaller...</div>
+            <div class="ai2-out" id="cd-out-shrink"></div>
+            <div class="ai2-out-acts" id="cd-acts-shrink">
+              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('shrink')">Copy</button>
+              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('shrink')">Save Draft</button>
             </div>
           </div>
           <div class="cd-tool-body" id="ai2-series-body">
@@ -4800,6 +4832,43 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div class="cal-picker-opt-title">Task</div>
         <div class="cal-picker-opt-desc">Add something to do with energy level, time estimate, and substeps</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE A PROMO PLAN -->
+<div class="modal-ov" id="promoModal">
+  <div class="modal">
+    <div class="m-title">Create a promo plan</div>
+    <div class="m-sub" style="margin-bottom:16px">Pick one thing to sell. Get a short run of posts that lead to it.</div>
+    <div class="promo-step-count" id="promoStepCount"></div>
+    <div id="promoStep1">
+      <div class="promo-q">What are you selling?</div>
+      <div class="promo-hint">One thing only. A paid offer, a freebie, a waitlist, an event.</div>
+      <input class="fi" id="promoOffer" placeholder="e.g. my 1:1 coaching, the fall workshop, my free guide" maxlength="80" />
+      <div class="promo-chips" id="promoOfferChips"></div>
+    </div>
+    <div id="promoStep2" style="display:none">
+      <div class="promo-q">When do people need to decide by?</div>
+      <div class="promo-hint">Doors closing, an event date, a holiday. No real date? Pick one about 3 weeks out. Your last post lands a couple of days before it, because people decide early.</div>
+      <input class="fi" type="date" id="promoDate" />
+    </div>
+    <div id="promoStep3" style="display:none">
+      <div class="promo-q">How many posts feels doable?</div>
+      <div class="promo-hint">3 is plenty. You can add more later.</div>
+      <div class="promo-chips" id="promoCountChips">
+        <button type="button" class="promo-chip" data-n="3" onclick="promoPickCount(3)">3 posts</button>
+        <button type="button" class="promo-chip" data-n="5" onclick="promoPickCount(5)">5 posts</button>
+        <button type="button" class="promo-chip" data-n="7" onclick="promoPickCount(7)">7 posts</button>
+      </div>
+    </div>
+    <div id="promoStep4" style="display:none">
+      <div class="ai2-loading" id="promoLoading">Building your plan...</div>
+      <div id="promoPreview"></div>
+    </div>
+    <div class="m-acts">
+      <button class="btn btn-g" id="promoBackBtn" onclick="promoBack()">Cancel</button>
+      <button class="btn btn-p" id="promoNextBtn" onclick="promoNext()" style="min-width:120px">Next</button>
     </div>
   </div>
 </div>
@@ -5742,7 +5811,7 @@ const S = {
   libFilters:{hooks:'All',ctas:'All',stories:'All',prompts:'All'},
   studio:{type:'Caption / Post',plat:'instagram',tone:'Warm & Personal',output:'',topic:''},
   editingCalId:null, viewingDraftId:null, addLibSection:null, cdId:null, cdOut:"", ideaAIOut:"",
-  brandProfile:{name:'',niche:'',role:'',client:'',offers:'',voice:'',pov:'',extra:'',platforms:'',frequency:'',timezone:'',phase:'',whatWorked:''},
+  brandProfile:{name:'',niche:'',role:'',client:'',offers:'',clientKeep:'',clientWish:'',voice:'',pov:'',extra:'',platforms:'',frequency:'',timezone:'',phase:'',whatWorked:''},
   offerProfile:{name:'',price:'',whoFor:'',transformation:'',objections:'',keyMsg:'',callToAction:''},
   longformProfile:{title:'',format:'book',premise:'',targetReader:'',coreArgument:'',tone:'',themes:''},
   activeProfile:'brand',
@@ -5923,7 +5992,7 @@ function applySettings(){
   }
   setVal('bpName',defaultName);
   setVal('bpNiche',bp.niche);setVal('bpRole',bp.role);setVal('bpClient',bp.client);
-  setVal('bpOffers',bp.offers);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
+  setVal('bpOffers',bp.offers);setVal('bpClientKeep',bp.clientKeep);setVal('bpClientWish',bp.clientWish);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
   setVal('bpPlatforms',bp.platforms);setVal('bpFrequency',bp.frequency);setVal('bpTimezone',bp.timezone);
   setVal('bpPhase',bp.phase);setVal('bpWhatWorked',bp.whatWorked);
 }
@@ -6379,6 +6448,7 @@ function renderIdeaListView(){
   var statusLabel={idea:'Idea',inprogress:'In Progress',ready:'Ready',published:'Published'};
   var items=S.ideas.slice();
   if(hidePublished) items=items.filter(function(i){return i.status!=='published';});
+  items=items.filter(promoMatches);
   if(sortBy==='date'){
     items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
   } else if(sortBy==='dateDesc'){
@@ -6416,6 +6486,7 @@ function renderIdeaListView(){
         +'<div class="idea-list-meta">'
         +(idea.platform?'<span style="font-size:11px;color:var(--tl)">'+cap(idea.platform)+'</span>':'')
         +(idea.format?'<span class="tag" style="background:'+fc.bg+';color:'+fc.fg+';font-size:10px;padding:3px 9px;font-weight:700">'+esc(idea.format)+'</span>':'')
+        +promoTagHTML(idea)
         +'<span class="idea-list-badge" style="background:'+bg+';color:'+color+'">'+label+'</span>'
         +'<span class="idea-list-date">'+(dt||'No date')+'</span>'
         +'</div></div>';
@@ -6428,18 +6499,19 @@ function renderKanban(){
   var hidePublished=S.plannerHidePublished||false;
   var colsToShow=hidePublished?IDEA_COLS.filter(function(c){return c.id!=='published';}):IDEA_COLS;
   el.innerHTML=colsToShow.map(col=>{
-    const cards=S.ideas.filter(i=>i.status===col.id);
+    const cards=S.ideas.filter(i=>i.status===col.id&&promoMatches(i));
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(i=>{var fc=formatColor(i.format);return`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
-        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}</div>
+        <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}${promoTagHTML(i)}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div></div>`;}).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
+  renderPromoFilterBar();
   if(S.plannerView==='list')renderIdeaListView();
 }
 function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
@@ -7444,7 +7516,7 @@ function openIdeaModal(status){
   var defStatus=status||'idea';
   document.querySelectorAll('.cd-stage').forEach(function(el){el.classList.toggle('active',el.dataset.s===defStatus);});
   // Reset AI sections
-  ['smartBrief','generate','hooks','variations','series','repurpose'].forEach(function(sec){
+  ['smartBrief','generate','hooks','variations','shrink','series','repurpose'].forEach(function(sec){
     var body=document.getElementById('ai2-'+sec+'-body');if(body)body.classList.remove('open');
     var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='+';
     var out=document.getElementById('cd-out-'+sec);if(out){out.textContent='';out.classList.remove('show');}
@@ -7782,7 +7854,7 @@ async function getAnonKey(){
 function saveBrandProfile(){
   const g=id=>document.getElementById(id)?.value.trim()||'';
   const wasEmpty=!S.brandProfile||(!S.brandProfile.niche&&!S.brandProfile.role);
-  S.brandProfile={name:g('bpName'),niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra'),platforms:g('bpPlatforms'),frequency:g('bpFrequency'),timezone:g('bpTimezone'),phase:g('bpPhase'),whatWorked:g('bpWhatWorked')};
+  S.brandProfile={name:g('bpName'),niche:g('bpNiche'),role:g('bpRole'),client:g('bpClient'),offers:g('bpOffers'),clientKeep:g('bpClientKeep'),clientWish:g('bpClientWish'),voice:g('bpVoice'),pov:g('bpPov'),extra:g('bpExtra'),platforms:g('bpPlatforms'),frequency:g('bpFrequency'),timezone:g('bpTimezone'),phase:g('bpPhase'),whatWorked:g('bpWhatWorked')};
   const hasContent=Object.values(S.brandProfile).some(v=>v.length>0);
   S.gs.bizSet=hasContent;
   persist();renderGS();toast('Brand profile saved ✓');
@@ -7822,6 +7894,8 @@ const SKILL_CORE = [
   "Section labels, slide numbers, and frame numbers are only there to organize the piece for the creator. The words underneath them must still read as one continuous thought. If you removed every label and read it out loud, it should flow like a person talking, not like a list of separate parts.",
   "Every piece carries at least one thing the audience can actually use: a specific step, a named tool or resource, a mini framework, a script they can borrow, or a concrete example from the niche in the brand profile. Vague encouragement is never the value.",
   "Specific beats clever. Name the real situation, the real feeling, the real moment. Cut any sentence that could appear in anyone else's post.",
+  "When the brand profile includes what their clients say when they're stuck or what they wish for, open with that language, close to how the client would say it, before explaining anything about the creator's work. The stuck words belong in the hook. The wish belongs in the promise or the call to action.",
+  "The hook and the body do different jobs. The hook makes them stop. Everything after it tells them why to stay and moves them one step closer to the next step. Never restate the hook in different words.",
   "Never invent statistics, studies, quotes, testimonials, or client results. If a number or proof point would help, write it as a clearly marked placeholder in square brackets, like [your client result here], so the creator fills in the real one.",
   "Use everything the creator gave you: title, notes, hook, their own draft, and any slides already written. If they wrote a hook, keep it word for word unless their instructions say otherwise. If they wrote a draft, build from their words and voice instead of replacing them.",
   "One call to action per piece, matched to the goal: save or share for value, comment or DM for conversation, link for an offer. Never stack asks.",
@@ -7891,14 +7965,19 @@ const SKILL_SPECS = {
     spec: "Write a finished blog post built to be found in search and actually read. Output in this order: the title on its own line (main keyword included, sentence case), a one-sentence subheadline, an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
   },
   hooks: {
-    lengths: { short: "5 hooks", standard: "5 hooks", long: "5 hooks" },
+    lengths: { short: "3 hooks", standard: "3 hooks", long: "3 hooks" },
     tokens: { short: 500, standard: 500, long: 500 },
-    spec: "Write exactly 5 opening hooks for this specific idea, not for the niche in general. Each one in a different style: a question, a bold claim, a specific number or detail, a story opener, a contrarian take. Each hook is one line, specific enough that it could only belong to this piece, and creates tension or curiosity without clickbait. Output exactly 5 numbered lines (1. to 5.) with the hook only, nothing else on the line."
+    spec: "Write exactly 3 opening hooks for this specific idea, not for the niche in general. Each one is a different way into the same idea. Hook 1 says the problem the way the audience would say it out loud to a friend. If the brand profile includes what their clients say when they're stuck, build this one from those words and keep the phrasing close to theirs. Hook 2 opens inside one specific moment or detail, the kind of thing that makes someone think that is me. Hook 3 leads with what they want instead. If the brand profile includes what their clients wish for, build this one from that. Each hook is one line, sounds like a person talking and not like a course module title, and is specific enough that it could only belong to this piece. Tension or curiosity, never clickbait. Output exactly 3 numbered lines (1. to 3.) with the hook only, nothing else on the line. Then, only if the creator already wrote their own hook on the card (it shows as Hook/Subject in what they wrote), add one last line that starts with CHECK: and says in one kind, plain sentence whether their hook is specific to this piece or could sit on anyone's post, and names the one word or detail to swap to sharpen it. If they did not write a hook, do not add a CHECK line."
   },
   variations: {
     lengths: { short: "60 to 100 words each", standard: "100 to 180 words each", long: "180 to 280 words each" },
     tokens: { short: 1200, standard: 1800, long: 2400 },
     spec: "Write 3 complete, different captions for this idea, labeled Variation 1: Warm and personal, Variation 2: Direct and punchy, Variation 3: Story-led. Each one is a full caption with its own hook line, its own value, its own landing line, and one call to action. Each one needs a real intro after its hook and a real close before its call to action. They should differ in angle and structure, not just wording."
+  },
+  shrink: {
+    lengths: { short: "40 words or fewer", standard: "40 words or fewer", long: "40 words or fewer" },
+    tokens: { short: 500, standard: 500, long: 500 },
+    spec: "Write the smallest version of this piece that still does its job, for a day when the creator has very little energy. This overrides the length and structure guidance above: no intro, no build, no wrap-up. Keep the one idea and the one feeling, drop everything else. Choose the lowest effort format that fits the platform, for example words over a photo they already have, a two line caption, a three frame story, or one screenshot of a note. If the card is working toward an offer, keep one short line that points to it, otherwise no call to action at all. Output exactly three labeled lines and nothing else. FORMAT: the format in a few words. POST THIS: the exact words to post, 40 words or fewer, opening with their hook if they wrote one. HOW: one sentence on how to make it in under ten minutes with just a phone."
   },
   series: {
     lengths: { short: "5 posts", standard: "5 posts", long: "5 posts" },
@@ -7951,7 +8030,7 @@ function buildSkillRequest(type, o){
     'What this piece is about (everything the creator has written on this card):\n' + (o.brief || '') + '\n\n' +
     (o.extra ? o.extra + '\n\n' : '') +
     'The job: ' + spec.spec +
-    cdInstrTail(o.instr) + ((type === 'hooks' || type === 'series') ? '' : SKILL_FLOW_CHECK);
+    cdInstrTail(o.instr) + ((type === 'hooks' || type === 'series' || type === 'shrink') ? '' : SKILL_FLOW_CHECK);
   return { sys: sys, usr: usr, maxTok: spec.tokens[len] };
 }
 function cdGetLength(){ var el = document.getElementById('cdLength'); return skillLengthKey(el ? el.value : ''); }
@@ -7973,6 +8052,8 @@ function buildBrandContext(){
   if(bp.role||bp.niche) lines.push(`Role: ${[bp.role,bp.niche].filter(Boolean).join(' - ')}`);
   if(bp.client)  lines.push(`Ideal client: ${bp.client}`);
   if(bp.offers)  lines.push(`Offers: ${bp.offers}`);
+  if(bp.clientKeep) lines.push(`What their clients say when they're stuck, in the clients' own words (raw material for hooks and opening lines, keep the phrasing close to how the client says it): ${bp.clientKeep}`);
+  if(bp.clientWish) lines.push(`What their clients say they wish for, in the clients' own words (raw material for the promise and the call to action): ${bp.clientWish}`);
   if(bp.voice)   lines.push(`Brand voice: ${bp.voice}`);
   if(bp.pov)     lines.push(`Unique POV: ${bp.pov}`);
   if(bp.platforms) lines.push(`Primary platforms: ${bp.platforms}`);
@@ -8334,7 +8415,7 @@ function cdOpen(id){
   });
 
   // Reset all AI sections
-  ['smartBrief','generate','hooks','variations','series','repurpose'].forEach(function(sec){
+  ['smartBrief','generate','hooks','variations','shrink','series','repurpose'].forEach(function(sec){
     var body=document.getElementById('ai2-'+sec+'-body');if(body)body.classList.remove('open');
     var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='+';
     var out=document.getElementById('cd-out-'+sec);if(out){out.textContent='';out.classList.remove('show');}
@@ -8387,7 +8468,7 @@ function cdOpen(id){
       if(legacyType){_cdOutputs['generate']=_cdOutputs[legacyType];_cdOutputs['generateType']=legacyType;}
     }
     // Simple text output sections
-    ['generate','variations','repurpose'].forEach(function(sec){
+    ['generate','variations','shrink','repurpose'].forEach(function(sec){
       if(_cdOutputs[sec]){
         var body=document.getElementById('ai2-'+sec+'-body');
         if(body){body.classList.add('open');var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';}
@@ -9048,16 +9129,18 @@ async function cdSmartBrief() {
     ' You look at a brief and immediately see the ANGLE, the EMOTION, and the EXECUTION. ' +
     'You are direct, specific, and practical. You never give generic advice. Every suggestion is tailored to the brand and audience.';
   var usr = 'I need your creative direction on this piece of content.\n\n' +
+    cdOfferContext(cdGetOfferFields()) +
     'Brief: ' + b.brief + '\n' +
     'Platform: ' + b.plat + '\n' +
     'Format: ' + b.fmt + '\n\n' +
-    'Cover these 4 labeled sections:\n' +
+    'Cover these 5 labeled sections:\n' +
     '1. THE ANGLE - the specific perspective or framing that will make this land with my audience (1-2 sentences)\n' +
-    '2. THE HOOK - one specific opening line or hook I should lead with\n' +
+    '2. THE HOOK - one specific opening line or hook I should lead with. If my brand profile has my clients\' own words, build it from those\n' +
     '3. THE EMOTION - what feeling should this create in my reader and why that matters for my niche\n' +
-    '4. THE WATCH OUT - one thing to avoid with this topic that would make it feel generic or off-brand\n\n' +
+    '4. THE WATCH OUT - one thing to avoid with this topic that would make it feel generic or off-brand\n' +
+    '5. WHERE THIS LEADS - the one next step this piece should point to. If an offer is named above, use it. If not, pick the offer from my brand profile this idea most naturally leads to and say why, or say plainly that this one is for trust and should not sell\n\n' +
     ADVICE_SHAPE.trim();
-  var result = await cdCallAI(sys, usr, 900);
+  var result = await cdCallAI(sys, usr, 1100);
   load.classList.remove('show');
   window._cdGenerating = false;
   if (result) { _cdOutputs['smartBrief']=result; out.textContent=result; out.classList.add('show'); cdAutoSaveOutputs(); }
@@ -9088,9 +9171,10 @@ async function cdGen2(type) {
     document.querySelectorAll('[id^="cdBtn-"]').forEach(function(b){ b.disabled=false; b.style.opacity=''; });
     return;
   }
-  // Show output in the correct section's output area (variations has its own; everything else shares Generate Content)
-  var outId = type === 'variations' ? 'cd-out-variations' : 'cd-out-generate';
-  var actsId = type === 'variations' ? 'cd-acts-variations' : 'cd-acts-generate';
+  // Show output in the correct section's output area (variations and shrink have their own; everything else shares Generate Content)
+  var ownOut = (type === 'variations' || type === 'shrink');
+  var outId = ownOut ? 'cd-out-' + type : 'cd-out-generate';
+  var actsId = ownOut ? 'cd-acts-' + type : 'cd-acts-generate';
   var out = document.getElementById(outId);
   var acts = document.getElementById(actsId);
   if (out) { out.textContent = 'Writing...'; out.classList.add('show'); }
@@ -9127,7 +9211,7 @@ async function cdGen2(type) {
         // that box (plus its Copy and Save Draft buttons, and the restore on
         // reopen) reads the 'generate' slot. Without this, a generated
         // caption/reel/carousel/etc was saved but never shown again.
-        if (type !== 'variations') { targetCard.aiOutputs['generate'] = result; targetCard.aiOutputs['generateType'] = type; }
+        if (!ownOut) { targetCard.aiOutputs['generate'] = result; targetCard.aiOutputs['generateType'] = type; }
       }
       targetCard.updatedAt = new Date().toISOString();
       persist();
@@ -9146,7 +9230,7 @@ async function cdGen2(type) {
         cdRenderSeries(result);
       } else {
         _cdOutputs[type] = result;
-        if (type !== 'variations') { _cdOutputs['generate'] = result; _cdOutputs['generateType'] = type; }
+        if (!ownOut) { _cdOutputs['generate'] = result; _cdOutputs['generateType'] = type; }
         var outNow = document.getElementById(outId);
         var actsNow = document.getElementById(actsId);
         if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
@@ -9167,6 +9251,16 @@ function cdRenderHooks(text) {
   if (!hookList) return;
   hookList.innerHTML = '';
   lines.forEach(function(line) {
+    // The hook check on the creator's own hook is feedback, not a hook to
+    // pick, so it gets its own note instead of a selectable row.
+    var checkMatch = line.trim().match(/^CHECK:\s*(.+)$/i);
+    if (checkMatch) {
+      var note = document.createElement('div');
+      note.className = 'ai2-hook-check';
+      note.innerHTML = '<strong>Your hook:</strong> ' + esc(checkMatch[1]);
+      hookList.appendChild(note);
+      return;
+    }
     var clean = line.replace(/^[0-9]+[.)\s]+/, '').trim();
     if (!clean) return;
     var item = document.createElement('div');
@@ -9667,6 +9761,8 @@ function dirChatSystemPrompt(playbookLock){
     if(bp.role)sys+="\nRole: "+bp.role;
     if(bp.voice)sys+="\nVoice: "+bp.voice;
     if(bp.pov)sys+="\nPOV: "+bp.pov;
+    if(bp.clientKeep)sys+="\nWhat their clients say when they're stuck (their own words, use for hooks and openings): "+bp.clientKeep;
+    if(bp.clientWish)sys+="\nWhat their clients say they wish for (their own words, use for the promise): "+bp.clientWish;
     if(bp.platforms)sys+="\nPrimary platforms: "+bp.platforms;
     if(bp.frequency)sys+="\nCurrent posting frequency: "+bp.frequency;
     if(bp.timezone)sys+="\nAudience timezone: "+bp.timezone;
@@ -9975,7 +10071,7 @@ function cdToggleAltFormats(){
 // that tool and closes the others, so only one thing is expanded at a time.
 function cdToggleTool(sec,pillEl){
   var opening = !document.getElementById('ai2-'+sec+'-body').classList.contains('open');
-  ['hooks','variations','series'].forEach(function(s){
+  ['hooks','variations','shrink','series'].forEach(function(s){
     var body=document.getElementById('ai2-'+s+'-body');
     var pill=document.getElementById('cd-pill-'+s);
     var isTarget = s===sec;
@@ -11027,6 +11123,8 @@ function copyBrandProfile() {
   if (bp.role || bp.niche) lines.push('Role: ' + [bp.role, bp.niche].filter(Boolean).join(' - '));
   if (bp.client)  lines.push('Ideal client: ' + bp.client);
   if (bp.offers)  lines.push('Offers: ' + bp.offers);
+  if (bp.clientKeep) lines.push('What clients say when they\'re stuck: ' + bp.clientKeep);
+  if (bp.clientWish) lines.push('What clients say they wish for: ' + bp.clientWish);
   if (bp.voice)   lines.push('Brand voice: ' + bp.voice);
   if (bp.pov)     lines.push('Unique POV: ' + bp.pov);
   if (bp.extra)   lines.push('Additional context:\n' + bp.extra);
@@ -11417,6 +11515,250 @@ function switchGuideTab(tab){
 }
 
 /* ═══════════════════ CALENDAR PICKER ═══════════════════ */
+/* ═══════════════════ CREATE A PROMO PLAN ═══════════════════
+   One offer, one decide-by date, a short run of posts that lead to it.
+   The dates and the job of each post are worked out here in code so they
+   are always right. The AI only fills in the titles and opening lines.
+   Every card it makes is a normal content card with the offer section
+   filled in and a promo label, so it shows in the planner and calendar. */
+var _promo={step:1,offer:'',date:'',count:3,plan:null,busy:false};
+var _promoFilter='';
+var PROMO_JOBS={
+  1:['invitation'],
+  2:['recognition','invitation'],
+  3:['recognition','proof','invitation'],
+  4:['recognition','proof','hesitation','invitation'],
+  5:['recognition','recognition','proof','hesitation','invitation'],
+  6:['recognition','recognition','proof','hesitation','proof','invitation'],
+  7:['recognition','recognition','proof','hesitation','proof','hesitation','invitation']
+};
+var PROMO_JOB_LABEL={recognition:'Name the problem',proof:'Show it works',hesitation:'Answer the doubt',invitation:'Make the ask'};
+var PROMO_FORMATS=['Caption / Post','Carousel','Reel / Video','Story'];
+function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
+function promoMatches(i){return !_promoFilter||(i&&i.promo===_promoFilter);}
+function promoTagHTML(i){
+  if(!i||!i.promo)return '';
+  return '<span class="tag promo-tag" title="Show only this promo" data-promo="'+escAttr(i.promo)+'" onclick="event.stopPropagation();setPromoFilter(this.dataset.promo)">✦ '+esc(i.promo)+'</span>';
+}
+function setPromoFilter(name){
+  _promoFilter=(_promoFilter===name)?'':(name||'');
+  renderKanban();
+  if(S.plannerView==='list')renderIdeaListView();
+}
+function renderPromoFilterBar(){
+  var bar=document.getElementById('promoFilterBar');
+  if(!bar)return;
+  // If the last card in a promo was deleted, drop the filter so the
+  // planner never sits on an empty view with no way to tell why.
+  if(_promoFilter&&!S.ideas.some(function(i){return i.promo===_promoFilter;}))_promoFilter='';
+  if(!_promoFilter){bar.style.display='none';bar.innerHTML='';return;}
+  bar.style.display='flex';
+  bar.innerHTML='<span>Showing only your promo: <strong>'+esc(_promoFilter)+'</strong></span><button class="btn btn-g" style="font-size:11.5px;padding:4px 12px;margin-left:auto" onclick="setPromoFilter(\'\')">Show everything</button>';
+}
+function promoYMD(d){
+  var m=d.getMonth()+1,day=d.getDate();
+  return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;
+}
+function promoToday(){var t=new Date();t.setHours(0,0,0,0);return t;}
+// Spread the posts between tomorrow and two days before the decide-by
+// date. If there is not enough room, plan fewer posts instead of stacking
+// several on one day.
+function promoSlots(deadlineStr,count){
+  var start=promoToday();start.setDate(start.getDate()+1);
+  var dl=new Date(deadlineStr+'T00:00:00');
+  var end=new Date(dl);end.setDate(end.getDate()-2);
+  if(end<start){end=new Date(dl);end.setDate(end.getDate()-1);}
+  if(end<start)end=new Date(start);
+  var span=Math.round((end.getTime()-start.getTime())/86400000);
+  var n=Math.max(1,Math.min(count,span+1));
+  var jobs=PROMO_JOBS[n]||PROMO_JOBS[3];
+  var slots=[];
+  for(var i=0;i<n;i++){
+    var off=(n===1)?span:Math.round(i*span/(n-1));
+    var d=new Date(start);d.setDate(d.getDate()+off);
+    slots.push({date:promoYMD(d),job:jobs[i]});
+  }
+  return slots;
+}
+function promoPlatform(){
+  var p=((S.brandProfile&&S.brandProfile.platforms)||'').toLowerCase();
+  var known=['instagram','tiktok','linkedin','facebook'];
+  var hit=known.map(function(k){return {k:k,i:p.indexOf(k)};}).filter(function(x){return x.i>-1;}).sort(function(a,b){return a.i-b.i;})[0];
+  return hit?hit.k:'instagram';
+}
+function openPromoPlanner(){
+  if(_promo.busy){openModal('promoModal');return;}
+  _promo={step:1,offer:'',date:'',count:3,plan:null,busy:false};
+  document.getElementById('promoOffer').value='';
+  var d=promoToday();d.setDate(d.getDate()+21);
+  var dateEl=document.getElementById('promoDate');
+  dateEl.value=promoYMD(d);
+  var min=promoToday();min.setDate(min.getDate()+1);
+  dateEl.min=promoYMD(min);
+  // Offer chips come from the Brand Profile so most people only tap.
+  var chips=document.getElementById('promoOfferChips');
+  chips.innerHTML='';
+  var offers=((S.brandProfile&&S.brandProfile.offers)||'').split(/[,;\n]+/).map(function(o){return o.trim();}).filter(Boolean).slice(0,6);
+  offers.forEach(function(o){
+    var b=document.createElement('button');
+    b.type='button';b.className='promo-chip';b.textContent=o;
+    b.addEventListener('click',function(){
+      document.getElementById('promoOffer').value=o;
+      chips.querySelectorAll('.promo-chip').forEach(function(c){c.classList.toggle('sel',c===b);});
+    });
+    chips.appendChild(b);
+  });
+  document.getElementById('promoPreview').innerHTML='';
+  promoPickCount(3);
+  promoShowStep(1);
+  openModal('promoModal');
+}
+function promoShowStep(n){
+  _promo.step=n;
+  [1,2,3,4].forEach(function(i){
+    var el=document.getElementById('promoStep'+i);
+    if(el)el.style.display=(i===n)?'':'none';
+  });
+  var count=document.getElementById('promoStepCount');
+  if(count)count.textContent=(n<4)?('Question '+n+' of 3'):(_promo.plan?'Your plan':'');
+  var back=document.getElementById('promoBackBtn');
+  var next=document.getElementById('promoNextBtn');
+  back.textContent=(n===1)?'Cancel':(n===4?'Start over':'Back');
+  next.textContent=(n===3)?'✦ Build my plan':(n===4?'Add to my calendar':'Next');
+  next.style.display=(n===4&&!_promo.plan)?'none':'';
+  back.disabled=!!_promo.busy;back.style.opacity=_promo.busy?'.5':'';
+}
+function promoPickCount(n){
+  _promo.count=n;
+  document.querySelectorAll('#promoCountChips .promo-chip').forEach(function(c){c.classList.toggle('sel',parseInt(c.dataset.n,10)===n);});
+}
+function promoBack(){
+  if(_promo.busy)return;
+  if(_promo.step===1){closeModal('promoModal');return;}
+  if(_promo.step===4){_promo.plan=null;document.getElementById('promoPreview').innerHTML='';promoShowStep(1);return;}
+  promoShowStep(_promo.step-1);
+}
+function promoNext(){
+  if(_promo.busy)return;
+  if(_promo.step===1){
+    var offer=document.getElementById('promoOffer').value.trim();
+    if(!offer){toast('Type or tap the one thing you are selling.');document.getElementById('promoOffer').focus();return;}
+    _promo.offer=offer.slice(0,80);
+    promoShowStep(2);return;
+  }
+  if(_promo.step===2){
+    var date=document.getElementById('promoDate').value;
+    if(!date){toast('Pick a date. About 3 weeks out is a good default.');return;}
+    if(new Date(date+'T00:00:00')<=promoToday()){toast('Pick a date after today so there is room to post.');return;}
+    _promo.date=date;
+    promoShowStep(3);return;
+  }
+  if(_promo.step===3){promoBuild();return;}
+  if(_promo.step===4){promoAddToCalendar();return;}
+}
+function promoFallbackPlan(slots){
+  return {person:'',situation:'',change:'',posts:slots.map(function(sl){
+    return {title:PROMO_JOB_LABEL[sl.job]+': '+_promo.offer,format:'Caption / Post',hook:''};
+  })};
+}
+function promoParsePlan(text,slots){
+  try{
+    var a=text.indexOf('{'),b=text.lastIndexOf('}');
+    if(a<0||b<=a)return null;
+    var obj=JSON.parse(text.slice(a,b+1));
+    if(!obj||!Array.isArray(obj.posts)||!obj.posts.length)return null;
+    var clean=function(v,max){return String(v==null?'':v).replace(/\s+/g,' ').trim().slice(0,max);};
+    return {
+      person:clean(obj.person,200),situation:clean(obj.situation,200),change:clean(obj.change,200),
+      posts:slots.map(function(sl,i){
+        var p=obj.posts[i]||{};
+        var fmt=PROMO_FORMATS.indexOf(p.format)>-1?p.format:'Caption / Post';
+        return {title:clean(p.title,80)||(PROMO_JOB_LABEL[sl.job]+': '+_promo.offer),format:fmt,hook:clean(p.hook,240)};
+      })
+    };
+  }catch(e){return null;}
+}
+async function promoBuild(){
+  if(_promo.busy)return;
+  var slots=promoSlots(_promo.date,_promo.count);
+  _promo.slots=slots;_promo.plan=null;_promo.busy=true;
+  promoShowStep(4);
+  var loading=document.getElementById('promoLoading');
+  var preview=document.getElementById('promoPreview');
+  preview.innerHTML='';loading.classList.add('show');
+  var plat=promoPlatform();
+  var jobHelp={
+    recognition:'describe the exact moment this person is in so they think that is me. Do not pitch.',
+    proof:'show with one concrete example that the change is real. Use a square bracket placeholder for any result or number, never invent one.',
+    hesitation:'name the real doubt someone has before buying and answer it plainly.',
+    invitation:'say who it is for, what changes, and make the ask clearly.'
+  };
+  var sys=CD_PERSONA+buildBrandContext()+' You are planning a short run of posts that all lead to one offer. Each post has one job. Never invent statistics, client results, or testimonials. Output only valid JSON with no preamble and no code fences.';
+  var usr='The offer: '+_promo.offer+'\n'+
+    'People need to decide by: '+_promo.date+'\n'+
+    'Platform: '+plat+'\n\n'+
+    'The posts, in order. Each line is the date and the job that post does:\n'+
+    slots.map(function(sl,i){return (i+1)+'. '+sl.date+' - '+PROMO_JOB_LABEL[sl.job]+': '+jobHelp[sl.job];}).join('\n')+'\n\n'+
+    'Return JSON in exactly this shape:\n'+
+    '{"person":"who this offer is for, one short line","situation":"what is going on for them right now, one short line","change":"what changes once they have this, one short line","posts":[{"title":"a short working title, under 60 characters","format":"one of: Caption / Post, Carousel, Reel / Video, Story","hook":"the opening line of the post"}]}\n\n'+
+    'Rules: posts must have exactly '+slots.length+' items in the same order as the list above. Every post takes a different angle, no repeats. If the brand profile includes what their clients say when they are stuck, build the Name the problem hooks from those words. If it includes what clients wish for, use that in the Make the ask post. Favor formats that are quick to make. Titles are plain labels for the creator, not headlines. No em dashes.';
+  var result=await cdCallAI(sys,usr,400+slots.length*200);
+  loading.classList.remove('show');
+  _promo.busy=false;
+  if(!result){
+    // Nothing came back (credits, timeout). cdCallAI already said why.
+    promoShowStep(3);return;
+  }
+  S.aiCount=(S.aiCount||0)+1;
+  var plan=promoParsePlan(result,slots);
+  if(!plan){plan=promoFallbackPlan(slots);toast('The titles came back scrambled, so these are plain ones. The dates and jobs are right.');}
+  _promo.plan=plan;
+  persist();
+  promoRenderPreview();
+  promoShowStep(4);
+}
+function promoRenderPreview(){
+  var preview=document.getElementById('promoPreview');
+  var plan=_promo.plan,slots=_promo.slots||[];
+  if(!preview||!plan)return;
+  var html='';
+  if(slots.length<_promo.count){
+    html+='<div class="promo-hint">That date is close, so this is '+slots.length+' post'+(slots.length===1?'':'s')+' instead of '+_promo.count+'. One a day, nothing stacked.</div>';
+  }
+  html+=plan.posts.map(function(p,i){
+    var sl=slots[i];
+    var dt=new Date(sl.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    return '<div class="promo-row"><div class="promo-row-top"><span class="promo-row-date">'+dt+'</span><span>'+esc(PROMO_JOB_LABEL[sl.job])+'</span><span>'+esc(p.format==='Caption / Post'?'Post':p.format.split(' / ')[0])+'</span></div>'+
+      '<div class="promo-row-title">'+esc(p.title)+'</div>'+
+      (p.hook?'<div class="promo-row-hook">'+esc(p.hook)+'</div>':'')+'</div>';
+  }).join('');
+  html+='<div class="promo-hint" style="margin:12px 0 0">These land as content cards in Ideas. Nothing is written for you yet. Open any card to write it your way or get help.</div>';
+  preview.innerHTML=html;
+}
+function promoAddToCalendar(){
+  var plan=_promo.plan,slots=_promo.slots||[];
+  if(!plan||!slots.length)return;
+  var plat=promoPlatform();
+  var base=Date.now();
+  var now=new Date().toISOString();
+  plan.posts.forEach(function(p,i){
+    var sl=slots[i];
+    var id=(base+i).toString();
+    var notes='This post\'s job: '+PROMO_JOB_LABEL[sl.job]+'.'+(p.hook?'\nHook idea: '+p.hook:'');
+    S.ideas.push({id:id,title:p.title,platform:plat,format:p.format,genLength:'standard',
+      offerName:_promo.offer,offerPerson:plan.person,offerSituation:plan.situation,offerChange:plan.change,offerAngle:sl.job,
+      notes:notes,hook:'',date:sl.date,time:'',images:[],status:'idea',ownContent:'',reminder:false,bucket:'',perfNote:'',
+      aiOutputs:{},aiHookSel:'',cdTasks:[],promo:_promo.offer,updatedAt:now});
+    S.calEntries.push({id:'cal_'+id,title:p.title,platform:plat,status:'idea',date:sl.date,time:'',notes:notes});
+  });
+  S.gs.ideaAdded=true;
+  var n=plan.posts.length;
+  _promo.plan=null;
+  persist();renderKanban();renderCalendar();renderBucketInsights();renderDashboard();
+  closeModal('promoModal');
+  toast(n+' post'+(n===1?'':'s')+' added to your planner and calendar ✓');
+}
+
 function openCalPicker(){
   openModal('calPickerModal');
 }
