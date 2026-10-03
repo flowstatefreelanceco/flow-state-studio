@@ -2745,6 +2745,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="dc-chip" data-playbook="cadence" onclick="dirChatFillStrategyExample(this)">Ask when's the best time to post or send something</div>
             <div class="dc-chip" data-playbook="launch" onclick="dirChatFillStrategyExample(this)">Help me sequence a launch</div>
             <div class="dc-chip" data-playbook="platform" onclick="dirChatFillStrategyExample(this)">Help me decide which platform to focus on</div>
+            <div class="dc-chip" data-playbook="hookcheck" onclick="dirChatFillStrategyExample(this)">Check my first line</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rework something you're already creating in the Studio</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rewrite something for another business or offer</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Shift the tone of a piece you're already working on</div>
@@ -9746,6 +9747,11 @@ function dirChatSystemPrompt(playbookLock){
     "INCOMPLETE MESSAGES: If someone refers to content they appear to have forgotten to paste (e.g. 'can you rework this' with nothing attached), respond briefly asking them to share it. Something like 'paste it in and I will take a look' is enough. Do not fill the gap with strategy.\n\n"+
     "RESPONSE SHAPE: Every reply should read like a person talking, not a list of parts. Open with a line that responds directly to what they said. Then do the work. When you give advice, say why in a sentence so it lands as judgment, not a rule. When you rewrite something, give the rewrite first, then one short line on what you changed and why, unless they asked for just the copy. End with a natural close: the next step, or one short question if you genuinely need more from them. Never stop abruptly after a list.\n\n"+
     "Keep responses focused and in plain text (no markdown headers).";
+  // "Check my first line" quick-pick: same check the Hooks pill runs on a
+  // card, for a line pasted straight into chat with no card needed.
+  if(playbookLock==='hookcheck'){
+    sys+="\n\nThe person just clicked the quick-pick 'Check my first line'. Treat what they pasted as the first line of a post. If they pasted a whole draft, work on the first line only. For this one reply, use exactly this shape in plain text and nothing else. Check: one kind, plain sentence on whether the line is specific to this post or could sit on anyone's post, naming the one word or detail that makes it general. If it is already specific, say so and say why. Three ways in: three numbered rewrites of the same idea, one line each. 1 says the problem the way their audience would say it out loud to a friend, built from their clients' own stuck words if those are in the profile below. 2 opens inside one specific moment or detail. 3 leads with what the audience wants instead, built from what their clients wish for if that is in the profile. I'd go with: the number you would pick and one short reason. Each rewrite sounds like a person talking, not a course module title. Keep their voice. Never invent a number, a result, or a quote, use a square bracket placeholder instead. No explanation of how hooks work. If nothing was pasted after the colon, just ask them to paste the line.";
+  }
   if(playbookLock==='cadence'||playbookLock==='launch'||playbookLock==='platform'){
     var lockNames={cadence:'POSTING CADENCE / TIMING',launch:'LAUNCH SEQUENCING',platform:'PLATFORM PRIORITIZATION'};
     sys+="\n\nThe person just clicked a quick-pick for this exact category: "+lockNames[playbookLock]+". Treat this message as that category with certainty, skip the detection step, apply that playbook directly even if the wording is brief or doesn't spell it out explicitly.";
@@ -10356,7 +10362,8 @@ var DC_PROMPT_LIBRARY=[
   {cat:'Repurposing',title:'Caption to Email',text:'Turn this Instagram caption into a short email for my list. Keep the warmth and voice. Add a subject line. [PASTE CAPTION]'},
   {cat:'Repurposing',title:'Reel Script to Caption',text:'Turn this reel script into an Instagram caption. Keep the hook. Tighten it up for text. [PASTE SCRIPT]'},
   {cat:'Repurposing',title:'Long to Short',text:'Condense this long-form content into a punchy 3-5 slide carousel. One idea per slide. [PASTE CONTENT]'},
-  {cat:'Repurposing',title:'One Idea, Many Formats',text:'I have this one piece of content or idea: [DESCRIBE]. Help me turn it into 3 different formats for 3 different platforms. Keep the core message, adapt the delivery.'}
+  {cat:'Repurposing',title:'One Idea, Many Formats',text:'I have this one piece of content or idea: [DESCRIBE]. Help me turn it into 3 different formats for 3 different platforms. Keep the core message, adapt the delivery.'},
+  {cat:'Hooks',title:'Check My First Line',text:'Check this first line: [PASTE YOUR FIRST LINE]. Tell me in one sentence if it is specific to this post or could sit on anyone\'s post. Then give me 3 other ways in: one in my clients\' own words, one that opens in a specific moment, and one that leads with what they want. Tell me which one you would pick and why.'}
 ];
 
 var _dcPlActiveCat='All';
