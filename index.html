@@ -4314,7 +4314,11 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       <textarea class="fi" id="taskNotes" style="min-height:80px;font-size:14px;line-height:1.7" placeholder="Context, links, random thoughts, blockers, anything..."></textarea>
     </div>
 
-    <div class="m-acts"><button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button></div>
+    <div class="m-acts">
+      <button class="btn btn-g" onclick="closeModal('taskModal')">Cancel</button>
+      <button class="btn btn-g" id="taskDeleteBtn" style="display:none;border-color:var(--r);color:var(--r)" onclick="deleteTaskFromModal()">Delete</button>
+      <button class="btn btn-p" id="taskSaveBtn" onclick="saveTask()">Add Task</button>
+    </div>
   </div>
 </div>
 
@@ -7530,12 +7534,35 @@ function openTaskEditModal(id){
   renderTaskSubsteps();
   const btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Save Changes';
   const mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='✅ Edit Task';
+  const delBtn=document.getElementById('taskDeleteBtn');if(delBtn)delBtn.style.display='inline-flex';
   const cardLink=document.getElementById('taskCardLink');
   if(cardLink){
-    if(t._ideaId){cardLink.style.display='block';cardLink.onclick=function(){closeModal('taskModal');cdOpen(t._ideaId);};}
-    else{cardLink.style.display='none';}
+    // The card a task was created from can be deleted on its own, so check
+    // it still exists before offering to open it - otherwise this link did
+    // nothing and left no way to tell the task apart from a normal one.
+    if(t._ideaId && S.ideas.some(function(i){return i.id===t._ideaId;})){
+      cardLink.style.display='block';
+      cardLink.textContent='↗ View linked Content Card';
+      cardLink.style.cursor='pointer';
+      cardLink.onclick=function(){closeModal('taskModal');cdOpen(t._ideaId);};
+    } else if(t._ideaId){
+      cardLink.style.display='block';
+      cardLink.textContent='The content card this came from was deleted.';
+      cardLink.style.cursor='default';
+      cardLink.onclick=null;
+    } else {
+      cardLink.style.display='none';
+    }
   }
   openModal('taskModal');
+}
+function deleteTaskFromModal(){
+  const id=S._editingTaskId;
+  if(!id)return;
+  if(!confirm('Delete this task? This can\'t be undone.'))return;
+  deleteTask(id);
+  closeModal('taskModal');
+  toast('Task deleted');
 }
 var _taskSubsteps = [];
 var _taskStarred = false;
@@ -7584,6 +7611,8 @@ function openTaskModal(status){
   renderTaskSubsteps();
   var btn=document.getElementById('taskSaveBtn');if(btn)btn.textContent='Add Task';
   var mt=document.getElementById('taskModalTitle');if(mt)mt.textContent='✅ Add Task';
+  // Nothing saved yet on a brand new task, so there's nothing to delete.
+  var delBtn=document.getElementById('taskDeleteBtn');if(delBtn)delBtn.style.display='none';
   openModal('taskModal');
 }
 function saveTask(){
