@@ -11,12 +11,19 @@
 //                                   on other sites, so they come through here.
 //
 // Keys live in Vercel environment variables, never in index.html:
-//   APIFY_TOKEN        (new, from apify.com)
-//   ANTHROPIC_API_KEY  (already set, same one /api/generate uses)
+//   APIFY_TOKEN                (from apify.com)
+//   ANTHROPIC_API_KEY          (same one /api/generate uses)
+//   SUPABASE_SERVICE_ROLE_KEY  (same one /api/generate uses for credits)
+//
+// Credits: finding a post costs one AI credit, charged here on the server
+// with the same fss_* database functions /api/generate uses, and refunded
+// if the post cannot be read. Reading slides and loading preview images
+// ride on that one credit.
 
 export const config = { maxDuration: 60 };
 
-const SUPABASE_URL = 'https://cucxwgmsatzlsgzhwghy.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cucxwgmsatzlsgzhwghy.supabase.co';
+const SERVICE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
 const APIFY_ACTOR = 'apify~instagram-scraper';
 const VISION_MODEL = 'claude-sonnet-5';
 const MAX_SLIDES = 20;
@@ -29,7 +36,7 @@ const IG_HOST = /(^|\.)instagram\.com$/i;
 const IG_CDN = /(^|\.)(cdninstagram\.com|fbcdn\.net)$/i;
 
 function send(res, status, body) { return res.status(status).json(body); }
-function fail(res, status, code, message) { return send(res, status, { error: { code: code, message: message } }); }
+function fail(res, status, code, message, extra) { return send(res, status, Object.assign({ error: { code: code, message: message }, code: code }, extra || {})); }
 
 function timedFetch(url, options, ms) {
   const controller = new AbortController();
@@ -55,16 +62,31 @@ function parsePublicUrl(raw) {
   return u;
 }
 
-async function isSignedIn(req) {
+// Returns the signed-in user, or null.
+async function getUser(req) {
   const auth = req.headers.authorization || '';
-  const apikey = req.headers.apikey || '';
-  if (!auth.startsWith('Bearer ') || !apikey) return false;
+  const apikey = req.headers.apikey || process.env.SUPABASE_ANON_KEY || '';
+  if (!auth.startsWith('Bearer ') || !apikey) return null;
   try {
     const r = await timedFetch(SUPABASE_URL + '/auth/v1/user', { headers: { Authorization: auth, apikey: apikey } }, 8000);
-    if (!r.ok) return false;
+    if (!r.ok) return null;
     const u = await r.json();
-    return !!(u && u.id);
-  } catch (e) { return false; }
+    return (u && u.id) ? u : null;
+  } catch (e) { return null; }
+}
+
+// Calls one of the fss_* credit functions in the database as the service role.
+async function rpc(name, args) {
+  const r = await timedFetch(SUPABASE_URL + '/rest/v1/rpc/' + name, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY },
+    body: JSON.stringify(args)
+  }, 8000);
+  if (!r.ok) throw new Error('credit service ' + name + ' failed: ' + r.status);
+  return r.json();
+}
+function creditInfo(c, used) {
+  return { used: c.unlimited ? 0 : (used != null ? used : c.used), limit: c.credit_limit, cycle_start: c.cycle_start, unlimited: !!c.unlimited, charged: !c.unlimited };
 }
 
 /* ---------- Instagram ---------- */
@@ -245,7 +267,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return fail(res, 405, 'method', 'Method not allowed');
   try {
-    if (!(await isSignedIn(req))) return fail(res, 401, 'signed_out', 'Your session expired. Refresh the page and log back in.');
+    const user = await getUser(req);
+    if (!user) return fail(res, 401, 'signed_out', 'Your session expired. Refresh the page and log back in.');
     const body = (req.body && typeof req.body === 'object') ? req.body : {};
     let out;
     if (body.action === 'read') {
@@ -255,7 +278,31 @@ export default async function handler(req, res) {
     } else {
       const u = parsePublicUrl(body.url);
       if (!u) return fail(res, 400, 'bad_link', 'That does not look like a link. It should start with https://');
-      out = IG_HOST.test(u.hostname) ? await fetchInstagram(u) : await fetchPage(u);
+      // One credit, charged up front and handed back if the post cannot be read.
+      let credit = null, charged = false;
+      if (SERVICE_KEY) {
+        try {
+          const rows = await rpc('fss_consume_credit', { p_user: user.id, p_anchor: user.created_at || null });
+          credit = Array.isArray(rows) ? rows[0] : rows;
+          if (!credit) throw new Error('credit service returned nothing');
+        } catch (e) {
+          // Fail closed, the same as /api/generate.
+          return fail(res, 503, 'credits_down', 'Credits could not be checked right now. Nothing was used, try again in a minute.');
+        }
+        if (credit.plan === 'locked') return fail(res, 403, 'locked', 'Your plan is not active right now. Head to Settings to pick one back up.');
+        if (!credit.ok) return fail(res, 402, 'out_of_credits', 'You have used all your credits for this cycle.', { fss: { used: credit.used, limit: credit.credit_limit, cycle_start: credit.cycle_start, unlimited: false } });
+        charged = !credit.unlimited;
+      }
+      try {
+        out = IG_HOST.test(u.hostname) ? await fetchInstagram(u) : await fetchPage(u);
+      } catch (e) {
+        out = { status: 500, code: 'server', message: 'Something went wrong reading that link.' };
+      }
+      if (out.status === 200) {
+        if (credit) out.body.fss = creditInfo(credit);
+      } else if (charged) {
+        try { await rpc('fss_refund_credit', { p_user: user.id }); } catch (e) { /* nothing more to do */ }
+      }
     }
     if (out.status === 200) return send(res, 200, out.body);
     return fail(res, out.status, out.code, out.message);
