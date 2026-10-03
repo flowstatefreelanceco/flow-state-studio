@@ -9031,6 +9031,11 @@ async function cdFetchCall(body){
   var r=await fetchWithTimeout('/api/fetch-post',{method:'POST',headers:headers,body:JSON.stringify(body)},70000);
   var d=await r.json().catch(function(){return null;});
   if(r.ok&&d&&d.kind)return d;
+  // The server counts credits for link fetching the same way it does for
+  // the other AI tools, so the same two answers can come back.
+  if(d&&d.fss&&_serverCreditsActive)aiSyncCredits(d.fss);
+  if(r.status===402||(d&&d.code==='out_of_credits'))throw aiCreditError('out_of_credits','You are out of AI credits for this cycle.');
+  if(r.status===403&&d&&d.code==='locked')throw aiCreditError('locked',(d.error&&d.error.message)||'Your plan is not active right now');
   var msg=d&&d.error&&d.error.message;
   if(!msg){
     msg=(r.status===404||r.status===405)?'Link fetching is not switched on yet. Paste the words in the box below instead.':'That link could not be read. Paste the words in the box below instead.';
@@ -9158,7 +9163,9 @@ async function cdFetchPost(){
       out=[(post.title||'').trim(),(post.text||'').trim()].filter(Boolean).join('\n\n');
     }
     if(!out)throw new Error('There were no words to read in that post. Paste the words in the box below instead.');
-    consumeCredit();
+    // When the server already charged and reported the real count, show
+    // that. Otherwise count it here like before.
+    if(post.fss&&_serverCreditsActive)aiSyncCredits(post.fss); else consumeCredit();
     S.aiCount=(S.aiCount||0)+1;
     // Save onto the card first, by id, so the words are kept even if the
     // card was closed or another one was opened while this was running.
@@ -9182,7 +9189,8 @@ async function cdFetchPost(){
     }
     persist();renderKanban();
   }catch(e){
-    var m=e&&e.name==='AbortError'?'That took too long. No credit was used. Try again, or paste the words in the box below instead.':((e&&e.message)||'That link could not be read. Paste the words in the box below instead.');
+    if(e&&e.code==='out_of_credits')showCreditBlocked();
+    var m=e&&e.name==='AbortError'?'That took too long. Try again, or paste the words in the box below instead.':((e&&e.message)||'That link could not be read. Paste the words in the box below instead.');
     if(stillHere())cdFetchStatus(m,true); else toast(m);
   }finally{
     _cdFetching=false;
