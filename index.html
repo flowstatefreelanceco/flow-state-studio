@@ -840,6 +840,9 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-pane-write,.cd-pane-ai{max-width:760px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
 .cd-pane-write>.cd-analog-sec>.card-section-toggle-hdr,.cd-pane-ai>.cd-bridge-sec>.card-section-toggle-hdr{display:none}
 .cd-pane-write>.cd-analog-sec>.card-section-toggle-body,.cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body{display:block}
+.cd-promo-link{display:block;width:100%;text-align:left;background:var(--gp);border:1px dashed #D4B98A;border-radius:var(--rsm);padding:9px 12px;font-family:var(--fb);font-size:12px;line-height:1.5;color:var(--el);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cd-promo-link:hover{border-color:var(--r);background:var(--rp)}
+.cd-promo-link strong{color:var(--e)}
 .cd-d-main,.cd-d-sidecol{display:flex;flex-direction:column;gap:14px;min-width:0}
 /* ═══ CONTENT CARD ON A WIDE SCREEN ═══
    The card used to be one 760px column in the middle of a full width
@@ -4652,6 +4655,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             </div>
           </div>
         </div>
+        <button type="button" class="cd-promo-link" onclick="cdOpenPromoFromCard()"><strong>Selling this for a few weeks?</strong> Create a promo plan. It saves this card, asks 3 questions, and gives you a short run of posts for your offer.</button>
         </div>
         <div class="cd-d-sidecol">
         <!-- GROUP: SCHEDULING -->
@@ -12156,6 +12160,20 @@ function promoLoadDraft(){
     if(!d.slots.length||d.slots[0].date<promoYMD(promoToday()))return null;
     return d;
   }catch(e){return null;}
+}
+// From a content card: save the card, then open the promo planner with the
+// offer already filled in if they typed one on the card.
+function cdOpenPromoFromCard(){
+  var offerEl=document.getElementById('cdOfferName');
+  var offer=offerEl?offerEl.value.trim():'';
+  try{cdSaveOrAdd({quiet:true});}catch(e){}
+  // An empty new card has nothing to save and stays open, so close it here.
+  var m=document.getElementById('cardDetailModal');
+  if(m&&m.classList.contains('open')){S.cdId=null;closeModal('cardDetailModal');}
+  openPromoPlanner();
+  if(offer&&_promo.step===1){
+    document.getElementById('promoOffer').value=offer.slice(0,80);
+  }
 }
 function openPromoPlanner(){
   if(_promo.busy){openModal('promoModal');return;}
