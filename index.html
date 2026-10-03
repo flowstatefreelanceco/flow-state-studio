@@ -794,6 +794,15 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-guide.details{background:var(--rp);border-color:rgba(179,108,55,.25);border-left-color:var(--r)}
 .cd-guide.write{background:var(--tealp);border-color:rgba(0,132,132,.2);border-left-color:var(--teal)}
 .cd-guide.ai{background:linear-gradient(135deg,#F7E6DC,#F3DDD2);border-color:rgba(140,58,38,.2);border-left-color:var(--el)}
+.cd-rp-fetch{background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);padding:11px 12px;margin-bottom:12px}
+.cd-rp-fetch-row{display:flex;gap:6px;align-items:stretch}
+.cd-rp-fetch-row .fi{flex:1;min-width:0;font-size:13px}
+.cd-rp-fetch-row .btn{flex-shrink:0;font-size:12.5px;padding:8px 14px;white-space:nowrap}
+.cd-rp-fetch-status{display:none;font-size:12px;line-height:1.5;margin-top:8px;padding:8px 10px;border-radius:var(--rsm);background:var(--tealp);color:var(--teal)}
+.cd-rp-fetch-status.show{display:block}
+.cd-rp-fetch-status.err{background:var(--rp);color:var(--el)}
+.cd-rp-fetch-hint{font-size:11.5px;color:var(--tl);line-height:1.5;margin-top:8px}
+@media(max-width:600px){.cd-rp-fetch-row{flex-direction:column}}
 .cd-guide-steps{margin:5px 0 6px 18px;padding:0;font-size:12.5px;color:var(--em);line-height:1.55}
 .cd-guide-steps li{margin-bottom:2px}
 .cd-guide-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px}
@@ -4714,7 +4723,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <button type="button" class="cd-guide-row" onclick="cdGuideGo('variations')"><strong>Variations</strong><span>Writes the same post 3 different ways.</span></button>
             <button type="button" class="cd-guide-row" onclick="cdGuideGo('shrink')"><strong>Shrink</strong><span>Makes a tiny version you can post in 10 minutes.</span></button>
             <button type="button" class="cd-guide-row" onclick="cdGuideGo('series')"><strong>Series</strong><span>Turns this one idea into 5 posts.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('repurpose')"><strong>Rebuild in my voice</strong><span>Paste a post you liked. Get your own version of it.</span></button>
+            <button type="button" class="cd-guide-row" onclick="cdGuideGo('repurpose')"><strong>Rebuild in my voice</strong><span>Paste the link to a post you liked. Get your own version of it.</span></button>
           </div>
           <div class="cd-guide-text" style="margin-top:8px">When the result shows up, tap <strong>Copy</strong> or <strong>Save Draft</strong> under it.</div></div>
         </div>
@@ -4852,7 +4861,18 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
             <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:14px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
-              Paste any post you saw anywhere. The Creative Director rebuilds it in your voice for your niche. Different topic, same energy.
+              Found a post you like? Paste its link below and tap <strong>Get post</strong>, or paste the words yourself. The Creative Director rebuilds it in your voice for your niche. Different topic, same energy.
+            </div>
+
+            <!-- Fetch from a link -->
+            <div class="cd-rp-fetch">
+              <label class="fl-lbl" for="cdRpUrl" style="font-size:11px">Paste the link to the post</label>
+              <div class="cd-rp-fetch-row">
+                <input class="fi" id="cdRpUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://www.instagram.com/p/..." onkeydown="if(event.key==='Enter'){event.preventDefault();cdFetchPost();}" />
+                <button type="button" class="btn btn-p" id="cdRpFetchBtn" onclick="cdFetchPost()">Get post</button>
+              </div>
+              <div class="cd-rp-fetch-status" id="cdRpFetchStatus"></div>
+              <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. The words from the post land in the box below, so you never type out slides. Uses 1 AI credit. On Instagram: open the post, tap the three dots, tap Copy link.</div>
             </div>
 
             <!-- Input -->
@@ -4862,7 +4882,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                 <option value="LinkedIn">From LinkedIn</option><option value="a blog">From a blog</option>
                 <option value="a newsletter">From a newsletter</option><option value="somewhere">From somewhere</option>
               </select>
-              <textarea class="ai2-input" id="cdRpText" placeholder="Paste the post, caption, or article here. For carousels, paste each slide on a new line..." style="min-height:70px"></textarea>
+              <textarea class="ai2-input" id="cdRpText" placeholder="The words from the post show up here after you tap Get post. No link? Paste the post, caption, or article here. For carousels, paste each slide on a new line..." style="min-height:70px"></textarea>
             </div>
 
             <!-- Output target -->
@@ -7670,6 +7690,8 @@ function openIdeaModal(status){
   var seriesListNew=document.getElementById('cd-series-list');if(seriesListNew){seriesListNew.innerHTML='';seriesListNew.classList.remove('show');}
   document.querySelectorAll('#cardDetailModal .ai2-tone-chip').forEach(function(c){c.classList.toggle('sel',c.dataset.t==='warm');});
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
+  var rpUrl=document.getElementById('cdRpUrl');if(rpUrl)rpUrl.value='';
+  cdFetchStatus('');
   var sbs=document.getElementById('cd-repurpose-sidebyside');if(sbs)sbs.classList.remove('show');
   var rebuildBtn=document.getElementById('cd-rebuild-btn');if(rebuildBtn)rebuildBtn.style.display='none';
   var analysisOut=document.getElementById('cd-analysis-out');if(analysisOut)analysisOut.textContent='';
@@ -8570,6 +8592,8 @@ function cdOpen(id){
   document.querySelectorAll('#cardDetailModal .ai2-tone-chip').forEach(function(c){c.classList.toggle('sel',c.dataset.t==='warm');});
   var sbOut=document.getElementById('cd-smartBrief-out');if(sbOut){sbOut.textContent='';sbOut.classList.remove('show');}
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
+  var rpUrl=document.getElementById('cdRpUrl');if(rpUrl)rpUrl.value='';
+  cdFetchStatus('');
 
   // Restore own content
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
@@ -8863,6 +8887,91 @@ function cdGetBrief(){
   var combined=own&&notesBlock?notesBlock+'\n\n---\nMy own draft:\n'+own:own||notesBlock;
   var fullBrief=(g('cdTitle')+(combined?'\n'+combined:''));
   return{title:g('cdTitle'),hook:hook,notes:combined,ownContent:own,plat:g('cdPlat')||'instagram',fmt:g('cdFormat')||'Caption / Post',format:g('cdFormat')||'Caption / Post',brief:fullBrief};
+}
+
+/* ═══ FETCH A POST FROM A LINK ═══
+   Sends the link to /api/fetch-post, which reads the post on the server
+   (keys never touch this file). Instagram carousels take a second call
+   that reads the words off each slide image. The result goes into the
+   Rebuild box exactly as if the person had pasted it. */
+var _cdFetching=false;
+function cdFetchStatus(msg,isErr){
+  var el=document.getElementById('cdRpFetchStatus');
+  if(!el)return;
+  el.textContent=msg||'';
+  el.classList.toggle('show',!!msg);
+  el.classList.toggle('err',!!isErr);
+}
+async function cdFetchCall(body){
+  var headers=await aiAuthHeaders();
+  headers.apikey=SKEY;
+  var r=await fetchWithTimeout('/api/fetch-post',{method:'POST',headers:headers,body:JSON.stringify(body)},70000);
+  var d=await r.json().catch(function(){return null;});
+  if(r.ok&&d&&d.kind)return d;
+  var msg=d&&d.error&&d.error.message;
+  if(!msg){
+    msg=(r.status===404||r.status===405)?'Link fetching is not switched on yet. Paste the words in the box below instead.':'That link could not be read. Paste the words in the box below instead.';
+  }
+  throw new Error(msg);
+}
+async function cdFetchPost(){
+  if(_cdFetching)return;
+  var input=document.getElementById('cdRpUrl');
+  var btn=document.getElementById('cdRpFetchBtn');
+  var url=input?input.value.trim():'';
+  if(!url){cdFetchStatus('Paste a link in the box first.',true);if(input)input.focus();return;}
+  if(!/^https?:\/\//i.test(url))url='https://'+url;
+  checkCreditReset();
+  if(!canUseAI()){showCreditBlocked();return;}
+  var targetCardId=S.cdId;
+  _cdFetching=true;
+  if(btn){btn.disabled=true;btn.textContent='Getting it...';}
+  cdFetchStatus('Getting the post. This can take up to a minute.');
+  var out='',note='',fromPlat='';
+  try{
+    var post=await cdFetchCall({url:url});
+    if(post.kind==='instagram'){
+      fromPlat='Instagram';
+      var slideText='';
+      if(post.slides&&post.slides.length){
+        var n=post.slides.length;
+        cdFetchStatus('Got the post. Reading the words on '+n+' slide'+(n===1?'':'s')+'...');
+        try{
+          var read=await cdFetchCall({action:'read',images:post.slides});
+          slideText=(read.text||'').trim();
+          if(read.read<read.total)note=' '+(read.total-read.read)+' slide'+(read.total-read.read===1?'':'s')+' would not load, so check the box.';
+        }catch(e){
+          note=' The slides could not be read, so only the caption is there.';
+        }
+      }
+      if(post.isVideo)note=' This post is a video, so only the caption could be read.';
+      var cap=(post.caption||'').trim();
+      out=[slideText,cap?'Caption:\n'+cap:''].filter(Boolean).join('\n\n');
+    } else {
+      fromPlat='a blog';
+      out=[(post.title||'').trim(),(post.text||'').trim()].filter(Boolean).join('\n\n');
+    }
+    if(!out)throw new Error('There were no words to read in that post. Paste the words in the box below instead.');
+    consumeCredit();
+    S.aiCount=(S.aiCount||0)+1;
+    // Only fill the box if the person is still on the card they started from.
+    if(S.cdId===targetCardId){
+      var ta=document.getElementById('cdRpText');
+      if(ta){ta.value=out;ta.dispatchEvent(new Event('input',{bubbles:true}));}
+      var sel=document.getElementById('cdRpPlat');
+      if(sel&&fromPlat)sel.value=fromPlat;
+      cdFetchStatus('Done. The words from the post are in the box below.'+note+' Next: tap Analyze Only or Autopsy + Rebuild.');
+    }
+    var card=S.ideas.find(function(a){return a.id===targetCardId;});
+    if(card){card.repurposeSourceText=out;card.updatedAt=new Date().toISOString();}
+    persist();
+  }catch(e){
+    var m=e&&e.name==='AbortError'?'That took too long. Try again, or paste the words in the box below instead.':((e&&e.message)||'That link could not be read. Paste the words in the box below instead.');
+    cdFetchStatus(m,true);
+  }finally{
+    _cdFetching=false;
+    if(btn){btn.disabled=false;btn.textContent='Get post';}
+  }
 }
 
 /* ═══ SWIPE FILE ═══ */
