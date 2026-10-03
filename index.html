@@ -463,8 +463,33 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .w-step-body p{font-size:12.5px;color:var(--t);line-height:1.6}
 
 /* SETTINGS */
-.setting-sec{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:26px;margin-bottom:16px;box-shadow:0 1px 4px var(--sh)}
-.setting-sec h3{font-family:var(--fh);font-size:24px;font-weight:600;margin-bottom:4px;color:var(--e)}
+.setting-sec{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);padding:0;margin-bottom:10px;box-shadow:0 1px 4px var(--sh);max-width:820px;overflow:hidden}
+#view-settings .cd-guide,#view-settings .ss-group{max-width:820px}
+.ss-group{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--el);margin:20px 2px 8px}
+.ss-hdr{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:13px 16px;cursor:pointer;text-align:left;font-family:var(--fb);-webkit-tap-highlight-color:transparent}
+.ss-hdr:hover{background:var(--p)}
+.ss-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:var(--bl);color:var(--e)}
+.ss-brand .ss-ico{background:var(--rp)}
+.ss-plan .ss-ico{background:var(--tealp);color:var(--teal)}
+.ss-hdr-txt{flex:1;min-width:0}
+.ss-title{display:block;font-size:14.5px;font-weight:700;color:var(--e);line-height:1.3}
+.ss-sub{display:block;font-size:12px;color:var(--t);line-height:1.4;margin-top:1px}
+.ss-chev{font-size:17px;color:var(--tl);flex-shrink:0;width:16px;text-align:center}
+.ss-body{display:none;padding:4px 18px 18px;border-top:1px solid var(--bl)}
+.setting-sec.open .ss-body{display:block}
+.setting-sec.open .ss-hdr{background:var(--p)}
+.ss-body>.setting-desc{margin-top:12px}
+.ss-step{display:flex;align-items:center;gap:8px;margin:18px 0 12px;padding-bottom:7px;border-bottom:1px dashed var(--b)}
+.ss-step-n{width:20px;height:20px;border-radius:50%;background:var(--r);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ss-step-t{font-size:13px;font-weight:700;color:var(--e)}
+.ss-step-h{font-size:11.5px;color:var(--tl)}
+.ss-step-ok{margin-left:auto;font-size:11px;font-weight:700;color:var(--teal);background:var(--tealp);border-radius:100px;padding:2px 9px;display:none}
+.ss-step.done .ss-step-ok{display:inline-block}
+.ss-step.done .ss-step-n{background:var(--teal)}
+.setting-sec .fl{margin-bottom:12px}
+.setting-sec .btn{font-size:12.5px}
+@media(max-width:600px){#upgradeOptions{grid-template-columns:1fr !important}.ss-step-h{display:none}}
+.setting-sec h3{font-family:var(--fh);font-size:16px;font-weight:600;margin-bottom:4px;color:var(--e)}
 .setting-desc{font-size:12.5px;color:var(--t);margin-bottom:16px;line-height:1.65}
 .setting-desc a{color:var(--r);text-decoration:none}
 .setting-desc a:hover{text-decoration:underline}
@@ -751,6 +776,22 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .cd-tab-sub{display:block;font-size:11px;font-weight:500;margin-top:2px;line-height:1.3}
 .cd-tab.active{color:var(--e);border-bottom-color:var(--teal);background:var(--p)}
 .cd-tab.active .cd-tab-sub{color:var(--t)}
+.cd-tab[data-tab="details"].active{border-bottom-color:var(--r);background:var(--rp)}
+.cd-tab[data-tab="write"].active{border-bottom-color:var(--teal);background:var(--tealp)}
+.cd-tab[data-tab="ai"].active{border-bottom-color:var(--el);background:#F3DDD2}
+.cd-guide{display:flex;gap:12px;align-items:flex-start;border-radius:var(--rad);padding:12px 14px;border:1px solid transparent;border-left-width:4px}
+.cd-guide-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:var(--w)}
+.cd-guide-title{font-family:var(--fh);font-size:15px;font-weight:600;color:var(--e);line-height:1.3}
+.cd-guide-text{font-size:12.5px;color:var(--em);line-height:1.55;margin-top:2px}
+.cd-guide.details{background:var(--rp);border-color:rgba(179,108,55,.25);border-left-color:var(--r)}
+.cd-guide.write{background:var(--tealp);border-color:rgba(0,132,132,.2);border-left-color:var(--teal)}
+.cd-guide.ai{background:linear-gradient(135deg,#F7E6DC,#F3DDD2);border-color:rgba(140,58,38,.2);border-left-color:var(--el)}
+.cd-guide-picks{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.cd-guide-pick{background:var(--w);border:1px solid rgba(140,58,38,.25);border-radius:100px;padding:5px 11px;font-family:var(--fb);font-size:11.5px;color:var(--e);cursor:pointer;line-height:1.3;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s}
+.cd-guide-pick:hover{border-color:var(--el);background:var(--p)}
+.cd-guide-pick strong{color:var(--el);font-weight:700}
+.cd-flash{animation:cdFlash 1.2s ease}
+@keyframes cdFlash{0%{box-shadow:0 0 0 3px rgba(179,108,55,.55)}100%{box-shadow:0 0 0 3px rgba(179,108,55,0)}}
 .cd-tab-dot{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--r);display:none}
 .cd-tab.has-new .cd-tab-dot{display:block}
 .cd2-wrap[data-tab="details"] .cd2-right{display:none}
@@ -2977,12 +3018,83 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   <div id="view-settings" class="view">
     <div class="main-hdr"><div><h1>Settings</h1><div class="sub">Customize your workspace</div></div></div>
     <div class="main-body">
-      <div class="setting-sec"><h3>AI</h3><div class="info-b" style="background:var(--tealp);border-color:var(--teal);color:var(--teal)">AI is powered by Flow State Studio ✦ No setup needed.</div></div>
+      <div class="cd-guide details" style="margin-bottom:18px">
+        <div class="cd-guide-ico">🧭</div>
+        <div><div class="cd-guide-title">Start with your Brand Profile</div>
+        <div class="cd-guide-text">It is the one thing here that changes how everything sounds. The rest can wait until you need it.</div></div>
+      </div>
+      <div class="ss-group">Make it sound like you</div>
+      <div class="setting-sec ss-brand open">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="true"><span class="ss-ico">🎨</span><span class="ss-hdr-txt"><span class="ss-title">Brand Profile</span><span class="ss-sub">Who you are, who you help, how you sound</span></span><span class="ss-chev">-</span></button>
+        <div class="ss-body">
 
-      <!-- MEMBERSHIP / UPGRADE -->
-      <div class="setting-sec" id="membershipSection">
-        <h3>Membership</h3>
-        <p class="setting-desc">Your current plan and usage this month.</p>
+        <p class="setting-desc">Fill this in once and every AI tool writes as <em>you</em>. Three small steps. Do one now and come back for the rest.</p>
+        <div class="ss-step" id="bpStep1"><span class="ss-step-n">1</span><span class="ss-step-t">You</span><span class="ss-step-h">Who is writing</span><span class="ss-step-ok">✓</span></div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Your Name</label><input class="fi" id="bpName" placeholder="e.g. Jess" /></div>
+          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. business coaching for creative entrepreneurs" /></div>
+          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Business Coach and Brand Strategist" /></div>
+        </div>
+        <div class="ss-step" id="bpStep2"><span class="ss-step-n">2</span><span class="ss-step-t">Who you help</span><span class="ss-step-h">And what they say, in their words</span><span class="ss-step-ok">✓</span></div>
+        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. service-based entrepreneurs ready to scale without burning out" /></div>
+        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital courses" /></div>
+        <div class="fl"><label class="fl-lbl">What clients say when they're stuck <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientKeep" placeholder="e.g. I keep starting over every Monday" /></div>
+        <div class="fl"><label class="fl-lbl">What clients say they wish for <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientWish" placeholder="e.g. I wish I had one place for everything" />
+          <div style="font-size:11.5px;color:var(--tl);margin-top:6px;line-height:1.5">Use their real words, the way they'd say it in a DM. The Studio builds your hooks and openings from these.</div>
+        </div>
+        <div class="ss-step" id="bpStep3"><span class="ss-step-n">3</span><span class="ss-step-t">How you sound</span><span class="ss-step-h">This one matters most</span><span class="ss-step-ok">✓</span></div>
+        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
+        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
+        <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="bpExtra" style="min-height:56px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
+          <button class="btn btn-g" onclick="copyBrandProfile()" title="Copy everything to clipboard so you can paste it into Claude, ChatGPT, Notion, or anywhere else">Copy Profile to Clipboard</button>
+        </div>
+        <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> Brand Voice matters most. Be specific: "writes like a trusted colleague, direct but warm, short sentences, zero buzzwords."</div>
+        </div>
+      </div>
+      <div class="setting-sec ss-brand">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">🗓️</span><span class="ss-hdr-txt"><span class="ss-title">Strategy &amp; Logistics</span><span class="ss-sub">Platforms, how often you post, what has worked</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
+        <p class="setting-desc">Helps Director Chat answer real questions, like when to post or how often, without asking you first.</p>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Primary Platforms</label><input class="fi" id="bpPlatforms" placeholder="e.g. Instagram, email newsletter" /></div>
+          <div class="fl"><label class="fl-lbl">Posting Frequency</label><input class="fi" id="bpFrequency" placeholder="e.g. 3x/week IG, weekly newsletter" /></div>
+        </div>
+        <div class="two-col">
+          <div class="fl"><label class="fl-lbl">Audience Timezone</label><input class="fi" id="bpTimezone" placeholder="e.g. mostly US Eastern, some UK" /></div>
+          <div class="fl"><label class="fl-lbl">Current Phase / Goal</label><input class="fi" id="bpPhase" placeholder="e.g. building audience, launching a new offer, or staying consistent" /></div>
+        </div>
+        <div class="fl"><label class="fl-lbl">What's Worked Before <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          <textarea class="fi" id="bpWhatWorked" style="min-height:56px" placeholder="Best days/times you've noticed for opens or engagement, formats that overperformed, launches that landed well..."></textarea>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="saveBrandProfile()">Save Strategy Profile</button>
+        </div>
+        <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> No analytics tool hooked up yet, so "What's Worked Before" is how you hand-feed it real signal. Even a rough note like "newsletter opens are always better on Tuesdays" makes a real difference.</div>
+        </div>
+      </div>
+      <div class="setting-sec ss-brand">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">◈</span><span class="ss-hdr-txt"><span class="ss-title">Content Buckets</span><span class="ss-sub">Tags for sorting your content cards</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
+        <p class="setting-desc">Tag content cards by topic or offer to track patterns over time. Add your own buckets to match your business, e.g. Product, 1:1 Offer, Freebie, Personal.</p>
+        <div id="settingsBucketList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px"></div>
+        <div style="display:flex;gap:8px">
+          <input class="fi" id="settingsNewBucket" placeholder="e.g. 1:1 Offer, Freebie, Product..." style="flex:1;font-size:13px" onkeydown="if(event.key==='Enter')addSettingsBucket()" />
+          <button class="btn btn-p" onclick="addSettingsBucket()">Add</button>
+        </div>
+        </div>
+      </div>
+      <div class="ss-group">Your plan</div>
+      <div class="setting-sec ss-plan" id="membershipSection">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">✦</span><span class="ss-hdr-txt"><span class="ss-title">Membership</span><span class="ss-sub">Your plan, credits and billing</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
+        <p class="setting-desc">Your current plan and usage this month. AI is built in, there is nothing to set up.</p>
         <div id="currentPlanDisplay" style="background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px">
           <div>
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t);margin-bottom:3px">Current Plan</div>
@@ -3015,76 +3127,13 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           <button class="btn btn-g" style="width:100%" onclick="openCustomerPortal()">Manage Subscription →</button>
           <div style="font-size:11px;color:var(--tl);margin-top:8px">You keep access until the end of your current billing period. Your subscription price is locked in for as long as it stays active.</div>
         </div>
-      </div>
-      <div class="setting-sec">
-        <h3>Brand Profile</h3>
-        <p class="setting-desc">These fields are automatically woven into every AI generation. The more specific you are, the more on-brand every draft will be. Fill this out once and the Studio will always write as <em>you</em>.</p>
-        <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Your Name</label><input class="fi" id="bpName" placeholder="e.g. Jess" /></div>
-          <div class="fl"><label class="fl-lbl">Your Niche</label><input class="fi" id="bpNiche" placeholder="e.g. business coaching for creative entrepreneurs" /></div>
-          <div class="fl"><label class="fl-lbl">Your Role / Title</label><input class="fi" id="bpRole" placeholder="e.g. Business Coach and Brand Strategist" /></div>
-        </div>
-        <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. service-based entrepreneurs ready to scale without burning out" /></div>
-        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital courses" /></div>
-        <div class="fl"><label class="fl-lbl">What clients say when they're stuck <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientKeep" placeholder="e.g. I keep starting over every Monday" /></div>
-        <div class="fl"><label class="fl-lbl">What clients say they wish for <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientWish" placeholder="e.g. I wish I had one place for everything" />
-          <div style="font-size:11.5px;color:var(--tl);margin-top:6px;line-height:1.5">Use their real words, the way they'd say it in a DM. The Studio builds your hooks and openings from these.</div>
-        </div>
-        <div class="fl"><label class="fl-lbl">Brand Voice</label><input class="fi" id="bpVoice" placeholder="e.g. Warm, grounded, and conversational. No corporate jargon, never pushy" /></div>
-        <div class="fl"><label class="fl-lbl">Your Unique POV</label><input class="fi" id="bpPov" placeholder="e.g. You don't have to hustle to scale. The right systems change everything" /></div>
-        <div class="fl"><label class="fl-lbl">Extra Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="bpExtra" style="min-height:56px" placeholder="Content pillars, things to avoid, client language, past prompts that worked well..."></textarea>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <button class="btn btn-p" onclick="saveBrandProfile()">Save Brand Profile</button>
-          <button class="btn btn-g" onclick="copyBrandProfile()" title="Copy everything to clipboard so you can paste it into Claude, ChatGPT, Notion, or anywhere else">Copy Profile to Clipboard</button>
-        </div>
-        <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> Brand Voice matters most. Be specific: "writes like a trusted colleague, direct but warm, short sentences, zero buzzwords."</div>
-      </div>
-      <div class="setting-sec">
-        <h3>Strategy &amp; Logistics</h3>
-        <p class="setting-desc">This is what turns your Creative Director from a voice coach into an actual strategist. Fill it out once and Director Chat will use it to answer real questions, like when to send something or how often to post, instead of bouncing the question back to you.</p>
-        <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Primary Platforms</label><input class="fi" id="bpPlatforms" placeholder="e.g. Instagram, email newsletter" /></div>
-          <div class="fl"><label class="fl-lbl">Posting Frequency</label><input class="fi" id="bpFrequency" placeholder="e.g. 3x/week IG, weekly newsletter" /></div>
-        </div>
-        <div class="two-col">
-          <div class="fl"><label class="fl-lbl">Audience Timezone</label><input class="fi" id="bpTimezone" placeholder="e.g. mostly US Eastern, some UK" /></div>
-          <div class="fl"><label class="fl-lbl">Current Phase / Goal</label><input class="fi" id="bpPhase" placeholder="e.g. building audience, launching a new offer, or staying consistent" /></div>
-        </div>
-        <div class="fl"><label class="fl-lbl">What's Worked Before <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-          <textarea class="fi" id="bpWhatWorked" style="min-height:56px" placeholder="Best days/times you've noticed for opens or engagement, formats that overperformed, launches that landed well..."></textarea>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <button class="btn btn-p" onclick="saveBrandProfile()">Save Strategy Profile</button>
-        </div>
-        <div class="info-b" style="margin-top:14px"><strong>Tip:</strong> No analytics tool hooked up yet, so "What's Worked Before" is how you hand-feed it real signal. Even a rough note like "newsletter opens are always better on Tuesdays" makes a real difference.</div>
-      </div>
-      <div class="setting-sec">
-        <h3>Content Buckets</h3>
-        <p class="setting-desc">Tag content cards by topic or offer to track patterns over time. Add your own buckets to match your business, e.g. Product, 1:1 Offer, Freebie, Personal.</p>
-        <div id="settingsBucketList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px"></div>
-        <div style="display:flex;gap:8px">
-          <input class="fi" id="settingsNewBucket" placeholder="e.g. 1:1 Offer, Freebie, Product..." style="flex:1;font-size:13px" onkeydown="if(event.key==='Enter')addSettingsBucket()" />
-          <button class="btn btn-p" onclick="addSettingsBucket()">Add</button>
         </div>
       </div>
-      <div class="setting-sec">
-        <h3>Onboarding &amp; Welcome Guide</h3>
-        <p class="setting-desc">Re-open the welcome guide that shows on first login - useful if you want to revisit the overview of each section.</p>
-        <button class="btn btn-g" onclick="resetOnboarding()">↺ Reset Welcome Guide</button>
-      </div>
-      <div class="setting-sec" id="inviteCodeSection" style="display:none">
-        <h3>Beta Invite Code</h3>
-        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically , no SQL needed.</p>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO2026</div>
-          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO2026').then(()=>toast('Code copied ✓'))">Copy</button>
-        </div>
-        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
-      </div>
-      <div class="setting-sec">
-        <h3>Export &amp; Import</h3>
+      <div class="ss-group">Backups and account</div>
+      <div class="setting-sec ss-data">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">⬇</span><span class="ss-hdr-txt"><span class="ss-title">Export &amp; Import</span><span class="ss-sub">Download a backup or bring one back in</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
         <p class="setting-desc">Download a backup of all your drafts, notes, ideas, tasks, and calendar entries as a JSON file. You can re-import it at any time to restore your content. Use this regularly as your safety net.</p>
         <div class="info-b" style="margin-bottom:12px">
           <strong>Export</strong> saves everything to your device as a .json file.<br>
@@ -3099,22 +3148,52 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div style="font-size:11px;color:var(--tl);margin-top:8px;line-height:1.6">
           JSON backup = full restore of everything. CSV = your drafts as a spreadsheet you can open in Excel or Google Sheets.
         </div>
+        </div>
       </div>
-      <div class="setting-sec">
-        <h3>Photo Storage Cleanup</h3>
+      <div class="setting-sec ss-data">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">🖼️</span><span class="ss-hdr-txt"><span class="ss-title">Photo Storage Cleanup</span><span class="ss-sub">Move older photos to proper storage</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
         <p class="setting-desc">Photos you uploaded before this update are stored directly inside your saved data, which is what can cause saves to silently fail once you have a few of them. This moves any old photos to proper file storage instead, where they belong, your cards will look exactly the same.</p>
         <button class="btn btn-brass" onclick="migrateOldImages()" id="migrateImgBtn">Move Old Photos to Storage</button>
         <div id="migrateImgStatus" style="font-size:12px;color:var(--t);margin-top:10px"></div>
+        </div>
       </div>
-      <div class="setting-sec" id="clearDataSection" style="border-color:#E0BDAA;display:none">
-        <h3>Clear All Data</h3>
+      <div class="setting-sec ss-data">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">👋</span><span class="ss-hdr-txt"><span class="ss-title">Onboarding &amp; Welcome Guide</span><span class="ss-sub">See the welcome guide again</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
+        <p class="setting-desc">Re-open the welcome guide that shows on first login - useful if you want to revisit the overview of each section.</p>
+        <button class="btn btn-g" onclick="resetOnboarding()">↺ Reset Welcome Guide</button>
+        </div>
+      </div>
+      <div class="setting-sec ss-data" id="inviteCodeSection" style="display:none">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">🔑</span><span class="ss-hdr-txt"><span class="ss-title">Beta Invite Code</span><span class="ss-sub">Code for beta testers</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
+        <p class="setting-desc">Share this code with beta testers. They enter it on the sign-up screen to get free beta access automatically , no SQL needed.</p>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="background:var(--p);border:1.5px solid var(--b);border-radius:var(--rsm);padding:10px 16px;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:.12em;color:var(--r);flex:1">FLOWBETASTUDIO2026</div>
+          <button class="btn btn-g" onclick="navigator.clipboard.writeText('FLOWBETASTUDIO2026').then(()=>toast('Code copied ✓'))">Copy</button>
+        </div>
+        <div class="info-b" style="margin-top:12px">Send this to anyone you want to give free beta access. They sign up, enter the code, and they are in , no action needed from you.</div>
+        </div>
+      </div>
+      <div class="setting-sec ss-data" id="clearDataSection" style="border-color:#E0BDAA;display:none">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">⚠</span><span class="ss-hdr-txt"><span class="ss-title">Clear All Data</span><span class="ss-sub">Delete everything in this browser</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
         <p class="setting-desc">Permanently deletes everything in this browser. Export first!</p>
         <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
+        </div>
       </div>
-      <div class="setting-sec">
-        <h3>Account</h3>
+      <div class="setting-sec ss-data">
+        <button type="button" class="ss-hdr" onclick="toggleSettingSec(this)" aria-expanded="false"><span class="ss-ico">👤</span><span class="ss-hdr-txt"><span class="ss-title">Account</span><span class="ss-sub">Sign out</span></span><span class="ss-chev">+</span></button>
+        <div class="ss-body">
+
         <p class="setting-desc" id="settingsAccountEmail">Signed in as loading...</p>
         <button class="btn btn-g" onclick="doSignOut()" style="border-color:var(--r);color:var(--r)">Sign Out</button>
+        </div>
       </div>
     </div>
   </div>
@@ -4415,6 +4494,11 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
     </div><!-- end cd-sticky -->
     <div class="cd2-wrap" id="cdWrap" data-tab="write">
       <div class="cd2-left">
+        <div class="cd-guide details">
+          <div class="cd-guide-ico">📌</div>
+          <div><div class="cd-guide-title">Give it a name and a home</div>
+          <div class="cd-guide-text">A title, where it's going, and a date if you have one. That's all you need here. Everything else is optional.</div></div>
+        </div>
         <!-- GROUP: THE BRIEF -->
         <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
         <div class="two-col">
@@ -4532,7 +4616,11 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       </div>
       <div class="cd2-right">
       <div class="cd-pane-write">
-        <div style="font-size:12.5px;color:var(--t);padding:4px 2px 2px;line-height:1.55">Write it yourself here, get help in <strong style="color:var(--r)">Bridge the Gap</strong>, or do both. No wrong path.</div>
+        <div class="cd-guide write">
+          <div class="cd-guide-ico">✍️</div>
+          <div><div class="cd-guide-title">Your words first</div>
+          <div class="cd-guide-text">Messy is fine. One line in any box is enough to start. Write it all yourself, get help in <strong style="color:var(--el)">Bridge the Gap</strong>, or do both. No wrong path.</div></div>
+        </div>
         <!-- GO ANALOG SECTION -->
         <div class="card-section-toggle cd-analog-sec">
           <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
@@ -4581,6 +4669,17 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div class="cd-next"><button type="button" class="btn btn-p" onclick="cdShowTab('ai')">Next: get AI help</button></div>
       </div><!-- end cd-pane-write -->
       <div class="cd-pane-ai">
+        <div class="cd-guide ai">
+          <div class="cd-guide-ico">✦</div>
+          <div><div class="cd-guide-title">Pick the help you need</div>
+          <div class="cd-guide-text">You only need one of these. Tap to jump to it.</div>
+          <div class="cd-guide-picks">
+            <button type="button" class="cd-guide-pick" onclick="cdGuideGo('smartBrief')"><strong>Not sure what to say?</strong> Creative direction</button>
+            <button type="button" class="cd-guide-pick" onclick="cdGuideGo('generate')"><strong>Want a draft?</strong> Generate</button>
+            <button type="button" class="cd-guide-pick" onclick="cdGuideGo('hooks')"><strong>Stuck on line one?</strong> Hooks</button>
+            <button type="button" class="cd-guide-pick" onclick="cdGuideGo('shrink')"><strong>Low energy?</strong> Shrink</button>
+          </div></div>
+        </div>
         <div class="cd-empty-note" id="cdAiEmpty">
           Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
           <div class="cd-empty-acts">
@@ -5996,6 +6095,7 @@ function applySettings(){
   setVal('bpOffers',bp.offers);setVal('bpClientKeep',bp.clientKeep);setVal('bpClientWish',bp.clientWish);setVal('bpVoice',bp.voice);setVal('bpPov',bp.pov);setVal('bpExtra',bp.extra);
   setVal('bpPlatforms',bp.platforms);setVal('bpFrequency',bp.frequency);setVal('bpTimezone',bp.timezone);
   setVal('bpPhase',bp.phase);setVal('bpWhatWorked',bp.whatWorked);
+  updateBrandSteps();
 }
 function setGreeting(){
   const h=new Date().getHours();
@@ -10086,6 +10186,21 @@ function cdToggleTool(sec,pillEl){
     if(pill)pill.classList.toggle('open',open);
   });
 }
+// The quick picks at the top of Bridge the Gap: open the right tool and
+// bring it into view, so nobody has to hunt for it.
+function cdGuideGo(sec){
+  var body=document.getElementById('ai2-'+sec+'-body');
+  if(!body)return;
+  if(sec==='hooks'||sec==='shrink'){
+    if(!body.classList.contains('open'))cdToggleTool(sec,document.getElementById('cd-pill-'+sec));
+  } else if(!body.classList.contains('open')){
+    body.classList.add('open');
+    var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';
+  }
+  var target=(sec==='hooks'||sec==='shrink')?body:(body.closest('.ai2-section')||body);
+  try{target.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){target.scrollIntoView();}
+  target.classList.remove('cd-flash');void target.offsetWidth;target.classList.add('cd-flash');
+}
 function cdCardHasContent(){
   return ['cdTitle','cdHook','cdNotes','cdOwnContent'].some(function(id){var el=document.getElementById(id);return el&&el.value.trim();});
 }
@@ -11124,6 +11239,25 @@ async function submitFeedback() {
 
 
 /* ═══ BRAND PROFILE COPY ═══ */
+/* ═══ SETTINGS SECTIONS ═══ */
+function toggleSettingSec(btn){
+  var sec=btn&&btn.closest('.setting-sec');
+  if(!sec)return;
+  var open=!sec.classList.contains('open');
+  sec.classList.toggle('open',open);
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  var chev=btn.querySelector('.ss-chev');if(chev)chev.textContent=open?'-':'+';
+}
+// A small tick on each Brand Profile step once its main fields have
+// something in them. A quiet "that part is done", never a to-do count.
+function updateBrandSteps(){
+  var has=function(id){var el=document.getElementById(id);return !!(el&&el.value.trim());};
+  var steps={bpStep1:has('bpName')&&has('bpNiche'),bpStep2:has('bpClient')&&has('bpOffers'),bpStep3:has('bpVoice')};
+  Object.keys(steps).forEach(function(id){var el=document.getElementById(id);if(el)el.classList.toggle('done',steps[id]);});
+}
+document.addEventListener('input',function(e){
+  if(e.target&&e.target.id&&e.target.id.indexOf('bp')===0)updateBrandSteps();
+});
 function copyBrandProfile() {
   var bp = S.brandProfile || {};
   var lines = [];
