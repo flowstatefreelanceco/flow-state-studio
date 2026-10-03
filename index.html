@@ -586,9 +586,20 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .pricing-divider{height:1px;background:var(--bl);margin:40px 0;position:relative}
 .pricing-divider::after{content:none}
 /* REPURPOSE SIDE BY SIDE */
-#cd-repurpose-sidebyside{display:none}
-#cd-repurpose-sidebyside.show{display:flex}
-@media(max-width:900px){#cd-repurpose-sidebyside.show{flex-direction:column}}
+.rp-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0;align-items:start}
+.rp-left,.rp-right{min-width:0}
+.rp-right{margin-top:18px}
+.rp-go{width:100%;padding:14px;font-size:14px;font-weight:700;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer;font-family:var(--fb)}
+.rp-go:disabled{opacity:.6;cursor:wait}
+.rp-out-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+#cd-out-repurpose.rp-out{display:block;margin-top:0;background:var(--tealp);border:1px solid rgba(58,140,140,.2);font-size:13px;color:var(--el);line-height:1.8;min-height:160px;max-height:520px}
+#cd-out-repurpose.rp-out:empty::before{content:attr(data-empty);color:var(--tl);font-style:italic}
+.rp-working.show{display:block;background:var(--tealp);color:var(--teal);border-radius:var(--rsm);padding:10px 12px;margin-bottom:8px;font-size:13px;font-style:normal;font-weight:600}
+.rp-why-btn{display:block;width:100%;margin-top:10px;padding:9px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px dashed var(--r);background:none;color:var(--r);cursor:pointer;font-family:var(--fb)}
+#cd-repurpose-sidebyside{margin-top:14px}
+.rp-words{margin-top:14px;border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;background:var(--w)}
+.rp-link{background:none;border:none;padding:0;font:inherit;color:var(--teal);font-weight:600;text-decoration:underline;cursor:pointer}
+.rp-words>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--teal)}
 /* ═══════════════ FEED PREVIEW ═══════════════ */
 .feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;max-width:640px;margin:0 auto}
 .feed-cell{aspect-ratio:3/4;background:var(--bl);position:relative;overflow:hidden;cursor:pointer;border-radius:2px}
@@ -873,13 +884,9 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section:nth-child(2){grid-column:2;grid-row:1/span 2}
   .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section:nth-child(n+4){grid-column:1/-1}
   .cd-guide-rows{grid-template-columns:repeat(4,minmax(0,1fr))}
-  /* Rebuild in my voice: get the words on the left, choose and go on the right */
-  #ai2-repurpose-body.open{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-auto-flow:row dense;gap:0 28px;align-items:start}
-  #ai2-repurpose-body.open>*{grid-column:2}
-  #ai2-repurpose-body.open>:nth-child(1){grid-column:1/-1}
-  #ai2-repurpose-body.open>:nth-child(2),#ai2-repurpose-body.open>.cd-rp-fetch{grid-column:1}
-  #ai2-repurpose-body.open>.cd-rp-fetch{grid-row:3/span 12}
-  #ai2-repurpose-body.open>#cd-load-repurpose,#ai2-repurpose-body.open>#cd-load-repurpose~*{grid-column:1/-1}
+  /* Rebuild in my voice: steps on the left, your result on the right, next to the button */
+  #ai2-repurpose-body .rp-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0 28px}
+  #ai2-repurpose-body .rp-right{position:sticky;top:8px;margin-top:16px}
 }
 .cd-next{display:flex;justify-content:flex-end;padding:8px 0 4px}
 .cd-next .btn{font-size:13px;padding:10px 18px}
@@ -3541,7 +3548,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">🔁</span>
               <div class="gd-card-title">Rebuild in My Voice</div>
-              <div class="gd-card-desc">Found a post you admire? Paste its link, tap <strong>Get post</strong>, and the Studio pulls in the words for you, including the words on every carousel slide. You see a preview of the post, and the words land in a box you can edit. Then pick your platform and format and tap Analyze Only (why it works) or Autopsy + Rebuild (your own 100% original version). It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Paste the words into the box yourself. The words stay saved on the card. The slide pictures are only shown right after you fetch.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Rebuild in My Voice, tap Get post, then tap Autopsy + Rebuild for a brand new version built for your niche.</div>
+              <div class="gd-card-desc">Found a post you admire? Three steps. 1: paste its link. 2: pick the platform and format you want back. 3: tap <strong>Rebuild this post in my voice</strong>. That one button gets the post, reads the words on every carousel slide, and writes your own 100% original version in the "Your version" box. It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Tap "No link?" under the button, paste the words in, and tap the same button. Want to know why the post worked? Tap "Optional: tell me why this post works" under your version. The words, your version, and the slide pictures all stay on the card. The pictures are kept on the device you fetched them on.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Rebuild in My Voice and tap Rebuild this post in my voice for a brand new version built for your niche.</div>
             </div>
           </div>
 
@@ -3625,7 +3632,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-callout-icon">✦</div>
             <div>
               <div class="gd-callout-eyebrow" style="color:var(--g)">One credit per AI generation, nothing else costs anything</div>
-              <div class="gd-callout-text">Every time you click a button that generates something with AI, Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, Rebuild in My Voice (Get post is one credit, and Analyze Only or Autopsy + Rebuild is one more), Create a promo plan, Brief Me, Surprise Me, Write the Full Piece, or sending a message in Director Chat, that's one credit. That's the whole list. Browsing the Studio, planning in the Content Planner, writing your own content in Go Analog, using Notebooks, moving tasks around, none of it touches your credits, ever. If something goes wrong and nothing comes back, no credit is used. Analog Prompt on the dashboard also does not use a credit, since it's not AI at all.<br><br>Starter includes 100 credits a month, Unlimited means exactly that, no cap. Either way, credits reset at the start of each new month, they don't roll over, and you can see exactly how many you've used and how many are left any time from the "Studio in Session" bar in your sidebar.</div>
+              <div class="gd-callout-text">Every time you click a button that generates something with AI, Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, Rebuild in My Voice (two credits with a link: one to get the post, one to write your version. One credit if you paste the words in yourself. The optional "why this post works" is one more), Create a promo plan, Brief Me, Surprise Me, Write the Full Piece, or sending a message in Director Chat, that's one credit. That's the whole list. Browsing the Studio, planning in the Content Planner, writing your own content in Go Analog, using Notebooks, moving tasks around, none of it touches your credits, ever. If something goes wrong and nothing comes back, no credit is used. Analog Prompt on the dashboard also does not use a credit, since it's not AI at all.<br><br>Starter includes 100 credits a month, Unlimited means exactly that, no cap. Either way, credits reset at the start of each new month, they don't roll over, and you can see exactly how many you've used and how many are left any time from the "Studio in Session" bar in your sidebar.</div>
             </div>
           </div>
 
@@ -3816,7 +3823,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           <div class="gd-section-lbl">Phase 03: Convert</div>
           <div class="gd-cards">
             <div class="gd-card rust"><div class="gd-card-eyebrow rust">What to create</div><div class="gd-card-title">Content that creates clarity around your offer and moves people to act</div><div class="gd-card-desc">Posts that name the specific problem your offer solves. Addressing common objections directly and honestly. What's included, what it costs, and who it's for. Testimonials and results, real ones. A clear and direct call to action on every post. Your goal: make it easy for the right people to say yes.</div></div>
-            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Rebuild in my voice + CTA Library</div><div class="gd-card-desc">Paste the link to a top-performing sales post into Rebuild in my voice and tap Get post. It pulls in the words, shows you why the post worked, then rebuilds it in your voice. When you are ready to sell, tap Create a promo plan on the Calendar for a short run of posts that lead to your offer. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Get Creative Direction on your offer to get a directional angle before you write.</div></div>
+            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Rebuild in my voice + CTA Library</div><div class="gd-card-desc">Paste the link to a top-performing sales post into Rebuild in my voice and tap Rebuild this post in my voice. It pulls in the words and writes your own version. Tap the optional button under it to see why the post worked. When you are ready to sell, tap Create a promo plan on the Calendar for a short run of posts that lead to your offer. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Get Creative Direction on your offer to get a directional angle before you write.</div></div>
           </div>
 
           <div class="gd-section-lbl">Phase 04: Reflect</div>
@@ -3924,7 +3931,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">🔍</span>
               <div class="gd-card-title">Learn from what already works</div>
-              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche. Copy its link, paste it into Rebuild in my voice, and tap Get post. Let the Creative Director break down why it worked, then rebuild the structure in your voice with your topic. You're not copying. You're learning from signal and applying it honestly.</div>
+              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche. Copy its link, paste it into Rebuild in my voice, and tap Rebuild this post in my voice. You get the same structure in your voice. Tap the optional button under it and the Creative Director breaks down why the original worked. You're not copying. You're learning from signal and applying it honestly.</div>
             </div>
           </div>
 
@@ -4931,88 +4938,76 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
             <div style="font-size:12px;color:var(--el);line-height:1.6;margin-bottom:4px;background:var(--rp);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid var(--r)">
-              Found a post you like? This writes your own version of it, on your topic, in your voice. 3 steps.
+              Found a post you like? Paste its link, tap one button, and you get your own version of it in your voice.
             </div>
 
-            <!-- STEP 1: get the words -->
-            <div class="ss-step"><span class="ss-step-n">1</span><span class="ss-step-t">Get the words from the post</span></div>
-            <div class="cd-rp-fetch">
-              <label class="fl-lbl" for="cdRpUrl" style="font-size:11px">Paste the link to the post</label>
-              <div class="cd-rp-fetch-row">
-                <input class="fi" id="cdRpUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://www.instagram.com/p/..." onkeydown="if(event.key==='Enter'){event.preventDefault();cdFetchPost();}" />
-                <button type="button" class="btn btn-p" id="cdRpFetchBtn" onclick="cdFetchPost()">Get post</button>
-              </div>
-              <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. Uses 1 AI credit. On Instagram: open the post, tap the three dots, tap Copy link.</div>
-              <div class="cd-rp-fetch-status" id="cdRpFetchStatus"></div>
-              <div class="cd-rp-preview" id="cdRpPreview"></div>
-              <label class="fl-lbl" for="cdRpText" style="font-size:11px;margin-top:12px">Words from the post</label>
-              <textarea class="ai2-input" id="cdRpText" placeholder="After you tap Get post, the words from the post show up here. No link? Skip Get post and paste the words here yourself. For carousels, put each slide on a new line." style="min-height:90px;margin-bottom:0"></textarea>
-              <div class="cd-rp-fetch-hint">This box is what the AI reads. Fix anything that looks wrong before you go on.</div>
-              <label class="fl-lbl" for="cdRpPlat" style="font-size:11px;margin-top:12px">Where is the post from?</label>
-              <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
-                <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
-                <option value="LinkedIn">LinkedIn</option><option value="a blog">A blog</option>
-                <option value="a newsletter">A newsletter</option><option value="somewhere">Somewhere else</option>
-              </select>
-            </div>
+            <div class="rp-grid">
+              <div class="rp-left">
+                <!-- STEP 1: the link -->
+                <div class="ss-step"><span class="ss-step-n">1</span><span class="ss-step-t">Paste the link to the post</span></div>
+                <input class="fi" id="cdRpUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://www.instagram.com/p/..." onkeydown="if(event.key==='Enter'){event.preventDefault();cdRpGo();}" />
+                <div class="cd-rp-fetch-hint">Works with Instagram posts and carousels, blogs, Substack and newsletters. On Instagram: open the post, tap the three dots, tap Copy link.</div>
 
-            <!-- STEP 2: what you want back -->
-            <div class="ss-step"><span class="ss-step-n">2</span><span class="ss-step-t">Pick what you want back</span></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px">
-              <div><label class="fl-lbl" for="cdRpOutPlat" style="font-size:11px">Your platform</label>
-              <select class="fi" id="cdRpOutPlat" style="font-size:12px;padding:6px 10px">
-                <option value="Instagram">Instagram</option><option value="LinkedIn">LinkedIn</option>
-                <option value="TikTok">TikTok</option><option value="Newsletter">Newsletter</option>
-                <option value="Email">Email</option><option value="Substack">Substack</option>
-                <option value="Blog">Blog Post</option>
-              </select></div>
-              <div><label class="fl-lbl" for="cdRpOutFmt" style="font-size:11px">Your format</label>
-              <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
-                <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
-                <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
-                <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
-                <option value="Blog Post">Blog Post</option>
-              </select></div>
-            </div>
-
-            <!-- STEP 3: go -->
-            <div class="ss-step"><span class="ss-step-n">3</span><span class="ss-step-t">Tap one</span></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
-              <button onclick="cdAutopsy()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:1.5px solid var(--r);background:white;color:var(--r);cursor:pointer">🔍 Analyze Only</button>
-              <button onclick="cdRepurpose2()" style="padding:11px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--r);color:white;cursor:pointer">✦ Autopsy + Rebuild</button>
-            </div>
-            <div class="cd-rp-fetch-hint" style="margin:0 0 12px"><strong>Analyze Only</strong> tells you why the post works. <strong>Autopsy + Rebuild</strong> writes your own version of it. Each one uses 1 AI credit. Your result shows up below and stays on this card.</div>
-
-            <div class="ai2-loading" id="cd-load-repurpose">Working...</div>
-
-            <!-- Side by side: analysis + rebuild -->
-            <div id="cd-repurpose-sidebyside" style="display:none;gap:12px;margin-bottom:10px">
-              <!-- Left: Autopsy -->
-              <div style="flex:1;min-width:0">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
-                  Content Autopsy
-                  <button onclick="cdSaveToSwipeFile()" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--r);border-radius:100px;color:var(--r);cursor:pointer;font-family:var(--fb)">+ Repurposed File</button>
+                <!-- STEP 2: what you want back -->
+                <div class="ss-step"><span class="ss-step-n">2</span><span class="ss-step-t">Pick what you want back</span></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                  <div><label class="fl-lbl" for="cdRpOutPlat" style="font-size:11px">Your platform</label>
+                  <select class="fi" id="cdRpOutPlat" style="font-size:12px;padding:6px 10px">
+                    <option value="Instagram">Instagram</option><option value="LinkedIn">LinkedIn</option>
+                    <option value="TikTok">TikTok</option><option value="Newsletter">Newsletter</option>
+                    <option value="Email">Email</option><option value="Substack">Substack</option>
+                    <option value="Blog">Blog Post</option>
+                  </select></div>
+                  <div><label class="fl-lbl" for="cdRpOutFmt" style="font-size:11px">Your format</label>
+                  <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
+                    <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
+                    <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
+                    <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
+                    <option value="Blog Post">Blog Post</option>
+                  </select></div>
                 </div>
-                <div id="cd-analysis-out" style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto"></div>
+
+                <!-- STEP 3: one button -->
+                <div class="ss-step"><span class="ss-step-n">3</span><span class="ss-step-t">Tap the button</span></div>
+                <button type="button" class="rp-go" id="cdRpGoBtn" onclick="cdRpGo()">✦ Rebuild this post in my voice</button>
+                <div class="cd-rp-fetch-hint">This gets the post and writes your version in one go. Uses 2 AI credits: 1 to get the post, 1 to write your version. Your version shows up in the "Your version" box and stays on this card.</div>
+                <div class="cd-rp-fetch-status" id="cdRpFetchStatus"></div>
+                <div class="cd-rp-preview" id="cdRpPreview"></div>
+
+                <details class="rp-words" id="cdRpWords">
+                  <summary>No link? Or want to see the words from the post? Tap here</summary>
+                  <label class="fl-lbl" for="cdRpText" style="font-size:11px;margin-top:10px">Words from the post</label>
+                  <textarea class="ai2-input" id="cdRpText" placeholder="When you use a link, the words from the post show up here. No link? Paste the words here yourself, then tap the button in step 3. For carousels, put each slide on a new line." style="min-height:110px;margin-bottom:0"></textarea>
+                  <div class="cd-rp-fetch-hint">This box is what the AI reads. Changed something here? Tap the button in step 3 again and it rewrites from these words. That uses 1 AI credit.</div>
+                  <label class="fl-lbl" for="cdRpPlat" style="font-size:11px;margin-top:12px">Where is the post from?</label>
+                  <select class="fi" id="cdRpPlat" style="font-size:12px;padding:6px 10px">
+                    <option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+                    <option value="LinkedIn">LinkedIn</option><option value="a blog">A blog</option>
+                    <option value="a newsletter">A newsletter</option><option value="somewhere">Somewhere else</option>
+                  </select>
+                </details>
               </div>
-              <!-- Right: Rebuilt -->
-              <div style="flex:1;min-width:0">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
-                  Rebuilt in Your Voice
+
+              <div class="rp-right">
+                <div class="rp-out-hdr" style="color:var(--teal)">
+                  Your version
                   <div style="display:flex;gap:4px">
                     <button onclick="cdCopy2('repurpose')" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--teal);border-radius:100px;color:var(--teal);cursor:pointer;font-family:var(--fb)">Copy</button>
                     <button onclick="cdSaveDraft2('repurpose')" style="font-size:10px;padding:3px 8px;background:var(--teal);border:1px solid var(--teal);border-radius:100px;color:white;cursor:pointer;font-family:var(--fb)">Save Draft</button>
                   </div>
                 </div>
-                <div id="cd-out-repurpose" class="ai2-out" style="background:var(--tealp);border:1px solid rgba(58,140,140,.2);border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto;min-height:80px"></div>
-                <button id="cd-rebuild-btn" onclick="cdRebuildAfterAnalysis()" style="display:none;width:100%;margin-top:8px;padding:10px;font-size:12px;font-weight:600;border-radius:var(--rsm);border:none;background:var(--teal);color:white;cursor:pointer">✦ Now Rebuild in My Voice</button>
-              </div>
-            </div>
+                <div class="ai2-loading rp-working" id="cd-load-repurpose">Working...</div>
+                <div id="cd-out-repurpose" class="ai2-out rp-out" data-empty="Your version of the post shows up here after you tap the button in step 3."></div>
 
-            <!-- Old single output (hidden, keep for compat) -->
-            <div class="ai2-out-acts" id="cd-acts-repurpose" style="display:none">
-              <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('repurpose')">Copy</button>
-              <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('repurpose')">Save Draft</button>
+                <button type="button" class="rp-why-btn" id="cdRpWhyBtn" onclick="cdAutopsy()">Optional: tell me why this post works (1 AI credit)</button>
+                <div id="cd-repurpose-sidebyside" style="display:none">
+                  <div class="rp-out-hdr" style="color:var(--r)">
+                    Why this post works
+                    <button onclick="cdSaveToSwipeFile()" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--r);border-radius:100px;color:var(--r);cursor:pointer;font-family:var(--fb)">+ Repurposed File</button>
+                  </div>
+                  <div id="cd-analysis-out" style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rsm);padding:12px 14px;font-size:12.5px;color:var(--el);line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -7768,8 +7763,9 @@ function openIdeaModal(status){
   var rpText=document.getElementById('cdRpText');if(rpText)rpText.value='';
   var rpUrl=document.getElementById('cdRpUrl');if(rpUrl)rpUrl.value='';
   cdFetchStatus('');cdPreviewClear();
-  var sbs=document.getElementById('cd-repurpose-sidebyside');if(sbs)sbs.classList.remove('show');
-  var rebuildBtn=document.getElementById('cd-rebuild-btn');if(rebuildBtn)rebuildBtn.style.display='none';
+  var sbs=document.getElementById('cd-repurpose-sidebyside');if(sbs)sbs.style.display='none';
+  var rpWords=document.getElementById('cdRpWords');if(rpWords)rpWords.open=false;
+  var rpOutReset=document.getElementById('cd-out-repurpose');if(rpOutReset)rpOutReset.textContent='';
   var analysisOut=document.getElementById('cd-analysis-out');if(analysisOut)analysisOut.textContent='';
   // Open SmartBrief by default
   var sb=document.getElementById('ai2-smartBrief-body');if(sb){sb.classList.add('open');var sc=document.getElementById('ai2-smartBrief-chev');if(sc)sc.textContent='-';}
@@ -8720,7 +8716,8 @@ function cdOpen(id){
   // Restore own content
   var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
   var rpTextRestore=document.getElementById('cdRpText');if(rpTextRestore)rpTextRestore.value=x.repurposeSourceText||'';
-  cdPreviewRestore(x.repurposeSource);
+  cdPreviewRestore(x.repurposeSource,x.id);
+  cdRpPrefill(x);
 
   // Restore carousel slides
   var slidesContainer=document.getElementById('cdCarouselSlides');
@@ -8761,10 +8758,6 @@ function cdOpen(id){
       if(_cdOutputs[sec]){
         var body=document.getElementById('ai2-'+sec+'-body');
         if(body){body.classList.add('open');var chev=document.getElementById('ai2-'+sec+'-chev');if(chev)chev.textContent='-';}
-        if(sec==='repurpose'){
-          var sbsForRepurpose=document.getElementById('cd-repurpose-sidebyside');
-          if(sbsForRepurpose)sbsForRepurpose.style.display='flex';
-        }
         var out=document.getElementById('cd-out-'+sec);
         if(out){out.textContent=_cdOutputs[sec];out.classList.add('show');}
         var acts=document.getElementById('cd-acts-'+sec);
@@ -8782,9 +8775,7 @@ function cdOpen(id){
       var analysisOutRestore=document.getElementById('cd-analysis-out');
       if(analysisOutRestore)analysisOutRestore.textContent=_cdOutputs['repurposeAnalysis'];
       var sbsRestore=document.getElementById('cd-repurpose-sidebyside');
-      if(sbsRestore)sbsRestore.style.display='flex';
-      var rebuildBtnRestore=document.getElementById('cd-rebuild-btn');
-      if(rebuildBtnRestore)rebuildBtnRestore.style.display='block';
+      if(sbsRestore)sbsRestore.style.display='block';
     }
 
     // Hook section - restore hook list AND built post
@@ -9042,23 +9033,71 @@ async function cdFetchCall(body){
   }
   throw new Error(msg);
 }
-// Preview of the post that was just fetched: who posted it, how it did,
-// and the slides. Shown right after a fetch only. Nothing here is saved to
-// the card, the slide images are another person's work.
+// Preview of the fetched post: who posted it, how it did, and the slides.
+// The card keeps the picture links. Small copies of the pictures are kept on
+// this device (IndexedDB, keyed by card id) so they are still there when the
+// card is reopened, long after Instagram's own links have expired.
 var _cdPreviewRun=0;
+function cdPicDb(){
+  return new Promise(function(res){
+    try{
+      var rq=indexedDB.open('fssPostPics',1);
+      rq.onupgradeneeded=function(){rq.result.createObjectStore('pics');};
+      rq.onsuccess=function(){res(rq.result);};
+      rq.onerror=function(){res(null);};
+    }catch(e){res(null);}
+  });
+}
+async function cdPicGet(cardId){
+  var db=await cdPicDb();if(!db||!cardId)return null;
+  return new Promise(function(res){
+    try{var rq=db.transaction('pics').objectStore('pics').get(String(cardId));rq.onsuccess=function(){res(rq.result||null);};rq.onerror=function(){res(null);};}catch(e){res(null);}
+  });
+}
+async function cdPicPut(cardId,val){
+  var db=await cdPicDb();if(!db||!cardId)return;
+  try{db.transaction('pics','readwrite').objectStore('pics').put(val,String(cardId));}catch(e){}
+}
+async function cdPicDel(cardId){
+  var db=await cdPicDb();if(!db||!cardId)return;
+  try{db.transaction('pics','readwrite').objectStore('pics').delete(String(cardId));}catch(e){}
+}
+// Makes a smaller copy of a picture so a whole carousel stays light to keep.
+function cdPicShrink(dataUrl){
+  return new Promise(function(res){
+    try{
+      var im=new Image();
+      im.onload=function(){
+        try{
+          var nw=im.naturalWidth||720,nh=im.naturalHeight||900;
+          var w=Math.min(720,nw),h=Math.round(nh*(w/nw));
+          var c=document.createElement('canvas');c.width=w;c.height=h;
+          c.getContext('2d').drawImage(im,0,0,w,h);
+          res(c.toDataURL('image/jpeg',0.72));
+        }catch(e){res(dataUrl);}
+      };
+      im.onerror=function(){res(dataUrl);};
+      im.src=dataUrl;
+    }catch(e){res(dataUrl);}
+  });
+}
 function cdPreviewClear(){
   _cdPreviewRun++;
   var box=document.getElementById('cdRpPreview');
   if(box){box.innerHTML='';box.classList.remove('show');}
 }
-function cdPreviewShow(post){
+// post: {preview:[links], isVideo, summary?}. cardId: where the pictures are kept.
+// saved: pictures already kept on this device for this card, if any.
+function cdPreviewShow(post,cardId,saved){
   var box=document.getElementById('cdRpPreview');
   if(!box)return;
   var run=++_cdPreviewRun;
   var urls=(post.preview||[]).slice(0,20);
+  var imgs=(saved&&saved.length===urls.length)?saved.slice():urls.map(function(){return '';});
   box.innerHTML='<div class="cd-rp-preview-meta"></div><div class="cd-rp-preview-note"></div><div class="cd-rp-big" title="Tap to close"></div><div class="cd-rp-strip"></div>';
-  box.querySelector('.cd-rp-preview-meta').textContent=cdPreviewSummary(post);
-  box.querySelector('.cd-rp-preview-note').textContent=urls.length?(post.isVideo?'This is the cover image of the video. Tap it to see it bigger. This preview is not saved to your card.':'These are the slides from the post. Tap one to see it bigger. This preview is not saved to your card.'):'';
+  box.querySelector('.cd-rp-preview-meta').textContent=post.summary||cdPreviewSummary(post);
+  var noteEl=box.querySelector('.cd-rp-preview-note');
+  noteEl.textContent=urls.length?(post.isVideo?'This is the cover image of the video. Tap it to see it bigger. It stays on this card.':'These are the slides from the post. Tap one to see it bigger. They stay on this card.'):'';
   var big=box.querySelector('.cd-rp-big');
   var strip=box.querySelector('.cd-rp-strip');
   big.addEventListener('click',function(){big.classList.remove('show');big.innerHTML='';strip.querySelectorAll('.cd-rp-thumb').forEach(function(t){t.classList.remove('sel');});});
@@ -9075,21 +9114,32 @@ function cdPreviewShow(post){
     return b;
   });
   box.classList.add('show');
+  var paint=function(i){
+    var img=document.createElement('img');
+    img.alt='Slide '+(i+1);img.src=imgs[i];
+    thumbs[i].insertBefore(img,thumbs[i].firstChild);
+  };
+  var todo=[];
+  urls.forEach(function(u,i){if(imgs[i])paint(i);else todo.push(i);});
+  if(!todo.length)return;
   // Load a few at a time so a 20 slide carousel does not fire 20 requests at once.
-  var next=0;
+  var next=0,missed=0;
   var worker=async function(){
-    while(next<urls.length){
-      var i=next++;
+    while(next<todo.length){
+      var i=todo[next++];
       try{
         var d=await cdFetchCall({action:'image',image:urls[i]});
-        if(run!==_cdPreviewRun)return;
-        var img=document.createElement('img');
-        img.alt='Slide '+(i+1);img.src='data:'+d.type+';base64,'+d.data;
-        thumbs[i].insertBefore(img,thumbs[i].firstChild);
-      }catch(e){ /* that slide just keeps its number */ }
+        imgs[i]=await cdPicShrink('data:'+d.type+';base64,'+d.data);
+        if(run===_cdPreviewRun)paint(i);
+      }catch(e){missed++; /* that slide just keeps its number */ }
     }
   };
-  for(var w=0;w<Math.min(3,urls.length);w++)worker();
+  var workers=[];
+  for(var w=0;w<Math.min(3,todo.length);w++)workers.push(worker());
+  Promise.all(workers).then(function(){
+    if(cardId&&imgs.some(Boolean))cdPicPut(cardId,{imgs:imgs});
+    if(missed&&run===_cdPreviewRun){noteEl.textContent=missed+' picture'+(missed===1?'':'s')+' would not load. Instagram only keeps its picture links alive for a short time. ';cdRpRefetchLink(noteEl);}
+  });
 }
 function cdPreviewSummary(post){
   var num=function(v){return (typeof v==='number')?v.toLocaleString('en-US'):'';};
@@ -9101,33 +9151,65 @@ function cdPreviewSummary(post){
   if(num(post.comments))bits.push(num(post.comments)+' comments');
   return bits.join(' · ');
 }
-// When a card is reopened: put the link back and show the one line summary.
-// The slide pictures are not kept, only the words.
-function cdPreviewRestore(src){
+// When a card is reopened: put the link back and show the post again, with
+// its pictures (from this device if they are kept here, otherwise reloaded
+// from the saved links).
+function cdPreviewRestore(src,cardId){
   var input=document.getElementById('cdRpUrl');
   if(input)input.value=(src&&src.url)||'';
   if(!src||!src.summary)return;
+  if(src.preview&&src.preview.length){
+    var run=_cdPreviewRun;
+    cdPicGet(cardId).then(function(kept){
+      if(run!==_cdPreviewRun||S.cdId!==cardId)return;
+      cdPreviewShow({preview:src.preview,isVideo:!!src.isVideo,summary:src.summary},cardId,kept&&kept.imgs);
+    });
+    return;
+  }
   var box=document.getElementById('cdRpPreview');
   if(!box)return;
   box.innerHTML='<div class="cd-rp-preview-meta"></div><div class="cd-rp-preview-note"></div>';
   box.querySelector('.cd-rp-preview-meta').textContent=src.summary;
-  box.querySelector('.cd-rp-preview-note').textContent='You fetched this post earlier. Its words are saved in the box below. The slide pictures are not kept.';
+  var oldNote=box.querySelector('.cd-rp-preview-note');
+  oldNote.textContent='You got this post before pictures were kept on cards. Its words are saved. ';
+  cdRpRefetchLink(oldNote);
   box.classList.add('show');
 }
+function cdRpRefetchLink(noteEl){
+  var b=document.createElement('button');
+  b.type='button';b.className='rp-link';b.textContent='Get the pictures again (1 AI credit)';
+  b.addEventListener('click',function(){if(window._cdGenerating){toast('Already working on it, one moment...');return;}cdFetchPost();});
+  noteEl.appendChild(b);
+}
+// Step 2 starts on this card's own platform and format, and the words box
+// opens by itself when the words were pasted in by hand.
+function cdRpPrefill(card){
+  var pick=function(id,val){
+    var sel=document.getElementById(id);if(!sel)return;
+    var v=String(val||'').toLowerCase();
+    var hit=Array.prototype.find.call(sel.options,function(o){return v&&(o.value.toLowerCase()===v||o.value.toLowerCase().indexOf(v)===0||v.indexOf(o.value.toLowerCase())===0);});
+    sel.value=hit?hit.value:sel.options[0].value;
+  };
+  pick('cdRpOutPlat',card&&card.platform);
+  pick('cdRpOutFmt',card&&card.format);
+  var wd=document.getElementById('cdRpWords');
+  if(wd)wd.open=!!(card&&card.repurposeSourceText&&!(card.repurposeSource&&card.repurposeSource.url));
+}
 async function cdFetchPost(){
-  if(_cdFetching)return;
+  if(_cdFetching)return false;
+  var ok=false;
   var input=document.getElementById('cdRpUrl');
-  var btn=document.getElementById('cdRpFetchBtn');
+  var btn=document.getElementById('cdRpGoBtn');
   var url=input?input.value.trim():'';
-  if(!url){cdFetchStatus('Paste a link in the box first.',true);if(input)input.focus();return;}
+  if(!url){cdFetchStatus('Paste a link in the box in step 1 first.',true);if(input)input.focus();return false;}
   if(!/^https?:\/\//i.test(url))url='https://'+url;
   checkCreditReset();
-  if(!canUseAI()){showCreditBlocked();return;}
+  if(!canUseAI()){showCreditBlocked();return false;}
   // Give the result a saved card to land on before spending the credit.
   var FALLBACK_TITLE='Post to rebuild';
   var targetCardId=cdEnsureCardSaved(FALLBACK_TITLE);
   _cdFetching=true;
-  if(btn){btn.disabled=true;btn.textContent='Getting it...';}
+  if(btn){btn.disabled=true;btn.textContent='Getting the post...';}
   cdPreviewClear();
   cdFetchStatus('Getting the post. This can take up to a minute.');
   var stillHere=function(){
@@ -9141,7 +9223,7 @@ async function cdFetchPost(){
       fromPlat='Instagram';
       summary=cdPreviewSummary(post);
       if(post.author)betterTitle='Rebuild: @'+post.author+' post';
-      if(stillHere())cdPreviewShow(post);
+      if(stillHere())cdPreviewShow(post,targetCardId);
       var slideText='';
       if(post.slides&&post.slides.length){
         var n=post.slides.length;
@@ -9173,6 +9255,7 @@ async function cdFetchPost(){
     if(card){
       card.repurposeSourceText=out;
       card.repurposeSource={url:url,summary:summary};
+      if(post.preview&&post.preview.length){card.repurposeSource.preview=post.preview.slice(0,20);card.repurposeSource.isVideo=!!post.isVideo;}
       if(card.title===FALLBACK_TITLE&&betterTitle)card.title=betterTitle;
       card.updatedAt=new Date().toISOString();
     }
@@ -9183,7 +9266,8 @@ async function cdFetchPost(){
       if(sel&&fromPlat)sel.value=fromPlat;
       var tEl=document.getElementById('cdTitle');
       if(tEl&&card&&tEl.value.trim()===FALLBACK_TITLE)tEl.value=card.title;
-      cdFetchStatus('Done. The words from the post are in the box below and saved to this card.'+note+' Next: go to step 2.');
+      cdFetchStatus('Got the post. Its words are saved to this card.'+note);
+      ok=true;
     } else if(card){
       toast('The post you fetched is saved on the card "'+card.title+'"');
     }
@@ -9191,12 +9275,32 @@ async function cdFetchPost(){
   }catch(e){
     if(e&&e.code==='out_of_credits')showCreditBlocked();
     var m=e&&e.name==='AbortError'?'That took too long. Try again, or paste the words in the box below instead.':((e&&e.message)||'That link could not be read. Paste the words in the box below instead.');
-    if(stillHere())cdFetchStatus(m,true); else toast(m);
+    if(stillHere()){cdFetchStatus(m,true);var wd=document.getElementById('cdRpWords');if(wd)wd.open=true;} else toast(m);
   }finally{
     _cdFetching=false;
-    if(btn){btn.disabled=false;btn.textContent='Get post';}
+    if(btn){btn.disabled=false;btn.textContent=RP_GO_LABEL;}
   }
+  return ok;
 }
+// The one button. With a link: gets the post, then writes your version.
+// With words already in the box (pasted by hand, or the same link as
+// before): skips the fetch and writes from those words.
+var RP_GO_LABEL='✦ Rebuild this post in my voice';
+async function cdRpGo(){
+  if(_cdFetching||window._cdGenerating){toast('Already working on it, one moment...');return;}
+  var urlEl=document.getElementById('cdRpUrl'),ta=document.getElementById('cdRpText');
+  var url=urlEl?urlEl.value.trim():'',words=ta?ta.value.trim():'';
+  if(!url&&!words){cdFetchStatus('Paste a link in the box in step 1 first.',true);if(urlEl)urlEl.focus();return;}
+  var card=S.ideas.find(function(a){return a.id===S.cdId;});
+  var lastUrl=(card&&card.repurposeSource&&card.repurposeSource.url)||'';
+  var norm=function(u){return String(u).replace(/^https?:\/\//i,'').replace(/[?#].*$/,'').replace(/\/+$/,'').toLowerCase();};
+  if(url&&(!words||norm(url)!==norm(lastUrl))){
+    var ok=await cdFetchPost();
+    if(!ok)return;
+  }
+  await cdRepurpose2();
+}
+
 
 /* ═══ SWIPE FILE ═══ */
 function cdSaveToSwipeFile(){
@@ -9863,21 +9967,29 @@ function cdRenderSeries(text) {
   list.classList.add('show');
 }
 
+function cdRpBusy(on,label){
+  var btn=document.getElementById('cdRpGoBtn'),why=document.getElementById('cdRpWhyBtn'),load=document.getElementById('cd-load-repurpose');
+  if(btn){btn.disabled=!!on;btn.textContent=on?label:RP_GO_LABEL;}
+  if(why)why.disabled=!!on;
+  if(load){load.textContent=on?label:'';load.classList.toggle('show',!!on);}
+}
+// On a phone the result sits below the steps, so bring it into view.
+function cdRpReveal(id){
+  var el=document.getElementById(id);
+  if(!el||!el.getBoundingClientRect)return;
+  var r=el.getBoundingClientRect();
+  if(r.top<0||r.top>window.innerHeight-140){try{el.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}}
+}
 async function cdAutopsy() {
-  if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
+  if (_cdFetching || window._cdGenerating) { toast('Already working on it, one moment...'); return; }
   var text = document.getElementById('cdRpText').value.trim();
-  if (!text) { toast('Paste some content to analyse first'); return; }
+  if (!text) { cdFetchStatus('There is no post yet. Paste a link in step 1 and tap the button in step 3 first.', true); return; }
   window._cdGenerating = true;
   var targetCardId = cdEnsureCardSaved('Post to rebuild');
-  var load = document.getElementById('cd-load-repurpose');
-  var sbs = document.getElementById('cd-repurpose-sidebyside');
-  var analysisOut = document.getElementById('cd-analysis-out');
-  var rebuildBtn = document.getElementById('cd-rebuild-btn');
-  if (load) load.classList.add('show');
-  if (sbs) sbs.style.display = 'none';
-  var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand;
-  var usr = 'Run a Rebuild in my voice on this post. Cover these 5 labeled sections:\n\n'
+  cdRpBusy(true, 'Working out why this post works. About 20 seconds...');
+  cdRpReveal('cd-load-repurpose');
+  var sys = CD_PERSONA + buildBrandContext();
+  var usr = 'Break down why this post works. Cover these 5 labeled sections:\n\n'
     + '1. HOOK: What type of hook is this and why does it stop the scroll?\n'
     + '2. STRUCTURE: How is it built? What is the flow?\n'
     + '3. EMOTIONAL ANGLE: What feeling does it create and why does that work?\n'
@@ -9885,133 +9997,56 @@ async function cdAutopsy() {
     + '5. WHAT TO AVOID: If I were to rebuild this, what would I not copy?\n\n'
     + 'Post to analyse:\n' + text + ADVICE_SHAPE;
   var result = await cdCallAI(sys, usr, 1100);
-  var loadNow = document.getElementById('cd-load-repurpose');
-  if (loadNow) loadNow.classList.remove('show');
   window._cdGenerating = false;
-  if (result) {
-    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
-    if (targetCard) {
-      targetCard.aiOutputs = targetCard.aiOutputs || {};
-      targetCard.aiOutputs['repurposeAnalysis'] = result;
-      targetCard.updatedAt = new Date().toISOString();
-      persist();
-    }
-    if (S.cdId === targetCardId) {
-      _cdOutputs['repurposeAnalysis'] = result;
-      var analysisOutNow = document.getElementById('cd-analysis-out');
-      var sbsNow = document.getElementById('cd-repurpose-sidebyside');
-      var rebuildBtnNow = document.getElementById('cd-rebuild-btn');
-      if (analysisOutNow) analysisOutNow.textContent = result;
-      if (sbsNow) sbsNow.style.display = 'flex';
-      if (rebuildBtnNow) rebuildBtnNow.style.display = 'block';
-    }
-  }
-}
-
-async function cdRebuildAfterAnalysis() {
-  if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
-  var analysis = _cdOutputs['repurposeAnalysis'] || '';
-  var text = document.getElementById('cdRpText').value.trim();
-  if (!analysis) { toast('Run Rebuild in my voice first'); return; }
-  window._cdGenerating = true;
-  var targetCardId = cdEnsureCardSaved('Post to rebuild');
-  var b = cdGetBrief();
-  var outFmt = document.getElementById('cdRpOutFmt') ? document.getElementById('cdRpOutFmt').value : b.fmt;
-  var load = document.getElementById('cd-load-repurpose');
-  var out = document.getElementById('cd-out-repurpose');
-  var rebuildBtn = document.getElementById('cd-rebuild-btn');
-  if (load) load.classList.add('show');
-  if (rebuildBtn) rebuildBtn.disabled = true;
-  var brand = buildBrandContext();
-  var tone = _cdSelTone || 'warm';
-  var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var sys = CD_PERSONA + brand + SKILL_CORE + ' Output ONLY the finished content. No preamble.';
-  var usr = 'I analysed this post and here is what makes it work:\n\n' + analysis
-    + '\n\nNow rebuild it completely for my brand, niche, and voice. Do NOT copy the original wording. Take the structure and emotional angle that works, then make it 100% original for my audience.'
-    + '\n\nFormat: ' + outFmt + ' for ' + b.plat + '.'
-    + '\nTone: ' + (toneMap[tone] || 'warm and authentic') + '.'
-    + (b.brief ? '\nMy topic/angle: ' + b.brief : '') + SKILL_FLOW_CHECK;
-  var result = await cdCallAI(sys, usr, 1200);
-  var loadNow = document.getElementById('cd-load-repurpose');
-  var rebuildBtnNow = document.getElementById('cd-rebuild-btn');
-  if (loadNow) loadNow.classList.remove('show');
-  if (rebuildBtnNow) rebuildBtnNow.disabled = false;
-  window._cdGenerating = false;
-  if (result) {
-    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
-    if (targetCard) {
-      targetCard.aiOutputs = targetCard.aiOutputs || {};
-      targetCard.aiOutputs['repurpose'] = result;
-      targetCard.updatedAt = new Date().toISOString();
-      persist();
-    }
-    if (S.cdId === targetCardId) {
-      _cdOutputs['repurpose'] = result;
-      var outNow = document.getElementById('cd-out-repurpose');
-      var sbsNow2 = document.getElementById('cd-repurpose-sidebyside');
-      if (sbsNow2) sbsNow2.style.display = 'flex';
-      if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
-    }
+  var here = S.cdId === targetCardId;
+  if (here) cdRpBusy(false);
+  if (!result) { if (here) cdFetchStatus('That did not come back. Nothing was used. Tap it again.', true); return; }
+  var stillHere = cdStoreOutput(targetCardId, 'repurposeAnalysis', result);
+  if (stillHere) {
+    _cdOutputs['repurposeAnalysis'] = result;
+    var analysisOutNow = document.getElementById('cd-analysis-out');
+    var sbsNow = document.getElementById('cd-repurpose-sidebyside');
+    if (analysisOutNow) analysisOutNow.textContent = result;
+    if (sbsNow) sbsNow.style.display = 'block';
+    cdFetchStatus('Done. "Why this post works" is under your version and saved to this card.');
+    cdRpReveal('cd-repurpose-sidebyside');
   }
 }
 
 async function cdRepurpose2() {
-  if (window._cdGenerating) { toast('Already generating, please wait...'); return; }
+  if (_cdFetching || window._cdGenerating) { toast('Already working on it, one moment...'); return; }
   var text = document.getElementById('cdRpText').value.trim();
-  if (!text) { toast('Paste some content first'); return; }
+  if (!text) { cdFetchStatus('There is no post yet. Paste a link in the box in step 1 first.', true); return; }
   window._cdGenerating = true;
-  // Capture which card this result belongs to right now, before the long
-  // wait for a response. Relying on S.cdId still matching by the time the
-  // response arrives was the actual bug here - if the card gets closed,
-  // reopened, or a different card gets opened while this is in flight
-  // (which a 10+ second wait makes very easy to do without realizing),
-  // the result could get silently written to the wrong place, or nowhere
-  // at all, and permanently lost the next time any card's own cdOpen()
-  // resets the shared working state.
+  // The result is saved to this card by id, so it is kept even if the card
+  // is closed or another one is opened while the AI is still writing.
   var targetCardId = cdEnsureCardSaved('Post to rebuild');
   var b = cdGetBrief();
-  var plat = document.getElementById('cdRpPlat').value;
-  var load = document.getElementById('cd-load-repurpose');
-  var out = document.getElementById('cd-out-repurpose');
-  var acts = document.getElementById('cd-acts-repurpose');
-  if (load) load.classList.add('show');
-  if (out) { out.textContent = ''; out.classList.remove('show'); }
-  if (acts) acts.classList.remove('show');
-  var brand = buildBrandContext();
-  var sys = CD_PERSONA + brand + SKILL_CORE + ' Output ONLY the repurposed content. No preamble.';
-  var usr = 'I found a post from ' + plat + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original.\n\nTarget platform: ' + b.plat + '. Format: ' + b.fmt + '.\n\nOriginal post:\n' + text + SKILL_FLOW_CHECK;
-  var result = await cdCallAI(sys, usr, 1200);
-  var loadNow = document.getElementById('cd-load-repurpose');
-  if (loadNow) loadNow.classList.remove('show');
+  var from = document.getElementById('cdRpPlat').value;
+  var outPlatEl = document.getElementById('cdRpOutPlat'), outFmtEl = document.getElementById('cdRpOutFmt');
+  var outPlat = (outPlatEl && outPlatEl.value) || b.plat;
+  var outFmt = (outFmtEl && outFmtEl.value) || b.fmt;
+  cdRpBusy(true, 'Writing your version. About 20 seconds...');
+  cdRpReveal('cd-load-repurpose');
+  var sys = CD_PERSONA + buildBrandContext() + SKILL_CORE + ' Output ONLY the repurposed content. No preamble.';
+  var usr = 'I found a post from ' + from + ' I want to repurpose for my audience.\n\nStudy what makes it work - the structure, hook, emotional angle. Then rebuild it completely for my niche and voice. Make it 100% original. Do not reuse its wording.\n\nTarget platform: ' + outPlat + '. Format: ' + outFmt + '.'
+    + ((b.brief && !/^(Rebuild: |Post to rebuild)/.test(b.brief)) ? '\nMy topic for this card: ' + b.brief : '')
+    + '\n\nOriginal post:\n' + text + SKILL_FLOW_CHECK;
+  var result = await cdCallAI(sys, usr, 1600);
   window._cdGenerating = false;
-  if (result) {
-    // Save directly to the card this actually belongs to, by ID, rather
-    // than assuming S.cdId (and the shared _cdOutputs object) still
-    // correctly refer to it - they may not, if time has passed.
-    var targetCard = S.ideas.find(function(a){return a.id===targetCardId;});
-    if (targetCard) {
-      targetCard.aiOutputs = targetCard.aiOutputs || {};
-      targetCard.aiOutputs['repurpose'] = result;
-      targetCard.updatedAt = new Date().toISOString();
-      persist();
-    }
-    // Only touch the visible screen if the person is still actually
-    // looking at this same card - otherwise this would incorrectly paint
-    // the result onto whatever card happens to be open now. Re-finding
-    // these elements fresh here, rather than trusting the references
-    // captured 10+ seconds ago before the wait, since anything that
-    // re-rendered this part of the page in the meantime would leave those
-    // old references pointing at detached nodes that no longer show on
-    // screen even though writing to them wouldn't throw any error.
-    if (S.cdId === targetCardId) {
-      _cdOutputs['repurpose'] = result;
-      var outNow = document.getElementById('cd-out-repurpose');
-      var actsNow = document.getElementById('cd-acts-repurpose');
-      var sbsNow3 = document.getElementById('cd-repurpose-sidebyside');
-      if (sbsNow3) sbsNow3.style.display = 'flex';
-      if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
-      if (actsNow) actsNow.classList.add('show');
-    }
+  var here = S.cdId === targetCardId;
+  if (here) cdRpBusy(false);
+  if (!result) { if (here) cdFetchStatus('Your version did not come back. Nothing was used for it. Tap the button again.', true); return; }
+  var stillHere = cdStoreOutput(targetCardId, 'repurpose', result);
+  if (stillHere) {
+    _cdOutputs['repurpose'] = result;
+    var outNow = document.getElementById('cd-out-repurpose');
+    if (outNow) { outNow.textContent = result; outNow.classList.add('show'); }
+    cdFetchStatus('Done. Your version is in the "Your version" box and saved to this card.');
+    cdRpReveal('cd-out-repurpose');
+  } else {
+    var tc = S.ideas.find(function(a){ return a.id === targetCardId; });
+    if (tc) toast('Your version is saved on the card "' + tc.title + '"');
   }
 }
 
@@ -10025,6 +10060,7 @@ function creditLimit(){
   return 50; // beta default
 }
 function markDeleted(id){
+  try{cdPicDel(id);}catch(e){}
   // Records a tombstone for this ID so that a future sync merge, on this
   // device or any other, knows this item was deliberately deleted rather
   // than just "missing," which is otherwise indistinguishable from "never
