@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.14">
+<html lang="en" data-version="5.15">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -3223,7 +3223,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <p class="setting-desc">Download a backup of all your drafts, notes, ideas, tasks, and calendar entries as a JSON file. You can re-import it at any time to restore your content. Use this regularly as your safety net.</p>
         <div class="info-b" style="margin-bottom:12px">
           <strong>Export</strong> saves everything to your device as a .json file.<br>
-          <strong>Import</strong> merges a backup file back into your account, it adds to your existing content, it does not replace it.
+          <strong>Import</strong> merges a backup file back into your account. It adds anything that is missing. If a card or task is in both places, the one that was edited most recently is kept.
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn btn-brass" onclick="exportData()">⬇ Export Full Backup (JSON)</button>
@@ -8349,10 +8349,29 @@ function importData(e){
     try{
       const d=JSON.parse(ev.target.result);
       if(!confirm(`Import data? This will merge with your existing content.`))return;
-      const merge=(key)=>{const ids=new Set(S[key].map(x=>x.id));(d[key]||[]).forEach(x=>{if(!ids.has(x.id))S[key].push(x);});};
+      // New items are added. An item that already exists is only replaced
+      // when the file's copy was edited more recently, so importing an
+      // updated backup brings in the edits and an old backup can never
+      // overwrite newer work.
+      const replaced={};
+      const merge=(key)=>{
+        const at=new Map(S[key].map((x,i)=>[x.id,i]));
+        (d[key]||[]).forEach(x=>{
+          if(!x||x.id==null)return;
+          if(!at.has(x.id)){S[key].push(x);return;}
+          const cur=S[key][at.get(x.id)];
+          if(x.updatedAt&&(!cur.updatedAt||x.updatedAt>cur.updatedAt)){S[key][at.get(x.id)]=x;if(key==='ideas')replaced[x.id]=x;}
+        });
+      };
       ['drafts','calEntries','ideas','tasks','hooks','ctas','stories','prompts'].forEach(merge);
+      // Calendar entries carry no edit date, so bring the entry of any
+      // replaced card in line with the card.
+      S.calEntries.forEach(c=>{
+        const x=replaced[String(c.id||'').replace(/^cal_/,'')];
+        if(x&&String(c.id).indexOf('cal_')===0){c.title=x.title;c.date=x.date;c.time=x.time;c.platform=x.platform;c.status=x.status;c.notes=x.notes;}
+      });
       if(d.settings)S.settings={...S.settings,...d.settings,apiKey:S.settings.apiKey};
-      persist();renderDashboard();renderCalendar();renderAllLibs();applySettings();
+      persist();renderDashboard();renderCalendar();renderKanban();renderAllLibs();applySettings();
       toast('Imported successfully ✓');
     }catch(err){toast('Could not read backup: '+err.message);}
     e.target.value='';
