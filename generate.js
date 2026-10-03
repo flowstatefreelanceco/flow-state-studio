@@ -12,8 +12,8 @@ const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cucxwgmsatzlsgzhwghy.s
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1Y3h3Z21zYXR6bHNnemh3Z2h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODI2MjIsImV4cCI6MjA5NDg1ODYyMn0.X1wOXn8gWN5teYBqU2QIw8K1tW4EgAJSVjrM00vBmHA';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const ALLOWED_MODELS = ['claude-sonnet-4-5'];
-const DEFAULT_MODEL = 'claude-sonnet-4-5';
+const ALLOWED_MODELS = ['claude-sonnet-5'];
+const DEFAULT_MODEL = 'claude-sonnet-5';
 const MAX_TOKENS_CAP = 3200;      // longest skill (long article)
 const MAX_MESSAGES = 100;         // long Director Chat threads
 const MAX_SYSTEM_CHARS = 60000;

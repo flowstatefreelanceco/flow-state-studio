@@ -5679,7 +5679,7 @@ const S = {
   drafts:[], calEntries:[], ideas:[], tasks:[],
   hooks:HOOKS_DEFAULT.slice(), ctas:CTAS_DEFAULT.slice(), stories:STORIES_DEFAULT.slice(), prompts:PROMPTS_DEFAULT.slice(),
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
-  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-4-5',buckets:[]},
+  settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-5',buckets:[]},
   plan:'beta',
   swipeFile:[],weeklyFocus:[], // 'owner'|'unlimited'|'beta'|'starter' - loaded from Supabase
   monthlyCredits:50, // limit for beta plan
@@ -5855,7 +5855,7 @@ function applySettings(){
   const n=S.settings.name||'Flow State Studio';
   const sbNameEl=document.getElementById('sbName');if(sbNameEl)sbNameEl.textContent=n;
   const acctEl=document.getElementById('settingsAccountEmail');if(acctEl)acctEl.textContent='Signed in as '+(_currentUser&&_currentUser.email?_currentUser.email:'unknown');
-  const modelEl=document.getElementById('modelIn');if(modelEl)modelEl.value=S.settings.model||'claude-sonnet-4-5';
+  const modelEl=document.getElementById('modelIn');if(modelEl)modelEl.value=S.settings.model||'claude-sonnet-5';
   // Brand profile
   const bp=S.brandProfile||{};
   const setVal=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val||'';};
@@ -6815,7 +6815,7 @@ async function generateStarterLibrary(silent){
     for(var attempt=0;attempt<3;attempt++){
       if(libOutOfCredits)break;
       try{
-        var libBody={model:S.settings.model||'claude-sonnet-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:usr}]};
+        var libBody={model:S.settings.model||'claude-sonnet-5',max_tokens:2000,system:sys,messages:[{role:'user',content:usr}]};
         if(libGrant)libBody.fss_grant=libGrant; else libBody.fss_want_grant='library';
         var r=await fetchWithTimeout('/api/generate',{method:'POST',headers:await aiAuthHeaders(),
           body:JSON.stringify(libBody)
@@ -7166,7 +7166,7 @@ async function generate(){
     ?`You have a draft to work from. Rewrite or refine this into a polished ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone. Keep the voice and ideas, improve the structure, hook, and flow.\n\nDraft:\n${ownDraft}`
     :`Write a ${S.studio.type} for ${S.studio.plat} in a ${S.studio.tone} tone.\n\nTopic: ${topic}`)+cdInstrTail(instr);
   try{
-    const full=await aiGenerateFull({model:S.settings.model||'claude-sonnet-4-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]},45000);
+    const full=await aiGenerateFull({model:S.settings.model||'claude-sonnet-5',max_tokens:1500,system:sys,messages:[{role:'user',content:usr}]},45000);
     if(!full.text)throw new Error('No response came back. Nothing was used, try again');
     if(full.truncated)toast('This one ran really long and may be cut off at the end.');
     var rawOut=stripMD(full.text);
@@ -9501,7 +9501,7 @@ async function cdCallAI(sys, usr, maxTok) {
   _aiInFlight++;
   try {
     // Longer skills (articles, long scripts) need more time than the 45s default
-    var full = await aiGenerateFull({ model: 'claude-sonnet-4-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30));
+    var full = await aiGenerateFull({ model: 'claude-sonnet-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30));
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was used or saved, try again.');
@@ -9566,7 +9566,7 @@ async function cdCallAIChat(messages, maxTok, playbookLock){
   if(!canUseAI()){showCreditBlocked();return '';}
   _aiInFlight++;
   try{
-    var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-4-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 45000);
+    var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 45000);
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was sent, try again.');
