@@ -4391,6 +4391,37 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             </select>
           </div>
         </div>
+        <!-- GROUP: OFFER FOCUS (optional) -->
+        <div class="card-section-toggle" id="cdOfferSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,var(--tealp),#d9efe9);border-bottom:2px solid rgba(0,132,132,.25)">
+            <div class="card-section-toggle-title" style="color:var(--teal)">🎯 What is this piece selling? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;opacity:.75">(optional)</span></div>
+            <span class="card-section-toggle-chev">+</span>
+          </div>
+          <div class="card-section-toggle-body" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:12px;line-height:1.55">Fill this in when a post is working toward a specific offer. The AI tools use it to write a sharper post, built around what this one person actually needs to hear.</div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">The offer</label>
+              <input class="fi" id="cdOfferName" placeholder="e.g. Flow to Launch Lab, a free workshop, your VA/OBM services" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Who this is for</label>
+              <input class="fi" id="cdOfferPerson" placeholder="e.g. a new freelancer who keeps starting over every week" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What's going on for them right now</label>
+              <input class="fi" id="cdOfferSituation" placeholder="e.g. they have clients but no system, so everything lives in their head" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What changes once they work with you</label>
+              <input class="fi" id="cdOfferChange" placeholder="e.g. they stop guessing and have a repeatable way to onboard clients" />
+            </div>
+            <div class="fl" style="margin-bottom:0"><label class="fl-lbl" style="font-size:11px">What job is this specific piece doing?</label>
+              <select class="fi" id="cdOfferAngle">
+                <option value="">Just write it normally</option>
+                <option value="recognition">Help them recognize themselves in the problem</option>
+                <option value="proof">Show proof it actually works</option>
+                <option value="hesitation">Answer the thing holding them back</option>
+                <option value="invitation">Make a direct, clear ask</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <!-- GROUP: SCHEDULING -->
         <div style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Scheduling</div>
@@ -7379,6 +7410,9 @@ function openIdeaModal(status){
   document.getElementById('cdPlat').value='instagram';
   document.getElementById('cdFormat').value='Caption / Post';
   var cdLenClr=document.getElementById('cdLength');if(cdLenClr)cdLenClr.value='standard';
+  ['cdOfferName','cdOfferPerson','cdOfferSituation','cdOfferChange'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('cdOfferAngle').value='';
+  cdSetOfferSectionOpen(false);
   document.getElementById('cdDate').value='';
   var ct=document.getElementById('cdTime');if(ct)ct.value='';
   document.getElementById('cdNotes').value='';
@@ -7431,7 +7465,7 @@ function saveIdea(opts){
   var status=stageEl?stageEl.dataset.s:'idea';
   var reminderCb = document.getElementById('cdReminderOn');
   var reminder = reminderCb ? reminderCb.checked : false;
-  var idea={id:Date.now().toString(),title,platform,format,genLength:cdGetLength(),notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
+  var idea={id:Date.now().toString(),title,platform,format,genLength:cdGetLength(),offerName:document.getElementById('cdOfferName').value.trim(),offerPerson:document.getElementById('cdOfferPerson').value.trim(),offerSituation:document.getElementById('cdOfferSituation').value.trim(),offerChange:document.getElementById('cdOfferChange').value.trim(),offerAngle:document.getElementById('cdOfferAngle').value,notes,hook:hookVal,date,time,images:S._pendingIdeaImages||[],status,ownContent:ownContent,reminder:reminder,bucket:document.getElementById('cdBucket')?document.getElementById('cdBucket').value:'',perfNote:document.getElementById('cdPerfNote')?document.getElementById('cdPerfNote').value.trim():'',aiOutputs:Object.assign({},_cdOutputs),aiHookSel:_cdHookSel||'',cdTasks:JSON.parse(JSON.stringify(_cdTasks)),updatedAt:new Date().toISOString()};
   var slidesContainerNew=document.getElementById('cdCarouselSlides');
   if(slidesContainerNew){
     idea.carouselSlides=Array.from(slidesContainerNew.querySelectorAll('.cd-slide-wrap textarea')).map(function(ta){return ta.value;});
@@ -7829,6 +7863,32 @@ const SKILL_SPECS = {
 
 function skillLengthKey(v){ return (v === 'short' || v === 'long') ? v : 'standard'; }
 
+// What each "job" asks the writer to do. Grounded in a simple, well-worn
+// structure: meet them in the problem, prove it works, answer the doubt,
+// or make the ask. None of this is specific to any one offer or niche.
+const OFFER_ANGLE_GUIDE = {
+  recognition: "This piece's job is recognition. Open by describing the exact moment this person is in right now, specific enough that they think \"that's me\" within the first line. Do not mention the offer by name until the very end, and only as a soft, low-pressure next step, not the point of the piece. The point is helping them see their own situation clearly.",
+  proof: "This piece's job is proof. Show, with one concrete example, story, or before-and-after, that the change described below is real and achievable. Keep it specific and grounded, never a generic success claim. Let the proof do the convincing, then connect it back to the offer in one or two lines at the end.",
+  hesitation: "This piece's job is answering a hesitation. Open by naming the real, specific doubt or question someone in this situation would have before buying or booking, in their own likely words. Answer it honestly and plainly, the way you'd answer a friend, not a sales page. End by inviting them to take the next step now that the doubt is addressed.",
+  invitation: "This piece's job is a direct, clear invitation. Skip a long lead-up. State who this is for and what changes for them in one or two lines, then make the ask plainly and with a genuine reason to act now if one exists. This is the piece that just asks."
+};
+function cdOfferContext(o){
+  o=o||{};
+  if(!o.name&&!o.person&&!o.situation&&!o.change&&!o.angle)return '';
+  var lines=['This piece is working toward a specific offer. Keep it grounded in these specifics instead of writing anything generic:'];
+  if(o.name)lines.push('The offer: '+o.name);
+  if(o.person)lines.push('Who this is for: '+o.person);
+  if(o.situation)lines.push("What's going on for them right now: "+o.situation);
+  if(o.change)lines.push('What changes once they work with you: '+o.change);
+  var out=lines.join('\n');
+  if(o.angle&&OFFER_ANGLE_GUIDE[o.angle])out+='\n\n'+OFFER_ANGLE_GUIDE[o.angle];
+  return out+'\n\n';
+}
+function cdGetOfferFields(){
+  var el=function(id){var e=document.getElementById(id);return e?e.value.trim():'';};
+  return {name:el('cdOfferName'),person:el('cdOfferPerson'),situation:el('cdOfferSituation'),change:el('cdOfferChange'),angle:(document.getElementById('cdOfferAngle')||{}).value||''};
+}
+
 // o: {brief, plat, format, tone, length, instr, freshness, extra}
 function buildSkillRequest(type, o){
   o = o || {};
@@ -7837,7 +7897,7 @@ function buildSkillRequest(type, o){
   var plat = (o.plat || 'instagram').toLowerCase();
   var platNote = SKILL_PLATFORM[plat] || '';
   var sys = CD_PERSONA + buildBrandContext() + SKILL_CORE + (platNote ? ' PLATFORM NOTES: ' + platNote : '') + ' Output ONLY the finished content. No preamble, no explanation of what you did.';
-  var usr = cdInstrLead(o.instr) + (o.freshness || '') +
+  var usr = cdInstrLead(o.instr) + (o.freshness || '') + cdOfferContext(o.offer) +
     'Platform: ' + plat + '\n' +
     (o.format ? 'Card format: ' + o.format + '\n' : '') +
     'Tone: ' + (o.tone || 'warm, personal, and human') + '\n' +
@@ -8200,6 +8260,12 @@ function cdOpen(id){
   document.getElementById('cdPlat').value=x.platform||'instagram';
   document.getElementById('cdFormat').value=x.format||'Caption / Post';
   var cdLenEl=document.getElementById('cdLength');if(cdLenEl)cdLenEl.value=skillLengthKey(x.genLength);
+  document.getElementById('cdOfferName').value=x.offerName||'';
+  document.getElementById('cdOfferPerson').value=x.offerPerson||'';
+  document.getElementById('cdOfferSituation').value=x.offerSituation||'';
+  document.getElementById('cdOfferChange').value=x.offerChange||'';
+  document.getElementById('cdOfferAngle').value=x.offerAngle||'';
+  cdSetOfferSectionOpen(!!(x.offerName||x.offerAngle));
   document.getElementById('cdDate').value=x.date||'';
   var ct=document.getElementById('cdTime');if(ct)ct.value=x.time||'';
   document.getElementById('cdNotes').value=x.notes||'';
@@ -8394,6 +8460,11 @@ function cdSave(opts){
   x.platform=document.getElementById('cdPlat').value||x.platform;
   x.format=document.getElementById('cdFormat').value||x.format;
   x.genLength=cdGetLength();
+  x.offerName=document.getElementById('cdOfferName').value.trim();
+  x.offerPerson=document.getElementById('cdOfferPerson').value.trim();
+  x.offerSituation=document.getElementById('cdOfferSituation').value.trim();
+  x.offerChange=document.getElementById('cdOfferChange').value.trim();
+  x.offerAngle=document.getElementById('cdOfferAngle').value;
   x.date=document.getElementById('cdDate').value;
   var ct=document.getElementById('cdTime');x.time=ct?ct.value:'';
   x.notes=document.getElementById('cdNotes').value;
@@ -8987,7 +9058,7 @@ async function cdGen2(type) {
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
   var toneDesc = toneMap[tone] || 'warm and authentic';
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
-  var req = buildSkillRequest(SKILL_SPECS[type] ? type : 'caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneDesc, length: cdGetLength(), instr: cdInstr, freshness: cdFreshnessNote(type) });
+  var req = buildSkillRequest(SKILL_SPECS[type] ? type : 'caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneDesc, length: cdGetLength(), instr: cdInstr, freshness: cdFreshnessNote(type), offer: cdGetOfferFields() });
   var result = await cdCallAI(req.sys, req.usr, req.maxTok);
   var loadNow0 = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
   if (loadNow0) loadNow0.classList.remove('show');
@@ -9077,7 +9148,7 @@ async function cdBuildCaptionFromHook() {
   var brand = buildBrandContext();
   var tone = _cdSelTone || 'warm';
   var toneMap = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap[tone] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' });
+  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap[tone] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' , offer: cdGetOfferFields() });
   var sys = req.sys, usr = req.usr;
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -9100,7 +9171,7 @@ async function cdBuildFromHook() {
   var brand = buildBrandContext();
   var tone2 = _cdSelTone || 'warm';
   var toneMap2 = { warm: 'warm, personal, and human', direct: 'direct, punchy, and clear', story: 'story-led and narrative', educational: 'educational and value-packed', playful: 'playful and witty' };
-  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap2[tone2] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' });
+  var req = buildSkillRequest('caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneMap2[tone2] || 'warm, personal, and human', length: cdGetLength(), extra: 'Start the caption with this exact hook, word for word: "' + _cdHookSel + '"' , offer: cdGetOfferFields() });
   var sys = req.sys, usr = req.usr;
   var out = document.getElementById('cd-out-hooks');
   var acts = document.getElementById('cd-acts-hooks');
@@ -11450,6 +11521,16 @@ function toggleCardSection(hdr){
   if(!body)return;
   var isOpen = body.classList.toggle('open');
   if(chev) chev.textContent = isOpen ? '-' : '+';
+}
+// Opens the Offer Focus section automatically when a card already has
+// something filled in, so returning to a card doesn't hide it behind a +.
+function cdSetOfferSectionOpen(open){
+  var sec=document.getElementById('cdOfferSec');
+  if(!sec)return;
+  var body=sec.querySelector('.card-section-toggle-body');
+  var chev=sec.querySelector('.card-section-toggle-chev');
+  if(body)body.classList.toggle('open',open);
+  if(chev)chev.textContent=open?'-':'+';
 }
 
 function runAnalogPrompt(){
