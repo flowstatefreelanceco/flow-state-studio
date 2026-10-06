@@ -1,59 +1,41 @@
 {
-  "version": "5.15",
+  "version": "5.16",
   "changelog": [
     {
       "type": "new",
       "date": "Oct 2026",
-      "title": "Create a promo plan",
-      "desc": "Have one thing to sell? Answer 3 questions and get a short run of posts with dates, each one leading people to your offer. You see the plan first, then tap Add to my calendar. Find it at the top of the Calendar and the Content Planner, or on any card's Details tab."
+      "title": "A teleprompter for your reels",
+      "desc": "Filming? Tap ▶ Teleprompter under any script. It opens full screen in big text. Tap Play and the words scroll for you, with the line to say lit up. Use − and + to change the speed, and A− and A+ to change the text size. Tap the script to pause. It does not use AI credits."
     },
     {
       "type": "new",
       "date": "Oct 2026",
-      "title": "Get a post from a link",
-      "desc": "In Rebuild in My Voice, paste the link to a post you like and tap Get post. The Studio pulls in the words for you, including the words on every carousel slide, so you never type out slides again. Works with Instagram posts and carousels, blogs, Substack and newsletters."
-    },
-    {
-      "type": "new",
-      "date": "Oct 2026",
-      "title": "Shrink, for low energy days",
-      "desc": "Open a card, tap Bridge the Gap, then Shrink. You get a tiny version of your post: which format to use, the exact words, and how to make it in about 10 minutes on your phone. Your full version stays on the card."
+      "title": "Where to find the teleprompter",
+      "desc": "In a content card: under Generate Content, Hooks, Caption Variations, Shrink, Your version, and Your draft. Also under every Director Chat reply, above your draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap Open the teleprompter (paste any script)."
     },
     {
       "type": "improvement",
       "date": "Oct 2026",
-      "title": "Hooks got smarter",
-      "desc": "Hooks now gives you 3 first lines, each a different way into your idea. If you already wrote your own hook, you also get one line of feedback on it."
-    },
-    {
-      "type": "new",
-      "date": "Oct 2026",
-      "title": "Your clients' own words",
-      "desc": "Settings, Brand Profile has two new boxes: what clients say when they're stuck, and what they say they wish for. Type a real sentence a client has said. The Studio uses those words to write first lines that sound like your people."
-    },
-    {
-      "type": "new",
-      "date": "Oct 2026",
-      "title": "Check my first line",
-      "desc": "In Director Chat, tap Check my first line, paste any opening line, and get a quick check plus 3 better ways in. No card needed."
+      "title": "Rebuild in My Voice is now one button",
+      "desc": "Paste the link to a post you like, pick your platform and format, and tap Rebuild this post in my voice. It gets the post and writes your version in one go, right next to the button. With a link it uses 2 AI credits. If you paste the words in yourself it uses 1."
     },
     {
       "type": "improvement",
       "date": "Oct 2026",
-      "title": "Content cards have a new look",
-      "desc": "Each tab now has its own colour and a short how-to at the top. Tap Hide guide to tuck it away. On a computer the card uses the full width, with your hook and notes on one side and your draft on the other."
+      "title": "The slides stay on your card",
+      "desc": "When you rebuild a post from a link, the pictures of its slides now stay on the card, so you can look back at them any time on the device you used."
     },
     {
       "type": "improvement",
       "date": "Oct 2026",
-      "title": "Settings is tidier",
-      "desc": "Every section is now a row you tap to open, and Settings remembers which ones you left open. Brand Profile is split into 3 short steps."
+      "title": "Repurposed File keeps your version",
+      "desc": "Tap + Repurposed File above your version to keep it. It saves your version, the original post, and why it worked if you asked for that."
     },
     {
       "type": "improvement",
       "date": "Oct 2026",
       "title": "Guides are up to date",
-      "desc": "The Studio Guide now covers everything above, with a Try this example for each one."
+      "desc": "The Studio Guide and the How to use each section list now cover everything above."
     }
   ]
 }
