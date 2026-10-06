@@ -1031,6 +1031,8 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .promo-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .promo-chip{background:var(--p);border:1.5px solid var(--bl);border-radius:100px;padding:8px 14px;font-family:var(--fb);font-size:13px;color:var(--e);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
 .promo-chip:hover{border-color:var(--g)}
+.promo-summary{background:var(--tealp);color:var(--teal);border-radius:var(--rsm);padding:10px 12px;font-size:13px;line-height:1.55;margin:14px 0 10px;font-weight:600}
+.promo-summary:empty{display:none}
 .promo-chip.sel{border-color:var(--teal);background:var(--tealp);color:var(--teal);font-weight:600}
 .promo-q{font-family:var(--fh);font-size:19px;font-weight:600;color:var(--e);margin-bottom:6px;line-height:1.3}
 .promo-hint{font-size:12.5px;color:var(--t);line-height:1.55;margin-bottom:14px}
@@ -2147,7 +2149,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div class="pf-icon-wrap">🗓</div>
         <div>
           <div class="pf-title">Create a Promo Plan</div>
-          <div class="pf-desc">Got one thing to sell? Answer 3 questions: what you're selling, when people need to decide by, and how many posts feels doable. You get a short run of posts with dates, each one with one job. You see the plan first. Nothing is added until you tap Add to my calendar.</div>
+          <div class="pf-desc">Got one thing to sell? Answer 3 questions: what you're selling, when people need to decide by, and how often you want to post. You get a run of posts with dates that all land before your date, each one with one job. You see the plan first. Nothing is added until you tap Add to my calendar.</div>
         </div>
       </div>
 
@@ -3234,7 +3236,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         </div>
         <div class="ss-step" id="bpStep2"><span class="ss-step-n">2</span><span class="ss-step-t">Who you help</span><span class="ss-step-h">Who buys from you and the exact words they use</span><span class="ss-step-ok">✓</span></div>
         <div class="fl"><label class="fl-lbl">Ideal Client</label><input class="fi" id="bpClient" placeholder="e.g. service-based entrepreneurs ready to scale without burning out" /></div>
-        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital courses" /></div>
+        <div class="fl"><label class="fl-lbl">Products and Offers</label><input class="fi" id="bpOffers" placeholder="e.g. 1:1 coaching, group programs, digital courses" /><div style="font-size:11.5px;color:var(--tl);margin-top:6px;line-height:1.5">Type the names of the things you sell, with a comma between each one. Names only, no descriptions. These show up as tap-to-pick buttons in Create a promo plan.</div></div>
         <div class="fl"><label class="fl-lbl">What clients say when they're stuck <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientKeep" placeholder="e.g. I keep starting over every Monday" /></div>
         <div class="fl"><label class="fl-lbl">What clients say they wish for <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="fi" id="bpClientWish" placeholder="e.g. I wish I had one place for everything" />
           <div style="font-size:11.5px;color:var(--tl);margin-top:6px;line-height:1.5">For both boxes: type a sentence a client has said to you, word for word. The AI uses it to write first lines that sound like your clients.</div>
@@ -3642,7 +3644,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card rust">
               <span class="gd-card-icon">🗓️</span>
               <div class="gd-card-title">Create a promo plan</div>
-              <div class="gd-card-desc">For when you have one thing to sell. You find it at the top of the Calendar and the Content Planner. It asks 3 questions: what are you selling, when do people need to decide by, and how many posts feels doable (3, 5 or 7). You get a list of posts with dates, and each post has one job: name the problem, show it works, answer the doubt, or make the ask. You see the list first. Nothing is added until you tap Add to my calendar. Each post becomes a content card with a label showing the promo name. Tap that label in the Content Planner to see only that promo. If you close the window before adding, your plan is kept for you.<br><br><strong>Try this:</strong> your workshop is in three weeks. Tap Create a promo plan, type the workshop name, pick the date, tap 3 posts. Add them, then open the first card and write it in Go Analog.</div>
+              <div class="gd-card-desc">For when you have one thing to sell. You find it at the top of the Calendar and the Content Planner. It asks 3 questions: what are you selling, when do people need to decide by, and how often do you want to post. For that last one you tap two things: how many posts a week (1, 2 or 3) and how many weeks before your date you want to start (1 to 4). A line under the buttons tells you how many posts that is in total and the first and last dates, before you build anything. Your date is fixed. Every post lands before it, and the last one goes out 2 days before. You get a list of posts with dates, and each post has one job: name the problem, show it works, answer the doubt, or make the ask. You see the list first. Nothing is added until you tap Add to my calendar. Each post becomes a content card with a label showing the promo name. Tap that label in the Content Planner to see only that promo. If you close the window before adding, your plan is kept for you.<br><br><strong>Try this:</strong> your workshop is in three weeks. Tap Create a promo plan, type the workshop name, pick the date, tap 1 post a week and 3 weeks. That is 3 posts. Add them, then open the first card and write it in Go Analog.</div>
             </div>
             <div class="gd-card rust">
               <span class="gd-card-icon">☆</span>
@@ -5228,21 +5230,30 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       <div class="promo-q">What are you selling?</div>
       <div class="promo-hint">One thing only. A paid offer, a freebie, a waitlist, an event.</div>
       <input class="fi" id="promoOffer" placeholder="e.g. my 1:1 coaching, the fall workshop, my free guide" maxlength="80" />
+      <div class="promo-hint" id="promoOfferChipsLbl" style="margin:12px 0 0;display:none">Or tap one of your offers. These come from Products and Offers in your Brand Profile (Settings).</div>
       <div class="promo-chips" id="promoOfferChips"></div>
     </div>
     <div id="promoStep2" style="display:none">
       <div class="promo-q">When do people need to decide by?</div>
-      <div class="promo-hint">Doors closing, an event date, a holiday. No real date? Pick one about 3 weeks out. Your last post lands a couple of days before it, because people decide early.</div>
+      <div class="promo-hint">Doors closing, an event date, a holiday. This date is fixed. Every post lands before it, and your last post goes out 2 days before it, because people decide early. No real date? Pick one about 3 weeks out.</div>
       <input class="fi" type="date" id="promoDate" />
     </div>
     <div id="promoStep3" style="display:none">
-      <div class="promo-q">How many posts feels doable?</div>
-      <div class="promo-hint">3 is plenty. You can add more later.</div>
-      <div class="promo-chips" id="promoCountChips">
-        <button type="button" class="promo-chip" data-n="3" onclick="promoPickCount(3)">3 posts</button>
-        <button type="button" class="promo-chip" data-n="5" onclick="promoPickCount(5)">5 posts</button>
-        <button type="button" class="promo-chip" data-n="7" onclick="promoPickCount(7)">7 posts</button>
+      <div class="promo-q">How often do you want to post about it?</div>
+      <div class="promo-hint">Tap how many posts a week. 1 a week is plenty.</div>
+      <div class="promo-chips" id="promoPerWeekChips">
+        <button type="button" class="promo-chip" data-n="1" onclick="promoPickPace('perWeek',1)">1 post a week</button>
+        <button type="button" class="promo-chip" data-n="2" onclick="promoPickPace('perWeek',2)">2 posts a week</button>
+        <button type="button" class="promo-chip" data-n="3" onclick="promoPickPace('perWeek',3)">3 posts a week</button>
       </div>
+      <div class="promo-hint" style="margin-top:16px">Tap how many weeks before your date you want to start.</div>
+      <div class="promo-chips" id="promoWeeksChips">
+        <button type="button" class="promo-chip" data-n="1" onclick="promoPickPace('weeks',1)">1 week</button>
+        <button type="button" class="promo-chip" data-n="2" onclick="promoPickPace('weeks',2)">2 weeks</button>
+        <button type="button" class="promo-chip" data-n="3" onclick="promoPickPace('weeks',3)">3 weeks</button>
+        <button type="button" class="promo-chip" data-n="4" onclick="promoPickPace('weeks',4)">4 weeks</button>
+      </div>
+      <div class="promo-summary" id="promoSummary"></div>
     </div>
     <div id="promoStep4" style="display:none">
       <div class="ai2-loading" id="promoLoading">Building your plan...</div>
@@ -12594,17 +12605,18 @@ function switchGuideTab(tab){
    are always right. The AI only fills in the titles and opening lines.
    Every card it makes is a normal content card with the offer section
    filled in and a promo label, so it shows in the planner and calendar. */
-var _promo={step:1,offer:'',date:'',count:3,plan:null,busy:false};
+var _promo={step:1,offer:'',date:'',perWeek:1,weeks:3,count:3,plan:null,busy:false};
 var _promoFilter='';
-var PROMO_JOBS={
-  1:['invitation'],
-  2:['recognition','invitation'],
-  3:['recognition','proof','invitation'],
-  4:['recognition','proof','hesitation','invitation'],
-  5:['recognition','recognition','proof','hesitation','invitation'],
-  6:['recognition','recognition','proof','hesitation','proof','invitation'],
-  7:['recognition','recognition','proof','hesitation','proof','hesitation','invitation']
-};
+// The job each post does, in order. It opens by naming the problem, the
+// middle goes back and forth between proof and the doubt, and the last
+// post is always the ask.
+function promoJobs(n){
+  if(n<=1)return ['invitation'];
+  var rest=n-1,rec=Math.max(1,Math.round(rest*0.3)),jobs=[];
+  for(var i=0;i<rest;i++)jobs.push(i<rec?'recognition':((i-rec)%2===0?'proof':'hesitation'));
+  jobs.push('invitation');
+  return jobs;
+}
 var PROMO_JOB_LABEL={recognition:'Name the problem',proof:'Show it works',hesitation:'Answer the doubt',invitation:'Make the ask'};
 var PROMO_FORMATS=['Caption / Post','Carousel','Reel / Video','Story'];
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
@@ -12633,25 +12645,52 @@ function promoYMD(d){
   return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;
 }
 function promoToday(){var t=new Date();t.setHours(0,0,0,0);return t;}
-// Spread the posts between tomorrow and two days before the decide-by
-// date. If there is not enough room, plan fewer posts instead of stacking
-// several on one day.
-function promoSlots(deadlineStr,count){
-  var start=promoToday();start.setDate(start.getDate()+1);
+// The decide-by date is fixed and everything counts back from it. The last
+// post lands two days before it (people decide early). Each week before
+// that gets perWeek posts, spread out, for the number of weeks chosen.
+// Nothing is ever planned for today or earlier, and never two on one day,
+// so a close date simply gets fewer posts.
+function promoSlots(deadlineStr,perWeek,weeks){
+  perWeek=Math.max(1,Math.min(3,perWeek||1));weeks=Math.max(1,Math.min(4,weeks||3));
+  var first=promoToday();first.setDate(first.getDate()+1);
   var dl=new Date(deadlineStr+'T00:00:00');
   var end=new Date(dl);end.setDate(end.getDate()-2);
-  if(end<start){end=new Date(dl);end.setDate(end.getDate()-1);}
-  if(end<start)end=new Date(start);
-  var span=Math.round((end.getTime()-start.getTime())/86400000);
-  var n=Math.max(1,Math.min(count,span+1));
-  var jobs=PROMO_JOBS[n]||PROMO_JOBS[3];
-  var slots=[];
-  for(var i=0;i<n;i++){
-    var off=(n===1)?span:Math.round(i*span/(n-1));
-    var d=new Date(start);d.setDate(d.getDate()+off);
-    slots.push({date:promoYMD(d),job:jobs[i]});
+  if(end<first){end=new Date(dl);end.setDate(end.getDate()-1);}
+  if(end<first)end=new Date(first);
+  var seen={},dates=[];
+  for(var w=0;w<weeks;w++){
+    for(var k=0;k<perWeek;k++){
+      var d=new Date(end);d.setDate(d.getDate()-(w*7+Math.round(k*7/perWeek)));
+      if(d<first)continue;
+      var key=promoYMD(d);
+      if(!seen[key]){seen[key]=1;dates.push(key);}
+    }
   }
-  return slots;
+  dates.sort();
+  var jobs=promoJobs(dates.length);
+  return dates.map(function(dt,i){return {date:dt,job:jobs[i]};});
+}
+function promoNiceDate(ymd){return new Date(ymd+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+// Offer names for the tap-to-pick buttons. The Brand Profile box is free
+// text, so keep only the bits that read like the name of an offer and drop
+// the bits that read like a description of one.
+function promoOfferNames(text){
+  var t=String(text||'');
+  var parts=t.split(/[\n;|•]+/).map(function(x){return x.trim();}).filter(Boolean);
+  if(parts.length<=1)parts=t.split(',');
+  var out=[];
+  parts.forEach(function(seg){
+    var name=seg.split(/:\s| - | \(/)[0].replace(/^(and|or)\s+/i,'').replace(/[.]+$/,'').trim();
+    if(name.length<2||name.length>40)return;
+    var words=name.split(/\s+/).length;
+    if(words>5)return;
+    if(/^\d+\s*\+/.test(name))return;                 // "10+ built in tools"
+    // A name in capitals can run to 5 words. Anything else longer than 3
+    // words reads like a description, not the name of an offer.
+    if(!/^[A-Z]/.test(name)&&words>3)return;
+    if(out.indexOf(name)<0)out.push(name);
+  });
+  return out.slice(0,6);
 }
 function promoPlatform(){
   var p=((S.brandProfile&&S.brandProfile.platforms)||'').toLowerCase();
@@ -12663,7 +12702,7 @@ function promoPlatform(){
 // taps Start over. It survives closing the window and refreshing the page.
 function promoSaveDraft(){
   try{
-    if(_promo.plan)localStorage.setItem('fssPromoDraft',JSON.stringify({offer:_promo.offer,date:_promo.date,count:_promo.count,slots:_promo.slots,plan:_promo.plan}));
+    if(_promo.plan)localStorage.setItem('fssPromoDraft',JSON.stringify({offer:_promo.offer,date:_promo.date,perWeek:_promo.perWeek,weeks:_promo.weeks,count:_promo.count,slots:_promo.slots,plan:_promo.plan}));
     else localStorage.removeItem('fssPromoDraft');
   }catch(e){}
 }
@@ -12694,7 +12733,7 @@ function openPromoPlanner(){
   if(_promo.busy){openModal('promoModal');return;}
   if(!_promo.plan){
     var draft=promoLoadDraft();
-    if(draft)_promo={step:4,offer:draft.offer,date:draft.date,count:draft.count,slots:draft.slots,plan:draft.plan,busy:false};
+    if(draft)_promo={step:4,offer:draft.offer,date:draft.date,perWeek:draft.perWeek||1,weeks:draft.weeks||3,count:draft.count,slots:draft.slots,plan:draft.plan,busy:false};
   }
   if(_promo.plan){
     // Pick up the plan they already paid a credit for.
@@ -12707,7 +12746,7 @@ function openPromoPlanner(){
   openModal('promoModal');
 }
 function promoReset(){
-  _promo={step:1,offer:'',date:'',count:3,plan:null,busy:false};
+  _promo={step:1,offer:'',date:'',perWeek:1,weeks:3,count:3,plan:null,busy:false};
   document.getElementById('promoOffer').value='';
   var d=promoToday();d.setDate(d.getDate()+21);
   var dateEl=document.getElementById('promoDate');
@@ -12717,7 +12756,9 @@ function promoReset(){
   // Offer chips come from the Brand Profile so most people only tap.
   var chips=document.getElementById('promoOfferChips');
   chips.innerHTML='';
-  var offers=((S.brandProfile&&S.brandProfile.offers)||'').split(/[,;\n]+/).map(function(o){return o.trim();}).filter(Boolean).slice(0,6);
+  var offers=promoOfferNames(S.brandProfile&&S.brandProfile.offers);
+  var chipsLbl=document.getElementById('promoOfferChipsLbl');
+  if(chipsLbl)chipsLbl.style.display=offers.length?'':'none';
   offers.forEach(function(o){
     var b=document.createElement('button');
     b.type='button';b.className='promo-chip';b.textContent=o;
@@ -12728,7 +12769,7 @@ function promoReset(){
     chips.appendChild(b);
   });
   document.getElementById('promoPreview').innerHTML='';
-  promoPickCount(3);
+  promoPickPace('perWeek',1);promoPickPace('weeks',3);
   promoShowStep(1);
 }
 function promoShowStep(n){
@@ -12746,9 +12787,22 @@ function promoShowStep(n){
   next.style.display=(n===4&&!_promo.plan)?'none':'';
   back.disabled=!!_promo.busy;back.style.opacity=_promo.busy?'.5':'';
 }
-function promoPickCount(n){
-  _promo.count=n;
-  document.querySelectorAll('#promoCountChips .promo-chip').forEach(function(c){c.classList.toggle('sel',parseInt(c.dataset.n,10)===n);});
+function promoPickPace(kind,n){
+  _promo[kind]=n;
+  var box=document.getElementById(kind==='perWeek'?'promoPerWeekChips':'promoWeeksChips');
+  if(box)box.querySelectorAll('.promo-chip').forEach(function(c){c.classList.toggle('sel',parseInt(c.dataset.n,10)===n);});
+  promoUpdateSummary();
+}
+// Says in plain words what the answers add up to, before any credit is used.
+function promoUpdateSummary(){
+  var el=document.getElementById('promoSummary');
+  var date=_promo.date||(document.getElementById('promoDate')||{}).value;
+  if(!el||!date)return;
+  var slots=promoSlots(date,_promo.perWeek,_promo.weeks);
+  var want=_promo.perWeek*_promo.weeks,n=slots.length;
+  var txt='That is '+n+' post'+(n===1?'':'s')+' in total. First post: '+promoNiceDate(slots[0].date)+'. Last post: '+promoNiceDate(slots[n-1].date)+'. People decide by: '+promoNiceDate(date)+'.';
+  if(n<want)txt+=' Your date is close, so there is only room for '+n+' instead of '+want+'.';
+  el.textContent=txt;
 }
 function promoBack(){
   if(_promo.busy)return;
@@ -12769,7 +12823,7 @@ function promoNext(){
     if(!date){toast('Pick a date. About 3 weeks out is a good default.');return;}
     if(new Date(date+'T00:00:00')<=promoToday()){toast('Pick a date after today so there is room to post.');return;}
     _promo.date=date;
-    promoShowStep(3);return;
+    promoShowStep(3);promoUpdateSummary();return;
   }
   if(_promo.step===3){promoBuild();return;}
   if(_promo.step===4){promoAddToCalendar();return;}
@@ -12798,7 +12852,8 @@ function promoParsePlan(text,slots){
 }
 async function promoBuild(){
   if(_promo.busy)return;
-  var slots=promoSlots(_promo.date,_promo.count);
+  var slots=promoSlots(_promo.date,_promo.perWeek,_promo.weeks);
+  _promo.count=_promo.perWeek*_promo.weeks;
   _promo.slots=slots;_promo.plan=null;_promo.busy=true;
   promoShowStep(4);
   var loading=document.getElementById('promoLoading');
@@ -12844,6 +12899,7 @@ function promoRenderPreview(){
   if(slots.length<_promo.count){
     html+='<div class="promo-hint">That date is close, so this is '+slots.length+' post'+(slots.length===1?'':'s')+' instead of '+_promo.count+'. One a day, nothing stacked.</div>';
   }
+  if(_promo.date&&slots.length)html='<div class="promo-summary">'+slots.length+' post'+(slots.length===1?'':'s')+', all before your date. People decide by <strong>'+esc(promoNiceDate(_promo.date))+'</strong>. Your last post goes out '+esc(promoNiceDate(slots[slots.length-1].date))+'.</div>'+html;
   html+=plan.posts.map(function(p,i){
     var sl=slots[i];
     var dt=new Date(sl.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
