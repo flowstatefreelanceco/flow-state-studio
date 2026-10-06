@@ -600,6 +600,56 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 .rp-words{margin-top:14px;border:1px solid var(--bl);border-radius:var(--rsm);padding:10px 12px;background:var(--w)}
 .rp-link{background:none;border:none;padding:0;font:inherit;color:var(--teal);font-weight:600;text-decoration:underline;cursor:pointer}
 .rp-words>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--teal)}
+/* ═══════════════ TELEPROMPTER ═══════════════ */
+#tpOverlay{display:none;position:fixed;inset:0;z-index:20000;background:#1d0c08;color:#fbf6ee;font-family:var(--fb);flex-direction:column}
+#tpOverlay.open{display:flex}
+.tp-top{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;flex-shrink:0;border-bottom:1px solid rgba(251,246,238,.12)}
+.tp-title{flex:1;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.tp-time{font-size:12px;opacity:.7;white-space:nowrap}
+.tp-btn{font-family:var(--fb);font-size:13px;font-weight:600;color:#fbf6ee;background:rgba(251,246,238,.1);border:1px solid rgba(251,246,238,.22);border-radius:100px;padding:8px 14px;cursor:pointer;min-height:40px;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.tp-btn:hover{background:rgba(251,246,238,.18)}
+.tp-btn.on{background:#fbf6ee;color:#1d0c08}
+.tp-stage{position:relative;flex:1;min-height:0}
+.tp-scroll{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 max(20px,calc((100% - 900px)/2));scrollbar-width:none;cursor:pointer}
+.tp-scroll::-webkit-scrollbar{display:none}
+.tp-scroll.mirror{transform:scaleX(-1)}
+.tp-pad{height:38vh}
+.tp-pad.end{height:62vh}
+.tp-line{font-size:var(--tp-size,34px);line-height:1.38;font-weight:600;margin:0 0 .5em;opacity:.34;transition:opacity .25s,color .25s;border-radius:8px;padding:2px 8px;margin-left:-8px;margin-right:-8px}
+.tp-line.past{opacity:.16}
+.tp-line.now{opacity:1;color:#fff;background:rgba(215,231,254,.14)}
+.tp-line.gap{margin-top:1.1em}
+.tp-cue{font-size:calc(var(--tp-size,34px)*.42);line-height:1.4;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#e8b99c;opacity:.75;margin:1.2em 0 .5em}
+#tpOverlay.paused .tp-line{opacity:.6}
+#tpOverlay.paused .tp-line.now{opacity:1}
+#tpOverlay.paused .tp-line:hover{opacity:1}
+.tp-marker{position:absolute;left:0;top:38%;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:12px solid #e8b99c;pointer-events:none;transform:translateY(6px)}
+.tp-count{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:min(40vw,220px);font-weight:800;color:#fbf6ee;background:rgba(29,12,8,.82);pointer-events:none}
+.tp-count.show{display:flex}
+.tp-hint{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:12.5px;opacity:.75;pointer-events:none;padding:0 16px}
+.tp-bar{flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:8px 14px;flex-wrap:wrap;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(251,246,238,.12);background:#1d0c08;transition:opacity .4s}
+#tpOverlay.playing .tp-bar{opacity:.4}
+#tpOverlay.playing .tp-bar:hover,#tpOverlay.playing .tp-bar:focus-within{opacity:1}
+.tp-play{font-size:15px;padding:10px 26px;background:#b56a3a;border-color:#b56a3a;min-width:120px}
+.tp-play:hover{background:#c47a48}
+.tp-group{display:flex;align-items:center;gap:6px}
+.tp-group-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-right:2px}
+.tp-val{font-size:13px;font-weight:700;min-width:64px;text-align:center}
+.tp-step{width:40px;padding:8px 0;text-align:center;font-size:16px}
+.tp-edit{position:absolute;inset:0;display:none;flex-direction:column;gap:10px;padding:16px max(16px,calc((100% - 760px)/2));background:#1d0c08}
+.tp-edit.show{display:flex}
+.tp-edit label{font-size:14px;font-weight:600}
+.tp-edit textarea{flex:1;min-height:0;width:100%;font-family:var(--fb);font-size:17px;line-height:1.6;color:#1d0c08;background:#fbf6ee;border:none;border-radius:10px;padding:14px;resize:none}
+.tp-edit-note{font-size:12.5px;opacity:.75;line-height:1.5}
+.tp-open{font-family:var(--fb);font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:var(--rsm);border:1.5px solid var(--teal);background:var(--tealp);color:var(--teal);cursor:pointer}
+.tp-open.sm{font-size:10px;padding:3px 8px;border-radius:100px;border-width:1px}
+.dc-msg.assistant .dc-bubble .dc-copy.tp{margin-left:6px}
+@media(max-width:600px){
+  .tp-group-lbl{display:none}
+  .tp-bar{gap:8px 10px}
+  .tp-val{min-width:54px;font-size:12px}
+  .tp-top .tp-btn{padding:8px 11px;font-size:12px}
+}
 /* ═══════════════ FEED PREVIEW ═══════════════ */
 .feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;max-width:640px;margin:0 auto}
 .feed-cell{aspect-ratio:3/4;background:var(--bl);position:relative;overflow:hidden;cursor:pointer;border-radius:2px}
@@ -2869,6 +2919,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <span class="dc-chips-label">Prompts to get started</span>
             <span class="dc-chips-arrow" style="margin-left:auto;font-size:10px;color:var(--tl)">▾</span>
           </button>
+          <button type="button" class="tp-open" style="margin:0 0 10px" onclick="tpOpen('','Teleprompter')" title="Paste any script and read it out loud in big text that scrolls for you">▶ Open the teleprompter (paste any script)</button>
           <div id="dcChipsBody" style="display:none;flex-wrap:wrap;gap:7px;padding-bottom:12px">
             <div class="dc-chip" data-playbook="cadence" onclick="dirChatFillStrategyExample(this)">Ask when's the best time to post or send something</div>
             <div class="dc-chip" data-playbook="launch" onclick="dirChatFillStrategyExample(this)">Help me sequence a launch</div>
@@ -3549,6 +3600,11 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
               <span class="gd-card-icon">🔁</span>
               <div class="gd-card-title">Rebuild in My Voice</div>
               <div class="gd-card-desc">Found a post you admire? Three steps. 1: paste its link. 2: pick the platform and format you want back. 3: tap <strong>Rebuild this post in my voice</strong>. That one button gets the post, reads the words on every carousel slide, and writes your own 100% original version in the "Your version" box. It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Tap "No link?" under the button, paste the words in, and tap the same button. Want to know why the post worked? Tap "Optional: tell me why this post works" under your version. The words, your version, and the slide pictures all stay on the card. The pictures are kept on the device you fetched them on.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Rebuild in My Voice and tap Rebuild this post in my voice for a brand new version built for your niche.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🎬</span>
+              <div class="gd-card-title">Teleprompter</div>
+              <div class="gd-card-desc">Filming a reel? Tap <strong>▶ Teleprompter</strong> under any script. Your script opens full screen in big text. Tap <strong>Play</strong>. You get a 3, 2, 1 countdown, then the words scroll up by themselves and the line to say is lit up. Use the <strong>− and +</strong> next to Speed to go slower or faster. Use <strong>A− and A+</strong> to change the text size. Tap the script to pause. While it is paused, tap any other line to jump to it. Stage directions like "B-roll:" show small and are skipped, so you only read what you say. It does not use AI credits.<br><br><strong>Where the button is:</strong> under Generate Content, Hooks, Caption Variations and Shrink, on Your version in Rebuild in My Voice, under Your draft in Go Analog, and under every Director Chat reply. Have a script from somewhere else? In Director Chat, tap <strong>Open the teleprompter (paste any script)</strong>.<br><br><strong>Good to know:</strong> the words move at the speed you pick. They do not listen to your voice. If you fall behind, tap the script to pause.</div>
             </div>
           </div>
 
@@ -4764,6 +4820,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
               <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
+              <button type="button" class="tp-open" style="font-size:11px;padding:5px 12px" onclick="cdTeleprompt('own')" title="Read your draft out loud in big text that scrolls for you">▶ Teleprompter</button>
               <div id="cdOwnSaved" style="font-size:10.5px;color:var(--teal);opacity:0;transition:opacity .3s">Saved ✓</div>
             </div>
           </div>
@@ -4874,6 +4931,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="ai2-out-acts" id="cd-acts-generate">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('generate')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('generate')">Save Draft</button>
+              <button type="button" class="tp-open" onclick="cdTeleprompt('generate')" title="Read this out loud in big text that scrolls for you">▶ Teleprompter</button>
             </div>
           </div>
         </div>
@@ -4902,6 +4960,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="ai2-out-acts" id="cd-acts-hooks">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('hooks')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('hooks')">Save Draft</button>
+              <button type="button" class="tp-open" onclick="cdTeleprompt('hooks')" title="Read this out loud in big text that scrolls for you">▶ Teleprompter</button>
             </div>
           </div>
           <div class="cd-tool-body" id="ai2-variations-body">
@@ -4912,6 +4971,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="ai2-out-acts" id="cd-acts-variations">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('variations')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('variations')">Save Draft</button>
+              <button type="button" class="tp-open" onclick="cdTeleprompt('variations')" title="Read this out loud in big text that scrolls for you">▶ Teleprompter</button>
             </div>
           </div>
           <div class="cd-tool-body" id="ai2-shrink-body">
@@ -4922,6 +4982,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="ai2-out-acts" id="cd-acts-shrink">
               <button class="btn btn-g" style="font-size:11.5px;padding:6px 12px" onclick="cdCopy2('shrink')">Copy</button>
               <button class="btn btn-brass" style="font-size:11.5px;padding:6px 12px" onclick="cdSaveDraft2('shrink')">Save Draft</button>
+              <button type="button" class="tp-open" onclick="cdTeleprompt('shrink')" title="Read this out loud in big text that scrolls for you">▶ Teleprompter</button>
             </div>
           </div>
           <div class="cd-tool-body" id="ai2-series-body">
@@ -4992,6 +5053,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                 <div class="rp-out-hdr" style="color:var(--teal)">
                   Your version
                   <div style="display:flex;gap:4px">
+                    <button type="button" class="tp-open sm" onclick="cdTeleprompt('repurpose')" title="Read this out loud in big text that scrolls for you">▶ Teleprompter</button>
                     <button onclick="cdCopy2('repurpose')" style="font-size:10px;padding:3px 8px;background:none;border:1px solid var(--teal);border-radius:100px;color:var(--teal);cursor:pointer;font-family:var(--fb)">Copy</button>
                     <button onclick="cdSaveDraft2('repurpose')" style="font-size:10px;padding:3px 8px;background:var(--teal);border:1px solid var(--teal);border-radius:100px;color:white;cursor:pointer;font-family:var(--fb)">Save Draft</button>
                   </div>
@@ -5044,6 +5106,41 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   </div>
 </div>
 
+<!-- TELEPROMPTER -->
+<div id="tpOverlay" role="dialog" aria-modal="true" aria-label="Teleprompter">
+  <div class="tp-top">
+    <div class="tp-title" id="tpTitle">Teleprompter</div>
+    <div class="tp-time" id="tpTime"></div>
+    <button type="button" class="tp-btn" id="tpEditBtn" onclick="tpToggleEdit()">Edit words</button>
+    <button type="button" class="tp-btn" onclick="tpClose()" aria-label="Close teleprompter">Close ✕</button>
+  </div>
+  <div class="tp-stage">
+    <div class="tp-scroll" id="tpScroll"></div>
+    <div class="tp-marker" aria-hidden="true"></div>
+    <div class="tp-hint" id="tpHint"></div>
+    <div class="tp-count" id="tpCount" aria-live="assertive"></div>
+    <div class="tp-edit" id="tpEdit">
+      <label for="tpEditText">Paste or fix your script here</label>
+      <textarea id="tpEditText" placeholder="Paste your script here. Put each new thought on its own line."></textarea>
+      <div class="tp-edit-note">Lines like "B-roll:" or "On screen:" show small and are skipped, so you only read what you say out loud. Changes here are for reading only. They do not change your card.</div>
+      <button type="button" class="tp-btn tp-play" onclick="tpApplyEdit()">Done, show my script</button>
+    </div>
+  </div>
+  <div class="tp-bar" id="tpBar">
+    <button type="button" class="tp-btn" onclick="tpRestart()">↺ Start over</button>
+    <button type="button" class="tp-btn tp-play" id="tpPlayBtn" onclick="tpToggle()">▶ Play</button>
+    <div class="tp-group"><span class="tp-group-lbl">Speed</span>
+      <button type="button" class="tp-btn tp-step" onclick="tpSpeed(-10)" aria-label="Slower">−</button>
+      <span class="tp-val" id="tpSpeedVal"></span>
+      <button type="button" class="tp-btn tp-step" onclick="tpSpeed(10)" aria-label="Faster">+</button>
+    </div>
+    <div class="tp-group"><span class="tp-group-lbl">Text size</span>
+      <button type="button" class="tp-btn tp-step" onclick="tpSize(-4)" aria-label="Smaller text">A−</button>
+      <button type="button" class="tp-btn tp-step" onclick="tpSize(4)" aria-label="Bigger text">A+</button>
+    </div>
+    <button type="button" class="tp-btn" id="tpMirrorBtn" onclick="tpMirror()">Mirror</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <!-- CALENDAR PICKER MODAL -->
@@ -10050,6 +10147,259 @@ async function cdRepurpose2() {
   }
 }
 
+/* ═══════════════════ TELEPROMPTER ═══════════════════
+   Opens any script full screen in big text, scrolls it at a chosen speed
+   and highlights the line to say. Nothing here uses AI or credits. */
+var TP={lines:[],idx:0,t:0,playing:false,raf:0,last:0,wpm:140,size:0,mirror:false,wake:null,counting:false,text:'',title:''};
+var TP_CUE=/^\s*(?:[\[(].*[\])]\s*$|(?:b-?roll|on[- ]?screen(?: text)?|text overlay|overlay|visual|visuals|shot|cut to|scene|music|audio|sound|sfx|caption|note|direction|action|camera|transition|format|how|length|runtime|duration)\s*[:\-–]|(?:slide|scene|part|section|step|option|version|variation)\s*\d+\s*[:.\-–]?\s*$|[A-Za-z][A-Za-z \/&'-]{0,24}:\s*$|[-=_*#~]{3,}\s*$)/i;
+function tpLoadPrefs(){
+  try{var p=JSON.parse(localStorage.getItem('fssTeleprompt')||'{}');if(p.wpm)TP.wpm=p.wpm;if(p.size)TP.size=p.size;TP.mirror=!!p.mirror;}catch(e){}
+  if(!TP.size)TP.size=window.innerWidth<700?28:40;
+}
+function tpSavePrefs(){try{localStorage.setItem('fssTeleprompt',JSON.stringify({wpm:TP.wpm,size:TP.size,mirror:TP.mirror}));}catch(e){}}
+function tpWords(s){var m=String(s).match(/\S+/g);return m?m.length:0;}
+// Turns a script into lines to say (short enough to read at a glance) and
+// small cue lines (directions and labels) that are shown but not timed.
+function tpParse(text){
+  var out=[];
+  var paras=String(text||'').replace(/\r/g,'').split('\n');
+  var gap=false;
+  paras.forEach(function(raw){
+    var line=raw.replace(/\*\*|__|^#{1,6}\s*|^\s*>\s*/g,'').replace(/^\s*(?:[-•*]|\d+[.)])\s+/,'').trim();
+    if(!line){gap=true;return;}
+    if(TP_CUE.test(line)){out.push({cue:true,text:line.replace(/^[\[(]|[\])]$/g,'').replace(/[:\-–]\s*$/,'')});gap=false;return;}
+    // "Hook: say this" keeps the words and shows the label small above them.
+    var lab=line.match(/^([A-Za-z][A-Za-z \/&'-]{0,18}):\s+(.+)$/);
+    if(lab&&tpWords(lab[1])<=3&&/^[A-Z]/.test(lab[1])&&!/^(https?|note that)$/i.test(lab[1])){out.push({cue:true,text:lab[1]});line=lab[2];gap=false;}
+    line=line.replace(/^["“]|["”]$/g,'');
+    // Break into sentences, then break long sentences at commas.
+    var parts=line.match(/[^.!?…]+[.!?…]+["”')\]]*|[^.!?…]+$/g)||[line];
+    var chunks=[];
+    parts.forEach(function(p){
+      p=p.trim();if(!p)return;
+      if(tpWords(p)<=16){chunks.push(p);return;}
+      var bits=p.split(/(?<=[,;:])\s+/),cur='';
+      bits.forEach(function(b){
+        if(cur&&tpWords(cur+' '+b)>14){chunks.push(cur);cur=b;}else cur=cur?cur+' '+b:b;
+      });
+      if(cur)chunks.push(cur);
+    });
+    // Very short bits ride along with the one before them.
+    var merged=[];
+    chunks.forEach(function(c){
+      var prev=merged[merged.length-1];
+      if(prev&&tpWords(c)<3&&tpWords(prev)+tpWords(c)<=16)merged[merged.length-1]=prev+' '+c;else merged.push(c);
+    });
+    merged.forEach(function(c,i){out.push({text:c,words:tpWords(c),gap:gap&&i===0});});
+    gap=false;
+  });
+  return out;
+}
+function tpDur(l){return l.cue?0:Math.max(0.9,l.words/TP.wpm*60)+(/[.!?…]["”')\]]*$/.test(l.text)?0.25:0.1);}
+function tpTimes(){var t=0;TP.lines.forEach(function(l){l.start=t;l.dur=tpDur(l);t+=l.dur;});TP.total=t;}
+function tpFmt(s){s=Math.max(0,Math.round(s));var m=Math.floor(s/60),r=s%60;return m?(m+' min '+(r?r+' sec':'')).trim():r+' sec';}
+function tpRender(){
+  var sc=document.getElementById('tpScroll');
+  sc.innerHTML='';
+  var pad=document.createElement('div');pad.className='tp-pad';sc.appendChild(pad);
+  TP.lines.forEach(function(l,i){
+    var d=document.createElement('div');
+    d.className=l.cue?'tp-cue':'tp-line'+(l.gap?' gap':'');
+    d.textContent=l.text;
+    if(!l.cue)d.dataset.i=i;
+    l.el=d;sc.appendChild(d);
+  });
+  var end=document.createElement('div');end.className='tp-pad end';sc.appendChild(end);
+  sc.classList.toggle('mirror',TP.mirror);
+}
+function tpSpoken(){return TP.lines.filter(function(l){return !l.cue;});}
+function tpLabels(){
+  var ov=document.getElementById('tpOverlay');
+  ov.style.setProperty('--tp-size',TP.size+'px');
+  document.getElementById('tpSpeedVal').textContent=(TP.wpm<=115?'Slow':TP.wpm<=165?'Medium':'Fast')+' '+TP.wpm;
+  document.getElementById('tpMirrorBtn').classList.toggle('on',TP.mirror);
+  var words=tpSpoken().reduce(function(a,l){return a+l.words;},0);
+  document.getElementById('tpTime').textContent=words?'About '+tpFmt(TP.total)+' at this speed':'';
+  document.getElementById('tpPlayBtn').textContent=TP.playing?'❚❚ Pause':(TP.t>0&&TP.t<TP.total?'▶ Keep going':'▶ Play');
+  ov.classList.toggle('playing',TP.playing);
+  ov.classList.toggle('paused',!TP.playing);
+  var hint=document.getElementById('tpHint');
+  hint.textContent=TP.playing?'':(TP.lines.length?'Tap Play to start. Tap the script to pause. While paused, tap any other line to jump to it.':'');
+}
+function tpIndexAt(t){
+  var idx=-1;
+  for(var i=0;i<TP.lines.length;i++){var l=TP.lines[i];if(l.cue)continue;if(l.start<=t+0.0001)idx=i;else break;}
+  if(idx<0){for(var j=0;j<TP.lines.length;j++){if(!TP.lines[j].cue){idx=j;break;}}}
+  return idx;
+}
+// Paints the highlight and puts the current line on the arrow.
+function tpPaint(jump){
+  var sc=document.getElementById('tpScroll');
+  var idx=tpIndexAt(TP.t);
+  if(idx<0)return;
+  if(idx!==TP.idx||jump){
+    TP.lines.forEach(function(l,i){if(l.cue)return;l.el.classList.toggle('now',i===idx);l.el.classList.toggle('past',i<idx);});
+    TP.idx=idx;
+  }
+  var l=TP.lines[idx];
+  var prog=l.dur?Math.min(1,Math.max(0,(TP.t-l.start)/l.dur)):0;
+  var anchor=sc.clientHeight*0.38;
+  // Aim: the line's top sits on the arrow when it starts, its bottom when it ends.
+  var target=l.el.offsetTop+prog*l.el.offsetHeight-anchor-(l.el.offsetHeight>anchor?0:0);
+  if(jump)sc.scrollTop=target;
+  else sc.scrollTop+= (target-sc.scrollTop)*0.12;
+}
+function tpTick(now){
+  if(!TP.playing)return;
+  var dt=Math.min(0.25,(now-TP.last)/1000);TP.last=now;
+  TP.t+=dt;
+  if(TP.t>=TP.total){TP.t=TP.total;tpPaint();tpPause();document.getElementById('tpHint').textContent='That is the end. Tap Start over to go again.';return;}
+  tpPaint();
+  TP.raf=requestAnimationFrame(tpTick);
+}
+async function tpWake(on){
+  try{
+    if(on&&navigator.wakeLock&&!TP.wake){TP.wake=await navigator.wakeLock.request('screen');TP.wake.addEventListener('release',function(){TP.wake=null;});}
+    else if(!on&&TP.wake){var w=TP.wake;TP.wake=null;await w.release();}
+  }catch(e){TP.wake=null;}
+}
+function tpCountdown(){
+  return new Promise(function(res){
+    var el=document.getElementById('tpCount');var n=3;TP.counting=true;
+    el.textContent=n;el.classList.add('show');
+    TP.countTimer=setInterval(function(){
+      n--;
+      if(n<=0||!TP.counting){clearInterval(TP.countTimer);el.classList.remove('show');var ok=TP.counting;TP.counting=false;res(ok);return;}
+      el.textContent=n;
+    },800);
+  });
+}
+function tpCancelCount(){if(TP.counting){TP.counting=false;clearInterval(TP.countTimer);document.getElementById('tpCount').classList.remove('show');}}
+async function tpPlay(){
+  if(TP.playing||TP.counting||!tpSpoken().length)return;
+  if(TP.t>=TP.total)TP.t=0;
+  if(TP.t===0){tpPaint(true);document.getElementById('tpHint').textContent='';var ok=await tpCountdown();if(!ok)return;}
+  TP.playing=true;TP.last=performance.now();
+  tpLabels();tpWake(true);
+  TP.raf=requestAnimationFrame(tpTick);
+}
+function tpPause(){
+  tpCancelCount();
+  TP.playing=false;cancelAnimationFrame(TP.raf);
+  tpLabels();tpWake(false);
+}
+function tpToggle(){if(TP.counting){tpCancelCount();tpLabels();return;}if(TP.playing)tpPause();else tpPlay();}
+function tpRestart(){tpPause();TP.t=0;tpPaint(true);tpLabels();}
+function tpJump(i){var l=TP.lines[i];if(!l||l.cue)return;TP.t=l.start;tpPaint(true);tpLabels();}
+function tpStep(dir){
+  var sp=[];TP.lines.forEach(function(l,i){if(!l.cue)sp.push(i);});
+  var pos=sp.indexOf(tpIndexAt(TP.t));
+  var nx=sp[Math.min(sp.length-1,Math.max(0,pos+dir))];
+  if(nx!==undefined)tpJump(nx);
+}
+function tpSpeed(d){
+  var cur=TP.lines[tpIndexAt(TP.t)];
+  var prog=cur&&cur.dur?(TP.t-cur.start)/cur.dur:0;
+  TP.wpm=Math.min(260,Math.max(70,TP.wpm+d));
+  tpTimes();
+  // Stay on the same words when the speed changes.
+  if(cur)TP.t=cur.start+Math.min(1,Math.max(0,prog))*cur.dur;
+  tpSavePrefs();tpLabels();
+}
+function tpSize(d){TP.size=Math.min(96,Math.max(18,TP.size+d));tpSavePrefs();tpLabels();tpPaint(true);}
+function tpMirror(){TP.mirror=!TP.mirror;document.getElementById('tpScroll').classList.toggle('mirror',TP.mirror);tpSavePrefs();tpLabels();}
+function tpSet(text){
+  TP.text=String(text||'');
+  TP.lines=tpParse(TP.text);TP.t=0;TP.idx=-1;
+  tpTimes();tpRender();tpLabels();
+  if(tpSpoken().length)tpPaint(true);
+}
+function tpToggleEdit(force){
+  var ed=document.getElementById('tpEdit');
+  var show=force===undefined?!ed.classList.contains('show'):!!force;
+  if(show){tpPause();document.getElementById('tpEditText').value=TP.text;}
+  ed.classList.toggle('show',show);
+  document.getElementById('tpBar').style.display=show?'none':'';
+  document.getElementById('tpEditBtn').style.display=show?'none':'';
+  if(show)setTimeout(function(){var ta=document.getElementById('tpEditText');if(ta&&!ta.value)ta.focus();},50);
+}
+function tpApplyEdit(){
+  var v=document.getElementById('tpEditText').value;
+  if(!v.trim()){toast('Paste your script in the box first');return;}
+  tpSet(v);tpToggleEdit(false);
+}
+// The one way in. text can be empty: it then opens on the paste box.
+function tpOpen(text,title){
+  tpLoadPrefs();
+  var ov=document.getElementById('tpOverlay');
+  TP.title=title||'Teleprompter';
+  document.getElementById('tpTitle').textContent=TP.title;
+  ov.classList.add('open');
+  TP.prevFocus=document.activeElement;
+  tpSet(text||'');
+  tpToggleEdit(!tpSpoken().length);
+  if(tpSpoken().length){var pb=document.getElementById('tpPlayBtn');if(pb)pb.focus();}
+}
+function tpClose(){
+  tpPause();
+  document.getElementById('tpOverlay').classList.remove('open');
+  document.getElementById('tpEdit').classList.remove('show');
+  try{if(TP.prevFocus&&TP.prevFocus.focus)TP.prevFocus.focus();}catch(e){}
+}
+function tpIsOpen(){var ov=document.getElementById('tpOverlay');return !!(ov&&ov.classList.contains('open'));}
+// From a content card: which="generate" | "hooks" | "variations" | "shrink" | "repurpose" | "own"
+function cdTeleprompt(which){
+  var txt='';
+  if(which==='own'){var el=document.getElementById('cdOwnContent');txt=el?el.value.trim():'';}
+  else if(which==='hooks')txt=_cdOutputs['hookBuilt']||'';
+  else txt=_cdOutputs[which]||'';
+  if(!txt){toast(which==='own'?'Write or paste your script in the box first':'There is no script here yet');return;}
+  var tEl=document.getElementById('cdTitle');
+  tpOpen(txt,(tEl&&tEl.value.trim())||'Teleprompter');
+}
+function dirChatTeleprompt(i){
+  var active=dirChatGetActive();
+  var m=((active&&active.messages)||[])[i];
+  if(!m||!m.content){toast('There is no script here yet');return;}
+  tpOpen(m.content,'From Director Chat');
+}
+(function(){
+  document.addEventListener('click',function(e){
+    if(!tpIsOpen())return;
+    var sc=document.getElementById('tpScroll');
+    if(!sc||!sc.contains(e.target))return;
+    var line=e.target.closest&&e.target.closest('.tp-line');
+    if(TP.counting){tpCancelCount();tpLabels();return;}
+    if(TP.playing){tpPause();return;}
+    if(line&&line.dataset.i!==undefined&&Number(line.dataset.i)!==TP.idx){tpJump(Number(line.dataset.i));return;}
+    tpPlay();
+  });
+  // Scrolling by hand while paused moves the highlight to the line on the arrow.
+  var st=0;
+  document.addEventListener('scroll',function(e){
+    if(!tpIsOpen()||TP.playing||e.target.id!=='tpScroll')return;
+    clearTimeout(st);
+    st=setTimeout(function(){
+      if(TP.playing)return;
+      var sc=e.target,y=sc.scrollTop+sc.clientHeight*0.38,best=-1;
+      TP.lines.forEach(function(l,i){if(!l.cue&&l.el.offsetTop<=y+4)best=i;});
+      if(best>=0&&best!==TP.idx){var l=TP.lines[best];TP.t=l.start;TP.idx=best;TP.lines.forEach(function(x,i){if(x.cue)return;x.el.classList.toggle('now',i===best);x.el.classList.toggle('past',i<best);});tpLabels();}
+    },140);
+  },true);
+  document.addEventListener('keydown',function(e){
+    if(!tpIsOpen())return;
+    var inEdit=document.getElementById('tpEdit').classList.contains('show');
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();if(inEdit&&tpSpoken().length)tpToggleEdit(false);else tpClose();return;}
+    if(inEdit)return;
+    if(e.key===' '||e.code==='Space'){e.preventDefault();tpToggle();}
+    else if(e.key==='ArrowUp'){e.preventDefault();tpSpeed(10);}
+    else if(e.key==='ArrowDown'){e.preventDefault();tpSpeed(-10);}
+    else if(e.key==='ArrowRight'){e.preventDefault();tpStep(1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();tpStep(-1);}
+  },true);
+  document.addEventListener('visibilitychange',function(){if(document.hidden&&tpIsOpen()&&TP.playing)tpPause();});
+})();
+
 /* ═══════════════════ CREDITS ═══════════════════ */
 function isUnlimited(){
   return S.plan==='owner'||S.plan==='unlimited';
@@ -10357,7 +10707,7 @@ function renderDirectorChat(){
   if(chat.length){
     chat.forEach(function(m,i){
       var safe=dirChatEscape(m.content||'');
-      html+='<div class="dc-msg '+(m.role==='user'?'user':'assistant')+'"><div class="dc-bubble">'+safe+(m.role==='assistant'?'<br><button class="dc-copy" onclick="dirChatCopy('+i+')">Copy</button>':'')+'</div></div>';
+      html+='<div class="dc-msg '+(m.role==='user'?'user':'assistant')+'"><div class="dc-bubble">'+safe+(m.role==='assistant'?'<br><button class="dc-copy" onclick="dirChatCopy('+i+')">Copy</button><button class="dc-copy tp" onclick="dirChatTeleprompt('+i+')">▶ Teleprompter</button>':'')+'</div></div>';
     });
   }
   ['dirChatLog','dirChatPopupLog'].forEach(function(id){
