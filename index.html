@@ -2603,7 +2603,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                 <li><strong>Bridge the Gap:</strong> click AI Tools in the header to open the left panel when you want generation help. It is hidden by default so you never feel pressured to use it.</li>
                 <li><strong>Instructions field:</strong> in the AI panel, tell it exactly what you want before generating. Keep my voice, punch up the hook, make it shorter. It will follow it.</li>
                 <li><strong>Use my draft:</strong> check the box in the AI panel to have the AI work from what you have already written rather than starting from scratch.</li>
-                <li><strong>Articles and Substack:</strong> the AI automatically generates a title and subtitle and places them in the fields above your draft. You do not need to write them yourself.</li>
+                <li><strong>Articles and Substack:</strong> the AI writes a title and a subtitle for you. They are the first two lines of the draft, marked Title: and Subtitle: so you can tell which is which. Copy each one into its own box on Substack and leave the labels behind.</li>
                 <li><strong>Analog badge:</strong> drafts you write yourself get an Analog badge in Saved Drafts. Filter by Analog Only anytime to see exactly what is yours.</li>
                 <li><strong>Saved Drafts:</strong> everything you save goes to Saved Drafts in the sidebar. Filter by platform, analog only, or AI-assisted. Exportable as CSV anytime.</li>
                 <li><strong>Teleprompter:</strong> tap ▶ Teleprompter above your AI draft, or inside any saved draft, to read it out loud in big text that scrolls for you.</li>
@@ -2906,7 +2906,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                   <option value="Playful & Light">Playful &amp; Light</option>
                 </select>
               </div>
-              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI generates a title and subtitle automatically.</div>
+              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI writes a title and a subtitle for you. They are the first two lines of your draft, marked Title: and Subtitle:</div>
               <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:44px;font-size:12.5px"></textarea></div>
               <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
               <button class="btn btn-p full" onclick="goStudioStep(2)">Continue →</button>
@@ -3657,7 +3657,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">🎬</span>
               <div class="gd-card-title">Teleprompter</div>
-              <div class="gd-card-desc">Filming a reel? Tap <strong>▶ Teleprompter</strong> under any script. Your script opens full screen in big text. Tap <strong>Play</strong>. You get a 3, 2, 1 countdown, then the words scroll up by themselves and the line to say is lit up. Use the <strong>− and +</strong> next to Speed to go slower or faster. Use <strong>A− and A+</strong> to change the text size. Tap the script to pause. While it is paused, tap any other line to jump to it. Stage directions like "B-roll:" show small and are skipped, so you only read what you say. It does not use AI credits.<br><br><strong>Where the button is:</strong> under Generate Content, Hooks, Caption Variations and Shrink, on Your version in Rebuild in My Voice, under Your draft in Go Analog, under every Director Chat reply, above your AI draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap <strong>Open the teleprompter (paste any script)</strong>.<br><br><strong>Good to know:</strong> the words move at the speed you pick. They do not listen to your voice. If you fall behind, tap the script to pause.</div>
+              <div class="gd-card-desc">Filming a reel? Tap <strong>▶ Teleprompter</strong> under any script. Your script opens full screen in big text. Tap <strong>Play</strong>. You get a 3, 2, 1 countdown, then the words scroll up by themselves and the line to say is lit up. Use the <strong>− and +</strong> next to Speed to go slower or faster. Use <strong>A− and A+</strong> to change the text size. Tap the script to pause. While it is paused, tap any other line to jump to it. Stage directions like "B-roll:" show small and are skipped, so you only read what you say. It does not use AI credits.<br><br><strong>Where the button is:</strong> under Generate Content, Hooks, Caption Variations and Shrink, on Your version in Rebuild in My Voice, under Caption / Body and Your draft in Go Analog, under every Director Chat reply, above your AI draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap <strong>Open the teleprompter (paste any script)</strong>.<br><br><strong>Good to know:</strong> the words move at the speed you pick. They do not listen to your voice. If you fall behind, tap the script to pause.</div>
             </div>
           </div>
 
@@ -4866,6 +4866,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
               <button type="button" class="cd-expand" onclick="cdFocusOpen('cdNotes','Caption / Body')" aria-label="Expand caption to full screen">Expand</button>
               <textarea class="fi cd-grow" id="cdNotes" data-min="140" style="min-height:140px;font-size:14px;line-height:1.7;margin-bottom:8px" placeholder="What's this about? Your key points, the angle, and what you want them to feel or do."></textarea>
+              <div style="margin:0 0 10px"><button type="button" class="tp-open" style="font-size:11px;padding:5px 12px" onclick="cdTeleprompt('notes')" title="Read your hook and caption out loud in big text that scrolls for you">▶ Teleprompter</button></div>
             </div>
             <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
               <button type="button" class="cd-expand" onclick="cdFocusOpen('cdOwnContent','Your draft')" aria-label="Expand draft to full screen">Expand</button>
@@ -7684,7 +7685,7 @@ async function generate(){
     if(titleM&&subM&&bodyM){
       // Compose title + subtitle + body into one output instead of overwriting
       // the card's own header fields. The card title/subtitle belong to the user.
-      S.studio.output=titleM[1].trim()+'\n'+subM[1].trim()+'\n\n'+bodyM[1].trim();
+      S.studio.output='Title: '+titleM[1].trim()+'\nSubtitle: '+subM[1].trim()+'\n\n'+bodyM[1].trim();
     }else{S.studio.output=rawOut;}
     // Render with ## headers as visually prominent lines
     var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:15px;color:var(--e);display:block;margin:16px 0 6px">$1</strong>');
@@ -8344,12 +8345,12 @@ const SKILL_SPECS = {
   substack: {
     lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
     tokens: { short: 1600, standard: 2400, long: 3200 },
-    spec: "Write a finished Substack article. Output in this order: the title on its own line, the subtitle on its own line (one sentence that sharpens the promise), then an opening hook of two or three short paragraphs that pulls the reader in from the first line, then three or four sections, each starting with a short plain-text header on its own line with a blank line before it (no symbols), then a closing that circles back to the opening image or idea and lands the point, then an optional one-line subscribe or share invitation. Write like a real person with a real point of view, not a content marketer. Minimal bullet points, and each section must give the reader something concrete: an example, a tool, a step, or a reframe."
+    spec: "Write a finished Substack article. Output in this order: first line is the word Title, a colon, then the title. Second line is the word Subtitle, a colon, then the subtitle (one sentence that sharpens the promise). Then a blank line, then an opening hook of two or three short paragraphs that pulls the reader in from the first line, then three or four sections, each starting with a short plain-text header on its own line with a blank line before it (no symbols), then a closing that circles back to the opening image or idea and lands the point, then an optional one-line subscribe or share invitation. Write like a real person with a real point of view, not a content marketer. Minimal bullet points, and each section must give the reader something concrete: an example, a tool, a step, or a reframe."
   },
   blog: {
     lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
     tokens: { short: 1600, standard: 2400, long: 3200 },
-    spec: "Write a finished blog post built to be found in search and actually read. Output in this order: the title on its own line (main keyword included, sentence case), a one-sentence subheadline, an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
+    spec: "Write a finished blog post built to be found in search and actually read. Output in this order: first line is the word Title, a colon, then the title (main keyword included, sentence case). Second line is the word Subtitle, a colon, then a one-sentence subheadline. Then a blank line, then an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
   },
   hooks: {
     lengths: { short: "3 hooks", standard: "3 hooks", long: "3 hooks" },
@@ -9931,6 +9932,7 @@ async function cdGen2(type) {
   var cdInstr = document.getElementById('cdInstrIn') ? document.getElementById('cdInstrIn').value.trim() : '';
   var req = buildSkillRequest(SKILL_SPECS[type] ? type : 'caption', { brief: b.brief, plat: b.plat, format: b.fmt, tone: toneDesc, length: cdGetLength(), instr: cdInstr, freshness: cdFreshnessNote(type), offer: cdGetOfferFields() });
   var result = await cdCallAI(req.sys, req.usr, req.maxTok);
+  if (result && (type === 'substack' || type === 'blog')) result = cdLabelArticleTop(result);
   var loadNow0 = document.getElementById('cd-load-'+type) || document.getElementById('cd-load-generate');
   if (loadNow0) loadNow0.classList.remove('show');
   if (result) {
@@ -10413,9 +10415,14 @@ function tpIsOpen(){var ov=document.getElementById('tpOverlay');return !!(ov&&ov
 function cdTeleprompt(which){
   var txt='';
   if(which==='own'){var el=document.getElementById('cdOwnContent');txt=el?el.value.trim():'';}
+  else if(which==='notes'){
+    // Your hook is the first thing you say, so it goes first.
+    var hk=document.getElementById('cdHook'),nt=document.getElementById('cdNotes');
+    txt=[hk?hk.value.trim():'',nt?nt.value.trim():''].filter(Boolean).join('\n\n');
+  }
   else if(which==='hooks')txt=_cdOutputs['hookBuilt']||'';
   else txt=_cdOutputs[which]||'';
-  if(!txt){toast(which==='own'?'Write or paste your script in the box first':'There is no script here yet');return;}
+  if(!txt){toast((which==='own'||which==='notes')?'Write or paste your script in the box first':'There is no script here yet');return;}
   var tEl=document.getElementById('cdTitle');
   tpOpen(txt,(tEl&&tEl.value.trim())||'Teleprompter');
 }
@@ -10572,6 +10579,28 @@ function showCreditBlocked(){
   toast(msg,true);
 }
 
+// Articles start with a title and a subtitle. This makes sure both are
+// labelled so people can tell which line is which, whatever the AI sent back.
+function cdLabelArticleTop(text){
+  var lines=String(text||'').replace(/\r/g,'').split('\n');
+  var i=0;while(i<lines.length&&!lines[i].trim())i++;
+  if(i>=lines.length)return text;
+  var clean=function(l){return l.replace(/^\s*#{1,6}\s*/,'').replace(/^\*\*(.+)\*\*$/,'$1').trim();};
+  var t=clean(lines[i]);
+  lines[i]=/^title\s*:/i.test(t)?'Title: '+t.replace(/^title\s*:\s*/i,''):'Title: '+t;
+  var j=i+1,blank=0;while(j<lines.length&&!lines[j].trim()){j++;blank++;}
+  if(j<lines.length){
+    var u=clean(lines[j]);
+    if(/^(subtitle|subheadline|subhead)\s*:/i.test(u))lines[j]='Subtitle: '+u.replace(/^[a-z]+\s*:\s*/i,'');
+    // Unlabelled: only call it the subtitle when it sits right under the title.
+    else if(blank===0&&u.split(/\s+/).length<=40)lines[j]='Subtitle: '+u;
+    else return lines.join('\n');
+    // Title and subtitle sit together, then one blank line before the article.
+    lines.splice(i+1,j-i-1);
+    if(lines[i+2]!==undefined&&lines[i+2].trim())lines.splice(i+2,0,'');
+  }
+  return lines.join('\n');
+}
 function stripMD(t){
   if(!t)return t;
   t=t.replace(/^#{1,6} /gm,'');

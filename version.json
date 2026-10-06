@@ -11,7 +11,7 @@
       "type": "new",
       "date": "Oct 2026",
       "title": "Where to find the teleprompter",
-      "desc": "In a content card: under Generate Content, Hooks, Caption Variations, Shrink, Your version, and Your draft. Also under every Director Chat reply, above your draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap Open the teleprompter (paste any script)."
+      "desc": "In a content card: under Generate Content, Hooks, Caption Variations, Shrink, Your version, Caption / Body, and Your draft. Also under every Director Chat reply, above your draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap Open the teleprompter (paste any script)."
     },
     {
       "type": "improvement",
@@ -30,6 +30,12 @@
       "date": "Oct 2026",
       "title": "Repurposed File keeps your version",
       "desc": "Tap + Repurposed File above your version to keep it. It saves your version, the original post, and why it worked if you asked for that."
+    },
+    {
+      "type": "improvement",
+      "date": "Oct 2026",
+      "title": "Articles now label the title and subtitle",
+      "desc": "When you generate a Substack article or blog post, the first two lines are now marked Title: and Subtitle: so you can tell which is which. Copy each one into its own box and leave the labels behind."
     },
     {
       "type": "improvement",
