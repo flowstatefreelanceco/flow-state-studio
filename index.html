@@ -768,6 +768,10 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 
 /* PICK UP WHERE YOU LEFT OFF */
 .pickup-wrap{margin-bottom:24px}
+.view-bar{flex-shrink:0;display:flex;align-items:center;gap:8px 18px;flex-wrap:wrap;margin-bottom:12px;font-size:12.5px;color:var(--t)}
+.view-bar label{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
+.view-bar select{padding:6px 10px;border:1px solid var(--bl);border-radius:var(--rsm);font-family:var(--fb);font-size:12.5px;background:var(--w);color:var(--e);cursor:pointer}
+.view-bar input[type=checkbox]{accent-color:var(--teal);width:15px;height:15px}
 .idea-list-sort{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:var(--t)}
 .idea-list-sort select{padding:5px 10px;border:1px solid var(--bl);border-radius:var(--rsm);font-family:var(--fb);font-size:12px;background:var(--w);color:var(--e);cursor:pointer}
 .idea-list-row{display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--w);border:1px solid var(--bl);border-radius:var(--rsm);margin-bottom:7px;cursor:pointer;transition:border-color .12s,box-shadow .12s}
@@ -2741,10 +2745,6 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
     <div class="main-hdr">
       <div><h1>Content Planner</h1><div class="sub">Plan and track all your content from idea to published</div></div>
       <div class="hdr-acts">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--t);user-select:none" title="Hide published cards">
-          <input type="checkbox" id="kanbanHidePublished" onchange="S.plannerHidePublished=this.checked;persist();renderKanban();renderIdeaListView();" style="accent-color:var(--teal);width:13px;height:13px" />
-          Hide published
-        </label>
         <button class="btn btn-g" id="plannerViewToggle" onclick="togglePlannerView()" style="font-size:12.5px">☰ List View</button>
         <button class="btn btn-g" onclick="openPromoPlanner()" style="font-size:12.5px">✦ Create a promo plan</button>
         <button class="btn btn-p" onclick="openIdeaModal()">+ Add Content</button>
@@ -2766,6 +2766,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
         <div id="bucketInsightsBody" style="max-height:0px;overflow:hidden;transition:max-height .3s ease"></div>
       </div>
       <div id="promoFilterBar" class="promo-filter-bar" style="display:none"></div>
+      <div class="view-bar" id="plannerViewBar"></div>
       <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
       <div id="ideaListView" style="display:none;flex-shrink:0"></div>
     </div>
@@ -2782,6 +2783,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       </div>
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
+      <div class="view-bar" id="taskViewBar"></div>
       <div class="kanban kanban-3" id="taskKanban"></div>
       <div id="taskListView" style="display:none;overflow-y:auto;flex:1"></div>
     </div>
@@ -3558,7 +3560,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">🗂</span>
               <div class="gd-card-title">Content Planner</div>
-              <div class="gd-card-desc">A simple board: Ideas, In Progress, Ready, Published. Every content card lives here. Tap <strong>Create a promo plan</strong> at the top when you have something to sell and want a short run of posts that lead to it.</div>
+              <div class="gd-card-desc">A simple board: Ideas, In Progress, Ready, Published. Every content card lives here. Tap <strong>Create a promo plan</strong> at the top when you have something to sell and want a short run of posts that lead to it. Above the board there is a <strong>Sort by</strong> menu. It starts on Date (soonest first), so what is due next is always at the top of each column. You can switch it to latest first, A to Z, or the order you added things. Tick <strong>Hide published</strong> to tuck finished posts away. Both work in Board View and List View.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">🖼</span>
@@ -3568,7 +3570,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
             <div class="gd-card teal">
               <span class="gd-card-icon">☑</span>
               <div class="gd-card-title">Tasks</div>
-              <div class="gd-card-desc">A to-do list that knows the difference between a high-focus task and a five-minute one. Star your priorities, filter down to just those.</div>
+              <div class="gd-card-desc">A to-do list that knows the difference between a high-focus task and a five-minute one. Star your priorities, filter down to just those. Above the board there is a <strong>Sort by</strong> menu. It starts on Date (soonest first), so what is due next is at the top. You can also sort by latest first, A to Z, energy, or the order you added things. Tick <strong>Hide done</strong> to tuck finished tasks away. Both work in Board View and List View.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">📅</span>
@@ -6247,7 +6249,7 @@ function persist(){
     drafts:S.drafts,calEntries:S.calEntries,ideas:S.ideas,tasks:S.tasks,
     notebooks:S.notebooks,notes:S.notes,
     brandProfile:S.brandProfile,offerProfile:S.offerProfile,longformProfile:S.longformProfile,activeProfile:S.activeProfile||'brand',aiCount:S.aiCount,
-    creditsUsed:S.creditsUsed,creditCycleStart:S.creditCycleStart,deletedIds:S.deletedIds||{},swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',
+    creditsUsed:S.creditsUsed,creditCycleStart:S.creditCycleStart,deletedIds:S.deletedIds||{},swipeFile:S.swipeFile||[],weeklyFocus:S.weeklyFocus||[],lastCardId:S.lastCardId||'',plannerView:S.plannerView||'kanban',plannerSort:S.plannerSort||'date',plannerHidePublished:S.plannerHidePublished||false,taskView:S.taskView||'kanban',taskSort:S.taskSort||'date',taskHideDone:S.taskHideDone||false,
     hooks:S.hooks,ctas:S.ctas,stories:S.stories,prompts:S.prompts,
     favs:S.favs,settings:S.settings,gs:S.gs,directorChats:S.directorChats||[],activeDirectorChatId:S.activeDirectorChatId||null,
     studio:S.studio||{}
@@ -6461,7 +6463,6 @@ function navigate(v,opts){
   if(v==='calendar')renderCalendar();
   if(v==='ideas'){
     renderKanban();renderBucketInsights();
-    var cb=document.getElementById('kanbanHidePublished');if(cb)cb.checked=S.plannerHidePublished||false;
     var kanban=document.getElementById('ideaKanban');
     var list=document.getElementById('ideaListView');
     var btn=document.getElementById('plannerViewToggle');
@@ -6817,6 +6818,46 @@ const FORMAT_COLORS={
   'Blog Post':{bg:'#B4BBE8',fg:'#3A3F8C'}
 };
 function formatColor(fmt){return FORMAT_COLORS[fmt]||{bg:'var(--bl)',fg:'var(--t)'};}
+// One sort for both the board and the list, on both pages. Cards with no
+// date go to the bottom. "added" keeps the order things were created in.
+var VIEW_SORTS={
+  ideas:[['date','Date (soonest first)'],['dateDesc','Date (latest first)'],['title','Title (A to Z)'],['added','Order I added them']],
+  tasks:[['date','Date (soonest first)'],['dateDesc','Date (latest first)'],['title','Title (A to Z)'],['energy','Energy (high to low)'],['added','Order I added them']]
+};
+function viewSortKey(kind){
+  var v=(kind==='tasks'?S.taskSort:S.plannerSort)||'date';
+  return VIEW_SORTS[kind].some(function(o){return o[0]===v;})?v:'date';
+}
+function sortForView(items,sortBy){
+  var out=items.map(function(it,i){return {it:it,i:i};});
+  var when=function(x){return x.date?(x.date+' '+(x.time||'99:99')):'';};
+  var cmp={
+    date:function(a,b){var x=when(a.it),y=when(b.it);if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;return x.localeCompare(y);},
+    dateDesc:function(a,b){var x=when(a.it),y=when(b.it);if(!x&&!y)return 0;if(!x)return 1;if(!y)return -1;return y.localeCompare(x);},
+    title:function(a,b){return String(a.it.title||'').localeCompare(String(b.it.title||''),undefined,{sensitivity:'base'});},
+    energy:function(a,b){var o={high:0,medium:1,low:2};var x=o[a.it.energy],y=o[b.it.energy];return (x==null?3:x)-(y==null?3:y);}
+  }[sortBy];
+  if(cmp)out.sort(function(a,b){return cmp(a,b)||(a.i-b.i);});
+  return out.map(function(o){return o.it;});
+}
+function renderViewBar(kind){
+  var el=document.getElementById(kind==='tasks'?'taskViewBar':'plannerViewBar');
+  if(!el)return;
+  var cur=viewSortKey(kind);
+  var hide=kind==='tasks'?!!S.taskHideDone:!!S.plannerHidePublished;
+  el.innerHTML='<label>Sort by <select onchange="setViewSort(\''+kind+'\',this.value)">'
+    +VIEW_SORTS[kind].map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur?' selected':'')+'>'+o[1]+'</option>';}).join('')
+    +'</select></label>'
+    +'<label><input type="checkbox" '+(hide?'checked':'')+' onchange="setViewHide(\''+kind+'\',this.checked)" />'+(kind==='tasks'?'Hide done':'Hide published')+'</label>';
+}
+function setViewSort(kind,v){
+  if(kind==='tasks'){S.taskSort=v;persist();renderTaskKanban();}
+  else{S.plannerSort=v;persist();renderKanban();}
+}
+function setViewHide(kind,on){
+  if(kind==='tasks'){S.taskHideDone=!!on;persist();renderTaskKanban();}
+  else{S.plannerHidePublished=!!on;persist();renderKanban();}
+}
 function togglePlannerView(){
   S.plannerView=(S.plannerView==='list')?'kanban':'list';
   var kanban=document.getElementById('ideaKanban');
@@ -6837,7 +6878,6 @@ function togglePlannerView(){
 function renderIdeaListView(){
   var el=document.getElementById('ideaListView');
   if(!el)return;
-  var sortBy=S.plannerSort||'date';
   var hidePublished=S.plannerHidePublished||false;
   var statusColors={idea:'var(--tl)',inprogress:'var(--r)',ready:'var(--teal)',published:'#1A521A'};
   var statusBg={idea:'var(--bl)',inprogress:'var(--rp)',ready:'var(--tealp)',published:'#D0EAD0'};
@@ -6845,29 +6885,10 @@ function renderIdeaListView(){
   var items=S.ideas.slice();
   if(hidePublished) items=items.filter(function(i){return i.status!=='published';});
   items=items.filter(promoMatches);
-  if(sortBy==='date'){
-    items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
-  } else if(sortBy==='dateDesc'){
-    items.sort(function(a,b){return (b.date||'0000').localeCompare(a.date||'0000');});
-  } else if(sortBy==='title'){
-    items.sort(function(a,b){return (a.title||'').localeCompare(b.title||'');});
-  } else if(sortBy==='status'){
-    var order={idea:0,inprogress:1,ready:2,published:3};
-    items.sort(function(a,b){return (order[a.status]||0)-(order[b.status]||0);});
-  }
-  var html='<div class="idea-list-sort" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">Sort by <select onchange="S.plannerSort=this.value;persist();renderIdeaListView()">'
-    +'<option value="date"'+(sortBy==='date'?' selected':'')+'>Date (earliest first)</option>'
-    +'<option value="dateDesc"'+(sortBy==='dateDesc'?' selected':'')+'>Date (latest first)</option>'
-    +'<option value="title"'+(sortBy==='title'?' selected':'')+'>Title (A-Z)</option>'
-    +'<option value="status"'+(sortBy==='status'?' selected':'')+'>Status</option>'
-    +'</select>'
-    +'<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;color:var(--t);user-select:none;margin-left:auto">'
-    +'<input type="checkbox" '+(hidePublished?'checked':'')+' onchange="S.plannerHidePublished=this.checked;persist();renderIdeaListView()" style="accent-color:var(--teal);width:14px;height:14px" />'
-    +'Hide published'
-    +'</label>'
-    +'</div>';
+  items=sortForView(items,viewSortKey('ideas'));
+  var html='';
   if(!items.length){
-    html+='<div class="idea-list-empty">No content cards yet. Click + Add Content to get started.</div>';
+    html+='<div class="idea-list-empty">'+(!S.ideas.length?'No content cards yet. Click + Add Content to get started.':(hidePublished?'Nothing to show. Untick Hide published above to see everything.':'No content cards to show here.'))+'</div>';
   } else {
     items.forEach(function(idea){
       var dt='';
@@ -6895,12 +6916,13 @@ function renderKanban(){
   var hidePublished=S.plannerHidePublished||false;
   var colsToShow=hidePublished?IDEA_COLS.filter(function(c){return c.id!=='published';}):IDEA_COLS;
   el.innerHTML=colsToShow.map(col=>{
-    const cards=S.ideas.filter(i=>i.status===col.id&&promoMatches(i));
+    const cards=sortForView(S.ideas.filter(i=>i.status===col.id&&promoMatches(i)),viewSortKey('ideas'));
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(i=>{var fc=formatColor(i.format);return`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();deleteIdea('${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
+        ${i.date?`<div style="font-size:11.5px;color:var(--teal);font-weight:600;margin:3px 0 2px">📅 ${fmtDate(i.date)}</div>`:''}
         <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}${promoTagHTML(i)}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
       </div></div>`;}).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
@@ -6908,6 +6930,7 @@ function renderKanban(){
     </div>`;
   }).join('');
   renderPromoFilterBar();
+  renderViewBar('ideas');
   if(S.plannerView==='list')renderIdeaListView();
 }
 function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
@@ -6965,34 +6988,16 @@ function toggleTaskView(){
 function renderTaskListView(){
   var el=document.getElementById('taskListView');
   if(!el)return;
-  var sortBy=S.taskSort||'date';
   var statusColors={todo:'#2d5fa0',inprogress:'var(--r)',done:'#1A521A'};
   var statusBg={todo:'var(--bluep)',inprogress:'var(--rp)',done:'#D0EAD0'};
   var statusLabel={todo:'To Do',inprogress:'In Progress',done:'Done'};
   var items=S.tasks.slice();
   if(S.taskStarFilter){items=items.filter(function(t){return t.starred;});}
-  if(sortBy==='date'){
-    items.sort(function(a,b){return (a.date||'9999').localeCompare(b.date||'9999');});
-  } else if(sortBy==='dateDesc'){
-    items.sort(function(a,b){return (b.date||'0000').localeCompare(a.date||'0000');});
-  } else if(sortBy==='title'){
-    items.sort(function(a,b){return (a.title||'').localeCompare(b.title||'');});
-  } else if(sortBy==='status'){
-    var order={todo:0,inprogress:1,done:2};
-    items.sort(function(a,b){return (order[a.status]||0)-(order[b.status]||0);});
-  } else if(sortBy==='energy'){
-    var eOrder={high:0,medium:1,low:2};
-    items.sort(function(a,b){return (eOrder[a.energy]??3)-(eOrder[b.energy]??3);});
-  }
-  var html='<div class="idea-list-sort">Sort by <select onchange="S.taskSort=this.value;persist();renderTaskListView()">'
-    +'<option value="date"'+(sortBy==='date'?' selected':'')+'>Date (earliest first)</option>'
-    +'<option value="dateDesc"'+(sortBy==='dateDesc'?' selected':'')+'>Date (latest first)</option>'
-    +'<option value="title"'+(sortBy==='title'?' selected':'')+'>Title (A-Z)</option>'
-    +'<option value="status"'+(sortBy==='status'?' selected':'')+'>Status</option>'
-    +'<option value="energy"'+(sortBy==='energy'?' selected':'')+'>Energy level</option>'
-    +'</select></div>';
+  if(S.taskHideDone){items=items.filter(function(t){return t.status!=='done';});}
+  items=sortForView(items,viewSortKey('tasks'));
+  var html='';
   if(!items.length){
-    html+='<div class="idea-list-empty">'+(S.taskStarFilter?'No starred tasks yet. Tap the ☆ on a task to pin it here.':'No tasks yet. Click + Add Task to get started.')+'</div>';
+    html+='<div class="idea-list-empty">'+(S.taskStarFilter?'No starred tasks to show. Tap the ☆ on a task to pin it here.':(!S.tasks.length?'No tasks yet. Click + Add Task to get started.':(S.taskHideDone?'Everything here is done. Untick Hide done above to see it.':'No tasks to show here.')))+'</div>';
   } else {
     items.forEach(function(t){
       var dt='';
@@ -7017,8 +7022,9 @@ function renderTaskListView(){
 function renderTaskKanban(){
   syncTaskStarFilterBtn();
   const el=document.getElementById('taskKanban');
-  el.innerHTML=TASK_COLS.map(col=>{
-    const cards=S.tasks.filter(t=>t.status===col.id).filter(t=>!S.taskStarFilter||t.starred);
+  renderViewBar('tasks');
+  el.innerHTML=TASK_COLS.filter(c=>!(S.taskHideDone&&c.id==='done')).map(col=>{
+    const cards=sortForView(S.tasks.filter(t=>t.status===col.id).filter(t=>!S.taskStarFilter||t.starred),viewSortKey('tasks'));
     return`<div class="kc">
       <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
       <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
@@ -12555,6 +12561,7 @@ function initFlowStateApp(savedData) {
     if (savedData.plannerHidePublished !== undefined) S.plannerHidePublished = savedData.plannerHidePublished;
     if (savedData.taskView) S.taskView = savedData.taskView;
     if (savedData.taskSort) S.taskSort = savedData.taskSort;
+    if (savedData.taskHideDone !== undefined) S.taskHideDone = savedData.taskHideDone;
     if (savedData.calEntries) S.calEntries = savedData.calEntries;
     if (savedData.ideas) S.ideas = savedData.ideas;
     if (savedData.tasks) S.tasks = savedData.tasks;
