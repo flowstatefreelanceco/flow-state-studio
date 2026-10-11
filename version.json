@@ -1,47 +1,11 @@
 {
-  "version": "5.16",
+  "version": "5.17",
   "changelog": [
     {
       "type": "new",
-      "date": "Oct 2026",
-      "title": "A teleprompter for your reels",
-      "desc": "Filming? Tap ▶ Teleprompter under any script. It opens full screen in big text. Tap Play and the words scroll for you, with the line to say lit up. Use − and + to change the speed, and A− and A+ to change the text size. Tap the script to pause. It does not use AI credits."
-    },
-    {
-      "type": "new",
-      "date": "Oct 2026",
-      "title": "Where to find the teleprompter",
-      "desc": "In a content card: under Generate Content, Hooks, Caption Variations, Shrink, Your version, Caption / Body, and Your draft. Also under every Director Chat reply, above your draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap Open the teleprompter (paste any script)."
-    },
-    {
-      "type": "improvement",
-      "date": "Oct 2026",
-      "title": "Rebuild in My Voice is now one button",
-      "desc": "Paste the link to a post you like, pick your platform and format, and tap Rebuild this post in my voice. It gets the post and writes your version in one go, right next to the button. With a link it uses 2 AI credits. If you paste the words in yourself it uses 1."
-    },
-    {
-      "type": "improvement",
-      "date": "Oct 2026",
-      "title": "The slides stay on your card",
-      "desc": "When you rebuild a post from a link, the pictures of its slides now stay on the card, so you can look back at them any time on the device you used."
-    },
-    {
-      "type": "improvement",
-      "date": "Oct 2026",
-      "title": "Repurposed File keeps your version",
-      "desc": "Tap + Repurposed File above your version to keep it. It saves your version, the original post, and why it worked if you asked for that."
-    },
-    {
-      "type": "improvement",
-      "date": "Oct 2026",
-      "title": "Articles now label the title and subtitle",
-      "desc": "When you generate a Substack article or blog post, the first two lines are now marked Title: and Subtitle: so you can tell which is which. Copy each one into its own box and leave the labels behind."
-    },
-    {
-      "type": "improvement",
-      "date": "Oct 2026",
-      "title": "Guides are up to date",
-      "desc": "The Studio Guide and the How to use each section list now cover everything above."
+      "date": "Oct 11, 2026",
+      "title": "New Later column in your Content Planner",
+      "desc": "Your Content Planner now has a Later column, the first one on the board. It's a parking spot for ideas you don't want to lose but aren't ready to plan yet. Brain dump here, then move anything to Ideas when you're ready. You can also park an idea from Ideas with its Later button."
     }
   ]
 }
