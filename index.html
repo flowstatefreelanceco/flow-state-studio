@@ -8549,6 +8549,10 @@ function importData(e){
     try{
       const d=JSON.parse(ev.target.result);
       if(!confirm(`Import data? This will merge with your existing content.`))return;
+      // A card left open still holds its old text in the form, and the next
+      // background save would write that back over the imported version.
+      var _cdm=document.getElementById('cardDetailModal');
+      if(_cdm&&_cdm.classList.contains('open')){try{cdSaveOrAdd({quiet:true});}catch(err){}S.cdId=null;closeModal('cardDetailModal');}
       // New items are added. An item that already exists is only replaced
       // when the file's copy was edited more recently, so importing an
       // updated backup brings in the edits and an old backup can never
@@ -9051,6 +9055,11 @@ function cdSelTone(el) {
 function cdUpdatePlatDot() {}
 
 
+function cdEditSig(x){
+  var k=['title','platform','format','genLength','offerName','offerPerson','offerSituation','offerChange','offerAngle','date','time','notes','hook','bucket','perfNote','images','ownContent','repurposeSourceText','aiOutputs','aiHookSel','cdTasks','carouselSlides','status','reminder'];
+  var o={};k.forEach(function(f){o[f]=x[f]===undefined?null:x[f];});
+  try{return JSON.stringify(o);}catch(e){return String(Math.random());}
+}
 function cdSaveOrAdd(opts){
   opts=opts||{};
   if(S.cdId){ cdSave(opts); } else { saveIdea(opts); }
@@ -9059,6 +9068,10 @@ function cdSave(opts){
   opts=opts||{};
   var x=S.ideas.find(function(a){return a.id===S.cdId;});
   if(!x)return;
+  // Only a real change counts as an edit. Opening and closing a card, or the
+  // phone switching apps while it's open, used to stamp a fresh edit time,
+  // which made Import Backup think the card was newer than the file.
+  var _cdBefore=cdEditSig(x);
   // Capture the date/time this card had BEFORE this save, so we can tell
   // below whether the post got rescheduled. Without this, changing a post's
   // date while its reminder was already on silently left the reminder
@@ -9101,7 +9114,6 @@ function cdSave(opts){
   x.aiOutputs=Object.assign({},_cdOutputs);
   x.aiHookSel=_cdHookSel||'';
   x.cdTasks=JSON.parse(JSON.stringify(_cdTasks));
-  x.updatedAt=new Date().toISOString();
   // Save carousel slides
   var slidesContainer=document.getElementById('cdCarouselSlides');
   if(slidesContainer){
@@ -9115,6 +9127,7 @@ function cdSave(opts){
   // Status from stage buttons
   var stageEl=document.querySelector('.cd-stage.active');
   if(stageEl&&stageEl.dataset.s)x.status=stageEl.dataset.s;
+  if(cdEditSig(x)!==_cdBefore) x.updatedAt=new Date().toISOString();
   // Sync calendar
   var calId='cal_'+x.id;
   if(x.date){
