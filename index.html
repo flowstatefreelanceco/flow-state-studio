@@ -2652,7 +2652,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
                 <li><strong>In Progress:</strong> move it here when you have started writing or designing.</li>
                 <li><strong>Ready to Post:</strong> caption written, graphic done, waiting to go live.</li>
                 <li><strong>Published:</strong> move it here once it is live so you can see your output at a glance.</li>
-                <li><strong>Go Analog in cards:</strong> every content card opens with the Go Analog section expanded. Write your own draft, hook, or notes directly in the card with no AI required.</li>
+                <li><strong>Go Analog in cards:</strong> every content card opens on Details, and Go Analog is one tap away. Write your own draft, hook, or notes directly in the card with no AI required.</li>
                 <li><strong>Bridge the Gap in cards:</strong> click Bridge the Gap inside any card to open the AI tools: Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, and Rebuild in my voice.</li>
                 <li><strong>Teleprompter:</strong> filming a reel? Tap ▶ Teleprompter under any script in a card. It opens full screen in big text and scrolls for you. It does not use AI credits.</li>
                 <li><strong>This Week's Focus:</strong> use the checklist on your dashboard to pick 1-3 things to work on this week. No dates, no pressure.</li>
@@ -3606,7 +3606,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
 
           <div class="gd-section-lbl">Go Analog, the short version</div>
           <div class="gd-card full teal" style="margin-bottom:12px">
-            <div class="gd-card-desc" style="font-size:13.5px">Every content card has three tabs. <strong>Details</strong> is where you name the post, pick the platform and format, and give it a date. <strong>Go Analog</strong> is where you write it yourself, no AI required: a Hook/Subject box, a Caption/Body box, and a place for your own draft. <strong>Bridge the Gap</strong> is the AI help, and it is always optional. A saved card opens on Go Analog every time, because this Studio was built to default to you, not to AI. Each tab has a short how-to at the top. Tap <strong>Hide guide</strong> to tuck it away, and tap <strong>? How to use this</strong> to bring it back. On a phone the how-to starts tucked away.</div>
+            <div class="gd-card-desc" style="font-size:13.5px">Every content card has three tabs. <strong>Details</strong> is where you name the post, pick the platform and format, and give it a date. <strong>Go Analog</strong> is where you write it yourself, no AI required: a Hook/Subject box, a Caption/Body box, and a place for your own draft. <strong>Bridge the Gap</strong> is the AI help, and it is always optional. Every card opens on Details, then Go Analog is the next tab over, because this Studio was built to default to you, not to AI. Each tab has a short how-to at the top. Tap <strong>Hide guide</strong> to tuck it away, and tap <strong>? How to use this</strong> to bring it back. On a phone the how-to starts tucked away.</div>
           </div>
           <div class="gd-callout" style="background:var(--gp);border-color:#D4A843">
             <div class="gd-callout-icon">✏️</div>
@@ -4128,8 +4128,8 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
           <div class="gd-callout" style="background:var(--gp);border-color:#D4A843;margin-bottom:12px">
             <div class="gd-callout-icon">✏️</div>
             <div>
-              <div class="gd-callout-eyebrow" style="color:var(--g)">Go Analog is always open by default</div>
-              <div class="gd-callout-text">Every content card opens with the Go Analog section expanded and the Bridge the Gap AI tools collapsed. That is intentional. The Studio defaults to you. Open Bridge the Gap only when and if you want to.</div>
+              <div class="gd-callout-eyebrow" style="color:var(--g)">Go Analog is always one tap away</div>
+              <div class="gd-callout-text">Every content card opens on Details, with Go Analog right next to it and the Bridge the Gap AI tools tucked into their own tab. That is intentional. The Studio defaults to you. Open Bridge the Gap only when and if you want to.</div>
             </div>
           </div>
           <div class="gd-cards">
@@ -5886,6 +5886,19 @@ async function saveUserData(obj){
             obj[k]=obj[k].filter(function(x){return !(x&&x.id&&mergedDeleted[x.id]);});
           }
         });
+        // Tasks added or edited on another device/tab must survive this save too.
+        // Without this, a tab that never loaded them overwrites the cloud copy and they vanish.
+        if(Array.isArray(cloudData.tasks)){
+          var _tts=function(x){var v=x&&(x.updatedAt||x.createdAt);return v?new Date(v).getTime():0;};
+          var _local=Array.isArray(obj.tasks)?obj.tasks.slice():[];
+          var _byId={};_local.forEach(function(x,i){if(x&&x.id)_byId[x.id]=i;});
+          cloudData.tasks.forEach(function(c){
+            if(!c||!c.id||mergedDeleted[c.id])return;
+            if(!(c.id in _byId)){_local.push(c);}
+            else if(_tts(c)>_tts(_local[_byId[c.id]])){_local[_byId[c.id]]=c;}
+          });
+          obj.tasks=_local;
+        }
       }catch(e){}
     }
     await sb.from('user_data').upsert({user_id:_currentUser.id,data:JSON.stringify(obj),updated_at:new Date().toISOString()},{onConflict:'user_id'});
@@ -7054,7 +7067,25 @@ function renderTaskKanban(){
   if(S.taskView==='list')renderTaskListView();
 }
 function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
+// A task made from a content card step is rebuilt from that step every time
+// the card saves. So when the task is deleted, the step has to go too, or the
+// task comes straight back the next time the card saves (including the silent
+// background save when the app is hidden).
+function unlinkTaskFromCard(t){
+  if(!t||!t._ideaTask)return;
+  var now=new Date().toISOString();
+  var idea=S.ideas.find(function(i){return i.id===t._ideaId;});
+  if(idea&&Array.isArray(idea.cdTasks)){
+    idea.cdTasks=idea.cdTasks.filter(function(s){return s.id!==t._ideaTask;});
+    idea.updatedAt=now;
+  }
+  if(typeof _cdTasks!=='undefined'&&Array.isArray(_cdTasks)&&_cdTasks.some(function(s){return s.id===t._ideaTask;})){
+    _cdTasks=_cdTasks.filter(function(s){return s.id!==t._ideaTask;});
+    try{cdRenderTasks();}catch(e){}
+  }
+}
 function deleteTask(id){
+  unlinkTaskFromCard(S.tasks.find(function(t){return t.id===id;}));
   markDeleted(id);
   S.calEntries.filter(function(e){return e.id==='cal_task_'+id||e._taskId===id||e.id==='cal_'+id;}).forEach(e=>markDeleted(e.id));
   S.tasks=S.tasks.filter(t=>t.id!==id);
@@ -8092,6 +8123,9 @@ function openTaskModal(status){
   var delBtn=document.getElementById('taskDeleteBtn');if(delBtn)delBtn.style.display='none';
   openModal('taskModal');
 }
+function cleanTaskSubsteps(){
+  return (_taskSubsteps||[]).filter(function(s){return s&&s.text&&s.text.trim();}).map(function(s){return {id:s.id,text:s.text.trim(),done:!!s.done};});
+}
 function saveTask(){
   const title=document.getElementById('taskTitle').value.trim();
   if(!title){toast('Please enter a task');return;}
@@ -8111,6 +8145,7 @@ function saveTask(){
     if(t){
       t.title=title;t.date=date;t.time=time;t.notes=notes;t.status=status;
       t.taskType=taskType;t.energy=energy;t.timeEst=timeEst;t.starred=starred;
+      t.substeps=cleanTaskSubsteps();
       t.updatedAt=new Date().toISOString();
       const calId='cal_task_'+t.id;
       if(date){
@@ -8126,7 +8161,7 @@ function saveTask(){
     persist();closeModal('taskModal');renderTaskKanban();renderCalendar();renderDashboard();toast('Task saved ✓');return;
   }
   // New task
-  const task={id:Date.now().toString(),title,status,date,time,notes,taskType,energy,timeEst,starred,updatedAt:new Date().toISOString()};
+  const task={id:Date.now().toString(),title,status,date,time,notes,taskType,energy,timeEst,starred,substeps:cleanTaskSubsteps(),updatedAt:new Date().toISOString()};
   S.tasks.push(task);
   if(date){S.calEntries.push({id:'cal_task_'+task.id,title,platform:'other',status,date,time,notes});}
   persist();closeModal('taskModal');renderTaskKanban();renderCalendar();renderDashboard();toast('Task added ✓');
@@ -9126,8 +9161,11 @@ function cdAddTask(){
   cdRenderTasks();
 }
 function cdRemoveTask(id){
+  // Removing a step also removes the task it made on the Task Board
+  var linked=S.tasks.filter(function(t){return t._ideaTask===id;});
   _cdTasks=_cdTasks.filter(t=>t.id!==id);
   cdRenderTasks();
+  linked.forEach(function(t){deleteTask(t.id);});
 }
 function cdRenderTasks(){
   var html;
@@ -9148,11 +9186,15 @@ function cdSyncTasks(ideaTitle,ideaId){
   _cdTasks.forEach(function(ct){
     if(!ct.title.trim())return;
     var existing=S.tasks.find(t=>t._ideaTask===ct.id);
+    // Tasks made here get an id ending in _<step id>. If one of those ids has a
+    // deletion tombstone, the person deleted this task on purpose, so never rebuild it.
+    if(!existing&&Object.keys(S.deletedIds||{}).some(function(k){return k.slice(-(ct.id.length+1))==='_'+ct.id;}))return;
     if(existing){
+      if(existing.title!==ct.title||existing.date!==ct.date)existing.updatedAt=new Date().toISOString();
       existing.title=ct.title;existing.date=ct.date;
       if(ct.date){var calId='cal_task_'+existing.id;var idx=S.calEntries.findIndex(e=>e.id===calId);if(idx>-1){S.calEntries[idx].title=ct.title;S.calEntries[idx].date=ct.date;}else{S.calEntries.push({id:calId,title:ct.title,platform:'other',status:'todo',date:ct.date,time:'',notes:'For: '+ideaTitle});}}
     } else {
-      var newTask={id:Date.now().toString()+'_'+ct.id,title:ct.title,status:'todo',date:ct.date,time:'',notes:'Step for: '+ideaTitle,_ideaTask:ct.id,_ideaId:ideaId};
+      var newTask={id:Date.now().toString()+'_'+ct.id,title:ct.title,status:'todo',date:ct.date,time:'',notes:'Step for: '+ideaTitle,_ideaTask:ct.id,_ideaId:ideaId,updatedAt:new Date().toISOString()};
       S.tasks.push(newTask);
       if(ct.date){S.calEntries.push({id:'cal_task_'+newTask.id,title:ct.title,platform:'other',status:'todo',date:ct.date,time:'',notes:'For: '+ideaTitle});}
     }
@@ -11198,8 +11240,8 @@ document.addEventListener('keydown',function(e){
 },true);
 
 
-// Pick the starting tab whenever the card opens: new cards start on Details
-// so the basics get filled in, existing cards open straight to writing.
+// Pick the starting tab whenever the card opens: every card, new or
+// existing, filled in or empty, always starts on Details.
 (function(){
   var m=document.getElementById('cardDetailModal');
   if(!m)return;
@@ -11208,7 +11250,7 @@ document.addEventListener('keydown',function(e){
     var isOpen=m.classList.contains('open');
     if(isOpen&&!wasOpen){
       document.querySelectorAll('#cardDetailModal .cd-tab').forEach(function(t){t.classList.remove('has-new');});
-      cdShowTab(S.cdId?'write':'details');
+      cdShowTab('details');
       setTimeout(cdGrowAll,120);
     }
     if(!isOpen&&wasOpen)cdFocusClose();
@@ -11814,11 +11856,8 @@ function calEntryDelete(id,fromIdea,fromTask){
   if(fromTask){
     var realId=id.replace('task_','');
     if(!confirm('Delete this task?'))return;
-    markDeleted(realId);
-    S.calEntries.filter(function(e){return e.id==='task_'+realId||e._taskId===realId;}).forEach(function(e){markDeleted(e.id);});
-    S.tasks=S.tasks.filter(function(t){return t.id!==realId;});
-    S.calEntries=S.calEntries.filter(function(e){return e.id!=='task_'+realId&&e._taskId!==realId;});
-    persist();closeModal('calDayModal');renderCalendar();renderTaskKanban();renderDashboard();toast('Task deleted');return;
+    deleteTask(realId);
+    closeModal('calDayModal');toast('Task deleted');return;
   }
   if(fromIdea){
     var realId=id.replace('idea_','');
