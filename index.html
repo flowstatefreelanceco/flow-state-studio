@@ -10890,7 +10890,29 @@ function renderDirectorChat(){
     log.innerHTML=chat.length?html:emptyHtml;
     log.scrollTop=log.scrollHeight;
   });
+  // The log is rebuilt every time the popup opens or the view changes, which
+  // used to wipe the typing dots while a reply was still on its way. Put them
+  // back, or if the last message never got an answer, say so with a retry.
+  var pending=!!(active&&_dcPending[active.id]);
+  if(pending){
+    dirChatShowTyping();
+  } else if(chat.length&&chat[chat.length-1].role==='user'){
+    ['dirChatLog','dirChatPopupLog'].forEach(function(id){
+      var log=document.getElementById(id);
+      if(!log)return;
+      var d=document.createElement('div');
+      d.className='dc-msg assistant';
+      d.innerHTML='<div class="dc-bubble">No answer came back for that one, and no credit was used.<br><button class="dc-copy" onclick="dirChatRetry()">Try again</button></div>';
+      log.appendChild(d);
+      log.scrollTop=log.scrollHeight;
+    });
+  }
+  ['dirChatSendBtn','dirChatPopupSendBtn'].forEach(function(id){
+    var b=document.getElementById(id);
+    if(b)b.disabled=pending;
+  });
 }
+var _dcPending={};
 
 function dirChatEscape(t){
   var d=document.createElement('div');
@@ -10971,6 +10993,10 @@ async function directorChatSend(target){
   var btn=document.getElementById(btnId);
   S.directorChats=S.directorChats||[];
   var active=dirChatGetActive();
+  if(active&&_dcPending[active.id]){
+    toast('Still working on your last message. Your new one is saved in the box.');
+    return;
+  }
   if(!active){
     active={id:'dc'+Date.now(),title:'New chat',messages:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
     S.directorChats.unshift(active);
@@ -10981,23 +11007,35 @@ async function directorChatSend(target){
   if(isFirstMessage) active.title=dirChatTitleFrom(active.messages);
   active.updatedAt=new Date().toISOString();
   input.value='';
-  renderDirectorChat();
   persist();
-  if(btn)btn.disabled=true;
-  dirChatShowTyping();
+  await dirChatRequestReply(active);
+}
+
+// Asks for the reply to the last user message in this chat. Used by Send and
+// by Try again, so a retry never adds the question a second time.
+async function dirChatRequestReply(active){
+  if(!active||_dcPending[active.id])return;
+  _dcPending[active.id]=true;
+  renderDirectorChat();
   // Build message history for the API (role/content only)
   var apiMessages=active.messages.map(function(m){return {role:m.role,content:m.content};});
   var playbookLock=S._dirChatPlaybookLock||null;
   S._dirChatPlaybookLock=null; // only applies to this one message, not the whole conversation
-  var reply=await cdCallAIChat(apiMessages, 1200, playbookLock);
+  var reply='';
+  try{ reply=await cdCallAIChat(apiMessages, 1200, playbookLock); }
+  finally{ _dcPending[active.id]=false; }
   dirChatHideTyping();
-  if(btn)btn.disabled=false;
   if(reply){
     active.messages.push({role:'assistant',content:reply,ts:new Date().toISOString()});
     active.updatedAt=new Date().toISOString();
-    renderDirectorChat();
     persist();
   }
+  renderDirectorChat();
+}
+function dirChatRetry(){
+  var active=dirChatGetActive();
+  if(!active||!active.messages.length||active.messages[active.messages.length-1].role!=='user')return;
+  dirChatRequestReply(active);
 }
 
 function directorChatClear(){
