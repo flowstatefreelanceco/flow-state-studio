@@ -225,6 +225,7 @@ html,body{height:100%;height:-webkit-fill-available;font-family:var(--fb);backgr
 .kanban{display:grid;gap:14px;flex:1;min-height:0;overflow:hidden}
 .kanban-3{grid-template-columns:repeat(3,1fr);gap:16px}
 .kanban-4{grid-template-columns:repeat(4,1fr)}
+.kanban-5{grid-template-columns:repeat(5,minmax(0,1fr))}
 .kc{background:var(--w);border:1px solid var(--bl);border-radius:var(--rad);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px var(--sh);min-width:0}
 .kc-head{padding:10px 14px 8px;border-bottom:1px solid var(--bl);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .kc-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t)}
@@ -1108,7 +1109,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   .pickup-grid{grid-template-columns:1fr}
 
   /* KANBAN */
-  .kanban-3,.kanban-4{grid-template-columns:1fr;gap:8px;overflow:visible !important}
+  .kanban-3,.kanban-4,.kanban-5{grid-template-columns:1fr;gap:8px;overflow:visible !important}
   .kanban{flex-direction:column;overflow:visible !important;flex:unset !important;min-height:unset !important;height:auto !important}
   .kc{min-height:unset;overflow:hidden}
   .empty-kc{padding:8px 10px !important;font-size:11px !important}
@@ -2767,7 +2768,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
       </div>
       <div id="promoFilterBar" class="promo-filter-bar" style="display:none"></div>
       <div class="view-bar" id="plannerViewBar"></div>
-      <div class="kanban kanban-4" id="ideaKanban" style="flex-shrink:0"></div>
+      <div class="kanban kanban-5" id="ideaKanban" style="flex-shrink:0"></div>
       <div id="ideaListView" style="display:none;flex-shrink:0"></div>
     </div>
   </div>
@@ -4692,6 +4693,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
     <div class="cd-sticky">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--bl);flex-shrink:0;background:var(--w)">
       <div class="cd-stages" style="margin-bottom:0">
+        <div class="cd-stage" data-s="later" onclick="cdSetStage(this)">Later</div>
         <div class="cd-stage" data-s="idea" onclick="cdSetStage(this)">Idea</div>
         <div class="cd-stage" data-s="inprogress" onclick="cdSetStage(this)">In Progress</div>
         <div class="cd-stage" data-s="ready" onclick="cdSetStage(this)">Ready</div>
@@ -6805,7 +6807,7 @@ function getOnYourPlateData(){
 }
 
 /* ═══════════════════ KANBAN - IDEAS ═══════════════════ */
-const IDEA_COLS=[{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+const IDEA_COLS=[{id:'later',label:'Later',bg:'var(--bl)',color:'var(--t)',bd:'#B9AFA3'},{id:'idea',label:'Ideas',bg:'var(--tealp)',color:'var(--teal)',bd:'#3A8C8C'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'ready',label:'Ready to Post',bg:'var(--gp)',color:'var(--g)',bd:'#C47A3A'},{id:'published',label:'Published',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
 // Color coding by content FORMAT (not platform) so cards in the planner are
 // recognizable at a glance - a Reel and a Carousel should never look the
 // same just because they're both Instagram. Keys match the <option> values
@@ -6892,9 +6894,9 @@ function renderIdeaListView(){
   var el=document.getElementById('ideaListView');
   if(!el)return;
   var hidePublished=S.plannerHidePublished||false;
-  var statusColors={idea:'var(--tl)',inprogress:'var(--r)',ready:'var(--teal)',published:'#1A521A'};
-  var statusBg={idea:'var(--bl)',inprogress:'var(--rp)',ready:'var(--tealp)',published:'#D0EAD0'};
-  var statusLabel={idea:'Idea',inprogress:'In Progress',ready:'Ready',published:'Published'};
+  var statusColors={later:'var(--t)',idea:'var(--tl)',inprogress:'var(--r)',ready:'var(--teal)',published:'#1A521A'};
+  var statusBg={later:'var(--bl)',idea:'var(--bl)',inprogress:'var(--rp)',ready:'var(--tealp)',published:'#D0EAD0'};
+  var statusLabel={later:'Later',idea:'Idea',inprogress:'In Progress',ready:'Ready',published:'Published'};
   var items=S.ideas.slice();
   if(hidePublished) items=items.filter(function(i){return i.status!=='published';});
   items=items.filter(promoMatches);
@@ -6928,6 +6930,7 @@ function renderKanban(){
   const el=document.getElementById('ideaKanban');
   var hidePublished=S.plannerHidePublished||false;
   var colsToShow=hidePublished?IDEA_COLS.filter(function(c){return c.id!=='published';}):IDEA_COLS;
+  el.className='kanban kanban-'+colsToShow.length;
   el.innerHTML=colsToShow.map(col=>{
     const cards=sortForView(S.ideas.filter(i=>i.status===col.id&&promoMatches(i)),viewSortKey('ideas'));
     return`<div class="kc">
@@ -6938,7 +6941,7 @@ function renderKanban(){
         ${i.date?`<div style="font-size:11.5px;color:var(--teal);font-weight:600;margin:3px 0 2px">📅 ${fmtDate(i.date)}</div>`:''}
         <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}${promoTagHTML(i)}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
-      </div></div>`;}).join(''):'<div class="empty-kc">No ideas here yet</div>'}</div>
+      </div></div>`;}).join(''):(col.id==='later'?'<div class="empty-kc">Brain dump here, sort it out later</div>':'<div class="empty-kc">No ideas here yet</div>')}</div>
       <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
@@ -6946,7 +6949,16 @@ function renderKanban(){
   renderViewBar('ideas');
   if(S.plannerView==='list')renderIdeaListView();
 }
-function nextCols(id){return IDEA_COLS.slice(IDEA_COLS.findIndex(c=>c.id===id)+1).slice(0,2);}
+function nextCols(id){
+  // Later is the brain dump parking lot, so it sits outside the normal
+  // Ideas > In Progress > Ready > Published flow. Ideas can be parked there
+  // and pulled back out with one tap.
+  var main=IDEA_COLS.filter(function(c){return c.id!=='later';});
+  var later=IDEA_COLS.filter(function(c){return c.id==='later';})[0];
+  if(id==='later')return main.slice(0,2);
+  if(id==='idea')return [main[1],later];
+  return main.slice(main.findIndex(function(c){return c.id===id;})+1).slice(0,2);
+}
 function deleteIdea(id){
   markDeleted(id);
   S.calEntries.filter(e=>e.id==='cal_'+id||e._ideaId===id).forEach(e=>markDeleted(e.id));
