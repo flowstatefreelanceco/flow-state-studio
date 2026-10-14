@@ -8469,12 +8469,12 @@ const SKILL_SPECS = {
   },
   substack: {
     lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
-    tokens: { short: 1600, standard: 2400, long: 3200 },
+    tokens: { short: 2400, standard: 3600, long: 5200 },
     spec: "Write a finished Substack article. Output in this order: first line is the word Title, a colon, then the title. Second line is the word Subtitle, a colon, then the subtitle (one sentence that sharpens the promise). Then a blank line, then an opening hook of two or three short paragraphs that pulls the reader in from the first line, then three or four sections, each starting with a short plain-text header on its own line with a blank line before it (no symbols), then a closing that circles back to the opening image or idea and lands the point, then an optional one-line subscribe or share invitation. Write like a real person with a real point of view, not a content marketer. Minimal bullet points, and each section must give the reader something concrete: an example, a tool, a step, or a reframe."
   },
   blog: {
     lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
-    tokens: { short: 1600, standard: 2400, long: 3200 },
+    tokens: { short: 2400, standard: 3600, long: 5200 },
     spec: "Write a finished blog post built to be found in search and actually read. Output in this order: first line is the word Title, a colon, then the title (main keyword included, sentence case). Second line is the word Subtitle, a colon, then a one-sentence subheadline. Then a blank line, then an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
   },
   hooks: {
@@ -10799,7 +10799,8 @@ async function aiGenerateFull(payload, ms, opts){
   var base = payload.messages.slice();
   var messages = base;
   var text = '', stop = '', grant = opts.grant || null, lastFss = null;
-  for (var pass = 0; pass < 3; pass++){
+  var maxPasses = opts.maxPasses || 3;
+  for (var pass = 0; pass < maxPasses; pass++){
     var body = Object.assign({}, payload, { messages: messages });
     if (grant) body.fss_grant = grant;
     else if (opts.wantGrant) body.fss_want_grant = opts.wantGrant;
@@ -10848,7 +10849,7 @@ async function cdCallAI(sys, usr, maxTok) {
   _aiInFlight++;
   try {
     // Longer skills (articles, long scripts) need more time than the 45s default
-    var full = await aiGenerateFull({ model: 'claude-sonnet-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30));
+    var full = await aiGenerateFull({ model: 'claude-sonnet-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30), { maxPasses: (maxTok || 0) >= 2400 ? 5 : 3 });
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was used or saved, try again.');
