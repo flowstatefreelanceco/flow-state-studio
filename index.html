@@ -10821,10 +10821,23 @@ async function aiGenerateFull(payload, ms, opts){
     text += chunk;
     stop = d.stop_reason || '';
     if (stop !== 'max_tokens' || !chunk) break;
+    if (pass >= maxPasses - 1) break;
+    // Newer models do not accept a half finished assistant message as the last
+    // turn, so that kind of continuation failed quietly and the reply just
+    // stopped. Ask for the rest with a normal user turn instead, after
+    // trimming back to the last finished sentence so nothing gets glued
+    // together mid word.
+    var cut = Math.max(text.lastIndexOf('. '), text.lastIndexOf('! '), text.lastIndexOf('? '), text.lastIndexOf('.\n'), text.lastIndexOf('!\n'), text.lastIndexOf('?\n'), text.lastIndexOf('\n'));
+    var sep = ' ';
+    if (cut > text.length - 600 && cut > 0) { sep = (text.charAt(cut) === '\n') ? '\n\n' : ' '; text = text.slice(0, cut + 1); }
     text = text.replace(/\s+$/, '');
-    messages = base.concat([{ role:'assistant', content: text }]);
+    messages = base.concat([
+      { role:'assistant', content: text },
+      { role:'user', content: 'Your last reply hit the length limit and stopped. Keep going from exactly where it stopped, picking up right after the last sentence above. Do not repeat anything you already wrote, do not start over, and do not add any note about being cut off. Just write the rest, and finish the piece properly.' }
+    ]);
+    text += sep;
   }
-  return { text: text, truncated: stop === 'max_tokens', fss: lastFss, grant: grant };
+  return { text: text.replace(/\s+$/, ''), truncated: stop === 'max_tokens', fss: lastFss, grant: grant };
 }
 // Shared handling for the two credit errors the server can send back
 function aiHandleCreditError(e){
@@ -10921,12 +10934,13 @@ async function cdCallAIChat(messages, maxTok, playbookLock){
   if(!canUseAI()){showCreditBlocked();return '';}
   _aiInFlight++;
   try{
-    var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 45000);
+    var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 90000, { maxPasses: 4 });
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was sent, try again.');
       return '';
     }
+    if(full.truncated) toast('That answer hit the length limit and may be cut off at the end. Ask me to keep going and I will pick it back up.');
     consumeCredit();
     return result;
   }catch(e){
@@ -11096,7 +11110,7 @@ async function dirChatRequestReply(active){
   var playbookLock=S._dirChatPlaybookLock||null;
   S._dirChatPlaybookLock=null; // only applies to this one message, not the whole conversation
   var reply='';
-  try{ reply=await cdCallAIChat(apiMessages, 1200, playbookLock); }
+  try{ reply=await cdCallAIChat(apiMessages, 2500, playbookLock); }
   finally{ _dcPending[active.id]=false; }
   dirChatHideTyping();
   if(reply){
