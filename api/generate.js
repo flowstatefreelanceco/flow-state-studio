@@ -16,7 +16,7 @@ export const config = { maxDuration: 60 };
 
 const ALLOWED_MODELS = ['claude-sonnet-5'];
 const DEFAULT_MODEL = 'claude-sonnet-5';
-const MAX_TOKENS_CAP = 3200;      // longest skill (long article)
+const MAX_TOKENS_CAP = 3200;      // per call, keeps each call under the 60 second limit. Longer pieces (up to 5200 tokens) are finished by auto-continue calls that ride on the same credit
 const MAX_MESSAGES = 100;         // long Director Chat threads
 const MAX_SYSTEM_CHARS = 60000;
 const MAX_TOTAL_CHARS = 400000;
@@ -183,7 +183,7 @@ export default async function handler(req, res) {
     let nextGrant = usedGrant;
     try {
       if (data.stop_reason === 'max_tokens' && !nextGrant) {
-        nextGrant = await rpc('fss_create_grant', { p_user: user.id, p_kind: 'continue', p_uses: 2, p_minutes: 5 });
+        nextGrant = await rpc('fss_create_grant', { p_user: user.id, p_kind: 'continue', p_uses: 5, p_minutes: 5 });
       } else if (body.fss_want_grant === 'library' && !usedGrant) {
         nextGrant = await rpc('fss_create_grant', { p_user: user.id, p_kind: 'library', p_uses: 15, p_minutes: 10 });
       }
