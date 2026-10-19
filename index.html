@@ -1794,6 +1794,16 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 #cdTitle{background:var(--w) !important;border:1.5px solid var(--bl) !important;border-bottom:3px solid var(--r) !important;border-radius:var(--rad) !important;padding:12px 16px !important;box-shadow:0 1px 4px var(--sh)}
 .cd1-col .cd1-sec,.cd1-basics{box-shadow:0 2px 6px rgba(60,38,16,.18)}
 .cd1-col .card-section-toggle-body.open,#cdMoreBody{background:var(--w)}
+
+/* WRITING STUDIO: one page of colored sections, like the content card */
+.studio-wrap.st1{display:block;overflow-y:visible;padding:4px 0 40px;align-items:stretch}
+.st1-col{display:flex;flex-direction:column;gap:12px;max-width:860px;margin:0 auto;width:100%}
+#stWriteSec{--sc:var(--g);--sbg:linear-gradient(135deg,var(--gp),#EDE0C4)}
+#stAiSec{--sc:var(--r);--sbg:linear-gradient(135deg,var(--rp),#EDD5C8)}
+#stDraftSec{--sc:var(--sage);--sbg:linear-gradient(135deg,var(--sagep),#EAF1E4)}
+.st1-col .cd1-basics{padding-bottom:10px}
+.st1-col .cd1-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:640px){.st1-col .cd1-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -2947,57 +2957,12 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
       <div><h1>Writing Studio</h1><div class="sub">Write your own or use AI. Both save to your library.</div></div>
     </div>
     <div class="main-body">
-      <div class="studio-wrap">
-        <div class="sp out-panel" style="max-width:640px;width:100%">
+      <div class="studio-wrap st1">
+        <div class="st1-col cd1-col">
 
-          <!-- TOP-LEVEL: Go Analog vs AI Draft, a real fork, not a step -->
-          <div style="padding:20px 20px 0">
-            <div class="studio-mode-toggle">
-              <button class="studio-mode-btn own sel" id="studioTabAnalog" onclick="switchStudioTab('analog')">✏️ Go Analog</button>
-              <button class="studio-mode-btn ai" id="studioTabAi" onclick="switchStudioTab('ai')">✦ AI Draft</button>
-            </div>
-          </div>
-
-          <!-- GO ANALOG: one flat page, no steps needed -->
-          <div class="studio-panel" id="studioAnalogPanel" style="padding:0 20px 22px">
-            <div class="studio-mode-banner analog"><span class="studio-mode-banner-title">✏️ Go Analog</span><span class="studio-mode-banner-sub">write your own, no AI required</span></div>
-            <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
-            <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
-            <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
-            </div>
-            <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
-              <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
-            </div>
-            <div style="display:flex;gap:10px;margin-bottom:10px">
-              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
-              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
-            </div>
-            <div style="display:flex;gap:10px">
-              <button class="btn btn-g" onclick="studioOwnCopy()">Copy</button>
-              <button class="btn btn-brass" style="flex:1" onclick="studioOwnSave()">Save to Drafts</button>
-              <button class="btn btn-p" style="flex:1" onclick="studioOwnCreateCard()">🗂 Create Content Card</button>
-            </div>
-          </div>
-
-          <!-- AI DRAFT: the 3-step wizard, only used by this path now -->
-          <div id="studioAiPanel" style="display:none">
-
-            <!-- STEP PROGRESS -->
-            <div class="studio-steps" id="studioSteps">
-              <div class="studio-step active" data-step="1" onclick="goStudioStep(1)"><div class="studio-step-dot">1</div><div class="studio-step-lbl">Set Up</div></div>
-              <div class="studio-step-line" id="studioLine1"></div>
-              <div class="studio-step" data-step="2" onclick="goStudioStep(2)"><div class="studio-step-dot">2</div><div class="studio-step-lbl">Generate</div></div>
-              <div class="studio-step-line" id="studioLine2"></div>
-              <div class="studio-step" data-step="3" onclick="goStudioStep(3)"><div class="studio-step-dot">3</div><div class="studio-step-lbl">Review &amp; Save</div></div>
-            </div>
-
-            <!-- STEP 1: SET UP -->
-            <div class="studio-panel" id="studioStep1" style="padding:0 20px 22px">
-              <div class="studio-panel-hdr">
-                <div class="studio-panel-title">What are you making?</div>
-                <div class="studio-panel-sub">Pick a type and platform, then tell us what it's about.</div>
-              </div>
+          <div class="cd1-basics" id="stBasics">
+            <div class="cd1-basics-hdr">What are you making?</div>
+            <div class="cd1-grid">
               <div class="fl"><label class="fl-lbl">Content Type</label>
                 <select class="fi" id="typeSel" onchange="studioTypeChanged()">
                   <option value="Caption / Post">Caption / Post</option>
@@ -3034,43 +2999,69 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                   <option value="Playful & Light">Playful &amp; Light</option>
                 </select>
               </div>
-              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI writes a title and a subtitle for you. They are the first two lines of your draft, marked Title: and Subtitle:</div>
-              <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:44px;font-size:12.5px"></textarea></div>
-              <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
-              <button class="btn btn-p full" onclick="goStudioStep(2)">Continue →</button>
             </div>
+            <div class="fl"><label class="fl-lbl">Topic / Brief</label><textarea class="fi" id="topicIn" placeholder="What are you writing about? Include key points, offers, or angles." style="min-height:44px;font-size:12.5px"></textarea></div>
+          </div>
 
-            <!-- STEP 2: GENERATE -->
-            <div class="studio-panel" id="studioStep2" style="display:none;padding:0 20px 22px">
-              <div class="studio-mode-banner bridge"><span class="studio-mode-banner-title">✦ Bridge the Gap</span><span class="studio-mode-banner-sub">AI tools + draft output</span></div>
-              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:2px 0 12px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use what I wrote in the Go Analog tab as the AI's starting point</span></label>
-              <button class="btn btn-p full" id="genBtn" onclick="generate()" style="margin-bottom:14px">✦ Generate Draft</button>
-              <div class="out-tb" style="border-top:none;border-radius:var(--rad) var(--rad) 0 0">
+          <!-- WRITE IT YOURSELF -->
+          <div class="card-section-toggle cd1-sec" id="stWriteSec">
+            <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+              <div class="cd1-sec-t"><span class="cd1-sec-n">✏️ Write it yourself</span><span class="cd1-sec-h">Go Analog. No AI needed.</span></div>
+              <span class="card-section-toggle-chev">-</span>
+            </div>
+            <div class="card-section-toggle-body open" style="padding:14px 16px">
+              <input class="fi" id="studioTitle" placeholder="Title (optional)" style="margin-bottom:8px;font-size:21px;font-family:var(--fh);font-weight:600" />
+              <input class="fi" id="studioSubtitle" placeholder="Subtitle or subheadline (optional)" style="margin-bottom:10px;font-size:13px" />
+              <div class="fl" style="margin-bottom:10px"><label class="fl-lbl">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea id="studioOwnHook" class="fi" placeholder="Your opening line, or an email subject..." style="min-height:44px;font-size:14px;line-height:1.6;resize:vertical"></textarea>
+            </div>
+              <div class="fl" style="margin-bottom:0"><label class="fl-lbl">Caption / Body</label>
+              <textarea id="studioOwnTA" class="fi" placeholder="Start writing here. No AI required. Just you and the page." style="min-height:160px;font-size:14px;line-height:1.85;margin-bottom:10px;resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:10px">
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Tags <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioTags" placeholder="e.g. ADHD, launch, mindfulness..." style="font-size:12.5px" /></div>
+              <div style="flex:1"><label style="font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--t);display:block;margin-bottom:5px">Links <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></label><input class="fi" id="studioLinks" placeholder="Relevant URLs..." style="font-size:12.5px" /></div>
+            </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn btn-g" onclick="studioOwnCopy()">Copy</button>
+                <button class="btn btn-brass" style="flex:1" onclick="studioOwnSave()">Save to Drafts</button>
+                <button class="btn btn-p" style="flex:1" onclick="studioOwnCreateCard()">🗂 Create Content Card</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAKE IT WITH AI -->
+          <div class="card-section-toggle cd1-sec" id="stAiSec">
+            <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+              <div class="cd1-sec-t"><span class="cd1-sec-n">✦ Make it with AI</span><span class="cd1-sec-h">Uses the basics above, and your own writing if you want.</span></div>
+              <span class="card-section-toggle-chev">+</span>
+            </div>
+            <div class="card-section-toggle-body" style="padding:14px 16px">
+              <div style="font-size:11.5px;color:var(--teal);background:var(--tealp);border-radius:var(--rsm);padding:8px 11px;margin-bottom:14px;line-height:1.55;display:none" id="studioArticleTip">✦ For this format, the AI writes a title and a subtitle for you. They are the first two lines of your draft, marked Title: and Subtitle:</div>
+              <div class="fl"><label class="fl-lbl">Instructions for the AI <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><textarea class="fi" id="instrIn" placeholder="e.g. Keep my tone and voice exactly, just clean up the structure." style="min-height:28px;font-size:12.5px"></textarea></div>
+              <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;padding:2px 0 12px;font-size:12.5px;color:var(--t);user-select:none"><input type="checkbox" id="useOwnDraft" style="margin-top:2px;width:14px;height:14px;accent-color:var(--teal);flex-shrink:0" /><span>Use what I wrote in Write it yourself as the AI's starting point</span></label>
+              <button class="btn btn-p full" id="genBtn" onclick="generate()">✦ Generate Draft</button>
+            </div>
+          </div>
+
+          <!-- THE DRAFT -->
+          <div class="card-section-toggle cd1-sec" id="stDraftSec">
+            <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+              <div class="cd1-sec-t"><span class="cd1-sec-n">📄 Your AI draft</span><span class="cd1-sec-h">Read it, copy it, save it.</span></div>
+              <span class="card-section-toggle-chev">+</span>
+            </div>
+            <div class="card-section-toggle-body" style="padding:14px 16px">
+              <div class="out-tb" style="border-top:none;padding:0 0 10px;border-bottom:none">
                 <div style="display:flex;align-items:center;gap:10px"><span class="sv-badge" id="svBadge">✓ Saved</span></div>
                 <div style="display:flex;gap:8px"><button type="button" class="tp-open" onclick="tpFromStudio()" title="Read this out loud in big text that scrolls for you">▶ Teleprompter</button><button class="btn btn-g" id="cpBtn" onclick="copyOut()" style="display:none">Copy</button></div>
               </div>
-              <div class="out-bdy" id="outBdy" style="padding-bottom:24px;border-radius:0 0 var(--rad) var(--rad)"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Hit Generate to write from your step 1 brief.</p></div></div>
-              <div style="display:flex;gap:10px;margin-top:18px">
-                <button class="btn btn-g" onclick="goStudioStep(1)">← Back</button>
-                <button class="btn btn-p" style="flex:1" onclick="goStudioStep(3)">Continue to Review →</button>
-              </div>
-            </div>
-
-            <!-- STEP 3: REVIEW & SAVE -->
-            <div class="studio-panel" id="studioStep3" style="display:none;padding:0 20px 22px">
-              <div class="studio-panel-hdr">
-                <div class="studio-panel-title">Review &amp; save</div>
-                <div class="studio-panel-sub" id="studioReviewSub">Here's what's about to be saved to your drafts library.</div>
-              </div>
-              <div class="studio-review-box" id="studioReviewBox"><div class="studio-review-empty">Nothing here yet, go back and generate something first.</div></div>
+              <div class="out-bdy" id="outBdy" style="padding:16px;min-height:140px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);margin-bottom:14px"><div class="out-ph"><div class="sym">✦</div><h3>AI draft will appear here</h3><p>Open Make it with AI and hit Generate.</p></div></div>
               <div style="display:flex;gap:10px;flex-wrap:wrap">
-                <button class="btn btn-g" onclick="goStudioStep(2)">← Back</button>
                 <button class="btn btn-g" onclick="studioReviewCopy()">Copy</button>
                 <button class="btn btn-brass" style="flex:1" onclick="studioReviewSave()">Save to Drafts</button>
                 <button class="btn btn-p" style="flex:1" onclick="studioCreateCardFromAI()">🗂 Create Content Card</button>
               </div>
             </div>
-
           </div>
 
         </div>
@@ -6451,6 +6442,7 @@ function _appInit(){
     if(outBdy){
       var rendered=S.studio.output.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>').replace(/^## (.+)$/gm,'<strong style="font-size:15px;color:var(--e);display:block;margin:16px 0 6px">$1</strong>');
       outBdy.innerHTML='<div class="out-txt">'+rendered+'</div>';
+      stSetSec('stDraftSec',true);
       var cpBtn=document.getElementById('cpBtn');var svBtn=document.getElementById('svBtn');
       if(cpBtn)cpBtn.style.display='inline-flex';if(svBtn)svBtn.style.display='inline-flex';
     }
@@ -7826,35 +7818,28 @@ function studioTypeChanged(){
    AI Draft keeps the 3-step wizard, since picking type/platform/tone
    before generating is the part that actually benefits from steps. ── */
 var _studioTab='analog';
+// Writing Studio is one page of toggle sections now, same as the content card.
+function stSetSec(id,open){
+  var sec=document.getElementById(id); if(!sec) return;
+  var body=sec.querySelector('.card-section-toggle-body');
+  var chev=sec.querySelector('.card-section-toggle-chev');
+  if(body) body.classList.toggle('open',!!open);
+  if(chev) chev.textContent=open?'-':'+';
+}
 function switchStudioTab(tab){
   _studioTab=tab;
-  var analogPanel=document.getElementById('studioAnalogPanel');
-  var aiPanel=document.getElementById('studioAiPanel');
-  var tabAnalog=document.getElementById('studioTabAnalog');
-  var tabAi=document.getElementById('studioTabAi');
-  if(analogPanel)analogPanel.style.display=(tab==='analog')?'block':'none';
-  if(aiPanel)aiPanel.style.display=(tab==='ai')?'block':'none';
-  if(tabAnalog)tabAnalog.classList.toggle('sel',tab==='analog');
-  if(tabAi)tabAi.classList.toggle('sel',tab==='ai');
-  var scroller=document.querySelector('#view-studio .sp.out-panel');
-  if(scroller)scroller.scrollTop=0;
+  stSetSec('stWriteSec',tab==='analog');
+  stSetSec('stAiSec',tab==='ai');
+  var sec=document.getElementById(tab==='ai'?'stAiSec':'stWriteSec');
+  if(sec&&sec.scrollIntoView) sec.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-/* ── AI Draft's own step wizard: Set Up -> Generate -> Review & Save ── */
-var _studioStep=1;
+// Kept so older shortcuts still work: step 1 = basics, 2 = generate, 3 = draft
 function goStudioStep(n){
-  if(n<1||n>3)return;
-  _studioStep=n;
-  [1,2,3].forEach(function(i){
-    var panel=document.getElementById('studioStep'+i);
-    if(panel)panel.style.display=(i===n)?'block':'none';
-    var stepEl=document.querySelector('.studio-step[data-step="'+i+'"]');
-    if(stepEl){stepEl.classList.toggle('active',i===n);stepEl.classList.toggle('done',i<n);}
-  });
-  var line1=document.getElementById('studioLine1');if(line1)line1.classList.toggle('done',n>1);
-  var line2=document.getElementById('studioLine2');if(line2)line2.classList.toggle('done',n>2);
-  if(n===3)renderStudioReview();
-  var scroller=document.querySelector('#view-studio .sp.out-panel');
-  if(scroller)scroller.scrollTop=0;
+  if(n===3){ stSetSec('stDraftSec',true); renderStudioReview(); }
+  else if(n===2){ stSetSec('stAiSec',true); }
+  var id=n===3?'stDraftSec':(n===2?'stAiSec':'stBasics');
+  var el=document.getElementById(id);
+  if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function renderStudioReview(){
   var box=document.getElementById('studioReviewBox');
@@ -7982,6 +7967,7 @@ async function generate(){
     // Render with ## headers as visually prominent lines
     var rendered=esc(S.studio.output).replace(/^## (.+)$/gm,'<strong style="font-size:15px;color:var(--e);display:block;margin:16px 0 6px">$1</strong>');
     document.getElementById('outBdy').innerHTML='<div class="out-txt">'+rendered+'</div>';
+    stSetSec('stDraftSec',true);
     var cpBtnEl=document.getElementById('cpBtn');if(cpBtnEl)cpBtnEl.style.display='inline-flex';
     var svBtnEl=document.getElementById('svBtn');if(svBtnEl)svBtnEl.style.display='inline-flex';
     S.gs.draftGenerated=true;S.aiCount=(S.aiCount||0)+1;consumeCredit();persist();renderGS();renderDashboard();
