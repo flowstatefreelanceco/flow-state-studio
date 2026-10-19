@@ -1778,6 +1778,22 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 .cd1-col .cd-promo-link{background:linear-gradient(135deg,var(--gp),#F6E7C4);border:1.5px dashed #D4A843}
 .cd1-col .cd-promo-link:hover{background:linear-gradient(135deg,var(--rp),#F6E7C4);border-color:var(--r)}
 #cdAiSec .ai2-section:nth-of-type(3n+2) .ai2-section-hdr{background:linear-gradient(135deg,#E8F5F5,var(--tealp))}
+
+/* content card: same cork board as the dashboard */
+#cardDetailModal .cd-modal-panel{
+  background-color:#C9A876 !important;
+  background-image:
+    radial-gradient(circle at 15% 20%,rgba(94,62,30,.14) 0,rgba(94,62,30,.14) 1px,transparent 1px),
+    radial-gradient(circle at 65% 45%,rgba(94,62,30,.11) 0,rgba(94,62,30,.11) 1.2px,transparent 1.2px),
+    radial-gradient(circle at 35% 75%,rgba(94,62,30,.13) 0,rgba(94,62,30,.13) 1px,transparent 1px),
+    radial-gradient(circle at 85% 85%,rgba(150,110,60,.15) 0,rgba(150,110,60,.15) 1.4px,transparent 1.4px),
+    radial-gradient(circle at 50% 10%,rgba(150,110,60,.12) 0,rgba(150,110,60,.12) 1px,transparent 1px) !important;
+  background-size:37px 37px,53px 53px,41px 41px,67px 67px,29px 29px !important;
+  background-repeat:repeat !important}
+#cardDetailModal .cd2-wrap,#cardDetailModal .cd2-left{background:transparent !important}
+#cdTitle{background:var(--w) !important;border:1.5px solid var(--bl) !important;border-bottom:3px solid var(--r) !important;border-radius:var(--rad) !important;padding:12px 16px !important;box-shadow:0 1px 4px var(--sh)}
+.cd1-col .cd1-sec,.cd1-basics{box-shadow:0 2px 6px rgba(60,38,16,.18)}
+.cd1-col .card-section-toggle-body.open,#cdMoreBody{background:var(--w)}
 </style>
 </head>
 <body>
@@ -12291,6 +12307,7 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
 
   var emails = [
     {
+      key: 'before',
       scheduledAt: dayBefore.toISOString(),
       subject: 'Heads up, you\'re posting tomorrow on ' + platform + ' 📅',
       htmlContent: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">'
@@ -12305,6 +12322,7 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
         + '</div>'
     },
     {
+      key: 'day',
       scheduledAt: postDate.toISOString(),
       subject: 'Today\'s the day, time to post on ' + platform + ' 🚀',
       htmlContent: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#2A1A0E">'
@@ -12319,21 +12337,55 @@ async function scheduleBrevoReminders(idea, userEmail, userName) {
     }
   ];
 
+  // Brevo only accepts a send time up to about 72 hours ahead, so a reminder
+  // for a post further out than that used to be refused and quietly lost.
+  // Each email is now tracked on the card (idea._rem) and only sent to Brevo
+  // once it is inside that window. reminderSweep() below keeps checking, so
+  // the rest go out as their day gets close.
+  var MAX_AHEAD = 70 * 3600 * 1000;
   var now = new Date();
-  var anySuccess = false;
+  if (!idea._rem || idea._rem.date !== idea.date) idea._rem = { date: idea.date, sent: {} };
+  var anySuccess = false, hardFail = false, pending = false;
   for (var e of emails) {
-    if (new Date(e.scheduledAt) <= now) continue; // skip past dates
+    if (idea._rem.sent[e.key]) continue;
+    var when = new Date(e.scheduledAt);
+    if (when <= now) { idea._rem.sent[e.key] = 'past'; continue; }
+    if (when - now > MAX_AHEAD) { pending = true; continue; }
     try {
       var resp = await fetch(EDGE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SKEY },
         body: JSON.stringify({ to: userEmail, toName: firstName, subject: e.subject, htmlContent: e.htmlContent, scheduledAt: e.scheduledAt })
       });
-      if (resp.ok) anySuccess = true;
-    } catch(err) { console.warn('Reminder send failed:', err); }
+      if (resp.ok) { anySuccess = true; idea._rem.sent[e.key] = new Date().toISOString(); }
+      else { hardFail = true; try { console.warn('Reminder refused', resp.status, await resp.text()); } catch(_){} }
+    } catch(err) { hardFail = true; console.warn('Reminder send failed:', err); }
   }
-  return anySuccess;
+  try { persist(); } catch(_){}
+  return anySuccess || (pending && !hardFail);
 }
+
+// Checks every card with reminders on and sends any that are now close enough
+// to schedule. Runs when the Studio opens and then every 30 minutes.
+var _remSweeping = false;
+async function reminderSweep() {
+  if (_remSweeping || !_currentUser || !_currentUser.email) return;
+  _remSweeping = true;
+  try {
+    var uName = (_currentUser.user_metadata && _currentUser.user_metadata.first_name) || '';
+    var today = new Date().toISOString().slice(0, 10);
+    var list = (S.ideas || []).filter(function(i){
+      return i && i.reminder && i.date && i.date >= today && i.status !== 'published';
+    });
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i]._rem;
+      if (r && r.date === list[i].date && r.sent && r.sent.before && r.sent.day) continue;
+      await scheduleBrevoReminders(list[i], _currentUser.email, uName);
+    }
+  } catch(err) { console.warn('Reminder sweep failed:', err); }
+  _remSweeping = false;
+}
+setInterval(function(){ reminderSweep(); }, 30 * 60 * 1000);
 
 /* ═══════════════════ MOBILE NAV ═══════════════════ */
 function toggleMobNav(){
@@ -12905,6 +12957,7 @@ setTimeout(function(){
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLoginCard();});
 
 function initFlowStateApp(savedData) {
+  setTimeout(function(){ try{ reminderSweep(); }catch(e){} }, 6000);
   // Merge saved data from Supabase into S
   if (savedData && Object.keys(savedData).length > 0) {
     if (savedData.drafts) S.drafts = savedData.drafts;
