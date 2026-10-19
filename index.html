@@ -12240,7 +12240,7 @@ function toast(msg,html){const el=document.getElementById('toast');if(!el){conso
 /* ═══════════════════ BREVO REMINDERS ═══════════════════ */
 async function testReminder(email) {
   var idea = { title: 'Test Post', platform: 'instagram', date: new Date(Date.now()+86400000).toISOString().slice(0,10), notes: 'This is a test reminder from Flow State Studio.', reminder: true, ownContent: '' };
-  await scheduleBrevoReminders(idea, email, 'there');
+  await scheduleBrevoReminders(idea, email, 'there', {direct:true});
   toast('Test reminder sent to ' + email + ' ✓');
 }
 
@@ -12289,8 +12289,13 @@ function cdToggleReminder(cb) {
   }
 }
 
-async function scheduleBrevoReminders(idea, userEmail, userName) {
+// Reminder emails are now sent by the server (api/send-reminders.js, once a
+// day at 9am Eastern), so nobody has to open the Studio for them to go. Saving
+// a card with the reminder switched on is all that is needed. Only the test
+// button in Settings still sends straight from here (opts.direct).
+async function scheduleBrevoReminders(idea, userEmail, userName, opts) {
   if (!idea.reminder || !idea.date || !userEmail) return false;
+  if (!opts || !opts.direct) return true;
   // Use UTC 13:00 (9am EST / 6am PST) as the send time
   // This ensures emails arrive in the morning for North American users
   var dateParts = idea.date.split('-');
@@ -12385,7 +12390,6 @@ async function reminderSweep() {
   } catch(err) { console.warn('Reminder sweep failed:', err); }
   _remSweeping = false;
 }
-setInterval(function(){ reminderSweep(); }, 30 * 60 * 1000);
 
 /* ═══════════════════ MOBILE NAV ═══════════════════ */
 function toggleMobNav(){
@@ -12957,7 +12961,6 @@ setTimeout(function(){
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLoginCard();});
 
 function initFlowStateApp(savedData) {
-  setTimeout(function(){ try{ reminderSweep(); }catch(e){} }, 6000);
   // Merge saved data from Supabase into S
   if (savedData && Object.keys(savedData).length > 0) {
     if (savedData.drafts) S.drafts = savedData.drafts;

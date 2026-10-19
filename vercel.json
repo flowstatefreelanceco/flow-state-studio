@@ -1,6 +1,18 @@
 {
   "rewrites": [
-    { "source": "/brains-that-build", "destination": "/brains-that-build.html" },
-    { "source": "/((?!brains-that-build).*)", "destination": "/index.html" }
+    {
+      "source": "/brains-that-build",
+      "destination": "/brains-that-build.html"
+    },
+    {
+      "source": "/((?!brains-that-build).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/send-reminders",
+      "schedule": "0 13 * * *"
+    }
   ]
 }
