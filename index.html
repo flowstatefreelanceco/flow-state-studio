@@ -1761,6 +1761,23 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
   .cd1-grid{grid-template-columns:1fr}
   #cdTitle{font-size:20px !important}
 }
+
+/* card color: each section gets its own brand color */
+.cd1-col .cd1-sec{border-left:5px solid var(--sc,var(--b));overflow:hidden}
+.cd1-col .cd1-sec>.card-section-toggle-hdr{background:var(--sbg,var(--p)) !important}
+.cd1-col .cd1-sec .cd1-sec-n{color:var(--sc,var(--e))}
+.cd1-col .cd1-sec .card-section-toggle-chev{color:var(--sc,var(--tl));font-weight:700}
+#cdWriteSec{--sc:var(--g);--sbg:linear-gradient(135deg,var(--gp),#EDE0C4)}
+#cdCarouselSec{--sc:#B0482F;--sbg:linear-gradient(135deg,var(--rp),#f0e2cc)}
+#cdAiSec{--sc:var(--r);--sbg:linear-gradient(135deg,var(--rp),#EDD5C8)}
+#cdOfferSec{--sc:var(--teal);--sbg:linear-gradient(135deg,var(--tealp),#d9efe9)}
+#cdExtrasSec{--sc:var(--sage);--sbg:linear-gradient(135deg,var(--sagep),#EAF1E4)}
+.cd1-basics{border-left:5px solid var(--teal);background:linear-gradient(135deg,#F4FAFA,var(--p))}
+.cd1-basics-hdr{color:var(--teal)}
+#cdTitle{border-bottom:3px solid var(--r) !important;color:var(--e) !important}
+.cd1-col .cd-promo-link{background:linear-gradient(135deg,var(--gp),#F6E7C4);border:1.5px dashed #D4A843}
+.cd1-col .cd-promo-link:hover{background:linear-gradient(135deg,var(--rp),#F6E7C4);border-color:var(--r)}
+#cdAiSec .ai2-section:nth-of-type(3n+2) .ai2-section-hdr{background:linear-gradient(135deg,#E8F5F5,var(--tealp))}
 </style>
 </head>
 <body>
@@ -4985,6 +5002,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
               <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
             </div>
           </div>
+          <button type="button" class="cd-promo-link" style="margin-bottom:10px" onclick="cdOpenPromoFromCard()"><strong>Selling this for a few weeks?</strong> Create a promo plan. It saves this card, asks 3 questions, and gives you a short run of posts for your offer.</button>
         </div>
 <!-- GO ANALOG SECTION -->
         <div class="card-section-toggle cd-analog-sec cd1-sec" id="cdWriteSec">
@@ -5282,7 +5300,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             </div>
           </div>
         </div>
-<button type="button" class="cd-promo-link" onclick="cdOpenPromoFromCard()"><strong>Selling this for a few weeks?</strong> Create a promo plan. It saves this card, asks 3 questions, and gives you a short run of posts for your offer.</button>
+
         <div class="card-section-toggle cd1-sec" id="cdExtrasSec">
           <div class="card-section-toggle-hdr" onclick="cdToggleMore()">
             <div class="cd1-sec-t"><span class="cd1-sec-n">📎 Tasks, images, and notes</span><span class="cd1-sec-h">Break it into steps, add visuals, note what worked.</span></div>
