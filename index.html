@@ -5482,7 +5482,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 <!-- WHAT'S NEW MODAL -->
 <div class="modal-ov" id="whatsNewModal">
   <div class="wn-wrap" style="position:relative">
-    <button class="wn-close" onclick="closeModal('whatsNewModal')">✕</button>
+    <button class="wn-close" onclick="dismissWhatsNew()">✕</button>
     <div class="wn-header">
       <div class="wn-title">What's New</div>
       <div class="wn-sub">Latest updates and improvements</div>
@@ -8118,6 +8118,7 @@ function openModal(id){
   document.body.style.width = '100%';
 }
 function closeModal(id){
+  if(id==='whatsNewModal' && typeof _whatsNewVersion!=='undefined' && _whatsNewVersion){ try{ localStorage.setItem('wnDismissed_'+_whatsNewVersion,'1'); if(typeof _currentUser!=='undefined' && _currentUser) localStorage.setItem('u'+_currentUser.id+'_wnDismissed_'+_whatsNewVersion,'1'); }catch(e){} }
   document.getElementById(id).classList.remove('open');
   var anyOpen = document.querySelector('.modal-ov.open');
   if(!anyOpen){
@@ -12671,7 +12672,10 @@ function checkForUpdate() {
       // people on the fresh page (almost everyone) never saw announcements.
       if (latest) {
         var wnKey = (_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + latest;
-        var dismissed = localStorage.getItem(wnKey);
+        var dismissed = false;
+        try{ dismissed = !!(localStorage.getItem(wnKey) || localStorage.getItem('wnDismissed_' + latest)); }catch(e){}
+        // Only ever auto-open once per page load, even if this check runs twice
+        if (_wnShownThisLoad) return;
         // Brand new accounts have nothing to compare "what changed" against,
         // so skip it for them. Never store this as dismissed: if the account
         // only looked empty because data was still loading, the popup must
@@ -12682,6 +12686,7 @@ function checkForUpdate() {
           _whatsNewChangelog = changelog;
           _whatsNewVersion = latest;
           // Show What's New modal automatically, no click needed
+          _wnShownThisLoad = true;
           renderWhatsNew(_whatsNewChangelog);
           openModal('whatsNewModal');
         }
@@ -12694,6 +12699,7 @@ function checkForUpdate() {
 
 var _whatsNewChangelog = [];
 var _whatsNewVersion = '';
+var _wnShownThisLoad = false;
 
 
 
@@ -12712,7 +12718,12 @@ function renderWhatsNew(changelog){
 }
 
 function dismissWhatsNew(){
-  if (_whatsNewVersion) localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
+  if (_whatsNewVersion) {
+    try{
+      localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'wnDismissed_' + _whatsNewVersion, '1');
+      localStorage.setItem('wnDismissed_' + _whatsNewVersion, '1');
+    }catch(e){}
+  }
   closeModal('whatsNewModal');
 }
 
