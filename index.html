@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-version="5.17">
+<html lang="en" data-version="5.18">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23d7e7fe'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%234d1e15' font-family='Georgia%2Cserif'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
@@ -1234,6 +1234,8 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   .cd-stage{font-size:9px;padding:4px 6px}
 }
 
+/* AI output boxes in content cards: show the whole piece, scroll inside the box */
+.ai2-out,.cd-out{max-height:min(70vh,720px) !important;overflow-y:auto !important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:thin;resize:vertical;padding-bottom:22px}
 /* ═══ MOBILE SWEEP ═══ */
 button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 @media(max-width:768px){
@@ -1728,6 +1730,37 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 .gc-c-cta.gold{color:var(--g)}
 .gc-c-cta.sage{color:var(--sage)}
 .gc-c-cta.espresso{color:var(--em)}
+
+/* ═══ CONTENT CARD: ONE PAGE ═══ */
+.cd2-wrap[data-tab="details"] .cd2-left.cd1-col{display:flex;flex-direction:column;gap:12px;max-width:860px;margin:0 auto;padding:18px 20px 40px}
+.cd1-col .card-section-toggle{margin-bottom:0;border:1px solid var(--bl);box-shadow:none;background:var(--w)}
+.cd1-col .card-section-toggle-hdr{background:var(--p) !important;border-bottom:none !important;padding:13px 16px}
+.cd1-col .card-section-toggle-body.open{border-top:1px solid var(--bl)}
+#cdMoreBody{border-top:1px solid var(--bl)}
+.cd2-wrap[data-tab="details"] .cd2-left.cd1-col{align-items:stretch}
+.cd1-col>*:not(.cd-guide-show){width:100%;box-sizing:border-box}
+.cd1-sec-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cd1-sec-n{font-size:14px;font-weight:700;color:var(--e);letter-spacing:0;text-transform:none}
+.cd1-sec-h{font-size:11.5px;font-weight:500;color:var(--tl);letter-spacing:0;text-transform:none;line-height:1.35}
+.cd1-col .card-section-toggle-chev{font-size:20px;line-height:1;width:24px;text-align:center;flex-shrink:0}
+.cd1-basics{background:var(--p);border:1px solid var(--bl);border-radius:var(--rad);padding:14px 16px 6px;display:flex;flex-direction:column;gap:2px}
+.cd1-basics-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:8px}
+.cd1-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+.cd1-grid .two-col{display:contents}
+.cd1-basics .fl{margin-bottom:10px}
+.cd1-basics .fi{background:var(--w)}
+#cdTitle{border-bottom:2px solid var(--bl) !important;border-radius:0 !important;padding:6px 2px 8px !important}
+#cdTitle:focus{border-bottom-color:var(--teal) !important;outline:none}
+#cdReminderWrap{grid-column:1/-1}
+.cd1-note{font-size:12.5px;color:var(--t);line-height:1.55;margin-bottom:10px}
+.cd1-ai-tools{display:flex;flex-direction:column;gap:10px}
+.cd1-ai-tools .ai2-section{margin:0}
+.cd1-col .cd-guide{margin-bottom:0}
+@media(max-width:640px){
+  .cd2-wrap[data-tab="details"] .cd2-left.cd1-col{padding:12px 12px 40px}
+  .cd1-grid{grid-template-columns:1fr}
+  #cdTitle{font-size:20px !important}
+}
 </style>
 </head>
 <body>
@@ -1809,7 +1842,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <div style="width:44px;height:44px;border-radius:10px;background:#e0f2f2;border:1px solid rgba(0,132,132,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✍️</div>
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Writing Studio</div>
-            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Write your own or generate with AI. Captions, carousels, reels, newsletters, Substack articles, and more. Every draft saves automatically so nothing gets lost. Go analog when you want to, use AI when you need a spark.</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Write your own or generate with AI. Captions, carousels, reels, trial reels, newsletters, Substack articles, and more. Every draft saves automatically so nothing gets lost. Go analog when you want to, use AI when you need a spark.</div>
           </div>
         </div>
 
@@ -2072,7 +2105,16 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
         <div class="pf-icon-wrap">✍️</div>
         <div>
           <div class="pf-title">Writing Studio + Saved Drafts</div>
-          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
+          <div class="pf-desc">Generate captions, carousels, story scripts, reel scripts, trial reel plans, newsletters, emails, and long-form articles in your brand voice. Write your own or use AI as a starting point. Every draft saves automatically to your personal library so your writing never disappears, and you can export it all as a CSV anytime.</div>
+        </div>
+      </div>
+
+      <!-- TRIAL REELS -->
+      <div class="pf-card rust tex-cork">
+        <div class="pf-icon-wrap">🧪</div>
+        <div>
+          <div class="pf-title">Trial Reel Planner</div>
+          <div class="pf-desc">Not sure which hook will land? Pick Trial Reel as the format and your Creative Director plans a no-talking b-roll reel with several on-screen hooks to test on people who do not follow you yet. It tests a fear, a desire, and a problem for one offer, then tells you what to compare, so you find the angle that brings in the right people before you build around it. A built-in Trial Reel Guide walks you through the whole method.</div>
         </div>
       </div>
 
@@ -2219,7 +2261,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
         <div class="pf-icon" style="color:var(--r)">📖</div>
         <div>
           <div class="pf-title" style="color:var(--r);font-size:19px">Built-in Guides: Strategy You Can Actually Use</div>
-          <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Not a help doc. Real playbooks for ND creative entrepreneurs, always one click away: a Complete Studio Guide, a Strategy Edition, an ND Rescue Kit for overwhelm, a Content Cycle Framework, an Unstuck Guide for creative blocks, an Analog Way for no-AI days, and a gentle IG Resurrection Guide for quiet accounts.</div>
+          <div class="pf-desc" style="color:var(--el);margin-bottom:14px">Not a help doc. Real playbooks for ND creative entrepreneurs, always one click away: a Complete Studio Guide, a Strategy Edition, an ND Rescue Kit for overwhelm, a Content Cycle Framework, an Unstuck Guide for creative blocks, an Analog Way for no-AI days, a gentle IG Resurrection Guide for quiet accounts, and a Trial Reel Guide for testing your hooks.</div>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
             <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">📚 Complete Studio Guide</span>
             <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🧠 Big Brain Energy</span>
@@ -2228,6 +2270,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">✦ The Unstuck Guide</span>
             <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">✏️ The Analog Way</span>
             <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🌱 IG Resurrection Guide</span>
+            <span class="gt-tag" style="background:rgba(255,255,255,.65);color:var(--r);border:1px solid #E0BDAA">🧪 Trial Reel Guide</span>
           </div>
         </div>
       </div>
@@ -2335,10 +2378,10 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <li>Go Analog and write it yourself, or Bridge the Gap with AI, your call</li>
           <li>Director Chat: your Creative Director and Strategist, real answers, not "it depends"</li>
           <li>Content Planner, Calendar, Task Board, Feed Preview</li>
-          <li>Writing Studio (8 formats) + Hook, CTA, Story &amp; Prompt Library</li>
-          <li>Rebuild any post from a link, Create a promo plan, Shrink, and a built-in Teleprompter for your reels</li>
+          <li>Writing Studio (9 formats, including Trial Reel plans) + Hook, CTA, Story &amp; Prompt Library</li>
+          <li>Rebuild any post from a link, Create a promo plan, Shrink, a Trial Reel format for testing hooks, and a built-in Teleprompter for your reels</li>
           <li>Unlimited Notebooks, Brain Dump, and Saved Drafts</li>
-          <li>Seven built-in guides</li>
+          <li>Eight built-in guides</li>
           <li>100 AI generations a month, price locked in for as long as you stay subscribed</li>
         </ul>
         <button class="pc-btn pc-btn-secondary" onclick="window.location.href='https://buy.stripe.com/fZu5kD3Zv90l8odftF4Rq02'">Get Started, $11.50/mo</button>
@@ -2588,6 +2631,12 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                 <div class="gc-c-desc">No AI required. What analog means and how to use the Studio your way.</div>
                 <div class="gc-c-cta gold">Read →</div>
               </div>
+              <div class="gc-carousel-card rust" onclick="navigate('guides');setTimeout(()=>openGuideDetail('trialreel'),100)">
+                <span class="gc-c-icon">🧪</span>
+                <div class="gc-c-title">The Trial Reel Guide</div>
+                <div class="gc-c-desc">Test hooks on new people with b-roll and no talking.</div>
+                <div class="gc-c-cta rust">Read →</div>
+              </div>
               <div class="gc-carousel-card sage" onclick="navigate('guides');setTimeout(()=>openGuideDetail('igresurrection'),100)">
                 <span class="gc-c-icon">🌱</span>
                 <div class="gc-c-title">The IG Resurrection Guide</div>
@@ -2692,8 +2741,9 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                 <li><strong>In Progress:</strong> move it here when you have started writing or designing.</li>
                 <li><strong>Ready to Post:</strong> caption written, graphic done, waiting to go live.</li>
                 <li><strong>Published:</strong> move it here once it is live so you can see your output at a glance.</li>
-                <li><strong>Go Analog in cards:</strong> every content card opens on Details, and Go Analog is one tap away. Write your own draft, hook, or notes directly in the card with no AI required.</li>
+                <li><strong>Write it yourself in cards:</strong> every content card is one page. The basics are at the top, then Write it yourself, where you can type your own hook, notes, or draft with no AI required. Open Get AI help only when you want it.</li>
                 <li><strong>Bridge the Gap in cards:</strong> click Bridge the Gap inside any card to open the AI tools: Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, and Rebuild in my voice.</li>
+                <li><strong>Trial reels:</strong> pick <strong>Trial Reel</strong> as the Format on a card and the Creative Director plans a no-talking b-roll reel with several on-screen hooks to test. Read the Trial Reel Guide for the full method.</li>
                 <li><strong>Teleprompter:</strong> filming a reel? Tap ▶ Teleprompter under any script in a card. It opens full screen in big text and scrolls for you. It does not use AI credits.</li>
                 <li><strong>This Week's Focus:</strong> use the checklist on your dashboard to pick 1-3 things to work on this week. No dates, no pressure.</li>
                 <li><strong>Tip:</strong> open a card and run Get Creative Direction or Generate Content without ever leaving the Planner.</li>
@@ -2922,6 +2972,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                   <option value="Story Script">Story</option>
                   <option value="Carousel Copy">Carousel</option>
                   <option value="Reel Script">Reel</option>
+                  <option value="Trial Reel">Trial Reel</option>
                   <option value="Bio / About">Bio / About</option>
                   <option value="Video Script">Video Script</option>
                   <option value="Blog Post">Blog Post</option>
@@ -3532,6 +3583,20 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             </div>
 
             <!-- The IG Resurrection Guide -->
+            <div class="guide-index-card rust" onclick="openGuideDetail('trialreel')">
+              <div class="gic-deco" style="color:var(--r)">🧪</div>
+              <span class="gic-icon">🧪</span>
+              <div class="gic-title">The Trial Reel Guide</div>
+              <div class="gic-desc">Test your hooks on people who do not follow you yet, with b-roll and on-screen text, no talking. Find out what pulls in the right people before you build around it.</div>
+              <div class="gic-tags">
+                <span class="gic-tag">Reels</span>
+                <span class="gic-tag">Hooks</span>
+                <span class="gic-tag">Testing</span>
+                <span class="gic-tag">Lead magnets</span>
+              </div>
+              <div class="gic-cta rust">Read the guide →</div>
+            </div>
+
             <div class="guide-index-card sage" onclick="openGuideDetail('igresurrection')">
               <div class="gic-deco" style="color:var(--sage)">🌱</div>
               <span class="gic-icon">🌱</span>
@@ -3575,6 +3640,111 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
               <div class="gic-cta espresso">Read the guide →</div>
             </div>
 
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL: The Trial Reel Guide -->
+      <div id="guide-detail-trialreel" class="guide-detail-page">
+        <div style="max-width:820px">
+          <div class="guide-detail-back" onclick="closeGuideDetail()">← Back to Guides</div>
+          <div class="guide-detail-hero rust">
+            <div class="guide-detail-hero-deco" style="color:var(--r)">🧪</div>
+            <div class="gdh-eyebrow rust">The Trial Reel Guide</div>
+            <div class="gdh-title">Test your hook on strangers before you build anything around it.</div>
+            <div class="gdh-desc">A trial reel is a reel Instagram shows mostly to people who do not follow you yet. That makes it a low pressure way to find out which message pulls in the right people. No talking, no being on camera, no guessing. This guide walks you through the method and how the Studio plans it with you.</div>
+          </div>
+
+          <div class="gd-section-lbl">What a trial reel is</div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">👀</span>
+              <div class="gd-card-title">Mostly seen by non-followers</div>
+              <div class="gd-card-desc">Because it goes to people who do not know you yet, you learn how a stranger reacts to your message. The people who already love you are not skewing the result. Instagram changes how this works from time to time, so check the options when you post.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">☕</span>
+              <div class="gd-card-title">B-roll plus words on screen</div>
+              <div class="gd-card-desc">Your desk, your coffee, a walk, a screen recording, a cozy corner of your home. You film it once and put a short line of text over it. You do not have to talk or show your face.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">🧘</span>
+              <div class="gd-card-title">Kinder on your nervous system</div>
+              <div class="gd-card-desc">A trial reel that flops is just information. Your regular followers do not see it, so there is nothing to explain and nothing to delete. That makes it a good fit if posting feels like a lot.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">The method, in order</div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">1️⃣</span>
+              <div class="gd-card-title">Start with one offer</div>
+              <div class="gd-card-desc">Pick the one thing you want people to buy or join, then work backwards from it. If you are testing five things at once you will not learn anything from any of them.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">2️⃣</span>
+              <div class="gd-card-title">Test three reasons people buy</div>
+              <div class="gd-card-desc">For the same offer, try a <strong>fear</strong> ("I keep starting over and never finishing"), a <strong>desire</strong> ("I want content that feels easy"), and a <strong>problem</strong> your offer solves ("I never know what to post"). One offer, three angles.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">3️⃣</span>
+              <div class="gd-card-title">Keep the clip, change only the hook</div>
+              <div class="gd-card-desc">Film one piece of b-roll and make about five versions with a different line of text on each. Same footage, different words. That way you know the hook is what made the difference.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">4️⃣</span>
+              <div class="gd-card-title">Look past views</div>
+              <div class="gd-card-desc">Compare views, follows, profile visits, and comments. A hook with fewer views that brings in the right people can beat one with lots of views and no follows. Ask which one attracts people who could actually buy.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">5️⃣</span>
+              <div class="gd-card-title">Repeat the winner</div>
+              <div class="gd-card-desc">Run the strongest angle again with new footage and a small tweak. Patterns show up on the second and third try, not the first.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">6️⃣</span>
+              <div class="gd-card-title">Give the attention somewhere to go</div>
+              <div class="gd-card-desc">Offer a free resource that connects to your paid offer and ask people to comment one word to get it. Only use a follow up system you really have set up. If you do not have one yet, point them to your profile link instead.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">7️⃣</span>
+              <div class="gd-card-title">Start selling early</div>
+              <div class="gd-card-desc">Use the winning hook to share a testimonial, a result, or exactly what a buyer receives. Open a waitlist or invite people to enquire. When you want to nudge someone, add value instead of dropping the price.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">How to do it in the Studio</div>
+          <div class="gd-callout rust" style="margin-bottom:12px">
+            <div class="gd-callout-icon">🧪</div>
+            <div>
+              <div class="gd-callout-eyebrow rust">The Studio move for this</div>
+              <div class="gd-callout-text">Open a content card in the Content Planner and pick <strong>Trial Reel</strong> as the Format. Open <strong>What is this piece selling?</strong> and fill in your one offer. Tap <strong>Generate Trial Reel Plan</strong>. You get one b-roll clip to film, several on-screen hooks tagged fear, desire, or problem, a short caption with a comment word, and what to compare afterwards. Put your own comment word and free resource in the Instructions box if you have them, otherwise the plan leaves a placeholder for you to fill in.</div>
+            </div>
+          </div>
+          <div class="gd-cards">
+            <div class="gd-card rust">
+              <span class="gd-card-icon">💬</span>
+              <div class="gd-card-title">Ask Director Chat</div>
+              <div class="gd-card-desc">The Creative Director knows this method. Try "I want to sell my offer, what trial reels should I make this week?" and it will plan the test around your offer and what you have set up.</div>
+            </div>
+            <div class="gd-card rust">
+              <span class="gd-card-icon">📊</span>
+              <div class="gd-card-title">Tracking happens in Instagram</div>
+              <div class="gd-card-desc">The Studio plans and writes the trial reels. It does not post them or read your numbers, so check views, follows, profile visits, and comments in Instagram and tell the Creative Director what you found.</div>
+            </div>
+          </div>
+
+          <div class="gd-section-lbl">A weekend experiment</div>
+          <div class="gd-card full rust" style="margin-bottom:12px">
+            <div class="gd-card-title" style="font-size:18px">Five trial reels, five different reasons to buy.</div>
+            <div class="gd-card-desc" style="font-size:13.5px;margin-top:6px">Pick one offer. Make five trial reels over a weekend, each testing a different fear, desire, or problem. Then see which one brought in follows, profile visits, and comments from the right people. That is your angle for the next month of content. You do not need to do this every week, and a quiet result still tells you something.</div>
+          </div>
+          <div class="gd-callout rust" style="margin-bottom:12px">
+            <div class="gd-callout-icon">🌿</div>
+            <div>
+              <div class="gd-callout-eyebrow rust">A gentle note</div>
+              <div class="gd-callout-text">This is a way to learn, not a promise of results. Nobody can guarantee how many people a reel reaches. Do the version that fits your energy, and skip it on days you need rest.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -3646,7 +3816,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 
           <div class="gd-section-lbl">Go Analog, the short version</div>
           <div class="gd-card full teal" style="margin-bottom:12px">
-            <div class="gd-card-desc" style="font-size:13.5px">Every content card has three tabs. <strong>Details</strong> is where you name the post, pick the platform and format, and give it a date. <strong>Go Analog</strong> is where you write it yourself, no AI required: a Hook/Subject box, a Caption/Body box, and a place for your own draft. <strong>Bridge the Gap</strong> is the AI help, and it is always optional. Every card opens on Details, then Go Analog is the next tab over, because this Studio was built to default to you, not to AI. Each tab has a short how-to at the top. Tap <strong>Hide guide</strong> to tuck it away, and tap <strong>? How to use this</strong> to bring it back. On a phone the how-to starts tucked away.</div>
+            <div class="gd-card-desc" style="font-size:13.5px">Every content card is one page with a few sections you can open and close. At the top are <strong>the basics</strong>: the title, platform, format, and a date. Below that, <strong>Write it yourself</strong> is where you write it your way, no AI required: a Hook/Subject box, a Caption/Body box, and a place for your own draft. <strong>Get AI help</strong> (Bridge the Gap) is the AI help, and it is always optional. It starts closed, because this Studio was built to default to you, not to AI. Tap any header to open or close it, and tap <strong>Hide guide</strong> to tuck the how-to away. Tap <strong>? How to use this</strong> to bring it back.</div>
           </div>
           <div class="gd-callout" style="background:var(--gp);border-color:#D4A843">
             <div class="gd-callout-icon">✏️</div>
@@ -3666,7 +3836,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="gd-card rust">
               <span class="gd-card-icon">✍️</span>
               <div class="gd-card-title">Generate Content</div>
-              <div class="gd-card-desc">This is the one that writes the finished piece. Pick a format, Caption, Story, Carousel, Reel Script, Newsletter, Email, or Substack Article, and it builds the whole thing, shaped correctly for that format.<br><br><strong>Try this:</strong> you have a topic but no time to write today. Fill in the Notes field with 2-3 bullet points of what you want covered, pick Carousel, hit Generate. You'll get labeled, ready-to-edit slides back, not a wall of text you have to break apart yourself.</div>
+              <div class="gd-card-desc">This is the one that writes the finished piece. Pick a format, Caption, Story, Carousel, Reel Script, Trial Reel, Newsletter, Email, or Substack Article, and it builds the whole thing, shaped correctly for that format.<br><br><strong>Try this:</strong> you have a topic but no time to write today. Fill in the Notes field with 2-3 bullet points of what you want covered, pick Carousel, hit Generate. You'll get labeled, ready-to-edit slides back, not a wall of text you have to break apart yourself.</div>
             </div>
             <div class="gd-card rust">
               <span class="gd-card-icon">🪝</span>
@@ -3697,6 +3867,11 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
               <span class="gd-card-icon">🔁</span>
               <div class="gd-card-title">Rebuild in My Voice</div>
               <div class="gd-card-desc">Found a post you admire? Three steps. 1: paste its link. 2: pick the platform and format you want back. 3: tap <strong>Rebuild this post in my voice</strong>. That one button gets the post, reads the words on every carousel slide, and writes your own 100% original version in the "Your version" box. It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Tap "No link?" under the button, paste the words in, and tap the same button. Want to know why the post worked? Tap "Optional: tell me why this post works" under your version. The words, your version, and the slide pictures all stay on the card. The pictures are kept on the device you fetched them on.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Rebuild in My Voice and tap Rebuild this post in my voice for a brand new version built for your niche.</div>
+            </div>
+            <div class="gd-card teal">
+              <span class="gd-card-icon">🧪</span>
+              <div class="gd-card-title">Trial Reels</div>
+              <div class="gd-card-desc">Not sure which hook will land? Pick <strong>Trial Reel</strong> as the Format on a content card. The Creative Director plans one b-roll clip with several on-screen hooks, no talking, so you can test what pulls in the right people before you commit. <a href="#" onclick="openGuideDetail('trialreel');return false" style="color:var(--teal);font-weight:700">Read the Trial Reel Guide</a></div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">🎬</span>
@@ -4744,29 +4919,25 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
         <button class="btn btn-p" style="font-size:12px;padding:6px 14px" onclick="cdSaveOrAdd()">Save</button>
       </div>
     </div>
-    <div class="cd-tabs" role="tablist" aria-label="Card sections">
-      <button type="button" class="cd-tab" role="tab" data-tab="details" onclick="cdShowTab('details')"><span class="cd-tab-name">Details</span><span class="cd-tab-sub">The basics</span></button>
-      <button type="button" class="cd-tab" role="tab" data-tab="write" onclick="cdShowTab('write')"><span class="cd-tab-name">Go Analog</span><span class="cd-tab-sub">Your words</span></button>
-      <button type="button" class="cd-tab" role="tab" data-tab="ai" onclick="cdShowTab('ai')"><span class="cd-tab-name">Bridge the Gap</span><span class="cd-tab-sub">AI help</span><span class="cd-tab-dot" aria-hidden="true"></span></button>
-    </div>
     </div><!-- end cd-sticky -->
-    <div class="cd2-wrap" id="cdWrap" data-tab="write">
-      <div class="cd2-left">
+    <div class="cd2-wrap" id="cdWrap" data-tab="details">
+      <div class="cd2-left cd1-col">
         <div class="cd-guide details" data-guide="card-details"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
           <div class="cd-guide-ico">📌</div>
-          <div><div class="cd-guide-title">Step 1: set up this post</div>
+          <div><div class="cd-guide-title">Everything for this post is on one page</div>
           <ol class="cd-guide-steps">
-            <li>Type a title on the line below. Example: "Why I stopped planning on Sundays".</li>
-            <li>Pick the <strong>Platform</strong> and the <strong>Format</strong> (Post, Carousel, Reel, Story).</li>
-            <li>Pick a <strong>Date</strong> to put it on your calendar.</li>
+            <li>Add a title, pick the <strong>Platform</strong> and <strong>Format</strong> (Post, Carousel, Reel, Trial Reel, Story), and a <strong>Date</strong> if you have one.</li>
+            <li>Open <strong>Write it yourself</strong> to type your hook, notes, or draft.</li>
+            <li>Open <strong>Get AI help</strong> whenever you want a hand. It works from what you typed.</li>
           </ol>
-          <div class="cd-guide-text">Selling something with this post? Tap <strong>What is this piece selling?</strong> and fill it in. Then tap the <strong>Go Analog</strong> tab to write.</div></div>
+          <div class="cd-guide-text">Tap any header to open or close it. Selling something? Open <strong>What is this selling?</strong>. Tap <strong>Save</strong> at the top when you are done.</div></div>
         </div>
         <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
-        <!-- GROUP: THE BRIEF -->
-        <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
-        <div class="cd-d-main">
-        <div class="two-col">
+<div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
+        <div class="cd1-basics">
+          <div class="cd1-basics-hdr">The basics</div>
+          <div class="cd1-grid">
+<div class="two-col">
           <div class="fl"><label class="fl-lbl">Platform</label>
             <select class="fi" id="cdPlat">
               <option value="instagram">Instagram</option><option value="newsletter">Newsletter</option>
@@ -4779,51 +4950,16 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <div class="fl"><label class="fl-lbl">Format</label>
             <select class="fi" id="cdFormat">
               <option value="Caption / Post">Post</option><option value="Carousel">Carousel</option>
-              <option value="Reel / Video">Reel</option><option value="Story">Story</option>
+              <option value="Reel / Video">Reel</option><option value="Trial Reel">Trial Reel</option><option value="Story">Story</option>
               <option value="Newsletter">Newsletter</option><option value="Substack / Article">Article</option>
               <option value="Freebie">Freebie</option><option value="Event">Event</option>
               <option value="Blog Post">Blog Post</option><option value="Other">Other</option>
             </select>
           </div>
         </div>
-        <!-- GROUP: OFFER FOCUS (optional) -->
-        <div class="card-section-toggle" id="cdOfferSec">
-          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,var(--tealp),#d9efe9);border-bottom:2px solid rgba(0,132,132,.25)">
-            <div class="card-section-toggle-title" style="color:var(--teal)">🎯 What is this piece selling? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;opacity:.75">(optional)</span></div>
-            <span class="card-section-toggle-chev">+</span>
           </div>
-          <div class="card-section-toggle-body" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:12px;line-height:1.55">Fill this in when a post is working toward a specific offer. The AI tools use it to write a sharper post, built around what this one person actually needs to hear.</div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">The offer</label>
-              <input class="fi" id="cdOfferName" placeholder="e.g. Flow to Launch Lab, a free workshop, your VA/OBM services" />
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Who this is for</label>
-              <input class="fi" id="cdOfferPerson" placeholder="e.g. a new freelancer who keeps starting over every week" />
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">What's going on for them right now</label>
-              <input class="fi" id="cdOfferSituation" placeholder="e.g. they have clients but no system, so everything lives in their head" />
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">What changes once they work with you</label>
-              <input class="fi" id="cdOfferChange" placeholder="e.g. they stop guessing and have a repeatable way to onboard clients" />
-            </div>
-            <div class="fl" style="margin-bottom:0"><label class="fl-lbl" style="font-size:11px">What job is this specific piece doing?</label>
-              <select class="fi" id="cdOfferAngle">
-                <option value="">Just write it normally</option>
-                <option value="recognition">Help them recognize themselves in the problem</option>
-                <option value="proof">Show proof it actually works</option>
-                <option value="hesitation">Answer the thing holding them back</option>
-                <option value="invitation">Make a direct, clear ask</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <button type="button" class="cd-promo-link" onclick="cdOpenPromoFromCard()"><strong>Selling this for a few weeks?</strong> Create a promo plan. It saves this card, asks 3 questions, and gives you a short run of posts for your offer.</button>
-        </div>
-        <div class="cd-d-sidecol">
-        <!-- GROUP: SCHEDULING -->
-        <div class="cd-d-side" style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Scheduling</div>
-          <div class="two-col">
+          <div class="cd1-grid cd1-when">
+<div class="two-col">
             <div class="fl"><label class="fl-lbl">Date</label><input class="fi" type="date" id="cdDate" onchange="cdDateChanged()" /></div>
             <div class="fl"><label class="fl-lbl">Time <span style="font-weight:400;font-size:11px">(optional)</span></label><select class="fi" id="cdTime"><option value="">-- time --</option><option value="00:00">12:00 AM</option><option value="00:30">12:30 AM</option><option value="01:00">1:00 AM</option><option value="01:30">1:30 AM</option><option value="02:00">2:00 AM</option><option value="02:30">2:30 AM</option><option value="03:00">3:00 AM</option><option value="03:30">3:30 AM</option><option value="04:00">4:00 AM</option><option value="04:30">4:30 AM</option><option value="05:00">5:00 AM</option><option value="05:30">5:30 AM</option><option value="06:00">6:00 AM</option><option value="06:30">6:30 AM</option><option value="07:00">7:00 AM</option><option value="07:30">7:30 AM</option><option value="08:00">8:00 AM</option><option value="08:30">8:30 AM</option><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option><option value="12:30">12:30 PM</option><option value="13:00">1:00 PM</option><option value="13:30">1:30 PM</option><option value="14:00">2:00 PM</option><option value="14:30">2:30 PM</option><option value="15:00">3:00 PM</option><option value="15:30">3:30 PM</option><option value="16:00">4:00 PM</option><option value="16:30">4:30 PM</option><option value="17:00">5:00 PM</option><option value="17:30">5:30 PM</option><option value="18:00">6:00 PM</option><option value="18:30">6:30 PM</option><option value="19:00">7:00 PM</option><option value="19:30">7:30 PM</option><option value="20:00">8:00 PM</option><option value="20:30">8:30 PM</option><option value="21:00">9:00 PM</option><option value="21:30">9:30 PM</option><option value="22:00">10:00 PM</option><option value="22:30">10:30 PM</option><option value="23:00">11:00 PM</option><option value="23:30">11:30 PM</option></select></div>
           </div>
@@ -4842,64 +4978,18 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
               <span id="cdReminderLbl" style="font-size:12px;color:var(--t)">Off</span>
             </label>
           </div>
-        </div>
-        <!-- GROUP: YOUR CONTENT BRIEF -->
-        <div class="cd-d-side" style="border-top:1px solid var(--bl);padding-top:14px;margin-top:4px">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--tl);margin-bottom:10px">Content brief <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(the AI tools in Bridge the Gap read everything on this card)</span></div>
-          <div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+          </div>
+<div class="fl"><label class="fl-lbl" style="font-size:11px">Content Bucket <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
             <div style="display:flex;gap:8px;align-items:center">
               <select class="fi" id="cdBucket" style="flex:1"></select>
               <button type="button" class="btn btn-g" style="font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0" onclick="openBucketManager()">Manage</button>
             </div>
           </div>
         </div>
-        </div>
-        <!-- MORE OPTIONS (collapsed by default) -->
-        <div style="border-top:1px solid var(--bl);padding-top:10px;margin-top:2px">
-          <button onclick="var b=document.getElementById('cdMoreBody');var open=b.style.display!=='none';b.style.display=open?'none':'flex';this.textContent=open?'+ More options (images, tasks, performance)':'− Less';" style="background:none;border:none;font-size:12px;color:var(--tl);cursor:pointer;font-family:var(--fb);font-weight:600;padding:0;letter-spacing:.02em">+ More options (images, tasks, performance)</button>
-          <div id="cdMoreBody" style="display:none;flex-direction:column;gap:14px;margin-top:12px">
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <textarea class="fi" id="cdPerfNote" style="min-height:32px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
-            </div>
-            <!-- IMAGE UPLOAD -->
-            <div class="fl">
-              <label class="fl-lbl">Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional, shows in Feed Preview)</span></label>
-              <div id="cdImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
-              <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
-                📸 Add images or slides
-                <input type="file" id="cdImgInput" multiple accept="image/*" style="display:none" onchange="handleCdImages(this)" />
-              </label>
-            </div>
-            <!-- TASK BREAKDOWN -->
-            <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
-                <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
-              </div>
-              <div id="cdTaskList2" style="display:flex;flex-direction:column;gap:6px"></div>
-              <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps added here sync to your Task board and Calendar.</div>
-            </div>
-          </div>
-        </div>
-        <div class="cd-next"><button type="button" class="btn btn-p" onclick="cdShowTab('write')">Next: start writing</button></div>
-      </div>
-      <div class="cd2-right">
-      <div class="cd-pane-write">
-        <div class="cd-guide write" data-guide="card-write"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
-          <div class="cd-guide-ico">✍️</div>
-          <div><div class="cd-guide-title">Step 2: write it in your own words</div>
-          <ol class="cd-guide-steps">
-            <li><strong>Hook / Subject:</strong> type the first line people will see.</li>
-            <li><strong>Caption / Body:</strong> type your main points. Rough notes are fine.</li>
-            <li><strong>Your Draft:</strong> type the whole post here if you want to write it all yourself.</li>
-          </ol>
-          <div class="cd-guide-text">Tap <strong>Expand</strong> on any box to write full screen. Tap <strong>Save</strong> at the top when you are done. Want help writing it? Tap the <strong>Bridge the Gap</strong> tab.</div></div>
-        </div>
-        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
-        <!-- GO ANALOG SECTION -->
-        <div class="card-section-toggle cd-analog-sec">
-          <div class="card-section-toggle-hdr analog" onclick="toggleCardSection(this)">
-            <div class="card-section-toggle-title analog">✏️ Go Analog</div>
+<!-- GO ANALOG SECTION -->
+        <div class="card-section-toggle cd-analog-sec cd1-sec" id="cdWriteSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">✏️ Write it yourself</span><span class="cd1-sec-h">Go Analog. No AI needed.</span></div>
             <span class="card-section-toggle-chev">-</span>
           </div>
           <div class="card-section-toggle-body open" style="padding:14px 16px">
@@ -4926,10 +5016,11 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           </div>
         </div>
 
-        <!-- CAROUSEL SLIDES SECTION -->
-        <div class="card-section-toggle" id="cdCarouselSec">
-          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)" style="background:linear-gradient(135deg,var(--rp),#f0e2cc);border-bottom:2px solid rgba(179,108,55,.25)">
-            <div class="card-section-toggle-title" style="color:#4d1e15">🗂 Carousel Slides</div>
+        
+<!-- CAROUSEL SLIDES SECTION -->
+        <div class="card-section-toggle cd1-sec" id="cdCarouselSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">🗂 Carousel slides</span><span class="cd1-sec-h">One slide per box.</span></div>
             <span class="card-section-toggle-chev">+</span>
           </div>
           <div class="card-section-toggle-body" style="padding:14px 16px">
@@ -4943,25 +5034,14 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           </div>
         </div>
 
-        <div class="cd-next"><button type="button" class="btn btn-p" onclick="cdShowTab('ai')">Next: get AI help</button></div>
-      </div><!-- end cd-pane-write -->
-      <div class="cd-pane-ai">
-        <div class="cd-guide ai" data-guide="card-ai"><button type="button" class="cd-guide-hide" onclick="guideHide(this)">Hide guide</button>
-          <div class="cd-guide-ico">✦</div>
-          <div style="flex:1;min-width:0"><div class="cd-guide-title">Step 3 (optional): get AI help</div>
-          <div class="cd-guide-text">The AI reads what you typed in Details and Go Analog. Tap one tool below to jump to it. Each use takes 1 AI credit.</div>
-          <div class="cd-guide-rows">
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('smartBrief')"><strong>Creative direction</strong><span>Tells you the angle, a first line, and what to avoid. Use it before you write.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('generate')"><strong>Generate</strong><span>Writes the full post for you from your notes.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('hooks')"><strong>Hooks</strong><span>Gives you 3 first lines to pick from.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('variations')"><strong>Variations</strong><span>Writes the same post 3 different ways.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('shrink')"><strong>Shrink</strong><span>Makes a tiny version you can post in 10 minutes.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('series')"><strong>Series</strong><span>Turns this one idea into 5 posts.</span></button>
-            <button type="button" class="cd-guide-row" onclick="cdGuideGo('repurpose')"><strong>Rebuild in my voice</strong><span>Paste the link to a post you liked. Get your own version of it.</span></button>
+        
+        <div class="card-section-toggle cd1-sec cd-bridge-sec" id="cdAiSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">✦ Get AI help</span><span class="cd1-sec-h">Bridge the Gap. Each use takes 1 credit.</span></div>
+            <span class="card-section-toggle-chev">+</span>
           </div>
-          <div class="cd-guide-text" style="margin-top:8px">When the result shows up, tap <strong>Copy</strong> or <strong>Save Draft</strong> under it.</div></div>
-        </div>
-        <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
+          <div class="card-section-toggle-body" style="padding:14px 16px">
+<div class="cd1-note">The AI works from what you typed above. Each tool below takes 1 AI credit, and results show up right under the button.</div>
         <div class="cd-empty-note" id="cdAiEmpty">
           Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
           <div class="cd-empty-acts">
@@ -4969,13 +5049,8 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <button type="button" class="btn btn-g" style="font-size:12px;padding:7px 14px" onclick="cdShowTab('write',{focus:'cdNotes'})">Write some notes</button>
           </div>
         </div>
-        <!-- BRIDGE THE GAP SECTION -->
-        <div class="card-section-toggle cd-bridge-sec">
-          <div class="card-section-toggle-hdr bridge" onclick="toggleCardSection(this)">
-            <div class="card-section-toggle-title bridge">✦ Bridge the Gap</div>
-            <span class="card-section-toggle-chev">+</span>
-          </div>
-          <div class="card-section-toggle-body" style="padding:8px">
+        
+<div class="cd1-ai-tools">
         <div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('smartBrief')" style="background:linear-gradient(135deg,var(--rp),#EDD5C8);border-bottom:2px solid #E0BDAA">
             <div class="ai2-section-title" style="color:var(--r)">✦ Get Creative Direction</div>
@@ -5020,6 +5095,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                 <button class="ai2-btn" onclick="cdGen2('story')"><span class="ai2-btn-label">Story Script</span><span class="ai2-btn-sub">Slide by slide</span></button>
                 <button class="ai2-btn" onclick="cdGen2('carousel')"><span class="ai2-btn-label">Carousel</span><span class="ai2-btn-sub">Hook + slides + CTA</span></button>
                 <button class="ai2-btn" onclick="cdGen2('reel')"><span class="ai2-btn-label">Reel Script</span><span class="ai2-btn-sub">Hook, body, CTA</span></button>
+                <button class="ai2-btn" onclick="cdGen2('trialreel')"><span class="ai2-btn-label">Trial Reel</span><span class="ai2-btn-sub">Test hooks, no talking</span></button>
                 <button class="ai2-btn" onclick="cdGen2('newsletter')"><span class="ai2-btn-label">Newsletter</span><span class="ai2-btn-sub">Intro paragraph</span></button>
                 <button class="ai2-btn" onclick="cdGen2('email')"><span class="ai2-btn-label">Email</span><span class="ai2-btn-sub">Subject + body</span></button>
                 <button class="ai2-btn" onclick="cdGen2('blog')"><span class="ai2-btn-label">Blog Post</span><span class="ai2-btn-sub">With headers</span></button>
@@ -5122,7 +5198,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                   <div><label class="fl-lbl" for="cdRpOutFmt" style="font-size:11px">Your format</label>
                   <select class="fi" id="cdRpOutFmt" style="font-size:12px;padding:6px 10px">
                     <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
-                    <option value="Reel Script">Reel Script</option><option value="Story Script">Story Script</option>
+                    <option value="Reel Script">Reel Script</option><option value="Trial Reel">Trial Reel</option><option value="Story Script">Story Script</option>
                     <option value="Newsletter">Newsletter</option><option value="Email">Email</option>
                     <option value="Blog Post">Blog Post</option>
                   </select></div>
@@ -5173,10 +5249,70 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             </div>
           </div>
         </div>
-          </div><!-- end bridge body -->
-        </div><!-- end bridge toggle -->
-      </div><!-- end cd-pane-ai -->
-      </div><!-- end cd2-right -->
+</div>
+          </div>
+        </div>
+<div class="card-section-toggle cd1-sec" id="cdOfferSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">🎯 What is this selling?</span><span class="cd1-sec-h">Optional. Makes AI writing sharper.</span></div>
+            <span class="card-section-toggle-chev">+</span>
+          </div>
+          <div class="card-section-toggle-body" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:12px;line-height:1.55">Fill this in when a post is working toward a specific offer. The AI tools use it to write a sharper post, built around what this one person actually needs to hear.</div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">The offer</label>
+              <input class="fi" id="cdOfferName" placeholder="e.g. Flow to Launch Lab, a free workshop, your VA/OBM services" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Who this is for</label>
+              <input class="fi" id="cdOfferPerson" placeholder="e.g. a new freelancer who keeps starting over every week" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What's going on for them right now</label>
+              <input class="fi" id="cdOfferSituation" placeholder="e.g. they have clients but no system, so everything lives in their head" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What changes once they work with you</label>
+              <input class="fi" id="cdOfferChange" placeholder="e.g. they stop guessing and have a repeatable way to onboard clients" />
+            </div>
+            <div class="fl" style="margin-bottom:0"><label class="fl-lbl" style="font-size:11px">What job is this specific piece doing?</label>
+              <select class="fi" id="cdOfferAngle">
+                <option value="">Just write it normally</option>
+                <option value="recognition">Help them recognize themselves in the problem</option>
+                <option value="proof">Show proof it actually works</option>
+                <option value="hesitation">Answer the thing holding them back</option>
+                <option value="invitation">Make a direct, clear ask</option>
+              </select>
+            </div>
+          </div>
+        </div>
+<button type="button" class="cd-promo-link" onclick="cdOpenPromoFromCard()"><strong>Selling this for a few weeks?</strong> Create a promo plan. It saves this card, asks 3 questions, and gives you a short run of posts for your offer.</button>
+        <div class="card-section-toggle cd1-sec" id="cdExtrasSec">
+          <div class="card-section-toggle-hdr" onclick="cdToggleMore()">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">📎 Tasks, images, and notes</span><span class="cd1-sec-h">Break it into steps, add visuals, note what worked.</span></div>
+            <span class="card-section-toggle-chev" id="cdMoreChev">+</span>
+          </div>
+          <div id="cdMoreBody" class="cd1-more" style="display:none;flex-direction:column;gap:14px;padding:14px 16px;background:var(--w)">
+<!-- TASK BREAKDOWN -->
+            <div style="background:var(--rp);border:1px solid #E0BDAA;border-radius:var(--rad);padding:14px 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r)">☑ Break Into Tasks</div>
+                <button onclick="cdAddTask()" style="font-size:11px;padding:4px 10px;background:var(--r);color:white;border:none;border-radius:var(--rsm);cursor:pointer;font-family:var(--fb)">+ Add Step</button>
+              </div>
+              <div id="cdTaskList2" style="display:flex;flex-direction:column;gap:6px"></div>
+              <div style="font-size:11px;color:var(--tl);margin-top:8px">Steps added here sync to your Task board and Calendar.</div>
+            </div><!-- IMAGE UPLOAD -->
+            <div class="fl">
+              <label class="fl-lbl">Images / Slides <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional, shows in Feed Preview)</span></label>
+              <div id="cdImgArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+              <label style="display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--p);border:1.5px dashed var(--b);border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:var(--t);transition:all .15s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--b)'">
+                📸 Add images or slides
+                <input type="file" id="cdImgInput" multiple accept="image/*" style="display:none" onchange="handleCdImages(this)" />
+              </label>
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What worked? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <textarea class="fi" id="cdPerfNote" style="min-height:32px;font-size:13px" placeholder="e.g. Stories converted better than carousel for this offer..."></textarea>
+            </div>
+            
+          </div>
+        </div>
+      </div>
     </div><!-- end cd2-wrap -->
   </div><!-- end modal -->
 </div><!-- end modal-ov -->
@@ -5438,7 +5574,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
       <div class="fl"><label class="fl-lbl">Format</label>
         <select class="fi" id="panicFormat">
           <option value="Caption">Caption</option><option value="Carousel">Carousel</option>
-          <option value="Reel Script">Reel</option><option value="Newsletter">Newsletter</option>
+          <option value="Reel Script">Reel</option><option value="Trial Reel">Trial Reel</option><option value="Newsletter">Newsletter</option>
           <option value="Blog Post">Blog Post</option><option value="Story">Story</option>
           <option value="Article">Article (Substack)</option>
         </select>
@@ -6866,6 +7002,7 @@ const FORMAT_COLORS={
   'Caption / Post':{bg:'#CFE3C4',fg:'#3D6B2C'},
   'Carousel':{bg:'#F0CFA0',fg:'#8C5A1A'},
   'Reel / Video':{bg:'#F5B8CE',fg:'#A31B5C'},
+  'Trial Reel':{bg:'#F8D3E3',fg:'#8A1F5A'},
   'Story':{bg:'#DCC0EE',fg:'#6B3A96'},
   'Newsletter':{bg:'#A8E0D8',fg:'#0F6B64'},
   'Substack / Article':{bg:'#B9C6EE',fg:'#2E4B8C'},
@@ -7713,7 +7850,7 @@ function studioFormatToCdFormat(type){
   var map={
     'Caption / Post':'Caption / Post','Email Newsletter':'Newsletter',
     'Story Script':'Story','Carousel Copy':'Carousel','Reel Script':'Reel / Video',
-    'Video Script':'Reel / Video','Blog Post':'Blog Post','Article':'Substack / Article',
+    'Video Script':'Reel / Video','Trial Reel':'Trial Reel','Blog Post':'Blog Post','Article':'Substack / Article',
     'Bio / About':'Other','Book Chapter':'Other'
   };
   return map[type]||'Other';
@@ -8000,8 +8137,7 @@ function openIdeaModal(status){
   var slidesContainer=document.getElementById('cdCarouselSlides');
   if(slidesContainer){slidesContainer.innerHTML='';cdAddSlide();cdAddSlide();cdAddSlide();}
   S._pendingIdeaImages=[];cdRenderTasks();cdRefreshImageArea();
-  var moreBodyNew=document.getElementById('cdMoreBody');
-  if(moreBodyNew){moreBodyNew.style.display='none';var mb=moreBodyNew.previousElementSibling;if(mb&&mb.tagName==='BUTTON')mb.textContent='+ More options (images, tasks, performance)';}
+  cdSetMore(false);
   var rw=document.getElementById('cdReminderWrap');if(rw)rw.style.display='none';
   var rc=document.getElementById('cdReminderOn');if(rc){rc.checked=false;cdToggleReminder(rc);}
   // Clear all fields
@@ -8393,7 +8529,11 @@ function saveBrandProfile(){
 // different person depending on which button you clicked. Built from the
 // richest existing version. Task-specific instructions (format, length,
 // output structure) stay in each function - only the identity lives here.
-const CD_PERSONA = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist and marketing executive with 10+ years managing brand accounts across every kind of business and every major platform (Instagram, TikTok, LinkedIn, Facebook, email/newsletter, Substack, YouTube). That background means you reason like someone who has actually run these accounts at scale, not someone repeating generic advice: you know what separates a post that performs from one that doesn't, what a launch actually needs at each phase, what a realistic cadence looks like before it tips into burnout, and how those decisions differ by platform and by niche. You hold three distinct layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, what makes a piece of content actually work), LAUNCH STRATEGY (sequencing, pacing, when to build vs when to ask), and GENERAL BUSINESS STRATEGY (platform prioritization, positioning, where to spend limited time and energy for the best return). On top of all of that, you specifically understand neurodivergent brains and how ND business owners actually work best, which means you never default to hustle-culture volume advice, you reason in sustainable systems instead of grind. Whatever niche or industry the person's brand profile describes, that is the only niche you write for, adapt fully to it rather than defaulting to any one industry. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
+const CD_PERSONA_BASE = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. You are not just a copywriting voice coach, you are a senior brand strategist and marketing executive with 10+ years managing brand accounts across every kind of business and every major platform (Instagram, TikTok, LinkedIn, Facebook, email/newsletter, Substack, YouTube). That background means you reason like someone who has actually run these accounts at scale, not someone repeating generic advice: you know what separates a post that performs from one that doesn't, what a launch actually needs at each phase, what a realistic cadence looks like before it tips into burnout, and how those decisions differ by platform and by niche. You hold three distinct layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, what makes a piece of content actually work), LAUNCH STRATEGY (sequencing, pacing, when to build vs when to ask), and GENERAL BUSINESS STRATEGY (platform prioritization, positioning, where to spend limited time and energy for the best return). On top of all of that, you specifically understand neurodivergent brains and how ND business owners actually work best, which means you never default to hustle-culture volume advice, you reason in sustainable systems instead of grind. Whatever niche or industry the person's brand profile describes, that is the only niche you write for, adapt fully to it rather than defaulting to any one industry. Be direct, warm, a little dry, never corporate, never hustle-y. No em dashes, no markdown symbols (no asterisks, no pound signs).";
+// What the Creative Director knows about trial reels. Used by Director Chat,
+// every card tool, and the Trial Reel format, so the strategy only lives here.
+const CD_TRIAL_KNOWLEDGE = " TRIAL REELS: you know the trial reel strategy well. A trial reel is an Instagram reel that is shown mostly to people who do not follow the creator yet, so it is a low pressure way to test a hook before committing to it. When someone plans reels, selling something, or asks what to post, you can suggest a trial reel where it fits, and you explain it simply. The method: start with ONE offer and work backwards from it. Test the three reasons a person buys that offer: a fear they have, a desire they want, and a problem the offer solves. Keep the footage the same and change only the short on-screen hook, because that isolates what is actually working. A good set is about five versions of one b-roll clip with five different hooks. Trial reels are b-roll with text on screen and no talking, so they suit people who do not want to be on camera. Judge results by views, follows, profile visits and comments, not views alone, and ask which hook attracts the people who might actually buy. Repeat the strongest angle. Turn attention into leads with a free resource tied to the paid offer, a single comment word, and a follow up message, but only suggest systems the creator really has set up. Start selling early using the winning hooks: share testimonials, results and exactly what a buyer receives, invite people to join a waitlist or enquire, and add value instead of discounting. A good first experiment is five trial reels over a weekend, each testing a different buying motivation. Never promise results or invent numbers. Studio helps plan and write them, it does not post or track them, so the creator checks the numbers in Instagram.";
+const CD_PERSONA = CD_PERSONA_BASE + CD_TRIAL_KNOWLEDGE;
 
 /* ═══════════════════ SKILL SPECS ═══════════════════
    Single source of truth for every "write me a piece of content" tool.
@@ -8447,6 +8587,11 @@ const SKILL_SPECS = {
     tokens: { short: 800, standard: 1100, long: 1500 },
     spec: "Write a finished talking-head Reel or TikTok script, written for the ear at a natural speaking pace. Organize it with these labels in this order. HOOK: the first 1 to 3 seconds, one spoken line, followed by ON SCREEN: the short text overlay. SETUP: the intro, one or two lines that tell the viewer why this matters to them right now and what they are about to get. BODY: two or three points that build on each other, each one concrete enough to act on, with a short spoken transition into each point so it sounds like one train of thought, not a list. LANDING: the conclusion, one or two lines that tie the points together into the one thing they walk away with. CTA: one line that flows naturally out of the landing. The spoken lines across all labels must read as one continuous, natural monologue. Add short delivery or b-roll notes in square brackets where a cut, a visual change, or a pause would hold attention. Say the main keyword out loud in the HOOK or SETUP. If it fits, make the last line loop back to the hook so the video replays cleanly."
   },
+  trialreel: {
+    lengths: { short: "3 hook versions", standard: "5 hook versions", long: "5 hook versions, each with its own short caption" },
+    tokens: { short: 900, standard: 1300, long: 1900 },
+    spec: "Write a finished trial reel plan. A trial reel is b-roll with text on screen and NO talking, shown mostly to people who do not follow the creator yet, so the point is to test which hook pulls in the right people for ONE offer. Use the offer details if they were given, otherwise work from the card notes. Do not invent an offer. Organize it with these labels in this order. THE OFFER: one line naming the single offer this set of trial reels works backwards from. THE CLIP: a short description of the one b-roll clip to film once and reuse for every version, chosen from the kind of footage the creator really has (a desk, coffee, a walk, a screen recording, a cozy home), described in one or two lines, and the same footage stays in every version. THE HOOKS: the on-screen text versions, numbered Version 1, Version 2, and so on. Each version is one short line of on-screen text, 12 words or fewer, readable in three seconds, written in the voice of the audience, and each is tagged in square brackets with what it tests: [Fear], [Desire], or [Problem]. Cover all three kinds across the set, and only change the hook between versions, never the clip. THE CAPTION: a short caption that holds the keyword in the first line and ends with one call to action asking them to comment one single word for the free resource tied to this offer. Use the comment word and free resource the creator gave. If they gave none, write the word as [YOUR COMMENT WORD] and the free resource as [your free resource], never invent a system. WHAT TO WATCH: two short lines telling them to compare views, follows, profile visits and comments for each version, and to notice which hook attracts people who could actually buy, then repeat the strongest one. End with one line reminding them they can start sharing a testimonial, a result, or what a buyer receives using the winning hook. Plain text, no talking-head script, no spoken lines."
+  },
   carousel: {
     lengths: { short: "5 to 6 slides", standard: "7 to 9 slides", long: "10 slides" },
     tokens: { short: 900, standard: 1200, long: 1500 },
@@ -8470,12 +8615,12 @@ const SKILL_SPECS = {
   substack: {
     lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
     tokens: { short: 2400, standard: 3600, long: 5200 },
-    spec: "Write a finished Substack article. Output in this order: first line is the word Title, a colon, then the title. Second line is the word Subtitle, a colon, then the subtitle (one sentence that sharpens the promise). Then a blank line, then an opening hook of two or three short paragraphs that pulls the reader in from the first line, then three or four sections, each starting with a short plain-text header on its own line with a blank line before it (no symbols), then a closing that circles back to the opening image or idea and lands the point, then an optional one-line subscribe or share invitation. Write like a real person with a real point of view, not a content marketer. Minimal bullet points, and each section must give the reader something concrete: an example, a tool, a step, or a reframe."
+    spec: "Write a finished Substack article. Output in this order: first line is the word Title, a colon, then the title. Second line is the word Subtitle, a colon, then the subtitle (one sentence that sharpens the promise). Then a blank line, then an opening hook of two or three short paragraphs that pulls the reader in from the first line, then three or four sections, each starting with a short plain-text header on its own line with a blank line before it (no symbols), then a closing that circles back to the opening image or idea and lands the point, then an optional one-line invitation to subscribe or share the post. Substack call to action rules, which override any general call to action advice: the reader may be on the Substack site or app, may not be subscribed, and may never see an email. So the only asks allowed are things anyone reading the post can do: subscribe, share the post, or read another post when the brief gives a real one. Never write: reply to this email, hit reply, comment a word or keyword to get something, DM me, link in bio, check your inbox, forward this email, or any line that assumes they are reading in an email, are already subscribed, or that an automation will answer them. Only mention a link to an offer if the brief or offer says where it lives. Write like a real person with a real point of view, not a content marketer. Minimal bullet points, and each section must give the reader something concrete: an example, a tool, a step, or a reframe."
   },
   blog: {
     lengths: { short: "600 to 900 words", standard: "900 to 1,400 words", long: "1,400 to 2,000 words" },
     tokens: { short: 2400, standard: 3600, long: 5200 },
-    spec: "Write a finished blog post built to be found in search and actually read. Output in this order: first line is the word Title, a colon, then the title (main keyword included, sentence case). Second line is the word Subtitle, a colon, then a one-sentence subheadline. Then a blank line, then an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
+    spec: "Write a finished blog post built to be found in search and actually read. Output in this order: first line is the word Title, a colon, then the title (main keyword included, sentence case). Second line is the word Subtitle, a colon, then a one-sentence subheadline. Then a blank line, then an opening that names the reader's problem in the first two sentences, then three to five sections each with a short plain-text header on its own line (no symbols, include the keyword or a close variation in at least one), then a closing section that summarizes the takeaway and gives one clear next step. The next step must work for anyone reading on a web page: never write reply to this email, comment a word or keyword to get something, DM me, link in bio, check your inbox, or anything that assumes an email or an automated reply. Only mention a link to an offer if the brief or offer says where it lives. Concrete examples, steps, and named tools or resources in every section. Minimal bullet points."
   },
   hooks: {
     lengths: { short: "3 hooks", standard: "3 hooks", long: "3 hooks" },
@@ -8935,15 +9080,7 @@ function cdOpen(id){
 
   // Auto-expand More options if this card already has content in that section
   var hasMoreContent=(x.images&&x.images.length)||(x.cdTasks&&x.cdTasks.length)||(x.perfNote&&x.perfNote.trim());
-  var moreBody=document.getElementById('cdMoreBody');
-  var moreBtn=moreBody&&moreBody.previousElementSibling;
-  if(moreBody&&hasMoreContent){
-    moreBody.style.display='flex';
-    if(moreBtn&&moreBtn.tagName==='BUTTON')moreBtn.textContent='− Less';
-  } else if(moreBody){
-    moreBody.style.display='none';
-    if(moreBtn&&moreBtn.tagName==='BUTTON')moreBtn.textContent='+ More options (images, tasks, performance)';
-  }
+  cdSetMore(!!hasMoreContent);
 
   // Populate all fields
   document.getElementById('cdTitle').value=x.title||'';
@@ -9031,7 +9168,7 @@ function cdOpen(id){
     // Older cards saved generated content only under its type (caption,
     // carousel, ...), so map the most likely one into the Generate box.
     if(!_cdOutputs['generate']){
-      var legacyType=['carousel','reel','caption','story','email','newsletter','substack','blog'].filter(function(t){return _cdOutputs[t];})[0];
+      var legacyType=['carousel','reel','trialreel','caption','story','email','newsletter','substack','blog'].filter(function(t){return _cdOutputs[t];})[0];
       if(legacyType){_cdOutputs['generate']=_cdOutputs[legacyType];_cdOutputs['generateType']=legacyType;}
     }
     // Simple text output sections
@@ -9784,7 +9921,7 @@ async function runPanicGenerate(){
   document.getElementById('panicOut').style.display='none';
   var actsEl=document.getElementById('panicActs');if(actsEl)actsEl.style.display='none';
   panicLockButtons(true);
-  var panicMap={'Caption':'caption','Carousel':'carousel','Reel Script':'reel','Story':'story','Newsletter':'newsletter','Blog Post':'blog','Article':'substack'};
+  var panicMap={'Caption':'caption','Carousel':'carousel','Reel Script':'reel','Trial Reel':'trialreel','Story':'story','Newsletter':'newsletter','Blog Post':'blog','Article':'substack'};
   var req=buildSkillRequest(panicMap[fmt]||'caption',{brief:topic,plat:plat,format:fmt,tone:'warm, direct, and human',length:'standard'});
   var result=await cdCallAI(req.sys,req.usr,req.maxTok);
   document.getElementById('panicLoading').style.display='none';
@@ -10862,13 +10999,13 @@ async function cdCallAI(sys, usr, maxTok) {
   _aiInFlight++;
   try {
     // Longer skills (articles, long scripts) need more time than the 45s default
-    var full = await aiGenerateFull({ model: 'claude-sonnet-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30), { maxPasses: (maxTok || 0) >= 2400 ? 5 : 3 });
+    var full = await aiGenerateFull({ model: 'claude-sonnet-5', max_tokens: maxTok || 800, system: sys, messages: [{ role: 'user', content: usr }] }, Math.max(45000, (maxTok || 800) * 30), { maxPasses: (maxTok || 0) >= 2400 ? 6 : 3 });
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was used or saved, try again.');
       return '';
     }
-    if(full.truncated) toast('This one ran really long and may be cut off at the end.');
+    if(full.truncated) toast('This one ran really long and may be cut off at the end. Nothing extra was used.');
     consumeCredit(); // only consume if we got a real response
     cdMarkAiNew();
     return result;
@@ -10934,13 +11071,13 @@ async function cdCallAIChat(messages, maxTok, playbookLock){
   if(!canUseAI()){showCreditBlocked();return '';}
   _aiInFlight++;
   try{
-    var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 90000, { maxPasses: 4 });
+    var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 90000, { maxPasses: 6 });
     var result = full.text || '';
     if(!result){
       toast('No response came back. Nothing was sent, try again.');
       return '';
     }
-    if(full.truncated) toast('That answer hit the length limit and may be cut off at the end. Ask me to keep going and I will pick it back up.');
+    if(full.truncated) toast('That answer ran longer than expected and may be cut off at the end. Nothing extra was used.');
     consumeCredit();
     return result;
   }catch(e){
@@ -11188,39 +11325,52 @@ document.addEventListener('click',function(e){
 // confirm/support/etc modals stacked on top still cover it.
 
 /* ═══════════════════ CARD TABS, AUTO-GROW, FOCUS MODE ═══════════════════ */
-var _cdTab='write';
+var _cdTab='details';
+function cdOpenSec(id,open){
+  var sec=document.getElementById(id); if(!sec)return null;
+  var body=sec.querySelector('.card-section-toggle-body')||sec.querySelector('.cd1-more');
+  var chev=sec.querySelector('.card-section-toggle-chev');
+  if(body&&body.classList.contains('card-section-toggle-body'))body.classList.toggle('open',open!==false);
+  if(chev)chev.textContent=(open!==false)?'-':'+';
+  return sec;
+}
+function cdToggleMore(){var b=document.getElementById('cdMoreBody');cdSetMore(!b||b.style.display==='none');}
+function cdSetMore(open){
+  var b=document.getElementById('cdMoreBody'),c=document.getElementById('cdMoreChev');
+  if(b)b.style.display=open?'flex':'none';
+  if(c)c.textContent=open?'-':'+';
+  if(open&&typeof cdGrowAll==='function')setTimeout(cdGrowAll,30);
+}
+// One page, no tabs: this opens the right section and scrolls to it.
 function cdShowTab(tab,opts){
   opts=opts||{};
-  if(['details','write','ai'].indexOf(tab)===-1)tab='write';
   _cdTab=tab;
-  var wrap=document.getElementById('cdWrap');
-  if(wrap)wrap.setAttribute('data-tab',tab);
-  document.querySelectorAll('#cardDetailModal .cd-tab').forEach(function(t){
-    var on=t.dataset.tab===tab;
-    t.classList.toggle('active',on);
-    t.setAttribute('aria-selected',on?'true':'false');
-    if(on&&tab==='ai')t.classList.remove('has-new');
-  });
   var panel=document.querySelector('#cardDetailModal .cd-modal-panel');
-  if(panel&&!opts.keepScroll)panel.scrollTop=0;
-  cdPinTabs();
-  if(tab==='write'){
-    // Carousel cards open the slides section so it isn't hidden behind a toggle
-    var fmt=document.getElementById('cdFormat');
-    var sec=document.getElementById('cdCarouselSec');
-    if(fmt&&sec&&fmt.value==='Carousel'){
-      var body=sec.querySelector('.card-section-toggle-body');var chev=sec.querySelector('.card-section-toggle-chev');
-      if(body&&!body.classList.contains('open')){body.classList.add('open');if(chev)chev.textContent='-';}
-    }
-    cdGrowAll();
-  }
-  if(tab==='ai'){cdUpdateAiEmpty();cdUpdatePrimaryBtn();}
+  var target=null;
+  if(tab==='write')target=cdOpenSec('cdWriteSec',true);
+  else if(tab==='ai')target=cdOpenSec('cdAiSec',true);
+  else if(panel&&!opts.keepScroll)panel.scrollTop=0;
+  if(target&&!opts.keepScroll){try{target.scrollIntoView({block:'start'});}catch(e){}}
+  var fmt=document.getElementById('cdFormat');
+  if(fmt&&fmt.value==='Carousel')cdOpenSec('cdCarouselSec',true);
+  cdGrowAll();cdUpdateAiEmpty();cdUpdatePrimaryBtn();
   if(opts.focus){
     var el=document.getElementById(opts.focus);
     if(el)setTimeout(function(){el.focus();el.classList.add('cd-hl');setTimeout(function(){el.classList.remove('cd-hl');},1600);},60);
   }
 }
-function cdPinTabs(){
+// Fresh card open: basics on top, Write open, the rest closed unless they have content.
+function cdResetSections(){
+  cdOpenSec('cdWriteSec',true);
+  cdOpenSec('cdAiSec',false);
+  var fmt=document.getElementById('cdFormat');
+  cdOpenSec('cdCarouselSec',!!(fmt&&fmt.value==='Carousel'));
+  try{
+    var x=(S.ideas||[]).find(function(a){return a.id===S.cdId;});
+    if(x&&x.aiOutputs&&Object.keys(x.aiOutputs).some(function(k){return x.aiOutputs[k];}))cdOpenSec('cdAiSec',true);
+  }catch(e){}
+}
+function cdPinTabs(){return;
   var sticky=document.querySelector('#cardDetailModal .cd-sticky');
   if(!sticky)return;
   var hdr=sticky.firstElementChild;
@@ -11230,13 +11380,13 @@ function cdPinTabs(){
 // Gap can lead with one obvious button instead of a wall of choices. The
 // person already made this decision in Details; this just acts on it.
 const CD_FORMAT_TO_TYPE = {
-  'Caption / Post':'caption','Carousel':'carousel','Reel / Video':'reel','Story':'story',
+  'Caption / Post':'caption','Carousel':'carousel','Reel / Video':'reel','Trial Reel':'trialreel','Story':'story',
   'Newsletter':'newsletter','Substack / Article':'substack','Blog Post':'blog',
   'Freebie':'caption','Event':'caption','Other':'caption'
 };
 const CD_TYPE_META = {
   caption:{label:'Generate Caption',icon:'✍️'}, carousel:{label:'Generate Carousel',icon:'🗂'},
-  reel:{label:'Generate Reel Script',icon:'🎬'}, story:{label:'Generate Story',icon:'📲'},
+  reel:{label:'Generate Reel Script',icon:'🎬'}, trialreel:{label:'Generate Trial Reel Plan',icon:'🧪'}, story:{label:'Generate Story',icon:'📲'},
   newsletter:{label:'Generate Newsletter',icon:'✉️'}, email:{label:'Generate Email',icon:'✉️'},
   substack:{label:'Generate Article',icon:'📝'}, blog:{label:'Generate Blog Post',icon:'📝'}
 };
@@ -11252,6 +11402,13 @@ function cdUpdatePrimaryBtn(){
   if(lbl)lbl.textContent=meta.label;
   if(ico)ico.textContent=meta.icon;
 }
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='cdFormat'){
+    cdUpdatePrimaryBtn();
+    if(e.target.value==='Carousel')cdOpenSec('cdCarouselSec',true);
+    if(e.target.value==='Trial Reel')cdSetOfferSectionOpen(true);
+  }
+});
 function cdGenPrimary(){ return cdGen2(cdPrimaryType()); }
 function cdToggleAltFormats(){
   var panel=document.getElementById('cdAltFormats');
@@ -11388,8 +11545,8 @@ document.addEventListener('keydown',function(e){
   new MutationObserver(function(){
     var isOpen=m.classList.contains('open');
     if(isOpen&&!wasOpen){
-      document.querySelectorAll('#cardDetailModal .cd-tab').forEach(function(t){t.classList.remove('has-new');});
       cdShowTab('details');
+      cdResetSections();
       setTimeout(cdGrowAll,120);
     }
     if(!isOpen&&wasOpen)cdFocusClose();
@@ -12663,7 +12820,7 @@ function renderBucketInsights(){
   if(!body) return;
   var ideas = S.ideas || [];
   var buckets = getBuckets();
-  var fmtColors = {'Caption / Post':'var(--teal)','Carousel':'var(--r)','Reel / Video':'#7A5C9C','Story':'#C47A3A','Newsletter':'var(--sage)','Substack / Article':'#4a7fa5','Other':'var(--tl)'};
+  var fmtColors = {'Caption / Post':'var(--teal)','Carousel':'var(--r)','Reel / Video':'#7A5C9C','Trial Reel':'#9C5C86','Story':'#C47A3A','Newsletter':'var(--sage)','Substack / Article':'#4a7fa5','Other':'var(--tl)'};
   var counts = {};
   buckets.forEach(function(b){ counts[b]={}; });
   ideas.forEach(function(idea){
@@ -12803,7 +12960,7 @@ function promoJobs(n){
   return jobs;
 }
 var PROMO_JOB_LABEL={recognition:'Name the problem',proof:'Show it works',hesitation:'Answer the doubt',invitation:'Make the ask'};
-var PROMO_FORMATS=['Caption / Post','Carousel','Reel / Video','Story'];
+var PROMO_FORMATS=['Caption / Post','Carousel','Reel / Video','Trial Reel','Story'];
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
 function promoMatches(i){return !_promoFilter||(i&&i.promo===_promoFilter);}
 function promoTagHTML(i){
@@ -13330,6 +13487,7 @@ function toggleCardSection(hdr){
   if(!body)return;
   var isOpen = body.classList.toggle('open');
   if(chev) chev.textContent = isOpen ? '-' : '+';
+  if(isOpen&&hdr.closest&&hdr.closest('#cardDetailModal')&&typeof cdGrowAll==='function')setTimeout(cdGrowAll,30);
 }
 // Opens the Offer Focus section automatically when a card already has
 // something filled in, so returning to a card doesn't hide it behind a +.
