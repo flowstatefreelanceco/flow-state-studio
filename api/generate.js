@@ -164,6 +164,13 @@ export default async function handler(req, res) {
     if (rejectedSetting || ranOutThinking) {
       attempt = await callModel(Object.assign({}, clean, { max_tokens: max_tokens + THINK_ROOM }));
     }
+    // A reply can come back with no words for no clear reason. Try once more
+    // before giving up, and keep the reason so the error can say what happened.
+    if (attempt.r.ok && !attempt.t) {
+      const first = attempt.d && attempt.d.stop_reason;
+      attempt = await callModel(clean);
+      if (attempt.d && !attempt.d.stop_reason && first) attempt.d.stop_reason = first;
+    }
     const response = attempt.r;
     const data = attempt.d;
     const text = attempt.t;
@@ -175,7 +182,7 @@ export default async function handler(req, res) {
       if (data && typeof data === 'object' && credit && !credit.unlimited && after !== null) {
         data.fss = { used: after, limit: credit.credit_limit, cycle_start: credit.cycle_start, unlimited: false };
       }
-      if (response.ok && !data.error) data.error = { message: 'The AI came back with no words. Nothing was used, try again' };
+      if (response.ok && !data.error) data.error = { message: 'The AI came back with no words' + (data.stop_reason ? ' (' + data.stop_reason + ')' : '') + '. Nothing was used, try again' };
       return res.status(response.ok ? 502 : response.status).json(data);
     }
 
