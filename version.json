@@ -1,6 +1,18 @@
 {
-  "version": "5.17",
+  "version": "5.19",
   "changelog": [
+    {
+      "type": "new",
+      "date": "Oct 19, 2026",
+      "title": "Trial reels are now in the Studio",
+      "desc": "Pick Trial Reel as the Format on any content card and your Creative Director plans a no-talking b-roll reel with several on-screen hooks to test on people who don't follow you yet. There's also a new Trial Reel Guide in Guides that walks through the method. Director Chat knows it too, so ask it what trial reels to make for your offer."
+    },
+    {
+      "type": "improvement",
+      "date": "Oct 19, 2026",
+      "title": "A simpler content card",
+      "desc": "Content cards are now one page instead of three tabs. The basics sit at the top, then Write it yourself, then Get AI help, with sections you can open and close. Nothing was removed, it's just easier to find things."
+    },
     {
       "type": "new",
       "date": "Oct 11, 2026",
