@@ -11097,12 +11097,14 @@ function dirChatSystemPrompt(playbookLock){
 
 async function cdCallAIChat(messages, maxTok, playbookLock){
   checkCreditReset();
-  if(!canUseAI()){showCreditBlocked();return '';}
+  window._dcLastErr='';
+  if(!canUseAI()){window._dcLastErr='credits';showCreditBlocked();return '';}
   _aiInFlight++;
   try{
     var full = await aiGenerateFull({ model: S.settings.model||'claude-sonnet-5', max_tokens: maxTok||1200, system: dirChatSystemPrompt(playbookLock), messages: messages }, 90000, { maxPasses: 6 });
     var result = full.text || '';
     if(!result){
+      window._dcLastErr='the AI returned an empty reply';
       toast('No response came back. Nothing was sent, try again.');
       return '';
     }
@@ -11112,6 +11114,7 @@ async function cdCallAIChat(messages, maxTok, playbookLock){
   }catch(e){
     if (aiHandleCreditError(e)) return '';
     var msg = e && e.name === 'AbortError' ? 'That took too long and timed out. Nothing was sent, try again.' : 'Error: ' + (e && e.message ? e.message : 'something went wrong') + '. Nothing was sent.';
+    window._dcLastErr=(e&&e.message)?e.message:'unknown error';
     toast(msg);
     return '';
   }finally{
@@ -11156,7 +11159,7 @@ function renderDirectorChat(){
       if(!log)return;
       var d=document.createElement('div');
       d.className='dc-msg assistant';
-      d.innerHTML='<div class="dc-bubble">No answer came back for that one, and no credit was used.<br><button class="dc-copy" onclick="dirChatRetry()">Try again</button></div>';
+      d.innerHTML='<div class="dc-bubble">No answer came back for that one, and no credit was used.'+(window._dcLastErr?'<div style="font-size:11px;opacity:.75;margin:6px 0">Reason: '+esc(window._dcLastErr)+'</div>':'')+'<br><button class="dc-copy" onclick="dirChatRetry()">Try again</button></div>';
       log.appendChild(d);
       log.scrollTop=log.scrollHeight;
     });
