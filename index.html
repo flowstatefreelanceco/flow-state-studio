@@ -11275,7 +11275,19 @@ async function dirChatRequestReply(active){
   _dcPending[active.id]=true;
   renderDirectorChat();
   // Build message history for the API (role/content only)
-  var apiMessages=active.messages.map(function(m){return {role:m.role,content:m.content};});
+  // Only send what the server accepts: text-only turns, the most recent 40,
+  // consecutive turns from the same side merged, starting with the person.
+  var apiMessages=[];
+  active.messages.forEach(function(m){
+    if(!m||(m.role!=='user'&&m.role!=='assistant'))return;
+    var c=(typeof m.content==='string')?m.content:(m.content==null?'':String(m.content));
+    if(!c.trim())return;
+    var last=apiMessages[apiMessages.length-1];
+    if(last&&last.role===m.role)last.content+='\n\n'+c;
+    else apiMessages.push({role:m.role,content:c});
+  });
+  if(apiMessages.length>40)apiMessages=apiMessages.slice(-40);
+  while(apiMessages.length&&apiMessages[0].role!=='user')apiMessages.shift();
   var playbookLock=S._dirChatPlaybookLock||null;
   S._dirChatPlaybookLock=null; // only applies to this one message, not the whole conversation
   var reply='';
