@@ -72,15 +72,17 @@ export default async function handler(req, res) {
   if (!user) return fail(res, 401, 'Your session expired. Refresh the page and log back in');
 
   // 2. Only accept the fields the Studio actually sends
-  const body = req.body || {};
-  const messages = Array.isArray(body.messages) ? body.messages : null;
-  if (!messages || !messages.length || messages.length > MAX_MESSAGES) {
-    return fail(res, 400, 'Invalid request');
-  }
-  for (const m of messages) {
-    if (!m || (m.role !== 'user' && m.role !== 'assistant')) return fail(res, 400, 'Invalid request');
-    if (typeof m.content !== 'string' && !Array.isArray(m.content)) return fail(res, 400, 'Invalid request');
-  }
+  let body = req.body || {};
+  if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
+  let messages = Array.isArray(body.messages) ? body.messages : null;
+  if (!messages) return fail(res, 400, 'Invalid request: no messages were sent');
+  // Be forgiving: keep only usable turns, newest ones, starting with the person
+  messages = messages
+    .filter(m => m && (m.role === 'user' || m.role === 'assistant') && ((typeof m.content === 'string' && m.content.trim()) || (Array.isArray(m.content) && m.content.length)))
+    .map(m => ({ role: m.role, content: m.content }));
+  if (messages.length > MAX_MESSAGES) messages = messages.slice(-MAX_MESSAGES);
+  while (messages.length && messages[0].role !== 'user') messages.shift();
+  if (!messages.length) return fail(res, 400, 'Invalid request: no usable messages');
   const system = typeof body.system === 'string' ? body.system : undefined;
   if (system && system.length > MAX_SYSTEM_CHARS) return fail(res, 413, 'Request too large');
   if (JSON.stringify(messages).length + (system ? system.length : 0) > MAX_TOTAL_CHARS) {
