@@ -1795,6 +1795,24 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 .cd1-col .cd1-sec,.cd1-basics{box-shadow:0 2px 6px rgba(60,38,16,.18)}
 .cd1-col .card-section-toggle-body.open,#cdMoreBody{background:var(--w)}
 
+/* CONTENT CARD: two columns on a wide screen. Left is what you write, right is the help around it. One column on phones and tablets. */
+.cd1-two{display:flex;flex-direction:column;gap:12px}
+.cd1-colA,.cd1-colB{display:flex;flex-direction:column;gap:12px;min-width:0}
+/* Phones and tablets: one column, in the order basics, write, carousel, AI, selling, extras */
+@media(max-width:999px){
+  .cd1-colA,.cd1-colB{display:contents}
+  .cd1-basics{order:1}
+  #cdWriteSec{order:2}
+  #cdCarouselSec{order:3}
+  #cdAiSec{order:4}
+  #cdOfferSec{order:5}
+  #cdExtrasSec{order:6}
+}
+@media(min-width:1000px){
+  .cd2-wrap[data-tab="details"] .cd2-left.cd1-col{max-width:1240px}
+  .cd1-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+}
+
 /* WRITING STUDIO: one page of colored sections, like the content card */
 .studio-wrap.st1{display:block;overflow-y:visible;padding:4px 0 40px;align-items:stretch}
 .st1-col{display:flex;flex-direction:column;gap:12px;max-width:860px;margin:0 auto;width:100%}
@@ -4953,13 +4971,60 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <div><div class="cd-guide-title">Everything for this post is on one page</div>
           <ol class="cd-guide-steps">
             <li>Add a title, pick the <strong>Platform</strong> and <strong>Format</strong> (Post, Carousel, Reel, Trial Reel, Story), and a <strong>Date</strong> if you have one.</li>
-            <li>Open <strong>Write it yourself</strong> to type your hook, notes, or draft.</li>
-            <li>Open <strong>Get AI help</strong> whenever you want a hand. It works from what you typed.</li>
+            <li>Open <strong>Write it yourself</strong> to type your hook and caption.</li>
+            <li>Open <strong>Get AI help</strong> for captions, hooks, reels, carousels, variations and more. It works from your hook and caption.</li>
           </ol>
           <div class="cd-guide-text">Tap any header to open or close it. Selling something? Open <strong>What is this selling?</strong>. Tap <strong>Save</strong> at the top when you are done.</div></div>
         </div>
         <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
 <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
+        <div class="cd1-two"><div class="cd1-colA">
+<!-- GO ANALOG SECTION -->
+        <div class="card-section-toggle cd-analog-sec cd1-sec" id="cdWriteSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">✏️ Write it yourself</span><span class="cd1-sec-h">Go Analog. No AI needed.</span></div>
+            <span class="card-section-toggle-chev">-</span>
+          </div>
+          <div class="card-section-toggle-body open" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Write your hook and caption once. The AI tools below work from exactly what you write here, so there is nothing to retype.</div>
+            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
+              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdHook','Hook / Subject')" aria-label="Expand hook to full screen">Expand</button>
+              <textarea class="fi cd-grow" id="cdHook" data-min="64" style="min-height:64px;font-size:14px;line-height:1.6;margin-bottom:8px" placeholder="Your first line. The thing that makes them stop scrolling."></textarea>
+            </div>
+            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
+              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdNotes','Caption / Body')" aria-label="Expand caption to full screen">Expand</button>
+              <textarea class="fi cd-grow" id="cdNotes" data-min="140" style="min-height:140px;font-size:14px;line-height:1.7;margin-bottom:8px" placeholder="What's this about? Your key points, the angle, and what you want them to feel or do."></textarea>
+              <div style="margin:0 0 10px"><button type="button" class="tp-open" style="font-size:11px;padding:5px 12px" onclick="cdTeleprompt('notes')" title="Read your hook and caption out loud in big text that scrolls for you">▶ Teleprompter</button></div>
+            </div>
+            <textarea id="cdOwnContent" style="display:none" tabindex="-1" aria-hidden="true"></textarea>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
+              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
+              <div id="cdOwnSaved" style="font-size:10.5px;color:var(--teal);opacity:0;transition:opacity .3s">Saved ✓</div>
+            </div>
+          </div>
+        </div>
+
+        
+<!-- CAROUSEL SLIDES SECTION -->
+        <div class="card-section-toggle cd1-sec" id="cdCarouselSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">🗂 Carousel slides</span><span class="cd1-sec-h">One slide per box.</span></div>
+            <span class="card-section-toggle-chev">+</span>
+          </div>
+          <div class="card-section-toggle-body" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Paste or write your carousel copy here. One slide per section.</div>
+            <div id="cdCarouselSlides" style="display:flex;flex-direction:column;gap:8px"></div>
+            <button onclick="cdAddSlide()" style="margin-top:8px;font-size:11.5px;color:var(--teal);background:none;border:1px dashed var(--teal);border-radius:var(--rsm);padding:6px 14px;cursor:pointer;font-family:var(--fb);width:100%">+ Add Slide</button>
+            <div style="display:flex;gap:6px;margin-top:10px">
+              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopySlides()">Copy All</button>
+              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveSlides()">Save as Draft</button>
+            </div>
+          </div>
+        </div>
+
+        
+        </div><div class="cd1-colB">
         <div class="cd1-basics">
           <div class="cd1-basics-hdr">The basics</div>
           <div class="cd1-grid">
@@ -5013,61 +5078,13 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           </div>
           <button type="button" class="cd-promo-link" style="margin-bottom:10px" onclick="cdOpenPromoFromCard()"><strong>Selling this for a few weeks?</strong> Create a promo plan. It saves this card, asks 3 questions, and gives you a short run of posts for your offer.</button>
         </div>
-<!-- GO ANALOG SECTION -->
-        <div class="card-section-toggle cd-analog-sec cd1-sec" id="cdWriteSec">
-          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
-            <div class="cd1-sec-t"><span class="cd1-sec-n">✏️ Write it yourself</span><span class="cd1-sec-h">Go Analog. No AI needed.</span></div>
-            <span class="card-section-toggle-chev">-</span>
-          </div>
-          <div class="card-section-toggle-body open" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:8px">No AI required. Whatever you write here is also what the AI tools in Bridge the Gap work from.</div>
-            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Hook / Subject <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdHook','Hook / Subject')" aria-label="Expand hook to full screen">Expand</button>
-              <textarea class="fi cd-grow" id="cdHook" data-min="64" style="min-height:64px;font-size:14px;line-height:1.6;margin-bottom:8px" placeholder="Your first line. The thing that makes them stop scrolling."></textarea>
-            </div>
-            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Caption / Body <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(key points, angle, CTA)</span></label>
-              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdNotes','Caption / Body')" aria-label="Expand caption to full screen">Expand</button>
-              <textarea class="fi cd-grow" id="cdNotes" data-min="140" style="min-height:140px;font-size:14px;line-height:1.7;margin-bottom:8px" placeholder="What's this about? Your key points, the angle, and what you want them to feel or do."></textarea>
-              <div style="margin:0 0 10px"><button type="button" class="tp-open" style="font-size:11px;padding:5px 12px" onclick="cdTeleprompt('notes')" title="Read your hook and caption out loud in big text that scrolls for you">▶ Teleprompter</button></div>
-            </div>
-            <div class="fl cd-field"><label class="fl-lbl" style="font-size:11px">Your draft <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label>
-              <button type="button" class="cd-expand" onclick="cdFocusOpen('cdOwnContent','Your draft')" aria-label="Expand draft to full screen">Expand</button>
-              <textarea id="cdOwnContent" class="fi cd-grow" data-min="180" style="min-height:180px;margin-bottom:8px;font-size:14px;line-height:1.75;background:var(--p) !important" placeholder="Your rough draft, in your words. Post it as is, or let Bridge the Gap polish it."></textarea>
-            </div>
-            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopyOwn()">Copy</button>
-              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveOwnDraft()">Save as Draft</button>
-              <button type="button" class="tp-open" style="font-size:11px;padding:5px 12px" onclick="cdTeleprompt('own')" title="Read your draft out loud in big text that scrolls for you">▶ Teleprompter</button>
-              <div id="cdOwnSaved" style="font-size:10.5px;color:var(--teal);opacity:0;transition:opacity .3s">Saved ✓</div>
-            </div>
-          </div>
-        </div>
-
-        
-<!-- CAROUSEL SLIDES SECTION -->
-        <div class="card-section-toggle cd1-sec" id="cdCarouselSec">
-          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
-            <div class="cd1-sec-t"><span class="cd1-sec-n">🗂 Carousel slides</span><span class="cd1-sec-h">One slide per box.</span></div>
-            <span class="card-section-toggle-chev">+</span>
-          </div>
-          <div class="card-section-toggle-body" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:10px">Paste or write your carousel copy here. One slide per section.</div>
-            <div id="cdCarouselSlides" style="display:flex;flex-direction:column;gap:8px"></div>
-            <button onclick="cdAddSlide()" style="margin-top:8px;font-size:11.5px;color:var(--teal);background:none;border:1px dashed var(--teal);border-radius:var(--rsm);padding:6px 14px;cursor:pointer;font-family:var(--fb);width:100%">+ Add Slide</button>
-            <div style="display:flex;gap:6px;margin-top:10px">
-              <button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="cdCopySlides()">Copy All</button>
-              <button class="btn btn-brass" style="font-size:11px;padding:5px 12px" onclick="cdSaveSlides()">Save as Draft</button>
-            </div>
-          </div>
-        </div>
-
-        
         <div class="card-section-toggle cd1-sec cd-bridge-sec" id="cdAiSec">
           <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
-            <div class="cd1-sec-t"><span class="cd1-sec-n">✦ Get AI help</span><span class="cd1-sec-h">Bridge the Gap. Each use takes 1 credit.</span></div>
+            <div class="cd1-sec-t"><span class="cd1-sec-n">✦ Get AI help</span><span class="cd1-sec-h">Captions, hooks, reels, carousels, variations and more. 1 credit each.</span></div>
             <span class="card-section-toggle-chev">+</span>
           </div>
           <div class="card-section-toggle-body" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:10px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px"><strong>What is in here:</strong> creative direction, full posts (caption, reel script, carousel, story, newsletter, email, blog), hooks, 3 variations, a shorter version for low energy days, a content series, and rebuild in my voice for turning someone else's post into yours. Each one uses 1 credit.</div>
 <div class="cd1-note">The AI works from what you typed above. Each tool below takes 1 AI credit, and results show up right under the button.</div>
         <div class="cd-empty-note" id="cdAiEmpty">
           Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
@@ -5357,6 +5374,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             
           </div>
         </div>
+        </div></div><!-- end cd1-two -->
       </div>
     </div><!-- end cd2-wrap -->
   </div><!-- end modal -->
@@ -10466,7 +10484,15 @@ function cdOpen(id){
   cdFetchStatus('');cdPreviewClear();
 
   // Restore own content
-  var ownEl=document.getElementById('cdOwnContent');if(ownEl)ownEl.value=x.ownContent||'';
+  // The separate "Your draft" box is gone. If an older card has text there, fold it
+  // into the caption so nothing is lost, then keep the old field empty.
+  var ownEl=document.getElementById('cdOwnContent');
+  var _oldOwn=(x.ownContent||'').trim();
+  if(_oldOwn){
+    var _nEl=document.getElementById('cdNotes');
+    if(_nEl&&_nEl.value.indexOf(_oldOwn)===-1){_nEl.value=(_nEl.value.trim()?_nEl.value.trim()+'\n\n':'')+_oldOwn;}
+  }
+  if(ownEl)ownEl.value='';
   var rpTextRestore=document.getElementById('cdRpText');if(rpTextRestore)rpTextRestore.value=x.repurposeSourceText||'';
   cdPreviewRestore(x.repurposeSource,x.id);
   cdRpPrefill(x);
@@ -11316,7 +11342,7 @@ function panicToCard(){
   openIdeaModal('idea');
   var t=document.getElementById('cdTitle');if(t)t.value=topic||(isGenerated?'Creative Director draft':'Creative Director Brief');
   if(isGenerated){
-    var d=document.getElementById('cdOwnContent');if(d)d.value=out;
+    var d=document.getElementById('cdNotes');if(d)d.value=out;
   } else {
     var n=document.getElementById('cdNotes');if(n)n.value='Creative Director Brief:\n'+out;
   }
@@ -11456,15 +11482,21 @@ function cdSaveSlides(){
   S.drafts.unshift({id:Date.now().toString(),title:(title||'Carousel').slice(0,65),content:txt,platform:'instagram',contentType:'Carousel',analog:true,createdAt:new Date().toISOString()});
   persist();renderDashboard();toast('Carousel saved to drafts ✓');
 }
+// Hook first, then caption, the way it would be posted.
+function cdOwnText(){
+  var hk=document.getElementById('cdHook'),nt=document.getElementById('cdNotes');
+  return [hk?hk.value.trim():'',nt?nt.value.trim():''].filter(Boolean).join('\n\n');
+}
 function cdCopyOwn(){
-  var el=document.getElementById('cdOwnContent');
-  if(el&&el.value.trim())navigator.clipboard.writeText(el.value.trim()).then(()=>toast('Copied ✓'));
+  var t=cdOwnText();
+  if(t)navigator.clipboard.writeText(t).then(()=>toast('Copied ✓'));
+  else toast('Nothing to copy yet');
 }
 function cdSaveOwnDraft(){
-  var el=document.getElementById('cdOwnContent');
-  if(!el||!el.value.trim()){toast('Nothing to save yet');return;}
+  var txt=cdOwnText();
+  if(!txt){toast('Nothing to save yet');return;}
   var b=cdGetBrief();
-  var draft={id:Date.now().toString(),title:b.title||'Untitled draft',content:el.value.trim(),platform:b.plat,format:b.format,analog:true,createdAt:new Date().toISOString()};
+  var draft={id:Date.now().toString(),title:b.title||'Untitled draft',content:txt,platform:b.plat,format:b.format,analog:true,createdAt:new Date().toISOString()};
   S.drafts.unshift(draft);S.gs.draftGenerated=true;persist();renderGS();renderDashboard();
   var saved=document.getElementById('cdOwnSaved');if(saved){saved.style.opacity='1';setTimeout(()=>saved.style.opacity='0',2000);}
   toast('Draft saved ✓');
