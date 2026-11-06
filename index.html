@@ -5505,6 +5505,28 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
   </div>
 </div>
 
+<!-- NEW HOOK TEMPLATES MODAL -->
+<div class="modal-ov" id="hookTplModal">
+  <div class="wn-wrap" style="position:relative;max-width:460px">
+    <button class="wn-close" onclick="hookTplClose(false)">✕</button>
+    <div class="wn-header">
+      <div class="wn-title">New in your Hooks library</div>
+      <div class="wn-sub"><span id="hookTplCount">100+</span> human hook templates just landed</div>
+    </div>
+    <div class="wn-list" style="padding:4px 22px 6px">
+      <div class="wn-item-desc" style="line-height:1.65;color:var(--t)">
+        The best hooks sound like a real thought, like something you would text a friend. These are written that way, for talking videos, voiceovers and carousels.<br><br>
+        <b>Four new groups:</b> Real thought openers, Start here, Origin story and Big aha.<br><br>
+        Tap <b>✦ Make it mine</b> on any hook and Studio rewrites it in your voice using your Brand Profile.
+      </div>
+    </div>
+    <div class="wn-footer" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button class="wn-got-it" onclick="hookTplClose(true)">Take me to the hooks ✦</button>
+      <button class="btn btn-g" onclick="hookTplClose(false)" style="padding:9px 16px">Maybe later</button>
+    </div>
+  </div>
+</div>
+
 <!-- TERMS OF SERVICE MODAL -->
 <div class="modal-ov" id="tosModal">
   <div class="modal modal-xl" style="max-height:85vh;overflow-y:auto">
@@ -6365,6 +6387,840 @@ const HOOKS_DEFAULT = [
   {id:'h19',cat:'Curiosity',text:"The thing everyone gets wrong about showing up on Instagram as a service provider."},
   {id:'h20',cat:'Curiosity',text:"Can I share something I've never posted about publicly before?"}
 ];
+// Hook templates from Jess's "human openers" set. Each one sounds like a real
+// thought, not a performed hook. They live in the Hooks library under four
+// categories and get merged into every account (new and existing) once.
+// [TOPIC] is the one blank to fill. "Make it mine" rewrites a template using
+// the person's own brand profile.
+const HOOK_TEMPLATES = [
+{
+"id": "ht_rea_any_1",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "okay wait..."
+},
+{
+"id": "ht_rea_any_2",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "i have a theory."
+},
+{
+"id": "ht_rea_any_3",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "i've been thinking about this all week."
+},
+{
+"id": "ht_rea_any_4",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "this is oddly specific but..."
+},
+{
+"id": "ht_rea_any_5",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "i don't think enough people talk about this."
+},
+{
+"id": "ht_rea_any_6",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "hear me out."
+},
+{
+"id": "ht_rea_any_7",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "i've changed my mind."
+},
+{
+"id": "ht_rea_any_8",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "this is gonna sound dramatic..."
+},
+{
+"id": "ht_rea_any_9",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "this might just be me..."
+},
+{
+"id": "ht_rea_any_10",
+"cat": "Real thought openers",
+"fmt": "any",
+"text": "okay... can we talk about this?"
+},
+{
+"id": "ht_sta_talk_1",
+"cat": "Start here",
+"fmt": "talk",
+"text": "okay wait... before you follow me..."
+},
+{
+"id": "ht_sta_talk_2",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i feel like i should probably introduce myself."
+},
+{
+"id": "ht_sta_talk_3",
+"cat": "Start here",
+"fmt": "talk",
+"text": "if this random video found you..."
+},
+{
+"id": "ht_sta_talk_4",
+"cat": "Start here",
+"fmt": "talk",
+"text": "okay... here's the deal."
+},
+{
+"id": "ht_sta_talk_5",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i think we should probably get acquainted."
+},
+{
+"id": "ht_sta_talk_6",
+"cat": "Start here",
+"fmt": "talk",
+"text": "you're about to learn way too much about me."
+},
+{
+"id": "ht_sta_talk_7",
+"cat": "Start here",
+"fmt": "talk",
+"text": "if you're wondering why i'm talking into my phone..."
+},
+{
+"id": "ht_sta_talk_8",
+"cat": "Start here",
+"fmt": "talk",
+"text": "welcome. you're early."
+},
+{
+"id": "ht_sta_talk_9",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i have a feeling you're gonna like it here."
+},
+{
+"id": "ht_sta_talk_10",
+"cat": "Start here",
+"fmt": "talk",
+"text": "this page might completely change how you think about [TOPIC][TOPIC]."
+},
+{
+"id": "ht_sta_talk_11",
+"cat": "Start here",
+"fmt": "talk",
+"text": "if you're still here after three seconds..."
+},
+{
+"id": "ht_sta_talk_12",
+"cat": "Start here",
+"fmt": "talk",
+"text": "okay... so what even is this page?"
+},
+{
+"id": "ht_sta_talk_13",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i should probably explain myself."
+},
+{
+"id": "ht_sta_talk_14",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i made this page for a very specific type of person."
+},
+{
+"id": "ht_sta_talk_15",
+"cat": "Start here",
+"fmt": "talk",
+"text": "if that's you... welcome home."
+},
+{
+"id": "ht_sta_talk_16",
+"cat": "Start here",
+"fmt": "talk",
+"text": "consider this your official orientation."
+},
+{
+"id": "ht_sta_talk_17",
+"cat": "Start here",
+"fmt": "talk",
+"text": "here's the lore."
+},
+{
+"id": "ht_sta_talk_18",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i'm gonna save you a lot of scrolling."
+},
+{
+"id": "ht_sta_talk_19",
+"cat": "Start here",
+"fmt": "talk",
+"text": "i don't think we've officially met yet."
+},
+{
+"id": "ht_sta_talk_20",
+"cat": "Start here",
+"fmt": "talk",
+"text": "here's why i keep showing up here every day."
+},
+{
+"id": "ht_sta_carousel_1",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "okay... hi."
+},
+{
+"id": "ht_sta_carousel_2",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "so... you're new here."
+},
+{
+"id": "ht_sta_carousel_3",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "before we become internet besties..."
+},
+{
+"id": "ht_sta_carousel_4",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "welcome to the chaos."
+},
+{
+"id": "ht_sta_carousel_5",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "let me explain this page in 30 seconds."
+},
+{
+"id": "ht_sta_carousel_6",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "if you're confused... this should help."
+},
+{
+"id": "ht_sta_carousel_7",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "here's what we're doing around here."
+},
+{
+"id": "ht_sta_carousel_8",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "if you only read one thing..."
+},
+{
+"id": "ht_sta_carousel_9",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "i made this page for you if..."
+},
+{
+"id": "ht_sta_carousel_10",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "here's the vibe."
+},
+{
+"id": "ht_sta_carousel_11",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "think of this as the trailer."
+},
+{
+"id": "ht_sta_carousel_12",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "everything makes more sense after this."
+},
+{
+"id": "ht_sta_carousel_13",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "start here."
+},
+{
+"id": "ht_sta_carousel_14",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "i'm glad you're here."
+},
+{
+"id": "ht_sta_carousel_15",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "this account has one job."
+},
+{
+"id": "ht_sta_carousel_16",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "here's what i'm trying to build."
+},
+{
+"id": "ht_sta_carousel_17",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "read this before you binge."
+},
+{
+"id": "ht_sta_carousel_18",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "let's get you caught up."
+},
+{
+"id": "ht_sta_carousel_19",
+"cat": "Start here",
+"fmt": "carousel",
+"text": "welcome to my corner of the internet."
+},
+{
+"id": "ht_ori_talk_1",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "here's what nobody knows about me..."
+},
+{
+"id": "ht_ori_talk_2",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "funny story..."
+},
+{
+"id": "ht_ori_talk_3",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i genuinely never thought i'd end up here."
+},
+{
+"id": "ht_ori_talk_4",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "this wasn't supposed to happen."
+},
+{
+"id": "ht_ori_talk_5",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i almost didn't do this."
+},
+{
+"id": "ht_ori_talk_6",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i almost talked myself out of posting."
+},
+{
+"id": "ht_ori_talk_7",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "this whole thing started because..."
+},
+{
+"id": "ht_ori_talk_8",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i wish someone would've grabbed me by the shoulders and told me this."
+},
+{
+"id": "ht_ori_talk_9",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "okay... story time."
+},
+{
+"id": "ht_ori_talk_10",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "here's the part nobody knows."
+},
+{
+"id": "ht_ori_talk_11",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i don't think i've ever shared this before."
+},
+{
+"id": "ht_ori_talk_12",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "this version of my life would've sounded insane two years ago."
+},
+{
+"id": "ht_ori_talk_13",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "everything changed after one really uncomfortable decision."
+},
+{
+"id": "ht_ori_talk_14",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "this all started because i was honestly struggling."
+},
+{
+"id": "ht_ori_talk_15",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i hit a breaking point."
+},
+{
+"id": "ht_ori_talk_16",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "the reason i started this page..."
+},
+{
+"id": "ht_ori_talk_17",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i got really tired of pretending."
+},
+{
+"id": "ht_ori_talk_18",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i had absolutely no clue what i was doing."
+},
+{
+"id": "ht_ori_talk_19",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "this account almost never existed."
+},
+{
+"id": "ht_ori_talk_20",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "here's how we ended up here."
+},
+{
+"id": "ht_ori_talk_21",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "i almost quit before i started."
+},
+{
+"id": "ht_ori_talk_22",
+"cat": "Origin story",
+"fmt": "talk",
+"text": "looking back... it all makes sense now."
+},
+{
+"id": "ht_ori_carousel_1",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "plot twist..."
+},
+{
+"id": "ht_ori_carousel_2",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "this wasn't the original plan."
+},
+{
+"id": "ht_ori_carousel_3",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "how we got here..."
+},
+{
+"id": "ht_ori_carousel_4",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "it started with one really bad day."
+},
+{
+"id": "ht_ori_carousel_5",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "i almost never hit post."
+},
+{
+"id": "ht_ori_carousel_6",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "i almost kept this to myself forever."
+},
+{
+"id": "ht_ori_carousel_7",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "here's the story behind all of this."
+},
+{
+"id": "ht_ori_carousel_8",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "this account almost didn't exist."
+},
+{
+"id": "ht_ori_carousel_9",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "the butterfly effect is crazy."
+},
+{
+"id": "ht_ori_carousel_10",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "one decision changed everything."
+},
+{
+"id": "ht_ori_carousel_11",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "this is where everything shifted."
+},
+{
+"id": "ht_ori_carousel_12",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "before any of this..."
+},
+{
+"id": "ht_ori_carousel_13",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "here's what nobody saw."
+},
+{
+"id": "ht_ori_carousel_14",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "this is the messy middle."
+},
+{
+"id": "ht_ori_carousel_15",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "every creator starts somewhere."
+},
+{
+"id": "ht_ori_carousel_16",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "here's my day one."
+},
+{
+"id": "ht_ori_carousel_17",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "i bet you didn't know this."
+},
+{
+"id": "ht_ori_carousel_18",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "here's the lore."
+},
+{
+"id": "ht_ori_carousel_19",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "this explains a lot."
+},
+{
+"id": "ht_ori_carousel_20",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "let's rewind. the story behind this account."
+},
+{
+"id": "ht_ori_carousel_21",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "how i got here."
+},
+{
+"id": "ht_ori_carousel_22",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "why i started posting online."
+},
+{
+"id": "ht_ori_carousel_23",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "the moment everything changed."
+},
+{
+"id": "ht_ori_carousel_24",
+"cat": "Origin story",
+"fmt": "carousel",
+"text": "my creator journey. buckle up."
+},
+{
+"id": "ht_big_talk_1",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "can i say something slightly controversial?"
+},
+{
+"id": "ht_big_talk_2",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i think we've all been lied to."
+},
+{
+"id": "ht_big_talk_3",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "hot take..."
+},
+{
+"id": "ht_big_talk_4",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i don't buy it."
+},
+{
+"id": "ht_big_talk_5",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "nobody's gonna like this."
+},
+{
+"id": "ht_big_talk_6",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "here's where i disagree with literally everyone."
+},
+{
+"id": "ht_big_talk_7",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i think we're asking the wrong question."
+},
+{
+"id": "ht_big_talk_8",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "this isn't your actual problem."
+},
+{
+"id": "ht_big_talk_9",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "stop doing this."
+},
+{
+"id": "ht_big_talk_10",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "can we collectively retire this advice?"
+},
+{
+"id": "ht_big_talk_11",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "here's what i'd do instead."
+},
+{
+"id": "ht_big_talk_12",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i wish i would've ignored this sooner."
+},
+{
+"id": "ht_big_talk_13",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "this changed everything for me."
+},
+{
+"id": "ht_big_talk_14",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i'm willing to die on this hill."
+},
+{
+"id": "ht_big_talk_15",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "this might offend your favorite creator."
+},
+{
+"id": "ht_big_talk_16",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i think we're overcomplicating this."
+},
+{
+"id": "ht_big_talk_17",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "this is probably why you're stuck."
+},
+{
+"id": "ht_big_talk_18",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "here's the thing nobody wants to admit."
+},
+{
+"id": "ht_big_talk_19",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "i completely changed my mind about this."
+},
+{
+"id": "ht_big_talk_20",
+"cat": "Big aha",
+"fmt": "talk",
+"text": "if i could scream one thing into the internet..."
+},
+{
+"id": "ht_big_carousel_1",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i'm gonna hold your hand when i say this..."
+},
+{
+"id": "ht_big_carousel_2",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "let's stop doing this."
+},
+{
+"id": "ht_big_carousel_3",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i fear we've all accepted this as normal."
+},
+{
+"id": "ht_big_carousel_4",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "this advice aged terribly."
+},
+{
+"id": "ht_big_carousel_5",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i said what i said."
+},
+{
+"id": "ht_big_carousel_6",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i'm not convinced."
+},
+{
+"id": "ht_big_carousel_7",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "here's the thing..."
+},
+{
+"id": "ht_big_carousel_8",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "you're making this way harder than it needs to be."
+},
+{
+"id": "ht_big_carousel_9",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i wish someone would've told me this sooner."
+},
+{
+"id": "ht_big_carousel_10",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "this changes everything."
+},
+{
+"id": "ht_big_carousel_11",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "this is your sign."
+},
+{
+"id": "ht_big_carousel_12",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "the internet got this one wrong."
+},
+{
+"id": "ht_big_carousel_13",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i don't think this is the flex people think it is."
+},
+{
+"id": "ht_big_carousel_14",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "i need everyone to hear this."
+},
+{
+"id": "ht_big_carousel_15",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "this is why you're still stuck."
+},
+{
+"id": "ht_big_carousel_16",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "save yourself six months."
+},
+{
+"id": "ht_big_carousel_17",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "here's the reframe."
+},
+{
+"id": "ht_big_carousel_18",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "let's simplify this."
+},
+{
+"id": "ht_big_carousel_19",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "if i had to start over tomorrow..."
+},
+{
+"id": "ht_big_carousel_20",
+"cat": "Big aha",
+"fmt": "carousel",
+"text": "read this twice."
+}
+];
+const HOOK_TEMPLATE_NOTES = {
+  'Real thought openers':'Start in the middle of a thought, like a text to a friend. These work for talking video, voiceover or the first slide of a carousel.',
+  'Start here':'Purpose: tell people what to expect from your page. Talk about who you are, what you post, who it is for and what they gain by following you.',
+  'Origin story':'Purpose: let people connect with you. Talk about where you started, the struggle, the turning point and why you share now. Voiceover idea: tell it over old photos, screenshots or B-roll.',
+  'Big aha':'Purpose: show people how you think. Share the belief, lesson or reframe that changed how you work.'
+};
+const HOOK_FMT_LABEL = {talk:'🎥 Talking / voiceover', carousel:'🎠 Carousel', any:'🎥 🎠 Any format'};
+// Adds any template the account does not have yet. Skips ones the person
+// deleted on purpose. Returns how many were added.
+function mergeHookTemplates(){
+  if(!Array.isArray(S.hooks))S.hooks=[];
+  var have={};S.hooks.forEach(function(h){have[h.id]=1;});
+  var gone=S.deletedIds||{};
+  var add=HOOK_TEMPLATES.filter(function(h){return !have[h.id]&&!gone[h.id];});
+  if(add.length)S.hooks=S.hooks.concat(add.map(function(h){return {id:h.id,cat:h.cat,fmt:h.fmt,text:h.text};}));
+  return add.length;
+}
 const CTAS_DEFAULT = [
   {id:'c1',cat:'Engagement',text:"Save this for when you need it. ✦"},
   {id:'c2',cat:'Engagement',text:"Drop your questions in the comments - I read every single one."},
@@ -6416,7 +7272,7 @@ const PROMPTS_DEFAULT = [
 ];
 function seedDefaultLibrary(){
   return {
-    hooks:HOOKS_DEFAULT.slice(),
+    hooks:HOOKS_DEFAULT.concat(HOOK_TEMPLATES),
     ctas:CTAS_DEFAULT.slice(),
     stories:STORIES_DEFAULT.slice(),
     prompts:PROMPTS_DEFAULT.slice()
@@ -6428,7 +7284,7 @@ const S = {
   view:'dashboard',
   calMonth:new Date().getMonth(), calYear:new Date().getFullYear(),
   drafts:[], calEntries:[], ideas:[], tasks:[],
-  hooks:HOOKS_DEFAULT.slice(), ctas:CTAS_DEFAULT.slice(), stories:STORIES_DEFAULT.slice(), prompts:PROMPTS_DEFAULT.slice(),
+  hooks:HOOKS_DEFAULT.concat(HOOK_TEMPLATES), ctas:CTAS_DEFAULT.slice(), stories:STORIES_DEFAULT.slice(), prompts:PROMPTS_DEFAULT.slice(),
   favs:{hooks:[], ctas:[], stories:[], prompts:[]},
   settings:{name:'Flow State Studio',apiKey:'',biz:'',model:'claude-sonnet-5',buckets:[]},
   plan:'beta',
@@ -7796,6 +8652,11 @@ const LIB_CAT_MAP={
   'Script Rewrite': {strip:'#C47A3A',border:'#C47A3A',text:'#6A4E18',bg:'#F2E4CC'},
   'Strategy':       {strip:'#7A9EC2',border:'#7A9EC2',text:'#1A2860',bg:'#D8E6F2'},
   'Sales Copy':     {strip:'#5A6E50',border:'#5A6E50',text:'#3A5228',bg:'#DCE8D4'},
+  'Real thought openers':{strip:'#3A8C8C',border:'#3A8C8C',text:'#1E5C5C',bg:'#D0E8E8'},
+  'Start here':     {strip:'#C47A3A',border:'#C47A3A',text:'#6A4E18',bg:'#F2E4CC'},
+  'Origin story':   {strip:'#8A5AAB',border:'#8A5AAB',text:'#3E1A5C',bg:'#EAD8F5'},
+  'Big aha':        {strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
+  'My version':     {strip:'#5A6E50',border:'#5A6E50',text:'#3A5228',bg:'#DCE8D4'},
   'Generated':      {strip:'#B5512A',border:'#B5512A',text:'#8C3518',bg:'#F5DFD0'},
   'default':        {strip:'#D8CABA',border:'#D8CABA',text:'#7A6248',bg:'#EDE5D5'}
 };
@@ -7898,7 +8759,9 @@ async function generateStarterLibrary(silent){
   var failedTypes=[];
 
   if(hooksResult.items){
-    S.hooks=hooksResult.items.map(function(h,i){return {id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text};});
+    var keepMine=S.hooks.filter(function(h){return (h.id||'').indexOf('mine_')===0;});
+    S.hooks=hooksResult.items.map(function(h,i){return {id:'gen_h_'+now+'_'+i,cat:h.cat,text:h.text};}).concat(keepMine);
+    mergeHookTemplates();
     succeededAny=true;
   } else failedTypes.push('Hooks');
 
@@ -7953,7 +8816,7 @@ function renderLib(section,silent){
     var favList=S.favs&&S.favs[section]?S.favs[section]:[];
     var isBookmarked=favList.indexOf(x.id)>-1;
     const matchCat=filter==='All'||(filter==='Bookmarked'&&isBookmarked)||x.cat===filter;
-    const matchQ=!query||x.text.toLowerCase().includes(query)||(x.title||'').toLowerCase().includes(query)||(x.cat||'').toLowerCase().includes(query);
+    const matchQ=!query||x.text.toLowerCase().includes(query)||(x.title||'').toLowerCase().includes(query)||(x.cat||'').toLowerCase().includes(query)||((HOOK_FMT_LABEL[x.fmt]||'').toLowerCase().includes(query));
     return matchCat&&matchQ;
   });
   const cnt=document.getElementById(section+'Count');
@@ -7981,10 +8844,13 @@ function renderLib(section,silent){
             <button class="lib-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="Bookmark" style="color:${isFav(x.id)?'var(--teal)':'var(--b)'}">${favSvg(x.id)}</button>
           </div>
           ${x.title?`<div class="lib-title-label">${esc(x.title)}</div>`:''}
+          ${x.fmt&&HOOK_FMT_LABEL[x.fmt]?`<div style="font-size:11px;color:var(--tl);margin-bottom:4px">${HOOK_FMT_LABEL[x.fmt]}</div>`:''}
           <div class="lib-text">${esc(x.text)}</div>
+          ${section==='hooks'&&x.fmt&&HOOK_TEMPLATE_NOTES[x.cat]?`<div style="font-size:11.5px;color:var(--tl);line-height:1.5;margin-top:8px;font-style:italic">${esc(HOOK_TEMPLATE_NOTES[x.cat])}</div>`:''}
         </div>
         <div class="lib-card-foot">
           <button class="lib-copy-btn" onclick="copyLib('${x.id}','${section}')" style="flex:1">${copySvg} Copy</button>
+          ${section==='hooks'&&x.fmt?`<button class="lib-copy-btn" onclick="tailorHook('${x.id}')" style="flex:1" title="Rewrite this in your voice using your Brand Profile">✦ Make it mine</button>`:''}
           <button onclick="deleteLib('${x.id}','${section}')" title="Remove" style="background:none;border:1.5px solid var(--bl);border-radius:var(--rsm);padding:8px 10px;cursor:pointer;color:var(--tl);font-size:12px;transition:all .15s;flex-shrink:0" onmouseover="this.style.borderColor='var(--r)';this.style.color='var(--r)'" onmouseout="this.style.borderColor='var(--bl)';this.style.color='var(--tl)'">✕</button>
         </div>
       </div>`;
@@ -7999,10 +8865,12 @@ function renderLib(section,silent){
           <div class="lib-list-top">
             <span class="lib-list-cat" style="color:${c.text}">${esc(x.cat)}</span>
             ${x.title?`<span class="lib-list-title">${esc(x.title)}</span>`:''}
+            ${x.fmt&&HOOK_FMT_LABEL[x.fmt]?`<span style="font-size:11px;color:var(--tl)">${HOOK_FMT_LABEL[x.fmt]}</span>`:''}
           </div>
           <div class="lib-list-text">${esc(x.text)}</div>
         </div>
         <div class="lib-list-actions">
+          ${section==='hooks'&&x.fmt?`<button class="lib-list-btn" onclick="tailorHook('${x.id}')" title="Make it mine" style="font-size:12px;width:auto;padding:0 8px">✦ Mine</button>`:''}
           <button class="lib-list-btn" onclick="copyLib('${x.id}','${section}')" title="Copy">${copySvg}</button>
           <button class="lib-list-fav${isFav(x.id)?' faved':''}" onclick="toggleFav('${section}','${x.id}')" title="Bookmark" style="color:${isFav(x.id)?'var(--teal)':'var(--b)'}">${favSvg(x.id)}</button>
           <button class="lib-list-btn" onclick="deleteLib('${x.id}','${section}')" title="Remove" style="color:var(--tl)" onmouseover="this.style.color='var(--r)'" onmouseout="this.style.color='var(--tl)'">✕</button>
@@ -8025,6 +8893,54 @@ function toggleFav(section,id){
   const i=S.favs[section].indexOf(id);
   if(i>-1)S.favs[section].splice(i,1); else S.favs[section].push(id);
   persist();renderLib(section);
+}
+async function tailorHook(id){
+  var item=S.hooks.find(function(h){return h.id===id;});
+  if(!item)return;
+  if(!S.brandProfile||(!S.brandProfile.niche&&!S.brandProfile.role)){
+    toast('Fill in your Brand Profile first and these will come out sounding like you.');return;
+  }
+  if(window._tailorBusy){toast('One moment, still writing the last one...');return;}
+  checkCreditReset();
+  if(!canUseAI()){showCreditBlocked();return;}
+  window._tailorBusy=true;toast('Writing your versions, this uses 1 credit...');
+  try{
+    var sys=CD_PERSONA+buildBrandContext()+' You are rewriting one hook template for this exact person. Keep the same shape, length and human, conversational feel: it must sound like a real thought they would text a friend, not a performed hook. Make it specific to their niche, audience and offers from the brand profile, in their voice. If the template has [TOPIC], fill it with something true to their work. Never use health claims, never use dashes, no hashtags, no quotation marks, no emojis. Output exactly 3 different versions, one per line, nothing else.';
+    var usr='Template: '+item.text+'\nWhat this hook is for: '+(HOOK_TEMPLATE_NOTES[item.cat]||'an opening line for a post')+'\nFormat: '+(HOOK_FMT_LABEL[item.fmt]||'any')+'\nWrite my 3 versions now.';
+    var r=await aiGenerateFull({model:S.settings.model||'claude-sonnet-5',max_tokens:400,system:sys,messages:[{role:'user',content:usr}]},30000);
+    var outs=(r.text||'').split('\n').map(function(l){return l.replace(/^[\s\-\*\d\.\)]+/,'').replace(/^["']|["']$/g,'').trim();}).filter(function(l){return l.length>3;}).slice(0,3);
+    if(!outs.length)throw new Error('No hooks came back');
+    var now=Date.now();
+    var mine=outs.map(function(t,i){return {id:'mine_h_'+now+'_'+i,cat:'My version',fmt:item.fmt,text:t};});
+    S.hooks=mine.concat(S.hooks);
+    S.libFilters.hooks='My version';
+    persist();renderLib('hooks');toast('3 versions saved under My version ✓');
+  }catch(e){
+    if(!aiHandleCreditError(e))toast('Could not write those just now. Try again in a moment.');
+  }finally{window._tailorBusy=false;}
+}
+// One-time heads up about the new hook templates. Shows once per person, and
+// only when this load actually added templates to an account that already has
+// things in it. Brand new accounts just see them in the library.
+function hookTplPopupMaybe(addedCount){
+  try{
+    var key=(_currentUser?'u'+_currentUser.id+'_':'')+'fssHookTplSeen_v1';
+    if(localStorage.getItem(key))return;
+    var isBrandNew=!(S.ideas&&S.ideas.length)&&!(S.drafts&&S.drafts.length)&&!(S.tasks&&S.tasks.length);
+    if(isBrandNew){localStorage.setItem(key,'1');return;}
+    if(!addedCount)return;
+    window._hookTplCount=addedCount;
+    setTimeout(function(){
+      if(document.querySelector('.modal-ov.open'))return;
+      var n=document.getElementById('hookTplCount');if(n)n.textContent=addedCount;
+      openModal('hookTplModal');
+    },1800);
+  }catch(e){}
+}
+function hookTplClose(go){
+  try{localStorage.setItem((_currentUser?'u'+_currentUser.id+'_':'')+'fssHookTplSeen_v1','1');}catch(e){}
+  closeModal('hookTplModal');
+  if(go){S.libFilters.hooks='All';navigate('hooks');}
 }
 function copyLib(id,section){
   const item=S[section].find(x=>x.id===id);
@@ -8805,7 +9721,7 @@ const CD_KNOWLEDGE_REVIEWED = "2026-10-29";
 const CD_PLATFORM_KNOWLEDGE = " PLATFORM MECHANICS (reviewed October 2026, these shift often, so state them as how things currently work, never as permanent rules, and never quote exact percentages or statistics as fact). INSTAGRAM: reach is driven mostly by watch time and replays, sends (people sharing a post privately), saves, and real conversation in comments and DMs, more than likes. Original content is favored, so reposted or watermarked clips from other apps get shown less, and that now applies to photos and carousels too. The hook has to land in about the first three seconds. For reels, shorter and tight tends to work best for reaching new people, and longer is fine when the content earns the watch time. Instagram works partly like a search engine, so write captions in plain keyword language, say the keyword out loud and put it on screen, use the name and bio fields, and add short alt text. Hashtags matter little now, so use a few relevant ones at most, or none. Trial reels are for testing hooks with non followers. LINKEDIN: the first hour and first day of engagement matter, comments (especially real replies from the author) count most, and a question in the post tends to draw more comments. Native formats like text posts, document carousels and native video usually beat posts that send people off the platform, so keep outbound links out of the post body and put them in a comment or the profile. Time spent reading helps, so a strong hook plus short, scannable lines. Generic or obviously AI sounding posts get ignored. Posting steadily beats one big post. EMAIL: inbox providers expect authenticated sending, an easy one click unsubscribe, and low spam complaints, so only email people who asked for it and never buy lists. Open rates are unreliable now because Apple Mail pre loads images, so judge emails by clicks, replies and unsubscribes, and by whether the list stays engaged. On a phone only the first 30 to 40 characters of a subject really show, so lead with the key word and let the preview text add something new. Plain, personal, single purpose emails with one link usually read as most human. Send on a rhythm the creator can keep. SUBSTACK: new writers grow mostly through Notes (short posts and thoughtful replies to other writers), recommendations from similar publications, and sharing posts elsewhere, not through search. Title makes the promise, subtitle sharpens it, the first lines show in the email and preview. Keep a steady weekly rhythm the writer can sustain, stay free while building the list, and treat paid tiers as something to add later. Some of these tactics come from industry guides without hard data, so when you recommend one, say it is a strong place to start and to watch what their own numbers say, because their own results beat any general rule. MEASURING: always tie advice to one clear metric for the goal: reach goals look at watch time and sends, connection goals look at comments and replies, lead goals look at link clicks, comment word replies and signups, sales goals look at enquiries and conversions. One change at a time, enough posts to see a pattern, and the creator checks real numbers in the platform, since Studio does not track them. PROOF: real testimonials, results, screenshots and what a buyer actually receives are the strongest content for selling. Never invent them. If none exist yet, suggest how to gather one from a real client or a free pilot, and use bracketed placeholders.";
 const CD_REEL_FORMATS = " REEL FORMATS THAT TRAVEL: you know five proven reel formats and suggest the one that fits the idea and how the creator likes to show up. 1) Tutorial with split screen: the creator's footage on one side and a screen recording or demo on the other, teaching one useful step, great for tools, systems and how to posts. 2) List: a short numbered list where each item is quick and saveable, the on screen list builds as it is spoken, which also keeps people watching to the end. 3) Breakdown: take one real result, page, post or number and explain why it worked, piece by piece, using only real figures the creator gives or clearly marked placeholders. 4) Storytelling with b-roll: a short personal story told over everyday footage, no need to face the camera the whole time. 5) Visual talking head: the creator speaking to camera with on screen text and inserted visuals that change every few seconds so the eye always has something new. Inspiration is fine but copying is not: take the structure of a format or trend and rebuild it in the creator's own words, footage and point of view, never reuse someone else's script, clips or exact wording, since original content is also favored by Instagram. A comment word call to action works well when the creator really has a free resource and follow up set up.";
 const CD_TREND_ENGINE = " TRENDS AND SOUNDS: this is where you earn your seat. FIRST, BE HONEST ABOUT WHAT YOU CAN SEE. You cannot see what is trending today. Never name a specific trending sound, song, challenge or meme as currently trending unless it appears in the TREND BRIEF below or the creator typed it in this conversation. If no trend brief is given, say so in one short line, then work from the durable trend STRUCTURES that keep returning (below) and ask the creator to paste the sound name and what they are seeing in their own feed for a sharper version. Never invent a sound name, never guess. WHAT YOU DO KNOW: trends come in types and each one is ridden differently. A trending sound lends familiarity and the cut points. A trending format is a repeatable structure you fill with your own truth, and it is the safest and most brand friendly type. A trending topic needs a real take, not a tag. Seasonal moments can be planned ahead. News moments carry the most risk. RUN EVERY TREND THROUGH THREE GATES IN ORDER. FIT: can this creator add a real angle from their own work, or are they just attaching their name to someone else's moment? If the only reason is that it is popular, skip it and say why. SAFETY: skip tragedies, disasters, deaths, divisive political moments, anything mocking or exploitative, and any trend that asks a wellness, beauty or spiritual brand to make a claim it should not make. TIMING: rising is a go, saturated or fading is a skip, because late reads as out of touch. Say which gate a trend fails in one plain sentence. THE REMIX: take the trend's structure, sound or pacing and fill it with the creator's specific truth, their footage and their niche's running joke or hard won lesson. A logo slapped onto a copied video earns nothing. Keep the brand voice, never force trend slang. HOOK AND SOUND MUST BE MARRIED. When a reel rides a sound, the hook, the on-screen text and the cuts are written around that sound, not on top of it. Decide what the sound is doing: a voiceover or meme audio where the words ARE the joke, a beat or drop where the text reveals and cuts land on the beats, a mood track that sits under the idea, or a lip sync style audio where the creator's point is mapped onto the lines. Write the hook so it makes sense with the sound off, since most people watch muted, and so it lands in the first one to three seconds. In every reel or trial reel plan include an AUDIO line that names the direction (original audio, trending audio, or licensed music bed), says where the text reveals or cuts should land if the sound drives the edit, and notes that the creator adds the track inside the app themselves. If the creator runs a business account, remind them in one short line to check that the sound is cleared for business use, since the commercial library is smaller. If a trend sound does not fit the message, use original audio or a format level trend instead, and say so. WHEN YOU REBUILD A POST OR REEL: study the mechanism, not the surface. Work out what is load bearing (usually the hook and the reason people send it to someone), what is incidental, and whether it is repeatable or a product of account size, timing or luck. If you were only given a caption, you do not know the sound, the on-screen hook or the visuals of the original, so say what you could not see and build the strongest version from what you can, instead of pretending. Never reuse the original's words, script or clips.";
-const CD_HOOK_CRAFT = " HOOK CRAFT: a hook works by opening a gap the viewer needs to close, and it is a promise the content must pay off. Mine the actual content for its most surprising, highest stakes, most specific or most relatable element and build the hook from that, so it is true. When asked for hooks, write several that use different mechanisms (curiosity gap, contrarian take, stakes, specificity, identity callout, mistake, transformation, question, timeliness) and recommend the one that fits the goal and format, with one line on why. For video, a hook lives in three channels at once: what is on screen, the first spoken words, and the on-screen text, and it has to work muted. For captions the hook is the one line before the more cutoff and carries the keyword. Open with the audience's own stuck language when the brand profile gives it. Never overpromise to win the tap, because a bounce after a bait hook teaches the algorithm the wrong thing. Never open with a generic template line that could sit on anyone's account.";
+const CD_HOOK_CRAFT = " HOOK CRAFT: a hook works by opening a gap the viewer needs to close, and it is a promise the content must pay off. Mine the actual content for its most surprising, highest stakes, most specific or most relatable element and build the hook from that, so it is true. When asked for hooks, write several that use different mechanisms (curiosity gap, contrarian take, stakes, specificity, identity callout, mistake, transformation, question, timeliness) and recommend the one that fits the goal and format, with one line on why. For video, a hook lives in three channels at once: what is on screen, the first spoken words, and the on-screen text, and it has to work muted. For captions the hook is the one line before the more cutoff and carries the keyword. Open with the audience's own stuck language when the brand profile gives it. Never overpromise to win the tap, because a bounce after a bait hook teaches the algorithm the wrong thing. Never open with a generic template line that could sit on anyone's account. HUMAN OPENERS: the best hooks often do not sound like hooks. They sound like a real thought, something you would text a friend, starting the conversation in the middle: okay wait, i have a theory, hear me out, i have changed my mind, this is oddly specific but, i do not think enough people talk about this. Humans stop for humans, not for polished robotic openers, so when the brand voice allows it prefer a real thought over a performed hook, and fill it with the brand's own specifics. The Hooks library has templates in four groups you can borrow the shape of, never the exact line twice: Start here (tell new people who you are, what you post, who it is for and what they gain), Origin story (where you started, the struggle, the turning point, why you share now), Big aha (the belief or reframe that shows how you think) and Real thought openers. The format matters less than the message, so the same hook can open a talking video, a voiceover over B-roll or the first slide of a carousel.";
 const CD_NICHE_GUARDRAILS = " WELLNESS, BEAUTY AND SPIRITUAL GUARDRAILS: you know the lines in these industries. Never write health or medical claims, never imply a service diagnoses, treats, cures or prevents anything, and never promise outcomes. Frame spiritual and energy work as practice, experience and perspective, not guaranteed results. For beauty and body content never stage or exaggerate a before, never hide editing or aids, and never present one person's result as typical. Testimonials, results and numbers are real or they are clearly marked bracketed placeholders, with consent for client stories. Disclose partnerships and affiliate links plainly. Where a topic touches mental health, trauma or the body, write with care, avoid fear based hooks, and point to a qualified professional when it fits. These guardrails protect the creator's trust and their account, and you apply them quietly without lecturing.";
 const CD_TALK_PLAN = " PLANNING A TALKING VIDEO: you plan any talking video in nine steps, in this order, before any script. 1) PILLAR: which content topic is it pulling from. 2) WHO IT IS FOR: new audience (people who do not follow yet, so no insider language, explain the idea fast), core audience (current followers, go deeper and use their shared language), or hottest leads (people close to buying, so speak to their real hesitation and show what working together is like). 3) ACTION: the one thing you want them to do, share, save, comment or follow. 4) FEELING: what they need to feel to take that action. Work backwards from the action, because the feeling is what triggers it: share comes from feeling seen, called out or proud to be associated with the idea, save comes from feeling this is useful and I will need it, comment comes from feeling a strong opinion or an easy way in, follow comes from feeling this person gets me and there is more. 5) ANGLE: the specific way into the topic, the take, the story or the contrarian lens, so it could not sit on anyone else's account. 6) FORMAT: listicle, rant, story time, receipts (real proof walked through piece by piece), POV (a relatable situation played out), or another proven talking video shape that fits the angle. 7) POST IDEA: the concept turned into the actual thing, one clear sentence of what the video says. 8) HOOK: the first line out of the creator's mouth plus the on-screen text, built to work together and with the sound off. 9) DELIVERY: how it will be said, which is the step most people skip and the one that decides whether the video lands. Delivery covers pace, energy, where the pauses go, which words get leaned on, facial expression, where to look, whether to walk or sit, and how the last line is landed. A strong angle delivered flat dies, so always give delivery notes in plain words the creator can act on. When asked to plan or write a talking video, run these steps in order and keep the feeling tied to the action. When the creator already filled some steps, use them as given. For any step left blank, choose the best fit for the goal and say what you chose and why in one short line, never leave a step empty. WHAT A FILLED PLAN LOOKS LIKE: PILLAR personal finance. FOR new audience. ACTION follow. FEELING curious plus entertained (two feelings is fine when they work together). ANGLE unhinged confession (an angle has a name and a stance, not just a topic). FORMAT listicle. POST IDEA weird things we did to get out of debt. HOOK six unhinged things we did to get out of debt (spoken line and on-screen text say the same thing, so it works muted, and a listicle hook names how many are coming). DELIVERY like you are telling your best friend a crazy story. Notice how the feeling picks the action, the angle makes it ownable, and the delivery matches the angle. Use this only as a picture of the shape, never reuse its topic or wording, and build every plan from the creator's own pillars, offers and story. Match the plan to the creator's real situation and only suggest what they can actually film."; 
 const CD_FEELINGS = " EMOTIONAL IMPACT: content spreads because of what it makes the viewer feel, so before writing anything name the one or two feelings the piece is aiming for and write toward the exact reaction in the viewer's head. The ten feelings and the reaction each one earns: SEEN, they think that is exactly how I feel. UNDERSTOOD, they think someone finally put words to it. INSPIRED, they think maybe I can do that too. CALLED OUT, they think okay, I needed to hear that. VALIDATED, they think I thought I was the only one. CURIOUS, they think now I need to know what happens next. HOPEFUL, they think maybe things can actually change. NOSTALGIC, they think I have not thought about that in years. ANGRY, they think no way, that is not okay, which only works when the target is a situation, a system or a bad habit and never a person or a group. PROUD, they think yes, more people need to hear this, and that reaction is what makes people share. Two feelings that work together are fine, like curious plus entertained. Use the creator's own stuck and wish language from the brand profile to land seen, understood and validated, because those need specific details and not general comfort. Make the hook trigger the first feeling in the first seconds and let the landing leave the last one. Never manufacture a feeling the content has not earned, never use fear or shame to get a reaction, and in wellness, beauty and spiritual work keep anger pointed at myths, industry habits and bad advice, never at people's bodies, beliefs or struggles."; 
@@ -13328,6 +14244,8 @@ function initFlowStateApp(savedData) {
     if (savedData.ideas) S.ideas = savedData.ideas;
     if (savedData.tasks) S.tasks = savedData.tasks;
     if (savedData.hooks && savedData.hooks.length) S.hooks = savedData.hooks;
+    var _htAdded = mergeHookTemplates();
+    try{ hookTplPopupMaybe(_htAdded); }catch(e){}
     if (savedData.ctas && savedData.ctas.length) S.ctas = savedData.ctas;
     if (savedData.stories && savedData.stories.length) S.stories = savedData.stories;
     if (savedData.prompts && savedData.prompts.length) S.prompts = savedData.prompts;
