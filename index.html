@@ -939,10 +939,7 @@ body.dc-over-card .dc-pop-panel{z-index:10600}
   .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section:nth-child(2){grid-column:2;grid-row:1/span 2}
   .cd-pane-ai>.cd-bridge-sec>.card-section-toggle-body>.ai2-section:nth-child(n+4){grid-column:1/-1}
   .cd-guide-rows{grid-template-columns:repeat(4,minmax(0,1fr))}
-  /* Rebuild in my voice: steps on the left, your result on the right, next to the button */
-  #ai2-repurpose-body .rp-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0 28px}
-  #ai2-repurpose-body .rp-right{position:sticky;top:8px;margin-top:16px}
-}
+  }
 .cd-next{display:flex;justify-content:flex-end;padding:8px 0 4px}
 .cd-next .btn{font-size:13px;padding:10px 18px}
 .cd-empty-note{background:var(--w);border:1.5px dashed var(--b);border-radius:var(--rad);padding:14px 16px;font-size:13px;color:var(--t);line-height:1.6;display:none}
@@ -1770,7 +1767,14 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 #cdWriteSec{--sc:var(--g);--sbg:linear-gradient(135deg,var(--gp),#EDE0C4)}
 #cdCarouselSec{--sc:#B0482F;--sbg:linear-gradient(135deg,var(--rp),#f0e2cc)}
 #cdAiSec{--sc:var(--r);--sbg:linear-gradient(135deg,var(--rp),#EDD5C8)}
-#cdOfferSec{--sc:var(--teal);--sbg:linear-gradient(135deg,var(--tealp),#d9efe9)}
+#cdOfferSec{--sc:var(--teal);--sbg:linear-gradient(135deg,var(--tealp),#d9efe9);margin-bottom:12px}
+#cdRepurposeSec{--sc:#C4826A;--sbg:linear-gradient(135deg,#F3DDD0,#E8C4B4)}
+/* Repurpose is its own section now, so the old inner header and box go away and the steps stack in the narrower column */
+#cdRepurposeSec .ai2-section{border:none;margin:0;background:none}
+#cdRepurposeSec .ai2-section-hdr{display:none}
+#cdRepurposeSec .ai2-section-body{display:block;padding:0}
+#cdRepurposeSec .rp-grid{display:block}
+#cdRepurposeSec .rp-right{position:static !important;margin-top:16px}
 #cdExtrasSec{--sc:var(--sage);--sbg:linear-gradient(135deg,var(--sagep),#EAF1E4)}
 .cd1-basics{border-left:5px solid var(--teal);background:linear-gradient(135deg,#F4FAFA,var(--p))}
 .cd1-basics-hdr{color:var(--teal)}
@@ -1805,7 +1809,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
   #cdWriteSec{order:2}
   #cdCarouselSec{order:3}
   #cdAiSec{order:4}
-  #cdOfferSec{order:5}
+  #cdRepurposeSec{order:5}
   #cdExtrasSec{order:6}
 }
 @media(min-width:1000px){
@@ -1912,6 +1916,14 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <div>
             <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Content Cards</div>
             <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Every piece of content gets its own card with a brief, hook, body, platform, format, date, and AI tools built in. Your Creative Director reads your brief and gives you a direction before you write a word. Saw a post you loved? Paste its link and get your own version of it, in your voice.</div>
+          </div>
+        </div>
+
+        <div class="tex-cork" style="background:var(--w);border:1.5px solid var(--bl);border-radius:14px;padding:22px 24px;display:flex;align-items:flex-start;gap:16px">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--rp);border:1px solid rgba(179,108,55,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">♻️</div>
+          <div>
+            <div style="display:inline-block;font-family:var(--fh);font-size:17px;font-weight:700;color:var(--e);margin-bottom:8px;background:#fcf6dc;padding:4px 12px;border-radius:8px">Repurpose</div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--t);line-height:1.7">Found a post that stopped your scroll? Paste the link and get your own version of it, in your voice, for your audience. It works with Instagram posts and carousels, blogs, Substack and newsletters. Original wording every time, never a copy.</div>
           </div>
         </div>
 
@@ -2086,7 +2098,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">Get a direction, angle, hook, and what to avoid, before you write a word.</div>
             </div>
             <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">🔁 Rebuild in My Voice</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:5px">♻️ Repurpose</div>
               <div style="font-size:12.5px;color:var(--el);line-height:1.6">Paste the link to a post you liked. It reads the post, carousel slides included, and writes your own version in your voice.</div>
             </div>
             <div style="background:rgba(255,255,255,.6);border-radius:var(--rsm);padding:12px 14px;border:1px solid #E0BDAA">
@@ -2198,9 +2210,9 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
       </div>
 
       <div class="pf-card rust tex-cork">
-        <div class="pf-icon-wrap">🔁</div>
+        <div class="pf-icon-wrap">♻️</div>
         <div>
-          <div class="pf-title">Rebuild in My Voice, From a Link</div>
+          <div class="pf-title">Repurpose, From a Link</div>
           <div class="pf-desc">Paste the link to a post you loved and tap one button. The Studio reads it, carousel slides included, and writes your own 100% original version in your voice. The slides stay on your card so you can look back at them. Works with Instagram, blogs, Substack and newsletters.</div>
         </div>
       </div>
@@ -2440,7 +2452,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <li>Director Chat: your Creative Director and Strategist, real answers, not "it depends"</li>
           <li>Content Planner, Calendar, Task Board, Feed Preview</li>
           <li>Writing Studio (9 formats, including Trial Reel plans) + Hook, CTA, Story &amp; Prompt Library</li>
-          <li>Rebuild any post from a link, Create a promo plan, Shrink, a Trial Reel format for testing hooks, and a built-in Teleprompter for your reels</li>
+          <li>Repurpose any post from a link, Create a promo plan, Shrink, a Trial Reel format for testing hooks, and a built-in Teleprompter for your reels</li>
           <li>Unlimited Notebooks, Brain Dump, and Saved Drafts</li>
           <li>Eight built-in guides</li>
           <li>100 AI generations a month, price locked in for as long as you stay subscribed</li>
@@ -2474,7 +2486,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
     <!-- CREDITS EXPLAINER -->
     <div style="text-align:center;margin:8px auto 32px;max-width:640px;padding:20px 28px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rad)">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tl);margin-bottom:8px">How credits work</div>
-      <div style="font-size:13px;color:var(--t);line-height:1.7">Generating with a tool or messaging Director Chat uses one credit. Rebuilding a post from a link uses two. Browsing, planning, the Teleprompter, and writing on your own never cost a thing. Your running tally is always visible.</div>
+      <div style="font-size:13px;color:var(--t);line-height:1.7">Generating with a tool or messaging Director Chat uses one credit. Repurposing a post from a link uses two. Browsing, planning, the Teleprompter, and writing on your own never cost a thing. Your running tally is always visible.</div>
     </div>
 
     <!-- INVITE CODE -->
@@ -2738,14 +2750,14 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <div class="guide-section" onclick="toggleGuideSec(this)">
             <div class="guide-section-hdr"><span class="guide-section-title"><span class="guide-section-icon">✦</span>Creative Director</span><span class="guide-toggle">›</span></div>
             <div class="guide-detail">
-              <p class="guide-desc">The brain of the Studio. Three ways to use it: the Panic Button on your dashboard for instant direction, Get Creative Direction inside any content card before you write, and Rebuild in my voice, where you paste the link to a post that stopped your scroll and get your own version of it.</p>
+              <p class="guide-desc">The brain of the Studio. Three ways to use it: the Panic Button on your dashboard for instant direction, Get Creative Direction inside any content card before you write, and Repurpose, where you paste the link to a post that stopped your scroll and get your own version of it.</p>
               <ul class="guide-tips">
                 <li><strong>Brief Me:</strong> add a topic and hit Brief Me to get a full content direction, angle, hook, emotion, and what to avoid, before you write a single word.</li>
                 <li><strong>Surprise Me:</strong> no idea what to post? Hit Surprise Me for a completely random content idea and creative direction generated for you, no topic required.</li>
                 <li><strong>Analog Prompt:</strong> not feeling the AI today? Hit Analog Prompt for a writing spark with zero generation. Just a question or nudge to get you thinking. No credits used.</li>
                 <li><strong>Save to Drafts:</strong> hit Save Brief to Drafts at any point to save your topic or the full generated brief to your Saved Drafts library.</li>
                 <li><strong>Get Creative Direction:</strong> inside any content card, open Bridge the Gap and click Get Creative Direction before you write.</li>
-                <li><strong>Rebuild in my voice:</strong> inside any content card, open Bridge the Gap, then Rebuild in my voice. Paste the link to a post you liked, pick your platform and format, and tap Rebuild this post in my voice. You get your own version, in your voice, for your audience.</li>
+                <li><strong>Repurpose:</strong> inside any content card, open the Repurpose section on the right. Paste the link to a post you liked, pick your platform and format, and tap Repurpose this post. You get your own version, in your voice, for your audience.</li>
                 <li><strong>Tip:</strong> fill in your Brand Profile in Settings first. Every output uses it automatically so you never have to re-explain your niche.</li>
               </ul>
             </div>
@@ -2787,7 +2799,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="guide-detail">
               <p class="guide-desc">Your personal reference library for the best AI outputs you generate. Find it under Library in the sidebar.</p>
               <ul class="guide-tips">
-                <li><strong>How to save:</strong> after you run Rebuild in my voice, tap + Repurposed File above your version. It keeps your version, the original post, and the "why this post works" notes if you asked for them.</li>
+                <li><strong>How to save:</strong> after you run Repurpose, tap + Repurposed File above your version. It keeps your version, the original post, and the "why this post works" notes if you asked for them.</li>
                 <li><strong>How to use it:</strong> open Library, then Repurposed File. Search by platform or content, tap Expand to see all of it, tap Copy, or tap View original post and Why it works.</li>
                 <li><strong>Tip:</strong> save your best angles here so you can come back to them when you hit a creative block instead of starting from scratch.</li>
               </ul>
@@ -2803,7 +2815,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                 <li><strong>Ready to Post:</strong> caption written, graphic done, waiting to go live.</li>
                 <li><strong>Published:</strong> move it here once it is live so you can see your output at a glance.</li>
                 <li><strong>Write it yourself in cards:</strong> every content card is one page. The basics are at the top, then Write it yourself, where you can type your own hook, notes, or draft with no AI required. Open Get AI help only when you want it.</li>
-                <li><strong>Bridge the Gap in cards:</strong> click Bridge the Gap inside any card to open the AI tools: Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, and Rebuild in my voice.</li>
+                <li><strong>Get AI help in cards:</strong> click Get AI help inside any card to open the AI tools: Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink and Content Series. Repurpose has its own section just below it.</li>
                 <li><strong>Trial reels:</strong> pick <strong>Trial Reel</strong> as the Format on a card and the Creative Director plans a no-talking b-roll reel with several on-screen hooks to test. Read the Trial Reel Guide for the full method.</li>
                 <li><strong>Teleprompter:</strong> filming a reel? Tap ▶ Teleprompter under any script in a card. It opens full screen in big text and scrolls for you. It does not use AI credits.</li>
                 <li><strong>This Week's Focus:</strong> use the checklist on your dashboard to pick 1-3 things to work on this week. No dates, no pressure.</li>
@@ -2843,7 +2855,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
                 <li><strong>CTAs:</strong> end every post with a clear call to action. Pick the one that matches your goal for that piece.</li>
                 <li><strong>Story Ideas:</strong> for when you open Instagram with no idea what to post to your Stories.</li>
                 <li><strong>Prompts:</strong> writing prompts for the Studio. Copy and fill in the brackets with your specifics.</li>
-                <li><strong>Repurposed File:</strong> your saved Rebuild in my voice rebuilds. Search, expand, copy, or remove anytime.</li>
+                <li><strong>Repurposed File:</strong> everything you saved from Repurpose. Search, expand, copy, or remove anytime.</li>
                 <li><strong>Tip:</strong> bookmark your favourites by clicking the heart so you can find them again quickly.</li>
               </ul>
             </div>
@@ -3309,7 +3321,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
   <!-- SWIPE FILE -->
   <div id="view-swipefile" class="view">
     <div class="main-hdr">
-      <div><h1>Repurposed File</h1><div class="sub">Your saved "Rebuild in my voice" rebuilds, all in one place</div></div>
+      <div><h1>Repurposed File</h1><div class="sub">Everything you saved from Repurpose, all in one place</div></div>
       <div class="hdr-acts">
         <button class="btn btn-g" id="swfClearBtn" onclick="clearSwipeFile()" style="display:none">Clear All</button>
       </div>
@@ -3849,7 +3861,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="gd-card teal">
               <span class="gd-card-icon">🔁</span>
               <div class="gd-card-title">Repurposed File</div>
-              <div class="gd-card-desc">Your saved "Rebuild in My Voice" rebuilds. To add one, tap + Repurposed File above your version on the card. Each one keeps your version, the original post, and why it worked if you asked.</div>
+              <div class="gd-card-desc">Everything you saved from Repurpose. To add one, tap + Repurposed File above your version on the card. Each one keeps your version, the original post, and why it worked if you asked.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">🧠</span>
@@ -3860,7 +3872,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 
           <div class="gd-section-lbl">Go Analog, the short version</div>
           <div class="gd-card full teal" style="margin-bottom:12px">
-            <div class="gd-card-desc" style="font-size:13.5px">Every content card is one page with a few sections you can open and close. At the top are <strong>the basics</strong>: the title, platform, format, and a date. Below that, <strong>Write it yourself</strong> is where you write it your way, no AI required: a Hook/Subject box, a Caption/Body box, and a place for your own draft. <strong>Get AI help</strong> (Bridge the Gap) is the AI help, and it is always optional. It starts closed, because this Studio was built to default to you, not to AI. Tap any header to open or close it, and tap <strong>Hide guide</strong> to tuck the how-to away. Tap <strong>? How to use this</strong> to bring it back.</div>
+            <div class="gd-card-desc" style="font-size:13.5px">Every content card is one page with a few sections you can open and close. Right under the title is <strong>What is this selling?</strong>, which you can fill in when a post is working toward an offer. On the left is where you create: <strong>Write it yourself</strong> (a Hook/Subject box and a Caption/Body box, no AI required), <strong>Carousel slides</strong>, and <strong>Tasks, images, and notes</strong>. On the right is <strong>the basics</strong> (platform, format, date), <strong>Get AI help</strong>, and <strong>Repurpose</strong>. The AI tools read whatever you wrote in your hook and caption, so there is nothing to retype. AI help and Repurpose are always optional and start closed, because this Studio was built to default to you, not to AI. Tap any header to open or close it, and tap <strong>Hide guide</strong> to tuck the how-to away. Tap <strong>? How to use this</strong> to bring it back.</div>
           </div>
           <div class="gd-callout" style="background:var(--gp);border-color:#D4A843">
             <div class="gd-callout-icon">✏️</div>
@@ -3909,8 +3921,8 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             </div>
             <div class="gd-card rust">
               <span class="gd-card-icon">🔁</span>
-              <div class="gd-card-title">Rebuild in My Voice</div>
-              <div class="gd-card-desc">Found a post you admire? Three steps. 1: paste its link. 2: pick the platform and format you want back. 3: tap <strong>Rebuild this post in my voice</strong>. That one button gets the post, reads the words on every carousel slide, and writes your own 100% original version in the "Your version" box. It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Tap "No link?" under the button, paste the words in, and tap the same button. Want to know why the post worked? Tap "Optional: tell me why this post works" under your version. The words, your version, and the slide pictures all stay on the card. The pictures are kept on the device you fetched them on.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Rebuild in My Voice and tap Rebuild this post in my voice for a brand new version built for your niche.</div>
+              <div class="gd-card-title">Repurpose</div>
+              <div class="gd-card-desc">Found a post you admire? Three steps. 1: paste its link. 2: pick the platform and format you want back. 3: tap <strong>Repurpose this post</strong>. That one button gets the post, reads the words on every carousel slide, and writes your own 100% original version in the "Your version" box. It works with Instagram posts and carousels, blogs, Substack and newsletters. Reels give you the caption only. No link? Tap "No link?" under the button, paste the words in, and tap the same button. Want to know why the post worked? Tap "Optional: tell me why this post works" under your version. The words, your version, and the slide pictures all stay on the card. The pictures are kept on the device you fetched them on.<br><br><strong>Try this:</strong> you saved a carousel months ago and never touched it because you didn't want to copy it. On Instagram, open it, tap the three dots, tap Copy link. Paste that link into Repurpose and tap Repurpose this post for a brand new version built for your niche.</div>
             </div>
             <div class="gd-card teal">
               <span class="gd-card-icon">🧪</span>
@@ -3920,7 +3932,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="gd-card teal">
               <span class="gd-card-icon">🎬</span>
               <div class="gd-card-title">Teleprompter</div>
-              <div class="gd-card-desc">Filming a reel? Tap <strong>▶ Teleprompter</strong> under any script. Your script opens full screen in big text. Tap <strong>Play</strong>. You get a 3, 2, 1 countdown, then the words scroll up by themselves and the line to say is lit up. Use the <strong>− and +</strong> next to Speed to go slower or faster. Use <strong>A− and A+</strong> to change the text size. Tap the script to pause. While it is paused, tap any other line to jump to it. Stage directions like "B-roll:" show small and are skipped, so you only read what you say. It does not use AI credits.<br><br><strong>Where the button is:</strong> under Generate Content, Hooks, Caption Variations and Shrink, on Your version in Rebuild in My Voice, under Caption / Body and Your draft in Go Analog, under every Director Chat reply, above your AI draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap <strong>Open the teleprompter (paste any script)</strong>.<br><br><strong>Good to know:</strong> the words move at the speed you pick. They do not listen to your voice. If you fall behind, tap the script to pause.</div>
+              <div class="gd-card-desc">Filming a reel? Tap <strong>▶ Teleprompter</strong> under any script. Your script opens full screen in big text. Tap <strong>Play</strong>. You get a 3, 2, 1 countdown, then the words scroll up by themselves and the line to say is lit up. Use the <strong>− and +</strong> next to Speed to go slower or faster. Use <strong>A− and A+</strong> to change the text size. Tap the script to pause. While it is paused, tap any other line to jump to it. Stage directions like "B-roll:" show small and are skipped, so you only read what you say. It does not use AI credits.<br><br><strong>Where the button is:</strong> under Generate Content, Hooks, Caption Variations and Shrink, on Your version in Repurpose, under Caption / Body in Write it yourself, under every Director Chat reply, above your AI draft in the Writing Studio, and inside any saved draft. Have a script from somewhere else? In Director Chat, tap <strong>Open the teleprompter (paste any script)</strong>.<br><br><strong>Good to know:</strong> the words move at the speed you pick. They do not listen to your voice. If you fall behind, tap the script to pause.</div>
             </div>
           </div>
 
@@ -4004,7 +4016,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="gd-callout-icon">✦</div>
             <div>
               <div class="gd-callout-eyebrow" style="color:var(--g)">One credit per AI generation, nothing else costs anything</div>
-              <div class="gd-callout-text">Every time you click a button that generates something with AI, Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, Rebuild in My Voice (two credits with a link: one to get the post, one to write your version. One credit if you paste the words in yourself. The optional "why this post works" is one more), Create a promo plan, Brief Me, Surprise Me, Write the Full Piece, or sending a message in Director Chat, that's one credit. That's the whole list. Browsing the Studio, planning in the Content Planner, writing your own content in Go Analog, using Notebooks, moving tasks around, none of it touches your credits, ever. If something goes wrong and nothing comes back, no credit is used. Analog Prompt on the dashboard also does not use a credit, since it's not AI at all.<br><br>Starter includes 100 credits a month, Unlimited means exactly that, no cap. Either way, credits reset at the start of each new month, they don't roll over, and you can see exactly how many you've used and how many are left any time from the "Studio in Session" bar in your sidebar.</div>
+              <div class="gd-callout-text">Every time you click a button that generates something with AI, Get Creative Direction, Generate Content, Hooks, Caption Variations, Shrink, Content Series, Repurpose (two credits with a link: one to get the post, one to write your version. One credit if you paste the words in yourself. The optional "why this post works" is one more), Create a promo plan, Brief Me, Surprise Me, Write the Full Piece, or sending a message in Director Chat, that's one credit. That's the whole list. Browsing the Studio, planning in the Content Planner, writing your own content in Go Analog, using Notebooks, moving tasks around, none of it touches your credits, ever. If something goes wrong and nothing comes back, no credit is used. Analog Prompt on the dashboard also does not use a credit, since it's not AI at all.<br><br>Starter includes 100 credits a month, Unlimited means exactly that, no cap. Either way, credits reset at the start of each new month, they don't roll over, and you can see exactly how many you've used and how many are left any time from the "Studio in Session" bar in your sidebar.</div>
             </div>
           </div>
 
@@ -4195,7 +4207,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <div class="gd-section-lbl">Phase 03: Convert</div>
           <div class="gd-cards">
             <div class="gd-card rust"><div class="gd-card-eyebrow rust">What to create</div><div class="gd-card-title">Content that creates clarity around your offer and moves people to act</div><div class="gd-card-desc">Posts that name the specific problem your offer solves. Addressing common objections directly and honestly. What's included, what it costs, and who it's for. Testimonials and results, real ones. A clear and direct call to action on every post. Your goal: make it easy for the right people to say yes.</div></div>
-            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Rebuild in my voice + CTA Library</div><div class="gd-card-desc">Paste the link to a top-performing sales post into Rebuild in my voice and tap Rebuild this post in my voice. It pulls in the words and writes your own version. Tap the optional button under it to see why the post worked. When you are ready to sell, tap Create a promo plan on the Calendar for a short run of posts that lead to your offer. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Get Creative Direction on your offer to get a directional angle before you write.</div></div>
+            <div class="gd-card rust"><div class="gd-card-eyebrow rust">Studio tools to use</div><div class="gd-card-title">Repurpose + CTA Library</div><div class="gd-card-desc">Paste the link to a top-performing sales post into Repurpose and tap Repurpose this post. It pulls in the words and writes your own version. Tap the optional button under it to see why the post worked. When you are ready to sell, tap Create a promo plan on the Calendar for a short run of posts that lead to your offer. Browse the CTA Library for convert-phase endings that feel natural, not pushy. Run the Get Creative Direction on your offer to get a directional angle before you write.</div></div>
           </div>
 
           <div class="gd-section-lbl">Phase 04: Reflect</div>
@@ -4303,7 +4315,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="gd-card rust">
               <span class="gd-card-icon">🔍</span>
               <div class="gd-card-title">Learn from what already works</div>
-              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche. Copy its link, paste it into Rebuild in my voice, and tap Rebuild this post in my voice. You get the same structure in your voice. Tap the optional button under it and the Creative Director breaks down why the original worked. You're not copying. You're learning from signal and applying it honestly.</div>
+              <div class="gd-card-desc">Find a post that stopped your scroll, from anyone in any niche. Copy its link, paste it into Repurpose, and tap Repurpose this post. You get the same structure in your voice. Tap the optional button under it and the Creative Director breaks down why the original worked. You're not copying. You're learning from signal and applying it honestly.</div>
             </div>
           </div>
 
@@ -4972,12 +4984,42 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           <ol class="cd-guide-steps">
             <li>Add a title, pick the <strong>Platform</strong> and <strong>Format</strong> (Post, Carousel, Reel, Trial Reel, Story), and a <strong>Date</strong> if you have one.</li>
             <li>Open <strong>Write it yourself</strong> to type your hook and caption.</li>
-            <li>Open <strong>Get AI help</strong> for captions, hooks, reels, carousels, variations and more. It works from your hook and caption.</li>
+            <li>Open <strong>Get AI help</strong> for captions, hooks, reels, carousels, variations and more. It works from your hook and caption. Found a post you love? Open <strong>Repurpose</strong>.</li>
           </ol>
-          <div class="cd-guide-text">Tap any header to open or close it. Selling something? Open <strong>What is this selling?</strong>. Tap <strong>Save</strong> at the top when you are done.</div></div>
+          <div class="cd-guide-text">Tap any header to open or close it. Selling something? Fill in <strong>What is this selling?</strong> under the title. Want to remake a post you love? Open <strong>Repurpose</strong>. Tap <strong>Save</strong> at the top when you are done.</div></div>
         </div>
         <button type="button" class="cd-guide-show" onclick="guideShow(this)">? How to use this</button>
 <div class="fl"><input class="fi" id="cdTitle" placeholder="What are you creating?" style="font-size:22px !important;font-family:var(--fh);font-weight:600;padding:10px 10px 6px;border:none;background:transparent" /></div>
+<div class="card-section-toggle cd1-sec" id="cdOfferSec">
+          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+            <div class="cd1-sec-t"><span class="cd1-sec-n">🎯 What is this selling?</span><span class="cd1-sec-h">Optional. Makes AI writing sharper.</span></div>
+            <span class="card-section-toggle-chev">+</span>
+          </div>
+          <div class="card-section-toggle-body" style="padding:14px 16px">
+            <div style="font-size:11.5px;color:var(--tl);margin-bottom:12px;line-height:1.55">Fill this in when a post is working toward a specific offer. The AI tools use it to write a sharper post, built around what this one person actually needs to hear.</div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">The offer</label>
+              <input class="fi" id="cdOfferName" placeholder="e.g. Flow to Launch Lab, a free workshop, your VA/OBM services" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">Who this is for</label>
+              <input class="fi" id="cdOfferPerson" placeholder="e.g. a new freelancer who keeps starting over every week" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What's going on for them right now</label>
+              <input class="fi" id="cdOfferSituation" placeholder="e.g. they have clients but no system, so everything lives in their head" />
+            </div>
+            <div class="fl"><label class="fl-lbl" style="font-size:11px">What changes once they work with you</label>
+              <input class="fi" id="cdOfferChange" placeholder="e.g. they stop guessing and have a repeatable way to onboard clients" />
+            </div>
+            <div class="fl" style="margin-bottom:0"><label class="fl-lbl" style="font-size:11px">What job is this specific piece doing?</label>
+              <select class="fi" id="cdOfferAngle">
+                <option value="">Just write it normally</option>
+                <option value="recognition">Help them recognize themselves in the problem</option>
+                <option value="proof">Show proof it actually works</option>
+                <option value="hesitation">Answer the thing holding them back</option>
+                <option value="invitation">Make a direct, clear ask</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div class="cd1-two"><div class="cd1-colA">
 <!-- GO ANALOG SECTION -->
         <div class="card-section-toggle cd-analog-sec cd1-sec" id="cdWriteSec">
@@ -5023,6 +5065,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
           </div>
         </div>
 
+        
         
         </div><div class="cd1-colB">
         <div class="cd1-basics">
@@ -5084,7 +5127,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <span class="card-section-toggle-chev">+</span>
           </div>
           <div class="card-section-toggle-body" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:10px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px"><strong>What is in here:</strong> creative direction, full posts (caption, reel script, carousel, story, newsletter, email, blog), hooks, 3 variations, a shorter version for low energy days, a content series, and rebuild in my voice for turning someone else's post into yours. Each one uses 1 credit.</div>
+            <div style="font-size:11.5px;color:var(--t);line-height:1.6;margin-bottom:10px;background:var(--p);border:1px solid var(--bl);border-radius:var(--rsm);padding:9px 12px"><strong>What is in here:</strong> creative direction, full posts (caption, reel script, carousel, story, newsletter, email, blog), hooks, 3 variations, a shorter version for low energy days, a content series, and a short version for low energy days. Each one uses 1 credit. Repurpose, for turning someone else's post into yours, is its own section just below.</div>
 <div class="cd1-note">The AI works from what you typed above. Each tool below takes 1 AI credit, and results show up right under the button.</div>
         <div class="cd-empty-note" id="cdAiEmpty">
           Give this card a title or a few notes first. The AI tools work from what's on the card, so the more you give them, the better the result.
@@ -5226,9 +5269,19 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="ai2-series-list" id="cd-series-list"></div>
           </div>
         </div>
-        <div class="ai2-section">
+        
+</div>
+          </div>
+        </div>
+<div class="card-section-toggle cd1-sec" id="cdRepurposeSec">
+  <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
+    <div class="cd1-sec-t"><span class="cd1-sec-n">♻️ Repurpose</span><span class="cd1-sec-h">Found a post you love? Get your own version in your voice. 2 credits.</span></div>
+    <span class="card-section-toggle-chev">+</span>
+  </div>
+  <div class="card-section-toggle-body" style="padding:14px 16px">
+<div class="ai2-section">
           <div class="ai2-section-hdr" onclick="toggleAI2('repurpose')" style="background:linear-gradient(135deg,#E8C4B4,#D4A090);border-bottom:2px solid #C4826A">
-            <div class="ai2-section-title" style="color:var(--r)">✦ Rebuild in my voice</div>
+            <div class="ai2-section-title" style="color:var(--r)">✦ Repurpose</div>
             <span id="ai2-repurpose-chev" style="color:#8C3518;font-size:16px">+</span>
           </div>
           <div class="ai2-section-body" id="ai2-repurpose-body">
@@ -5264,7 +5317,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
 
                 <!-- STEP 3: one button -->
                 <div class="ss-step"><span class="ss-step-n">3</span><span class="ss-step-t">Tap the button</span></div>
-                <button type="button" class="rp-go" id="cdRpGoBtn" onclick="cdRpGo()">✦ Rebuild this post in my voice</button>
+                <button type="button" class="rp-go" id="cdRpGoBtn" onclick="cdRpGo()">✦ Repurpose this post</button>
                 <div class="cd-rp-fetch-hint">This gets the post and writes your version in one go. Uses 2 AI credits: 1 to get the post, 1 to write your version. Your version shows up in the "Your version" box and stays on this card.</div>
                 <div class="cd-rp-fetch-status" id="cdRpFetchStatus"></div>
                 <div class="cd-rp-preview" id="cdRpPreview"></div>
@@ -5311,41 +5364,9 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             </div>
           </div>
         </div>
+  </div>
 </div>
-          </div>
-        </div>
-<div class="card-section-toggle cd1-sec" id="cdOfferSec">
-          <div class="card-section-toggle-hdr" onclick="toggleCardSection(this)">
-            <div class="cd1-sec-t"><span class="cd1-sec-n">🎯 What is this selling?</span><span class="cd1-sec-h">Optional. Makes AI writing sharper.</span></div>
-            <span class="card-section-toggle-chev">+</span>
-          </div>
-          <div class="card-section-toggle-body" style="padding:14px 16px">
-            <div style="font-size:11.5px;color:var(--tl);margin-bottom:12px;line-height:1.55">Fill this in when a post is working toward a specific offer. The AI tools use it to write a sharper post, built around what this one person actually needs to hear.</div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">The offer</label>
-              <input class="fi" id="cdOfferName" placeholder="e.g. Flow to Launch Lab, a free workshop, your VA/OBM services" />
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">Who this is for</label>
-              <input class="fi" id="cdOfferPerson" placeholder="e.g. a new freelancer who keeps starting over every week" />
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">What's going on for them right now</label>
-              <input class="fi" id="cdOfferSituation" placeholder="e.g. they have clients but no system, so everything lives in their head" />
-            </div>
-            <div class="fl"><label class="fl-lbl" style="font-size:11px">What changes once they work with you</label>
-              <input class="fi" id="cdOfferChange" placeholder="e.g. they stop guessing and have a repeatable way to onboard clients" />
-            </div>
-            <div class="fl" style="margin-bottom:0"><label class="fl-lbl" style="font-size:11px">What job is this specific piece doing?</label>
-              <select class="fi" id="cdOfferAngle">
-                <option value="">Just write it normally</option>
-                <option value="recognition">Help them recognize themselves in the problem</option>
-                <option value="proof">Show proof it actually works</option>
-                <option value="hesitation">Answer the thing holding them back</option>
-                <option value="invitation">Make a direct, clear ask</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-section-toggle cd1-sec" id="cdExtrasSec">
+<div class="card-section-toggle cd1-sec" id="cdExtrasSec">
           <div class="card-section-toggle-hdr" onclick="cdToggleMore()">
             <div class="cd1-sec-t"><span class="cd1-sec-n">📎 Tasks, images, and notes</span><span class="cd1-sec-h">Break it into steps, add visuals, note what worked.</span></div>
             <span class="card-section-toggle-chev" id="cdMoreChev">+</span>
@@ -5374,6 +5395,10 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             
           </div>
         </div>
+
+
+
+        
         </div></div><!-- end cd1-two -->
       </div>
     </div><!-- end cd2-wrap -->
@@ -9799,13 +9824,13 @@ function saveBrandProfile(){
 // different person depending on which button you clicked. Built from the
 // richest existing version. Task-specific instructions (format, length,
 // output structure) stay in each function - only the identity lives here.
-const CD_PERSONA_BASE = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. Your background: you are a Senior Vice President of Marketing and Strategy who spent more than 20 years inside the wellness, beauty and spiritual industries and the last 10 of them as an SVP running brand, social and launch strategy for practitioner-led and founder-led brands. You came up through Instagram, Facebook and LinkedIn as each one changed, and you have been on TikTok since 2019, so you have watched every algorithm shift happen from the inside and you know which lessons are durable and which expired. You reason like someone who has run these accounts at scale: you know what separates a post that performs from one that only looks good, what a launch needs in each phase, what a cadence looks like before it tips into burnout, and how all of that differs by platform and by niche. You know how trust is built in wellness, beauty and spiritual work: through a visible point of view, small honest proof, consistency and permission, not through hype. You hold three layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, trends, what makes a piece actually work), LAUNCH STRATEGY (sequencing, pacing, when to build and when to ask), and BUSINESS STRATEGY (platform priority, positioning, where to spend limited time and energy). You also understand neurodivergent brains and how ND business owners actually work best, so you never default to hustle-culture volume advice and you build sustainable systems instead of grind. Wellness, beauty and spiritual brands are your home ground, but whatever niche the brand profile describes is the only niche you write for, so adapt fully to it. Be direct, warm, a little dry, never corporate, never hustle-y. You give a point of view and a recommendation, not a menu of options with no opinion. No em dashes, no markdown symbols (no asterisks, no pound signs).";
+const CD_PERSONA_BASE = "You are the Creative Director inside Flow State Studio, a content workspace for neurodivergent entrepreneurs. Your background: you are a Senior Vice President of Marketing and Strategy who spent more than 20 years inside the wellness, beauty and spiritual industries and the last 10 of them as an SVP running brand, social and launch strategy for practitioner-led and founder-led brands. You came up through Instagram, Facebook and LinkedIn as each one changed, and you have been on TikTok since 2019, so you have watched every algorithm shift happen from the inside and you know which lessons are durable and which expired. You reason like someone who has run these accounts at scale: you know what separates a post that performs from one that only looks good, what a launch needs in each phase, what a cadence looks like before it tips into burnout, and how all of that differs by platform and by niche. You know how trust is built in wellness, beauty and spiritual work: through a visible point of view, small honest proof, consistency and permission, not through hype. You hold three layers of expertise and know which one a question calls for: CONTENT STRATEGY (voice, hooks, structure, trends, what makes a piece actually work), LAUNCH STRATEGY (sequencing, pacing, when to build and when to ask), and BUSINESS STRATEGY (platform priority, positioning, where to spend limited time and energy). You also understand neurodivergent brains and how ND business owners actually work best, so you never default to hustle-culture volume advice and you build sustainable systems instead of grind. Wellness, beauty and spiritual brands are your home ground, but whatever niche the brand profile describes is the only niche you write for, so adapt fully to it. Be direct, warm, a little dry, never corporate, never hustle-y. You sound like the smartest friend this creator has, with an SVP's judgment and none of the agency polish. You give a point of view and a recommendation, not a menu of options with no opinion. No em dashes, no markdown symbols (no asterisks, no pound signs).";
 // What the Creative Director knows about trial reels. Used by Director Chat,
 // every card tool, and the Trial Reel format, so the strategy only lives here.
 const CD_TRIAL_KNOWLEDGE = " TRIAL REELS: you know the trial reel strategy well. A trial reel is an Instagram reel that is shown mostly to people who do not follow the creator yet, so it is a low pressure way to test a hook before committing to it. When someone plans reels, selling something, or asks what to post, you can suggest a trial reel where it fits, and you explain it simply. The method: start with ONE offer and work backwards from it. Test the three reasons a person buys that offer: a fear they have, a desire they want, and a problem the offer solves. Keep the footage the same and change only the short on-screen hook, because that isolates what is actually working. A good set is about five versions of one b-roll clip with five different hooks. Trial reels are b-roll with text on screen and no talking, so they suit people who do not want to be on camera. Judge results by views, follows, profile visits and comments, not views alone, and ask which hook attracts the people who might actually buy. Repeat the strongest angle. Turn attention into leads with a free resource tied to the paid offer, a single comment word, and a follow up message, but only suggest systems the creator really has set up. Start selling early using the winning hooks: share testimonials, results and exactly what a buyer receives, invite people to join a waitlist or enquire, and add value instead of discounting. A good first experiment is five trial reels over a weekend, each testing a different buying motivation. Never promise results or invent numbers. Studio helps plan and write them, it does not post or track them, so the creator checks the numbers in Instagram.";
 // Platform mechanics the Creative Director works from. REVIEW EVERY QUARTER:
 // platforms change fast. Update CD_KNOWLEDGE_REVIEWED when you do.
-const CD_KNOWLEDGE_REVIEWED = "2026-10-29";
+const CD_KNOWLEDGE_REVIEWED = "2026-11-06";
 const CD_PLATFORM_KNOWLEDGE = " PLATFORM MECHANICS (reviewed October 2026, these shift often, so state them as how things currently work, never as permanent rules, and never quote exact percentages or statistics as fact). INSTAGRAM: reach is driven mostly by watch time and replays, sends (people sharing a post privately), saves, and real conversation in comments and DMs, more than likes. Original content is favored, so reposted or watermarked clips from other apps get shown less, and that now applies to photos and carousels too. The hook has to land in about the first three seconds. For reels, shorter and tight tends to work best for reaching new people, and longer is fine when the content earns the watch time. Instagram works partly like a search engine, so write captions in plain keyword language, say the keyword out loud and put it on screen, use the name and bio fields, and add short alt text. Hashtags matter little now, so use a few relevant ones at most, or none. Trial reels are for testing hooks with non followers. LINKEDIN: the first hour and first day of engagement matter, comments (especially real replies from the author) count most, and a question in the post tends to draw more comments. Native formats like text posts, document carousels and native video usually beat posts that send people off the platform, so keep outbound links out of the post body and put them in a comment or the profile. Time spent reading helps, so a strong hook plus short, scannable lines. Generic or obviously AI sounding posts get ignored. Posting steadily beats one big post. EMAIL: inbox providers expect authenticated sending, an easy one click unsubscribe, and low spam complaints, so only email people who asked for it and never buy lists. Open rates are unreliable now because Apple Mail pre loads images, so judge emails by clicks, replies and unsubscribes, and by whether the list stays engaged. On a phone only the first 30 to 40 characters of a subject really show, so lead with the key word and let the preview text add something new. Plain, personal, single purpose emails with one link usually read as most human. Send on a rhythm the creator can keep. SUBSTACK: new writers grow mostly through Notes (short posts and thoughtful replies to other writers), recommendations from similar publications, and sharing posts elsewhere, not through search. Title makes the promise, subtitle sharpens it, the first lines show in the email and preview. Keep a steady weekly rhythm the writer can sustain, stay free while building the list, and treat paid tiers as something to add later. Some of these tactics come from industry guides without hard data, so when you recommend one, say it is a strong place to start and to watch what their own numbers say, because their own results beat any general rule. MEASURING: always tie advice to one clear metric for the goal: reach goals look at watch time and sends, connection goals look at comments and replies, lead goals look at link clicks, comment word replies and signups, sales goals look at enquiries and conversions. One change at a time, enough posts to see a pattern, and the creator checks real numbers in the platform, since Studio does not track them. PROOF: real testimonials, results, screenshots and what a buyer actually receives are the strongest content for selling. Never invent them. If none exist yet, suggest how to gather one from a real client or a free pilot, and use bracketed placeholders.";
 const CD_REEL_FORMATS = " REEL FORMATS THAT TRAVEL: you know five proven reel formats and suggest the one that fits the idea and how the creator likes to show up. 1) Tutorial with split screen: the creator's footage on one side and a screen recording or demo on the other, teaching one useful step, great for tools, systems and how to posts. 2) List: a short numbered list where each item is quick and saveable, the on screen list builds as it is spoken, which also keeps people watching to the end. 3) Breakdown: take one real result, page, post or number and explain why it worked, piece by piece, using only real figures the creator gives or clearly marked placeholders. 4) Storytelling with b-roll: a short personal story told over everyday footage, no need to face the camera the whole time. 5) Visual talking head: the creator speaking to camera with on screen text and inserted visuals that change every few seconds so the eye always has something new. Inspiration is fine but copying is not: take the structure of a format or trend and rebuild it in the creator's own words, footage and point of view, never reuse someone else's script, clips or exact wording, since original content is also favored by Instagram. A comment word call to action works well when the creator really has a free resource and follow up set up.";
 const CD_TREND_ENGINE = " TRENDS AND SOUNDS: this is where you earn your seat. FIRST, BE HONEST ABOUT WHAT YOU CAN SEE. You cannot see what is trending today. Never name a specific trending sound, song, challenge or meme as currently trending unless it appears in the TREND BRIEF below or the creator typed it in this conversation. If no trend brief is given, say so in one short line, then work from the durable trend STRUCTURES that keep returning (below) and ask the creator to paste the sound name and what they are seeing in their own feed for a sharper version. Never invent a sound name, never guess. WHAT YOU DO KNOW: trends come in types and each one is ridden differently. A trending sound lends familiarity and the cut points. A trending format is a repeatable structure you fill with your own truth, and it is the safest and most brand friendly type. A trending topic needs a real take, not a tag. Seasonal moments can be planned ahead. News moments carry the most risk. RUN EVERY TREND THROUGH THREE GATES IN ORDER. FIT: can this creator add a real angle from their own work, or are they just attaching their name to someone else's moment? If the only reason is that it is popular, skip it and say why. SAFETY: skip tragedies, disasters, deaths, divisive political moments, anything mocking or exploitative, and any trend that asks a wellness, beauty or spiritual brand to make a claim it should not make. TIMING: rising is a go, saturated or fading is a skip, because late reads as out of touch. Say which gate a trend fails in one plain sentence. THE REMIX: take the trend's structure, sound or pacing and fill it with the creator's specific truth, their footage and their niche's running joke or hard won lesson. A logo slapped onto a copied video earns nothing. Keep the brand voice, never force trend slang. HOOK AND SOUND MUST BE MARRIED. When a reel rides a sound, the hook, the on-screen text and the cuts are written around that sound, not on top of it. Decide what the sound is doing: a voiceover or meme audio where the words ARE the joke, a beat or drop where the text reveals and cuts land on the beats, a mood track that sits under the idea, or a lip sync style audio where the creator's point is mapped onto the lines. Write the hook so it makes sense with the sound off, since most people watch muted, and so it lands in the first one to three seconds. In every reel or trial reel plan include an AUDIO line that names the direction (original audio, trending audio, or licensed music bed), says where the text reveals or cuts should land if the sound drives the edit, and notes that the creator adds the track inside the app themselves. If the creator runs a business account, remind them in one short line to check that the sound is cleared for business use, since the commercial library is smaller. If a trend sound does not fit the message, use original audio or a format level trend instead, and say so. WHEN YOU REBUILD A POST OR REEL: study the mechanism, not the surface. Work out what is load bearing (usually the hook and the reason people send it to someone), what is incidental, and whether it is repeatable or a product of account size, timing or luck. If you were only given a caption, you do not know the sound, the on-screen hook or the visuals of the original, so say what you could not see and build the strongest version from what you can, instead of pretending. Never reuse the original's words, script or clips.";
@@ -9813,7 +9838,8 @@ const CD_HOOK_CRAFT = " HOOK CRAFT: a hook works by opening a gap the viewer nee
 const CD_NICHE_GUARDRAILS = " WELLNESS, BEAUTY AND SPIRITUAL GUARDRAILS: you know the lines in these industries. Never write health or medical claims, never imply a service diagnoses, treats, cures or prevents anything, and never promise outcomes. Frame spiritual and energy work as practice, experience and perspective, not guaranteed results. For beauty and body content never stage or exaggerate a before, never hide editing or aids, and never present one person's result as typical. Testimonials, results and numbers are real or they are clearly marked bracketed placeholders, with consent for client stories. Disclose partnerships and affiliate links plainly. Where a topic touches mental health, trauma or the body, write with care, avoid fear based hooks, and point to a qualified professional when it fits. These guardrails protect the creator's trust and their account, and you apply them quietly without lecturing.";
 const CD_TALK_PLAN = " PLANNING A TALKING VIDEO: you plan any talking video in nine steps, in this order, before any script. 1) PILLAR: which content topic is it pulling from. 2) WHO IT IS FOR: new audience (people who do not follow yet, so no insider language, explain the idea fast), core audience (current followers, go deeper and use their shared language), or hottest leads (people close to buying, so speak to their real hesitation and show what working together is like). 3) ACTION: the one thing you want them to do, share, save, comment or follow. 4) FEELING: what they need to feel to take that action. Work backwards from the action, because the feeling is what triggers it: share comes from feeling seen, called out or proud to be associated with the idea, save comes from feeling this is useful and I will need it, comment comes from feeling a strong opinion or an easy way in, follow comes from feeling this person gets me and there is more. 5) ANGLE: the specific way into the topic, the take, the story or the contrarian lens, so it could not sit on anyone else's account. 6) FORMAT: listicle, rant, story time, receipts (real proof walked through piece by piece), POV (a relatable situation played out), or another proven talking video shape that fits the angle. 7) POST IDEA: the concept turned into the actual thing, one clear sentence of what the video says. 8) HOOK: the first line out of the creator's mouth plus the on-screen text, built to work together and with the sound off. 9) DELIVERY: how it will be said, which is the step most people skip and the one that decides whether the video lands. Delivery covers pace, energy, where the pauses go, which words get leaned on, facial expression, where to look, whether to walk or sit, and how the last line is landed. A strong angle delivered flat dies, so always give delivery notes in plain words the creator can act on. When asked to plan or write a talking video, run these steps in order and keep the feeling tied to the action. When the creator already filled some steps, use them as given. For any step left blank, choose the best fit for the goal and say what you chose and why in one short line, never leave a step empty. WHAT A FILLED PLAN LOOKS LIKE: PILLAR personal finance. FOR new audience. ACTION follow. FEELING curious plus entertained (two feelings is fine when they work together). ANGLE unhinged confession (an angle has a name and a stance, not just a topic). FORMAT listicle. POST IDEA weird things we did to get out of debt. HOOK six unhinged things we did to get out of debt (spoken line and on-screen text say the same thing, so it works muted, and a listicle hook names how many are coming). DELIVERY like you are telling your best friend a crazy story. Notice how the feeling picks the action, the angle makes it ownable, and the delivery matches the angle. Use this only as a picture of the shape, never reuse its topic or wording, and build every plan from the creator's own pillars, offers and story. Match the plan to the creator's real situation and only suggest what they can actually film."; 
 const CD_FEELINGS = " EMOTIONAL IMPACT: content spreads because of what it makes the viewer feel, so before writing anything name the one or two feelings the piece is aiming for and write toward the exact reaction in the viewer's head. The ten feelings and the reaction each one earns: SEEN, they think that is exactly how I feel. UNDERSTOOD, they think someone finally put words to it. INSPIRED, they think maybe I can do that too. CALLED OUT, they think okay, I needed to hear that. VALIDATED, they think I thought I was the only one. CURIOUS, they think now I need to know what happens next. HOPEFUL, they think maybe things can actually change. NOSTALGIC, they think I have not thought about that in years. ANGRY, they think no way, that is not okay, which only works when the target is a situation, a system or a bad habit and never a person or a group. PROUD, they think yes, more people need to hear this, and that reaction is what makes people share. Two feelings that work together are fine, like curious plus entertained. Use the creator's own stuck and wish language from the brand profile to land seen, understood and validated, because those need specific details and not general comfort. Make the hook trigger the first feeling in the first seconds and let the landing leave the last one. Never manufacture a feeling the content has not earned, never use fear or shame to get a reaction, and in wellness, beauty and spiritual work keep anger pointed at myths, industry habits and bad advice, never at people's bodies, beliefs or struggles."; 
-const CD_PERSONA = CD_PERSONA_BASE + CD_TREND_ENGINE + CD_HOOK_CRAFT + CD_FEELINGS + CD_TALK_PLAN + CD_NICHE_GUARDRAILS + CD_TRIAL_KNOWLEDGE + CD_PLATFORM_KNOWLEDGE + CD_REEL_FORMATS;
+const CD_HUMAN_LAYER = " HUMAN FIRST, THEN STRATEGY: the creator's audience follows a person, not a brand, and real account data backs that up: a face plus a strong opinion earns views, permission and reassurance posts earn shares, and product tours and feature posts fall flat. So everything you write has to sound like one real human talking to one other human, in the creator's first person unless told otherwise. HOW HUMAN SOUNDS: start in the middle of a thought, the way you would text a friend. Use contractions, short sentences, the occasional fragment and an uneven rhythm. Put one real, specific detail in every piece (a moment, a place, a number from the creator's own life, something they actually said or did), because specifics are what make a stranger feel seen. Say the slightly embarrassing true thing. Let a line stay a little unfinished instead of tying every idea in a bow. Write for the ear: if you would not say it out loud to a friend over coffee, rewrite it. AI TELLS TO CUT: openers like in today's fast paced world, picture this, let's dive in, buckle up; words like unlock, elevate, game changer, journey, delve, leverage, seamless, transform, empower, navigate, landscape; the not this but that construction more than once; three item lists where the third item is padding; a closing line that restates the whole piece; stacked rhetorical questions; stacked emojis; vulnerability that is really a brag; and any sentence that could sit on any other creator's page. RELATABLE: name the stuck moment in the audience's own words before offering any fix, so the first reaction is me too and not tell me more. Story before lesson. Say what it felt like, not just what happened. Give permission before advice, because permission is what gets saved and shared. Never talk down, never hustle, never shame, and never promise it will be easy. CONVERT WITHOUT SELLING: organic conversion is trust plus a clear next step. Give real value first, show how the creator thinks, and let the offer appear as the natural next step for the person it fits, in one honest sentence and never a pitch. Match the ask to how warm the viewer is: new people get follow or save, people who already know the creator get comment or share, and people close to buying get a DM word or an apply link. When a comment word fits, tie it to something useful the person receives (a checklist, a prompt, a short walkthrough) and keep the selling in the DM or the link, almost never in the post itself. Nurture content asks for saves, shares, comments and follows only. Offer content keeps one offer and one ask. Proof is honest and small: process, what the creator really does and has really seen, and real results with permission. Never invent numbers, never lean on follower counts the creator does not have, never fake a testimonial. CONTENT MIX: when planning or choosing an angle, balance four kinds of posts: value (teaches the creator's method, and the only place offers live), personal (behind the scenes, the human), relatable (the shared feeling and experience) and curiosity (an ongoing storyline people want to follow). A strong week has authority posts, one or two storyline posts and one personality post, and leaves room to follow what is working. Never put an offer in every post. STORY: draw only on the story the creator has actually given you in the brand profile, their notes or the card. Never invent a personal story, a childhood detail, a health detail, a client or a result. When a story would help and none was given, write the beat in square brackets for the creator to fill with the real one, or ask for it in one short line. THEIR WORDS: use the creator's own phrases, the name they give their audience and the way they describe their offer when the brand profile gives them. If the brand profile has a one line statement of who they help, or a warmer everyday version of it, use those words. Use the searchable term where search matters (name, bio, first line) and the warmer term in the body.";
+const CD_PERSONA = CD_PERSONA_BASE + CD_HUMAN_LAYER + CD_TREND_ENGINE + CD_HOOK_CRAFT + CD_FEELINGS + CD_TALK_PLAN + CD_NICHE_GUARDRAILS + CD_TRIAL_KNOWLEDGE + CD_PLATFORM_KNOWLEDGE + CD_REEL_FORMATS;
 
 /* ═══════════════════ SKILL SPECS ═══════════════════
    Single source of truth for every "write me a piece of content" tool.
@@ -9822,7 +9848,7 @@ const CD_PERSONA = CD_PERSONA_BASE + CD_TREND_ENGINE + CD_HOOK_CRAFT + CD_FEELIN
    ever gets improved in one place. The Studio page uses SKILL_CORE too. */
 const SKILL_CORE = [
   " HOW YOU WRITE EVERY PIECE:",
-  "You write like a brand and social media executive with more than a decade of running real accounts. You are not filling in a template. You are writing one complete piece that a real person will read from top to bottom.",
+  "You bring a senior marketer's judgment but you write like the creator talking to one friend, never like a brand or an agency. You are not filling in a template. You are writing one complete piece that a real person will read from top to bottom and feel was written by a human who gets them.",
   "Every piece has a real beginning, middle, and end. The beginning grabs attention and then, in the next line or two, tells the reader why this matters to them right now, so the middle has somewhere to land. The middle delivers the substance in an order that builds, where each point leads naturally into the next one with a connecting thought, never a jump. The end lands the idea: it pulls the whole thing together into one clear takeaway or reframe, and only then hands off to the call to action, which should read as the obvious next step rather than a sudden pivot.",
   "Section labels, slide numbers, and frame numbers are only there to organize the piece for the creator. The words underneath them must still read as one continuous thought. If you removed every label and read it out loud, it should flow like a person talking, not like a list of separate parts.",
   "Every piece carries at least one thing the audience can actually use: a specific step, a named tool or resource, a mini framework, a script they can borrow, or a concrete example from the niche in the brand profile. Vague encouragement is never the value.",
@@ -9836,7 +9862,8 @@ const SKILL_CORE = [
   "Aim every piece at one or two named feelings from this list: seen, understood, inspired, called out, validated, curious, hopeful, nostalgic, angry (at a situation or a myth, never at people), or proud. Write toward the reaction in the reader's head, for example that is exactly how I feel, or I thought I was the only one, and never fake a feeling the content has not earned.",
   "If a TREND BRIEF is in the brand profile, use a trend from it only when it passes fit, safety and timing, and rebuild its structure in the creator's own words and footage. If there is no trend brief, never name a sound or trend as current.",
   "In wellness, beauty and spiritual work never make health or medical claims, never promise outcomes, never stage or exaggerate a before, and never present one person's result as typical.",
-  "One call to action per piece, matched to the goal: save or share for value, comment or DM for conversation, link for an offer. Never stack asks.",
+  "One call to action per piece, matched to the goal and to how warm the audience is: follow or save for new people, comment or share for people who know the creator, a DM word or link for people close to buying. When it fits, a comment word that delivers something useful beats a pitch. Never stack asks, and keep the selling out of the body of a value post.",
+  "Sound human before you sound smart. Start mid thought, use the creator's own words, include one real specific detail from their material, and cut anything that sounds like a brochure or like AI wrote it. Never invent a personal story, client or result: use what the creator gave you or leave a clear bracket to fill.",
   "Plain text only. Labels like HOOK: or Slide 1: are fine. No asterisks, no pound signs, no em dashes, no emoji unless the creator's voice uses them.",
   "Length targets are defaults. A complete piece that flows always beats one that hits a word count."
 ].join(" ");
@@ -9845,7 +9872,7 @@ const SKILL_CORE = [
 // else, no fluff", which produced choppy fragments with no lead-in or close.
 const ADVICE_SHAPE = "\n\nHOW TO SHAPE THIS: Talk to them like a strategist sitting across the table, not a form being filled in. Open with one or two sentences that react to their specific idea: what is strong about it, or the real opportunity in it, so they know you understood it. Then work through the sections below in order. Keep each label, and under it write in full, connected sentences that explain the why, not just the what, and let each section build on the one before. Close with two or three sentences that pull it together and name the very next thing to do. Warm, direct, and specific, with no filler, but never clipped or written as fragments. Plain text, no asterisks or pound signs, no em dashes.";
 // Added to the end of every content request: a last read-through for flow.
-const SKILL_FLOW_CHECK = "\n\nBefore you answer, read your piece top to bottom as the audience would. Check these and fix them silently. First, the hook: does it work with the sound off or with no context, does it open a real gap, and is it true to what follows? Then the flow: it opens by meeting the reader where they are and saying why this matters, every part hands off to the next without a jump, and the ending pulls it together into a clear takeaway before the call to action. If any spot feels abrupt, choppy, or like a list of separate parts, rewrite that spot. Then output only the finished piece.";
+const SKILL_FLOW_CHECK = "\n\nBefore you answer, read your piece top to bottom as the audience would. Check these and fix them silently. First, the hook: does it work with the sound off or with no context, does it open a real gap, and is it true to what follows? Then the flow: it opens by meeting the reader where they are and saying why this matters, every part hands off to the next without a jump, and the ending pulls it together into a clear takeaway before the call to action. If any spot feels abrupt, choppy, or like a list of separate parts, rewrite that spot. Then the human check: read it aloud as the creator. Would a friend actually say this? Cut brochure phrases, stock AI words, tidy summary endings and anything that could sit on any other page, add one specific detail if there is none, and make sure the ask is small and fits how warm the reader is. Then output only the finished piece.";
 
 const SKILL_PLATFORM = {
   instagram: "Instagram: only the first line or so shows before more, so the hook has to carry the keyword and the tension on its own. Instagram search reads captions, so the main keyword belongs in the first sentence. Sends, saves, and watch time matter more for reach than likes, so write for the person who would send it to one friend. Skip long hashtag lists, a few relevant ones at most. Use plain keyword language a person would search.",
@@ -10550,6 +10577,7 @@ function cdOpen(id){
     if(_cdOutputs['repurposeAnalysis']){
       var rpBody=document.getElementById('ai2-repurpose-body');
       if(rpBody){rpBody.classList.add('open');var rpChev=document.getElementById('ai2-repurpose-chev');if(rpChev)rpChev.textContent='-';}
+      cdOpenSec('cdRepurposeSec',true);
       var analysisOutRestore=document.getElementById('cd-analysis-out');
       if(analysisOutRestore)analysisOutRestore.textContent=_cdOutputs['repurposeAnalysis'];
       var sbsRestore=document.getElementById('cd-repurpose-sidebyside');
@@ -11003,7 +11031,7 @@ async function cdFetchPost(){
   checkCreditReset();
   if(!canUseAI()){showCreditBlocked();return false;}
   // Give the result a saved card to land on before spending the credit.
-  var FALLBACK_TITLE='Post to rebuild';
+  var FALLBACK_TITLE='Post to repurpose';
   var targetCardId=cdEnsureCardSaved(FALLBACK_TITLE);
   _cdFetching=true;
   if(btn){btn.disabled=true;btn.textContent='Getting the post...';}
@@ -11019,7 +11047,7 @@ async function cdFetchPost(){
     if(post.kind==='instagram'){
       fromPlat='Instagram';
       summary=cdPreviewSummary(post);
-      if(post.author)betterTitle='Rebuild: @'+post.author+' post';
+      if(post.author)betterTitle='Repurpose: @'+post.author+' post';
       if(stillHere())cdPreviewShow(post,targetCardId);
       var slideText='';
       if(post.slides&&post.slides.length){
@@ -11038,7 +11066,7 @@ async function cdFetchPost(){
       out=[slideText,cap?'Caption:\n'+cap:''].filter(Boolean).join('\n\n');
     } else {
       fromPlat='a blog';
-      if(post.title)betterTitle=('Rebuild: '+post.title).slice(0,65);
+      if(post.title)betterTitle=('Repurpose: '+post.title).slice(0,65);
       out=[(post.title||'').trim(),(post.text||'').trim()].filter(Boolean).join('\n\n');
     }
     if(!out)throw new Error('There were no words to read in that post. Paste the words in the box below instead.');
@@ -11082,7 +11110,7 @@ async function cdFetchPost(){
 // The one button. With a link: gets the post, then writes your version.
 // With words already in the box (pasted by hand, or the same link as
 // before): skips the fetch and writes from those words.
-var RP_GO_LABEL='✦ Rebuild this post in my voice';
+var RP_GO_LABEL='✦ Repurpose this post';
 async function cdRpGo(){
   if(_cdFetching||window._cdGenerating){toast('Already working on it, one moment...');return;}
   var urlEl=document.getElementById('cdRpUrl'),ta=document.getElementById('cdRpText');
@@ -11793,7 +11821,7 @@ async function cdAutopsy() {
   var text = document.getElementById('cdRpText').value.trim();
   if (!text) { cdFetchStatus('There is no post yet. Paste a link in step 1 and tap the button in step 3 first.', true); return; }
   window._cdGenerating = true;
-  var targetCardId = cdEnsureCardSaved('Post to rebuild');
+  var targetCardId = cdEnsureCardSaved('Post to repurpose');
   cdRpBusy(true, 'Working out why this post works. About 20 seconds...');
   cdRpReveal('cd-load-repurpose');
   var sys = CD_PERSONA + buildBrandContext();
@@ -11830,7 +11858,7 @@ async function cdRepurpose2() {
   window._cdGenerating = true;
   // The result is saved to this card by id, so it is kept even if the card
   // is closed or another one is opened while the AI is still writing.
-  var targetCardId = cdEnsureCardSaved('Post to rebuild');
+  var targetCardId = cdEnsureCardSaved('Post to repurpose');
   var b = cdGetBrief();
   var from = document.getElementById('cdRpPlat').value;
   var outPlatEl = document.getElementById('cdRpOutPlat'), outFmtEl = document.getElementById('cdRpOutFmt');
@@ -11852,7 +11880,7 @@ async function cdRepurpose2() {
     ? '\n\nBecause this is going to video, write it as a trend aware piece: a hook that works with the sound off and fits the sound direction, an AUDIO line (use a sound from the trend brief only if it passes the fit, safety and timing gates, otherwise original audio), the on-screen text timed to the beats or cuts, and the caption with the keyword in its first line.'
     : '';
   var usr = 'I found a post from ' + from + ' I want to repurpose for my audience.\n\nStudy the mechanism that makes it work: what is load bearing (usually the hook and why people would send it), what is incidental, and what is repeatable. Then rebuild it completely for my niche and voice. Make it 100% original. Do not reuse its wording.\n\nTarget platform: ' + outPlat + '. Format: ' + outFmt + '.' + videoNote + videoAsk
-    + ((b.brief && !/^(Rebuild: |Post to rebuild)/.test(b.brief)) ? '\nMy topic for this card: ' + b.brief : '')
+    + ((b.brief && !/^(Rebuild: |Repurpose: |Post to rebuild|Post to repurpose)/.test(b.brief)) ? '\nMy topic for this card: ' + b.brief : '')
     + '\n\nOriginal post:\n' + text + SKILL_FLOW_CHECK;
   var result = await cdCallAI(sys, usr, 1600);
   window._cdGenerating = false;
@@ -12743,6 +12771,7 @@ function cdShowTab(tab,opts){
   var target=null;
   if(tab==='write')target=cdOpenSec('cdWriteSec',true);
   else if(tab==='ai')target=cdOpenSec('cdAiSec',true);
+  else if(tab==='repurpose')target=cdOpenSec('cdRepurposeSec',true);
   else if(panel&&!opts.keepScroll)panel.scrollTop=0;
   if(target&&!opts.keepScroll){try{target.scrollIntoView({block:'start'});}catch(e){}}
   var fmt=document.getElementById('cdFormat');
@@ -12757,11 +12786,17 @@ function cdShowTab(tab,opts){
 function cdResetSections(){
   cdOpenSec('cdWriteSec',true);
   cdOpenSec('cdAiSec',false);
+  cdOpenSec('cdRepurposeSec',false);
   var fmt=document.getElementById('cdFormat');
   cdOpenSec('cdCarouselSec',!!(fmt&&fmt.value==='Carousel'));
   try{
     var x=(S.ideas||[]).find(function(a){return a.id===S.cdId;});
-    if(x&&x.aiOutputs&&Object.keys(x.aiOutputs).some(function(k){return x.aiOutputs[k];}))cdOpenSec('cdAiSec',true);
+    if(x&&x.aiOutputs){
+      var _ks=Object.keys(x.aiOutputs).filter(function(k){return x.aiOutputs[k];});
+      if(_ks.some(function(k){return k!=='repurpose'&&k!=='repurposeAnalysis';}))cdOpenSec('cdAiSec',true);
+      if(_ks.some(function(k){return k==='repurpose'||k==='repurposeAnalysis';}))cdOpenSec('cdRepurposeSec',true);
+    }
+    if(x&&(x.repurposeSourceText||(x.repurposeSource&&x.repurposeSource.url)))cdOpenSec('cdRepurposeSec',true);
   }catch(e){}
 }
 function cdPinTabs(){return;
@@ -14771,7 +14806,7 @@ function renderSwipeFile(){
   if(clearBtn)clearBtn.style.display=total>0?'':'none';
   if(count)count.textContent=items.length===total?total+' saved item'+(total===1?'':'s'):items.length+' of '+total+' items';
   if(!items.length){
-    grid.innerHTML='<div class="swf-empty"><div class="swf-empty-icon">📌</div><div class="swf-empty-title">'+(q?'No matches found':'Your Repurposed File is empty')+'</div><div class="swf-empty-desc">'+(q?'Try a different search term.':'Run a Rebuild in my voice on any post you love, then click "+ Repurposed File" to save the rebuild here.')+'</div></div>';
+    grid.innerHTML='<div class="swf-empty"><div class="swf-empty-icon">📌</div><div class="swf-empty-title">'+(q?'No matches found':'Your Repurposed File is empty')+'</div><div class="swf-empty-desc">'+(q?'Try a different search term.':'Run Repurpose on any post you love, then click "+ Repurposed File" to save it here.')+'</div></div>';
     return;
   }
   var html='';
