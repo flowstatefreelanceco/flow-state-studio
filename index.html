@@ -2917,7 +2917,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
     </div>
     <div class="main-body" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden">
       <div class="view-bar" id="taskViewBar"></div>
-      <div class="kanban kanban-3" id="taskKanban"></div>
+      <div class="kanban kanban-4" id="taskKanban"></div>
       <div id="taskListView" style="display:none;overflow-y:auto;flex:1"></div>
     </div>
   </div>
@@ -3097,6 +3097,8 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
             <div class="dc-chip" data-playbook="launch" onclick="dirChatFillStrategyExample(this)">Help me sequence a launch</div>
             <div class="dc-chip" data-playbook="platform" onclick="dirChatFillStrategyExample(this)">Help me decide which platform to focus on</div>
             <div class="dc-chip" data-playbook="hookcheck" onclick="dirChatFillStrategyExample(this)">Check my first line</div>
+            <div class="dc-chip" onclick="dirChatFillExample(this)">Give me honest feedback on a draft</div>
+            <div class="dc-chip" onclick="dirChatFillExample(this)">Plan a talking video for one of my offers</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rework something you're already creating in the Studio</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Rewrite something for another business or offer</div>
             <div class="dc-chip" onclick="dirChatFillExample(this)">Shift the tone of a piece you're already working on</div>
@@ -4815,7 +4817,7 @@ button,a,.btn,[onclick],select,summary,label{touch-action:manipulation}
     <div class="task-grp" style="background:var(--p);border:1px solid var(--bl)">
       <div class="task-grp-lbl" style="color:var(--t)">📋 The basics</div>
       <div class="two-col">
-        <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
+        <div class="fl"><label class="fl-lbl">Status</label><select class="fi" id="taskStatus"><option value="later">Later</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></div>
         <div class="fl"><label class="fl-lbl">Type</label>
           <select class="fi" id="taskType">
             <option value="">No type</option>
@@ -6992,8 +6994,8 @@ function getOnYourPlateData(){
   var todayStr=fmt(today);
   var tomorrowStr=fmt(tomorrow);
 
-  var dueTodayT=S.tasks.filter(function(t){return t.date===todayStr&&t.status!=='done';});
-  var dueTomorrowT=S.tasks.filter(function(t){return t.date===tomorrowStr&&t.status!=='done';});
+  var dueTodayT=S.tasks.filter(function(t){return t.date===todayStr&&t.status!=='done'&&t.status!=='later';});
+  var dueTomorrowT=S.tasks.filter(function(t){return t.date===tomorrowStr&&t.status!=='done'&&t.status!=='later';});
   var dueTodayC=S.ideas.filter(function(i){return i.date===todayStr&&i.status!=='published';});
   var dueTomorrowC=S.ideas.filter(function(i){return i.date===tomorrowStr&&i.status!=='published';});
 
@@ -7111,6 +7113,71 @@ function togglePlannerView(){
   }
   persist();
 }
+// Multi select in the list views. Select turns on checkboxes, tap rows to pick
+// them, then delete them all at once. Deleting cards also deletes their linked
+// tasks, deleting tasks never touches the cards.
+var _selMode={ideas:false,tasks:false};
+var _sel={ideas:{},tasks:{}};
+var _selVisible={ideas:[],tasks:[]};
+function selRerender(board){
+  if(board==='ideas')renderIdeaListView();else renderTaskListView();
+}
+function selToggle(board){_selMode[board]=!_selMode[board];_sel[board]={};selRerender(board);}
+function selRow(board,id){if(_sel[board][id])delete _sel[board][id];else _sel[board][id]=1;selRerender(board);}
+function selAll(board){
+  var ids=_selVisible[board];
+  var all=ids.length&&ids.every(function(id){return _sel[board][id];});
+  _sel[board]={};
+  if(!all)ids.forEach(function(id){_sel[board][id]=1;});
+  selRerender(board);
+}
+function selBarHTML(board,ids){
+  _selVisible[board]=ids.slice();
+  if(!ids.length)return '';
+  var bt='font-size:12px;padding:6px 12px';
+  if(!_selMode[board])return '<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button type="button" class="btn btn-g" style="'+bt+'" onclick="selToggle(\''+board+'\')">☑ Select</button></div>';
+  var n=ids.filter(function(id){return _sel[board][id];}).length;
+  return '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;padding:8px 10px;border:1px solid var(--teal);background:var(--tealp);border-radius:12px;position:sticky;top:0;z-index:5">'
+    +'<span style="font-size:12.5px;font-weight:700;color:var(--teal);flex:1;min-width:90px">'+n+' selected</span>'
+    +'<button type="button" class="btn btn-g" style="'+bt+'" onclick="selAll(\''+board+'\')">'+(n===ids.length?'Clear all':'Select all')+'</button>'
+    +'<button type="button" class="btn btn-danger" style="'+bt+(n?'':';opacity:.45')+'" onclick="selDelete(\''+board+'\')">Delete'+(n?' '+n:'')+'</button>'
+    +'<button type="button" class="btn btn-g" style="'+bt+'" onclick="selToggle(\''+board+'\')">Done</button>'
+    +'</div>';
+}
+function selDelete(board){
+  var ids=Object.keys(_sel[board]).filter(function(id){return _selVisible[board].indexOf(id)>-1;});
+  if(!ids.length){toast('Tap a row to select it first');return;}
+  if(board==='ideas'){
+    var nt=ids.reduce(function(a,id){return a+linkedTaskCount(id);},0);
+    if(!confirm('Delete '+ids.length+' content card'+(ids.length===1?'':'s')+(nt?' and their '+nt+' linked task'+(nt===1?'':'s'):'')+'? This can\'t be undone.'))return;
+    ids.forEach(function(id){
+      cascadeDeleteIdeaTasks(id);
+      markDeleted(id);
+      S.calEntries.filter(function(e){return e.id==='cal_'+id||e._ideaId===id;}).forEach(function(e){markDeleted(e.id);});
+      S.calEntries=S.calEntries.filter(function(e){return e.id!=='cal_'+id&&e._ideaId!==id;});
+      S.ideas=S.ideas.filter(function(i){return i.id!==id;});
+      if(S.lastCardId===id)S.lastCardId='';
+    });
+  } else {
+    if(!confirm('Delete '+ids.length+' task'+(ids.length===1?'':'s')+'? Any content cards they came from stay.'))return;
+    ids.forEach(function(id){
+      var t=S.tasks.find(function(x){return x.id===id;});
+      if(!t)return;
+      unlinkTaskFromCard(t);
+      markDeleted(id);
+      S.calEntries.filter(function(e){return e.id==='cal_task_'+id||e._taskId===id||e.id==='cal_'+id;}).forEach(function(e){markDeleted(e.id);});
+      S.calEntries=S.calEntries.filter(function(e){return e.id!=='cal_task_'+id&&e._taskId!==id&&e.id!=='cal_'+id;});
+      S.tasks=S.tasks.filter(function(x){return x.id!==id;});
+    });
+  }
+  _sel[board]={};_selMode[board]=false;
+  persist();
+  try{renderKanban();}catch(e){}
+  try{renderTaskKanban();}catch(e){}
+  try{renderCalendar();renderDashboard();renderBucketInsights();}catch(e){}
+  selRerender(board);
+  toast(ids.length+(board==='ideas'?' card':' task')+(ids.length===1?'':'s')+' deleted');
+}
 function renderIdeaListView(){
   var el=document.getElementById('ideaListView');
   if(!el)return;
@@ -7122,7 +7189,8 @@ function renderIdeaListView(){
   if(hidePublished) items=items.filter(function(i){return i.status!=='published';});
   items=items.filter(promoMatches);
   items=sortForView(items,viewSortKey('ideas'));
-  var html='';
+  var html=selBarHTML('ideas',items.map(function(i){return i.id;}));
+  var smI=_selMode.ideas;
   if(!items.length){
     html+='<div class="idea-list-empty">'+(!S.ideas.length?'No content cards yet. Click + Add Content to get started.':(hidePublished?'Nothing to show. Untick Hide published above to see everything.':'No content cards to show here.'))+'</div>';
   } else {
@@ -7133,7 +7201,9 @@ function renderIdeaListView(){
       var bg=statusBg[idea.status]||'var(--bl)';
       var label=statusLabel[idea.status]||cap(idea.status||'');
       var fc=formatColor(idea.format);
-      html+='<div class="idea-list-row" onclick="cdOpen(\''+idea.id+'\')">'
+      var pickedI=smI&&_sel.ideas[idea.id];
+      html+='<div class="idea-list-row"'+(pickedI?' style="border-color:var(--teal);background:var(--tealp)"':'')+' onclick="'+(smI?'selRow(\'ideas\',\''+idea.id+'\')':'cdOpen(\''+idea.id+'\')')+'">'
+        +(smI?'<input type="checkbox" '+(pickedI?'checked':'')+' style="width:18px;height:18px;flex-shrink:0;pointer-events:none">':'')
         +'<span class="idea-list-dot" style="background:'+color+'"></span>'
         +'<span class="idea-list-title">'+esc(idea.title||'Untitled')+'</span>'
         +'<div class="idea-list-meta">'
@@ -7147,23 +7217,65 @@ function renderIdeaListView(){
   }
   el.innerHTML=html;
 }
+// Mobile kanban: columns stack, so one long column pushes everything below it
+// far down the page. On a phone each column folds up when you tap its header,
+// shows the first 4 cards then a "Show more" button, and a row of chips at the
+// top jumps to any column with its count, so nothing is hidden for good.
+// Later, Published and Done start folded. Kept per device, not synced.
+var MOB_KB_CAP=4;
+var MOB_KB_DEFAULT_COLLAPSED={'ideas:later':1,'ideas:published':1,'tasks:later':1,'tasks:done':1};
+function mobKbOn(){return window.innerWidth<=768;}
+function mobKbLoad(){try{return JSON.parse(localStorage.getItem('fssMobKb')||'{}')||{};}catch(e){return {};}}
+function mobKbSave(o){try{localStorage.setItem('fssMobKb',JSON.stringify(o));}catch(e){}}
+function mobKbCollapsed(board,col){var o=mobKbLoad();var k=board+':'+col;if(o.c&&o.c[k]!==undefined)return !!o.c[k];return !!MOB_KB_DEFAULT_COLLAPSED[k];}
+function mobKbExpanded(board,col){var o=mobKbLoad();return !!(o.x&&o.x[board+':'+col]);}
+function mobKbRerender(board){if(board==='ideas')renderKanban();else renderTaskKanban();}
+function mobKbToggle(board,col){var o=mobKbLoad();o.c=o.c||{};o.c[board+':'+col]=!mobKbCollapsed(board,col);mobKbSave(o);mobKbRerender(board);}
+function mobKbMore(board,col){var o=mobKbLoad();o.x=o.x||{};o.x[board+':'+col]=!mobKbExpanded(board,col);mobKbSave(o);mobKbRerender(board);}
+function mobKbJump(board,col){
+  var o=mobKbLoad();
+  if(mobKbCollapsed(board,col)){o.c=o.c||{};o.c[board+':'+col]=false;mobKbSave(o);mobKbRerender(board);}
+  setTimeout(function(){var el=document.getElementById('kc-'+board+'-'+col);if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'start'});},30);
+}
+function mobKbMoreBtn(board,col,n,expanded,mob){
+  if(!mob||n<=MOB_KB_CAP)return '';
+  return '<button type="button" class="btn btn-g" style="width:100%;font-size:12px;padding:8px;margin:2px 0 4px" onclick="mobKbMore(\''+board+'\',\''+col+'\')">'+(expanded?'Show less':'Show '+(n-MOB_KB_CAP)+' more')+'</button>';
+}
+function mobKbChipsHTML(board,cols){
+  if(!mobKbOn())return '';
+  return '<div style="display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch">'+cols.map(function(c){
+    return '<button type="button" onclick="mobKbJump(\''+board+'\',\''+c.id+'\')" style="flex:0 0 auto;border:1.5px solid '+c.bd+';background:'+c.bg+';color:'+c.color+';border-radius:100px;padding:5px 12px;font-size:12px;font-weight:700;font-family:var(--fb);cursor:pointer">'+c.label+' '+c.n+'</button>';
+  }).join('')+'</div>';
+}
+(function(){
+  var was=mobKbOn(),t;
+  window.addEventListener('resize',function(){
+    clearTimeout(t);
+    t=setTimeout(function(){var now=mobKbOn();if(now!==was){was=now;try{renderKanban();renderTaskKanban();}catch(e){}}},200);
+  });
+})();
 function renderKanban(){
   const el=document.getElementById('ideaKanban');
   var hidePublished=S.plannerHidePublished||false;
   var colsToShow=hidePublished?IDEA_COLS.filter(function(c){return c.id!=='published';}):IDEA_COLS;
   el.className='kanban kanban-'+colsToShow.length;
-  el.innerHTML=colsToShow.map(col=>{
+  var mobI=mobKbOn();
+  var chipsI=mobKbChipsHTML('ideas',colsToShow.map(function(c){return{id:c.id,label:c.label,color:c.color,bg:c.bg,bd:c.bd,n:S.ideas.filter(function(i){return i.status===c.id&&promoMatches(i);}).length};}));
+  el.innerHTML=chipsI+colsToShow.map(col=>{
     const cards=sortForView(S.ideas.filter(i=>i.status===col.id&&promoMatches(i)),viewSortKey('ideas'));
-    return`<div class="kc">
-      <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(i=>{var fc=formatColor(i.format);return`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
+    const collapsed=mobI&&mobKbCollapsed('ideas',col.id);
+    const expanded=mobKbExpanded('ideas',col.id);
+    const shown=(mobI&&!expanded)?cards.slice(0,MOB_KB_CAP):cards;
+    return`<div class="kc" id="kc-ideas-${col.id}">
+      <div class="kc-head" ${mobI?`onclick="mobKbToggle('ideas','${col.id}')"`:''} style="${mobI?'cursor:pointer;':''}background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${mobI?(collapsed?'▸ ':'▾ '):''}${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
+      <div class="kc-body"${collapsed?' style="display:none"':''}>${shown.length?shown.map(i=>{var fc=formatColor(i.format);return`<div class="kc-card" onclick="cdOpen('${i.id}')" style="cursor:pointer"><div class="cc-inner" style="padding:8px 10px">
         <button class="cc-del" onclick="event.stopPropagation();mobConfirmDelete('idea','${i.id}')">✕</button>
         <div class="cc-title">${esc(i.title)}</div>
         ${i.date?`<div style="font-size:11.5px;color:var(--teal);font-weight:600;margin:3px 0 2px">📅 ${fmtDate(i.date)}</div>`:''}
         <div class="cc-foot">${i.platform?`<span class="tag tag-${i.platform}" style="font-size:10px;padding:3px 9px">${cap(i.platform)}</span>`:''}${i.format?`<span class="tag" style="background:${fc.bg};color:${fc.fg};font-size:10px;padding:3px 9px;font-weight:700">${esc(i.format)}</span>`:''}${i.bucket?`<span class="tag" style="background:var(--rp);color:var(--r);font-size:10px;padding:3px 9px;border:1px solid rgba(179,108,55,.2)">◈ ${esc(i.bucket)}</span>`:''}${promoTagHTML(i)}</div>
         ${col.id!=='published'?`<div style="margin-top:10px;display:flex;gap:5px">${nextCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveIdea('${i.id}','${nc.id}')">→ ${nc.label}</button>`).join('')}</div>`:''}
-      </div></div>`;}).join(''):(col.id==='later'?'<div class="empty-kc">Brain dump here, sort it out later</div>':'<div class="empty-kc">No ideas here yet</div>')}</div>
-      <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
+      </div></div>`;}).join(''):(col.id==='later'?'<div class="empty-kc">Brain dump here, sort it out later</div>':'<div class="empty-kc">No ideas here yet</div>')}${mobKbMoreBtn('ideas',col.id,cards.length,expanded,mobI)}</div>
+      <div class="kc-add"${collapsed?' style="display:none"':''}><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openIdeaModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
   renderPromoFilterBar();
@@ -7185,7 +7297,8 @@ function nextCols(id){
 // so ask first. Desktop keeps the one click behavior.
 function mobConfirmDelete(kind,id){
   var touch=false;try{touch=!!(window.matchMedia&&window.matchMedia('(hover:none)').matches);}catch(e){}
-  if(touch&&!confirm(kind==='task'?'Delete this task?':'Delete this content card?'))return;
+  var nl=kind==='idea'?linkedTaskCount(id):0;
+  if(touch&&!confirm(kind==='task'?'Delete this task?':(nl?'Delete this content card and its '+nl+' linked task'+(nl===1?'':'s')+'?':'Delete this content card?')))return;
   if(kind==='task')deleteTask(id);else deleteIdea(id);
 }
 // Phones zoom the whole page when you tap a field with text under 16px.
@@ -7201,18 +7314,33 @@ function mobConfirmDelete(kind,id){
   document.addEventListener('touchstart',fix,{passive:true,capture:true});
   document.addEventListener('focusin',fix,true);
 })();
+// A content card owns the tasks made from it: deleting the card deletes those
+// tasks too. It never works the other way, deleting a task leaves its card.
+function cascadeDeleteIdeaTasks(ideaId){
+  var linked=S.tasks.filter(function(t){return t._ideaId===ideaId;});
+  if(!linked.length)return 0;
+  var ids={};
+  linked.forEach(function(t){ids[t.id]=1;markDeleted(t.id);});
+  S.calEntries.filter(function(e){return e.id.indexOf('cal_task_')===0&&ids[e.id.slice(9)]||(e._taskId&&ids[e._taskId]);}).forEach(function(e){markDeleted(e.id);});
+  S.calEntries=S.calEntries.filter(function(e){return !(e.id.indexOf('cal_task_')===0&&ids[e.id.slice(9)])&&!(e._taskId&&ids[e._taskId]);});
+  S.tasks=S.tasks.filter(function(t){return !ids[t.id];});
+  return linked.length;
+}
+function linkedTaskCount(ideaId){return S.tasks.filter(function(t){return t._ideaId===ideaId;}).length;}
 function deleteIdea(id){
+  cascadeDeleteIdeaTasks(id);
   markDeleted(id);
   S.calEntries.filter(e=>e.id==='cal_'+id||e._ideaId===id).forEach(e=>markDeleted(e.id));
   S.ideas=S.ideas.filter(i=>i.id!==id);
   S.calEntries=S.calEntries.filter(e=>e.id!=='cal_'+id&&e._ideaId!==id);
   if(S.lastCardId===id)S.lastCardId='';
   persist();renderKanban();renderCalendar();renderDashboard();renderBucketInsights();
+  try{renderTaskKanban();if(S.taskView==='list')renderTaskListView();}catch(e){}
 }
 function moveIdea(id,status){const i=S.ideas.find(x=>x.id===id);if(i){i.status=status;i.updatedAt=new Date().toISOString();persist();renderKanban();renderDashboard();}}
 
 /* ═══════════════════ KANBAN - TASKS ═══════════════════ */
-const TASK_COLS=[{id:'todo',label:'To Do',bg:'var(--bluep)',color:'#2d5fa0',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
+const TASK_COLS=[{id:'later',label:'Later',bg:'var(--bl)',color:'var(--t)',bd:'#B9AFA3'},{id:'todo',label:'To Do',bg:'var(--bluep)',color:'#2d5fa0',bd:'#7A9EC2'},{id:'inprogress',label:'In Progress',bg:'var(--rp)',color:'var(--r)',bd:'#B5512A'},{id:'done',label:'Done',bg:'#D0EAD0',color:'#1A521A',bd:'#5A6E50'}];
 function toggleTaskStarFilter(){
   S.taskStarFilter=!S.taskStarFilter;
   syncTaskStarFilterBtn();
@@ -7252,17 +7380,86 @@ function toggleTaskView(){
   }
   persist();
 }
+// Change dates straight from the task list. The calendar entry is kept in
+// step, and for a task that came from a card step the card's own step date is
+// updated too, otherwise the next save of the card would put the old date back.
+function taskListSetDate(id,val){
+  var t=S.tasks.find(function(x){return x.id===id;});
+  if(!t)return;
+  t.date=val||'';
+  t.updatedAt=new Date().toISOString();
+  var calId='cal_task_'+t.id;
+  if(t.date){
+    var idx=S.calEntries.findIndex(function(e){return e.id===calId;});
+    if(idx>-1){S.calEntries[idx].title=t.title;S.calEntries[idx].date=t.date;S.calEntries[idx].status=t.status;}
+    else{S.calEntries.push({id:calId,title:t.title,platform:'other',status:t.status,date:t.date,time:t.time||'',notes:t.notes||''});}
+  } else {
+    S.calEntries=S.calEntries.filter(function(e){return e.id!==calId;});
+  }
+  if(t._ideaTask&&t._ideaId){
+    var idea=S.ideas.find(function(i){return i.id===t._ideaId;});
+    if(idea&&Array.isArray(idea.cdTasks)){
+      idea.cdTasks.forEach(function(ct){if(ct.id===t._ideaTask)ct.date=t.date;});
+      idea.updatedAt=new Date().toISOString();
+    }
+  }
+  persist();
+  try{renderTaskKanban();}catch(e){}
+  try{renderCalendar();renderDashboard();}catch(e){}
+  renderTaskListView();
+  toast('Task date saved ✓');
+}
+function cardListSetDate(ideaId,val){
+  var x=S.ideas.find(function(i){return i.id===ideaId;});
+  if(!x)return;
+  x.date=val||'';
+  x.updatedAt=new Date().toISOString();
+  var calId='cal_'+x.id;
+  if(x.date){
+    var idx=S.calEntries.findIndex(function(e){return e.id===calId;});
+    if(idx>-1){S.calEntries[idx].title=x.title;S.calEntries[idx].date=x.date;S.calEntries[idx].time=x.time;S.calEntries[idx].platform=x.platform;S.calEntries[idx].status=x.status;S.calEntries[idx].notes=x.notes;}
+    else{S.calEntries.push({id:calId,title:x.title,platform:x.platform,status:x.status,date:x.date,time:x.time,notes:x.notes});}
+  } else {
+    S.calEntries=S.calEntries.filter(function(e){return e.id!==calId;});
+  }
+  persist();
+  try{renderKanban();}catch(e){}
+  try{renderCalendar();renderDashboard();}catch(e){}
+  renderTaskListView();
+  toast('Card date saved ✓');
+}
+// Delete from the task list view. Both ask first, because a list row is easy
+// to tap by accident. Deleting a card from here also offers to remove the
+// tasks that came from it, since a card delete alone leaves them behind.
+function taskListDelete(id){
+  var t=S.tasks.find(function(x){return x.id===id;});
+  if(!t)return;
+  if(!confirm('Delete this task? This can\'t be undone.'))return;
+  deleteTask(id);
+  renderTaskListView();
+  toast('Task deleted');
+}
+function taskListDeleteCard(ideaId){
+  var idea=S.ideas.find(function(i){return i.id===ideaId;});
+  if(!idea)return;
+  var n=linkedTaskCount(ideaId);
+  if(!confirm('Delete the content card "'+(idea.title||'Untitled')+'"'+(n?' and its '+n+' linked task'+(n===1?'':'s'):'')+'? This can\'t be undone.'))return;
+  deleteIdea(ideaId);
+  renderTaskListView();
+  toast('Card deleted');
+}
 function renderTaskListView(){
   var el=document.getElementById('taskListView');
   if(!el)return;
-  var statusColors={todo:'#2d5fa0',inprogress:'var(--r)',done:'#1A521A'};
-  var statusBg={todo:'var(--bluep)',inprogress:'var(--rp)',done:'#D0EAD0'};
-  var statusLabel={todo:'To Do',inprogress:'In Progress',done:'Done'};
+  var statusColors={later:'var(--t)',todo:'#2d5fa0',inprogress:'var(--r)',done:'#1A521A'};
+  var statusBg={later:'var(--bl)',todo:'var(--bluep)',inprogress:'var(--rp)',done:'#D0EAD0'};
+  var statusLabel={later:'Later',todo:'To Do',inprogress:'In Progress',done:'Done'};
   var items=S.tasks.slice();
   if(S.taskStarFilter){items=items.filter(function(t){return t.starred;});}
   if(S.taskHideDone){items=items.filter(function(t){return t.status!=='done';});}
   items=sortForView(items,viewSortKey('tasks'));
-  var html='';
+  var html=selBarHTML('tasks',items.map(function(t){return t.id;}));
+  var smT=_selMode.tasks;
   if(!items.length){
     html+='<div class="idea-list-empty">'+(S.taskStarFilter?'No starred tasks to show. Tap the ☆ on a task to pin it here.':(!S.tasks.length?'No tasks yet. Click + Add Task to get started.':(S.taskHideDone?'Everything here is done. Untick Hide done above to see it.':'No tasks to show here.')))+'</div>';
   } else {
@@ -7273,15 +7470,30 @@ function renderTaskListView(){
       var bg=statusBg[t.status]||'var(--bl)';
       var label=statusLabel[t.status]||cap(t.status||'');
       var energyIcon=t.energy==='high'?'🔥':t.energy==='medium'?'⚡':t.energy==='low'?'🌿':'';
-      html+='<div class="idea-list-row" onclick="openTaskEditModal(\''+t.id+'\')">'
+      var linkedCard=t._ideaId?S.ideas.find(function(i){return i.id===t._ideaId;}):null;
+      var cardStatusLabel={later:'Later',idea:'Idea',inprogress:'In Progress',ready:'Ready to Post',published:'Published'};
+      var cardRow='';
+      if(linkedCard){
+        cardRow='<div style="flex-basis:100%;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px">'
+          +'<button type="button" onclick="event.stopPropagation();cdOpen(\''+linkedCard.id+'\')" style="max-width:100%;border:1px solid var(--teal);background:var(--tealp);color:var(--teal);border-radius:100px;padding:4px 11px;font-size:11.5px;font-weight:600;font-family:var(--fb);cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">↗ Card: '+esc(linkedCard.title||'Untitled')+(cardStatusLabel[linkedCard.status]?' · '+cardStatusLabel[linkedCard.status]:'')+'</button>'
+          +'<label onclick="event.stopPropagation()" style="font-size:11px;color:var(--tl);display:flex;align-items:center;gap:4px">Card date <input type="date" value="'+(linkedCard.date||'')+'" onchange="cardListSetDate(\''+linkedCard.id+'\',this.value)" style="border:1px solid var(--bl);border-radius:8px;padding:3px 6px;font-size:12px;font-family:var(--fb);color:var(--t);background:var(--w);max-width:140px"></label>'
+          +(smT?'':'<button type="button" onclick="event.stopPropagation();taskListDeleteCard(\''+linkedCard.id+'\')" style="border:1px solid var(--bl);background:var(--w);color:var(--tl);border-radius:100px;padding:4px 10px;font-size:11px;font-family:var(--fb);cursor:pointer">🗑 Delete card (and its tasks)</button>')
+          +'</div>';
+      } else if(t._ideaId){
+        cardRow='<div style="flex-basis:100%;font-size:11px;color:var(--tl);margin-top:2px">The content card this came from was deleted.</div>';
+      }
+      var pickedT=smT&&_sel.tasks[t.id];
+      html+='<div class="idea-list-row" style="flex-wrap:wrap'+(pickedT?';border-color:var(--teal);background:var(--tealp)':'')+'" onclick="'+(smT?'selRow(\'tasks\',\''+t.id+'\')':'openTaskEditModal(\''+t.id+'\')')+'">'
+        +(smT?'<input type="checkbox" '+(pickedT?'checked':'')+' style="width:18px;height:18px;flex-shrink:0;pointer-events:none">':'')
         +'<span class="idea-list-dot" style="background:'+color+'"></span>'
         +'<span class="idea-list-title">'+(t.starred?'★ ':'')+esc(t.title)+'</span>'
         +'<div class="idea-list-meta">'
         +(energyIcon?'<span style="font-size:13px">'+energyIcon+'</span>':'')
         +(t.taskType?'<span style="font-size:11px;color:var(--tl)">'+cap(t.taskType)+'</span>':'')
         +'<span class="idea-list-badge" style="background:'+bg+';color:'+color+'">'+label+'</span>'
-        +'<span class="idea-list-date">'+(dt||'No date')+'</span>'
-        +'</div></div>';
+        +'<input type="date" title="Task date" value="'+(t.date||'')+'" onclick="event.stopPropagation()" onchange="taskListSetDate(\''+t.id+'\',this.value)" style="border:1px solid var(--bl);border-radius:8px;padding:3px 6px;font-size:12px;font-family:var(--fb);color:var(--t);background:var(--w);max-width:140px">'
+        +(smT?'':'<button type="button" title="Delete this task" onclick="event.stopPropagation();taskListDelete(\''+t.id+'\')" style="border:none;background:none;color:var(--tl);font-size:15px;cursor:pointer;padding:2px 6px">✕</button>')
+        +'</div>'+cardRow+'</div>';
     });
   }
   el.innerHTML=html;
@@ -7290,11 +7502,17 @@ function renderTaskKanban(){
   syncTaskStarFilterBtn();
   const el=document.getElementById('taskKanban');
   renderViewBar('tasks');
-  el.innerHTML=TASK_COLS.filter(c=>!(S.taskHideDone&&c.id==='done')).map(col=>{
+  var mobT=mobKbOn();
+  var colsT=TASK_COLS.filter(c=>!(S.taskHideDone&&c.id==='done'));
+  var chipsT=mobKbChipsHTML('tasks',colsT.map(function(c){return{id:c.id,label:c.label,color:c.color,bg:c.bg,bd:c.bd,n:S.tasks.filter(function(t){return t.status===c.id&&(!S.taskStarFilter||t.starred);}).length};}));
+  el.innerHTML=chipsT+colsT.map(col=>{
     const cards=sortForView(S.tasks.filter(t=>t.status===col.id).filter(t=>!S.taskStarFilter||t.starred),viewSortKey('tasks'));
-    return`<div class="kc">
-      <div class="kc-head" style="background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
-      <div class="kc-body">${cards.length?cards.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
+    const collapsed=mobT&&mobKbCollapsed('tasks',col.id);
+    const expanded=mobKbExpanded('tasks',col.id);
+    const shown=(mobT&&!expanded)?cards.slice(0,MOB_KB_CAP):cards;
+    return`<div class="kc" id="kc-tasks-${col.id}">
+      <div class="kc-head" ${mobT?`onclick="mobKbToggle('tasks','${col.id}')"`:''} style="${mobT?'cursor:pointer;':''}background:${col.bg};border-bottom:2px solid ${col.bd}"><span class="kc-title" style="color:${col.color}">${mobT?(collapsed?'▸ ':'▾ '):''}${col.label}</span><span class="kc-count" style="color:${col.color}">${cards.length}</span></div>
+      <div class="kc-body"${collapsed?' style="display:none"':''}>${shown.length?shown.map(t=>`<div class="kc-card" onclick="openTaskEditModal('${t.id}')" style="cursor:pointer">
         <button class="cc-del" onclick="event.stopPropagation();mobConfirmDelete('task','${t.id}')">✕</button>
         <!-- Title section - rust top strip -->
         <div style="background:var(--p);border-bottom:2px solid var(--teal);padding:8px 12px 8px;position:relative">
@@ -7314,13 +7532,21 @@ function renderTaskKanban(){
           ${col.id!=='done'?nextTaskCols(col.id).map(nc=>`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px" onclick="event.stopPropagation();moveTask('${t.id}','${nc.id}')">→ ${nc.label}</button>`).join(''):''}
           ${t._ideaId?`<button class="btn btn-g" style="padding:4px 9px;font-size:10.5px;border-color:var(--teal);color:var(--teal);margin-left:auto" onclick="event.stopPropagation();cdOpen('${t._ideaId}')">↗ Card</button>`:'<div style="flex:1"></div>'}
         </div>
-      </div>`).join(''):(S.taskStarFilter?'<div class="empty-kc">No starred tasks here</div>':'<div class="empty-kc">Nothing here yet</div>')}</div>
-      <div class="kc-add"><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
+      </div>`).join(''):(S.taskStarFilter?'<div class="empty-kc">No starred tasks here</div>':(col.id==='later'?'<div class="empty-kc">Park tasks here for later</div>':'<div class="empty-kc">Nothing here yet</div>'))}${mobKbMoreBtn('tasks',col.id,cards.length,expanded,mobT)}</div>
+      <div class="kc-add"${collapsed?' style="display:none"':''}><button class="btn btn-g" style="width:100%;font-size:12px;padding:7px" onclick="openTaskModal('${col.id}')">+ Add</button></div>
     </div>`;
   }).join('');
   if(S.taskView==='list')renderTaskListView();
 }
-function nextTaskCols(id){return TASK_COLS.slice(TASK_COLS.findIndex(c=>c.id===id)+1);}
+function nextTaskCols(id){
+  // Later is the parking lot, like on the content board. Tasks can be parked
+  // there from To Do or In Progress and pulled back out with one tap.
+  var byId=function(x){return TASK_COLS.find(function(c){return c.id===x;});};
+  if(id==='later')return [byId('todo'),byId('inprogress')];
+  if(id==='todo')return [byId('inprogress'),byId('later')];
+  if(id==='inprogress')return [byId('done'),byId('later')];
+  return [];
+}
 // A task made from a content card step is rebuilt from that step every time
 // the card saves. So when the task is deleted, the step has to go too, or the
 // task comes straight back the next time the card saves (including the silent
@@ -9491,13 +9717,15 @@ function cdSave(opts){
 }
 
 function cdDelete() {
-  if (!confirm('Delete this card?')) return;
+  var nLinked=linkedTaskCount(S.cdId);
+  if (!confirm(nLinked?'Delete this card and its '+nLinked+' linked task'+(nLinked===1?'':'s')+'?':'Delete this card?')) return;
+  cascadeDeleteIdeaTasks(S.cdId);
   markDeleted(S.cdId);
   S.calEntries.filter(function(e){return e.id==='cal_'+S.cdId||e._ideaId===S.cdId;}).forEach(function(e){markDeleted(e.id);});
   S.ideas = S.ideas.filter(function(a) { return a.id !== S.cdId; });
   S.calEntries = S.calEntries.filter(function(e){return e.id!=='cal_'+S.cdId&&e._ideaId!==S.cdId;});
   if(S.lastCardId===S.cdId)S.lastCardId='';
-  persist(); closeModal('cardDetailModal'); renderKanban(); renderCalendar(); renderDashboard(); renderBucketInsights(); toast('Deleted');
+  persist(); closeModal('cardDetailModal'); renderKanban(); renderCalendar(); renderDashboard(); renderBucketInsights(); try{renderTaskKanban();if(S.taskView==='list')renderTaskListView();}catch(e){} toast('Deleted');
 }
 
 var _cdTasks=[];
@@ -11159,7 +11387,10 @@ function dirChatSystemPrompt(playbookLock){
   var bp=S.brandProfile||{};
   var hasBrand=Object.keys(bp).some(function(k){return bp[k];});
   var sys=CD_PERSONA+"\n\n"+
-    "DEFAULT MODE, CONTENT HELP: Most messages you receive are about content: reworking a hook, rewriting a caption, improving a draft, brainstorming ideas, shifting tone. This is your primary job. Lead with content help every time, even when there's a small strategy element in the message. If someone pastes copy, your first response is to improve or rewrite it, not to frame it strategically. Keep rewrites close in length to what they gave you. A one-line hook gets one improved hook back (two options at most), not a paragraph. Do not add strategic context unless they ask for it. If their message is just pasted content with no question, assume they want it improved and do that directly.\n\n"+
+    "DEFAULT MODE, CONTENT HELP: Most messages you receive are about content: reworking a hook, rewriting a caption, improving a draft, brainstorming ideas, shifting tone. This is your primary job. Lead with content help every time, even when there's a small strategy element in the message. If someone pastes copy, your first response is to improve or rewrite it, not to frame it strategically. Keep rewrites close in length to what they gave you. A one-line hook gets one improved hook back (two options at most), not a paragraph. Do not add strategic context unless they ask for it, with one exception: if the piece has no clear action for the reader or does not connect to anything they offer, say so in one short line, because that is part of making it work. If their message is just pasted content with no question, assume they want it improved and do that directly.\n\n"+
+    "ANSWER WHAT THEY ACTUALLY ASKED: the first sentence responds to the exact question in front of you. If they ask what you think, give your honest read before anything else and offer a rewrite after, do not skip straight to a rewrite. If they ask about their own offer, content or plan, answer with specifics from their profile, not general marketing advice that could be sent to anyone.\n\n"+
+    "FEEDBACK STANDARD: when someone shares a draft, hook, idea, plan, numbers or a finished post and asks for feedback or what you think, give a real critique in this order, in plain sentences. First what is working, quoting the exact words or moment that works. Then the one biggest thing holding it back and why it matters for this reader. Then the fix, as a concrete rewrite or change they can use right now. Judge it against five things: does the hook stop a stranger, is it clear what the reader should feel (name it, for example seen, understood, curious, called out), does it fit who it is for (new audience, core audience or hottest leads), is there one clear action, and does it connect to the offer it should be earning trust for. Be honest and kind. If it is strong, say so briefly and say what to keep. If it is not working, say that plainly, never hide it in praise. No flattery, no padding with generic tips, no list of ten fixes, only the one or two changes that matter most.\n\n"+
+    "OFFER GROUNDING: their offers are listed in the profile below. Whenever they ask for content, ideas, captions, scripts, a plan or what to post, tie it to the real offer it serves: say which offer it supports, who it is for, what that person gets or what changes for them, and a call to action that fits how that offer is actually bought or applied for, only using what the profile or their message says. Use only the offers, prices, inclusions and proof that appear in the profile or their message. If something you need is missing, put a square bracket placeholder in the copy and ask for it in one short line at the end. Never invent an offer, a result, a testimonial or a detail. If they ask what to promote or post this week, recommend one offer and give the reason. If a request has nothing to do with an offer, like a personal story, write it well and add one sentence on how it builds trust toward the offer instead of forcing a pitch in.\n\n"+
     "WHEN STRATEGY COMES UP: It is fine and expected that strategy questions come up in conversation, and when they do you should answer them well. But even then, if the message also contains content to work on, do the content work first and keep the strategy brief. A sentence or two of strategic framing alongside a rewrite is great. A full strategy breakdown instead of the rewrite is not what they came for. The exception is when they explicitly ask a strategy-only question with nothing to rewrite, in which case apply the right playbook below.\n\n"+
     "STRATEGY PLAYBOOKS (apply only when the question is explicitly about strategy, not content creation):\n\n"+
     "POSTING CADENCE / TIMING questions (how often to post, when to send, best day/time): Default to 3-5 posts a week on the person's primary visual platform (Instagram, TikTok) as a sustainable floor, 2-5 a week for LinkedIn, 1-2 a day for Facebook if they use it heavily. Consistency at a sustainable pace beats high volume that burns them out, this matters especially here since ND business owners are the ones most likely to be pushed into hustle-pace advice that doesn't fit how they work. For newsletters/email, earlier in the week and mid-morning tends to open better across most niches, adjust if their brand profile or past results say otherwise. For Instagram engagement in personal-brand spaces, weekday evenings often beat weekday mornings. Always frame the number as a floor they can sustain, not a ceiling to max out.\n\n"+
@@ -11189,6 +11420,8 @@ function dirChatSystemPrompt(playbookLock){
     }
     if(bp.niche)sys+="\nNiche: "+bp.niche;
     if(bp.role)sys+="\nRole: "+bp.role;
+    if(bp.client)sys+="\nWho they serve (ideal client): "+bp.client;
+    if(bp.offers)sys+="\nTheir offers, what they sell (ground content and recommendations in these, and never add details that are not here): "+bp.offers;
     if(bp.voice)sys+="\nVoice: "+bp.voice;
     if(bp.pov)sys+="\nPOV: "+bp.pov;
     if(bp.clientKeep)sys+="\nWhat their clients say when they're stuck (their own words, use for hooks and openings): "+bp.clientKeep;
@@ -11198,9 +11431,11 @@ function dirChatSystemPrompt(playbookLock){
     if(bp.timezone)sys+="\nAudience timezone: "+bp.timezone;
     if(bp.phase)sys+="\nCurrent phase / goal: "+bp.phase;
     if(bp.whatWorked)sys+="\nWhat's worked before (treat this as their strongest, most reliable signal): "+bp.whatWorked;
+    if(bp.extra)sys+="\nAnything else they want you to know: "+bp.extra;
   } else {
-    sys+="\n\nThey haven't filled out their Strategy & Logistics profile yet (Settings > Strategy & Logistics), so you don't know their platforms, cadence, or timezone. If a question really hinges on that, give your best general recommendation anyway, then mention in passing that filling out that section would let you get more specific.";
+    sys+="\n\nThey haven't filled out their Strategy & Logistics profile yet (Settings > Strategy & Logistics), so you don't know their offers, platforms, cadence, or timezone. If they ask for content tied to an offer you have not been told about, ask what the offer is and who it is for in one short line before writing, or use bracketed placeholders. If a question really hinges on that, give your best general recommendation anyway, then mention in passing that filling out that section would let you get more specific.";
   }
+  try{sys+=buildTrendContext();}catch(e){}
   return sys;
 }
 
@@ -12299,6 +12534,7 @@ function calEntryDelete(id,fromIdea,fromTask){
   if(fromIdea){
     var realId=id.replace('idea_','');
     if(!confirm('Delete this content card? This also removes it from the planner.'))return;
+    cascadeDeleteIdeaTasks(realId);
     markDeleted(realId);
     S.calEntries.filter(function(e){return e.id==='cal_'+realId||e._ideaId===realId;}).forEach(function(e){markDeleted(e.id);});
     S.ideas=S.ideas.filter(function(i){return i.id!==realId;});
