@@ -6150,6 +6150,56 @@ async function saveUserData(obj){
   }catch(e){console.warn('Supabase save failed:',e.message); return false;}
 }
 
+function showPlanCheckFailed(){
+  var el=document.getElementById('planCheckFailed');
+  if(!el){
+    el=document.createElement('div');
+    el.id='planCheckFailed';
+    el.style.cssText='position:fixed;inset:0;z-index:10001;background:var(--p,#FAF6EF);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center';
+    el.innerHTML='<div style="max-width:380px"><div style="font-family:var(--fh,serif);font-size:22px;color:var(--e,#3a2a20);margin-bottom:10px">We could not confirm your plan</div>'
+      +'<div style="font-size:14px;color:var(--t,#5a4a40);line-height:1.6;margin-bottom:18px">This is usually a quick connection hiccup. Your work is safe. Tap retry and you will be back in.</div>'
+      +'<button class="btn btn-brass" id="planRetryBtn" style="padding:11px 22px;font-size:14px" onclick="planCheckRetry()">Retry</button></div>';
+    document.body.appendChild(el);
+  }
+  el.style.display='flex';
+  var b=document.getElementById('planRetryBtn');if(b){b.disabled=false;b.textContent='Retry';}
+}
+async function planCheckRetry(){
+  var b=document.getElementById('planRetryBtn');if(b){b.disabled=true;b.textContent='Checking...';}
+  var el=document.getElementById('planCheckFailed');if(el)el.style.display='none';
+  document.getElementById('loadingScreen').classList.remove('hidden');
+  _appBooted=false;
+  try{ await bootApp(); }catch(e){ document.getElementById('loadingScreen').classList.add('hidden'); showPlanCheckFailed(); }
+}
+// An open tab used to keep working after a cancellation until the page was
+// reloaded. This rechecks the plan when the tab comes back into view and every
+// 30 minutes, and shows the locked screen if access has ended. Failures here
+// are ignored on purpose: a hiccup must never lock out someone who is paying.
+var _planRecheckAt=Date.now();
+async function planRecheck(){
+  try{
+    if(!sb||!_currentUser||S.plan==='owner')return;
+    var st=await sb.rpc('fss_my_status');
+    if(st&&st.error)return;
+    var row=st&&st.data&&(Array.isArray(st.data)?st.data[0]:st.data);
+    if(!row||!row.plan)return;
+    _planRecheckAt=Date.now();
+    if(row.plan==='locked'&&S.plan!=='locked'){
+      S.plan='locked';
+      try{persist();}catch(e){}
+      document.querySelectorAll('.modal-ov.open').forEach(function(m){m.classList.remove('open');});
+      document.body.style.overflow='';document.body.style.position='';
+      var ls=document.getElementById('lockedScreen');if(ls)ls.classList.add('show');
+    } else if(row.plan!==S.plan&&row.plan!=='locked'){
+      S.plan=row.plan;if(row.access_until)S.accessUntil=row.access_until;
+      try{renderCreditBar();}catch(e){}
+    }
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'&&Date.now()-_planRecheckAt>5*60*1000)planRecheck();
+});
+setInterval(function(){ if(document.visibilityState==='visible')planRecheck(); },30*60*1000);
 async function bootApp(){
   _appBooted=true;
   window._supabasePersist=function(obj){return saveUserData(obj);};
@@ -6159,29 +6209,49 @@ async function bootApp(){
   // Plan and credits come from the server (fss_my_status), which also
   // applies any scheduled downgrade and access_until lock there, never in
   // the browser, and never to an owner account.
-  try{
-    // Picks up a plan paid for in another tab since they last loaded
-    try{ await sb.rpc('fss_claim_my_plan',{p_invite:null}); }catch(e){}
-    var st=await sb.rpc('fss_my_status');
-    var row=st&&st.data&&(Array.isArray(st.data)?st.data[0]:st.data);
-    if(row&&row.plan){
-      S.plan=row.plan;
-      if(row.access_until)S.accessUntil=row.access_until;
-      if(row.credit_limit!==null&&row.credit_limit!==undefined){
-        S.creditsUsed=row.used||0;
-        if(row.cycle_start)S.creditCycleStart=row.cycle_start;
+  var _planVerified=false;
+  for(var _try=0;_try<3&&!_planVerified;_try++){
+    try{
+      // Picks up a plan paid for in another tab since they last loaded
+      try{ await sb.rpc('fss_claim_my_plan',{p_invite:null}); }catch(e){}
+      var st=await sb.rpc('fss_my_status');
+      // A missing server function is the old setup, so fall through to the profile read. Any other error means the check failed.
+      if(st&&st.error&&!/could not find the function|PGRST202/i.test(JSON.stringify(st.error)))throw st.error;
+      var row=st&&st.data&&(Array.isArray(st.data)?st.data[0]:st.data);
+      if(row&&row.plan){
+        S.plan=row.plan;
+        if(row.access_until)S.accessUntil=row.access_until;
+        if(row.credit_limit!==null&&row.credit_limit!==undefined){
+          S.creditsUsed=row.used||0;
+          if(row.cycle_start)S.creditCycleStart=row.cycle_start;
+        }
+        _serverCreditsActive=true;
+        _planVerified=true;
+      } else {
+        // Fallback (server functions not installed yet): read only, no writes
+        var {data:profile,error:profErr}=await sb.from('profiles').select('plan,access_until').eq('id',_currentUser.id).maybeSingle();
+        if(profErr)throw profErr;
+        // The profile read worked. No row yet just means a brand new account, which starts on the default plan.
+        _planVerified=true;
+        if(profile&&profile.plan){
+          S.plan=profile.plan;
+          if(profile.plan!=='owner'&&profile.access_until){
+            S.accessUntil=profile.access_until;
+            if(new Date(profile.access_until)<new Date()) S.plan='locked';
+          }
+        }
       }
-      _serverCreditsActive=true;
-    } else {
-      // Fallback (server functions not installed yet): read only, no writes
-      var {data:profile}=await sb.from('profiles').select('plan,access_until').eq('id',_currentUser.id).maybeSingle();
-      if(profile&&profile.plan) S.plan=profile.plan;
-      if(profile&&profile.plan!=='owner'&&profile.access_until){
-        S.accessUntil=profile.access_until;
-        if(new Date(profile.access_until)<new Date()) S.plan='locked';
-      }
-    }
-  }catch(e){ /* defaults to beta */ }
+    }catch(e){ console.warn('Plan check failed, attempt '+(_try+1)+':',e&&e.message); }
+    if(!_planVerified&&_try<2)await new Promise(function(r){setTimeout(r,800*(_try+1));});
+  }
+  // Never open the app on a guess. If the plan could not be confirmed (after
+  // retries) show a retry screen instead of defaulting to a free plan, so a
+  // cancelled account cannot get in just because a check failed.
+  if(!_planVerified){
+    document.getElementById('loadingScreen').classList.add('hidden');
+    showPlanCheckFailed();
+    return;
+  }
   document.getElementById('loadingScreen').classList.add('hidden');
   // Check if user is locked
   if(S.plan==='locked'){
