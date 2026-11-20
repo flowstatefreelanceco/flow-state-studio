@@ -9711,7 +9711,7 @@ function renderMembershipSection(){
     if(S.accessUntil&&plan!=='locked'){
       var untilDate=new Date(S.accessUntil).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
       cancelNotice.style.display='block';
-      cancelNotice.textContent='Your subscription is cancelled, but you keep full access through '+untilDate+', the end of what you already paid for. No action needed.';
+      cancelNotice.textContent='Your access is active through '+untilDate+'. After that date you will need an active subscription to keep using the Studio. Everything you have made stays saved in your account either way.';
     } else {
       cancelNotice.style.display='none';
     }
